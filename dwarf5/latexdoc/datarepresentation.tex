@@ -1,0 +1,2240 @@
+\chapter{Data Representation}
+\label{datarep:datarepresentation}
+
+This section describes the binary representation of the
+debugging information entry itself, of the attribute types
+and of other fundamental elements described above.
+
+
+\section{Vendor Extensibility}
+\label{datarep:vendorextensibility}
+
+To reserve a portion of the DWARF name space and ranges of
+enumeration values for use for vendor specific extensions,
+special labels are reserved for tag names, attribute names,
+base type encodings, location operations, language names,
+calling conventions and call frame instructions.
+
+The labels denoting the beginning and end of the reserved
+value range for vendor specific extensions consist of the
+appropriate prefix (DW\_TAG, DW\_AT, DW\_END, DW\_ATE, DW\_OP,
+DW\_LANG, DW\_LNE, DW\_CC or DW\_CFA respectively) followed by
+\_lo\_user or \_hi\_user. 
+\textit{For example, for entry tags, the special
+labels are DW\_TAG\_lo\_user and DW\_TAG\_hi\_user.}
+Values in the
+range between prefix\_lo\_user and prefix\_hi\_user inclusive,
+are reserved for vendor specific extensions. Vendors may
+use values in this range without conflicting with current or
+future system\dash defined values. All other values are reserved
+for use by the system.
+
+\textit{There may also be codes for vendor specific extensions
+between the number of standard line number opcodes and
+the first special line number opcode. However, since the
+number of standard opcodes varies with the DWARF version,
+the range for extensions is also version dependent. Thus,
+DW\_LNS\_lo\_user and DW\_LNS\_hi\_user symbols are not defined.}
+
+Vendor defined tags, attributes, base type encodings, location
+atoms, language names, line number actions, calling conventions
+and call frame instructions, conventionally use the form
+prefix\_vendor\_id\_name, where vendor\_id is some identifying
+character sequence chosen so as to avoid conflicts with
+other vendors.
+
+To ensure that extensions added by one vendor may be safely
+ignored by consumers that do not understand those extensions,
+the following rules should be followed:
+
+\begin{enumerate}[1.]
+\item New attributes should be added in such a way that a
+debugger may recognize the format of a new attribute value
+without knowing the content of that attribute value.
+
+\item The semantics of any new attributes should not alter
+the semantics of previously existing attributes.
+
+\item The semantics of any new tags should not conflict with
+the semantics of previously existing tags.
+
+\item Do not add any new forms of attribute value.
+
+\end{enumerate}
+
+
+\section{Reserved Values}
+\label{datarep:reservedvalues}
+\subsection{Error Values}
+\label{datarep:errorvalues}
+
+As a convenience for consumers of DWARF information, the value
+0 is reserved in the encodings for attribute names, attribute
+forms, base type encodings, location operations, languages,
+line number program opcodes, macro information entries and tag
+names to represent an error condition or unknown value. DWARF
+does not specify names for these reserved values, since they
+do not represent valid encodings for the given type and should
+not appear in DWARF debugging information.
+
+
+\subsection{Initial Length Values}
+\label{datarep:initiallengthvalues}
+
+An initial length field is one of the length fields that occur
+at the beginning of those DWARF sections that have a header
+(.debug\_aranges, .debug\_info, .debug\_types, .debug\_line,
+.debug\_pubnames, and .debug\_pubtypes) or the length field
+that occurs at the beginning of the CIE and FDE structures
+in the .debug\_frame section.
+
+In an initial length field, the values 0xfffffff0 through
+0xffffffff are reserved by DWARF to indicate some form of
+extension relative to DWARF Version 2; such values must not
+be interpreted as a length field. The use of one such value,
+0xffffffff, is defined below 
+(see Section \refersec{datarep:32bitand64bitdwarfformats}); 
+the use of
+the other values is reserved for possible future extensions.
+
+
+
+\section{Executable Objects and Shared Objects} 
+\label{datarep:executableobjectsandsharedobjects}
+
+The relocated addresses in the debugging information for an
+executable object are virtual addresses and the relocated
+addresses in the debugging information for a shared object
+are offsets relative to the start of the lowest region of
+memory loaded from that shared object.
+
+\textit{This requirement makes the debugging information for
+shared objects position independent.  Virtual addresses in a
+shared object may be calculated by adding the offset to the
+base address at which the object was attached. This offset
+is available in the run\dash time linker’s data structures.}
+
+
+
+\section{32-Bit and 64-Bit DWARF Formats}
+\label{datarep:32bitand64bitdwarfformats}
+
+There are two closely related file formats. In the 32\dash bit DWARF
+format, all values that represent lengths of DWARF sections
+and offsets relative to the beginning of DWARF sections are
+represented using 32\dash bits. In the 64\dash bit DWARF format, all
+values that represent lengths of DWARF sections and offsets
+relative to the beginning of DWARF sections are represented
+using 64\dash bits. A special convention applies to the initial
+length field of certain DWARF sections, as well as the CIE and
+FDE structures, so that the 32\dash bit and 64\dash bit DWARF formats
+can coexist and be distinguished within a single linked object.
+
+The differences between the 32\dash\   and 64\dash bit 
+DWARF formats are
+detailed in the following:
+
+
+\begin{enumerate}[1.]
+
+\item  In the 32\dash bit DWARF format, an initial length field
+(see Section \refersec{datarep:initiallengthvalues}) 
+is an unsigned 32\dash bit integer (which
+must be less than 0xfffffff0); in the 64\dash bit DWARF format,
+an initial length field is 96 bits in size, and has two parts:
+\begin{itemize}
+\item The first 32\dash bits have the value 0xffffffff.
+
+\item  The following 64\dash bits contain the actual length
+represented as an unsigned 64\dash bit integer.
+\end{itemize}
+
+\textit{This representation allows a DWARF consumer to dynamically
+detect that a DWARF section contribution is using the 64\dash bit
+format and to adapt its processing accordingly.}
+
+\item Section offset and section length fields that occur
+in the headers of DWARF sections (other than initial length
+fields) are listed following. In the 32\dash bit DWARF format these
+are 32\dash bit unsigned integer values; in the 64\dash bit DWARF format,
+they are 64\dash bit unsigned integer values.
+
+\begin{center}
+\begin{tabular}{lll}
+Section &Name & Role  \\ \hline
+.debug\_ranges & debug\_info\_offset & offset in .debug\_info \\
+.debug\_frame/CIE & CIE\_id & CIE distinguished value \\
+.debug\_frame/FDE & CIE\_pointer & offset in .debug\_frame \\
+.debug\_info & debug\_abbrev\_offset & offset in .debug\_abbrev \\
+.debug\_line & header\_length & length of header itself \\
+.debug\_pubnames & debug\_info\_offset & offset in .debug\_info \\
+                & debug\_info\_length & length of .debug\_info \\
+                &                   & contribution \\
+.debug\_pubtypes & debug\_info\_offset & offset in .debug\_info \\
+                & debug\_info\_length & length of .debug\_info \\
+                &                   & contribution \\
+.debug\_types & debug\_abbrev\_offset & offset in .debug\_info \\
+                & type\_offset & offset in of .debug\_types \\
+
+\end{tabular}
+\end{center}
+
+\textit{The CIE\_id field in a CIE structure must be 64 bits because
+it overlays the CIE\_pointer in a FDE structure; this implicit
+union must be accessed to distinguish whether a CIE or FDE is
+present, consequently, these two fields must exactly overlay
+each other (both offset and size).}
+
+\item Within the body of the .debug\_info or .debug\_types
+section, certain forms of attribute value depend on the choice
+of DWARF format as follows. For the 32\dash bit DWARF format,
+the value is a 32\dash bit unsigned integer; for the 64\dash bit DWARF
+format, the value is a 64\dash bit unsigned integer.
+\begin{center}
+\begin{tabular}{lll}
+Form & Role  \\ \hline
+DW\_FORM\_ref\_addr& offset in .debug\_info \\
+DW\_FORM\_sec\_offset& offset in a section other than .debug\_info or .debug\_str \\
+DW\_FORM\_strp&offset in .debug\_str \\
+DW\_OP\_call\_ref&offset in .debug\_info \\
+\end{tabular}
+\end{center}
+
+\item Within the body of the .debug\_pubnames and
+.debug\_pubtypes sections, the representation of the first field
+of each tuple (which represents an offset in the .debug\_info
+section) depends on the DWARF format as follows: in the
+32\dash bit DWARF format, this field is a 32\dash bit unsigned integer;
+in the 64\dash bit DWARF format, it is a 64\dash bit unsigned integer.
+
+\end{enumerate}
+
+
+The 32\dash bit and 64\dash bit DWARF format conventions must not be
+intermixed within a single compilation unit.
+
+\textit{Attribute values and section header fields that represent
+addresses in the target program are not affected by these
+rules.}
+
+A DWARF consumer that supports the 64\dash bit DWARF format must
+support executables in which some compilation units use the
+32\dash bit format and others use the 64\dash bit format provided that
+the combination links correctly (that is, provided that there
+are no link\dash time errors due to truncation or overflow). (An
+implementation is not required to guarantee detection and
+reporting of all such errors.)
+
+\textit{It is expected that DWARF producing compilers will not use
+the 64\dash bit format by default. In most cases, the division of
+even very large applications into a number of executable and
+shared objects will suffice to assure that the DWARF sections
+within each individual linked object are less than 4 GBytes
+in size. However, for those cases where needed, the 64\dash bit
+format allows the unusual case to be handled as well. Even
+in this case, it is expected that only application supplied
+objects will need to be compiled using the 64\dash bit format;
+separate 32\dash bit format versions of system supplied shared
+executable libraries can still be used.}
+
+
+
+\section{Format of Debugging Information}
+\label{datarep:formatofdebugginginformation}
+
+For each compilation unit compiled with a DWARF producer,
+a contribution is made to the .debug\_info section of
+the object file. Each such contribution consists of a
+compilation unit header 
+(see Section \refersec{datarep:compilationunitheader}) 
+followed by a
+single DW\_TAG\_compile\_unit or DW\_TAG\_partial\_unit debugging
+information entry, together with its children.
+
+For each type defined in a compilation unit, a contribution may
+be made to the .debug\_types section of the object file. Each
+such contribution consists of a type unit header 
+(see Section \refersec{datarep:typeunitheader}) 
+followed by a DW\_TAG\_type\_unit entry, together with
+its children.
+
+Each debugging information entry begins with a code that
+represents an entry in a separate abbreviations table. This
+code is followed directly by a series of attribute values.
+
+The appropriate entry in the abbreviations table guides the
+interpretation of the information contained directly in the
+.debug\_info or .debug\_types section.
+
+Multiple debugging information entries may share the same
+abbreviation table entry. Each compilation unit is associated
+with a particular abbreviation table, but multiple compilation
+units may share the same table.
+\subsection{Unit Headers}
+\label{datarep:unitheaders}
+
+\subsubsection{Compilation Unit Header}
+\label{datarep:compilationunitheader}
+
+\begin{enumerate}[1.]
+
+\item unit\_length (initial length) \\
+A 4\dash byte or 12\dash byte unsigned integer representing the length
+of the .debug\_info contribution for that compilation unit,
+not including the length field itself. In the 32\dash bit DWARF
+format, this is a 4\dash byte unsigned integer (which must be less
+than 0xfffffff0); in the 64\dash bit DWARF format, this consists
+of the 4\dash byte value 0xffffffff followed by an 8\dash byte unsigned
+integer that gives the actual length 
+(see Section \refersec{datarep:32bitand64bitdwarfformats}).
+
+\item  version (uhalf)
+A 2\dash byte unsigned integer representing the version of the
+DWARF information for the compilation unit 
+(see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
+The value in this field is 4.
+
+\item debug\_abbrev\_offset (section offset) \\
+A 4\dash byte or 8\dash byte unsigned offset into the .debug\_abbrev
+section. This offset associates the compilation unit with a
+particular set of debugging information entry abbreviations. In
+the 32\dash bit DWARF format, this is a 4\dash byte unsigned length;
+in the 64\dash bit DWARF format, this is an 8\dash byte unsigned length
+(see Section \refersec{datarep:32bitand64bitdwarfformats}).
+
+\item address\_size (ubyte) \\
+A 1\dash byte unsigned integer representing the size in bytes of
+an address on the target architecture. If the system uses
+segmented addressing, this value represents the size of the
+offset portion of an address.
+
+
+
+
+\end{enumerate}
+
+\subsubsection{Type Unit Header}
+\label{datarep:typeunitheader}
+
+The header for the series of debugging information entries
+contributing to the description of a type that has been
+placed in its own type unit, within the .debug\_types section,
+consists of the following information:
+
+\begin{enumerate}[1.]
+
+\item unit\_length (initial length) \\
+A 4\dash byte or 12\dash byte unsigned integer representing the length
+of the .debug\_types contribution for that compilation unit,
+not including the length field itself. In the 32\dash bit DWARF
+format, this is a 4\dash byte unsigned integer (which must be
+less than 0xfffffff0); in the 64\dash bit DWARF format, this
+consists of the 4\dash byte value 0xffffffff followed by an 
+8\dash byte unsigned integer that gives the actual length
+(see Section \refersec{datarep:32bitand64bitdwarfformats}).
+
+\item  version (uhalf)
+A 2\dash byte unsigned integer representing the version of the
+DWARF information for the compilation unit 
+(see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
+The value in this field is 4.
+
+\item debug\_abbrev\_offset (section offset) \\
+A 4\dash byte or 8\dash byte unsigned offset into the .debug\_abbrev
+section. This offset associates the compilation unit with a
+particular set of debugging information entry abbreviations. In
+the 32\dash bit DWARF format, this is a 4\dash byte unsigned length;
+in the 64\dash bit DWARF format, this is an 8\dash byte unsigned length
+(see Section \refersec{datarep:32bitand64bitdwarfformats}).
+
+\item address\_size (ubyte) \\
+A 1\dash byte unsigned integer representing the size in bytes of
+an address on the target architecture. If the system uses
+segmented addressing, this value represents the size of the
+offset portion of an address.
+
+
+\item type\_signature (8\dash byte unsigned integer) \\
+A 64\dash bit unique signature of the type described in this type
+unit.  
+
+\textit{An attribute that refers(using DW\_FORM\_ref\_sig8) to
+the primary type contained in this type unit uses this value.}
+
+
+\item type\_offset (section offset) \\
+A 4\dash byte or 8\dash byte unsigned offset relative to the beginning
+of the type unit header. This offset refers to the debugging
+information entry that describes the type. Because the type
+may be nested inside a namespace or other structures, and may
+contain references to other types that have not been placed in
+separate type units, it is not necessarily either the first or
+the only entry in the type unit. In the 32\dash bit DWARF format,
+this is a 4\dash byte unsigned length; in the 64\dash bit DWARF format,
+this is an 8\dash byte unsigned length
+(see Section \refersec{datarep:32bitand64bitdwarfformats}).
+
+\end{enumerate}
+
+\subsection{Debugging Information Entry}
+\label{datarep:debugginginformationentry}
+
+Each debugging information entry begins with an unsigned LEB128
+number containing the abbreviation code for the entry. This
+code represents an entry within the abbreviations table
+associated with the compilation unit containing this entry. The
+abbreviation code is followed by a series of attribute values.
+
+On some architectures, there are alignment constraints on
+section boundaries. To make it easier to pad debugging
+information sections to satisfy such constraints, the
+abbreviation code 0 is reserved. Debugging information entries
+consisting of only the abbreviation code 0 are considered
+null entries.
+
+\subsection{Abbreviations Tables}
+\label{datarep:abbreviationstables}
+
+The abbreviations tables for all compilation units
+are contained in a separate object file section called
+.debug\_abbrev. As mentioned before, multiple compilation
+units may share the same abbreviations table.
+
+The abbreviations table for a single compilation unit consists
+of a series of abbreviation declarations. Each declaration
+specifies the tag and attributes for a particular form of
+debugging information entry. Each declaration begins with
+an unsigned LEB128 number representing the abbreviation
+code itself. It is this code that appears at the beginning
+of a debugging information entry in the .debug\_info or
+.debug\_types section. As described above, the abbreviation
+code 0 is reserved for null debugging information entries. The
+abbreviation code is followed by another unsigned LEB128
+number that encodes the entry’s tag. The encodings for the
+tag names are given in 
+Table \refersec{tab:tagencodings}.
+
+Following the tag encoding is a 1\dash byte value that determines
+whether a debugging information entry using this abbreviation
+has child entries or not. If the value is DW\_CHILDREN\_yes,
+the next physically succeeding entry of any debugging
+information entry using this abbreviation is the first
+child of that entry. If the 1\dash byte value following the
+abbreviation’s tag encoding is DW\_CHILDREN\_no, the next
+physically succeeding entry of any debugging information entry
+using this abbreviation is a sibling of that entry. (Either
+the first child or sibling entries may be null entries). The
+encodings for the child determination byte are given in 
+Table \refersec{tab:childdeterminationencodings}
+(As mentioned in 
+Section \refersec{chap:relationshipofdebugginginformationentries}, 
+each chain of
+sibling entries is terminated by a null entry.)
+
+Finally, the child encoding is followed by a series of
+attribute specifications. Each attribute specification
+consists of two parts. The first part is an unsigned LEB128
+number representing the attribute’s name. The second part
+is an unsigned LEB128 number representing the attribute’s
+form. The series of attribute specifications ends with an
+entry containing 0 for the name and 0 for the form.
+
+The attribute form DW\_FORM\_indirect is a special case. For
+attributes with this form, the attribute value itself in the
+.debug\_info or .debug\_types section begins with an unsigned
+LEB128 number that represents its form. This allows producers
+to choose forms for particular attributes dynamically,
+without having to add a new entry to the abbreviations table.
+
+The abbreviations for a given compilation unit end with an
+entry consisting of a 0 byte for the abbreviation code.
+
+See 
+Appendix \refersec{app:compilationunitsandabbreviationstableexample} 
+for a depiction of the organization of the
+debugging information.
+
+\subsection{Attribute Encodings}
+\label{datarep:attributeencodings}
+
+The encodings for the attribute names are given in 
+Table \refersec{tab:attributeencodings}.
+
+The attribute form governs how the value of the attribute is
+encoded. There are nine classes of form, listed below. Each
+class is a set of forms which have related representations
+and which are given a common interpretation according to the
+attribute in which the form is used.
+
+Form DW\_FORM\_sec\_offset is a member of more than one class,
+namely lineptr, loclistptr, macptr or rangelistptr; the list
+of classes allowed by the applicable attribute in 
+Table \refersec{tab:attributeencodings}
+determines the class of the form.
+
+\textit{In DWARF V3 the forms DW\_FORM\_data4 and DW\_FORM\_data8 were
+members of either class constant or one of the classes lineptr,
+loclistptr, macptr or rangelistptr, depending on context. In
+DWARF V4 DW\_FORM\_data4 and DW\_FORM\_data8 are members of class
+constant in all cases. The new DW\_FORM\_sec\_offset replaces
+their usage for the other classes.}
+
+Each possible form belongs to one or more of the following classes:
+
+\begin{itemize}
+\item address \\
+Represented as an object of appropriate size to hold an
+address on the target machine (DW\_FORM\_addr). The size is
+encoded in the compilation unit header 
+(see Section \refersec{datarep:compilationunitheader}).
+This address is relocatable in a relocatable object file and
+is relocated in an executable file or shared object.
+
+\item block \\
+Blocks come in four forms:
+
+\begin{myindentpara}{1cm}
+A 1\dash byte length followed by 0 to 255 contiguous information
+bytes (DW\_FORM\_block1).
+\end{myindentpara}
+
+\begin{myindentpara}{1cm}
+A 2\dash byte length followed by 0 to 65,535 contiguous information
+bytes (DW\_FORM\_block2).
+\end{myindentpara}
+
+
+\begin{myindentpara}{1cm}
+A 4\dash byte length followed by 0 to 4,294,967,295 contiguous
+information bytes (DW\_FORM\_block4).
+\end{myindentpara}
+
+
+\begin{myindentpara}{1cm}
+An unsigned LEB128 length followed by the number of bytes
+specified by the length (DW\_FORM\_block).
+\end{myindentpara}
+
+In all forms, the length is the number of information bytes
+that follow. The information bytes may contain any mixture
+of relocated (or relocatable) addresses, references to other
+debugging information entries or data bytes.
+
+\item constant \\
+There are six forms of constants. There are fixed length
+constant data forms for one, two, four and eight byte values
+(respectively, DW\_FORM\_data1, DW\_FORM\_data2, DW\_FORM\_data4,
+and DW\_FORM\_data8). There are also variable length constant
+data forms encoded using LEB128 numbers (see below). Both
+signed (DW\_FORM\_sdata) and unsigned (DW\_FORM\_udata) variable
+length constants are available
+
+The data in DW\_FORM\_data1, DW\_FORM\_data2, DW\_FORM\_data4 and
+DW\_FORM\_data8 can be anything. Depending on context, it may
+be a signed integer, an unsigned integer, a floating\dash point
+constant, or anything else. A consumer must use context to
+know how to interpret the bits, which if they are target
+machine data (such as an integer or floating point constant)
+will be in target machine byte\dash order.
+
+\textit{If one of the DW\_FORM\_data<n> forms is used to represent a
+signed or unsigned integer, it can be hard for a consumer
+to discover the context necessary to determine which
+interpretation is intended. Producers are therefore strongly
+encouraged to use DW\_FORM\_sdata or DW\_FORM\_udata for signed and
+unsigned integers respectively, rather than 
+DW\_FORM\_data\textless n \textgreater.}
+
+
+\item exprloc \\
+This is an unsigned LEB128 length followed by the
+number of information bytes specified by the length
+(DW\_FORM\_exprloc). The information bytes contain a DWARF
+expression 
+(see Section \refersec{chap:dwarfexpressions}) 
+or location description 
+(see Section \refersec{chap:locationdescriptions}).
+
+\item flag \\
+A flag is represented explicitly as a single byte of data
+(DW\_FORM\_flag) or implicitly (DW\_FORM\_flag\_present). In the
+first case, if the flag has value zero, it indicates the
+absence of the attribute; if the flag has a non\dash zero value,
+it indicates the presence of the attribute. In the second
+case, the attribute is implicitly indicated as present, and
+no value is encoded in the debugging information entry itself.
+
+\item lineptr \\
+This is an offset into the .debug\_line section
+(DW\_FORM\_sec\_offset). It consists of an offset from the
+beginning of the .debug\_line section to the first byte of
+the data making up the line number list for the compilation
+unit. 
+It is relocatable in a relocatable object file, and
+relocated in an executable or shared object. In the 32\dash bit
+DWARF format, this offset is a 4\dash byte unsigned value;
+in the 64\dash bit DWARF format, it is an 8\dash byte unsigned value
+(see Section \refersec{datarep:32bitand64bitdwarfformats}).
+
+
+\item loclistptr \\
+This is an offset into the .debug\_loc section
+(DW\_FORM\_sec\_offset). It consists of an offset from the
+beginning of the .debug\_loc section to the first byte of
+the data making up the location list for the compilation
+unit. 
+It is relocatable in a relocatable object file, and
+relocated in an executable or shared object. In the 32\dash bit
+DWARF format, this offset is a 4\dash byte unsigned value;
+in the 64\dash bit DWARF format, it is an 8\dash byte unsigned value
+(see Section \refersec{datarep:32bitand64bitdwarfformats}).
+
+
+\item macptr \\
+This is an offset into the .debug\_macinfo section
+(DW\_FORM\_sec\_offset). It consists of an offset from the
+beginning of the .debug\_macinfo section to the first byte of
+the data making up the macro information list for the compilation
+unit. 
+It is relocatable in a relocatable object file, and
+relocated in an executable or shared object. In the 32\dash bit
+DWARF format, this offset is a 4\dash byte unsigned value;
+in the 64\dash bit DWARF format, it is an 8\dash byte unsigned value
+(see Section \refersec{datarep:32bitand64bitdwarfformats}).
+
+\item rangelistptr \\
+This is an offset into the .debug\_ranges section
+(DW\_FORM\_sec\_offset). 
+It consists of an
+offset from the beginning of the .debug\_ranges section
+to the beginning of the non\dash contiguous address ranges
+information for the referencing entity.  
+It is relocatable in
+a relocatable object file, and relocated in an executable or
+shared object. In the 32\dash bit DWARF format, this offset
+is a 4\dash byte unsigned value; in the 64\dash bit DWARF
+format, it is an 8\dash byte unsigned value (see Section
+\refersec{datarep:32bitand64bitdwarfformats}).
+\end{itemize}
+
+\textit{Because classes lineptr, loclistptr, macptr and rangelistptr
+share a common representation, it is not possible for an
+attribute to allow more than one of these classes}
+
+
+\begin{itemize}
+\item reference \\
+There are three types of reference.
+
+The first type of reference can identify any debugging
+information entry within the containing unit. This type of
+reference is an offset from the first byte of the compilation
+header for the compilation unit containing the reference. There
+are five forms for this type of reference. There are fixed
+length forms for one, two, four and eight byte offsets
+(respectively, DW\_FORM\_ref1, DW\_FORM\_ref2, DW\_FORM\_ref4,
+and DW\_FORM\_ref8). There is also an unsigned variable
+length offset encoded form that uses unsigned LEB128 numbers
+(DW\_FORM\_ref\_udata). Because this type of reference is within
+the containing compilation unit no relocation of the value
+is required.
+
+The second type of reference can identify any debugging
+information entry within a .debug\_info section; in particular,
+it may refer to an entry in a different compilation unit
+from the unit containing the reference, and may refer to an
+entry in a different shared object.  This type of reference
+(DW\_FORM\_ref\_addr) is an offset from the beginning of the
+.debug\_info section of the target executable or shared object;
+it is relocatable in a relocatable object file and frequently
+relocated in an executable file or shared object. For
+references from one shared object or static executable file
+to another, the relocation and identification of the target
+object must be performed by the consumer. In the 32\dash bit DWARF
+format, this offset is a 4\dash byte unsigned value; 
+in the 64\dash bit DWARF format, it is an 8\dash byte
+unsigned value 
+(see Section \refersec{datarep:32bitand64bitdwarfformats}).
+
+A debugging information entry that may be referenced by
+another compilation unit using DW\_FORM\_ref\_addr must have a
+global symbolic name.
+
+For a reference from one executable or shared object to
+another, the reference is resolved by the debugger to identify
+the shared object or executable and the offset into that
+object’s .debug\_info section in the same fashion as the run
+time loader, either when the debug information is first read,
+or when the reference is used.
+
+The third type of reference can identify any debugging
+information type entry that has been placed in its own
+type unit. This type of reference (DW\_FORM\_ref\_sig8) is the
+64\dash bit type signature 
+(see Section \refersec{datarep:typesignaturecomputation}) 
+that was computed
+for the type.
+
+The use of compilation unit relative references will reduce the
+number of link\dash time relocations and so speed up linking. The
+use of the second and third type of reference allows for the
+sharing of information, such as types, across compilation
+units.
+
+A reference to any kind of compilation unit identifies the
+debugging information entry for that unit, not the preceding
+header.
+
+\item string \\
+A string is a sequence of contiguous non\dash null bytes followed by
+one null byte. A string may be represented immediately in the
+debugging information entry itself (DW\_FORM\_string), or may
+be represented as an offset into a string table contained in
+the .debug\_str section of the object file (DW\_FORM\_strp). In
+the 32\dash bit DWARF format, the representation of a DW\_FORM\_strp
+value is a 4\dash byte unsigned offset; in the 64\dash bit DWARF format,
+it is an 8\dash byte unsigned offset 
+(see Section \refersec{datarep:32bitand64bitdwarfformats}).
+
+If the DW\_AT\_use\_UTF8 attribute is specified for the
+compilation unit entry, string values are encoded using the
+UTF\dash 8 (Unicode Transformation Format\dash 8) from the Universal
+Character Set standard (ISO/IEC 10646\dash 1:1993). Otherwise,
+the string representation is unspecified.
+
+The Unicode Standard Version 3 is fully compatible with
+ISO/IEC 10646\dash 1:1993. It contains all the same characters
+and encoding points as ISO/IEC 10646, as well as additional
+information about the characters and their use.
+
+Earlier versions of DWARF did not specify the representation
+of strings; for compatibility, this version also does
+not. However, the UTF\dash 8 representation is strongly recommended.
+
+\end{itemize}
+
+In no case does an attribute use one of the classes lineptr,
+loclistptr, macptr or rangelistptr to point into either the
+.debug\_info or .debug\_str section.
+
+The form encodings are listed in 
+Table \refersec{tab:attributeformencodings}.
+
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{l|l}
+  \caption{Tag encodings} \label{tab:tagencodings} \\
+  \hline \\ \bfseries Tag name&\bfseries Value\\ \hline
+\endfirsthead
+  \bfseries Tag name&\bfseries Value \\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+DW\_TAG\_array\_type &0x01 \\
+DW\_TAG\_class\_type&0x02 \\
+DW\_TAG\_entry\_point&0x03 \\
+DW\_TAG\_enumeration\_type&0x04 \\
+DW\_TAG\_formal\_parameter&0x05 \\
+DW\_TAG\_imported\_declaration&0x08 \\
+DW\_TAG\_label&0x0a \\
+DW\_TAG\_lexical\_block&0x0b \\
+DW\_TAG\_member&0x0d \\
+DW\_TAG\_pointer\_type&0x0f \\
+DW\_TAG\_reference\_type&0x10 \\
+DW\_TAG\_compile\_unit&0x11 \\
+DW\_TAG\_string\_type&0x12 \\
+DW\_TAG\_structure\_type&0x13 \\
+DW\_TAG\_subroutine\_type&0x15 \\
+DW\_TAG\_typedef&0x16 \\
+DW\_TAG\_union\_type&0x17 \\
+DW\_TAG\_unspecified\_parameters&0x18  \\
+DW\_TAG\_variant&0x19  \\
+DW\_TAG\_common\_block&0x1a  \\
+DW\_TAG\_common\_inclusion&0x1b  \\
+DW\_TAG\_inheritance&0x1c  \\
+DW\_TAG\_inlined\_subroutine&0x1d  \\
+DW\_TAG\_module&0x1e  \\
+DW\_TAG\_ptr\_to\_member\_type&0x1f  \\
+DW\_TAG\_set\_type&0x20  \\
+DW\_TAG\_subrange\_type&0x21  \\
+DW\_TAG\_with\_stmt&0x22  \\
+DW\_TAG\_access\_declaration&0x23  \\
+DW\_TAG\_base\_type&0x24  \\
+DW\_TAG\_catch\_block&0x25  \\
+DW\_TAG\_const\_type&0x26  \\
+DW\_TAG\_constant&0x27  \\
+DW\_TAG\_enumerator&0x28  \\
+DW\_TAG\_file\_type&0x29  \\
+DW\_TAG\_friend&0x2a  \\
+DW\_TAG\_namelist&0x2b    \\
+DW\_TAG\_namelist\_item&0x2c    \\
+DW\_TAG\_packed\_type&0x2d    \\
+DW\_TAG\_subprogram&0x2e    \\
+DW\_TAG\_template\_type\_parameter&0x2f    \\
+DW\_TAG\_template\_value\_parameter&0x30    \\
+DW\_TAG\_thrown\_type&0x31    \\
+DW\_TAG\_try\_block&0x32    \\
+DW\_TAG\_variant\_part&0x33    \\
+DW\_TAG\_variable&0x34    \\
+DW\_TAG\_volatile\_type&0x35    \\
+DW\_TAG\_dwarf\_procedure&0x36     \\
+DW\_TAG\_restrict\_type&0x37      \\
+DW\_TAG\_interface\_type&0x38      \\
+DW\_TAG\_namespace&0x39      \\
+DW\_TAG\_imported\_module&0x3a      \\
+DW\_TAG\_unspecified\_type&0x3b      \\
+DW\_TAG\_partial\_unit&0x3c      \\
+DW\_TAG\_imported\_unit&0x3d      \\
+DW\_TAG\_condition&0x3f      \\
+DW\_TAG\_shared\_type&0x40      \\
+DW\_TAG\_type\_unit \ddag &0x41      \\
+DW\_TAG\_rvalue\_reference\_type \ddag &0x42      \\
+DW\_TAG\_template\_alias \ddag &0x43      \\
+DW\_TAG\_lo\_user&0x4080      \\
+DW\_TAG\_hi\_user&0xffff      \\
+\end{longtable}
+\ddag  TAG new in DWARF Version 4 
+\end{centering}
+
+
+\begin{figure}[here]
+\centering
+\setlength{\extrarowheight}{0.1cm}
+\caption{Child determination encodings}
+\label{tab:childdeterminationencodings}
+\begin{tabular}{l|l} \hline
+Child determination name& Value\\ \hline
+DW\_CHILDREN\_no&0x00 \\ 
+DW\_CHILDREN\_yes&0x01 \\ \hline
+\end{tabular}
+\end{figure}
+
+
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{l|l|l}
+  \caption{Attribute encodings} \label{tab:attributeencodings} \\
+  \hline \\ \bfseries Attribute name&\bfseries Value &\bfseries Classes \\ \hline
+\endfirsthead
+  \bfseries Attribute name&\bfseries Value &\bfseries Classes\\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+DW\_AT\_sibling&0x01&reference \\
+DW\_AT\_location&0x02&exprloc, loclistptr   \\
+DW\_AT\_name&0x03&string   \\
+DW\_AT\_ordering&0x09&constant   \\
+DW\_AT\_byte\_size&0x0b&constant, exprloc, reference   \\
+DW\_AT\_bit\_offset&0x0c&constant, exprloc, reference   \\
+DW\_AT\_bit\_size&0x0d&constant, exprloc, reference   \\
+DW\_AT\_stmt\_list&0x10&lineptr   \\
+DW\_AT\_low\_pc&0x11&address   \\
+DW\_AT\_high\_pc&0x12&address, constant   \\
+DW\_AT\_language&0x13&constant   \\
+DW\_AT\_discr&0x15&reference   \\
+DW\_AT\_discr\_value&0x16&constant   \\
+DW\_AT\_visibility&0x17&constant   \\
+DW\_AT\_import&0x18&reference   \\
+DW\_AT\_string\_length&0x19&exprloc, loclistptr   \\
+DW\_AT\_common\_reference&0x1a&reference   \\
+DW\_AT\_comp\_dir&0x1b&string   \\
+DW\_AT\_const\_value&0x1c&block, constant, string   \\
+DW\_AT\_containing\_type&0x1d&reference     \\
+DW\_AT\_default\_value&0x1e&reference     \\
+DW\_AT\_inline&0x20&constant     \\
+DW\_AT\_is\_optional&0x21&flag     \\
+DW\_AT\_lower\_bound&0x22&constant, exprloc, reference     \\
+DW\_AT\_producer&0x25&string     \\
+DW\_AT\_prototyped&0x27&flag     \\
+DW\_AT\_return\_addr&0x2a&exprloc, loclistptr     \\
+% FIXME: lower case , not Constant
+DW\_AT\_start\_scope&0x2c&Constant, rangelistptr     \\
+DW\_AT\_bit\_stride&0x2e&constant, exprloc, reference     \\
+DW\_AT\_upper\_bound&0x2f&constant, exprloc, reference     \\
+DW\_AT\_abstract\_origin&0x31&reference     \\
+DW\_AT\_accessibility&0x32&constant     \\
+DW\_AT\_address\_class&0x33&constant     \\
+DW\_AT\_artificial&0x34&flag     \\
+DW\_AT\_base\_types&0x35&reference     \\
+DW\_AT\_calling\_convention&0x36&constant     \\
+DW\_AT\_count&0x37&constant, exprloc, reference     \\
+DW\_AT\_data\_member\_location&0x38&constant, exprloc, loclistptr     \\
+DW\_AT\_decl\_column&0x39&constant     \\
+DW\_AT\_decl\_file&0x3a&constant     \\
+DW\_AT\_decl\_line&0x3b&constant     \\
+DW\_AT\_declaration&0x3c&flag     \\
+DW\_AT\_discr\_list&0x3d&block     \\
+DW\_AT\_encoding&0x3e&constant     \\
+DW\_AT\_external&0x3f&flag     \\
+DW\_AT\_frame\_base&0x40&exprloc, loclistptr     \\
+DW\_AT\_friend&0x41&reference     \\
+DW\_AT\_identifier\_case&0x42&constant    \\
+DW\_AT\_macro\_info&0x43&macptr    \\
+DW\_AT\_namelist\_item&0x44&reference    \\
+DW\_AT\_priority&0x45&reference    \\
+DW\_AT\_segment&0x46&exprloc, loclistptr    \\
+DW\_AT\_specification&0x47&reference    \\
+DW\_AT\_static\_link&0x48&exprloc, loclistptr    \\
+DW\_AT\_type&0x49&reference    \\
+DW\_AT\_use\_location&0x4a&exprloc, loclistptr    \\
+DW\_AT\_variable\_parameter&0x4b&flag    \\
+DW\_AT\_virtuality&0x4c&constant    \\
+DW\_AT\_vtable\_elem\_location&0x4d&exprloc, loclistptr    \\
+
+
+DW\_AT\_allocated&0x4e&constant, exprloc, reference     \\
+DW\_AT\_associated&0x4f&constant, exprloc, reference     \\
+DW\_AT\_data\_location&0x50&exprloc     \\
+DW\_AT\_byte\_stride&0x51&constant, exprloc, reference     \\
+DW\_AT\_entry\_pc&0x52&address     \\
+DW\_AT\_use\_UTF8&0x53&flag     \\
+DW\_AT\_extension&0x54&reference     \\
+DW\_AT\_ranges&0x55&rangelistptr     \\
+DW\_AT\_trampoline&0x56&address, flag, reference, string     \\
+DW\_AT\_call\_column&0x57&constant     \\
+DW\_AT\_call\_file&0x58&constant     \\
+DW\_AT\_call\_line&0x59&constant     \\
+DW\_AT\_description&0x5a&string     \\
+DW\_AT\_binary\_scale&0x5b&constant     \\
+DW\_AT\_decimal\_scale&0x5c&constant     \\
+DW\_AT\_small &0x5d&reference     \\
+DW\_AT\_decimal\_sign&0x5e&constant     \\
+DW\_AT\_digit\_count&0x5f&constant     \\
+DW\_AT\_picture\_string&0x60&string      \\
+DW\_AT\_mutable&0x61&flag     \\
+
+
+DW\_AT\_threads\_scaled&0x62&flag     \\
+DW\_AT\_explicit&0x63&flag     \\
+DW\_AT\_object\_pointer&0x64&reference     \\
+DW\_AT\_endianity&0x65&constant     \\
+DW\_AT\_elemental&0x66&flag     \\
+DW\_AT\_pure&0x67&flag     \\
+DW\_AT\_recursive&0x68&flag     \\
+DW\_AT\_signature \ddag &0x69&reference     \\ 
+DW\_AT\_main\_subprogram \ddag &0x6a&flag     \\
+DW\_AT\_data\_bit\_offset \ddag &0x6b&constant     \\
+DW\_AT\_const\_expr \ddag &0x6c&flag     \\
+DW\_AT\_enum\_class \ddag &0x6d&flag     \\
+DW\_AT\_linkage\_name \ddag &0x6e&string     \\
+DW\_AT\_lo\_user&0x2000 & ---     \\
+DW\_AT\_hi\_user&0x3fff& ---     \\
+
+\end{longtable}
+\ddag  Attribute new in DWARF Version 4 
+\end{centering}
+
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{l|l|l}
+  \caption{Attribute form encodings} \label{tab:attributeformencodings} \\
+  \hline \\ \bfseries Form name&\bfseries Value &\bfseries Classes \\ \hline
+\endfirsthead
+  \bfseries Form name&\bfseries Value &\bfseries Classes\\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+DW\_FORM\_addr&0x01&address  \\
+DW\_FORM\_block2&0x03&block \\
+DW\_FORM\_block4&0x04&block  \\
+DW\_FORM\_data2&0x05&constant \\
+DW\_FORM\_data4&0x06&constant \\
+DW\_FORM\_data8&0x07&constant \\
+DW\_FORM\_string&0x08&string \\
+DW\_FORM\_block&0x09&block \\
+DW\_FORM\_block1&0x0a&block \\
+DW\_FORM\_data1&0x0b&constant \\
+DW\_FORM\_flag&0x0c&flag \\
+DW\_FORM\_sdata&0x0d&constant    \\
+DW\_FORM\_strp&0x0e&string         \\
+DW\_FORM\_udata&0x0f&constant         \\
+DW\_FORM\_ref\_addr&0x10&reference         \\
+DW\_FORM\_ref1&0x11&reference          \\
+DW\_FORM\_ref2&0x12&reference         \\
+DW\_FORM\_ref4&0x13&reference         \\
+DW\_FORM\_ref8&0x14&reference \\
+DW\_FORM\_ref\_udata&0x15&reference  \\
+DW\_FORM\_indirect&0x16&(see Section \refersec{datarep:abbreviationstables}) \\
+DW\_FORM\_sec\_offset \ddag &0x17&lineptr, loclistptr, macptr, rangelistptr \\
+DW\_FORM\_exprloc \ddag &0x18&exprloc \\
+DW\_FORM\_flag\_present \ddag &0x19&flag \\
+DW\_FORM\_ref\_sig8 \ddag &0x20&reference \\
+ 
+\end{longtable}
+\ddag  FORM new in DWARF Version 4 
+\end{centering}
+
+\section{Variable Length Data}
+\label{datarep:variablelengthdata}
+Integers may be encoded using ``Little Endian Base 128''
+(LEB128) numbers. LEB128 is a scheme for encoding integers
+densely that exploits the assumption that most integers are
+small in magnitude.
+
+This encoding is equally suitable whether the target machine
+architecture represents data in big\dash\  endian or little\dash endian
+order. It is ``little\dash endian'' only in the sense that it
+avoids using space to represent the ``big'' end of an
+unsigned integer, when the big end is all zeroes or sign
+extension bits.
+
+Unsigned LEB128 (ULEB128) numbers are encoded as follows:
+start at the low order end of an unsigned integer and chop
+it into 7\dash bit chunks. Place each chunk into the low order 7
+bits of a byte. Typically, several of the high order bytes
+will be zero; discard them. Emit the remaining bytes in a
+stream, starting with the low order byte; set the high order
+bit on each byte except the last emitted byte. The high bit
+of zero on the last byte indicates to the decoder that it
+has encountered the last byte.
+
+The integer zero is a special case, consisting of a single
+zero byte.
+
+Table \refersec{tab:examplesofunsignedleb128encodings}
+gives some examples of unsigned LEB128 numbers. The
+0x80 in each case is the high order bit of the byte, indicating
+that an additional byte follows.
+
+
+The encoding for signed, two’s complement LEB128 (SLEB128)
+numbers is similar, except that the criterion for discarding
+high order bytes is not whether they are zero, but whether
+they consist entirely of sign extension bits. Consider the
+32\dash bit integer -2. The three high level bytes of the number
+are sign extension, thus LEB128 would represent it as a single
+byte containing the low order 7 bits, with the high order
+bit cleared to indicate the end of the byte stream. Note
+that there is nothing within the LEB128 representation that
+indicates whether an encoded number is signed or unsigned. The
+decoder must know what type of number to expect. 
+Table \refersec{tab:examplesofunsignedleb128encodings}
+gives some examples of unsigned LEB128 numbers and 
+Table \refersec{tab:examplesofsignedleb128encodings}
+gives some examples of signed LEB128 numbers.
+
+Appendix \refersec{app:variablelengthdataencodingdecodinginformative} 
+gives algorithms for encoding and decoding these forms.
+
+
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{l|l|l}
+  \caption{Examples of unsigned LEB32 encodings} \label{tab:examplesofunsignedleb128encodings} \\
+  \hline \\ \bfseries Number&\bfseries First byte &\bfseries Second byte \\ \hline
+\endfirsthead
+  \bfseries Number&\bfseries First Byte &\bfseries Second byte\\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+2&2& --- \\
+127&127& ---\\
+128& 0 + 0x80 & 1 \\
+129& 1 + 0x80 & 1 \\
+130& 2 + 0x80 & 1 \\
+12857& 57 + 0x80 & 100 \\
+
+\end{longtable}
+\end{centering}
+
+
+
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{l|l|l}
+  \caption{Examples of signed LEB32 encodings} \label{tab:examplesofsignedleb128encodings} \\
+  \hline \\ \bfseries Number&\bfseries First byte &\bfseries Second byte \\ \hline
+\endfirsthead
+  \bfseries Number&\bfseries First Byte &\bfseries Second byte\\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+2&2& --- \\
+-2&0x7e& ---\\
+127& 127 + 0x80 & 0 \\
+-127& 1 + 0x80 & 0x7f \\
+128& 0 + 0x80 & 1 \\
+-128& 0 + 0x80 & 0x7f \\
+129& 1 + 0x80 & 1 \\
+-129& -x7f + 0x80 & 0xtc \\
+
+\end{longtable}
+\end{centering}
+
+
+
+\section{DWARF Expressions and Location Descriptions}
+\label{datarep:dwarfexpressionsandlocationdescriptions}
+\subsection{DWARF Expressions}
+\label{datarep:dwarfexpressions}
+
+A DWARF expression is stored in a block of contiguous
+bytes. The bytes form a sequence of operations. Each operation
+is a 1\dash byte code that identifies that operation, followed by
+zero or more bytes of additional data. The encodings for the
+operations are described in 
+Table \refersec{tab:dwarfoperationencodings}. 
+
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{l|l|l|l}
+  \caption{DWARF operation encodings} \label{tab:dwarfoperationencodings} \\
+  \hline \\ & &\bfseries No. of  &\\ 
+  \bfseries Operation&\bfseries Code &\bfseries Operands &\bfseries Notes\\ \hline
+\endfirsthead
+   & &\bfseries No. of &\\ 
+  \bfseries Operation&\bfseries Code &\bfseries  Operands &\bfseries Notes\\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+
+DW\_OP\_addr&0x03&1 & constant address  \\ 
+& & &(size target specific) \\
+
+DW\_OP\_deref&0x06&0 & \\
+
+
+DW\_OP\_const1u&0x08&1&1\dash byte constant  \\
+DW\_OP\_const1s&0x09&1&1\dash byte constant   \\
+DW\_OP\_const2u&0x0a&1&2\dash byte constant   \\
+DW\_OP\_const2s&0x0b&1&2\dash byte constant   \\
+DW\_OP\_const4u&0x0c&1&4\dash byte constant    \\
+DW\_OP\_const4s&0x0d&1&4\dash byte constant   \\
+DW\_OP\_const8u&0x0e&1&8\dash byte constant   \\
+DW\_OP\_const8s&0x0f&1&8\dash byte constant   \\
+DW\_OP\_constu&0x10&1&ULEB128 constant   \\
+DW\_OP\_consts&0x11&1&SLEB128 constant   \\
+DW\_OP\_dup&0x12&0 &   \\
+DW\_OP\_drop&0x13&0  &   \\
+DW\_OP\_over&0x14&0 &   \\
+DW\_OP\_pick&0x15&1&1\dash byte stack index   \\
+DW\_OP\_swap&0x16&0 &   \\
+DW\_OP\_rot&0x17&0 &   \\
+DW\_OP\_xderef&0x18&0 &   \\
+DW\_OP\_abs&0x19&0 &   \\
+DW\_OP\_and&0x1a&0 &   \\
+DW\_OP\_div&0x1b&0 &   \\
+
+
+
+DW\_OP\_minus&0x1c&0 & \\
+DW\_OP\_mod&0x1d&0 & \\
+DW\_OP\_mul&0x1e&0 & \\
+DW\_OP\_neg&0x1f&0 & \\
+DW\_OP\_not&0x20&0 & \\
+DW\_OP\_or&0x21&0 & \\
+DW\_OP\_plus&0x22&0 & \\
+DW\_OP\_plus\_uconst&0x23&1&ULEB128 addend \\
+DW\_OP\_shl&0x24&0 & \\
+DW\_OP\_shr&0x25&0 & \\
+DW\_OP\_shra&0x26&0 & \\
+DW\_OP\_xor&0x27&0 & \\
+DW\_OP\_skip&0x2f&1&signed 2\dash byte constant \\
+DW\_OP\_bra&0x28&1 & signed 2\dash byte constant \\
+DW\_OP\_eq&0x29&0 & \\
+DW\_OP\_ge&0x2a&0 & \\
+DW\_OP\_gt&0x2b&0 & \\
+DW\_OP\_le&0x2c&0 & \\
+DW\_OP\_lt&0x2d&0  & \\
+DW\_OP\_ne&0x2e&0 & \\ \hline
+
+
+
+DW\_OP\_lit0&0x30 & 0 & \\
+
+DW\_OP\_lit1&0x31 & 0& literals 0 .. 31 = \\
+\ldots & & & (DW\_OP\_lit0 + literal) \\
+DW\_OP\_lit31&0x4f & 0 & \\ \hline
+
+DW\_OP\_reg0 & 0x50 & 0 & \\
+DW\_OP\_reg1 & 0x51 & 0&reg 0 .. 31 = \\
+\ldots & & & (DW\_OP\_reg0 + regnum) \\
+DW\_OP\_reg31 & 0x6f & 0 & \\ \hline
+
+DW\_OP\_breg0 & 0x70 &1 & SLEB128 offset \\
+DW\_OP\_breg1 & 0x71 & 1 &base register 0 .. 31 = \\
+... & &              &(DW\_OP\_breg0 + regnum) \\
+DW\_OP\_breg31 & 0x8f & 1 & \\ \hline
+
+DW\_OP\_regx & 0x90 &1&ULEB128 register \\
+DW\_OP\_fbreg & 0x91&1&SLEB128 offset \\
+DW\_OP\_bregx & 0x92&2 &ULEB128 register followed \\
+& & & by SLEB128 offset \\
+DW\_OP\_piece & 0x93 &1& ULEB128 size of piece addressed \\
+DW\_OP\_deref\_size & 0x94 &1& 1-byte size of data retrieved \\
+DW\_OP\_xderef\_size & 0x95&1&1-byte size of data retrieved \\
+DW\_OP\_nop & 0x96 &0& \\
+
+
+DW\_OP\_push\_object\_address&0x97&0 &  \\
+DW\_OP\_call2&0x98&1& 2\dash byte offset of DIE \\
+DW\_OP\_call4&0x99&1& 4\dash byte offset of DIE \\
+DW\_OP\_call\_ref&0x9a&1& 4\dash\  or 8\dash byte\\
+     &&& offset of DIE \\
+DW\_OP\_form\_tls\_address&0x9b &0& \\
+DW\_OP\_call\_frame\_cfa &0x9c &0& \\
+DW\_OP\_bit\_piece&0x9d &2&ULEB128 size followed by \\
+&&&ULEB128 offset\\
+DW\_OP\_implicit\_value&0x9e &2&ULEB128 size followed by \\
+&&&block of that size\\
+DW\_OP\_stack\_value\_cfa &0x9f &0& \\
+DW\_OP\_lo\_user\_cfa &0xe0 && \\
+DW\_OP\_hi\_user\_cfa &0xff && \\
+
+\end{longtable}
+\end{centering}
+
+
+\subsection{Location Descriptions}
+\label{datarep:locationdescriptions}
+
+A location description is used to compute the 
+location of a variable or other entity.
+
+\subsection{Location Lists}
+\label{datarep:locationlists}
+
+Each entry in a location list is either a location list entry,
+a base address selection entry, or an end of list entry.
+
+A location list entry consists of two address offsets followed
+by a 2\dash byte length, followed by a block of contiguous bytes
+that contains a DWARF location description. The length
+specifies the number of bytes in that block. The two offsets
+are the same size as an address on the target machine.
+
+A base address selection entry and an end of list entry each
+consist of two (constant or relocated) address offsets. The two
+offsets are the same size as an address on the target machine.
+
+For a location list to be specified, the base address of
+the corresponding compilation unit must be defined 
+(see Section  \refersec{chap:normalandpartialcompilationunitentries}).
+
+\section{Base Type Attribute Encodings}
+\label{datarep:basetypeattributeencodings}
+
+The encodings of the constants used in the DW\_AT\_encoding
+attribute are given in 
+Table \refersec{tab:basetypeencodingvalues}
+
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{l|c}
+  \caption{Base type encoding values} \label{tab:basetypeencodingvalues} \\
+  \hline \\ \bfseries Base type encoding code name&\bfseries Value \\ \hline
+\endfirsthead
+  \bfseries Base type encoding code name&\bfseries Value\\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+
+DW\_ATE\_address&0x01 \\
+DW\_ATE\_boolean&0x02 \\
+DW\_ATE\_complex\_float&0x03 \\
+DW\_ATE\_float&0x04 \\
+DW\_ATE\_signed&0x05 \\
+DW\_ATE\_signed\_char&0x06 \\
+DW\_ATE\_unsigned&0x07 \\
+DW\_ATE\_unsigned\_char&0x08 \\
+DW\_ATE\_imaginary\_float&0x09 \\
+DW\_ATE\_packed\_decimal&0x0a \\
+DW\_ATE\_numeric\_string&0x0b \\
+DW\_ATE\_edited&0x0c \\
+DW\_ATE\_signed\_fixed&0x0d \\
+DW\_ATE\_unsigned\_fixed&0x0e \\
+DW\_ATE\_decimal\_float & 0x0f \\
+DW\_ATE\_UTF \ddag & 0x10 \\
+DW\_ATE\_lo\_user & 0x80 \\
+DW\_ATE\_hi\_user & 0xff \\
+
+\end{longtable}
+\ddag  Base type encoding new in DWARF Version 4
+\end{centering}
+
+
+The encodings of the constants used in the 
+DW\_AT\_decimal\_sign attribute 
+are given in 
+Table \refersec{tab:decimalsignencodings}.
+
+
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{l|c}
+  \caption{Decimal sign encodings} \label{tab:decimalsignencodings} \\
+  \hline \\ \bfseries Decimal sign code name&\bfseries Value \\ \hline
+\endfirsthead
+  \bfseries Decimal sign code name&\bfseries Value\\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+
+DW\_DS\_unsigned & 0x01  \\
+DW\_DS\_leading\_overpunch & 0x02  \\
+DW\_DS\_trailing\_overpunch & 0x03  \\
+DW\_DS\_leading\_separate & 0x04  \\
+DW\_DS\_trailing\_separate & 0x05  \\
+
+\end{longtable}
+\end{centering}
+
+The encodings of the constants used in the 
+DW\_AT\_endianity attribute are given in 
+Table \refersec{tab:endianityencodings}.
+
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{l|c}
+  \caption{Endianity encodings} \label{tab:endianityencodings}\\
+  \hline \\ \bfseries Endian code name&\bfseries Value \\ \hline
+\endfirsthead
+  \bfseries Endian code name&\bfseries Value\\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+
+DW\_END\_default  & 0x00 \\
+DW\_END\_big & 0x01 \\
+DW\_END\_little & 0x02 \\
+DW\_END\_lo\_user & 0x40 \\
+DW\_END\_hi\_user & 0xff \\
+
+\end{longtable}
+\end{centering}
+
+\section{Accessibility Codes}
+\label{datarep:accessibilitycodes}
+The encodings of the constants used in the DW\_AT\_accessibility
+attribute are given in 
+Table \refersec{tab:accessibilityencodings}.
+
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{l|c}
+  \caption{Accessibility encodings} \label{tab:accessibilityencodings}\\
+  \hline \\ \bfseries Accessibility code name&\bfseries Value \\ \hline
+\endfirsthead
+  \bfseries Accessibility code name&\bfseries Value\\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+
+DW\_ACCESS\_public&0x01  \\
+DW\_ACCESS\_protected&0x02 \\
+DW\_ACCESS\_private&0x03 \\
+
+\end{longtable}
+\end{centering}
+
+
+\section{Visibility Codes}
+\label{datarep:visibilitycodes}
+The encodings of the constants used in the 
+DW\_AT\_visibility attribute are given in 
+Table \refersec{tab:visibilityencodings}. 
+
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{l|c}
+  \caption{Visibility encodings} \label{tab:visibilityencodings}\\
+  \hline \\ \bfseries Visiibility code name&\bfseries Value \\ \hline
+\endfirsthead
+  \bfseries Visibility code name&\bfseries Value\\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+
+DW\_VIS\_local&0x01 \\
+DW\_VIS\_exported&0x02 \\
+DW\_VIS\_qualified&0x03 \\
+
+\end{longtable}
+\end{centering}
+
+\section{Virtuality Codes}
+\label{datarep:vitualitycodes}
+
+The encodings of the constants used in the 
+DW\_AT\_virtuality attribute are given in 
+Table \refersec{tab:virtualityencodings}.
+
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{l|c}
+  \caption{Virtuality encodings} \label{tab:virtualityencodings}\\
+  \hline \\ \bfseries Virtuality code name&\bfseries Value \\ \hline
+\endfirsthead
+  \bfseries Virtuality code name&\bfseries Value\\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+
+DW\_VIRTUALITY\_none&0x00 \\
+DW\_VIRTUALITY\_virtual&0x01 \\
+DW\_VIRTUALITY\_pure\_virtual&0x02 \\
+
+
+
+\end{longtable}
+\end{centering}
+
+The value 
+DW\_VIRTUALITY\_none is equivalent to the absence of the 
+DW\_AT\_virtuality
+attribute.
+
+\section{Source Languages}
+\label{datarep:sourcelanguages}
+
+The encodings of the constants used in the DW\_AT\_language
+attribute are given in 
+Table \refersec{tab:languageencodings}.
+Names marked with
+% If we don't force a following space it looks odd
+\dag \  
+and their associated values are reserved, but the
+languages they represent are not well supported. 
+Table \refersec{tab:languageencodings}
+also shows the default lower bound, if any, assumed for
+an omitted DW\_AT\_lower\_bound attribute in the context of a
+DW\_TAG\_subrange\_type debugging information entry for each
+defined language.
+
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{l|c|c}
+  \caption{Language encodings} \label{tab:languageencodings}\\
+  \hline \\ \bfseries Language name&\bfseries Value &\bfseries Default Lower Bound \\ \hline
+\endfirsthead
+  \bfseries Language name&\bfseries Value &\bfseries Default Lower Bound\\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+
+DW\_LANG\_C89&0x0001&0       \\
+DW\_LANG\_C&0x0002&0       \\
+DW\_LANG\_Ada83 \dag &0x0003&1       \\
+DW\_LANG\_C\_plus\_plus &0x0004&0       \\
+DW\_LANG\_Cobol74 \dag &0x0005&1       \\
+DW\_LANG\_Cobol85 \dag &0x0006&1       \\
+DW\_LANG\_Fortran77&0x0007&1       \\
+DW\_LANG\_Fortran90&0x0008&1       \\
+DW\_LANG\_Pascal83&0x0009&1       \\
+DW\_LANG\_Modula2&0x000a&1       \\
+DW\_LANG\_Java&0x000b&0       \\
+DW\_LANG\_C99&0x000c&0       \\
+DW\_LANG\_Ada95 \dag &0x000d&1       \\
+DW\_LANG\_Fortran95 &0x000e&1       \\
+DW\_LANG\_PLI \dag &0x000f&1 \\
+DW\_LANG\_ObjC&0x0010&0 \\
+DW\_LANG\_ObjC\_plus\_plus&0x0011&0 \\
+DW\_LANG\_UPC&0x0012&0 \\
+DW\_LANG\_D&0x0013&0 \\
+DW\_LANG\_Python \dag &0x0014&0 \\
+DW\_LANG\_lo\_user&0x8000 & \\
+DW\_LANG\_hi\_user&0xffff & \\
+
+\end{longtable}
+\dag See text
+\end{centering}
+
+\section{Address Class Encodings}
+\label{datarep:addressclassencodings}
+
+The value of the common address class encoding 
+DW\_ADDR\_none is 0.
+
+
+\section{Identifier Case}
+\label{datarep:identifiercase}
+
+The encodings of the constants used in the 
+DW\_AT\_identifier\_case attribute are given in 
+Table \refersec{tab:identifiercaseencodings}.
+
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{l|c}
+  \caption{Identifier case encodings} \label{tab:identifiercaseencodings}\\
+  \hline \\ \bfseries Identifier case name&\bfseries Value \\ \hline
+\endfirsthead
+  \bfseries Identifier case name&\bfseries Value\\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+DW\_ID\_case\_sensitive&0x00     \\
+DW\_ID\_up\_case&0x01     \\
+DW\_ID\_down\_case&0x02     \\
+DW\_ID\_case\_insensitive&0x03     \\
+\end{longtable}
+\end{centering}
+
+\section{Calling Convention Encodings}
+\label{datarep:callingconventionencodings}
+The encodings of the constants used in the 
+DW\_AT\_calling\_convention attribute are given in
+Table \refersec{tab:callingconventionencodings}.
+
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{l|c}
+  \caption{Calling convention encodings} \label{tab:callingconventionencodings}\\
+  \hline \\ \bfseries Calling Convention name&\bfseries Value \\ \hline
+\endfirsthead
+  \bfseries Calling Convention name&\bfseries Value\\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+
+DW\_CC\_normal&0x01     \\
+DW\_CC\_program&0x02     \\
+DW\_CC\_nocall&0x03     \\
+DW\_CC\_lo\_user&0x40     \\
+DW\_CC\_hi\_user&0xff     \\
+
+\end{longtable}
+\end{centering}
+
+\section{Inline Codes}
+\label{datarep:inlinecodes}
+
+The encodings of the constants used in the 
+DW\_AT\_inline attribute are given in 
+Table \refersec{tab:inlineencodings}.
+
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{l|c}
+  \caption{Inline encodings} \label{tab:inlineencodings}\\
+  \hline \\ \bfseries Iline Code name&\bfseries Value \\ \hline
+\endfirsthead
+  \bfseries Iline Code name&\bfseries Value\\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+
+DW\_INL\_not\_inlined&0x00      \\
+DW\_INL\_inlined&0x01      \\
+DW\_INL\_declared\_not\_inlined&0x02      \\
+DW\_INL\_declared\_inlined&0x03      \\
+
+\end{longtable}
+\end{centering}
+
+% this clearpage is ugly, but the following table came
+% out oddly without it.
+\clearpage
+\section{Array Ordering}
+\label{datarep:arrayordering}
+
+The encodings of the constants used in the 
+DW\_AT\_ordering attribute are given in 
+Table \refersec{tab:orderingencodings}.
+
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{l|c}
+  \caption{Ordering encodings} \label{tab:orderingencodings}\\
+  \hline \\ \bfseries Ordering name&\bfseries Value \\ \hline
+\endfirsthead
+  \bfseries Ordering name&\bfseries Value\\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+
+DW\_ORD\_row\_major&0x00  \\
+DW\_ORD\_col\_major&0x01  \\
+
+\end{longtable}
+\end{centering}
+
+
+\section{Discriminant Lists}
+\label{datarep:discriminantlists}
+
+The descriptors used in the 
+DW\_AT\_discr\_list attribute are 
+encoded as 1\dash byte constants. The
+defined values are given in 
+Table \refersec{tab:discriminantdescriptorencodings}.
+
+% Odd that the 'Name' field captalized here, it is not caps elsewhere.
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{l|c}
+  \caption{Discriminant descriptor encodings} \label{tab:discriminantdescriptorencodings}\\
+  \hline \\ \bfseries Descriptor Name&\bfseries Value \\ \hline
+\endfirsthead
+  \bfseries Descriptor Name&\bfseries Value\\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+
+DW\_DSC\_label&0x00 \\
+DW\_DSC\_range&0x01 \\
+
+\end{longtable}
+\end{centering}
+
+\section{Name Lookup Tables}
+\label{datarep:namelookuptables}
+
+Each set of entries in the table of global names contained
+in the .debug\_pubnames and .debug\_pubtypes sections begins
+with a header consisting of:
+
+
+\begin{enumerate}[1.]
+\item unit\_length (initial length) \\
+A 4\dash byte or 12\dash byte unsigned integer representing the length
+of the .debug\_info contribution for that compilation unit,
+not including the length field itself. In the 32\dash bit DWARF
+format, this is a 4\dash byte unsigned integer (which must be less
+than 0xfffffff0); in the 64\dash bit DWARF format, this consists
+of the 4\dash byte value 0xffffffff followed by an 8\dash byte unsigned
+integer that gives the actual length
+(see Section \refersec{datarep:32bitand64bitdwarfformats}).
+
+\item  version (uhalf)
+A 2\dash byte unsigned integer representing the version of the
+DWARF information for the compilation unit
+(see Appendix \refersec{app:dwarfsectionversionnumbersinformative}).
+The value in this field is 4.
+
+% Some say unsigned offset this just says offset: FIXME
+\item debug\_info\_offset (section offset) \\
+A 4\dash byte or 8\dash byte offset into the .debug\_info
+section of the compilation unit header.
+In
+the 32\dash bit DWARF format, this is a 4\dash byte unsigned offset;
+in the 64\dash bit DWARF format, this is an 8\dash byte unsigned offsets
+(see Section \refersec{datarep:32bitand64bitdwarfformats}).
+
+\item  debug\_info\_length (section length) \\
+A 4\dash byte or 8\dash byte length containing the size in bytes of the
+contents of the .debug\_info section generated to represent
+this compilation unit. In the 32\dash bit DWARF format, this is
+a 4\dash byte unsigned length; in the 64\dash bit DWARF format, this
+is an 8-byte unsigned length 
+(see Section \refersec{datarep:32bitand64bitdwarfformats}).
+
+
+\end{enumerate}
+
+This header is followed by a series of tuples. Each tuple
+consists of a 4\dash byte or 8\dash byte offset followed by a string
+of non\dash null bytes terminated by one null byte. 
+In the 32\dash bit
+DWARF format, this is a 4\dash byte offset; in the 64\dash bit DWARF
+format, it is an 8\dash byte offset. 
+Each set is terminated by an
+offset containing the value 0.
+
+
+\section{Address Range Table}
+\label{datarep:addrssrangetable}
+
+Each set of entries in the table of address ranges contained
+in the .debug\_aranges section begins with a header containing:
+
+\begin{enumerate}[1.]
+% FIXME The unit length text is not fully consistent across
+% these tables.
+
+\item unit\_length (initial length) \\
+A 4-byte or 12-byte length containing the length of the
+set of entries for this compilation unit, not including the
+length field itself. In the 32-bit DWARF format, this is a
+4-byte unsigned integer (which must be less than 0xfffffff0);
+in the 64-bit DWARF format, this consists of the 4-byte value
+0xffffffff followed by an 8-byte unsigned integer that gives
+the actual length 
+(see Section \refersec{datarep:32bitand64bitdwarfformats}).
+
+\item version (uhalf) \\
+A 2\dash byte version identifier containing the value 2 
+(see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
+
+\item debug\_info\_offset (section offset) \\
+A 4\dash byte or 8\dash byte offset into the .debug\_info section of
+the compilation unit header. In the 32\dash bit DWARF format,
+this is a 4\dash byte unsigned offset; in the 64\dash bit DWARF format,
+this is an 8\dash byte unsigned offset 
+(see Section \refersec{datarep:32bitand64bitdwarfformats}).
+
+\item address\_size (ubyte) \\
+A 1\dash byte unsigned integer containing the size in bytes of an
+address (or the offset portion of an address for segmented
+addressing) on the target system.
+
+\item segment\_size (ubyte) \\
+A 1\dash byte unsigned integer containing the size in bytes of a
+segment selector on the target system.
+
+\end{enumerate}
+
+This header is followed by a series of tuples. Each tuple
+consists of a segment, an address and a length. 
+The segment
+size is given by the segment\_size field of the header; the
+address and length size are each given by the address\_size
+field of the header. 
+The first tuple following the header in
+each set begins at an offset that is a multiple of the size
+of a single tuple (that is, the size of a segment selector
+plus twice the size of an address). 
+The header is padded, if
+necessary, to that boundary. Each set of tuples is terminated
+by a 0 for the segment, a 0 for the address and 0 for the
+length. If the segment\_size field in the header is zero,
+the segment selectors are omitted from all tuples, including
+the terminating tuple.
+
+
+\section{Line Number Information}
+\label{datarep:linenumberinformation}
+
+The version number in the line number program header is 4
+(see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
+
+The boolean values ``true'' and ``false'' 
+used by the line number information program are encoded
+as a single byte containing the value 0 
+for ``false,'' and a non-zero value for ``true.''
+
+The encodings for the standard opcodes are given in 
+Table \refersec{tab:linenumberstandardopcodeencodings}.
+
+% Odd that the 'Name' field captalized here, it is not caps elsewhere.
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{l|c}
+  \caption{Line Number Standard Opcode encodings} \label{tab:linenumberstandardopcodeencodings}\\
+  \hline \\ \bfseries Opcode Name&\bfseries Value \\ \hline
+\endfirsthead
+  \bfseries Opcode Name&\bfseries Value\\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+
+DW\_LNS\_copy&0x01 \\
+DW\_LNS\_advance\_pc&0x02 \\
+DW\_LNS\_advance\_line&0x03 \\
+DW\_LNS\_set\_file&0x04 \\
+DW\_LNS\_set\_column&0x05 \\
+DW\_LNS\_negate\_stmt&0x06 \\
+DW\_LNS\_set\_basic\_block&0x07 \\
+DW\_LNS\_const\_add\_pc*0x08 \\
+DW\_LNS\_fixed\_advance\_pc&0x09 \\
+DW\_LNS\_set\_prologue\_end&0x0a \\
+DW\_LNS\_set\_epilogue\_begin&0x0b \\
+DW\_LNS\_set\_isa&0x0c \\
+
+\end{longtable}
+\end{centering}
+
+
+The encodings for the extended opcodes are given in 
+Table \refersec{tab:linenumberextendedopcodeencodings}.
+
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{l|c}
+  \caption{Line Number Extended Opcode encodings} \label{tab:linenumberextendedopcodeencodings}\\
+  \hline \\ \bfseries Opcode Name&\bfseries Value \\ \hline
+\endfirsthead
+  \bfseries Opcode Name&\bfseries Value\\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+
+DW\_LNE\_end\_sequence&0x01    \\
+DW\_LNE\_set\_address&0x02\\
+DW\_LNE\_define\_file&0x03\\
+DW\_LNE\_set\_discriminator \ddag &0x04   \\
+DW\_LNE\_lo\_user&0x80   \\
+DW\_LNE\_hi\_user&0xff   \\
+
+\end{longtable}
+\ddag Extended opcode new in DWARF Version 4.
+\end{centering}
+
+\section{Macro Information}
+\label{datarep:macroinformation}
+
+The source line numbers and source file indices encoded in the
+macro information section are represented as unsigned LEB128
+numbers as are the constants in a DW\_MACINFO\_vendor\_ext entry.
+
+The macinfo type is encoded as a single byte. 
+The encodings are given in 
+Table \refersec{tab:macinfotypeencodings}.
+
+
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{l|c}
+  \caption{Macinfo Type Encodings} \label{tab:macinfotypeencodings}\\
+  \hline \\ \bfseries Macinfo Type Name&\bfseries Value \\ \hline
+\endfirsthead
+  \bfseries Macinfo Type Name&\bfseries Value\\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+
+DW\_MACINFO\_define&0x01 \\
+DW\_MACINFO\_undef&0x02 \\
+DW\_MACINFO\_start\_file&0x03 \\
+DW\_MACINFO\_end\_file&0x04 \\
+DW\_MACINFO\_vendor\_ext&0xff \\
+
+\end{longtable}
+\end{centering}
+
+\section{Call Frame Information}
+\label{datarep:callframeinformation}
+
+In the 32\dash bit DWARF format, the value of the CIE id in the
+CIE header is 0xffffffff; in the 64\dash bit DWARF format, the
+value is 0xffffffffffffffff.
+
+The value of the CIE version number is 4 
+(see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
+
+Call frame instructions are encoded in one or more bytes. The
+primary opcode is encoded in the high order two bits of
+the first byte (that is, opcode = byte >> 6). An operand
+or extended opcode may be encoded in the low order 6
+bits. Additional operands are encoded in subsequent bytes.
+The instructions and their encodings are presented in
+Table \refersec{tab:callframeinstructionencodings}.
+
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{l|c|c|l|l}
+  \caption{Call frame instruction encodings} \label{tab:callframeinstructionencodings} \\
+  \hline \\ &\bfseries High 2 &\bfseries Low 6 &  & \\
+  \bfseries Instruction&\bfseries Bits &\bfseries Bits &\bfseries Operand 1 &\bfseries Operand 2\\ \hline
+\endfirsthead
+   & \bfseries High 2 &\bfseries Low 6 &  &\\
+  \bfseries Instruction&\bfseries Bits &\bfseries Bits &\bfseries Operand 1 &\bfseries Operand 2\\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+
+DW\_CFA\_advance\_loc&0x1&delta & \\
+DW\_CFA\_offset&0x2&register&ULEB128 offset \\
+DW\_CFA\_restore&0x3&register & & \\
+DW\_CFA\_nop&0&0 & & \\
+DW\_CFA\_set\_loc&0&0x01&address & \\
+DW\_CFA\_advance\_loc1&0&0x02&1\dash byte delta & \\
+DW\_CFA\_advance\_loc2&0&0x03&2\dash byte delta & \\
+DW\_CFA\_advance\_loc4&0&0x04&4\dash byte delta & \\
+DW\_CFA\_offset\_extended&0&0x05&ULEB128 register&ULEB128 offset \\
+DW\_CFA\_restore\_extended&0&0x06&ULEB128 register & \\
+DW\_CFA\_undefined&0&0x07&ULEB128 register & \\
+DW\_CFA\_same\_value&0&0x08 &ULEB128 register & \\
+DW\_CFA\_register&0&0x09&ULEB128 register &ULEB128 offset \\
+DW\_CFA\_remember\_state&0&0x0a & & \\
+DW\_CFA\_restore\_state&0&0x0b & & \\
+DW\_CFA\_def\_cfa&0&0x0c &ULEB128 register&ULEB128 offset \\
+DW\_CFA\_def\_cfa\_register&0&0x0d&ULEB128 register & \\
+DW\_CFA\_def\_cfa\_offset&0&0x0e &ULEB128 offset & \\
+DW\_CFA\_def\_cfa\_expression&0&0x0f &BLOCK  \\
+DW\_CFA\_expression&0&0x10&ULEB128 register & BLOCK \\
+
+DW\_CFA\_offset\_extended\_sf&0&0x11&ULEB128 register&SLEB128 offset \\
+DW\_CFA\_def\_cfa\_sf&0&0x12&ULEB128 register&SLEB128 offset \\
+DW\_CFA\_def\_cfa\_offset\_sf&0&0x13&SLEB128 offset & \\
+DW\_CFA\_val\_offset&0&0x14&ULEB128&ULEB128 \\
+DW\_CFA\_val\_offset\_sf&0&0x15&ULEB128&SLEB128 \\
+DW\_CFA\_val\_expression&0&0x16&ULEB128&BLOCK  \\
+DW\_CFA\_lo\_user&0&0x1c   & & \\
+DW\_CFA\_hi\_user&0&0x3f & & \\
+\end{longtable}
+\end{centering}
+
+\section{Non-continguous Address Ranges}
+\label{datarep:noncontiguousaddressranges}
+
+Each entry in a range list 
+(see Section \refersec{chap:noncontiguousaddressranges})
+is either a
+range list entry, a base address selection entry, or an end
+of list entry.
+
+A range list entry consists of two relative addresses. The
+addresses are the same size as addresses on the target machine.
+
+A base address selection entry and an end of list entry each
+consist of two (constant or relocated) addresses. The two
+addresses are the same size as addresses on the target machine.
+
+For a range list to be specified, the base address of the
+corresponding compilation unit must be defined 
+(see Section \refersec{chap:normalandpartialcompilationunitentries}).
+
+
+\section{Dependencies and Constraints}
+\label{datarep:dependenciesandconstraints}
+
+The debugging information in this format is intended to
+exist in the .debug\_abbrev, .debug\_aranges, .debug\_frame,
+.debug\_info, .debug\_line, .debug\_loc, .debug\_macinfo,
+.debug\_pubnames, .debug\_pubtypes, .debug\_ranges, .debug\_str
+and .debug\_types sections of an object file, or equivalent
+separate file or database. The information is not 
+word\dash aligned. Consequently: •
+
+\begin{itemize}
+\item For the 32\dash bit DWARF format and a target architecture with
+32\dash bit addresses, an assembler or compiler must provide a way
+to produce 2\dash byte and 4\dash byte quantities without alignment
+restrictions, and the linker must be able to relocate a
+4\dash byte address or section offset that occurs at an arbitrary
+alignment.
+
+\item For the 32\dash bit DWARF format and a target architecture with
+64\dash bit addresses, an assembler or compiler must provide a
+way to produce 2\dash byte, 4\dash byte and 8\dash byte quantities without
+alignment restrictions, and the linker must be able to relocate
+an 8\dash byte address or 4\dash byte section offset that occurs at an
+arbitrary alignment.
+
+\item For the 64\dash bit DWARF format and a target architecture with
+32\dash bit addresses, an assembler or compiler must provide a
+way to produce 2\dash byte, 4\dash byte and 8\dash byte quantities without
+alignment restrictions, and the linker must be able to relocate
+a 4\dash byte address or 8\dash byte section offset that occurs at an
+arbitrary alignment.
+
+\textit{It is expected that this will be required only for very large
+32\dash bit programs or by those architectures which support
+a mix of 32\dash bit and 64\dash bit code and data within the same
+executable object.}
+
+\item For the 64\dash bit DWARF format and a target architecture with
+64\dash bit addresses, an assembler or compiler must provide a
+way to produce 2\dash byte, 4\dash byte and 8\dash byte quantities without
+alignment restrictions, and the linker must be able to
+relocate an 8\dash byte address or section offset that occurs at
+an arbitrary alignment.
+\end{itemize}
+
+\section{Integer Representation Names}
+\label{datarep:integerrepresentationnames}
+
+The sizes of the integers used in the lookup by name, lookup
+by address, line number and call frame information sections
+are given in
+Table 41 \refersec{tab:integerrepresentationnames}.
+
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{c|l}
+  \caption{Integer Representation Names} \label{tab:integerrepresentationnames}\\
+  \hline \\ \bfseries Representation Name&\bfseries Representation \\ \hline
+\endfirsthead
+  \bfseries Representation Name&\bfseries Representation\\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+
+sbyte&  signed, 1\dash byte integer \\
+ubyte&unsigned, 1\dash byte integer \\
+uhalf&unsigned, 2\dash byte integer \\
+uword&unsigned, 4\dash byte integer \\
+
+\end{longtable}
+\end{centering}
+
+\section{Type Signature Computation}
+\label{datarep:typesignaturecomputation}
+
+A type signature is computed only by the DWARF producer;
+it is used by a DWARF consumer to resolve type references to
+the type definitions that are contained in type units.
+
+The type signature for a type T0 is formed from the MD5
+hash of a flattened description of the type. The flattened
+description of the type is a byte sequence derived from the
+DWARF encoding of the type as follows:
+
+\begin{enumerate}[1.]
+
+\item Start with an empty sequence S and a list V of visited
+types, where V is initialized to a list containing the type
+T0 as its single element. Elements in V are indexed from 1,
+so that V[1] is T0.
+
+\item If the debugging information entry represents a type that
+is nested inside another type or a namespace, append to S
+the type’s context as follows: For each surrounding type
+or namespace, beginning with the outermost such construct,
+append the letter 'C', the DWARF tag of the construct, and
+the name (taken from the DW\_AT\_name attribute) of the type
+or namespace (including its trailing null byte).
+
+\item  Append to S the letter 'D', followed by the DWARF tag of
+the debugging information entry.
+
+\item For each of the following attributes that are present in
+the debugging information entry, in the order listed below,
+append to S a marker letter (see below), the DWARF attribute
+code, and the attribute value.
+
+\begin{itemize}
+\item DW\_AT\_name
+\item DW\_AT\_accessibility
+\item DW\_AT\_address\_class
+\item DW\_AT\_allocated
+\item DW\_AT\_artificial
+\item DW\_AT\_associated
+\item DW\_AT\_binary\_scale
+\item DW\_AT\_bit\_offset
+\item DW\_AT\_bit\_size
+\item DW\_AT\_bit\_stride
+\item DW\_AT\_byte\_size
+\item DW\_AT\_byte\_stride
+\item DW\_AT\_const\_expr
+\item DW\_AT\_const\_value
+\item DW\_AT\_containing\_type
+\item DW\_AT\_count
+\item DW\_AT\_data\_bit\_offset
+\item DW\_AT\_data\_location
+\item DW\_AT\_data\_member\_location
+\item DW\_AT\_decimal\_scale
+\item DW\_AT\_decimal\_sign
+\item DW\_AT\_default\_value
+\item DW\_AT\_digit\_count
+\item DW\_AT\_discr
+\item DW\_AT\_discr\_list
+\item DW\_AT\_discr\_value
+\item DW\_AT\_encoding
+\item DW\_AT\_enum\_class
+\item DW\_AT\_endianity
+\item DW\_AT\_explicit
+\item DW\_AT\_is\_optional
+\item DW\_AT\_location
+\item DW\_AT\_lower\_bound
+\item DW\_AT\_mutable
+\item DW\_AT\_ordering
+\item DW\_AT\_picture\_string
+\item DW\_AT\_prototyped
+\item DW\_AT\_small
+\item DW\_AT\_segment
+\item DW\_AT\_string\_length
+\item DW\_AT\_threads\_scaled
+\item DW\_AT\_upper\_bound
+\item DW\_AT\_use\_location
+\item DW\_AT\_use\_UTF8
+\item DW\_AT\_variable\_parameter
+\item DW\_AT\_virtuality
+\item DW\_AT\_visibility
+\item DW\_AT\_vtable\_elem\_location
+\end{itemize}
+
+Note that except for the initial DW\_AT\_name attribute,
+attributes are appended in order according to the alphabetical
+spelling of their identifier.
+
+If an implementation defines any vendor-specific attributes,
+any such attributes that are essential to the definition of
+the type should also be included at the end of the above list,
+in their own alphabetical suborder.
+
+An attribute that refers to another type entry T is processed
+as follows: (a) If T is in the list V at some V[x], use the
+letter 'R' as the marker and use the unsigned LEB128 encoding
+of x as the attribute value; otherwise, (b) use the letter 'T'
+as the marker, process the type T recursively by performing
+Steps 2 through 7, and use the result as the attribute value.
+
+Other attribute values use the letter 'A' as the marker, and
+the value consists of the form code (encoded as an unsigned
+LEB128 value) followed by the encoding of the value according
+to the form code. To ensure reproducibility of the signature,
+the set of forms used in the signature computation is limited
+to the following: DW\_FORM\_sdata, 
+DW\_FORM\_flag, 
+DW\_FORM\_string,
+and DW\_FORM\_block.
+
+\item If the tag in Step 3 is one of DW\-\_TAG\-\_pointer\-\_type,
+DW\-\_TAG\-\_reference\-\_type, 
+DW\-\_TAG\-\_rvalue\-\_reference\-\_type,
+DW\-\_TAG\-\_ptr\-\_to\-\_member\-\_type, 
+or DW\-\_TAG\-\_friend, and the referenced
+type (via the DW\-\_AT\-\_type or 
+DW\-\_AT\-\_friend attribute) has a
+DW\-\_AT\-\_name attribute, append to S the letter 'N', the DWARF
+attribute code (DW\-\_AT\-\_type or 
+DW\-\_AT\-\_friend), the context of
+the type (according to the method in Step 2), the letter 'E',
+and the name of the type. For DW\-\_TAG\-\_friend, if the referenced
+entry is a DW\-\_TAG\-\_subprogram, the context is omitted and the
+name to be used is the ABI-specific name of the subprogram
+(e.g., the mangled linker name).
+
+
+\item 6.If the tag in Step 3 is not one of DW\-\_TAG\-\_pointer\-\_type,
+DW\-\_TAG\-\_reference\-\_type, 
+DW\-\_TAG\-\_rvalue\-\_reference\-\_type,
+DW\-\_TAG\-\_ptr\-\_to\-\_member\-\_type, or 
+DW\-\_TAG\-\_friend, but has
+a DW\-\_AT\-\_type attribute, or if the referenced type (via
+the DW\-\_AT\-\_type or 
+DW\-\_AT\-\_friend attribute) does not have a
+DW\-\_AT\-\_name attribute, the attribute is processed according to
+the method in Step 4 for an attribute that refers to another
+type entry.
+
+
+\item Visit each child C of the debugging information
+entry as follows: If C is a nested type entry or a member
+function entry, and has a DW\-\_AT\-\_name attribute, append to
+S the letter 'S', the tag of C, and its name; otherwise,
+process C recursively by performing Steps 3 through 7,
+appending the result to S. Following the last child (or if
+there are no children), append a zero byte.
+\end{enumerate}
+
+
+
+For the purposes of this algorithm, if a debugging information
+entry S has a 
+DW\-\_AT\-\_specification 
+attribute that refers to
+another entry D (which has a 
+DW\-\_AT\-\_declaration 
+attribute),
+then S inherits the attributes and children of D, and S is
+processed as if those attributes and children were present in
+the entry S. Exception: if a particular attribute is found in
+both S and D, the attribute in S is used and the corresponding
+one in D is ignored.
+
+DWARF tag and attribute codes are appended to the sequence
+as unsigned LEB128 values, using the values defined earlier
+in this chapter.
+
+\textit{A grammar describing this computation may be found in
+Appendix \refersec{app:typesignaturecomputationgrammar}.
+}
+
+\textit{An attribute that refers to another type entry should
+be recursively processed or replaced with the name of the
+referent (in Step 4, 5 or 6). If neither treatment applies to
+an attribute that references another type entry, the entry
+that contains that attribute should not be considered for a
+separate type unit.}
+
+\textit{If a debugging information entry contains an attribute from
+the list above that would require an unsupported form, that
+entry should not be considered for a separate type unit.}
+
+\textit{A type should be considered for a separate type unit only
+if all of the type entries that it contains or refers to in
+Steps 6 and 7 can themselves each be considered for a separate
+type unit.}
+
+Where the DWARF producer may reasonably choose two or more
+different forms for a given attribute, it should choose
+the simplest possible form in computing the signature. (For
+example, a constant value should be preferred to a location
+expression when possible.)
+
+Once the string S has been formed from the DWARF encoding,
+an MD5 hash is computed for the string and the lower 64 bits
+are taken as the type signature.
+
+\textit{The string S is intended to be a flattened representation of
+the type that uniquely identifies that type (i.e., a different
+type is highly unlikely to produce the same string).}
+
+\textit{A debugging information entry should not be placed in a
+separate type unit if any of the following apply:}
+
+\begin{itemize}
+
+\item \textit{The entry has an attribute whose value is a location
+expression, and the location expression contains a reference to
+another debugging information entry (e.g., a DW\_OP\_call\_ref
+operator), as it is unlikely that the entry will remain
+identical across compilation units.}
+
+\item \textit{The entry has an attribute whose value refers
+to a code location or a location list.}
+
+\item \textit{The entry has an attribute whose value refers
+to another debugging information entry that does not represent
+a type.}
+\end{itemize}
+
+
+\textit{Certain attributes are not included in the type signature:}
+
+\begin{itemize}
+\item \textit{The DW\_AT\_declaration attribute is not included because it
+indicates that the debugging information entry represents an
+incomplete declaration, and incomplete declarations should
+not be placed in separate type units.}
+
+\item \textit{The DW\_AT\_description attribute is not included because
+it does not provide any information unique to the defining
+declaration of the type.}
+
+\item \textit{The DW\_AT\_decl\_file, DW\_AT\_decl\_line, and
+DW\_AT\_decl\_column attributes are not included because they
+may vary from one source file to the next, and would prevent
+two otherwise identical type declarations from producing the
+same hash.}
+
+\end{itemize}

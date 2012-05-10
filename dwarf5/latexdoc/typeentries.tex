@@ -1,0 +1,1673 @@
+\chapter{Type Entries}
+\label{chap:typeentries}
+This section presents the debugging information entries
+that describe program types: base types, modified types and
+user\dash defined types.
+
+If the scope of the declaration of a named type begins after
+the low pc value for the scope most closely enclosing the
+declaration, the declaration may have a DW\_AT\_start\_scope
+attribute as described for objects in 
+Section \refersec{chap:dataobjectentries}.
+
+\section{Base Type Entries}
+\label{chap:basetypeentries}
+
+\textit{A base type is a data type that is not defined in terms of
+other data types. Each programming language has a set of base
+types that are considered to be built into that language.}
+
+A base type is represented by a debugging information entry
+with the tag DW\-\_TAG\-\_base\-\_type.
+
+A base type entry has a DW\_AT\_name attribute whose value is
+a null\dash terminated string containing the name of the base type
+as recognized by the programming language of the compilation
+unit containing the base type entry.
+
+A base type entry has a DW\_AT\_encoding attribute describing
+how the base type is encoded and is to be interpreted. The
+value of this attribute is an integer constant. The set of
+values and their meanings for the DW\_AT\_encoding attribute
+is given in 
+Figure \refersec{fig:encodingattributevalues}
+and following text.  
+
+A base type entry
+may have a DW\_AT\_endianity attribute as described in 
+Section \refersec{chap:dataobjectentries}. 
+If omitted, the encoding assumes the representation that
+is the default for the target architecture.
+
+A base type entry has either a DW\_AT\_byte\_size attribute
+or a DW\_AT\_bit\_size attribute whose integer constant value
+(see Section \refersec{chap:byteandbitsizes}) 
+is the amount of storage needed to hold
+a value of the type.
+
+\textit{For example, the C type int on a machine that uses 32\dash bit
+integers is represented by a base type entry with a name
+attribute whose value is “int”, an encoding attribute
+whose value is DW\_ATE\_signed and a byte size attribute whose
+value is 4.}
+
+If the value of an object of the given type does not fully
+occupy the storage described by a byte size attribute,
+the base type entry may also have a DW\_AT\_bit\_size and a
+DW\_AT\_data\_bit\_offset attribute, both of whose values are
+integer constant values (
+see Section \refersec{chap:staticanddynamicvaluesofattributes}). 
+The bit size
+attribute describes the actual size in bits used to represent
+values of the given type. The data bit offset attribute is the
+offset in bits from the beginning of the containing storage to
+the beginning of the value. Bits that are part of the offset
+are padding. The data bit offset uses the bit numbering and
+direction conventions that are appropriate to the current
+language on the
+target system to locate the beginning of the storage and
+value. If this attribute is omitted a default data bit offset
+of zero is assumed.
+
+\textit{Attribute DW\_AT\_data\_bit\_offset is new in DWARF Version 4 and
+is also used for bit field members 
+(see Section \refersec{chap:datamemberentries}). 
+It
+replaces the attribute DW\_AT\_bit\_offset when used for base
+types as defined in DWARF V3 and earlier. The earlier attribute
+is defined in a manner suitable for bit field members on
+big\dash endian architectures but which is wasteful for use on
+little\dash endian architectures.}
+
+\textit{The attribute DW\_AT\_bit\_offset is deprecated in DWARF Version
+4 for use in base types, but implementations may continue to
+support its use for compatibility.}
+
+\textit{The DWARF Version 3 definition of these attributes is as follows.}
+
+\begin{myindentpara}{1cm}
+\textit{A base type entry has a DW\_AT\_byte\_size attribute, whose value
+(see Section 2.19) is the size in bytes of the storage unit
+used to represent an object of the given type.}
+
+\textit{If the value of an object of the given type does not fully
+occupy the storage unit described by the byte size attribute,
+the base type entry may have a DW\_AT\_bit\_size attribute and a
+DW\_AT\_bit\_offset attribute, both of whose values (see Section
+2.19) are integers. The bit size attribute describes the actual
+size in bits used to represent a value of the given type.
+The bit offset attribute describes the offset in bits of the
+high order bit of a value of the given type from the high
+order bit of the storage unit used to contain that value.}
+\end{myindentpara}
+
+\textit{In comparing DWARF Versions 3 and 4, note that DWARF V4
+defines the following combinations of attributes:}
+
+\begin{itemize}
+\item \textit{DW\_AT\_byte\_size}
+\item \textit{DW\_AT\_bit\_size}
+\item \textit{DW\_AT\_byte\_size, DW\_AT\_bit\_size 
+and optionally DW\_AT\_data\_bit\_offset}
+\end{itemize}
+DWARF V3 defines the following combinations:
+% FIXME: the figure below interferes with the following
+% bullet list, which looks horrible as a result.
+\begin{itemize}
+\item \textit{DW\_AT\_byte\_size}
+\item \textit{DW\_AT\_byte\_size, DW\_AT\_bit\_size and DW\_AT\_bit\_offset}
+\end{itemize}
+
+\begin{figure}[!here]
+\centering
+\begin{tabular}{lp{9cm}}
+Name&Meaning\\ \hline
+DW\_ATE\_address &  linear machine address (for
+  segmented addresses see
+  Section \refersec{chap:segmentedaddresses}) \\
+DW\_ATE\_boolean& true or false \\
+
+DW\_ATE\_complex\_float& complex binary floating\dash point number \\
+DW\_ATE\_float & binary floating\dash point number \\
+DW\_ATE\_imaginary\_float& imaginary binary floating\dash point number \\
+DW\_ATE\_signed& signed binary integer \\
+DW\_ATE\_signed\_char& signed character \\
+DW\_ATE\_unsigned & unsigned binary integer \\
+DW\_ATE\_unsigned\_char & unsigned character \\
+DW\_ATE\_packed\_decimal  & packed decimal \\
+DW\_ATE\_numeric\_string& numeric string \\
+DW\_ATE\_edited & edited string \\
+DW\_ATE\_signed\_fixed & signed fixed\dash point scaled integer \\
+DW\_ATE\_unsigned\_fixed& unsigned fixed\dash point scaled integer \\
+DW\_ATE\_decimal\_float & decimal floating\dash point number \\ 
+DW\_ATE\_UTF & Unicode character \\
+\end{tabular}
+\caption{Encoding attribute values}
+\label{fig:encodingattributevalues}
+\end{figure}
+
+\textit{The DW\_ATE\_decimal\_float encoding is intended for
+floating\dash point representations that have a power\dash of\dash ten
+exponent, such as that specified in IEEE 754R.}
+
+\textit{The DW\_ATE\_UTF encoding is intended for Unicode string
+encodings (see the Universal Character Set standard,
+ISO/IEC 10646\dash 1:1993). For example, the C++ type char16\_t is
+represented by a base type entry with a name attribute whose
+value is “char16\_t”, an encoding attribute whose value
+is DW\_ATE\_UTF and a byte size attribute whose value is 2.}
+
+The DW\_ATE\_packed\_decimal and DW\_ATE\_numeric\_string base types
+represent packed and unpacked decimal string numeric data
+types, respectively, either of which may be either signed
+or unsigned. These base types are used in combination with
+DW\_AT\_decimal\_sign, DW\_AT\_digit\_count and DW\_AT\_decimal\_scale
+attributes.
+
+A DW\_AT\_decimal\_sign attribute is an integer constant that
+conveys the representation of the sign of the decimal type
+(see Figure \refersec{fig:decimalsignattributevalues}). 
+Its integer constant value is interpreted to
+mean that the type has a leading overpunch, trailing overpunch,
+leading separate or trailing separate sign representation or,
+alternatively, no sign at all.
+
+The DW\_AT\_digit\_count attribute is an integer constant
+value that represents the number of digits in an instance of
+the type.
+
+The DW\_AT\_decimal\_scale attribute is an integer constant value
+that represents the exponent of the base ten scale factor to
+be applied to an instance of the type. A scale of zero puts the
+decimal point immediately to the right of the least significant
+digit. Positive scale moves the decimal point to the right
+and implies that additional zero digits on the right are not
+stored in an instance of the type. Negative scale moves the
+decimal point to the left; if the absolute value of the scale
+is larger than the digit count, this implies additional zero
+digits on the left are not stored in an instance of the type.
+
+The DW\_ATE\_edited base type is used to represent an edited
+numeric or alphanumeric data type. It is used in combination
+with an DW\_AT\_picture\_string attribute whose value is a 
+null\dash terminated string containing the target\dash dependent picture
+string associated with the type.
+
+If the edited base type entry describes an edited numeric
+data type, the edited type entry has a DW\_AT\_digit\_count and a
+DW\_AT\_decimal\_scale attribute. These attributes have the same
+interpretation as described for the DW\_ATE\_packed\_decimal and
+DW\_ATE\_numeric\_string base types. If the edited type entry
+describes an edited alphanumeric data type, the edited type
+entry does not have these attributes.
+
+
+\textit{The presence or absence of the DW\_AT\_digit\_count and
+DW\_AT\_decimal\_scale attributes allows a debugger to easily
+distinguish edited numeric from edited alphanumeric, although
+in principle the digit count and scale are derivable by
+interpreting the picture string.}
+
+The DW\_ATE\_signed\_fixed and DW\_ATE\_unsigned\_fixed entries
+describe signed and unsigned fixed\dash point binary data types,
+respectively.
+
+The fixed binary type entries have a DW\_AT\_digit\_count
+attribute with the same interpretation as described for the
+DW\_ATE\_packed\_decimal and DW\_ATE\_numeric\_string base types.
+
+For a data type with a decimal scale factor, the fixed binary
+type entry has a DW\_AT\_decimal\_scale attribute with the same
+interpretation as described for the DW\_ATE\_packed\_decimal
+and DW\_ATE\_numeric\_string base types.
+
+For a data type with a binary scale factor, the fixed
+binary type entry has a DW\_AT\_binary\_scale attribute. The
+DW\_AT\_binary\_scale attribute is an integer constant value
+that represents the exponent of the base two scale factor to
+be applied to an instance of the type.  Zero scale puts the
+binary point immediately to the right of the least significant
+bit. Positive scale moves the binary point to the right and
+implies that additional zero bits on the right are not stored
+in an instance of the type. Negative scale moves the binary
+point to the left; if the absolute value of the scale is
+larger than the number of bits, this implies additional zero
+bits on the left are not stored in an instance of the type.
+
+For a data type with a non\dash decimal and non\dash binary scale factor,
+the fixed binary type entry has a DW\_AT\_small attribute which
+references a DW\_TAG\_constant entry. The scale factor value
+is interpreted in accordance with the value defined by the
+DW\_TAG\_constant entry. The value represented is the product
+of the integer value in memory and the associated constant
+entry for the type.
+
+\textit{The DW\_AT\_small attribute is defined with the Ada small
+attribute in mind.}
+
+\begin{figure}[here]
+\centering
+\begin{tabular}{lp{9cm}}
+Name&Meaning\\ \hline
+DW\_DS\_unsigned &  unsigned \\
+DW\_DS\_leading\_overpunch & Sign is encoded in the most significant digit in a target\dash dependent  manner \\
+DW\_DS\_trailing\_overpunch & Sign is encoded in the least significant digit in a target\dash dependent manner \\
+DW\_DS\_leading\_separate & Decimal type: Sign a ``+'' or ``-'' character 
+to the right of the least significant digit. \\
+&Packed decimal type: Least significant nibble contains
+a target\dash dependent value
+indicating positive or negative. \\
+\end{tabular}
+\caption{Decimal sign attribute values}
+\label{fig:decimalsignattributevalues}
+\end{figure}
+
+\section{Unspecified Type Entries}
+\label{chap:unspecifiedtypeentries}
+Some languages have constructs in which a type may be left unspecified or the absence of a type
+may be explicitly indicated.
+
+An unspecified (implicit, unknown, ambiguous or nonexistent)
+type is represented by a debugging information entry with
+the tag DW\_TAG\_unspecified\_type. If a name has been given
+to the type, then the corresponding unspecified type entry
+has a DW\_AT\_name attribute whose value is a null\dash terminated
+string containing the name as it appears in the source program.
+
+The interpretation of this debugging information entry is
+intentionally left flexible to allow it to be interpreted
+appropriately in different languages. For example, in C and C++
+the language implementation can provide an unspecified type
+entry with the name “void” which can be referenced by the
+type attribute of pointer types and typedef declarations for
+'void' (see 
+% FIXME: the following reference was wrong in DW4 so DavidA guessed
+% the intent.
+Sections \refersec{chap:unspecifiedtypeentries} and 
+%The following reference was valid, so the following is probably correct.
+Section \refersec{chap:typedefentries}, 
+respectively). As another
+example, in Ada such an unspecified type entry can be referred
+to by the type attribute of an access type where the denoted
+type is incomplete (the name is declared as a type but the
+definition is deferred to a separate compilation unit). Type
+Modifier Entries
+
+A base or user\dash defined type may be modified in different ways
+in different languages. A type modifier is represented in
+DWARF by a debugging information entry with one of the tags
+given in 
+Figure \refersec{fig:typemodifiertags}.
+
+
+If a name has been given to the modified type in the source
+program, then the corresponding modified type entry has
+a DW\_AT\_name attribute whose value is a null-terminated
+string containing the modified type name as it appears in
+the source program.
+
+Each of the type modifier entries has a DW\_AT\_type attribute,
+whose value is a reference to a debugging information entry
+describing a base type, a user-defined type or another type
+modifier.
+
+A modified type entry describing a pointer or reference
+type (using DW\_TAG\_pointer\_type, DW\_TAG\_reference\_type or
+DW\_TAG\_rvalue\_reference\_type) may have a DW\_AT\_address\_class
+attribute to describe how objects having the given pointer
+or reference type ought to be dereferenced.
+
+A modified type entry describing a shared qualified type
+(using DW\_TAG\_shared\_type) may have a DW\_AT\_count attribute
+whose value is a constant expressing the blocksize of the
+type. If no count attribute is present, then the “infinite”
+blocksize is assumed.
+
+When multiple type modifiers are chained together to modify
+a base or user-defined type, the tree ordering reflects the
+semantics of the applicable lanuage rather than the textual
+order in the source presentation.
+
+\begin{figure}[here]
+\centering
+\begin{tabular}{lp{9cm}}
+Name&Meaning\\ \hline
+DW\_TAG\_const\_type &  C or C++ const qualified type \\
+DW\_TAG\_packed\_type& Pascal or Ada packed type \\
+DW\_TAG\_pointer\_type & Pointer to an object of the type being modified \\
+DW\_TAG\_reference\_type& C++ (lvalue) reference to an object of the type 
+being modified \\
+DW\_TAG\_restrict\_type&C restrict qualified type \\
+DW\_TAG\_rvalue\_reference\_type & C++ rvalue reference to an object of the type
+being modified \\
+DW\_TAG\_shared\_type&UPC shared qualified type \\
+DW\_TAG\_volatile\_type&C or C++ volatile qualified type \\
+\end{tabular}
+\caption{Type modifier tags}
+\label{fig:typemodifiertags}
+\end{figure}
+
+% The following prevents splitting the examples up.
+% FIXME perhaps there is a better way. We could box the verbatim, 
+% see memman.pdf on verbatims.
+\clearpage
+\textit{As examples of how tye modifiers are ordered, take the following C
+declarations:}
+
+\begin{verbatim}
+const unsigned char * volatile p;
+    which represents a volatile pointer to a constant
+    character. This is encoded in DWARF as:
+        DW_TAG_variable(p) -->
+            DW_TAG_volatile_type -->
+                DW_TAG_pointer_type -->
+                    DW_TAG_const_type -->
+                        DW_TAG_base_type(unsigned char)
+
+volatile unsigned char * const restrict p;
+    on the other hand, represents a restricted constant
+    pointer to a volatile character. This is encoded as:
+        DW_TAG_variable(p) -->
+            DW_TAG_restrict_type -->
+                DW_TAG_const_type -->
+                    DW_TAG_pointer_type -->
+                        DW_TAG_volatile_type -->
+                            DW_TAG_base_type(unsigned char)
+
+\end{verbatim}
+
+\section{Typedef Entries}
+\label{chap:typedefentries}
+A named type that is defined in terms of another type
+definition is represented by a debugging information entry with
+the tag DW\_TAG\_typedef. The typedef entry has a DW\_AT\_name
+attribute whose value is a null-terminated string containing
+the name of the typedef as it appears in the source program.
+
+The typedef entry may also contain a DW\_AT\_type attribute whose
+value is a reference to the type named by the typedef. If
+the debugging information entry for a typedef represents
+a declaration of the type that is not also a definition,
+it does not contain a type attribute.
+
+\textit{Depending on the language, a named type that is defined in
+terms of another type may be called a type alias, a subtype,
+a constrained type and other terms. A type name declared with
+no defining details may be termed an incomplete, forward
+or hidden type. While the DWARF DW\_TAG\_typedef entry was
+originally inspired by the like named construct in C and C++,
+it is broadly suitable for similar constructs (by whatever
+source syntax) in other languages.}
+
+\section{Array Type Entries}
+\label{chap:arraytypeentries}
+
+Many languages share the concept of an ``array,'' which is
+a table of components of identical type.
+
+An array type is represented by a debugging information entry
+with the tag DW\_TAG\_array\_type. If a name has been given to
+the array type in the source program, then the corresponding
+array type entry has a DW\_AT\_name attribute whose value is a
+null-terminated string containing the array type name as it
+appears in the source program.
+
+The array type entry describing a multidimensional array may
+have a DW\_AT\_ordering attribute whose integer constant value is
+interpreted to mean either row-major or column-major ordering
+of array elements. The set of values and their meanings
+for the ordering attribute are listed in 
+Figure \refersec{fig:arrayordering}. 
+If no
+ordering attribute is present, the default ordering for the
+source language (which is indicated by the DW\_AT\_language
+attribute of the enclosing compilation unit entry) is assumed.
+
+\begin{figure}[here]
+\autorows[0pt]{c}{1}{l}{
+\addtoindex{DW\_ORD\_col\_major},
+\addtoindex{DW\_ORD\_row\_major}
+}
+\caption{Array ordering}\label{fig:arrayordering}
+\end{figure}
+
+The ordering attribute may optionally appear on one-dimensional
+arrays; it will be ignored.
+
+An array type entry has a DW\_AT\_type attribute describing
+the type of each element of the array.
+
+If the amount of storage allocated to hold each element of an
+object of the given array type is different from the amount
+of storage that is normally allocated to hold an individual
+object of the indicated element type, then the array type
+entry has either a DW\_AT\_byte\_stride or a DW\_AT\_bit\_stride
+attribute, whose value 
+(see Section \refersec{chap:staticanddynamicvaluesofattributes}) 
+is the size of each
+element of the array.
+
+The array type entry may have either a DW\_AT\_byte\_size or a
+DW\_AT\_bit\_size attribute 
+(see Section \refersec{chap:byteandbitsizes}), 
+whose value is the
+amount of storage needed to hold an instance of the array type.
+
+\textit{If the size of the array can be determined statically at
+compile time, this value can usually be computed by multiplying
+the number of array elements by the size of each element.}
+
+
+Each array dimension is described by a debugging information
+entry with either the tag DW\_TAG\_subrange\_type or the tag
+DW\_TAG\_enumeration\_type. These entries are children of the
+array type entry and are ordered to reflect the appearance of
+the dimensions in the source program (i.e., leftmost dimension
+first, next to leftmost second, and so on).
+
+In languages, such as C, in which there is no concept of
+a “multidimensional array”, an array of arrays may
+be represented by a debugging information entry for a
+multidimensional array.
+
+Other attributes especially applicable to arrays are
+DW\_AT\_allocated, DW\_AT\_associated and DW\_AT\_data\_location,
+which are described in 
+Section \refersec{chap:dynamictypeproperties}. 
+For relevant examples,
+see also 
+Appendix \refersec{app:fortran90example}.
+
+\section{ Structure, Union, Class and Interface Type Entries}
+\label{chap:structureunionclassandinterfacetypeentries}
+
+\textit{The languages C, C++, and Pascal, among others, allow the
+programmer to define types that are collections of related
+components. In C and C++, these collections are called
+“structures.” In Pascal, they are called “records.”
+The components may be of different types. The components are
+called “members” in C and C++, and “fields” in Pascal.}
+
+\textit{The components of these collections each exist in their
+own space in computer memory. The components of a C or C++
+“union” all coexist in the same memory.}
+
+\textit{Pascal and other languages have a “discriminated union,”
+also called a “variant record.” Here, selection of a
+number of alternative substructures (“variants”) is based
+on the value of a component that is not part of any of those
+substructures (the “discriminant”).}
+
+\textit{C++ and Java have the notion of "class”, which is in some
+ways similar to a structure. A class may have “member
+functions” which are subroutines that are within the scope
+of a class or structure.}
+
+\textit{The C++ notion of structure is more general than in C, being
+equivalent to a class with minor differences. Accordingly,
+in the following discussion statements about C++ classes may
+be understood to apply to C++ structures as well.}
+
+\subsection{Structure, Union and Class Type Entries}
+\label{chap:structureunionandclasstypeentries}
+
+
+Structure, union, and class types are represented by debugging
+information entries with the tags DW\_TAG\_structure\_type,
+DW\_TAG\_union\_type, and DW\_TAG\_class\_type,
+respectively. If a name has been given to the structure,
+union, or class in the source program, then the corresponding
+structure type, union type, or class type entry has a
+DW\_AT\_name attribute whose value is a null\dash terminated string
+containing the type name as it appears in the source program.
+
+The members of a structure, union, or class are represented
+by debugging information entries that are owned by the
+corresponding structure type, union type, or class type entry
+and appear in the same order as the corresponding declarations
+in the source program.
+
+A structure type, union type or class type entry may have
+either a DW\_AT\_byte\_size or a DW\_AT\_bit\_size attribute 
+(see Section \refersec{chap:byteandbitsizes}), 
+whose value is the amount of storage needed
+to hold an instance of the structure, union or class type,
+including any padding.  An incomplete structure, union or
+class type is represented by a structure, union or class
+entry that does not have a byte size attribute and that has
+a DW\_AT\_declaration attribute.
+
+If the complete declaration of a type has been placed in
+a separate type unit 
+(see Section \refersec{chap:separatetypeunitentries}), 
+an incomplete
+declaration of that type in the compilation unit may provide
+the unique 64\dash bit signature of the type using a DW\_AT\_signature
+attribute.
+
+If a structure, union or class entry represents the definition
+of a structure, class or union member corresponding to a prior
+incomplete structure, class or union, the entry may have a
+DW\_AT\_specification attribute whose value is a reference to
+the debugging information entry representing that incomplete
+declaration.
+
+Structure, union and class entries containing the
+DW\_AT\_specification attribute do not need to duplicate
+information provided by the declaration entry referenced by the
+specification attribute.  In particular, such entries do not
+need to contain an attribute for the name of the structure,
+class or union they represent if such information is already
+provided in the declaration.
+
+\textit{For C and C++, data member declarations occurring within
+the declaration of a structure, union or class type are
+considered to be “definitions” of those members, with
+the exception of “static” data members, whose definitions
+appear outside of the declaration of the enclosing structure,
+union or class type. Function member declarations appearing
+within a structure, union or class type declaration are
+definitions only if the body of the function also appears
+within the type declaration.}
+
+If the definition for a given member of the structure, union
+or class does not appear within the body of the declaration,
+that member also has a debugging information entry describing
+its definition. That latter entry has a DW\_AT\_specification
+attribute referencing the debugging information entry
+owned by the body of the structure, union or class entry and
+representing a non\dash defining declaration of the data, function
+or type member. The referenced entry will not have information
+about the location of that member (low and high pc attributes
+for function members, location descriptions for data members)
+and will have a DW\_AT\_declaration attribute.
+
+\textit{Consider a nested class whose 
+definition occurs outside of the containing class definition, as in:}
+
+\begin{lstlisting}
+struct A {
+    struct B;
+};
+struct A::B { ... };
+\end{lstlisting}
+
+\textit{The two different structs can be described in 
+different compilation units to 
+facilitate DWARF space compression 
+(see Appendix \refersec{app:usingcompilationunits}).}
+
+\subsection{Interface Type Entries}
+\label{chap:interfacetypeentries}
+
+\textit{The Java language defines "interface" types. An interface
+in Java is similar to a C++ or Java class with only abstract
+methods and constant data members.}
+
+Interface types are represented by debugging information
+entries with the tag DW\_TAG\_interface\_type.
+
+An interface type entry has a DW\_AT\_name attribute, whose
+value is a null-terminated string containing the type name
+as it appears in the source program.
+
+The members of an interface are represented by debugging
+information entries that are owned by the interface type
+entry and that appear in the same order as the corresponding
+declarations in the source program.
+
+\subsection{Derived or Extended Structs, Classes and Interfaces}
+\label{chap:derivedorextendedstructsclasesandinterfaces}
+
+\textit{In C++, a class (or struct) may be ``derived from'' or be a
+``subclass of'' another class. In Java, an interface may ``extend''
+one or more other interfaces, and a class may "extend" another
+class and/or "implement" one or more interfaces. All of these
+relationships may be described using the following. Note that
+in Java, the distinction between extends and implements is
+implied by the entities at the two ends of the relationship.}
+
+A class type or interface type entry that describes a
+derived, extended or implementing class or interface owns
+debugging information entries describing each of the classes
+or interfaces it is derived from, extending or implementing,
+respectively, ordered as they were in the source program. Each
+such entry has the tag DW\_TAG\_inheritance.
+
+An inheritance entry has a DW\_AT\_type attribute whose value is
+a reference to the debugging information entry describing the
+class or interface from which the parent class or structure
+of the inheritance entry is derived, extended or implementing.
+
+An inheritance entry for a class that derives from or extends
+another class or struct also has a DW\_AT\_data\_member\_location
+attribute, whose value describes the location of the beginning
+of the inherited type relative to the beginning address of the
+derived class. If that value is a constant, it is the offset
+in bytes from the beginning of the class to the beginning of
+the inherited type. Otherwise, the value must be a location
+description. In this latter case, the beginning address of
+the derived class is pushed on the expression stack before
+the location description is evaluated and the result of the
+evaluation is the location of the inherited type.
+
+\textit{The interpretation of the value of this attribute for
+inherited types is the same as the interpretation for data
+members 
+(see Section \refersec{chap:datamemberentries}).  }
+
+An inheritance entry may have a
+DW\_AT\_accessibility attribute. If no accessibility attribute
+is present, private access is assumed for an entry of a class
+and public access is assumed for an entry of an interface,
+struct or union.
+
+If the class referenced by the inheritance entry serves
+as a C++ virtual base class, the inheritance entry has a
+DW\_AT\_virtuality attribute.
+
+\textit{For a C++ virtual base, the data member location attribute
+will usually consist of a non-trivial location description.}
+
+\subsection{Access Declarations}
+\label{chap:accessdeclarations}
+
+\textit{In C++, a derived class may contain access declarations that
+change the accessibility of individual class members from the
+overall accessibility specified by the inheritance declaration.
+A single access declaration may refer to a set of overloaded
+names.}
+
+If a derived class or structure contains access declarations,
+each such declaration may be represented by a debugging
+information entry with the tag DW\_TAG\_access\_declaration. Each
+such entry is a child of the class or structure type entry.
+
+An access declaration entry has a DW\_AT\_name attribute, whose
+value is a null-terminated string representing the name used
+in the declaration in the source program, including any class
+or structure qualifiers.
+
+An access declaration entry also has a DW\_AT\_accessibility
+attribute describing the declared accessibility of the named
+entities.
+
+
+\subsection{Friends}
+\label{chap:friends}
+
+Each ``friend'' declared by a structure, union or class
+type may be represented by a debugging information entry
+that is a child of the structure, union or class type entry;
+the friend entry has the tag DW\_TAG\_friend.
+
+A friend entry has a DW\_AT\_friend attribute, whose value is
+a reference to the debugging information entry describing
+the declaration of the friend.
+
+
+\subsection{Data Member Entries}
+\label{chap:datamemberentries}
+
+A data member (as opposed to a member function) is
+represented by a debugging information entry with the tag
+DW\_TAG\_member. The member entry for a named member has
+a DW\_AT\_name attribute whose value is a null-terminated
+string containing the member name as it appears in the source
+program. If the member entry describes an anonymous union, the
+name attribute is omitted or consists of a single zero byte.
+
+The data member entry has a DW\_AT\_type attribute to denote
+the type of that member.
+
+A data member entry may have a DW\_AT\_accessibility
+attribute. If no accessibility attribute is present, private
+access is assumed for an entry of a class and public access
+is assumed for an entry of a structure, union, or interface.
+
+A data member entry may have a DW\_AT\_mutable attribute,
+which is a flag. This attribute indicates whether the data
+member was declared with the mutable storage class specifier.
+
+The beginning of a data member is described relative to
+the beginning of the object in which it is immediately
+contained. In general, the beginning is characterized by
+both an address and a bit offset within the byte at that
+address. When the storage for an entity includes all of
+the bits in the beginning byte, the beginning bit offset is
+defined to be zero.
+
+Bit offsets in DWARF use the bit numbering and direction
+conventions that are appropriate to the current language on
+the target system.
+
+The member entry corresponding to a data member that is
+defined in a structure, union or class may have either a
+DW\_AT\_data\_member\_location attribute or a DW\_AT\_data\_bit\_offset
+attribute. If the beginning of the data member is the same as
+the beginning of the containing entity then neither attribute
+is required.
+
+For a DW\_AT\_data\_member\_location attribute there are two cases:
+
+\begin{enumerate}[1.]
+
+\item If the value is an integer constant, it is the offset
+in bytes from the beginning of the containing entity. If
+the beginning of the containing entity has a non-zero bit
+offset then the beginning of the member entry has that same
+bit offset as well.
+
+\item Otherwise, the value must be a location description. In
+this case, the beginning of the containing entity must be byte
+aligned. The beginning address is pushed on the DWARF stack
+before the location description is evaluated; the result of
+the evaluation is the base address of the member entry.
+
+\textit{The push on the DWARF expression stack of the base address of
+the containing construct is equivalent to execution of the
+DW\_OP\_push\_object\_address operation 
+(see Section \refersec{chap:stackoperations});
+DW\_OP\_push\_object\_address therefore is not needed at the
+beginning of a location description for a data member. The
+result of the evaluation is a location--either an address or
+the name of a register, not an offset to the member.}
+
+\textit{A DW\_AT\_data\_member\_location attribute that has the form of a
+location description is not valid for a data member contained
+in an entity that is not byte aligned because DWARF operations
+do not allow for manipulating or computing bit offsets.}
+
+\end{enumerate}
+
+For a DW\_AT\_data\_bit\_offset attribute, the value is an integer
+constant 
+(see Section \refersec{chap:staticanddynamicvaluesofattributes}) 
+that specifies the number of bits
+from the beginning of the containing entity to the beginning
+of the data member. This value must be greater than or equal
+to zero, but is not limited to less than the number of bits
+per byte.
+
+If the size of a data member is not the same as the size
+of the type given for the data member, the data member has
+either a DW\_AT\_byte\_size or a DW\_AT\_bit\_size attribute whose
+integer constant value 
+(see Section \refersec{chap:staticanddynamicvaluesofattributes}) 
+is the amount
+of storage needed to hold the value of the data member.
+
+\textit{C and C++ bit fields typically require the use of the
+DW\_AT\_data\_bit\_offset and DW\_AT\_bit\_size attributes.}
+
+\textit{This Standard uses the following bit numbering and direction
+conventions in examples. These conventions are for illustrative
+purposes and other conventions may apply on particular
+architectures.}
+
+
+\begin{itemize}
+\item \textit{For big\dash endian architectures, bit offsets are
+counted from high-order to low\dash order bits within a byte (or
+larger storage unit); in this case, the bit offset identifies
+the high\dash order bit of the object.}
+
+\item \textit{For little\dash endian architectures, bit offsets are
+counted from low\dash order to high\dash order bits within a byte (or
+larger storage unit); in this case, the bit offset identifies
+the low\dash order bit of the object.}
+\end{itemize}
+
+
+\textit{In either case, the bit so identified is defined as the beginning of the object.}
+
+\textit{For example, take one possible representation of the following C structure definition in both big\dash and little\dash endian byte orders:}
+
+\begin{lstlisting}
+struct S {
+    int j:5;
+    int k:6;
+    int m:5;
+    int n:8;
+};
+\end{lstlisting}
+
+\textit{The following diagrams show the structure layout
+and data bit offsets for example big\dash\   and little\dash endian
+architectures, respectively. Both diagrams show a structure
+that begins at address A and whose size is four bytes. Also,
+high order bits are to the left and low order bits are to
+the right.}
+
+\textit{Big\dash Endian Data Bit Offsets:}
+
+\begin{verbatim}
+    j:0
+    k:5
+    m:11
+    n:16
+
+    Addresses increase ->
+    |       A       |     A + 1     |    A + 2      |    A + 3      | 
+
+    Data bit offsets increase ->
+    +---------------+---------------+---------------+---------------+
+    |0     4|5         10|11      15|16           23|24           31|
+    |   j   |     k      | m        |        n      |       <pad>   |
+    |       |            |          |               |               | 
+    +---------------------------------------------------------------+ 
+\end{verbatim}
+
+\textit{Little\dash  Endian Data Bit Offsets:}
+\begin{verbatim}
+    j:0
+    k:5
+    m:11
+    n:16
+                                               <- Addresses increase
+    |       A       |     A + 1     |    A + 2      |    A + 3      | 
+
+                                        <-  Data bit offsets increase 
+
+    +---------------+---------------+---------------+---------------+
+    |31           24|23           16|15     11|10       5|4        0|
+    |     <pad>     |        n      |    m    |    k     |     j    |
+    |               |               |         |          |          |
+    +---------------------------------------------------------------+
+
+\end{verbatim}
+
+\textit{Note that data member bit offsets in this example are the
+same for both big\dash\ and little\dash endian architectures even
+though the fields are allocated in different directions
+(high\dash order to low-order versus low\dash order to high\dash order);
+the bit naming conventions for memory and/or registers of
+the target architecture may or may not make this seem natural.}
+
+\textit{For a more extensive example showing nested and packed records
+and arrays, see 
+Appendix \refersec{app:pascalexample}.}
+
+\textit{Attribute DW\_AT\_data\_bit\_offset is new in DWARF Version 4 and
+is also used for base types 
+(see Section \refersec{chap:basetypeentries}). 
+It replaces the
+attributes DW\-\_AT\-\_bit\-\_offset and DW\-\_AT\-\_byte\-\_size when used to
+identify the beginning of bit field data members as defined
+in DWARF V3 and earlier. The earlier attributes are defined
+in a manner suitable for bit field members on big-endian
+architectures but which is either awkward or incomplete for
+use on little-endian architectures.  (DW\-\_AT\-\_byte\-\_size also
+has other uses that are not affected by this change.)}
+
+\textit{The DW\-\_AT\-\_byte\-\_size, DW\-\_AT\-\_bit\-\_size and 
+DW\-\_AT\-\_bit\-\_offset
+attribute combination is deprecated for data members in DWARF
+Version 4, but implementations may continue to support this
+use for compatibility.}
+
+\textit{The DWARF Version 3 definitions of these attributes are
+as follows.}
+
+\begin{myindentpara}{1cm}
+\textit{If the data member entry describes a bit field, then that
+entry has the following attributes:}
+
+\begin{itemize}
+\item \textit{A DW\_AT\_byte\_size attribute whose value (see Section
+2.19) is the number of bytes that contain an instance of the
+bit field and any padding bits.}
+
+\textit{The byte size attribute may be omitted if the size of the
+object containing the bit field can be inferred from the type
+attribute of the data member containing the bit field.}
+
+\item \textit{A DW\_AT\_bit\_offset attribute whose value (see Section
+2.19) is the number of bits to the left of the leftmost
+(most significant) bit of the bit field value.}
+
+\item \textit{A DW\_AT\_bit\_size attribute whose value (see Section
+2.19) is the number of bits occupied by the bit field value.}
+
+\end{itemize}
+
+\textit{The location description for a bit field calculates the address
+of an anonymous object containing the bit field. The address
+is relative to the structure, union, or class that most closely
+encloses the bit field declaration. The number of bytes in this
+anonymous object is the value of the byte size attribute of
+the bit field. The offset (in bits) from the most significant
+bit of the anonymous object to the most significant bit of
+the bit field is the value of the bit offset attribute.}
+\end{myindentpara}
+
+
+\textit{Diagrams similar to the above that show the use of the
+DW\-\_AT\-\_byte\-\_size, DW\-\_AT\-\_bit\-\_size and DW\-\_AT\-\_bit\-\_offset attribute
+combination may be found in the DWARF Version 3 Standard.}
+
+\textit{In comparing DWARF Versions 3 and 4, note that DWARF V4
+defines the following combinations of attributes:}
+
+\begin{itemize}
+\item \textit{either DW\-\_AT\-\_data\-\_member\-\_location or
+DW\-\_AT\-\_data\-\_bit\-\_offset (to specify the beginning of the
+data member)}
+
+% FIXME: the indentation of the following line is suspect.
+\textit{optionally together with}
+
+\item  \textit{either DW\_AT\_byte\_size or DW\-\_AT\-\_bit\-\_size (to
+specify the size of the data member)}
+
+\end{itemize}
+
+\textit{DWARF V3 defines the following combinations}
+
+\begin{itemize}
+\item \textit{DW\_AT\_data\_member\_location (to specify the beginning
+of the data member, except this specification is only partial
+in the case of a bit field) }
+
+% FIXME: the indentation of the following line is suspect.
+\textit{optionally together with}
+
+\item \textit{DW\_AT\_byte\_size, DW\-\_AT\-\_bit\-\_size and DW\-\_AT\_bit\_offset
+(to further specify the beginning of a bit field data member
+as well as specify the size of the data member) }
+\end{itemize}
+
+\subsection{Member Function Entries}
+\label{chap:memberfunctionentries}
+
+A member function is represented by a debugging information
+entry with the tag DW\_TAG\_subprogram. The member function entry
+may contain the same attributes and follows the same rules
+as non\dash member global subroutine entries 
+(see Section \refersec{chap:subroutineandentrypointentries}).
+
+A member function entry may have a DW\_AT\_accessibility
+attribute. If no accessibility attribute is present, private
+access is assumed for an entry of a class and public access
+is assumed for an entry of a structure, union or interface.
+
+If the member function entry describes a virtual function,
+then that entry has a DW\-\_AT\-\_virtuality attribute.
+
+If the member function entry describes an explicit member
+function, then that entry has a DW\-\_AT\-\_explicit attribute.
+
+An entry for a virtual function also has a
+DW\_AT\_vtable\_elem\_location attribute whose value contains
+a location description yielding the address of the slot
+for the function within the virtual function table for the
+enclosing class. The address of an object of the enclosing
+type is pushed onto the expression stack before the location
+description is evaluated.
+
+If the member function entry describes a non\dash static member
+function, then that entry has a DW\_AT\_object\_pointer attribute
+whose value is a reference to the formal parameter entry
+that corresponds to the object for which the function is
+called. The name attribute of that formal parameter is defined
+by the current language (for example, this for C++ or self
+for Objective C and some other languages). That parameter
+also has a DW\_AT\_artificial attribute whose value is true.
+
+Conversely, if the member function entry describes a static
+member function, the entry does not have a DW\_AT\_object\_pointer
+attribute.
+
+If the member function entry describes a non\dash static member
+function that has a const\dash volatile qualification, then
+the entry describes a non\dash static member function whose
+object formal parameter has a type that has an equivalent
+const\dash volatile qualification.
+
+If a subroutine entry represents the defining declaration
+of a member function and that definition appears outside of
+the body of the enclosing class declaration, the subroutine
+entry has a DW\_AT\_specification attribute, whose value is
+a reference to the debugging information entry representing
+the declaration of this function member. The referenced entry
+will be a child of some class (or structure) type entry.
+
+Subroutine entries containing the DW\_AT\_specification
+attribute do not need to duplicate information provided
+by the declaration entry referenced by the specification
+attribute. In particular, such entries do not need to contain
+attributes for the name or return type of the function member
+whose definition they represent.
+
+\subsection{Class Template Instantiations}
+\label{chap:classtemplateinstantiations}
+
+\textit{In C++ a class template is a generic definition of a class
+type that may be instantiated when an instance of the class
+is declared or defined. The generic description of the
+class may include both parameterized types and parameterized
+constant values. DWARF does not represent the generic template
+definition, but does represent each instantiation.}
+
+A class template instantiation is represented by a
+debugging information entry with the tag DW\_TAG\_class\_type,
+DW\_TAG\_structure\_type or DW\_TAG\_union\_type. With five
+exceptions, such an entry will contain the same attributes
+and have the same types of child entries as would an entry
+for a class type defined explicitly using the instantiation
+types and values. The exceptions are:
+
+\begin{enumerate}[1.]
+\item Each formal parameterized type declaration appearing in the
+template definition is represented by a debugging information
+entry with the tag DW\_TAG\_template\_type\_parameter. Each
+such entry may have a DW\_AT\_name attribute, whose value is
+a null\dash terminated string containing the name of the formal
+type parameter as it appears in the source program. The
+template type parameter entry also has a DW\_AT\_type attribute
+describing the actual type by which the formal is replaced
+for this instantiation.
+
+\item Each formal parameterized value declaration appearing in the
+template definition is represented by a debugging information
+entry with the tag DW\_TAG\_template\_value\_parameter. Each
+such entry may have a DW\_AT\_name attribute, whose value is
+a null\dash terminated string containing the name of the formal
+value parameter as it appears in the source program. The
+template value parameter entry also has a DW\_AT\_type attribute
+describing the type of the parameterized value. Finally,
+the template value parameter entry has a DW\_AT\_const\_value
+attribute, whose value is the actual constant value of the
+value parameter for this instantiation as represented on the
+target architecture.
+
+\item The class type entry and each of its child entries references
+a template type parameter entry in any circumstance where the
+source template definition references a formal parameterized
+type. Similarly, the class type entry and each of its child
+entries references a template value parameter entry in any
+circumstance where the source template definition references
+a formal parameterized value.
+
+\item If the compiler has generated a special compilation unit to
+hold the template instantiation and that special compilation
+unit has a different name from the compilation unit containing
+the template definition, the name attribute for the debugging
+information entry representing the special compilation unit
+should be empty or omitted.
+
+\item If the class type entry representing the template
+instantiation or any of its child entries contains declaration
+coordinate attributes, those attributes should refer to
+the source for the template definition, not to any source
+generated artificially by the compiler.
+\end{enumerate}
+
+
+\subsection{Variant Entries}
+\label{chap:variantentries}
+
+A variant part of a structure is represented by a debugging
+information entry with the tag DW\_TAG\_variant\_part and is
+owned by the corresponding structure type entry.
+
+If the variant part has a discriminant, the discriminant is
+represented by a separate debugging information entry which
+is a child of the variant part entry. This entry has the form
+of a structure data member entry. The variant part entry will
+have a DW\_AT\_discr attribute whose value is a reference to
+the member entry for the discriminant.
+
+If the variant part does not have a discriminant (tag field),
+the variant part entry has a DW\_AT\_type attribute to represent
+the tag type.
+
+Each variant of a particular variant part is represented by
+a debugging information entry with the tag DW\_TAG\_variant
+and is a child of the variant part entry. The value that
+selects a given variant may be represented in one of three
+ways. The variant entry may have a DW\_AT\_discr\_value attribute
+whose value represents a single case label. The value of this
+attribute is encoded as an LEB128 number. The number is signed
+if the tag type for the variant part containing this variant
+is a signed type. The number is unsigned if the tag type is
+an unsigned type.
+
+Alternatively, the variant entry may contain a DW\_AT\_discr\_list
+attribute, whose value represents a list of discriminant
+values. This list is represented by any of the block forms and
+may contain a mixture of case labels and label ranges. Each
+item on the list is prefixed with a discriminant value
+descriptor that determines whether the list item represents
+a single label or a label range. A single case label is
+represented as an LEB128 number as defined above for the
+DW\_AT\_discr\_value attribute. A label range is represented by
+two LEB128 numbers, the low value of the range followed by the
+high value. Both values follow the rules for signedness just
+described. The discriminant value descriptor is an integer
+constant that may have one of the values given in 
+Figure \refersec{fig:discriminantdescriptorvalues}.
+
+\begin{figure}[here]
+\autorows[0pt]{c}{1}{l}{
+\addtoindex{DW\_DSC\_label},
+\addtoindex{DW\_DSC\_range}
+}
+\caption{Discriminant descriptor values}\label{fig:discriminantdescriptorvalues}
+\end{figure}
+
+If a variant entry has neither a DW\_AT\_discr\_value
+attribute nor a DW\_AT\_discr\_list attribute, or if it has
+a DW\_AT\_discr\_list attribute with 0 size, the variant is a
+default variant.
+
+The components selected by a particular variant are represented
+by debugging information entries owned by the corresponding
+variant entry and appear in the same order as the corresponding
+declarations in the source program.
+
+\section{Condition Entries}
+\label{chap:conditionentries}
+
+\textit{COBOL has the notion of a ``level\dash 88 condition'' that
+associates a data item, called the conditional variable, with
+a set of one or more constant values and/or value ranges.
+Semantically, the condition is ‛true’ if the conditional
+variable's value matches any of the described constants,
+and the condition is ‛false’ otherwise.}
+
+The DW\_TAG\_condition debugging information entry describes a
+logical condition that tests whether a given data item’s
+value matches one of a set of constant values. If a name
+has been given to the condition, the condition entry has a
+DW\_AT\_name attribute whose value is a null\dash terminated string
+giving the condition name as it appears in the source program.
+
+The condition entry's parent entry describes the conditional
+variable; normally this will be a DW\_TAG\_variable,
+DW\_TAG\_member or DW\_TAG\_formal\_parameter entry. If the parent
+entry has an array type, the condition can test any individual
+element, but not the array as a whole. The condition entry
+implicitly specifies a “comparison type” that is the
+type of an array element if the parent has an array type;
+otherwise it is the type of the parent entry.
+
+The condition entry owns DW\_TAG\_constant and/or
+DW\_TAG\_subrange\_type entries that describe the constant
+values associated with the condition. If any child entry has
+a DW\_AT\_type attribute, that attribute should describe a type
+compatible with the comparison type (according to the source
+language); otherwise the child’s type is the same as the
+comparison type.
+
+\textit{For conditional variables with alphanumeric types, COBOL
+permits a source program to provide ranges of alphanumeric
+constants in the condition. Normally a subrange type entry
+does not describe ranges of strings; however, this can be
+represented using bounds attributes that are references to
+constant entries describing strings. A subrange type entry may
+refer to constant entries that are siblings of the subrange
+type entry.}
+
+
+\section{Enumeration Type Entries}
+\label{chap:enumerationtypeentries}
+
+\textit{An “enumeration type” is a scalar that can assume one of
+a fixed number of symbolic values.}
+
+An enumeration type is represented by a debugging information
+entry with the tag DW\_TAG\_enumeration\_type.
+
+If a name has been given to the enumeration type in the source
+program, then the corresponding enumeration type entry has
+a DW\_AT\_name attribute whose value is a null\dash terminated
+string containing the enumeration type name as it appears
+in the source program. This entry also has a DW\_AT\_byte\_size
+attribute whose integer constant value is the number of bytes
+required to hold an instance of the enumeration.
+
+The enumeration type entry may have a DW\_AT\_type attribute
+which refers to the underlying data type used to implement
+the enumeration.
+
+If an enumeration type has type safe semantics such that
+
+\begin{enumerate}[1.]
+\item Enumerators are contained in the scope of the enumeration type, and/or
+
+\item Enumerators are not implicitly converted to another type
+\end{enumerate}
+
+then the enumeration type entry may have a DW\_AT\_enum\_class
+attribute, which is a flag. In a language that offers only
+one kind of enumeration declaration, this attribute is not
+required.
+
+\textit{In C or C++, the underlying type will be the appropriate
+integral type determined by the compiler from the properties of
+the enumeration literal values. A C++ type declaration written
+using enum class declares a strongly typed enumeration and
+is represented using DW\_TAG\_enumeration\_type in combination
+with DW\_AT\_enum\_class.}
+
+Each enumeration literal is represented by a debugging
+information entry with the tag DW\_TAG\_enumerator. Each
+such entry is a child of the enumeration type entry, and the
+enumerator entries appear in the same order as the declarations
+of the enumeration literals in the source program.
+
+Each enumerator entry has a DW\_AT\_name attribute, whose
+value is a null\dash terminated string containing the name of the
+enumeration literal as it appears in the source program. Each
+enumerator entry also has a DW\_AT\_const\_value attribute,
+whose value is the actual numeric value of the enumerator as
+represented on the target system.
+
+
+If the enumeration type occurs as the description of a
+dimension of an array type, and the stride for that dimension
+is different than what would otherwise be determined, then
+the enumeration type entry has either a DW\_AT\_byte\_stride
+or DW\_AT\_bit\_stride attribute which specifies the separation
+between successive elements along the dimension as described
+in 
+Section \refersec{chap:visibilityofdeclarations}. 
+The value of the DW\_AT\_bit\_stride attribute
+is interpreted as bits and the value of the DW\_AT\_byte\_stride
+attribute is interpreted as bytes.
+
+
+\section{Subroutine Type Entries}
+\label{chap:subroutinetypeentries}
+
+It is possible in C to declare pointers to subroutines
+that return a value of a specific type. In both C and C++,
+it is possible to declare pointers to subroutines that not
+only return a value of a specific type, but accept only
+arguments of specific types. The type of such pointers would
+be described with a ``pointer to'' modifier applied to a
+user\dash defined type.
+
+A subroutine type is represented by a debugging information
+entry with the tag DW\_TAG\_subroutine\_type. If a name has
+been given to the subroutine type in the source program,
+then the corresponding subroutine type entry has a DW\_AT\_name
+attribute whose value is a null\dash terminated string containing
+the subroutine type name as it appears in the source program.
+
+If the subroutine type describes a function that returns
+a value, then the subroutine type entry has a DW\_AT\_type
+attribute to denote the type returned by the subroutine. If
+the types of the arguments are necessary to describe the
+subroutine type, then the corresponding subroutine type
+entry owns debugging information entries that describe the
+arguments. These debugging information entries appear in the
+order that the corresponding argument types appear in the
+source program.
+
+In C there is a difference between the types of functions
+declared using function prototype style declarations and
+those declared using non\dash prototype declarations.
+
+A subroutine entry declared with a function prototype style
+declaration may have a DW\_AT\_prototyped attribute, which is
+a flag.
+
+Each debugging information entry owned by a subroutine
+type entry has a tag whose value has one of two possible
+interpretations:
+
+\begin{enumerate}[1.]
+\item The formal parameters of a parameter list (that have a
+specific type) are represented by a debugging information entry
+with the tag DW\_TAG\_formal\_parameter. Each formal parameter
+entry has a DW\_AT\_type attribute that refers to the type of
+the formal parameter.
+
+\item The unspecified parameters of a variable parameter list
+are represented by a debugging information entry with the
+tag DW\_TAG\_unspecified\_parameters.
+\end{enumerate}
+
+
+
+\section{String Type Entries}
+\label{chap:stringtypeentries}
+
+
+A ``string'' is a sequence of characters that have specific
+semantics and operations that separate them from arrays of
+characters. Fortran is one of the languages that has a string
+type. Note that ``string'' in this context refers to a target
+machine concept, not the class string as used in this document
+(except for the name attribute).
+
+A string type is represented by a debugging information entry
+with the tag DW\_TAG\_string\_type. If a name has been given to
+the string type in the source program, then the corresponding
+string type entry has a DW\_AT\_name attribute whose value is
+a null\dash terminated string containing the string type name as
+it appears in the source program.
+
+The string type entry may have a DW\_AT\_string\_length attribute
+whose value is a location description yielding the location
+where the length of the string is stored in the program. The
+string type entry may also have a DW\_AT\_byte\_size attribute
+or DW\_AT\_bit\_size attribute, whose value 
+(see Section \refersec{chap:byteandbitsizes}) 
+is the size of the data to be retrieved from the location
+referenced by the string length attribute. If no (byte or bit)
+size attribute is present, the size of the data to be retrieved
+is the same as the size of an address on the target machine.
+
+If no string length attribute is present, the string type
+entry may have a DW\_AT\_byte\_size attribute or DW\_AT\_bit\_size
+attribute, whose value 
+(see Section \refersec{chap:byteandbitsizes}) 
+is the amount of
+storage needed to hold a value of the string type.
+
+
+\section{Set Type Entries}
+\label{chap:settypeentries}
+
+\textit{Pascal provides the concept of a “set,” which represents
+a group of values of ordinal type.}
+
+A set is represented by a debugging information entry with
+the tag DW\_TAG\_set\_type. If a name has been given to the
+set type, then the set type entry has a DW\_AT\_name attribute
+whose value is a null\dash terminated string containing the
+set type name as it appears in the source program.
+
+The set type entry has a DW\_AT\_type attribute to denote the
+type of an element of the set.
+
+If the amount of storage allocated to hold each element of an
+object of the given set type is different from the amount of
+storage that is normally allocated to hold an individual object
+of the indicated element type, then the set type entry has
+either a DW\_AT\_byte\_size attribute, or DW\_AT\_bit\_size attribute
+whose value (see Section \refersec{chap:byteandbitsizes}) is
+the amount of storage needed to hold a value of the set type.
+
+
+\section{Subrange Type Entries}
+\label{chap:subrangetypeentries}
+
+\textit{Several languages support the concept of a ``subrange''
+type object. These objects can represent a subset of the
+values that an object of the basis type for the subrange can
+represent. Subrange type entries may also be used to represent
+the bounds of array dimensions.}
+
+A subrange type is represented by a debugging information
+entry with the tag DW\_TAG\_subrange\_type. If a name has been
+given to the subrange type, then the subrange type entry
+has a DW\_AT\_name attribute whose value is a null\dash terminated
+string containing the subrange type name as it appears in
+the source program.
+
+The subrange entry may have a DW\_AT\_type attribute to describe
+the type of object, called the basis type, of whose values
+this subrange is a subset.
+
+If the amount of storage allocated to hold each element of an
+object of the given subrange type is different from the amount
+of storage that is normally allocated to hold an individual
+object of the indicated element type, then the subrange
+type entry has a DW\_AT\_byte\_size attribute or DW\_AT\_bit\_size
+attribute, whose value 
+(see Section \refersec{chap:staticanddynamicvaluesofattributes})
+is the amount of
+storage needed to hold a value of the subrange type.
+
+The subrange entry may have a DW\_AT\_threads\_scaled attribute,
+which is a flag. If present, this attribute indicates whether
+this subrange represents a UPC array bound which is scaled
+by the runtime THREADS value (the number of UPC threads in
+this execution of the program).
+
+\textit{This allows the representation of a UPC shared array such as}
+
+\begin{lstlisting}
+int shared foo[34*THREADS][10][20];
+\end{lstlisting}
+
+The subrange entry may have the attributes DW\_AT\_lower\_bound
+and DW\_AT\_upper\_bound to specify, respectively, the lower
+and upper bound values of the subrange. The DW\_AT\_upper\_bound
+attribute may be replaced by a DW\_AT\_count attribute, whose
+value describes the number of elements in the subrange rather
+than the value of the last element. The value of each of
+these attributes is determined as described in 
+Section \refersec{chap:staticanddynamicvaluesofattributes}.
+
+If the lower bound value is missing, the value is assumed to
+be a language\dash dependent default constant. The default lower
+bound is 0 for C, C++, D, Java, Objective C, Objective C++,
+Python, and UPC. The default lower bound is 1 for Ada, COBOL,
+Fortran, Modula\dash 2, Pascal and PL/I.
+
+\textit{No other default lower bound values are currently defined.}
+
+If the upper bound and count are missing, then the upper bound value is 
+\textit{unknown}.
+
+If the subrange entry has no type attribute describing the
+basis type, the basis type is assumed to be the same as
+the object described by the lower bound attribute (if it
+references an object). If there is no lower bound attribute,
+or that attribute does not reference an object, the basis type
+is the type of the upper bound or count attribute (if either
+of them references an object). If there is no upper bound or
+count attribute, or neither references an object, the type is
+assumed to be the same type, in the source language of the
+compilation unit containing the subrange entry, as a signed
+integer with the same size as an address on the target machine.
+
+If the subrange type occurs as the description of a dimension
+of an array type, and the stride for that dimension is
+different than what would otherwise be determined, then
+the subrange type entry has either a DW\_AT\_byte\_stride or
+DW\_AT\_bit\_stride attribute which specifies the separation
+between successive elements along the dimension as described
+in 
+Section \refersec{chap:byteandbitsizes}.
+
+\textit{Note that the stride can be negative.}
+
+\section{Pointer to Member Type Entries}
+\label{chap:pointertomembertypeentries}
+
+\textit{In C++, a pointer to a data or function member of a class or
+structure is a unique type.}
+
+A debugging information entry representing the type of an
+object that is a pointer to a structure or class member has
+the tag DW\_TAG\_ptr\_to\_member\_type.
+
+If the pointer to member type has a name, the pointer to
+member entry has a DW\_AT\_name attribute, whose value is a
+null\dash terminated string containing the type name as it appears
+in the source program.
+
+The pointer to member entry has a DW\_AT\_type attribute to
+describe the type of the class or structure member to which
+objects of this type may point.
+
+The pointer to member entry also has a DW\_AT\_containing\_type
+attribute, whose value is a reference to a debugging
+information entry for the class or structure to whose members
+objects of this type may point.
+
+The pointer to member entry has a DW\_AT\_use\_location attribute
+whose value is a location description that computes the
+address of the member of the class to which the pointer to
+member entry points.
+
+\textit{The method used to find the address of a given member of a
+class or structure is common to any instance of that class
+or structure and to any instance of the pointer or member
+type. The method is thus associated with the type entry,
+rather than with each instance of the type.}
+
+The DW\_AT\_use\_location description is used in conjunction
+with the location descriptions for a particular object of the
+given pointer to member type and for a particular structure or
+class instance. The DW\_AT\_use\_location attribute expects two
+values to be pushed onto the DWARF expression stack before
+the DW\_AT\_use\_location description is evaluated. The first
+value pushed is the value of the pointer to member object
+itself. The second value pushed is the base address of the
+entire structure or union instance containing the member
+whose address is being calculated.
+
+\textit{For an expression such as}
+
+\begin{lstlisting}
+    object.*mbr_ptr
+\end{lstlisting}
+
+\textit{where mbr\_ptr has some pointer to member type, a debugger should:}
+
+\textit{1. Push the value of mbr\_ptr onto the DWARF expression stack.}
+
+\textit{2. Push the base address of object onto the DWARF expression stack.}
+
+\textit{3. Evaluate the DW\_AT\_use\_location description 
+given in the type of mbr\_ptr.}
+
+\section{File Type Entries}
+\label{chap:filetypeentries}
+
+\textit{Some languages, such as Pascal, provide a data type to represent 
+files.}
+
+A file type is represented by a debugging information entry
+with the tag DW\_TAG\_file\_type. If the file type has a name,
+the file type entry has a DW\_AT\_name attribute, whose value
+is a null\dash terminated string containing the type name as it
+appears in the source program.
+
+The file type entry has a DW\_AT\_type attribute describing
+the type of the objects contained in the file.
+
+The file type entry also has a DW\_AT\_byte\_size or
+DW\_AT\_bit\_size attribute, whose value 
+(see Section \refersec{chap:staticanddynamicvaluesofattributes})
+is the amount of storage need to hold a value of the file type.
+
+\section{Dynamic Type Properties}
+\label{chap:dynamictypeproperties}
+\subsection{Data Location}
+\label{chap:datalocation}
+
+\textit{Some languages may represent objects using descriptors to hold
+information, including a location and/or run\dash time parameters,
+about the data that represents the value for that object.}
+
+The DW\_AT\_data\_location attribute may be used with any
+type that provides one or more levels of hidden indirection
+and/or run\dash time parameters in its representation. Its value
+is a location description. The result of evaluating this
+description yields the location of the data for an object.
+When this attribute is omitted, the address of the data is
+the same as the address of the object.
+
+\textit{This location description will typically begin with
+DW\_OP\_push\_object\_address which loads the address of the
+object which can then serve as a descriptor in subsequent
+calculation. For an example using DW\_AT\_data\_location for a
+Fortran 90 array, see 
+Appendix \refersec{app:fortran90example}.}
+
+\subsection{Allocation and Association Status}
+\label{chap:allocationandassociationstatus}
+
+\textit{Some languages, such as Fortran 90, provide types whose values
+may be dynamically allocated or associated with a variable
+under explicit program control.}
+
+The DW\_AT\_allocated attribute may optionally be used with any
+type for which objects of the type can be explicitly allocated
+and deallocated. The presence of the attribute indicates that
+objects of the type are allocatable and deallocatable. The
+integer value of the attribute (see below) specifies whether
+an object of the type is currently allocated or not.
+
+The DW\_AT\_associated attribute may optionally be used with
+any type for which objects of the type can be dynamically
+associated with other objects. The presence of the attribute
+indicates that objects of the type can be associated. The
+integer value of the attribute (see below) indicates whether
+an object of the type is currently associated or not.
+
+While these attributes are defined specifically with Fortran
+90 ALLOCATABLE and POINTER types in mind, usage is not limited
+to just that language.
+
+The value of these attributes is determined as described in
+Section \refersec{chap:staticanddynamicvaluesofattributes}.
+
+A non\dash zero value is interpreted as allocated or associated,
+and zero is interpreted as not allocated or not associated.
+
+\textit{For Fortran 90, if the DW\_AT\_associated attribute is present,
+the type has the POINTER property where either the parent
+variable is never associated with a dynamic object or the
+implementation does not track whether the associated object
+is static or dynamic. If the DW\_AT\_allocated attribute is
+present and the DW\_AT\_associated attribute is not, the type
+has the ALLOCATABLE property. If both attributes are present,
+then the type should be assumed to have the POINTER property
+(and not ALLOCATABLE); the DW\_AT\_allocated attribute may then
+be used to indicate that the association status of the object
+resulted from execution of an ALLOCATE statement rather than
+pointer assignment.}
+
+\textit{For examples using DW\_AT\_allocated for Ada and Fortran 90
+arrays, 
+see Appendix \refersec{app:aggregateexamples}.}
+
+
+
+\section{Template Alias Entries}
+\label{chap:templatealiasentries}
+
+A type named using a template alias is represented
+by a debugging information entry with the tag
+DW\-\_TAG\-\_template\-\_alias. The template alias entry has a
+DW\-\_AT\-\_name attribute whose value is a null\dash terminated string
+containing the name of the template alias as it appears in
+the source program. The template alias entry also contains a
+DW\-\_AT\-\_type attribute whose value is a reference to the type
+named by the template alias. The template alias entry has
+the following child entries:
+
+\begin{enumerate}[1.]
+\item Each formal parameterized type declaration appearing
+in the template alias declaration is represented
+by a debugging information entry with the tag
+DW\-\_TAG\-\_template\-\_type\-\_parameter. Each such entry may have
+a DW\_AT\_name attribute, whose value is a null\dash terminated
+string containing the name of the formal type parameter as it
+appears in the source program. The template type parameter
+entry also has a DW\-\_AT\-\_type attribute describing the actual
+type by which the formal is replaced for this instantiation.
+
+\item Each formal parameterized value declaration
+appearing in the template alias declaration is
+represented by a debugging information entry with the tag
+DW\-\_TAG\-\_template\-\_value\-\_parameter. Each such entry may have
+a DW\-\_AT\-\_name attribute, whose value is a null\dash terminated
+string containing the name of the formal value parameter
+as it appears in the source program. The template value
+parameter entry also has a DW\-\_AT\-\_type attribute describing
+the type of the parameterized value. Finally, the template
+value parameter entry has a DW\-\_AT\-\_const\-\_value attribute, whose
+value is the actual constant value of the value parameter for
+this instantiation as represented on the target architecture.
+\end{enumerate}
+

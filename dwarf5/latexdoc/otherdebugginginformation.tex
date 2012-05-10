@@ -1,0 +1,1799 @@
+\chapter{Other Debugging Information}
+\label{chap:otherdebugginginformation}
+% references to chapter 7 look like  {datarep:...}
+This section describes debugging information that is not
+represented in the form of debugging information entries and
+is not contained within a .debug\_info or .debug\_types section.
+
+In the descriptions that follow, these terms are used to
+specify the representation of DWARF sections:
+
+Initial length, section offset and section length, which are
+defined in 
+Sections \refersec{datarep:locationdescriptions} and 
+\refersec{datarep:32bitand64bitdwarfformats}.
+
+Sbyte, ubyte, uhalf, and uword, which are defined in 
+Section \refersec{datarep:integerrepresentationnames}.
+
+\section{Accelerated Access}
+\label{chap:acceleratedaccess}
+
+\textit{A debugger frequently needs to find the debugging information
+for a program entity defined outside of the compilation unit
+where the debugged program is currently stopped. Sometimes the
+debugger will know only the name of the entity; sometimes only
+the address. To find the debugging information associated with
+a global entity by name, using the DWARF debugging information
+entries alone, a debugger would need to run through all
+entries at the highest scope within each compilation unit.}
+
+\textit{Similarly, in languages in which the name of a type is
+required to always refer to the same concrete type (such as
+C++), a compiler may choose to elide type definitions in
+all compilation units except one. In this case a debugger
+needs a rapid way of locating the concrete type definition
+by name. As with the definition of global data objects, this
+would require a search of all the top level type definitions
+of all compilation units in a program.}
+
+\textit{To find the debugging information associated with a subroutine,
+given an address, a debugger can use the low and high pc
+attributes of the compilation unit entries to quickly narrow
+down the search, but these attributes only cover the range
+of addresses for the text associated with a compilation unit
+entry. To find the debugging information associated with a
+data object, given an address, an exhaustive search would be
+needed. Furthermore, any search through debugging information
+entries for different compilation units within a large program
+would potentially require the access of many memory pages,
+probably hurting debugger performance.}
+
+To make lookups of program entities (data objects, functions
+and types) by name or by address faster, a producer of DWARF
+information may provide three different types of tables
+containing information about the debugging information
+entries owned by a particular compilation unit entry in a
+more condensed format.
+
+\subsection{Lookup by Name}
+
+For lookup by name, two tables are maintained in separate
+object file sections named .debug\_pubnames for objects and
+functions, and .debug\_pubtypes for types. Each table consists
+of sets of variable length entries. Each set describes the
+names of global objects and functions, or global types,
+respectively, whose definitions are represented by debugging
+information entries owned by a single compilation unit.
+
+\textit{C++ member functions with a definition in the class declaration
+are definitions in every compilation unit containing the
+class declaration, but if there is no concrete out\dash of\dash line
+instance there is no need to have a .debug\_pubnames entry
+for the member function.}
+
+Each set begins with a header containing four values:
+\begin{enumerate}[1.]
+
+\item unit\_length (initial length) \\
+The total length of the all of the entries for that set,
+not including the length field itself 
+(see Section \refersec{datarep:locationdescriptions}).
+
+\item  version (uhalf) \\
+A version number 
+(see Section \refersec{datarep:namelookuptables}). 
+This number is specific
+to the name lookup table and is independent of the DWARF
+version number.
+
+\item debug\_info\_offset (section offset) \\
+The offset from the beginning of the .debug\_info section of
+the compilation unit header referenced by the set.
+
+\item debug\_info\_length (section length) \\
+The size in bytes of the contents of the .debug\_info section
+generated to represent that compilation unit.
+\end{enumerate}
+
+This header is followed by a variable number of offset/name
+pairs. Each pair consists of the section offset from the
+beginning of the compilation unit corresponding to the current
+set to the debugging information entry for the given object,
+followed by a null\dash terminated character string representing
+the name of the object as given by the DW\_AT\_name attribute
+of the referenced debugging information entry. Each set of
+names is terminated by an offset field containing zero (and
+no following string).
+
+
+In the case of the name of a function member or static data
+member of a C++ structure, class or union, the name presented
+in the .debug\_pubnames section is not the simple name given
+by the DW\_AT\_name attribute of the referenced debugging
+information entry, but rather the fully qualified name of
+the data or function member.
+
+\subsection{Lookup by Address}
+
+For lookup by address, a table is maintained in a separate
+object file section called .debug\_aranges. The table consists
+of sets of variable length entries, each set describing the
+portion of the program’s address space that is covered by
+a single compilation unit.
+
+Each set begins with a header containing five values:
+
+\begin{enumerate}[1.]
+
+\item unit\_length (initial length) \\
+The total length of all of the
+entries for that set, not including the length field itself
+(see Section \refersec{datarep:initiallengthvalues}).
+
+\item version (uhalf) \\
+A version number 
+(see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
+This
+number is specific to the address lookup table and is
+independent of the DWARF version number.
+
+\item debug\_info\_offset (section offset) \\
+The offset from the
+beginning of the .debug\_info or .debug\_types section of the
+compilation unit header referenced by the set.
+
+\item address\_size (ubyte) \\
+The size of an address in bytes on
+the target architecture. For segmented addressing, this is
+the size of the offset portion of the address.
+
+\item segment\_size (ubyte) \\
+The size of a segment selector in
+bytes on the target architecture. If the target system uses
+a flat address space, this value is 0.
+
+\end{enumerate}
+
+
+This header is followed by a variable number of address range
+descriptors. Each descriptor is a triple consisting of a
+segment selector, the beginning address within that segment
+of a range of text or data covered by some entry owned by
+the corresponding compilation unit, followed by the non\dash zero
+length of that range. A particular set is terminated by an
+entry consisting of three zeroes. When the segment\_size value
+is zero in the header, the segment selector is omitted so that
+each descriptor is just a pair, including the terminating
+entry. By scanning the table, a debugger can quickly decide
+which compilation unit to look in to find the debugging
+information for an object that has a given address.
+
+\textit{If the range of addresses covered by the text and/or data
+of a compilation unit is not contiguous, then there may be
+multiple address range descriptors for that compilation unit.}
+
+
+
+
+\section{Line Number Information}
+\label{chap:linenumberinformation}
+\textit{A source\dash level debugger will need to know how to
+associate locations in the source files with the corresponding
+machine instruction addresses in the executable object or
+the shared objects used by that executable object. Such an
+association would make it possible for the debugger user
+to specify machine instruction addresses in terms of source
+locations. This would be done by specifying the line number
+and the source file containing the statement. The debugger
+can also use this information to display locations in terms
+of the source files and to single step from line to line,
+or statement to statement.}
+
+Line number information generated for a compilation unit is
+represented in the .debug\_line section of an object file and
+is referenced by a corresponding compilation unit debugging
+information entry 
+(see Section \refersec{chap:generalsubroutineandentrypointinformation}) 
+in the .debug\_info
+section.
+
+\textit{Some computer architectures employ more than one instruction
+set (for example, the ARM and MIPS architectures support
+a 32\dash bit as well as a 16\dash bit instruction set). Because the
+instruction set is a function of the program counter, it is
+convenient to encode the applicable instruction set in the
+.debug\_line section as well.}
+
+\textit{If space were not a consideration, the information provided
+in the .debug\_line section could be represented as a large
+matrix, with one row for each instruction in the emitted
+object code. The matrix would have columns for:}
+
+\begin{itemize}
+\item \textit{the source file name}
+\item \textit{the source line number}
+\item \textit{the source column number}
+\item \textit{whether this insruction is the beginning of a basic block}
+\item \textit{and so on}
+\end{itemize}
+
+\textit{Such a matrix, however, would be impractically large. We
+shrink it with two techniques. First, we delete from
+the matrix each row whose file, line, source column and
+discriminator information is identical with that of its
+predecessors. Any deleted row would never be the beginning of
+a source statement. Second, we design a byte\dash coded language
+for a state machine and store a stream of bytes in the object
+file instead of the matrix. This language can be much more
+compact than the matrix. When a consumer of the line number
+information executes, it must ``run'' the state machine
+to generate the matrix for each compilation unit it is
+interested in.  The concept of an encoded matrix also leaves
+room for expansion. In the future, columns can be added to the
+matrix to encode other things that are related to individual
+instruction addresses.}
+
+\textit{When the set of addresses of a compilation unit cannot be
+described as a single contiguous range, there will be a
+separate matrix for each contiguous subrange.}
+
+\subsection{Definitions}
+
+The following terms are used in the description of the line
+number information format:
+
+
+\begin{tabular} {lp{9cm}}
+state machine &
+The hypothetical machine used by a consumer of the line number
+information to expand the byte\dash coded 
+instruction stream into a matrix of
+line number information. \\
+
+line number program &
+A series of byte\dash coded 
+line number information instructions representing
+one compilation unit. \\
+
+basic block &
+ A sequence of instructions where only the first instruction may be a
+branch target and only the last instruction may transfer control. A
+procedure invocation is defined to be an exit from a basic block.
+
+\textit{A basic block does not necessarily correspond to a specific source code
+construct.} \\
+
+sequence &
+A series of contiguous target machine instructions. One compilation unit
+may emit multiple sequences (that is, not all instructions within a
+compilation unit are assumed to be contiguous). \\
+\end{tabular}
+
+\subsection{State Machine Registers}
+\label{chap:statemachineregisters}
+
+The line number information state machine has the following registers:
+\begin{longtable}{l|p{9cm}}
+  \caption{State Machine Registers } \\
+  \hline \\ \bfseries Register name&\bfseries Meaning\\ \hline
+\endfirsthead
+  \bfseries Register name&\bfseries Meaning\\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+address &
+The program\dash counter value corresponding to a machine instruction
+generated by the compiler. \\
+
+op\_index &
+An unsigned integer representing the index of an operation within a VLIW
+instruction. The index of the first operation is 0. For non\dash VLIW
+architectures, this register will always be 0.
+
+The address and op\_index registers, taken together, form an operation
+pointer that can reference any individual operation with the instruction
+stream. \\
+
+
+file &
+An unsigned integer indicating the identity of the source file
+corresponding to a machine instruction. \\
+
+line &
+An unsigned integer indicating a source line number. Lines are numbered
+beginning at 1. The compiler may emit the value 0 in cases where an
+instruction cannot be attributed to any source line. \\
+
+column &
+An unsigned integer indicating a column number within a source line.
+Columns are numbered beginning at 1. The value 0 is reserved to indicate
+that a statement begins at the ``left edge'' of the line. \\
+
+is\_stmt &
+A boolean indicating that the current instruction is a recommended
+breakpoint location. A recommended breakpoint location 
+is intended to ``represent'' a line, a 
+statement and/or a semantically distinct subpart of a
+statement. \\
+
+basic\_block  &
+A boolean indicating that the current instruction is the beginning of a basic
+block. \\
+
+end\_sequence &
+A boolean indicating that the current address is that of the first byte after
+the end of a sequence of target machine instructions. end\_sequence
+terminates a sequence of lines; therefore other information in the same
+row is not meaningful. \\
+
+prologue\_end &
+A boolean indicating that the current address is one (of possibly many)
+where execution should be suspended for an entry breakpoint of a
+function. \\
+
+epilogue\_begin &
+A boolean indicating that the current address is one (of possibly many)
+where execution should be suspended for an exit breakpoint of a function. \\
+
+isa &
+An unsigned integer whose value encodes the applicable
+instruction set architecture for the current instruction.
+The encoding of instruction sets should be shared by all
+users of a given architecture. It is recommended that this
+encoding be defined by the ABI authoring committee for each
+architecture. \\
+
+discriminator &
+An unsigned integer identifying the block to which the
+current instruction belongs. Discriminator values are assigned
+arbitrarily by the DWARF producer and serve to distinguish
+among multiple blocks that may all be associated with the
+same source file, line, and column. Where only one block
+exists for a given source position, the discriminator value
+should be zero. \\
+\end{longtable}
+
+At the beginning  of each sequence within a line number
+program, the state of the registers is:
+
+\begin{tabular}{lp{8cm}}
+address & 0 \\
+op\_index & 0 \\
+file & 1 \\
+line & 1 \\
+column & 0 \\
+is\_stmt & determined by default\_is\_stmt in the line number program header \\
+basic\_block & ``false'' \\
+end\_sequence & ``false'' \\
+prologue\_end & ``false'' \\
+epilogue\_begin & ``false'' \\
+isa & 0 \\
+discriminator & 0 \\
+\end{tabular}
+
+\textit{The isa value 0 specifies that the instruction set is the
+architecturally determined default instruction set. This may
+be fixed by the ABI, or it may be specified by other means,
+for example, by the object file description.}
+
+\subsection{Line Number Program Instructions}
+
+The state machine instructions in a line number program belong to one of three categories:
+
+\begin{tabular}{lp{10cm}}
+special opcodes &
+These have a ubyte opcode field and no operands.
+
+\textit{Most of the instructions in a 
+line number program are special opcodes.} \\
+
+standard opcodes &
+These have a ubyte opcode field which may be followed by zero or more
+LEB128 operands (except for 
+DW\-\_LNS\-\_fixed\-\_advance\-\_pc, see below).
+The opcode implies the number of operands and their meanings, but the
+line number program header also specifies the number of operands for
+each standard opcode. \\
+
+extended opcodes &
+These have a multiple byte format. The first byte is zero; the next bytes
+are an unsigned LEB128 integer giving the number of bytes in the
+instruction itself (does not include the first zero byte or the size). The
+remaining bytes are the instruction itself (which begins with a ubyte
+extended opcode). \\
+\end{tabular}
+
+
+\subsection{The Line Number Program Header}
+
+The optimal encoding of line number information depends to a
+certain degree upon the architecture of the target machine. The
+line number program header provides information used by
+consumers in decoding the line number program instructions for
+a particular compilation unit and also provides information
+used throughout the rest of the line number program.
+
+The line number program for each compilation unit begins with
+a header containing the following fields in order:
+
+\begin{enumerate}[1.]
+\item unit\_length (initial length)  \\
+The size in bytes of the line number information for this
+compilation unit, not including the unit\_length field itself
+(see Section \refersec{datarep:initiallengthvalues}). 
+
+\item version (uhalf) 
+A version number 
+(see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
+This number is specific to
+the line number information and is independent of the DWARF
+version number. 
+
+\item header\_length  \\
+The number of bytes following the header\_length field to the
+beginning of the first byte of the line number program itself.
+In the 32\dash bit DWARF format, this is a 4\dash byte unsigned
+length; in the 64\dash bit DWARF format, this field is an
+8\dash byte unsigned length 
+(see Section \refersec{datarep:32bitand64bitdwarfformats}). 
+
+\item minimum\_instruction\_length (ubyte)  \\
+The size in bytes of the smallest target machine
+instruction. Line number program opcodes that alter
+the address and op\_index registers use this and
+maximum\-\_operations\-\_per\-\_instruction in their calculations. 
+
+\item maximum\_operations\_per\_instruction (ubyte) \\
+The maximum number of individual operations that may be
+encoded in an instruction. Line number program opcodes
+that alter the address and op\_index registers use this and
+minimum\_instruction\_length in their calculations.  For non-VLIW
+architectures, this field is 1, the op\_index register is always
+0, and the operation pointer is simply the address register.
+
+\item default\_is\_stmt (ubyte) \\
+The initial value of the is\_stmt register.  
+
+\textit{A simple approach
+to building line number information when machine instructions
+are emitted in an order corresponding to the source program
+is to set default\_is\_stmt to ``true'' and to not change the
+value of the is\_stmt register within the line number program.
+One matrix entry is produced for each line that has code
+generated for it. The effect is that every entry in the
+matrix recommends the beginning of each represented line as
+a breakpoint location. This is the traditional practice for
+unoptimized code.}
+
+\textit{A more sophisticated approach might involve multiple entries in
+the matrix for a line number; in this case, at least one entry
+(often but not necessarily only one) specifies a recommended
+breakpoint location for the line number. DW\_LNS\_negate\_stmt
+opcodes in the line number program control which matrix entries
+constitute such a recommendation and default\_is\_stmt might
+be either ``true'' or ``false''. This approach might be
+used as part of support for debugging optimized code.}
+
+\item line\_base (sbyte) \\
+This parameter affects the meaning of the special opcodes. See below.
+
+\item line\_range (ubyte) \\
+This parameter affects the meaning of the special opcodes. See below.
+
+\item opcode\_base (ubyte) \\
+The number assigned to the first special opcode.
+
+\textit{Opcode base is typically one greater than the highest-numbered
+standard opcode defined for the specified version of the line
+number information (12 in DWARF Version 3 and Version 4, 9 in
+Version 2).  If opcode\_base is less than the typical value,
+then standard opcode numbers greater than or equal to the
+opcode base are not used in the line number table of this unit
+(and the codes are treated as special opcodes). If opcode\_base
+is greater than the typical value, then the numbers between
+that of the highest standard opcode and the first special
+opcode (not inclusive) are used for vendor specific extensions.}
+
+\item standard\_opcode\_lengths (array of ubyte) \\
+This array specifies the number of LEB128 operands for each
+of the standard opcodes. The first element of the array
+corresponds to the opcode whose value is 1, and the last
+element corresponds to the opcode whose value 
+is opcode\_base - 1.
+
+By increasing opcode\_base, and adding elements to this array,
+new standard opcodes can be added, while allowing consumers who
+do not know about these new opcodes to be able to skip them.
+
+Codes for vendor specific extensions, if any, are described
+just like standard opcodes.
+
+\item include\_directories (sequence of path names) \\
+Entries in this sequence describe each path that was searched
+for included source files in this compilation. (The paths
+include those directories specified explicitly by the user for
+the compiler to search and those the compiler searches without
+explicit direction.) Each path entry is either a full path name
+or is relative to the current directory of the compilation.
+
+The last entry is followed by a single null byte.
+
+The line number program assigns numbers to each of the file
+entries in order, beginning with 1. The current directory of
+the compilation is understood to be the zeroth entry and is
+not explicitly represented.
+
+\item  file\_names (sequence of file entries) \\
+Entries in this sequence describe source files that contribute
+to the line number information for this compilation unit or is
+used in other contexts, such as in a declaration coordinate or
+a macro file inclusion. Each entry consists of the following
+values:
+
+
+\begin{itemize}
+\item A null\dash terminated string containing the full or relative
+path name of a source file. If the entry contains a file
+name or relative path name, the file is located relative
+to either the compilation directory (as specified by the
+DW\_AT\_comp\_dir attribute given in the compilation unit) or one
+of the directories listed in the include\_directories section.
+
+\item An unsigned LEB128 number representing the directory
+index of a directory in the include\_directories section.
+
+
+\item An unsigned LEB128 number representing the
+(implementation\dash defined) time of last modification for
+the file, or 0 if not available.
+
+\item An unsigned LEB128 number representing the length in
+bytes of the file, or 0 if not available.  
+
+\end{itemize}
+
+The last entry is followed by a single null byte.
+
+The directory index represents an entry in the
+include\_directories section. The index is 0 if the file was
+found in the current directory of the compilation, 1 if it
+was found in the first directory in the include\_directories
+section, and so on. The directory index is ignored for file
+names that represent full path names.
+
+The primary source file is described by an entry whose path
+name exactly matches that given in the DW\_AT\_name attribute
+in the compilation unit, and whose directory is understood
+to be given by the implicit entry with index 0.
+
+The line number program assigns numbers to each of the file
+entries in order, beginning with 1, and uses those numbers
+instead of file names in the file register.
+
+\textit{A compiler may generate a single null byte for the file
+names field and define file names using the extended opcode
+DW\_LNE\_define\_file.}
+
+
+\end{enumerate}
+
+
+Contents needed.
+\subsection{The Line Number Program}
+
+As stated before, the goal of a line number program is to build
+a matrix representing one compilation unit, which may have
+produced multiple sequences of target machine instructions.
+Within a sequence, addresses (operation pointers) may only
+increase. (Line numbers may decrease in cases of pipeline
+scheduling or other optimization.)
+
+\subsubsection{Special Opcodes} 
+\label{chap:specialopcodes}
+Each ubyte special opcode has the following effect on the state machine:
+
+\begin{enumerate}[1.]
+
+\item  Add a signed integer to the line register.
+
+\item  Modify the operation pointer by incrementing the
+address and op\_index registers as described below.
+
+\item  Append a row to the matrix using the current values
+of the state machine registers.
+
+\item  Set the basic\_block register to ``false.''
+\item  Set the prologue\_end register to ``false.''
+\item  Set the epilogue\_begin register to ``false.''
+\item  Set the discriminator register to 0.
+
+\end{enumerate}
+
+All of the special opcodes do those same seven things; they
+differ from one another only in what values they add to the
+line, address and op\_index registers.
+
+
+\textit{Instead of assigning a fixed meaning to each special opcode,
+the line number program uses several parameters in the header
+to configure the instruction set. There are two reasons
+for this.  First, although the opcode space available for
+special opcodes now ranges from 13 through 255, the lower
+bound may increase if one adds new standard opcodes. Thus, the
+opcode\_base field of the line number program header gives the
+value of the first special opcode. Second, the best choice of
+special\dash opcode meanings depends on the target architecture. For
+example, for a RISC machine where the compiler\dash generated code
+interleaves instructions from different lines to schedule
+the pipeline, it is important to be able to add a negative
+value to the line register to express the fact that a later
+instruction may have been emitted for an earlier source
+line. For a machine where pipeline scheduling never occurs,
+it is advantageous to trade away the ability to decrease
+the line register (a standard opcode provides an alternate
+way to decrease the line number) in return for the ability
+to add larger positive values to the address register. To
+permit this variety of strategies, the line number program
+header defines a line\_base field that specifies the minimum
+value which a special opcode can add to the line register
+and a line\_range field that defines the range of values it
+can add to the line register.}
+
+
+A special opcode value is chosen based on the amount that needs
+to be added to the line, address and op\_index registers. The
+maximum line increment for a special opcode is the value
+of the line\_base field in the header, plus the value of
+the line\_range field, minus 1 (line base + 
+line range - 1). 
+If the desired line increment is greater than the maximum
+line increment, a standard opcode must be used instead of a
+special opcode. The operation advance represents the number
+of operations to skip when advancing the operation pointer.
+
+The special opcode is then calculated using the following formula:
+
+  opcode = ( \textit{desired line increment} - line\_base) +
+(line\_range * \textit{operation advance} ) + opcode\_base
+
+If the resulting opcode is greater than 255, a standard opcode
+must be used instead.
+
+When maximum\_operations\_per\_instruction is 1, the operation
+advance is simply the address increment divided by the
+minimum\_instruction\_length.
+
+To decode a special opcode, subtract the opcode\_base from
+the opcode itself to give the \textit{adjusted opcode}. 
+The \textit{operation advance} 
+is the result of the adjusted opcode divided by the
+line\_range. The new address and op\_index values are given by
+\begin{myindentpara}{1cm}
+
+\textit{adjusted opcode} = opcode – opcode\_base
+
+\textit{operation advance} = \textit{adjusted opcode} / line\_range
+
+\begin{myindentpara}{1cm}
+new address =
+
+address +
+
+minimum\_instruction\_length *
+((op\_index + operation advance) / 
+maximum\_operations\_per\_instruction)
+\end{myindentpara}
+new op\_index =
+
+\begin{myindentpara}{1cm}
+(op\_index + operation advance) \% maximum\_operations\_per\_instruction
+\end{myindentpara}
+
+\end{myindentpara}
+
+\textit{When the maximum\_operations\_per\_instruction field is 1,
+op\_index is always 0 and these calculations simplify to those
+given for addresses in DWARF Version 3.}
+
+The amount to increment the line register is the line\_base plus
+the result of the adjusted opcode modulo the line\_range. That
+is,
+
+\begin{myindentpara}{1cm}
+line increment = line\_base + (adjusted opcode \% line\_range)
+\end{myindentpara}
+
+\textit{As an example, suppose that the opcode\_base is 13, line\_base
+is -3, line\_range is 12, minimum\_instruction\_length is 1
+and maximum\_operations\_per\_instruction is 1. This means that
+we can use a special opcode whenever two successive rows in
+the matrix have source line numbers differing by any value
+within the range [-3, 8] and (because of the limited number
+of opcodes available) when the difference between addresses
+is within the range [0, 20], but not all line advances are
+available for the maximum operation advance (see below).}
+
+\textit{The opcode mapping would be:}
+% FIXME: This should be a tabular or the like, not
+% FIXME a verbatim
+\begin{verbatim}
+            \       Line advance
+   Operation \
+     Advance  \ -3  -2  -1   0   1   2   3   4   5   6   7   8
+   ---------   -----------------------------------------------
+           0    13  14  15  16  17  18  19  20  21  22  23  24
+           1    25  26  27  28  29  30  31  32  33  34  35  36
+           2    37  38  39  40  41  42  43  44  45  46  47  48
+           3    49  50  51  52  53  54  55  56  57  58  59  60
+           4    61  62  63  64  65  66  67  68  69  70  71  72
+           5    73  74  75  76  77  78  79  80  81  82  83  84
+           6    85  86  87  88  89  90  91  92  93  94  95  96
+           7    97  98  99 100 101 102 103 104 105 106 107 108
+           8   109 110 111 112 113 114 115 116 117 118 119 120
+           9   121 122 123 124 125 126 127 128 129 130 131 132
+          10   133 134 135 136 137 138 139 140 141 142 143 144
+          11   145 146 147 148 149 150 151 152 153 154 155 156
+          12   157 158 159 160 161 162 163 164 165 166 167 168
+          13   169 170 171 172 173 174 175 176 177 178 179 180
+          14   181 182 183 184 185 186 187 188 189 190 191 192
+          15   193 194 195 196 197 198 199 200 201 202 203 204
+          16   205 206 207 208 209 210 211 212 213 214 215 216
+          17   217 218 219 220 221 222 223 224 225 226 227 228 
+          18   229 230 231 232 233 234 235 236 237 238 239 240 
+          19   241 242 243 244 245 246 247 248 249 250 251 252
+          20   253 254 255
+\end{verbatim}
+
+
+\textit{There is no requirement that the expression 
+255 - line\_base + 1 be an integral multiple of
+line\_range. }
+
+\subsubsection{Standard Opcodes}
+\label{chap:standardopcodes}
+
+
+The standard opcodes, their applicable operands and the
+actions performed by these opcodes are as follows:
+
+\begin{enumerate}[1.]
+
+\item \textbf{DW\_LNS\_copy} \\
+The DW\_LNS\_copy opcode takes no operands. It appends a row
+to the matrix using the current values of the state machine
+registers. Then it sets the discriminator register to 0,
+and sets the basic\_block, prologue\_end and epilogue\_begin
+registers to ``false.''
+
+\item \textbf{DW\_LNS\_advance\_pc} \\
+The DW\_LNS\_advance\_pc opcode takes a single unsigned LEB128
+operand as the operation advance and modifies the address
+and op\_index registers as specified in 
+Section \refersec{chap:specialopcodes}.
+
+\item \textbf{DW\_LNS\_advance\_line} \\
+The DW\_LNS\_advance\_line opcode takes a single signed LEB128
+operand and adds that value to the line register of the
+state machine.
+
+\item \textbf{DW\_LNS\_set\_file} \\ 
+The DW\_LNS\_set\_file opcode takes a single
+unsigned LEB128 operand and stores it in the file register
+of the state machine.
+
+\item \textbf{DW\_LNS\_set\_column} \\ 
+The DW\_LNS\_set\_column opcode takes a
+single unsigned LEB128 operand and stores it in the column
+register of the state machine.
+
+\item \textbf{DW\_LNS\_negate\_stmt} \\
+The DW\_LNS\_negate\_stmt opcode takes no
+operands. It sets the is\_stmt register of the state machine
+to the logical negation of its current value.
+
+\item \textbf{DW\_LNS\_set\_basic\_block} \\
+The DW\_LNS\_set\_basic\_block opcode
+takes no operands. It sets the basic\_block register of the
+state machine to ``true.''
+
+
+
+\item \textbf{DW\_LNS\_const\_add\_pc} \\
+The DW\_LNS\_const\_add\_pc opcode takes
+no operands. It advances the address and op\_index registers
+by the increments corresponding to special opcode 255.
+
+\textit{When the line number program needs to advance the address
+by a small amount, it can use a single special opcode,
+which occupies a single byte. When it needs to advance the
+address by up to twice the range of the last special opcode,
+it can use DW\_LNS\_const\_add\_pc followed by a special opcode,
+for a total of two bytes. Only if it needs to advance the
+address by more than twice that range will it need to use
+both DW\_LNS\_advance\_pc and a special opcode, requiring three
+or more bytes.}
+
+\item \textbf{DW\_LNS\_fixed\_advance\_pc} \\ 
+The DW\_LNS\_fixed\_advance\_pc opcode
+takes a single uhalf (unencoded) operand and adds it to the
+address register of the state machine and sets the op\_index
+register to 0. This is the only standard opcode whose operand
+is \textbf{not} a variable length number. It also does 
+\textbf{not} multiply the
+operand by the minimum\_instruction\_length field of the header.
+
+\textit{Existing assemblers cannot emit DW\_LNS\_advance\_pc or special
+opcodes because they cannot encode LEB128 numbers or judge when
+the computation of a special opcode overflows and requires
+the use of DW\_LNS\_advance\_pc. Such assemblers, however, can
+use DW\_LNS\_fixed\_advance\_pc instead, sacrificing compression.}
+
+\item \textbf{DW\_LNS\_set\_prologue\_end} \\
+The DW\_LNS\_set\_prologue\_end
+opcode takes no operands. It sets the prologue\_end register
+to ``true''.
+
+\textit{When a breakpoint is set on entry to a function, it is
+generally desirable for execution to be suspended, not on the
+very first instruction of the function, but rather at a point
+after the function's frame has been set up, after any language
+defined local declaration processing has been completed,
+and before execution of the first statement of the function
+begins. Debuggers generally cannot properly determine where
+this point is. This command allows a compiler to communicate
+the location(s) to use.}
+
+\textit{In the case of optimized code, there may be more than one such
+location; for example, the code might test for a special case
+and make a fast exit prior to setting up the frame.}
+
+\textit{Note that the function to which the prologue end applies cannot
+be directly determined from the line number information alone;
+it must be determined in combination with the subroutine
+information entries of the compilation (including inlined
+subroutines).}
+
+
+\item \textbf{DW\_LNS\_set\_epilogue\_begin} \\
+The DW\_LNS\_set\_epilogue\_begin opcode takes no operands. It
+sets the epilogue\_begin register to ``true''.
+
+\textit{When a breakpoint is set on the exit of a function or execution
+steps over the last executable statement of a function, it is
+generally desirable to suspend execution after completion of
+the last statement but prior to tearing down the frame (so that
+local variables can still be examined). Debuggers generally
+cannot properly determine where this point is. This command
+allows a compiler to communicate the location(s) to use.}
+
+\textit{Note that the function to which the epilogue end applies cannot
+be directly determined from the line number information alone;
+it must be determined in combination with the subroutine
+information entries of the compilation (including inlined
+subroutines).}
+
+\textit{In the case of a trivial function, both prologue end and
+epilogue begin may occur at the same address.}
+
+\item \textbf{DW\_LNS\_set\_isa} \\
+The DW\_LNS\_set\_isa opcode takes a single
+unsigned LEB128 operand and stores that value in the isa
+register of the state machine.
+\end{enumerate}
+
+\subsubsection{ExtendedOpcodes}
+\label{chap:extendedopcodes}
+
+The extended opcodes are as follows:
+
+\begin{enumerate}[1.]
+
+\item \textbf{DW\_LNE\_end\_sequence} \\
+The DW\_LNE\_end\_sequence opcode takes no operands. It sets the
+end\_sequence register of the state machine to “true” and
+appends a row to the matrix using the current values of the
+state-machine registers. Then it resets the registers to the
+initial values specified above 
+(see Section \refersec{chap:statemachineregisters}). 
+Every line
+number program sequence must end with a DW\_LNE\_end\_sequence
+instruction which creates a row whose address is that of the
+byte after the last target machine instruction of the sequence.
+
+\item \textbf{DW\_LNE\_set\_address} \\
+The DW\_LNE\_set\_address opcode takes a single relocatable
+address as an operand. The size of the operand is the size
+of an address on the target machine. It sets the address
+register to the value given by the relocatable address and
+sets the op\_index register to 0.
+
+\textit{All of the other line number program opcodes that
+affect the address register add a delta to it. This instruction
+stores a relocatable value into it instead.}
+
+
+\item \textbf{DW\_LNE\_define\_file} \\
+
+The DW\_LNE\_define\_file opcode takes four operands:
+
+\begin{enumerate}[1.]
+
+\item A null\dash terminated string containing the full or relative
+path name of a source file. If the entry contains a file
+name or a relative path name, the file is located relative
+to either the compilation directory (as specified by the
+DW\_AT\_comp\_dir attribute given in the compilation unit)
+or one of the directories in the include\_directories section.
+
+\item An unsigned LEB128 number representing the directory index
+of the directory in which the file was found.  
+
+\item An unsigned
+LEB128 number representing the time of last modification
+of the file, or 0 if not available.  
+
+\item An unsigned LEB128
+number representing the length in bytes of the file, or 0 if
+not available.
+\end{enumerate}
+
+The directory index represents an entry in the
+include\_directories section of the line number program
+header. The index is 0 if the file was found in the current
+directory of the compilation, 1 if it was found in the first
+directory in the include\_directories section, and so on. The
+directory index is ignored for file names that represent full
+path names.
+
+The primary source file is described by an entry whose path
+name exactly matches that given in the DW\_AT\_name attribute
+in the compilation unit, and whose directory index is 0. The
+files are numbered, starting at 1, in the order in which they
+appear; the names in the header come before names defined by
+the DW\_LNE\_define\_file instruction. These numbers are used
+in the file register of the state machine.
+
+\item \textbf{DW\_LNE\_set\_discriminator} \\
+The DW\_LNE\_set\_discriminator opcode takes a single
+parameter, an unsigned LEB128 integer. It sets the
+discriminator register to the new value.
+
+
+
+\end{enumerate}
+
+\textit{Appendix \refersec{app:linenumberprogramexample} 
+gives some sample line number programs.}
+
+\section{Macro Information}
+\label{chap:macroinformation}
+\textit{Some languages, such as C and C++, provide a way to replace
+text in the source program with macros defined either in the
+source file itself, or in another file included by the source
+file.  Because these macros are not themselves defined in the
+target language, it is difficult to represent their definitions
+using the standard language constructs of DWARF. The debugging
+information therefore reflects the state of the source after
+the macro definition has been expanded, rather than as the
+programmer wrote it. The macro information table provides a way
+of preserving the original source in the debugging information.}
+
+As described in Section 3.1.1, the macro information for a
+given compilation unit is represented in the .debug\_macinfo
+section of an object file. The macro information for each
+compilation unit is represented as a series of “macinfo”
+entries. Each macinfo entry consists of a “type code” and
+up to two additional operands. The series of entries for a
+given compilation unit ends with an entry containing a type
+code of 0.
+
+\subsection{Macinfo Types}
+\label{chap:macinfotypes}
+
+The valid macinfo types are as follows:
+
+\begin{tabular}{ll}
+DW\_MACINFO\_define 
+&A macro definition.\\
+DW\_MACINFO\_undef
+&A macro undefinition.\\
+DW\_MACINFO\_start\_file
+&The start of a new source file inclusion.\\
+DW\_MACINFO\_end\_file
+&The end of the current source file inclusion.\\
+DW\_MACINFO\_vendor\_ext
+& Vendor specific macro information directives.\\
+\end{tabular}
+
+\subsubsection{Define and Undefine Entries}
+\label{chap:defineandundefineentries}
+
+All DW\_MACINFO\_define and DW\_MACINFO\_undef entries have two
+operands. The first operand encodes the line number of the
+source line on which the relevant defining or undefining
+macro directives appeared.
+
+The second operand consists of a null-terminated character
+string. In the case of a DW\_MACINFO\_undef entry, the value
+of this string will be simply the name of the pre- processor
+symbol that was undefined at the indicated source line.
+
+In the case of a DW\_MACINFO\_define entry, the value of this
+string will be the name of the macro symbol that was defined
+at the indicated source line, followed immediately by the macro
+formal parameter list including the surrounding parentheses (in
+the case of a function-like macro) followed by the definition
+string for the macro. If there is no formal parameter list,
+then the name of the defined macro is followed directly by
+its definition string.
+
+In the case of a function-like macro definition, no whitespace
+characters should appear between the name of the defined
+macro and the following left parenthesis. Also, no whitespace
+characters should appear between successive formal parameters
+in the formal parameter list. (Successive formal parameters
+are, however, separated by commas.) Also, exactly one space
+character should separate the right parenthesis that terminates
+the formal parameter list and the following definition string.
+
+In the case of a ``normal'' (i.e. non-function-like) macro
+definition, exactly one space character should separate the
+name of the defined macro from the following definition text.
+
+
+
+\subsubsection{Start File Entries}
+\label{chap:startfileentries}
+Each DW\_MACINFO\_start\_file entry also has two operands. The
+first operand encodes the line number of the source line on
+which the inclusion macro directive occurred.
+
+The second operand encodes a source file name index. This index
+corresponds to a file number in the line number information
+table for the relevant compilation unit. This index indicates
+(indirectly) the name of the file that is being included by
+the inclusion directive on the indicated source line.
+
+\subsubsection{End File Entries}
+\label{chap:endfileentries}
+A DW\_MACINFO\_end\_file entry has no operands. The presence of
+the entry marks the end of the current source file inclusion.
+
+\subsubsection{Vendor Extension Entries}
+\label{chap:vendorextensionentries}
+A DW\_MACINFO\_vendor\_ext entry has two operands. The first
+is a constant. The second is a null-terminated character
+string. The meaning and/or significance of these operands is
+intentionally left undefined by this specification.
+
+\textit{A consumer must be able to totally ignore all
+DW\_MACINFO\_vendor\_ext entries that it does not understand
+(see Section \refersec{datarep:vendorextensibility}).}
+
+
+\subsection{Base Source Entries} 
+\label{chap:basesourceentries}
+
+A producer shall generate DW\_MACINFO\_start\_file and
+DW\_MACINFO\_end\_file entries for the source file submitted to
+the compiler for compilation. This DW\_MACINFO\_start\_file entry
+has the value 0 in its line number operand and references
+the file entry in the line number information table for the
+primary source file.
+
+
+\subsection{Macinfo Entries For Command Line Options}
+\label{chap:macinfoentriesforcommandlineoptions}
+
+In addition to producing DW\_MACINFO\_define and DW\_MACINFO\_undef
+entries for each of the define and undefine directives
+processed during compilation, the DWARF producer should
+generate a DW\_MACINFO\_define or DW\_MACINFO\_undef entry for
+each pre-processor symbol which is defined or undefined by
+some means other than via a define or undefine directive
+within the compiled source text. In particular, pre-processor
+symbol definitions and un- definitions which occur as a
+result of command line options (when invoking the compiler)
+should be represented by their own DW\_MACINFO\_define and
+DW\_MACINFO\_undef entries.
+
+All such DW\_MACINFO\_define and DW\_MACINFO\_undef entries
+representing compilation options should appear before the
+first DW\_MACINFO\_start\_file entry for that compilation unit
+and should encode the value 0 in their line number operands.
+
+
+\subsection{General rules and restrictions}
+\label{chap:generalrulesandrestrictions}
+
+All macinfo entries within a .debug\_macinfo section for a
+given compilation unit appear in the same order in which the
+directives were processed by the compiler.
+
+All macinfo entries representing command line options appear
+in the same order as the relevant command line options
+were given to the compiler. In the case where the compiler
+itself implicitly supplies one or more macro definitions or
+un-definitions in addition to those which may be specified on
+the command line, macinfo entries are also produced for these
+implicit definitions and un-definitions, and these entries
+also appear in the proper order relative to each other and
+to any definitions or undefinitions given explicitly by the
+user on the command line.
+
+
+
+\section{Call Frame Information}
+\label{chap:callframeinformation}
+
+
+
+
+\textit{Debuggers often need to be able to view and modify the state of any subroutine activation that is
+on the call stack. An activation consists of:}
+
+\begin{itemize}
+\item \textit{A code location that is within the
+subroutine. This location is either the place where the program
+stopped when the debugger got control (e.g. a breakpoint), or
+is a place where a subroutine made a call or was interrupted
+by an asynchronous event (e.g. a signal).}
+
+\item \textit{An area of memory that is allocated on a stack called a
+``call frame.'' The call frame is identified by an address
+on the stack. We refer to this address as the Canonical
+Frame Address or CFA. Typically, the CFA is defined to be the
+value of the stack pointer at the call site in the previous
+frame (which may be different from its value on entry to the
+current frame).}
+
+\item \textit{A set of registers that are in use by the subroutine
+at the code location.}
+
+\end{itemize}
+
+\textit{Typically, a set of registers are designated to be preserved
+across a call. If a callee wishes to use such a register, it
+saves the value that the register had at entry time in its call
+frame and restores it on exit. The code that allocates space
+on the call frame stack and performs the save operation is
+called the subroutine’s prologue, and the code that performs
+the restore operation and deallocates the frame is called its
+epilogue. Typically, the prologue code is physically at the
+beginning of a subroutine and the epilogue code is at the end.}
+
+\textit{To be able to view or modify an activation that is not
+on the top of the call frame stack, the debugger must
+``virtually unwind'' the stack of activations until
+it finds the activation of interest.  A debugger unwinds
+a stack in steps. Starting with the current activation it
+virtually restores any registers that were preserved by the
+current activation and computes the predecessor’s CFA and
+code location. This has the logical effect of returning from
+the current subroutine to its predecessor. We say that the
+debugger virtually unwinds the stack because the actual state
+of the target process is unchanged.}
+
+\textit{The unwinding operation needs to know where registers are
+saved and how to compute the predecessor’s CFA and code
+location. When considering an architecture-independent way
+of encoding this information one has to consider a number of
+special things.}
+
+
+\begin{itemize} % bullet list
+
+\item \textit{Prologue and epilogue code is not always in distinct blocks
+at the beginning and end of a subroutine. It is common
+to duplicate the epilogue code at the site of each return
+from the code. Sometimes a compiler breaks up the register
+save/unsave operations and moves them into the body of the
+subroutine to just where they are needed.}
+
+
+\item \textit{Compilers use different ways to manage the call
+frame. Sometimes they use a frame pointer register, sometimes
+not.}
+
+\item \textit{The algorithm to compute CFA changes as you progress through
+the prologue and epilogue code. (By definition, the CFA value
+does not change.)}
+
+\item \textit{Some subroutines have no call frame.}
+
+\item \textit{Sometimes a register is saved in another register that by
+convention does not need to be saved.}
+
+\item \textit{Some architectures have special instructions that perform
+some or all of the register management in one instruction,
+leaving special information on the stack that indicates how
+registers are saved.}
+
+\item \textit{Some architectures treat return address values specially. For
+example, in one architecture, the call instruction guarantees
+that the low order two bits will be zero and the return
+instruction ignores those bits. This leaves two bits of
+storage that are available to other uses that must be treated
+specially.}
+
+
+\end{itemize}
+
+
+\subsection{Structure of Call Frame Information}
+\label{chap:structureofcallframeinformation}
+
+DWARF supports virtual unwinding by defining an architecture
+independent basis for recording how procedures save and restore
+registers during their lifetimes. This basis must be augmented
+on some machines with specific information that is defined by
+an architecture specific ABI authoring committee, a hardware
+vendor, or a compiler producer. The body defining a specific
+augmentation is referred to below as the ``augmenter.''
+
+Abstractly, this mechanism describes a very large table that
+has the following structure:
+
+\begin{verbatim}
+        LOC CFA R0 R1 ... RN
+        L0
+        L1
+        ...
+        LN
+\end{verbatim}
+
+
+The first column indicates an address for every location
+that contains code in a program. (In shared objects, this
+is an object-relative offset.) The remaining columns contain
+virtual unwinding rules that are associated with the indicated
+location.
+
+The CFA column defines the rule which computes the Canonical
+Frame Address value; it may be either a register and a signed
+offset that are added together, or a DWARF expression that
+is evaluated.
+
+The remaining columns are labeled by register number. This
+includes some registers that have special designation on
+some architectures such as the PC and the stack pointer
+register. (The actual mapping of registers for a particular
+architecture is defined by the augmenter.) The register columns
+contain rules that describe whether a given register has been
+saved and the rule to find the value for the register in the
+previous frame.
+
+The register rules are:
+
+
+\begin{tabular}{lp{8cm}}
+undefined 
+&A register that has this rule has no recoverable value in the previous frame.
+(By convention, it is not preserved by a callee.) \\
+
+same value
+&This register has not been modified from the previous frame. (By convention,
+it is preserved by the callee, but the callee has not modified it.) \\
+
+offset(N)
+&The previous value of this register is saved at the address CFA+N where CFA
+is the current CFA value and N is a signed offset.\\
+
+val\_offset(N)
+&The previous value of this register is the value CFA+N where CFA is the
+current CFA value and N is a signed offset.\\
+
+register(R)
+&The previous value of this register is stored 
+in another register numbered R.\\
+
+expression(E)
+&The previous value of this register is located at the address produced by
+executing the DWARF expression E.\\
+
+val\_expression(E) 
+&The previous value of this register is the value produced by executing the
+DWARF expression E.\\
+
+architectural
+&The rule is defined externally to this specification by the augmenter.\\
+
+\end{tabular}
+
+\textit{This table would be extremely large if actually constructed
+as described. Most of the entries at any point in the table
+are identical to the ones above them. The whole table can be
+represented quite compactly by recording just the differences
+starting at the beginning address of each subroutine in
+the program.}
+
+The virtual unwind information is encoded in a self-contained
+section called .debug\_frame.  Entries in a .debug\_frame section
+are aligned on a multiple of the address size relative to
+the start of the section and come in two forms: a Common
+Information Entry (CIE) and a Frame Description Entry (FDE).
+
+\textit{If the range of code addresses for a function is not
+contiguous, there may be multiple CIEs and FDEs corresponding
+to the parts of that function.}
+
+
+A Common Information Entry holds information that is shared
+among many Frame Description Entries. There is at least one
+CIE in every non-empty .debug\_frame section. A CIE contains
+the following fields, in order:
+
+\begin{enumerate}[1.]
+\item length (initial length)  \\
+A constant that gives the number of bytes of the CIE structure,
+not including the length field itself 
+(see Section \refersec{datarep:initiallengthvalues}). 
+The
+size of the length field plus the value of length must be an
+integral multiple of the address size.
+
+\item  CIE\_id (4 or 8 bytes, see Section \refersec{datarep:32bitand64bitdwarfformats}) \\
+A constant that is used to distinguish CIEs from FDEs.
+
+\item  version (ubyte) \\
+A version number 
+(see Section \refersec{datarep:callframeinformation}). 
+This number is specific to the call frame information
+and is independent of the DWARF version number.
+
+
+\item  augmentation (UTF\dash 8 string) \\
+A null\dash terminated UTF\dash 8 string that identifies the augmentation
+to this CIE or to the FDEs that use it. If a reader encounters
+an augmentation string that is unexpected, then only the
+following fields can be read:
+
+
+\begin{itemize}
+
+\item CIE: length, CIE\_id, version, augmentation
+
+\item FDE: length, CIE\_pointer, initial\_location, address\_range
+
+\end{itemize}
+If there is no augmentation, this value is a zero byte.
+
+\textit{The augmentation string allows users to indicate that there
+is additional target\dash specific information in the CIE or FDE
+which is needed to unwind a stack frame. For example, this
+might be information about dynamically allocated data which
+needs to be freed on exit from the routine.}
+
+\textit{Because the .debug\_frame section is useful independently of
+any .debug\_info section, the augmentation string always uses
+UTF\dash 8 encoding.}
+
+\item  address\_size (ubyte) \\
+The size of a target address in this CIE and any FDEs that
+use it, in bytes. If a compilation unit exists for this frame,
+its address size must match the address size here.
+
+\item  segment\_size (ubyte) \\
+The size of a segment selector in this CIE and any FDEs that
+use it, in bytes.
+
+\item  code\_alignment\_factor (unsigned LEB128) \\
+A constant that is factored out of all advance location
+instructions (see 
+Section \refersec{chap:rowcreationinstructions}).
+
+
+\item  data\_alignment\_factor (signed LEB128) \\
+A constant that is factored out of certain offset instructions
+(see below). The resulting value is  \textit{(operand *
+data\_alignment\_factor)}.
+
+\item  return\_address\_register (unsigned LEB128) \\
+An unsigned LEB128 constant that indicates which column in the
+rule table represents the return address of the function. Note
+that this column might not correspond to an actual machine
+register.
+
+\item initial\_instructions (array of ubyte) \\
+A sequence of rules that are interpreted to create the initial
+setting of each column in the table.  The default rule for
+all columns before interpretation of the initial instructions
+is the undefined rule. However, an ABI authoring body or a
+compilation system authoring body may specify an alternate
+default value for any or all columns.
+
+\item padding (array of ubyte) \\
+Enough DW\_CFA\_nop instructions to make the size of this entry
+match the length value above.
+\end{enumerate}
+
+An FDE contains the following fields, in order:
+
+\begin{enumerate}[1.]
+\item length (initial length)  \\
+
+A constant that gives the number of bytes of the header and
+instruction stream for this function, not including the length
+field itself 
+(see Section  \refersec{datarep:initiallengthvalues}). 
+The size of the length field
+plus the value of length must be an integral multiple of the
+address size.
+
+\item   CIE\_pointer (4 or 8 bytes, see Section \refersec{datarep:32bitand64bitdwarfformats}) \\
+A constant offset into the .debug\_frame section that denotes
+the CIE that is associated with this FDE.
+
+\item  initial\_location (segment selector and target address) \\
+The address of the first location associated with this table
+entry. If the segment\_size field of this FDE's CIE is non-zero,
+the initial location is preceded by a segment selector of
+the given length.
+
+\item  address\_range (target address) \\
+The number of bytes of program instructions described by this entry.
+
+\item instructions (array of ubyte) \\
+A sequence of table defining instructions that are described below.
+
+\item 6. padding (array of ubyte) \\
+Enough DW\_CFA\_nop instructions to make the size of this
+entry match the length value above.
+\end{enumerate}
+
+\subsection{Call Frame Instructions}
+\label{chap:callframeinstructions}
+
+Each call frame instruction is defined to take 0 or more
+operands. Some of the operands may be encoded as part of the
+opcode 
+(see Section \refersec{datarep:callframeinformation}). 
+The instructions are defined in
+the following sections.
+
+Some call frame instructions have operands that are encoded
+as DWARF expressions 
+(see Section \refersec{chap:generaloperations}). 
+The following DWARF
+operators cannot be used in such operands:
+
+
+\begin{itemize}
+\item DW\-\_OP\-\_call2, DW\-\_OP\-\_call4 
+and DW\-\_OP\-\_call\-\_ref operators
+are not meaningful in an operand of these instructions
+because there is no mapping from call frame information to
+any corresponding debugging compilation unit information,
+thus there is no way to interpret the call offset.
+
+\item DW\_OP\_push\_object\_address is not meaningful in an operand
+of these instructions because there is no object context to
+provide a value to push.
+
+\item DW\_OP\_call\_frame\_cfa is not meaningful in an operand of
+these instructions because its use would be circular.
+\end{itemize}
+
+\textit{Call frame instructions to which these restrictions apply
+include DW\_CFA\_def\_cfa\_expression, DW\_CFA\_expression
+and DW\_CFA\_val\_expression.}
+
+\subsubsection{Row Creation Instructions}
+\label{chap:rowcreationinstructions}
+
+\begin{enumerate}[1.]
+
+\item \textbf{DW\_CFA\_set\_loc} \\
+The DW\_CFA\_set\_loc instruction takes a single operand that
+represents a target address. The required action is to create a
+new table row using the specified address as the location. All
+other values in the new row are initially identical to the
+current row. The new location value is always greater than
+the current one. If the segment\_size field of this FDE's CIE
+is non- zero, the initial location is preceded by a segment
+selector of the given length.
+
+
+\item \textbf{DW\_CFA\_advance\_loc} \\
+The DW\_CFA\_advance instruction takes a single operand (encoded
+with the opcode) that represents a constant delta. The required
+action is to create a new table row with a location value that
+is computed by taking the current entry’s location value
+and adding the value of 
+\textit{delta * code\_alignment\_factor}. All
+other values in the new row are initially identical to the
+current row
+
+\item \textbf{DW\_CFA\_advance\_loc1} \\
+The DW\_CFA\_advance\_loc1 instruction takes a single ubyte
+operand that represents a constant delta. This instruction
+is identical to DW\_CFA\_advance\_loc except for the encoding
+and size of the delta operand.
+
+\item \textbf{DW\_CFA\_advance\_loc2} \\
+The DW\_CFA\_advance\_loc2 instruction takes a single uhalf
+operand that represents a constant delta. This instruction
+is identical to DW\_CFA\_advance\_loc except for the encoding
+and size of the delta operand.
+
+\item \textbf{DW\_CFA\_advance\_loc4} \\
+The DW\_CFA\_advance\_loc4 instruction takes a single uword
+operand that represents a constant delta. This instruction
+is identical to DW\_CFA\_advance\_loc except for the encoding
+and size of the delta operand.
+
+\end{enumerate}
+
+\subsubsection{CFA Definition Instructions}
+\label{chap:cfadefinitioninstructions}
+
+\begin{enumerate}[1.]
+\item \textbf{DW\_CFA\_def\_cfa} \\
+The DW\_CFA\_def\_cfa instruction takes two unsigned LEB128
+operands representing a register number and a (non\dash factored)
+offset. The required action is to define the current CFA rule
+to use the provided register and offset.
+
+\item \textbf{ DW\_CFA\_def\_cfa\_sf} \\
+The DW\_CFA\_def\_cfa\_sf instruction takes two operands:
+an unsigned LEB128 value representing a register number and a
+signed LEB128 factored offset. This instruction is identical
+to DW\_CFA\_def\_cfa except that the second operand is signed
+and factored. The resulting offset is factored\_offset *
+data\_alignment\_factor.
+
+
+\item \textbf{DW\_CFA\_def\_cfa\_register} \\
+The DW\_CFA\_def\_cfa\_register instruction takes a single
+unsigned LEB128 operand representing a register number. The
+required action is to define the current CFA rule to use
+the provided register (but to keep the old offset). This
+operation is valid only if the current CFA rule is defined
+to use a register and offset.
+
+
+
+\item \textbf{DW\_CFA\_def\_cfa\_offset} \\
+The DW\_CFA\_def\_cfa\_offset instruction takes a single
+unsigned LEB128 operand representing a (non-factored)
+offset. The required action is to define the current CFA rule
+to use the provided offset (but to keep the old register). This
+operation is valid only if the current CFA rule is defined
+to use a register and offset.
+
+
+\item \textbf{DW\_CFA\_def\_cfa\_offset\_sf} \\
+The DW\_CFA\_def\_cfa\_offset\_sf instruction takes a signed
+LEB128 operand representing a factored offset. This instruction
+is identical to DW\_CFA\_def\_cfa\_offset except that the
+operand is signed and factored. The resulting offset is
+factored\_offset * data\_alignment\_factor. This operation
+is valid only if the current CFA rule is defined to use a
+register and offset.
+
+\item \textbf{DW\_CFA\_def\_cfa\_expression} \\
+The DW\_CFA\_def\_cfa\_expression instruction takes a single
+operand encoded as a DW\_FORM\_exprloc value representing a
+DWARF expression. The required action is to establish that
+expression as the means by which the current CFA is computed.
+See 
+Section \refersec{chap:callframeinstructions} 
+regarding restrictions on the DWARF
+expression operators that can be used.
+
+\end{enumerate}
+
+\subsubsection{Register Rule Instructions}
+\label{chap:registerruleinstructions}
+
+\begin{enumerate}[1.]
+\item \textbf{DW\_CFA\_undefined} \\
+The DW\_CFA\_undefined instruction takes a single unsigned
+LEB128 operand that represents a register number. The required
+action is to set the rule for the specified register to
+``undefined.''
+
+\item \textbf{DW\_CFA\_same\_value} \\
+The DW\_CFA\_same\_value instruction takes a single unsigned
+LEB128 operand that represents a register number. The required
+action is to set the rule for the specified register to
+``same value.''
+
+\item \textbf{DW\_CFA\_offset} \\
+The DW\_CFA\_offset instruction takes two operands: a register
+number (encoded with the opcode) and an unsigned LEB128
+constant representing a factored offset. The required action
+is to change the rule for the register indicated by the
+register number to be an offset(N) rule where the value of
+N is 
+\textit{factored offset * data\_alignment\_factor.}
+
+\item \textbf{DW\_CFA\_offset\_extended} \\
+The DW\_CFA\_offset\_extended instruction takes two unsigned
+LEB128 operands representing a register number and a factored
+offset. This instruction is identical to DW\_CFA\_offset except
+for the encoding and size of the register operand.
+
+\item \textbf{ DW\_CFA\_offset\_extended\_sf} \\
+The DW\_CFA\_offset\_extended\_sf instruction takes two operands:
+an unsigned LEB128 value representing a register number and a
+signed LEB128 factored offset. This instruction is identical
+to DW\_CFA\_offset\_extended except that the second operand is
+signed and factored. The resulting offset is 
+\textit{factored\_offset * data\_alignment\_factor}.
+
+\item \textbf{DW\_CFA\_val\_offset} \\
+The DW\_CFA\_val\_offset instruction takes two unsigned
+LEB128 operands representing a register number and a
+factored offset. The required action is to change the rule
+for the register indicated by the register number to be a
+val\_offset(N) rule where the value of N is 
+\textit{factored\_offset * data\_alignment\_factor}.
+
+\item \textbf{DW\_CFA\_val\_offset\_sf} \\
+The DW\_CFA\_val\_offset\_sf instruction takes two operands: an
+unsigned LEB128 value representing a register number and a
+signed LEB128 factored offset. This instruction is identical
+to DW\_CFA\_val\_offset except that the second operand is signed
+and factored. The resulting offset is 
+\textit{factored\_offset * data\_alignment\_factor}.
+
+\item \textbf{DW\_CFA\_register} \\
+The DW\_CFA\_register instruction takes two unsigned LEB128
+operands representing register numbers. The required action
+is to set the rule for the first register to be register(R)
+where R is the second register.
+
+\item \textbf{DW\_CFA\_expression} \\
+The DW\_CFA\_expression instruction takes two operands: an
+unsigned LEB128 value representing a register number, and
+a DW\_FORM\_block value representing a DWARF expression. The
+required action is to change the rule for the register
+indicated by the register number to be an expression(E)
+rule where E is the DWARF expression. That is, the DWARF
+expression computes the address. The value of the CFA is
+pushed on the DWARF evaluation stack prior to execution of
+the DWARF expression.
+
+See Section \refersec{chap:callframeinstructions} 
+regarding restrictions on the DWARF
+expression operators that can be used.
+
+\item \textbf{DW\_CFA\_val\_expression} \\
+The DW\_CFA\_val\_expression instruction takes two operands:
+an unsigned LEB128 value representing a register number, and
+a DW\_FORM\_block value representing a DWARF expression. The
+required action is to change the rule for the register
+indicated by the register number to be a val\_expression(E)
+rule where E is the DWARF expression. That is, the DWARF
+expression computes the value of the given register. The value
+of the CFA is pushed on the DWARF evaluation stack prior to
+execution of the DWARF expression.
+
+See Section \refersec{chap:callframeinstructions} 
+regarding restrictions on the DWARF
+expression operators that can be used.
+
+\item \textbf{ DW\_CFA\_restore} \\
+The DW\_CFA\_restore instruction takes a single operand (encoded
+with the opcode) that represents a register number. The
+required action is to change the rule for the indicated
+register to the rule assigned it by the initial\_instructions
+in the CIE.
+
+\item \textbf{DW\_CFA\_restore\_extended} \\
+The DW\_CFA\_restore\_extended instruction takes a single unsigned
+LEB128 operand that represents a register number. This
+instruction is identical to DW\_CFA\_restore except for the
+encoding and size of the register operand.
+
+\end{enumerate}
+
+\subsubsection{Row State Instructions}
+\label{chap:rowstateinstructions}
+
+\textit{The next two instructions provide the ability to stack and
+retrieve complete register states. They may be useful, for
+example, for a compiler that moves epilogue code into the
+body of a function.}
+
+
+\begin{enumerate}[1.]
+
+\item \textbf{DW\_CFA\_remember\_state} \\
+The DW\_CFA\_remember\_state instruction takes no operands. The
+required action is to push the set of rules for every register
+onto an implicit stack.
+
+
+\item \textbf{DW\_CFA\_restore\_state} \\
+The DW\_CFA\_restore\_state instruction takes no operands. The
+required action is to pop the set of rules off the implicit
+stack and place them in the current row.
+
+\end{enumerate}
+
+\subsubsection{Padding Instruction}
+\label{chap:paddinginstruction}
+\begin{enumerate}[1.]
+\item \textbf{DW\_CFA\_nop} \\
+The DW\_CFA\_nop instruction has no operands and no required
+actions. It is used as padding to make a CIE or FDE an
+appropriate size
+
+\end{enumerate}
+
+\subsection{Call Frame Instruction Usage} 
+\label{chap:callframeinstructionusage}
+
+\textit{To determine the virtual unwind rule set for a given location
+(L1), one searches through the FDE headers looking at the
+initial\_location and address\_range values to see if L1 is
+contained in the FDE. If so, then:}
+
+\begin{enumerate}[1.]
+
+\item \textit{Initialize a register set by reading the
+initial\_instructions field of the associated CIE.}
+
+\item \textit{Read and process the FDE’s instruction
+sequence until a DW\_CFA\_advance\_loc, DW\_CFA\_set\_loc, or the
+end of the instruction stream is encountered.}
+
+\item \textit{ If a DW\_CFA\_advance\_loc or DW\_CFA\_set\_loc
+instruction is encountered, then compute a new location value
+(L2). If L1 >= L2 then process the instruction and go back
+to step 2.}
+
+\item \textit{ The end of the instruction stream can be thought
+of as a DW\_CFA\_set\_loc (initial\_location + address\_range)
+instruction. Note that the FDE is ill-formed if L2 is less
+than L1.}
+
+\end{enumerate}
+
+\textit{The rules in the register set now apply to location L1.}
+
+\textit{For an example, see 
+Appendix \refersec{app:callframeinformationexample}.}
+
+
+
+\subsection{Call Frame Calling Address}
+\label{chap:callframecallingaddress}
+
+\textit{When unwinding frames, consumers frequently wish to obtain the
+address of the instruction which called a subroutine. This
+information is not always provided. Typically, however,
+one of the registers in the virtual unwind table is the
+Return Address.}
+
+If a Return Address register is defined in the virtual
+unwind table, and its rule is undefined (for example, by
+DW\_CFA\_undefined), then there is no return address and no
+call address, and the virtual unwind of stack activations
+is complete.
+
+\textit{In most cases the return address is in the same context as the
+calling address, but that need not be the case, especially if
+the producer knows in some way the call never will return. The
+context of the 'return address' might be on a different line,
+in a different lexical block, or past the end of the calling
+subroutine. If a consumer were to assume that it was in the
+same context as the calling address, the unwind might fail.}
+
+\textit{For architectures with constant-length instructions where
+the return address immediately follows the call instruction,
+a simple solution is to subtract the length of an instruction
+from the return address to obtain the calling instruction. For
+architectures with variable-length instructions (e.g.  x86),
+this is not possible. However, subtracting 1 from the return
+address, although not guaranteed to provide the exact calling
+address, generally will produce an address within the same
+context as the calling address, and that usually is sufficient.}
+
+
+

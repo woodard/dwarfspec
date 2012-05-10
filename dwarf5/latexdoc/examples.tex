@@ -1,0 +1,1958 @@
+\chapter{Examples (Informative)}
+\label{app:examplesinformative}
+
+The following sections provide examples that illustrate
+various aspects of the DWARF debugging information format.
+
+
+
+\section{ Compilation Units and Abbreviations Table Example}
+\label{app:compilationunitsandabbreviationstableexample}
+
+
+Figure 48  FIXME REF
+depicts the relationship of the abbreviations tables contained
+in the .debug\_abbrev section to the information contained in
+the .debug\_info section. Values are given in symbolic form,
+where possible.
+
+The figure corresponds to the following two trivial source files:
+
+File myfile.c
+\begin{lstlisting}
+typedef char* POINTER;
+\end{lstlisting}
+File myfile2.c
+\begin{lstlisting}
+typedef char* strp;
+\end{lstlisting}
+
+
+Needs content FIXME
+
+\section{Aggregate Examples}
+\label{app:aggregateexamples}
+
+The following examples illustrate how to represent some of
+the more complicated forms of array and record aggregates
+using DWARF.
+
+\subsection{Fortran 90 Example}
+\label{app:fortran90example}
+Consider the Fortran 90 source fragment in 
+Figure \refersec{fig:fortran90examplesourcefragment}.
+
+\begin{figure}[here]
+\begin{lstlisting}
+type array_ptr
+real :: myvar
+real, dimension (:), pointer :: ap
+end type array_ptr
+type(array_ptr), allocatable, dimension(:) :: arrays
+allocate(arrays(20))
+do i = 1, 20
+allocate(arrays(i)%ap(i+10))
+end do
+\end{lstlisting}
+\caption{Fortran 90 example: source fragment} \label{fig:fortran90examplesourcefragment}
+\end{figure}
+
+For allocatable and pointer arrays, it is essentially required
+by the Fortran 90 semantics that each array consist of two
+parts, which we here call 1) the descriptor and 2) the raw
+data. (A descriptor has often been called a dope vector in
+other contexts, although it is often a structure of some kind
+rather than a simple vector.) Because there are two parts,
+and because the lifetime of the descriptor is necessarily
+longer than and includes that of the raw data, there must be
+an address somewhere in the descriptor that points to the
+raw data when, in fact, there is some (that is, when 
+the ``variable'' is allocated or associated).
+
+For concreteness, suppose that a descriptor looks something
+like the C structure in 
+Figure \refersec{fig:fortran90exampledescriptorrepresentation}.
+Note, however, that it is
+a property of the design that 1) a debugger needs no builtin
+knowledge of this structure and 2) there does not need to
+be an explicit representation of this structure in the DWARF
+input to the debugger.
+
+\begin{figure}[here]
+\begin{lstlisting}
+struct desc {
+    long el_len; // Element length
+    void * base; // Address of raw data
+    int ptr_assoc : 1; // Pointer is associated flag
+    int ptr_alloc : 1; // Pointer is allocated flag
+    int num_dims : 6; // Number of dimensions
+    struct dims_str { // For each dimension...  
+        long low_bound;
+        long upper_bound;
+        long stride;
+    } dims[63];
+};
+\end{lstlisting}
+\caption{Fortran 90 example: descriptor representation} \label{fig:fortran90exampledescriptorrepresentation}
+\end{figure}
+
+
+In practice, of course, a “real” descriptor will have
+dimension substructures only for as many dimensions as are
+specified in the num\_dims component. Let us use the notation
+desc ,textless n \textgreater\   
+to indicate a specialization of the desc struct in
+which n is the bound for the dims component as well as the
+contents of the num\_dims component.
+
+Because the arrays considered here come in two parts, it is
+necessary to distinguish the parts carefully. In particular,
+the “address of the variable” or equivalently, the “base
+address of the object” always refers to the descriptor. For
+arrays that do not come in two parts, an implementation can
+provide a descriptor anyway, thereby giving it two parts. (This
+may be convenient for general runtime support unrelated to
+debugging.) In this case the above vocabulary applies as
+stated. Alternatively, an implementation can do without a
+descriptor, in which case the “address of the variable”,
+or equivalently the “base address of the object”, refers
+to the “raw data” (the real data, the only thing around
+that can be the object).
+
+If an object has a descriptor, then the DWARF type for that
+object will have a DW\_AT\_data\_location attribute. If an object
+does not have a descriptor, then usually the DWARF type for the
+object will not have a DW\_AT\_data\_location. (See the following
+Ada example for a case where the type for an object without
+a descriptor does have a DW\_AT\_data\_location attribute. In
+that case the object doubles as its own descriptor.)
+
+The Fortran 90 derived type array\_ptr can now be redescribed
+in C\dash like terms that expose some of the representation as in
+
+\begin{lstlisting}
+struct array_ptr {
+    float myvar;
+    desc<1> ap;
+};
+\end{lstlisting}
+
+Similarly for variable arrays:
+\begin{lstlisting}
+desc<1> arrays;
+\end{lstlisting}
+
+(Recall that desc \textless 1 \textgreater 
+indicates the 1\dash dimensional version of desc.)
+
+Finally, the following notation is useful:
+
+\begin{enumerate}[1.]
+\item  sizeof(type): size in bytes of entities of the given type
+
+\item offset(type, comp): offset in bytes of the comp component
+within an entity of the given type
+\end{enumerate}
+
+
+The DWARF description is shown in 
+Section \refersec{app:fortran90exampledwarfdescription}.
+
+\subsection{Fortran 90 example: DWARF description}
+\label{app:fortran90exampledwarfdescription}
+
+\begin{alltt}
+! Description for type of 'ap'
+
+1\$: \addtoindex{DW\_TAG\_array\_type}
+        ! No name, default (Fortran) ordering, default stride
+        DW\_AT\_type(reference to REAL)
+        DW\_AT\_associated(expression= ! Test 'ptr\_assoc' flag
+            DW\_OP\_push\_object\_address
+            DW\_OP\_lit<n> ! where n == offset(ptr\_assoc)
+            DW\_OP\_plus
+            DW\_OP\_deref
+            DW\_OP\_lit1 ! mask for 'ptr\_assoc' flag
+            DW\_OP\_and)
+        DW\_AT\_data\_location(expression= ! Get raw data address
+            DW\_OP\_push\_object\_address
+            DW\_OP\_lit<n> ! where n == offset(base)
+            DW\_OP\_plus
+            DW\_OP\_deref) ! Type of index of array 'ap'
+2\$:     \addtoindex{DW\_TAG\_subrange\_type}
+        ! No name, default stride
+        DW\_AT\_type(reference to INTEGER)
+        DW\_AT\_lower\_bound(expression=
+        DW\_OP\_push\_object\_address
+            DW\_OP\_lit<n> ! where n ==
+                         !  offset(desc, dims) +
+                         !  offset(dims\_str, lower\_bound)
+            DW\_OP\_plus
+            DW\_OP\_deref)
+        DW\_AT\_upper\_bound(expression=
+            DW\_OP\_push\_object\_address
+            DW\_OP\_lit<n> ! where n ==
+                         !  offset(desc, dims) +
+                         !  offset(dims\_str, upper\_bound)
+            DW\_OP\_plus
+            \addtoindex{DW\_OP\_deref})
+        !  Note: for the m'th dimension, the second operator becomes
+        !  DW\_OP\_lit<x> where
+        !  x == offset(desc, dims) +
+        !  (m-1)*sizeof(dims\_str) +
+        !  offset(dims\_str, [lower|upper]\_bound)
+        !  That is, the expression does not get longer for each
+        !  successive dimension (other than to express the larger
+        !  offsets involved).
+3\$: DW\_TAG\_structure\_type
+        DW\_AT\_name("array\_ptr")
+        DW\_AT\_byte\_size(constant sizeof(REAL) + sizeof(desc<1>))
+4\$:     DW\_TAG\_member
+            DW\_AT\_name("myvar")
+            DW\_AT\_type(reference to REAL)
+            DW\_AT\_data\_member\_location(constant 0)
+5\$:     DW\_TAG\_member
+            DW\_AT\_name("ap");
+            DW\_AT\_type(reference to 1\$)
+            DW\_AT\_data\_member\_location(constant sizeof(REAL))
+
+6\$: DW\_TAG\_array\_type
+        ! No name, default (Fortran) ordering, default stride
+        DW\_AT\_type(reference to 3\$)
+        DW\_AT\_allocated(expression=
+             ! Test 'ptr\_alloc' flag
+            DW\_OP\_push\_object\_address
+            DW\_OP\_lit<n> ! where n == offset(ptr\_alloc)
+            DW\_OP\_plus
+            DW\_OP\_deref
+            DW\_OP\_lit2
+             ! mask for 'ptr\_alloc' flag
+            DW\_OP\_and)
+        DW\_AT\_data\_location(expression= ! Get raw data address
+            DW\_OP\_push\_object\_address
+            DW\_OP\_lit<n> ! where n = offset(base)
+            DW\_OP\_plus
+            DW\_OP\_deref)
+
+7\$: DW\_TAG\_subrange\_type
+        ! No name, default stride
+        DW\_AT\_type(reference to INTEGER)
+        DW\_AT\_lower\_bound(expression=
+            DW\_OP\_push\_object\_address
+            DW\_OP\_lit<n> ! where n == ...
+            DW\_OP\_plus
+            DW\_OP\_deref)
+        DW\_AT\_upper\_bound(expression=
+            DW\_OP\_push\_object\_address
+            DW\_OP\_lit<n> ! where n == ...
+            DW\_OP\_plus
+            DW\_OP\_deref)
+
+8\$: DW\_TAG\_variable
+        DW\_AT\_name("arrays")
+        DW\_AT\_type(reference to 6\$)
+        DW\_AT\_location(expression=
+            ...as appropriate...) ! Assume static allocation
+\end{alltt}
+
+\subsection{Fortran 90 example continued: DWARF description}
+\label{app:fortran90examplecontinueddwarfdescription}
+
+Suppose the program is stopped immediately following completion
+of the do loop. Suppose further that the user enters the
+following debug command:
+
+\begin{lstlisting}
+debug> print arrays(5)%ap(2)
+\end{lstlisting}
+
+Interpretation of this expression proceeds as follows:
+
+\begin{enumerate}[1.]
+
+\item Lookup name arrays. We find that it is a variable,
+whose type is given by the unnamed type at 6\$. Notice that
+the type is an array type.
+
+
+\item Find the 5 element of that array object. To do array
+indexing requires several pieces of information:
+
+\begin{enumerate}[a]
+
+\item  the address of the array data
+
+\item the lower bounds of the array \\
+% Using plain [] here gives trouble.
+\lbrack To check that 5 is within bounds would require the upper
+bound too, but we will skip that for this example. \rbrack
+
+\item the stride 
+
+\end{enumerate}
+
+For a), check for a DW\_AT\_data\_location attribute. Since
+there is one, go execute the expression, whose result is
+the address needed. The object address used in this case
+is the object we are working on, namely the variable named
+arrays , whose address was found in step 1. (Had there been
+no DW\_AT\_data\_location attribute, the desired address would
+be the same as the address from step 1.)
+
+For b), for each dimension of the array (only one
+in this case), go interpret the usual lower bound
+attribute. Again this is an expression, which again begins
+with DW\_OP\_push\_object\_address. This object is 
+\textbf{still} arrays,
+from step 1, because we have not begun to actually perform
+any indexing yet.
+
+For c), the default stride applies. Since there is no
+DW\_AT\_byte\_stride attribute, use the size of the array element
+type, which is the size of type array\_ptr (at 3\$).
+
+Having acquired all the necessary data, perform the indexing
+operation in the usual manner -  which has nothing to do with
+any of the attributes involved up to now. Those just provide
+the actual values used in the indexing step.
+
+The result is an object within the memory that was dynamically
+allocated for arrays.
+
+\item  Find the ap component of the object just identified,
+whose type is array\_ptr.
+
+This is a conventional record component lookup and
+interpretation. It happens that the ap component in this case
+begins at offset 4 from the beginning of the containing object.
+Component ap has the unnamed array type defined at 1\$ in the
+symbol table.
+
+\item  Find the second element of the array object found in step 3. To do array indexing requires
+several pieces of information:
+
+\begin{enumerate}[a]
+\item  the address of the array storage
+
+\item  the lower bounds of the array \\
+% Using plain [] here gives trouble.
+\lbrack To check that 2 is within bounds we would require the upper
+%bound too, but we’ll skip that for this example \rbrack
+
+\item  the stride
+
+\end{enumerate}
+\end{enumerate}
+
+This is just like step 2), so the details are omitted. Recall
+that because the DWARF type 1\$ has a DW\_AT\_data\_location,
+the address that results from step 4) is that of a
+descriptor, and that address is the address pushed by the
+DW\_OP\_push\_object\_address operations in 1\$ and 2\$.
+
+Note: we happen to be accessing a pointer array here instead
+of an allocatable array; but because there is a common
+underlying representation, the mechanics are the same. There
+could be completely different descriptor arrangements and the
+mechanics would still be the same — only the stack machines
+would be different.
+
+
+
+\subsection{Ada Example}
+\label{app:adaexample}
+
+Figure \refersec{fig:adaexamplesourcefragment}
+illustrates two kinds of Ada parameterized array, one embedded in a record.
+
+
+\begin{figure}[here]
+\begin{lstlisting}
+M : INTEGER := <exp>;
+VEC1 : array (1..M) of INTEGER;
+subtype TEENY is INTEGER range 1..100;
+type ARR is array (INTEGER range <>) of INTEGER;
+type REC2(N : TEENY := 100) is record
+    VEC2 : ARR(1..N);
+end record;
+
+OBJ2B : REC2;
+\end{lstlisting}
+\caption{Ada 90 example: source fragment} \label{fig:adaexamplesourcefragment}
+\end{figure}
+
+VEC1 illustrates an (unnamed) array type where the upper bound
+of the first and only dimension is determined at runtime. Ada
+semantics require that the value of an array bound is fixed at
+the time the array type is elaborated (where elaboration refers
+to the runtime executable aspects of type processing). For
+the purposes of this example, we assume that there are no
+other assignments to M so that it safe for the REC1 type
+description to refer directly to that variable (rather than
+a compiler generated copy).
+
+REC2 illustrates another array type (the unnamed type of
+component VEC2) where the upper bound of the first and only
+bound is also determined at runtime. In this case, the upper
+bound is contained in a discriminant of the containing record
+type. (A discriminant is a component of a record whose value
+cannot be changed independently of the rest of the record
+because that value is potentially used in the specification
+of other components of the record.)
+
+The DWARF description is shown in 
+Section \refersec{app:adaexampledwarfdescription}
+
+
+Interesting aspects about this example are:
+
+\begin{enumerate}[1)]
+\item The array VEC2 is ``immediately'' contained within structure
+REC2 (there is no intermediate descriptor or indirection),
+which is reflected in the absence of a DW\_AT\_data\_location
+attribute on the array type at 28\$.
+
+\item One of the bounds of VEC2 is nonetheless dynamic and part of
+the same containing record. It is described as a reference to
+a member, and the location of the upper bound is determined
+as for any member. That is, the location is determined using
+an address calculation relative to the base of the containing
+object.  A consumer must notice that the referenced bound is a
+member of the same containing object and implicitly push the
+base address of the containing object just as for accessing
+a data member generally.
+
+\item The lack of a subtype concept in DWARF means that DWARF types
+serve the role of subtypes and must replicate information from
+what should be the parent type. For this reason, DWARF for
+the unconstrained array ARR is not needed for the purposes
+of this example and therefore not shown.
+\end{enumerate}
+
+\subsubsection{Ada example: DWARF description}
+\label{app:adaexampledwarfdescription}
+
+\begin{alltt}
+11\$: DW\_TAG\_variable
+        DW\_AT\_name("M")
+        DW\_AT\_type(reference to INTEGER)
+12\$: DW\_TAG\_array\_type
+        ! No name, default (Ada) order, default stride
+        DW\_AT\_type(reference to INTEGER)
+13\$:    DW\_TAG\_subrange\_type
+            DW\_AT\_type(reference to INTEGER)
+            DW\_AT\_lower\_bound(constant 1)
+            DW\_AT\_upper\_bound(reference to variable M at 11\$)
+14\$: DW\_TAG\_variable
+        DW\_AT\_name("VEC1")
+        DW\_AT\_type(reference to array type at 12\$)
+    . . .
+21\$: DW\_TAG\_subrange\_type
+        DW\_AT\_name("TEENY")
+        DW\_AT\_type(reference to INTEGER)
+        DW\_AT\_lower\_bound(constant 1)
+        DW\_AT\_upper\_bound(constant 100)
+
+      . . .
+26\$: DW\_TAG\_structure\_type
+        DW\_AT\_name("REC2")
+27\$:   DW\_TAG\_member
+            DW\_AT\_name("N")
+            DW\_AT\_type(reference to subtype TEENY at 21\$)
+            DW\_AT\_data\_member\_location(constant 0)
+28\$:   DW\_TAG\_array\_type
+            ! No name, default (Ada) order, default stride
+            ! Default data location
+            DW\_AT\_TYPE(reference to INTEGER)
+29\$:       DW\_TAG\_subrange\_type
+                DW\_AT\_type(reference to subrange TEENY at 21\$)
+                DW\_AT\_lower\_bound(constant 1)
+                DW\_AT\_upper\_bound(reference to member N at 27\$)
+30\$:   DW\_TAG\_member
+            DW\_AT\_name("VEC2")
+            DW\_AT\_type(reference to array “subtype” at 28\$)
+            DW\_AT\_data\_member\_location(machine=
+                DW\_OP\_lit<n> ! where n == offset(REC2, VEC2)
+                DW\_OP\_plus)
+      . . .
+41\$: DW\_TAG\_variable
+        DW\_AT\_name("OBJ2B")
+        DW\_AT\_type(reference to REC2 at 26\$)
+        DW\_AT\_location(...as appropriate...)
+
+\end{alltt}
+
+\subsection{Pascal Example}
+\label{app:pascalexample}
+
+The Pascal source in 
+Figure \refersec{fig:packedrecordexamplesourcefragment}
+is used to illustrate the representation of packed unaligned bit
+fields.
+\begin{figure}[here]
+\begin{lstlisting}
+TYPE T : PACKED RECORD ! bit size is 2
+F5 : BOOLEAN; ! bit offset is 0
+F6 : BOOLEAN; ! bit offset is 1
+END;
+VAR V : PACKED RECORD
+F1 : BOOLEAN; ! bit offset is 0
+F2 : PACKED RECORD ! bit offset is 1
+F3 : INTEGER; ! bit offset is 0 in F2, 1 in V
+END;
+F4 : PACKED ARRAY [0..1] OF T; ! bit offset is 33
+F7 : T; ! bit offset is 37
+END;
+\end{lstlisting}
+\caption{Packed record example: source fragment} \label{fig:packedrecordexamplesourcefragment}
+\end{figure}
+
+The DWARF representation in 
+Section \refersec{app:packedrecordexampledwarfdescription} 
+is
+appropriate. 
+DW\_TAG\_packed\_type entries could be added to
+better represent the source, but these do not otherwise affect
+the example and are omitted for clarity. Note that this same
+representation applies to both typical big\dash \ and 
+little\dash endian
+architectures using the conventions described in 
+Section \refersec{chap:datamemberentries}.
+
+
+\subsection{Packed record example: DWARF description}
+\label{app:packedrecordexampledwarfdescription}
+\begin{alltt}
+
+21\$: DW\_TAG\_structure\_type ! anonymous type for F2
+        DW\_TAG\_member
+            DW\_AT\_name("F3")
+            DW\_AT\_type(reference to 11\$)
+22\$: DW\_TAG\_array\_type ! anonymous type for F4
+        DW\_AT\_type(reference to 20\$)
+        DW\_TAG\_subrange\_type
+            DW\_AT\_type(reference to 11\$)
+            DW\_AT\_lower\_bound(0)
+            DW\_AT\_upper\_bound(1)
+        DW\_AT\_bit\_stride(2)
+        DW\_AT\_bit\_size(4)
+23\$: DW\_TAG\_structure\_type ! anonymous type for V
+        DW\_AT\_bit\_size(39)
+        DW\_TAG\_member
+            DW\_AT\_name("F1")
+            DW\_AT\_type(reference to 10\$)
+            DW\_AT\_data\_bit\_offset(0)! may be omitted
+            DW\_AT\_bit\_size(1) ! may be omitted
+        DW\_AT\_member
+            DW\_AT\_name("F2")
+            DW\_AT\_type(reference to 21\$)
+            DW\_AT\_data\_bit\_offset(1)
+            DW\_AT\_bit\_size(32) ! may be omitted
+        DW\_AT\_member
+            DW\_AT\_name("F4")
+            DW\_AT\_type(reference to 22\$)
+            DW\_AT\_data\_bit\_offset(33)
+            DW\_AT\_bit\_size(4) ! may be omitted
+        DW\_AT\_member
+            DW\_AT\_name("F7")
+            DW\_AT\_type(reference to 20\$) ! type T
+            DW\_AT\_data\_bit\_offset(37)
+            DW\_AT\_bit\_size(2) ! may be omitted
+     DW\_TAG\_variable
+        DW\_AT\_name("V")
+        DW\_AT\_type(reference to 23\$)
+        DW\_AT\_location(...)
+        ...
+\end{alltt}
+
+\section{Namespace Example}
+\label{app:namespaceexample}
+
+
+The C++ example in 
+Figure \refersec{fig:namespaceexamplesourcefragment}
+is used to illustrate the representation of namespaces.
+
+\begin{figure}[here]
+\begin{lstlisting}
+namespace {
+    int i;
+}
+
+namespace A {
+    namespace B {
+        int j;
+        int myfunc (int a);
+        float myfunc (float f) { return f – 2.0; }
+        int myfunc2(int a) { return a + 2; }
+    }
+}
+namespace Y {
+    using A::B::j;         // (1) using declaration
+    int foo;
+}
+
+using A::B::j;             // (2) using declaration
+namespace Foo = A::B;      // (3) namespace alias
+using Foo::myfunc;         // (4) using declaration
+using namespace Foo;       // (5) using directive
+namespace A {
+    namespace B {
+        using namespace Y; // (6) using directive
+        int k;
+    }
+}
+int Foo::myfunc(int a)
+{
+    i = 3;
+    j = 4;
+    return myfunc2(3) + j + i + a + 2;
+}
+\end{lstlisting}
+\caption{Namespace example: source fragment} \label{fig:namespaceexamplesourcefragment}
+\end{figure}
+
+
+The DWARF representation in 
+Section \refersec{app:namespaceexampledwarfdescription}
+is appropriate.
+
+\subsection{Namespace example: DWARF description}
+\label{app:namespaceexampledwarfdescription}
+\begin{alltt}
+
+1\$:  DW\_TAG\_base\_type
+        DW\_AT\_name("int")
+        ...
+2\$:  DW\_TAG\_base\_type
+        DW\_AT\_name("float")
+        ...
+6\$:  DW\_TAG\_namespace
+        ! no DW\_AT\_name attribute
+7\$:
+        DW\_TAG\_variable
+            DW\_AT\_name("i")
+            DW\_AT\_type(reference to 1\$)
+            DW\_AT\_location ...
+            ...
+10\$: DW\_TAG\_namespace
+        DW\_AT\_name("A")
+20\$:    DW\_TAG\_namespace
+            DW\_AT\_name("B")
+30\$:        DW\_TAG\_variable
+                DW\_AT\_name("j")
+                DW\_AT\_type(reference to 1\$)
+                DW\_AT\_location ...
+                ...
+34\$:        DW\_TAG\_subprogram
+                DW\_AT\_name("myfunc")
+                DW\_AT\_type(reference to 1\$)
+                ...
+36\$:        DW\_TAG\_subprogram
+                DW\_AT\_name("myfunc")
+                DW\_AT\_type(reference to 2\$)
+                ...
+38\$:        DW\_TAG\_subprogram
+                DW\_AT\_name("myfunc2")
+                DW\_AT\_low\_pc ...
+                DW\_AT\_high\_pc ...
+                \addtoindex{DW\_AT\_type}(reference to 1\$)
+                ...
+
+40\$: DW\_TAG\_namespace
+        DW\_AT\_name("Y")
+        DW\_TAG\_imported\_declaration    ! (1) using-declaration
+            DW\_AT\_import(reference to 30\$)
+        DW\_TAG\_variable
+            DW\_AT\_name("foo")
+            DW\_AT\_type(reference to 1\$)
+            DW\_AT\_location ...
+            ...
+     DW\_TAG\_imported\_declaration       ! (2) using declaration
+        DW\_AT\_import(reference to 30\$)
+        DW\_TAG\_imported\_declaration    ! (3) namespace alias
+            DW\_AT\_name("Foo")
+            DW\_AT\_import(reference to 20\$)
+        DW\_TAG\_imported\_declaration    ! (4) using declaration
+            DW\_AT\_import(reference to 34\$) ! - part 1
+        DW\_TAG\_imported\_declaration    ! (4) using declaration
+            DW\_AT\_import(reference to 36\$) !  - part 2
+        DW\_TAG\_imported\_module         ! (5) using directive
+            DW\_AT\_import(reference to 20\$)
+        DW\_TAG\_namespace
+            DW\_AT\_extension(reference to 10\$)
+            DW\_TAG\_namespace
+                DW\_AT\_extension(reference to 20\$)
+                DW\_TAG\_imported\_module ! (6) using directive
+                    DW\_AT\_import(reference to 40\$)
+                DW\_TAG\_variable
+                    DW\_AT\_name("k")
+                    DW\_AT\_type(reference to 1\$)
+                    DW\_AT\_location ...
+                    ...
+60\$: DW\_TAG\_subprogram
+        DW\_AT\_specification(reference to 34\$)
+        DW\_AT\_low\_pc ...
+        DW\_AT\_high\_pc ...
+        ...
+\end{alltt}
+
+\section{Member Function Example}
+\label{app:memberfunctionexample}
+
+Consider the member function example fragment in 
+Figure \refersec{fig:memberfunctionexamplesourcefragment}.
+
+\begin{figure}[here]
+\begin{lstlisting}
+class A
+{
+    void func1(int x1);
+    void func2() const;
+    static void func3(int x3);
+};
+void A::func1(int x) {}
+\end{lstlisting}
+\caption{Member function example: source fragment} \label{fig:memberfunctionexamplesourcefragment}
+\end{figure}
+
+
+
+The DWARF representation in 
+Section \refersec{app:memberfunctionexampledwarfdescription}
+is appropriate.
+
+\subsection{Member function example: DWARF description}
+\label{app:memberfunctionexampledwarfdescription}
+
+
+\begin{alltt}
+1\$: DW\_TAG\_unspecified\_type
+        DW\_AT\_name("void")
+                ...
+2\$ DW\_TAG\_base\_type
+        DW\_AT\_name("int")
+        ...
+3\$: DW\_TAG\_class\_type
+        DW\_AT\_name("A")
+        ...
+4\$:    DW\_TAG\_pointer\_type
+            DW\_AT\_type(reference to 3\$)
+            ...
+5\$:    DW\_TAG\_const\_type
+            DW\_AT\_type(reference to 3\$)
+            ...
+6\$:    DW\_TAG\_pointer\_type
+            DW\_AT\_type(reference to 5\$)
+            ...
+
+7\$:    DW\_TAG\_subprogram
+            DW\_AT\_declaration
+            DW\_AT\_name("func1")
+            DW\_AT\_type(reference to 1\$)
+            DW\_AT\_object\_pointer(reference to 8\$)
+                ! References a formal parameter in this 
+                ! member function
+            ...
+8\$:        DW\_TAG\_formal\_parameter
+                DW\_AT\_artificial(true)
+                DW\_AT\_name("this")
+                DW\_AT\_type(reference to 4\$)
+                    ! Makes type of 'this' as 'A*' =>
+                    ! func1 has not been marked const 
+                    ! or volatile
+                DW\_AT\_location ...
+                ...
+9\$:        DW\_TAG\_formal\_parameter
+                DW\_AT\_name(x1)
+                DW\_AT\_type(reference to 2\$)
+                ...
+10\$:    DW\_TAG\_subprogram
+             DW\_AT\_declaration
+             DW\_AT\_name("func2")
+             DW\_AT\_type(reference to 1\$)
+             DW\_AT\_object\_pointer(reference to 11\$)
+             ! References a formal parameter in this 
+             ! member function
+             ...
+11\$:        DW\_TAG\_formal\_parameter
+                 DW\_AT\_artificial(true)
+                 DW\_AT\_name("this")
+                 DW\_AT\_type(reference to 6\$)
+                     ! Makes type of 'this' as 'A const*' =>
+                 !     func2 marked as const
+                 DW\_AT\_location ...
+                 ...
+12\$:    DW\_TAG\_subprogram
+             DW\_AT\_declaration
+             DW\_AT\_name("func3")
+             DW\_AT\_type(reference to 1\$)
+             ...
+                 ! No object pointer reference formal parameter
+                 ! implies func3 is static
+13\$:        DW\_TAG\_formal\_parameter
+                 DW\_AT\_name(x3)
+                 DW\_AT\_type(reference to 2\$)
+                 ...
+\end{alltt}
+
+\section{Line Number Program Example}
+\label{app:linenumberprogramexample}
+
+Consider the simple source file and the resulting machine
+code for the Intel 8086 processor in 
+Figure \refersec{fig:linenumberprogramexamplemachinecode}.
+
+\begin{figure}[here]
+\begin{lstlisting}
+1: int
+2: main()
+    0x239: push pb
+    0x23a: mov bp,sp
+3: {
+4: printf("Omit needless words\n");
+    0x23c: mov ax,0xaa
+    0x23f: push ax
+    0x240: call _printf
+    0x243: pop cx
+5: exit(0);
+    0x244: xor ax,ax
+    0x246: push ax
+    0x247: call _exit
+    0x24a: pop cx
+6: }
+    0x24b: pop bp
+    0x24c: ret
+7: 0x24d:
+\end{lstlisting}
+\caption{Line number program example: machine code} \label{fig:linenumberprogramexamplemachinecode}
+\end{figure}
+
+Suppose the line number program header includes the following
+(header fields not needed below are not shown):
+
+
+
+\begin{alltt}
+version                    4
+minimum_instruction_length 1
+opcode_base               10 ! Opcodes 10-12 not needed
+line_base                  1
+line_range                15
+\end{alltt}
+
+
+Figure \refersec{tab:linenumberprogramexampleoneencoding}
+shows one encoding of the line number program, which occupies
+12 bytes (the opcode SPECIAL(m,n) indicates the special opcode
+generated for a line increment of m and an address increment
+of n).
+
+
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{lll}
+  \caption{Line number program example: one encoding} \label{tab:linenumberprogramexampleoneencoding} \\
+  \hline \\ \bfseries Opcode &\bfseries Operand &\bfseries Byte Stream \\ \hline
+\endfirsthead
+  \bfseries Opcode &\bfseries Operand &\bfseries Byte Stream\\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+DW\_LNS\_advance\_pc&LEB128(0x239)&0x2, 0xb9, 0x04 \\
+SPECIAL(2, 0)&0xb  & \\
+SPECIAL(2, 3)&0x38 & \\
+SPECIAL(1, 8)&0x82 & \\
+SPECIAL(1, 7)&0x73 & \\
+DW\_LNS\_advance\_pc&LEB128(2)&0x2, 0x2 \\
+DW\_LNE\_end\_sequence &&0x0, 0x1, 0x1 \\
+\end{longtable}
+\end{centering}
+
+
+Figure 62  FIXME REF
+shows an alternate 
+encoding of the same program using 
+standard opcodes to advance
+the program counter; 
+this encoding occupies 22 bytes.
+
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{lll}
+  \caption{Line number program example: alternate encoding} \label{tab:linenumberprogramexamplealternateencoding} \\
+  \hline \\ \bfseries Opcode &\bfseries Operand &\bfseries Byte Stream \\ \hline
+\endfirsthead
+  \bfseries Opcode &\bfseries Operand &\bfseries Byte Stream\\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+DW\_LNS\_fixed\_advance\_pc&0x239&0x9, 0x39, 0x2        \\
+SPECIAL(2, 0)&& 0xb        \\
+DW\_LNS\_fixed\_advance\_pc&0x3&0x9, 0x3, 0x0        \\
+SPECIAL(2, 0)&&0xb        \\
+DW\_LNS\_fixed\_advance\_pc&0x8&0x9, 0x8, 0x0        \\
+SPECIAL(1, 0)&& 0xa        \\
+DW\_LNS\_fixed\_advance\_pc&0x7&0x9, 0x7, 0x0        \\
+SPECIAL(1, 0) && 0xa        \\
+DW\_LNS\_fixed\_advance\_pc&0x2&0x9, 0x2, 0x0        \\
+DW\_LNE\_end\_sequence&&0x0, 0x1, 0x1        \\
+\end{longtable}
+\end{centering}
+
+
+\section{Call Frame Information Example}
+\label{app:callframeinformationexample}
+
+The following example uses a hypothetical RISC machine in
+the style of the Motorola 88000.
+
+\begin{itemize}
+\item Memory is byte addressed.
+
+\item Instructions are all 4 bytes each and word aligned.
+
+\item Instruction operands are typically of the form:
+
+\begin{alltt}
+<destination.reg>, <source.reg>, <constant>
+\end{alltt}
+
+\item The address for the load and store instructions is computed
+by adding the contents of the
+source register with the constant.
+
+\item There are 8 4\dash byte registers:
+
+\begin{alltt}
+R0 always 0
+R1 holds return address on call
+R2-R3 temp registers (not preserved on call)
+R4-R6 preserved on call
+R7 stack pointer.
+\end{alltt}
+
+\item  The stack grows in the negative direction.
+
+\item The architectural ABI committee specifies that the
+stack pointer (R7) is the same as the CFA
+
+\end{itemize}
+
+The following 
+(Figure refersec{fig:callframeinformationexamplemachinecodefragments}
+are two code fragments from a subroutine called
+foo that uses a frame pointer (in addition to the stack
+pointer). The first column values are byte addresses. 
+% The \space is so we get a space after >
+\textless~fs~\textgreater \  denotes the stack frame size in bytes, namely 12.
+
+
+\begin{figure}[here]
+\begin{lstlisting}
+       ;; start prologue
+foo    sub R7, R7, <fs>        ; Allocate frame
+foo+4  store R1, R7, (<fs>-4)  ; Save the return address
+foo+8  store R6, R7, (<fs>-8)  ; Save R6
+foo+12 add R6, R7, 0           ; R6 is now the Frame ptr
+foo+16 store R4, R6, (<fs>-12) ; Save a preserved reg
+       ;; This subroutine does not change R5
+       ...
+       ;; Start epilogue (R7 is returned to entry value)
+foo+64 load R4, R6, (<fs>-12)  ; Restore R4
+foo+68 load R6, R7, (<fs>-8)   ; Restore R6
+foo+72 load R1, R7, (<fs>-4)   ; Restore return address
+foo+76 add R7, R7, <fs>        ; Deallocate frame
+foo+80 jump R1 ; Return
+foo+84
+\end{lstlisting}
+\caption{Call frame information example: machine code fragments} \label{fig:callframeinformationexamplemachinecodefragments}
+\end{figure}
+
+
+An abstract table 
+(see Section \refersec{chap:structureofcallframeinformation}) 
+for the foo subroutine
+is shown in 
+Table \refersec{tab:callframeinformationexampleconceptualmatrix}.
+Figure 64. FIXME REF 
+Corresponding fragments from the
+.debug\_frame section are shown in 
+Table \refersec{tab:callframeinformationexamplecommoninformationentryencoding}.
+
+The following notations apply in 
+Table \refersec{tab:callframeinformationexampleconceptualmatrix}:
+
+\begin{alltt}
+1. R8 is the return address
+2. s = same\_value rule
+3. u = undefined rule
+4. rN = register(N) rule
+5. cN = offset(N) rule
+6. a = architectural rule
+\end{alltt}
+
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{lllllllllll}
+  \caption{Call frame inforation example: conceptual matrix} \label{tab:callframeinformationexampleconceptualmatrix} \\
+  \hline \\ \bfseries Location & \bfseries CFA & \bfseries R0 & \bfseries R1 & \bfseries R2 & \bfseries R3 & \bfseries R4 & \bfseries R5 & \bfseries R6 & \bfseries R7 & \bfseries R8 \\ \hline
+\endfirsthead
+  \bfseries Location &\bfseries CFA &\bfseries R0 & \bfseries R1 & \bfseries R2 &\bfseries R3 &\bfseries R4 &\bfseries R5 &\bfseries R6 &\bfseries R7 &\bfseries R8\\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+foo&[R7]+0&s&u&u&u&s&s&s&a&r1 \\
+foo+4&[R7]+fs&s&u&u&u&s&s&s&a&r1 \\
+foo+8&[R7]+fs&s&u&u&u&s&s&s&a&c-4 \\
+foo+12&[R7]+fs&s&u&u&u&s&s&c-8&a&c-4 \\
+foo+16&[R6]+fs&s&u&u&u&s&s&c-8&a&c-4 \\
+foo+20&[R6]+fs&s&u&u&u&c-12&s&c-8&a&c-4 \\
+...&&&&&&&&&& \\
+foo+64&[R6]+fs&s&u&u&u&c-12&s&c-8&a&c-4 \\
+foo+68&[R6]+fs&s&u&u&u&s&s&c-8&a&c-4  \\
+foo+72&[R7]+fs&s&u&u&u&s&s&s&a&c-4  \\
+foo+76&[R7]+fs&s&u&u&u&s&s&s&a&r1 \\
+foo+80&[R7]+0&s&u&u&u&s&s&s&a&r1 \\
+\end{longtable}
+\end{centering}
+
+
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{lll}
+  \caption{Call frame information example: common information entry encoding} \label{tab:callframeinformationexamplecommoninformationentryencoding} \\
+  \hline \\ \bfseries Address &\bfseries Value &\bfseries Comment \\ \hline
+\endfirsthead
+  \bfseries Address &\bfseries Value &\bfseries Comment \\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+cie&36&length    \\
+cie+4&0xffffffff&CIE\_id    \\
+cie+8&4&version    \\
+cie+9&0&augmentation     \\
+cie+10&4&address size    \\
+cie+11&0&segment size    \\
+cie+12&4&code\_alignment\_factor, \textless caf \textgreater    \\
+cie+13&-4&data\_alignment\_factor, \textless daf \textgreater    \\
+cie+14&8&R8 is the return addr.    \\
+cie+15&DW\_CFA\_def\_cfa (7, 0)&CFA = [R7]+0    \\
+cie+18&DW\_CFA\_same\_value (0)&R0 not modified (=0)    \\
+cie+20&DW\_CFA\_undefined (1)&R1 scratch    \\
+cie+22&DW\_CFA\_undefined (2)&R2 scratch    \\
+cie+24&DW\_CFA\_undefined (3)&R3 scratch    \\
+cie+26&DW\_CFA\_same\_value (4)&R4 preserve    \\
+cie+28&DW\_CFA\_same\_value (5)&R5 preserve    \\
+cie+30&DW\_CFA\_same\_value (6)&R6 preserve    \\
+cie+32&DW\_CFA\_same\_value (7)&R7 preserve    \\
+cie+34&DW\_CFA\_register (8, 1)&R8 is in R1    \\
+cie+37&DW\_CFA\_nop&padding    \\
+cie+38&DW\_CFA\_nop& padding \\
+cie+39& DW\_CFA\_nop&padding  \\
+cie+40 &&  \\
+\end{longtable}
+\end{centering}
+
+
+The following notations apply in 
+Table \refersec{tab:callframeinformationexampleframedescriptionentryencoding}:
+
+\begin{alltt}
+1. <fs> = frame size
+2. <caf> = code alignment factor
+3. <daf> = data alignment factor
+\end{alltt}
+
+
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{lll}
+  \caption{Call frame information example: frame description entry encoding} \label{tab:callframeinformationexampleframedescriptionentryencoding} \\
+  \hline \\ \bfseries Address &\bfseries Value &\bfseries Comment \\ \hline
+\endfirsthead
+  \bfseries Address &\bfseries Value &\bfseries Comment \\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+fde&40&length \\
+fde+4&cie&CIE\_ptr \\
+fde+8&foo&initial\_location \\
+fde+12&84&address\_range \\
+fde+16&DW\_CFA\_advance\_loc(1)&instructions \\
+fde+17&DW\_CFA\_def\_cfa\_offset(12)& \textless fs \textgreater \\
+fde+19&DW\_CFA\_advance\_loc(1)&4/ \textless caf \textgreater \\
+fde+20&DW\_CFA\_offset(8,1)&-4/ \textless daf \textgreater (second parameter) \\
+fde+22&DW\_CFA\_advance\_loc(1)& \\
+fde+23&DW\_CFA\_offset(6,2)&-8/ \textless daf> \textgreater (2nd parameter)  \\
+fde+25&DW\_CFA\_advance\_loc(1) & \\
+fde+26&DW\_CFA\_def\_cfa\_register(6) & \\
+fde+28&DW\_CFA\_advance\_loc(1) & \\
+fde+29&DW\_CFA\_offset(4,3)&-12/ \textless daf \textgreater (2nd parameter) \\
+fde+31&DW\_CFA\_advance\_loc(12)&44/ \textless caf \textgreater \\
+fde+32&DW\_CFA\_restore(4)& \\
+fde+33&DW\_CFA\_advance\_loc(1) & \\
+fde+34&DW\_CFA\_restore(6) & \\
+fde+35&DW\_CFA\_def\_cfa\_register(7)  & \\
+fde+37&DW\_CFA\_advance\_loc(1) & \\
+fde+38&DW\_CFA\_restore(8) &\\
+fde+39&DW\_CFA\_advance\_loc(1) &\\
+fde+40&DW\_CFA\_def\_cfa\_offset(0)  &\\
+fde+42&DW\_CFA\_nop&padding \\
+fde+43&DW\_CFA\_nop&padding \\
+fde+44 && \\
+\end{longtable}
+\end{centering}
+
+\section{Inlining Examples}
+\label{app:inliningexamples}
+The pseudo\dash source in 
+Figure \refersec{fig:inliningexamplespseudosourcefragment}
+is used to illustrate the
+use of DWARF to describe inlined subroutine calls. This
+example involves a nested subprogram INNER that makes uplevel
+references to the formal parameter and local variable of the
+containing subprogram OUTER.
+
+\begin{figure}[here]
+\begin{lstlisting}
+inline procedure OUTER (OUTER_FORMAL : integer) =
+    begin
+    OUTER_LOCAL : integer;
+    procedure INNER (INNER_FORMAL : integer) =
+        begin
+        INNER_LOCAL : integer;
+        print(INNER_FORMAL + OUTER_LOCAL);
+        end;
+    INNER(OUTER_LOCAL);
+    ...
+    INNER(31);
+    end;
+! Call OUTER
+!
+OUTER(7);
+\end{lstlisting}
+\caption{Inlining examples: pseudo-source fragmment} \label{fig:inliningexamplespseudosourcefragment}
+\end{figure}
+
+
+There are several approaches that a compiler might take to
+inlining for this sort of example. This presentation considers
+three such approaches, all of which involve inline expansion
+of subprogram OUTER. (If OUTER is not inlined, the inlining
+reduces to a simpler single level subset of the two level
+approaches considered here.)
+
+The approaches are:
+
+\begin{itemize}[1.]
+\item  Inline both OUTER and INNER in all cases
+
+\item Inline OUTER, multiple INNERs \\
+Treat INNER as a non\dash inlinable part of OUTER, compile and
+call a distinct normal version of INNER defined within each
+inlining of OUTER.
+
+\item Inline OUTER, one INNER \\
+Compile INNER as a single normal subprogram which is called
+from every inlining of OUTER.
+\end{itemize}
+
+This discussion does not consider why a compiler might choose
+one of these approaches; it considers only how to describe
+the result.
+
+In the examples that follow in this section, the debugging
+information entries are given mnemonic labels of the following
+form
+
+\begin{lstlisting}
+<io>.<ac>.<n>.<s>
+\end{lstlisting}
+
+where \begin{verbatim}<io>\end{verbatim}
+is either INNER or OUTER to indicate to which
+subprogram the debugging information entry applies, 
+\begin{verbatim}<ac>\end{verbatim}
+is either AI or CI to indicate ``abstract instance'' or
+``concrete instance'' respectively, 
+\begin{verbatim}<n>\end{verbatim}
+is the number of the
+alternative being considered, and 
+\begin{verbatim}<s>\end{verbatim}
+is a sequence number that
+distinguishes the individual entries. There is no implication
+that symbolic labels, nor any particular naming convention,
+are required in actual use.
+
+For conciseness, declaration coordinates and call coordinates are omitted.
+
+\subsection{Alternative 1: inline both OUTER and INNER}
+\label{app:inlinebothouterandinner}
+
+A suitable abstract instance for an alternative where both
+OUTER and INNER are always inlined is shown in 
+Figure \refersec{app:inliningexample1abstractinstance}
+
+Notice in 
+Section \refersec{app:inliningexample1abstractinstance} 
+that the debugging information entry for
+INNER (labelled INNER.AI.1.1) is nested in (is a child of)
+that for OUTER (labelled OUTER.AI.1.1). Nonetheless, the
+abstract instance tree for INNER is considered to be separate
+and distinct from that for OUTER.
+
+The call of OUTER shown in 
+Figure \refersec{fig:inliningexamplespseudosourcefragment}
+might be described as
+shown in 
+Section \refersec{app:inliningexample1concreteinstance}.
+
+
+\subsubsection{Inlining example \#1: abstract instance}
+\label{app:inliningexample1abstractinstance}
+\begin{alltt}
+    ! Abstract instance for OUTER
+    !
+OUTER.AI.1.1:
+    DW\_TAG\_subprogram
+        DW\_AT\_name("OUTER")
+        DW\_AT\_inline(DW\_INL\_declared\_inlined)
+        ! No low/high PCs
+OUTER.AI.1.2:
+        DW\_TAG\_formal\_parameter
+            DW\_AT\_name("OUTER\_FORMAL")
+            DW\_AT\_type(reference to integer)
+            ! No location
+OUTER.AI.1.3:
+        DW\_TAG\_variable
+            DW\_AT\_name("OUTER\_LOCAL")
+            DW\_AT\_type(reference to integer)
+            ! No location
+        !
+        ! Abstract instance for INNER
+        !
+INNER.AI.1.1:
+        DW\_TAG\_subprogram
+            DW\_AT\_name("INNER")
+            DW\_AT\_inline(DW\_INL\_declared\_inlined)
+            ! No low/high PCs
+INNER.AI.1.2:
+            DW\_TAG\_formal\_parameter
+                DW\_AT\_name("INNER\_FORMAL")
+                DW\_AT\_type(reference to integer)
+                ! No location
+INNER.AI.1.3:
+            DW\_TAG\_variable
+                DW\_AT\_name("INNER\_LOCAL")
+                DW\_AT\_type(reference to integer)
+                ! No location
+            ...
+            0
+        ! No DW\_TAG\_inlined\_subroutine (concrete instance)
+        ! for INNER corresponding to calls of INNER
+        ...
+        0
+\end{alltt}
+
+
+\subsubsection{Inlining example \#1: concrete instance}
+\label{app:inliningexample1concreteinstance}
+\begin{alltt}
+! Concrete instance for call "OUTER(7)"
+!
+OUTER.CI.1.1:
+    DW\_TAG\_inlined\_subroutine
+        ! No name
+        DW\_AT\_abstract\_origin(reference to OUTER.AI.1.1)
+        DW\_AT\_low\_pc(...)
+        DW\_AT\_high\_pc(...)
+OUTER.CI.1.2:
+        DW\_TAG\_formal\_parameter
+            ! No name
+            DW\_AT\_abstract\_origin(reference to OUTER.AI.1.2)
+            DW\_AT\_const\_value(7)
+OUTER.CI.1.3:
+        DW\_TAG\_variable
+            ! No name
+            DW\_AT\_abstract\_origin(reference to OUTER.AI.1.3)
+            DW\_AT\_location(...)
+        !
+        ! No DW\_TAG\_subprogram (abstract instance) for INNER
+        !
+        ! Concrete instance for call INNER(OUTER\_LOCAL)
+        !
+INNER.CI.1.1:
+        DW\_TAG\_inlined\_subroutine
+            ! No name
+            DW\_AT\_abstract\_origin(reference to INNER.AI.1.1)
+            DW\_AT\_low\_pc(...)
+            DW\_AT\_high\_pc(...)
+            DW\_AT\_static\_link(...)
+INNER.CI.1.2:
+            DW\_TAG\_formal\_parameter
+                ! No name
+                DW\_AT\_abstract\_origin(reference to INNER.AI.1.2)
+                DW\_AT\_location(...)
+INNER.CI.1.3:
+             DW\_TAG\_variable
+                ! No name
+                DW\_AT\_abstract\_origin(reference to INNER.AI.1.3)
+                DW\_AT\_location(...)
+            ...
+            0
+        ! Another concrete instance of INNER within OUTER
+        ! for the call "INNER(31)"
+        ...
+        0
+\end{alltt}
+
+\subsection{Alternative 2: Inline OUTER, multiple INNERs}
+\label{app:inlineoutermultiipleinners}
+
+
+In the second alternative we assume that subprogram INNER
+is not inlinable for some reason, but subprogram OUTER is
+inlinable. Each concrete inlined instance of OUTER has its
+own normal instance of INNER. The abstract instance for OUTER,
+which includes INNER, is shown in 
+Section \refersec{app:inliningexample2abstractinstance}.
+
+Note that the debugging information in this Figure differs from
+that in 
+Section \refersec{app:inliningexample1abstractinstance}
+in that INNER lacks a DW\_AT\_inline attribute
+and therefore is not a distinct abstract instance. INNER
+is merely an out\dash of\dash line routine that is part of OUTER’s
+abstract instance. This is reflected in the Figure 70 by
+the fact that the labels for INNER use the substring OUTER
+instead of INNER.
+
+A resulting concrete inlined instance of OUTER is shown in
+Section \refersec{app:inliningexample2concreteinstance}.
+
+Notice in 
+Section \refersec{app:inliningexample2concreteinstance}.
+that OUTER is expanded as a concrete
+inlined instance, and that INNER is nested within it as a
+concrete out\dash of\dash line subprogram. Because INNER is cloned
+for each inline expansion of OUTER, only the invariant
+attributes of INNER 
+(for example, DW\_AT\_name) are specified
+in the abstract instance of OUTER, and the low\dash level,
+instance\dash specific attributes of INNER (for example,
+DW\_AT\_low\_pc) are specified in each concrete instance of OUTER.
+
+The several calls of INNER within OUTER are compiled as normal
+calls to the instance of INNER that is specific to the same
+instance of OUTER that contains the calls.
+
+
+\subsubsection{Inlining example 2: abstract instance}
+\label{app:inliningexample2abstractinstance}
+\begin{alltt}
+    ! Abstract instance for OUTER
+    !
+OUTER.AI.2.1:
+    DW\_TAG\_subprogram
+        DW\_AT\_name("OUTER")
+        DW\_AT\_inline(DW\_INL\_declared\_inlined)
+        ! No low/high PCs
+OUTER.AI.2.2:
+        DW\_TAG\_formal\_parameter
+            DW\_AT\_name("OUTER\_FORMAL")
+            DW\_AT\_type(reference to integer)
+            ! No location
+OUTER.AI.2.3:
+        DW\_TAG\_variable
+            DW\_AT\_name("OUTER\_LOCAL")
+            DW\_AT\_type(reference to integer)
+            ! No location
+        !
+        ! Nested out-of-line INNER subprogram
+        !
+OUTER.AI.2.4:
+        DW\_TAG\_subprogram
+            DW\_AT\_name("INNER")
+            ! No DW\_AT\_inline
+            ! No low/high PCs, frame\_base, etc.
+OUTER.AI.2.5:
+            DW\_TAG\_formal\_parameter
+                DW\_AT\_name("INNER\_FORMAL")
+                DW\_AT\_type(reference to integer)
+                ! No location
+OUTER.AI.2.6:
+            DW\_TAG\_variable
+                DW\_AT\_name("INNER\_LOCAL")
+                DW\_AT\_type(reference to integer)
+                ! No location
+            ...
+            0
+        ...
+        0
+\end{alltt}
+
+\subsubsection{Inlining example 2: concrete instance}
+\label{app:inliningexample2concreteinstance}
+\begin{alltt}
+
+    ! Concrete instance for call "OUTER(7)"
+    !
+OUTER.CI.2.1:
+    DW\_TAG\_inlined\_subroutine
+        ! No name
+        DW\_AT\_abstract\_origin(reference to OUTER.AI.2.1)
+        DW\_AT\_low\_pc(...)
+        DW\_AT\_high\_pc(...)
+OUTER.CI.2.2:
+        DW\_TAG\_formal\_parameter
+            ! No name
+            DW\_AT\_abstract\_origin(reference to OUTER.AI.2.2)
+            DW\_AT\_location(...)
+OUTER.CI.2.3:
+        DW\_TAG\_variable
+            ! No name
+            DW\_AT\_abstract\_origin(reference to OUTER.AI.2.3)
+            DW\_AT\_location(...)
+        !
+        ! Nested out-of-line INNER subprogram
+        !
+OUTER.CI.2.4:
+        DW\_TAG\_subprogram
+            ! No name
+            DW\_AT\_abstract\_origin(reference to OUTER.AI.2.4)
+            DW\_AT\_low\_pc(...)
+            DW\_AT\_high\_pc(...)
+            DW\_AT\_frame\_base(...)
+            DW\_AT\_static\_link(...)
+OUTER.CI.2.5:
+            DW\_TAG\_formal\_parameter
+                ! No name
+                DW\_AT\_abstract\_origin(reference to OUTER.AI.2.5)
+                DW\_AT\_location(...)
+OUTER.CI.2.6:
+            DW\_TAG\_variable
+                ! No name
+                DW\_AT\_abstract\_origin(reference to OUTER.AT.2.6)
+                DW\_AT\_location(...)
+            ...
+            0
+        ...
+        0
+\end{alltt}
+
+\subsection{Alternative 3: inline OUTER, one normal INNER}
+\label{app:inlineouteronenormalinner}
+
+In the third approach, one normal subprogram for INNER is
+compiled which is called from all concrete inlined instances of
+OUTER. The abstract instance for OUTER is shown in 
+Section \refersec{app:inliningexample3abstractinstance}.
+
+The most distinctive aspect of that Figure is that subprogram
+INNER exists only within the abstract instance of OUTER,
+and not in OUTER’s concrete instance. In the abstract
+instance of OUTER, the description of INNER has the full
+complement of attributes that would be expected for a
+normal subprogram. While attributes such as DW\_AT\_low\_pc,
+DW\_AT\_high\_pc, DW\_AT\_location, and so on, typically are omitted
+from an abstract instance because they are not invariant across
+instances of the containing abstract instance, in this case
+those same attributes are included precisely because they are
+invariant -- there is only one subprogram INNER to be described
+and every description is the same.
+
+A concrete inlined instance of OUTER is illustrated in
+\refersec{app:inliningexample3concreteinstance}.
+
+Notice in 
+Figure 73 FIXME REF
+\refersec{app:inliningexample3concreteinstance}
+that there is no DWARF representation for
+INNER at all; the representation of INNER does not vary across
+instances of OUTER and the abstract instance of OUTER includes
+the complete description of INNER, so that the description of
+INNER may be (and for reasons of space efficiency, should be)
+omitted from each concrete instance of OUTER.
+
+There is one aspect of this approach that is problematical from
+the DWARF perspective. The single compiled instance of INNER
+is assumed to access up\dash level variables of OUTER; however,
+those variables may well occur at varying positions within
+the frames that contain the concrete inlined instances. A
+compiler might implement this in several ways, including the
+use of additional compiler generated parameters that provide
+reference parameters for the up\dash level variables, or a compiler
+generated static link like parameter that points to the group
+of up\dash level entities, among other possibilities. In either of
+these cases, the DWARF description for the location attribute
+of each uplevel variable needs to be different if accessed
+from within INNER compared to when accessed from within the
+instances of OUTER. An implementation is likely to require
+vendor\dash specific DWARF attributes and/or debugging information
+entries to describe such cases.
+
+Note that in C++, a member function of a class defined within
+a function definition does not require any vendor\dash specific
+extensions because the C++ language disallows access to
+entities that would give rise to this problem. (Neither extern
+variables nor static members require any form of static link
+for accessing purposes.)
+
+\subsubsection{Inlining example 3: abstract instance}
+\label{app:inliningexample3abstractinstance}
+\begin{alltt}
+    ! Abstract instance for OUTER
+    !
+OUTER.AI.3.1:
+    DW\_TAG\_subprogram
+        DW\_AT\_name("OUTER")
+        DW\_AT\_inline(DW\_INL\_declared\_inlined)
+        ! No low/high PCs
+OUTER.AI.3.2:
+        DW\_TAG\_formal\_parameter
+            DW\_AT\_name("OUTER\_FORMAL")
+            DW\_AT\_type(reference to integer)
+            ! No location
+OUTER.AI.3.3:
+        DW\_TAG\_variable
+            DW\_AT\_name("OUTER\_LOCAL")
+            DW\_AT\_type(reference to integer)
+            ! No location
+        !
+        ! Normal INNER
+        !
+OUTER.AI.3.4:
+        DW\_TAG\_subprogram
+            DW\_AT\_name("INNER")
+            DW\_AT\_low\_pc(...)
+            DW\_AT\_high\_pc(...)
+            DW\_AT\_frame\_base(...)
+            DW\_AT\_static\_link(...)
+OUTER.AI.3.5:
+            DW\_TAG\_formal\_parameter
+                DW\_AT\_name("INNER\_FORMAL")
+                DW\_AT\_type(reference to integer)
+                DW\_AT\_location(...)
+OUTER.AI.3.6:
+            DW\_TAG\_variable
+                DW\_AT\_name("INNER\_LOCAL")
+                DW\_AT\_type(reference to integer)
+                DW\_AT\_location(...)
+            ...
+            0
+        ...
+        0
+\end{alltt}
+
+
+\subsubsection{Inlining example 3: concrete instance}
+\label{app:inliningexample3concreteinstance}
+\begin{alltt}
+    ! Concrete instance for call "OUTER(7)"
+    !
+OUTER.CI.3.1:
+    DW\_TAG\_inlined\_subroutine
+        ! No name
+        DW\_AT\_abstract\_origin(reference to OUTER.AI.3.1)
+        DW\_AT\_low\_pc(...)
+        DW\_AT\_high\_pc(...)
+        DW\_AT\_frame\_base(...)
+OUTER.CI.3.2:
+        DW\_TAG\_formal\_parameter
+            ! No name
+            DW\_AT\_abstract\_origin(reference to OUTER.AI.3.2)
+            ! No type
+            DW\_AT\_location(...)
+OUTER.CI.3.3:
+        DW\_TAG\_variable
+            ! No name
+            DW\_AT\_abstract\_origin(reference to OUTER.AI.3.3)
+            ! No type
+            DW\_AT\_location(...)
+        ! No DW\_TAG\_subprogram for "INNER"
+        ...
+        0
+\end{alltt}
+
+\section{Constant Expression Example}
+\label{app:constantexpressionexample}
+C++ generalizes the notion of constant expressions to include
+constant expression user-defined literals and functions.
+
+\begin{figure}[here]
+\begin{lstlisting}
+constexpr double mass = 9.8;
+constexpr int square (int x) { return x * x; }
+float arr[square(9)]; // square() called and inlined
+\end{lstlisting}
+\caption{Constant expressions: C++ source} \label{fig:constantexpressionscsource}
+\end{figure}
+
+These declarations can be represented as illustrated in 
+Section \refersec{app:constantexpressionsdwarfdescription}.
+
+\subsection{Constant expressions: DWARF description}
+\label{app:constantexpressionsdwarfdescription}
+\begin{alltt}
+
+      ! For variable mass
+      !
+1\$:  DW\_TAG\_const\_type
+        DW\_AT\_type(reference to "double")
+2\$:  DW\_TAG\_variable
+        DW\_AT\_name("mass")
+        DW\_AT\_type(reference to 1\$)
+        DW\_AT\_const\_expr(true)
+        DW\_AT\_const\_value(9.8)
+      ! Abstract instance for square
+      !
+10\$: DW\_TAG\_subprogram
+        DW\_AT\_name("square")
+        DW\_AT\_type(reference to "int")
+        DW\_AT\_inline(DW\_INL\_inlined)
+11\$:   DW\_TAG\_formal\_parameter
+            DW\_AT\_name("x")
+            DW\_AT\_type(reference to "int")
+      ! Concrete instance for square(9)
+      !
+20\$: DW\_TAG\_inlined\_subroutine
+        DW\_AT\_abstract\_origin(reference to 10\$)
+        DW\_AT\_const\_expr(present)
+        DW\_AT\_const\_value(81)
+        DW\_TAG\_formal\_parameter
+            DW\_AT\_abstract\_origin(reference to 11\$)
+            DW\_AT\_const\_value(9)
+      ! Anonymous array type for arr
+      !
+30\$: DW\_TAG\_array\_type
+        DW\_AT\_type(reference to "float")
+        DW\_AT\_byte\_size(324) ! 81*4
+        DW\_TAG\_subrange\_type
+            DW\_AT\_type(reference to "int")
+            DW\_AT\_upper\_bound(reference to 20\$)
+      ! Variable arr
+      !
+40\$: DW\_TAG\_variable
+        DW\_AT\_name("arr")
+        DW\_AT\_type(reference to 30\$)
+\end{alltt}
+
+
+\section{Unicode Character Example}
+\label{app:unicodecharacterexample}
+
+Unicode character encodings can be described in DWARF as
+illustrated in 
+Section \refersec{app:unicodecharacterexamplesub}.
+
+\begin{lstlisting}
+// C++ source
+//
+char16_t chr_a = u'h';
+char32_t chr_b = U'h';
+\end{lstlisting}
+
+\subsection{Unicode Character Example}
+\label{app:unicodecharacterexamplesub}
+\begin{alltt}
+
+! DWARF description
+!
+1\$: DW\_TAG\_base\_type
+        DW\_AT\_name("char16\_t")
+        DW\_AT\_encoding(DW\_ATE\_UTF)
+        DW\_AT\_byte\_size(2)
+2\$: DW\_TAG\_base\_type
+        DW\_AT\_name("char32\_t")
+        DW\_AT\_encoding(DW\_ATE\_UTF)
+        DW\_AT\_byte\_size(4)
+3\$: DW\_TAG\_variable
+        DW\_AT\_name("chr\_a")
+        DW\_AT\_type(reference to 1\$)
+4\$: DW\_TAG\_variable
+        DW\_AT\_name("chr\_b")
+        DW\_AT\_type(reference to 2\$)
+\end{alltt}
+
+
+
+\section{Type-Safe Enumeration Example}
+\label{app:typesafeenumerationexample}
+
+
+C++ type\dash safe enumerations can be described in DWARF as illustrated in 
+Section \refersec{app:ctypesafeenumerationexample}.
+
+\begin{lstlisting}
+// C++ source
+//
+enum class E { E1, E2=100 };
+E e1;
+\end{lstlisting}
+
+\subsection{C++ type-safe enumeration example}
+\label{app:ctypesafeenumerationexample}
+\begin{alltt}
+! DWARF description
+!
+11\$: DW\_TAG\_enumeration\_type
+        DW\_AT\_name("E")
+        DW\_AT\_type(reference to "int")
+        DW\_AT\_enum\_class(present)
+12\$:   DW\_TAG\_enumerator
+            DW\_AT\_name("E1")
+            DW\_AT\_const\_value(0)
+13\$:
+         DW\_TAG\_enumerator
+            DW\_AT\_name("E2")
+            DW\_AT\_const\_value(100)
+14\$: DW\_TAG\_variable
+        DW\_AT\_name("e1")
+        DW\_AT\_type(reference to 11\$)
+\end{alltt}
+
+\section{Template Example}
+\label{app:templateexample}
+
+C++ templates can be described in DWARF as illustrated in 
+Section \refersec{app:ctemplateexample1}.
+
+
+
+\begin{lstlisting}
+// C++ source
+//
+template<class T>
+struct wrapper {
+    T comp;
+};
+wrapper<int> obj;
+\end{lstlisting}
+
+\subsection{C++ template example 1}
+\label{app:ctemplateexample1}
+\begin{alltt}
+! DWARF description
+!
+11\$: DW\_TAG\_structure\_type
+        DW\_AT\_name("wrapper")
+12\$: DW\_TAG\_template\_type\_parameter
+        DW\_AT\_name("T")
+        DW\_AT\_type(reference to "int")
+13\$ DW\_TAG\_member
+        DW\_AT\_name("comp")
+        DW\_AT\_type(reference to 12\$)
+14\$: DW\_TAG\_variable
+        DW\_AT\_name("obj")
+        DW\_AT\_type(reference to 11\$)
+\end{alltt}
+
+The actual type of the component comp is int, but in the DWARF
+the type references the DW\_TAG\_template\_type\_parameter for
+T, which in turn references int. This implies that in the
+original template comp was of type T and that was replaced
+with int in the instance.  There exist situations where it is
+not possible for the DWARF to imply anything about the nature
+of the original template. 
+
+Consider following C++ source and DWARF 
+that can describe it in
+Section \refersec{app:ctemplateexample2}.
+
+
+\begin{lstlisting}
+// C++ source
+//
+    template<class T>
+    struct wrapper {
+        T comp;
+    };
+    template<class U>
+    void consume(wrapper<U> formal)
+    {
+        ...
+    }
+    wrapper<int> obj;
+    consume(obj);
+\end{lstlisting}
+
+\subsection{C++ template example 2}
+\label{app:ctemplateexample2}
+\begin{alltt}
+! DWARF description
+!
+11\$: DW\_TAG\_structure\_type
+        DW\_AT\_name("wrapper")
+12\$:   DW\_TAG\_template\_type\_parameter
+            DW\_AT\_name("T")
+            DW\_AT\_type(reference to "int")
+13\$    DW\_TAG\_member
+            DW\_AT\_name("comp")
+            DW\_AT\_type(reference to 12\$)
+14\$: DW\_TAG\_variable
+        DW\_AT\_name("obj")
+        DW\_AT\_type(reference to 11\$)
+21\$: DW\_TAG\_subprogram
+        DW\_AT\_name("consume")
+22\$:   DW\_TAG\_template\_type\_parameter
+            DW\_AT\_name("U")
+            DW\_AT\_type(reference to "int")
+23\$:   DW\_TAG\_formal\_parameter
+            DW\_AT\_name("formal")
+            DW\_AT\_type(reference to 11\$)
+\end{alltt}
+
+In the DW\_TAG\_subprogram entry for the instance of consume,
+U is described as 
+int. 
+The type of formal is 
+\begin{alltt}
+wrapper<U>
+\end{alltt}
+ in
+the source. DWARF only represents instantiations of templates;
+there is no entry which represents 
+\begin{alltt}
+wrapper<U>, 
+\end{alltt}
+which is neither
+a template parameter nor a template instantiation. The type
+of formal is described as 
+\begin{alltt}
+wrapper<int>, 
+\end{alltt}
+the instantiation of
+\begin{alltt}
+wrapper<U>, 
+\end{alltt}
+in the DW\_AT\_type attribute at 
+23\$. 
+There is no
+description of the relationship between template type parameter
+T at 12\$ and U at 
+22\$ which was used to instantiate 
+\begin{alltt}
+wrapper<U>.
+\end{alltt}
+
+A consequence of this is that the DWARF information would
+not distinguish between the existing example and one where
+the formal of consume were declared in the source to be
+\begin{alltt}
+wrapper<int>.
+\end{alltt}
+
+\section{Template Alias Examples}
+\label{app:templatealiasexample}
+
+C++ template aliases can be described in DWARF as illustrated in 
+Section \refersec{app:templatealiasexample1}
+and 
+Section \refersec{app:templatealiasexample2}.
+
+
+\begin{lstlisting}
+// C++ source, template alias example 1
+//
+template<typename T, typename U>
+struct Alpha {
+    T tango;
+    U uniform;
+};
+template<typename V> using Beta = Alpha<V,V>;
+Beta<long> b;
+\end{lstlisting}
+
+
+\subsection{template alias example 1}
+\label{app:templatealiasexample1}
+\begin{alltt}
+! DWARF representation for variable 'b'
+!
+20\$: DW\_TAG\_structure\_type
+        DW\_AT\_name("Alpha")
+21\$:   DW\_TAG\_template\_type\_parameter
+            DW\_AT\_name("T")
+            DW\_AT\_type(reference to "long")
+22\$:   DW\_TAG\_template\_type\_parameter
+            DW\_AT\_name("U")
+            DW\_AT\_type(reference to "long")
+23\$:   DW\_TAG\_member
+            DW\_AT\_name("tango")
+            DW\_AT\_type(reference to 21\$)
+24\$:   DW\_TAG\_member
+            DW\_AT\_name("uniform")
+            DW\_AT\_type(reference to 22\$)
+25\$: DW\_TAG\_template\_alias
+        DW\_AT\_name("Beta")
+        DW\_AT\_type(reference to 20\$)
+26\$:   DW\_TAG\_template\_type\_parameter
+            DW\_AT\_name("V")
+            DW\_AT\_type(reference to "long")
+27\$: DW\_TAG\_variable
+        DW\_AT\_name("b")
+        DW\_AT\_type(reference to 25\$)
+\end{alltt}
+
+
+\begin{lstlisting}
+// C++ source, template alias example 2
+//
+template<class TX> struct X { };
+template<class TY> struct Y { };
+template<class T> using Z = Y<T>;
+X<Y<int>> y;
+X<Z<int>> z;
+\end{lstlisting}
+
+
+\subsection{template alias example 2}
+\label{app:templatealiasexample2}
+\begin{alltt}
+! DWARF representation for X<Y<int>>
+!
+30\$: DW\_TAG\_structure\_type
+        DW\_AT\_name("Y")
+31\$:   DW\_TAG\_template\_type\_parameter
+            DW\_AT\_name("TY")
+            DW\_AT\_type(reference to "int")
+32\$: DW\_TAG\_structure\_type
+        DW\_AT\_name("X")
+33\$:   DW\_TAG\_template\_type\_parameter
+            DW\_AT\_name("TX")
+            DW\_AT\_type(reference to 30\$)
+
+! DWARF representation for X<Z<int>>
+!
+40\$: DW\_TAG\_template\_alias
+using Z = Y<int>;
+        DW\_AT\_name("Z")
+        DW\_AT\_type(reference to 30\$)
+41\$:   DW\_TAG\_template\_type\_parameter
+            DW\_AT\_name("T")
+            DW\_AT\_type(reference to "int")
+42\$: DW\_TAG\_structure\_type
+        DW\_AT\_name("X")
+43\$:   DW\_TAG\_template\_type\_parameter
+            DW\_AT\_name("TX")
+            DW\_AT\_type(reference to 40\$)
+! Note that 32\$ and 42\$ are actually the same type
+!
+50\$: DW\_TAG\_variable
+        DW\_AT\_name("y")
+        DW\_AT\_type(reference to \$32)
+51\$: DW\_TAG\_variable
+        DW\_AT\_name("z")
+        DW\_AT\_type(reference to \$42)
+\end{alltt}

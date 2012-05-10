@@ -1,0 +1,256 @@
+\chapter[Data Object and Object List]{Data Object and Object List Entries}
+\label{chap:dataobjectandobjectlistentries}
+
+This section presents the debugging information entries that
+describe individual data objects: variables, parameters and
+constants, and lists of those objects that may be grouped in
+a single declaration, such as a common block.
+
+\section{Data Object Entries}
+\label{chap:dataobjectentries}
+
+
+Program variables, formal parameters and constants are
+represented by debugging information entries with the tags
+DW\_TAG\_variable, DW\_TAG\_formal\_parameter and DW\_TAG\_constant,
+respectively.
+
+\textit{The tag DW\_TAG\_constant is used for languages that
+have true named constants.}
+
+The debugging information entry for a program variable,
+formal parameter or constant may have the following attributes:
+\begin{enumerate}[1.]
+\item A DW\_AT\_name attribute, whose value is a null-terminated
+string, containing the data object name as it appears in the
+source program.  If a variable entry describes an anonymous
+union, the name attribute is omitted or consists of a single
+zero byte.
+
+\item A DW\_AT\_external attribute, which is a flag, if the name
+of a variable is visible outside of its enclosing compilation
+unit.  The definitions of C++ static data members of structures
+or classes are represented by variable entries flagged as
+external. Both file static and local variables in C and C++
+are represented by non-external variable entries.
+
+\item A DW\_AT\_declaration attribute, which is a flag that
+indicates whether this entry represents a non-defining
+declaration of an object.
+
+\item A DW\_AT\_location attribute, whose value describes the
+location of a variable or parameter at run-time.  In a variable
+entry representing the definition of a variable (that is,
+with no DW\_AT\_declaration attribute) if no location attribute
+is present, or if the location attribute is present but has
+an empty location description (as described in Section 2.6),
+the variable is assumed to exist in the source code but not
+in the executable program (but see number 10, below).
+
+In a variable entry representing a non-defining declaration of a variable, the location
+specified modifies the location specified by the defining declaration and only applies for the
+scope of the variable entry; if no location is specified, then the location specified in the
+defining declaration applies.
+The location of a variable may be further specified with a DW\_AT\_segment attribute, if
+appropriate.
+
+\item A DW\_AT\_type attribute describing the type of the variable,
+constant or formal parameter.
+
+\item If the variable entry represents the defining declaration
+for a C++ static data member of a structure, class or union,
+the entry has a DW\_AT\_specification attribute, whose value is a
+reference to the debugging information entry representing the
+declaration of this data member. The referenced entry has the
+tag DW\_TAG\_member and will be a child of some class, structure
+or union type entry.  If the variable entry represents a
+non-defining declaration, DW\_AT\_specification may be used
+to reference the defining declaration of the variable. If
+no DW\_AT\_specification attribute is present, the defining
+declaration may be found as a global definition either in the
+current compilation unit or in another compilation unit with
+the DW\_AT\_external attribute.  Variable entries containing
+the DW\_AT\_specification attribute do not need to duplicate
+information provided by the declaration entry referenced by
+the specification attribute. In particular, such variable
+entries do not need to contain attributes for the name or
+type of the data member whose definition they represent.
+
+\item A DW\_AT\_variable\_parameter attribute, which is a flag,
+if a formal parameter entry represents a parameter whose
+value in the calling function may be modified by the callee..
+The absence of this attribute implies that the parameter’s
+value in the calling function cannot be modified by the callee.
+
+\item A DW\_AT\_is\_optional attribute, which is a flag, if a
+parameter entry represents an optional parameter.
+
+\item A DW\_AT\_default\_value attribute for a formal parameter
+entry. The value of this attribute is a reference to the
+debugging information entry for a variable or subroutine,
+or the value may be a constant. If the attribute form is of
+class reference, the default value of the parameter is the
+value of the referenced variable (which may be constant) or
+the value returned by the referenced subroutine; a reference
+value of 0 means that no default value has been specified.
+If the value is of class constant, that constant is interpreted
+as a default value of the type of the formal parameter.
+
+\textit{For a constant form there is no way to 
+express the absence of a default value.}
+
+\item A DW\_AT\_const\_value attribute for an entry describing a
+variable or formal parameter whose value is constant and not
+represented by an object in the address space of the program,
+or an entry describing a named constant. (Note that such
+an entry does not have a location attribute.) The value of
+this attribute may be a string or any of the constant data
+or data block forms, as appropriate for the representation
+of the variable’s value. The value is the actual constant
+value of the variable, represented as it would be on the
+target architecture.  One way in which a formal parameter
+with a constant value and no location can arise is for a
+formal parameter of an inlined subprogram that corresponds
+to a constant actual parameter of a call that is inlined.
+
+\item A DW\_AT\_start\_scope attribute if the scope of an
+object is smaller than (that is, is a subset of the addresses
+of) the scope most closely enclosing the object. There are
+two cases:
+\begin{enumerate}[a)]
+\item If the scope of the object entry includes all of the
+containing scope except for a contiguous sequence of bytes at
+the beginning of that containing scope, then the scope of the
+object is specified using a value of class constant. If the
+containing scope is contiguous, the value of this attribute
+is the offset in bytes of the beginning of the scope for the
+object from the low pc value of the debugging information
+entry that defines its scope. If the containing scope
+is non-contiguous (see Section 2.17.3), the value of this
+attribute is the offset in bytes of the beginning of the scope
+for the object from the beginning of the first range list entry
+that is not a base selection entry or an end of list entry.
+
+\item Otherwise, the scope of the object is specified using
+a value of class rangelistptr. This value indicates the
+beginning of a range list (see Section 2.17.3).
+\end{enumerate}
+
+
+\textit{The scope of a variable may begin somewhere in the middle of
+a lexical block in a language that allows executable code in a
+block before a variable declaration, or where one declaration
+containing initialization code may change the scope of a
+subsequent declaration.  For example, in the following C code:}
+
+\begin{lstlisting}
+float x = 99.99;
+int myfunc()
+{
+    float f = x;
+    float x = 88.99;
+    return 0;
+}
+\end{lstlisting}
+
+\textit{C scoping rules require that the value of the variable x
+assigned to the variable f in the initialization sequence is
+the value of the global variable x, rather than the local x,
+because the scope of the local variable x only starts after
+the full declarator for the local x.}
+
+\textit{Due to optimization, the scope of an object may be
+non-contiguous and require use of a range list even when
+the containing scope is contiguous. Conversely, the scope of
+an object may not require its own range list even when the
+containing scope is non\dash contiguous.}
+
+\item A DW\_AT\_endianity attribute, whose value is a constant
+that specifies the endianity of the object. The value of
+this attribute specifies an ABI\dash defined byte ordering for
+the value of the object. If omitted, the default endianity
+of data for the given type is assumed.  The set of values
+and their meaning for this attribute is given in 
+Figure \refersec{fig:endianityattributevalues}.
+
+\begin{figure}[here]
+\centering
+\begin{tabular}{lp{9cm}}
+Name&Meaning\\ \hline
+DW\_END\_default &  Default endian encoding
+  (equivalent to the absence of a 
+  DW\_AT\_endianity attribute) \\
+DW\_END\_big & Big\dash endian encoding \\
+DW\_END\_little& Little-endian encoding \\
+\end{tabular}
+\caption{Endianity attribute values}
+\label{fig:endianityattributevalues}
+\end{figure}
+
+
+These represent the default encoding formats as defined by
+the target architecture’s ABI or processor definition. The
+exact definition of these formats may differ in subtle ways
+for different architectures.
+
+
+\item A DW\_AT\_const\_expr attribute, which is a flag, if a
+variable entry represents a C++ object declared with the
+constexpr specifier. This attributes indicates that the
+variable can be evaluated as a compile\dash time constant.  
+
+\textit{In C++,
+a variable declared with constexpr is implicitly const. Such a
+variable has a DW\_AT\_type attribute whose value is a reference
+to a debugging information entry}
+
+\item A DW\_AT\_linkage\_name attribute for a 
+variable or constant entry as described in 
+Section \refersec{chap:linkagenames}.
+
+\end{enumerate}
+
+FIXME incomplete
+
+
+\section{Common Block Entries}
+\label{chap:commonblockentries}
+A Fortran common block may be described by a debugging
+information entry with the tag DW\_TAG\_common\_block. The
+common block entry has a DW\_AT\_name attribute whose value
+is a null-terminated string containing the common block
+name as it appears in the source program. It may also have a
+DW\_AT\_linkage\_name attribute as described in 
+Section \refersec{chap:linkagenames}. 
+It
+also has a DW\_AT\_location attribute whose value describes the
+location of the beginning of the common block. The common
+block entry owns debugging information entries describing
+the variables contained within the common block.
+
+\section{Namelist Entries}
+\label{chap:namelistentries}
+\textit{At least one language, Fortran 90, has the concept of a
+namelist. A namelist is an ordered list of the names of some
+set of declared objects. The namelist object itself may be used
+as a replacement for the list of names in various contexts.}
+
+A namelist is represented by a debugging information entry
+with the tag DW\_TAG\_namelist. If the namelist itself has a
+name, the namelist entry has a DW\_AT\_name attribute, whose
+value is a null-terminated string containing the namelist’s
+name as it appears in the source program.
+
+Each name that is part of the namelist is represented
+by a debugging information entry with the tag
+DW\_TAG\_namelist\_item. Each such entry is a child of the
+namelist entry, and all of the namelist item entries for a
+given namelist are ordered as were the list of names they
+correspond to in the source program.
+
+Each namelist item entry contains a DW\_AT\_namelist\_item
+attribute whose value is a reference to the debugging
+information entry representing the declaration of the item
+whose name appears in the namelist.
+
+

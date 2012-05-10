@@ -1,0 +1,90 @@
+|\chapter{Debug Section Relationships (Informative)}
+\label{app:debugsectionrelationshipsinformative}
+%
+\setlength\maxovaldiam{80pt}
+\thicklines
+\begin{picture}(0,0)
+  \put(-38,30) { .debug\_aranges }
+  \put(-00,30) { \circle{80}}
+  \put(180,30) { .debug\_frame }
+  \put(210,30) { \circle{80}}
+  \put(365,30) { .debug\_abbrev }
+  \put(400,30) { \circle{80}}
+
+  \put(370,-85) { .debug\_str }
+  \put(400,-75) {\circle{80}}
+
+  \put(-40,-175) { .debug\_info }
+  \put(-00,-180) {\circle{80}}
+
+  \put(370,-190) { .debug\_loc }
+  \put(400,-180) {\circle{80}}
+
+  \put(365,-300) { .debug\_ranges }
+  \put(400,-290) {\circle{80}}
+
+  \put(-40,-398) { .debug\_pubnames }
+  \put(-40,-410) { .debug\_pubtypes } 
+  \put(-00,-400) { \circle{80}}
+  \put(175,-400) { .debug\_line }
+  \put(210,-400) { \circle{80}}
+  \put(365,-400) { .debug\_macinfo}
+  \put(400,-400) { \circle{80}}
+
+\end{picture}
+
+\clearpage
+\begin{enumerate}[(a)]  
+\item  .debug\_aranges  \\
+The debug\_info\_offset value in
+the header is the offset in the .debug\_info section of the
+corresponding compilation unit header (not the compilation
+unit entry).
+
+\item .debug\_pubnames and .debug\_pubtypes \\
+The debug\_info\_offset value in the header is the offset in the
+.debug\_info section of the corresponding compilation unit header (not
+the compilation unit entry). Each pubname/pubtype has the offset (within
+the corresponding compilation unit) of the applicable debugging
+information entry.
+
+\item .debug\_info and .debug\_types \\
+The debug\_abbrev\_offset value in the header is the offset in the
+.debug\_abbrev section of the abbreviations for that compilation unit.
+(d) .debug\_info and .debug\_types
+Attribute values of class string may have form DW\_FORM\_strp, whose
+value is the offset in the .debug\_str section of the corresponding string.
+
+\item  .debug\_info and .debug\_types \\
+Attribute values of class string may have form DW\_FORM\_strp, whose
+value is the offset in the .debug\_str section of the corresponding string.
+
+\item .debug\_loc \\
+The operand of the DW\_OP\_call\_ref DWARF expression operator is the
+offset of a debugging information entry in the .debug\_info section.
+
+\item .debug\_info \\
+An attribute value of class loclistptr (specifically form
+DW\_FORM\_sec\_offset) is an offset within the .debug\_loc section of a
+location list.
+
+\item .debug\_info \\
+An attribute value of class rangelistptr (specifically form
+DW\_FORM\_sec\_offset) is an offset within the .debug\_ranges section of
+a range list.
+
+
+\item .debug\_info \\
+An attribute value of class macptr (specifically form
+DW\_FORM\_sec\_offset) is an offset within the .debug\_macinfo section
+of the beginning of the macro information for the referencing unit.
+
+
+\item .debug\_info \\
+An attribute value of class lineptr (specifically form
+DW\_FORM\_sec\_offset) is an offset in the .debug\_line section of the
+beginning of the line number information for the referencing unit.
+\end{enumerate}
+
+
+

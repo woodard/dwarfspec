@@ -1,0 +1,1271 @@
+\chapter[Compression (Informative)]{DWARF Compression and Duplicate Elimination (Informative)}
+\label{dwarfcompressionandduplicateeliminationinformative}
+
+% It seemed difficult to get close to the same layout and 
+% captioning as DWARF4 here with figures as they moved (floated)
+% making it hard to follow.  Hence this uses fewer figures.
+
+DWARF can use a lot of disk space.
+
+This is especially true for C++, where the depth and complexity
+of headers can mean that many, many (possibly thousands of)
+declarations are repeated in every compilation unit. C++
+templates can also mean that some functions and their DWARF
+descriptions get duplicated.
+
+This Appendix describes techniques for using the DWARF
+representation in combination with features and characteristics
+of some common object file representations to reduce redundancy
+without losing information. It is worth emphasizing that none
+of these techniques are necessary to provide a complete and
+accurate DWARF description; they are solely concerned with
+reducing the size of DWARF information.
+
+The techniques described here depend more directly and more
+obviously on object file concepts and linker mechanisms than
+most other parts of DWARF. While the presentation tends to
+use the vocabulary of specific systems, this is primarily to
+aid in describing the techniques by appealing to well\dash known
+terminology. These techniques can be employed on any system
+that supports certain general functional capabilities
+(described below).
+
+
+\section{Using Compilation Units}
+\label{app:usingcompilationunits}
+
+\subsection{Overview}
+The general approach is to break up the debug information of
+a compilation into separate normal and partial compilation
+units, each consisting of one or more sections. By arranging
+that a sufficiently similar partitioning occurs in other
+compilations, a suitable system linker can delete redundant
+groups of sections when combining object files.
+
+\textit{The following uses some traditional section naming here
+but aside from the DWARF sections, the names are just meant
+to suggest traditional contents as a way of explaining the
+approach, not to be limiting.}
+
+A traditional relocatable object output 
+from a single compilation might contain sections named:
+\begin{alltt}
+    .data
+    .text
+    .debug\_info
+    .debug\_abbrev
+    .debug\_line
+    .debug\_aranges
+\end{alltt}
+A relocatable object from a compilation system 
+attempting duplicate DWARF elimination might
+contain sections as in:
+
+\begin{alltt}
+    .data
+    .text
+    .debug\_info
+    .debug\_abbrev
+    .debug\_line
+    .debug\_aranges
+\end{alltt}
+
+followed (or preceded, the order is not significant) 
+by a series of section groups:
+\begin{alltt}
+==== Section group 1
+    .debug\_info
+    .debug\_abbrev
+    .debug\_line
+==== ...
+==== Section group N
+    .debug\_info
+    .debug\_abbrev
+    .debug\_line
+\end{alltt}
+
+where each section group might or might not contain executable
+code (\textit{.text} sections) or data (\textit{.data} sections).
+
+A \textit{section group} is a named set of section contributions
+within an object file with the property that the entire set
+of section contributions must be retained or discarded as a
+whole; no partial elimination is allowed. Section groups can
+generally be handled by a linker in two ways:
+
+\begin{enumerate}[1.]
+\item Given multiple identical (duplicate) section groups,
+one of them is chosen to be kept and used, while the rest
+are discarded.
+
+\item Given a section group that is not referenced from any
+section outside of the section group, the section group
+is discarded.
+
+
+\end{enumerate}
+
+
+Which handling applies may be indicated by the section group
+itself and/or selection of certain linker options.
+
+For example, if a linker determines that section group 1
+from A.o and section group 3 from B.o are identical, it could
+discard one group and arrange that all references in A.o and
+B.o apply to the remaining one of the two identical section
+groups. This saves space.
+
+An important part of making it possible to “redirect”
+references to the surviving section group is the use of
+consistently chosen linker global symbols for referring to
+locations within each section group. It follows that references
+are simply to external names and the linker already knows
+how to match up references and definitions.
+
+What is minimally needed from the object file format and system
+linker (outside of DWARF itself, and normal object/linker
+facilities such as simple relocations) are:
+
+\begin{enumerate}[1.]
+
+\item A means of referencing from inside one .debug\_info
+compilation unit to another .debug\_info compilation unit
+(DW\_FORM\_ref\_addr provides this).
+
+\item A means of having multiple contributions to specific sections
+(for example, .debug\_info, and so on) in a single object file.
+
+\item  A means of identifying a section group (giving it a name).
+
+\item A means of identifying which sections go together to make
+up a section group, so that the group can be treated as a unit
+(kept or discarded).
+
+\item  A means of indicating how each section group should be
+processed by the linker.
+
+\end{enumerate}
+
+\textit{The notion of section and section contribution used here
+corresponds closely to the similarly named concepts in the
+ELF object file representation. The notion of section group is
+an abstraction of common extensions of the ELF representation
+widely known as ``COMDATs'' or ``COMDAT sections''. (Other
+object file representations provide COMDAT\dash style mechanisms as
+well.) There are several variations in the COMDAT schemes in
+common use, any of which should be sufficient for the purposes
+of the DWARF duplicate elimination techniques described here.}
+
+\subsection{Naming and Usage Considerations}
+\label{app:namingandusageconsiderations}
+
+A precise description of the means of deriving names usable
+by the linker to access DWARF entities is not part of this
+specification. Nonetheless, an outline of a usable approach
+is given here to make this more understandable and to guide
+implementors.
+
+Implementations should clearly document their naming conventions.
+
+In the following, it will be helpful to refer to the examples
+in 
+Figure \refersec{app:duplicateeliminationexample1csource}
+through 
+Figure \refersec{app:duplicateeliminationexample2companiondwarf}
+of 
+Section \refersec{app:examples}.
+
+\textbf{Section Group Names}
+
+Section groups must have a section group name. For the subsequent C++ example, a name like
+
+<producer-prefix>.<file-designator>.<gid-number>
+
+will suffice, where
+
+\begin{itemize}
+
+\item  \textless producer\dash prefix \textgreater 
+is some string specific to the
+producer, which has a language\dash designation embedded in the
+name when appropriate. (Alternatively, the language name
+could be embedded in the 
+\textless gid\dash number \textgreater).
+
+
+\item  \textless file\dash designator \textgreater
+names the file, such as wa.h in
+the example.
+
+
+\item  \textless gid\dash number \textgreater
+is a string generated to identify the
+specific wa.h header file in such a way that
+
+\begin{itemize}
+
+\item  a 'matching' output from another compile generates
+the same 
+\textless gid\dash number \textgreater,
+and
+
+\item  a non\dash matching output (say because of \#defines)
+generates a different 
+\textless gid\dash number \textgreater.
+\end{itemize}
+
+\end{itemize}
+
+\textit{It may be useful to think of a 
+\textless gid\dash number \textgreater
+as a kind
+of ``digital signature'' that allows a fast test for the
+equality of two section groups.}
+
+So, for example, the section group corresponding to file wa.h
+above is given the name \textit{my.compiler.company.cpp.wa.h.123456}.
+
+
+
+\textbf{Debugging Information Entry Names}
+
+Global labels for debugging information entries (need explained
+below) within a section group can be given names of the form
+
+\begin{alltt}
+    <prefix>.<file-designator>.<gid-number>.<die-number>
+\end{alltt}
+
+such as
+
+\begin{alltt}
+    my.compiler.company.wa.h.123456.987
+\end{alltt}
+
+where
+\begin{itemize}
+\item \textless prefix \textgreater\  
+distinguishes this as a DWARF debug info name, and should identify the producer
+and, when appropriate, the language.
+\item \textless file\dash designator\textgreater\  
+and 
+\textless gid\dash number \textgreater
+are as above.
+
+\item  \textless die\dash number \textgreater
+could be a number sequentially assigned 
+to entities (tokens, perhaps) found
+during compilation.
+
+\end{itemize}
+
+In general, every point in the section group .debug\_info that
+could be referenced from outside by any compilation unit must
+normally have an external name generated for it in the linker
+symbol table, whether the current compilation references all
+those points or not.
+
+The completeness of the set of names generated is a
+quality\dash of\dash implementation issue.
+
+It is up to the producer to ensure that if 
+<die-numbers>
+\textless die\dash numbers \textgreater
+in separate compilations would not match properly then a
+distinct 
+\textless gid\dash number \textgreater
+is generated.
+
+Note that only section groups that are designated as
+duplicate\dash removal\dash applies actually require the
+\begin{alltt}
+    <prefix>.<file-designator>.<gid-number>.<die-number>
+\end{alltt}
+external labels for debugging information entries as all other
+section group sections can use 'local' labels 
+(section\dash relative
+relocations).
+
+(This is a consequence of separate compilation, not a rule
+imposed by this document.)
+
+\textit{Local labels use references with form DW\_FORM\_ref4
+or 
+DW\_FORM\_ref8. 
+(These are affected by relocations
+so 
+DW\_FORM\_ref\_udata, 
+DW\_FORM\_ref1 and 
+DW\_FORM\_ref2 are
+normally not usable and 
+DW\_FORM\_ref\_addr is not necessary
+for a local label.)}
+
+\textbf{Use of DW\_TAG\_compile\_unit versus 
+DW\_TAG\_partial\_unit}
+
+A section group compilation unit that uses 
+DW\_TAG\_compile\_unit
+is like any other compilation unit, in that its contents
+are evaluated by consumers as though it were an ordinary
+compilation unit.
+
+An \#include directive appearing outside any other
+declarations is a good candidate to be represented using
+DW\_TAG\_compile\_unit. 
+However, an \#include appearing inside
+a C++ namespace declaration or a function, for example, is
+not a good candidate because the entities included are not
+necessarily file level entities.
+
+This also applies to Fortran INCLUDE lines when declarations
+are included into a procedure or module context.
+
+Consequently a compiler must use DW\_TAG\_partial\_unit (instead
+of DW\_TAG\_compile\_unit) in a section group whenever the section
+group contents are not necessarily globally visible. This
+directs consumers to ignore that compilation unit when scanning
+top level declarations and definitions.
+
+The DW\_TAG\_partial\_unit compilation unit will be referenced
+from elsewhere and the referencing locations give the
+appropriate context for interpreting the partial compilation
+unit.
+
+A DW\_TAG\_partial\_unit entry may have, as appropriate, any of
+the attributes assigned to a DW\_TAG\_compile\_unit.
+
+
+\textbf{Use of DW\_TAG\_imported\_unit}
+
+A DW\_TAG\_imported\_unit debugging information entry has an
+DW\_AT\_import attribute referencing a DW\_TAG\_compile\_unit or
+DW\_TAG\_partial\_unit debugging information entry.
+
+A DW\_TAG\_imported\_unit debugging information entry refers
+to a 
+DW\_TAG\_compile\_unit or 
+DW\_TAG\_partial\_unit debugging
+information entry to specify that the 
+DW\_TAG\_compile\_unit or
+DW\_TAG\_partial\_unit contents logically appear at the point
+of the 
+DW\_TAG\_imported\_unit entry.
+
+
+\textbf{Use of DW\_FORM\_ref\_addr}
+
+Use 
+DW\_FORM\_ref\_addr to reference from one compilation
+unit's debugging information entries to those of another
+compilation unit.
+
+When referencing into a removable section group .debug\_info
+from another .debug\_info (from anywhere), the
+\begin{alltt}
+<prefix>.<file-designator>.<gid-number>.<die-number>
+\end{alltt}
+name should be used for an external symbol and a relocation
+generated based on that name.
+
+When referencing into a non-section group .debug\_info,
+from another .debug\_info (from anywhere) 
+DW\_FORM\_ref\_addr is
+still the form to be used, but a section\dash relative relocation
+generated by use of a non-exported name (often called an
+``internal name'') may be used for references within the
+same object file.
+
+\subsection{Examples}
+\label{app:examples}
+
+This section provides several examples in order to have a
+concrete basis for discussion.
+
+In these examples, the focus is on the arrangement of DWARF
+information into sections (specifically the .debug\_info
+section) and the naming conventions used to achieve references
+into section groups. In practice, all of the examples that
+follow involve DWARF sections other than just .debug\_info
+(for example, .debug\_line, .debug\_aranges, or others);
+however, only the .debug\_info section is shown to keep the
+examples compact and easier to read.
+
+The grouping of sections into a named set is shown, but the means for achieving this in terms of
+the underlying object language is not (and varies from system to system).
+
+\subsubsection{C++ Example}
+
+The C++ source in 
+Section \refersec{app:duplicateeliminationexample1csource}
+is used to illustrate the DWARF
+representation intended to allow duplicate elimination.
+
+\paragraph{Duplicate elimination example 1: C++ Source} 
+\label{app:duplicateeliminationexample1csource}
+
+File wa.h
+
+\begin{lstlisting}
+struct A {
+   int i;
+};
+\end{lstlisting}
+
+File wa.C
+
+\begin{lstlisting}
+#include "wa.h";
+int
+f(A &a)
+{
+    return a.i + 2;
+}
+\end{lstlisting}
+
+
+section \refersec{app:duplicateeliminationexample1dwarfsectiongroup}
+shows the section group corresponding to the included file 
+wa.h.
+
+
+\paragraph{Duplicate elimination example 1: DWARF section group} 
+
+\label{app:duplicateeliminationexample1dwarfsectiongroup}
+
+\begin{alltt}
+==== Section group name:
+    my.compiler.company.cpp.wa.h.123456
+== section .debug\_info
+DW.cpp.wa.h.123456.1: ! linker global symbol
+    DW\_TAG\_compile\_unit
+        DW\_AT\_language(DW\_LANG\_C\_plus\_plus)
+        ...  ! other unit attributes
+DW.cpp.wa.h.123456.2: ! linker global symbol
+    DW\_TAG\_base\_type
+        DW\_AT\_name("int")
+DW.cpp.wa.h.123456.3: ! linker global symbol
+    DW\_TAG\_structure\_type
+        DW\_AT\_NAME("A")
+DW.cpp.wa.h.123456.4: ! linker global symbol
+        DW\_TAG\_member
+        DW\_AT\_name("i")
+        DW\_AT\_type(DW\_FORM\_refn to DW.cpp.wa.h.123456.2)
+            ! (This is a local reference, so the more
+            ! compact form DW\_FORM\_refn can be used)
+\end{alltt}
+
+
+Figure \refersec{app:duplicateeliminationexample1primarycompilationunit}
+shows the ``normal'' DWARF sections, which are not part of
+any section group, and how they make use of the information
+in the section group shown above.
+
+\paragraph{Duplicate elimination example 1: primary compilation unit} 
+\label{app:duplicateeliminationexample1primarycompilationunit}
+\begin{alltt}
+== section .text
+    [generated code for function f]
+== section .debug\_info
+    DW\_TAG\_compile\_unit
+.L1:                   ! local (non-linker) symbol
+        DW\_TAG\_reference\_type
+            DW\_AT\_type(reference to DW.cpp.wa.h.123456.3)
+        DW\_TAG\_subprogram
+            DW\_AT\_name("f")
+            DW\_AT\_type(reference to DW.cpp.wa.h.123456.2)
+            DW\_TAG\_variable
+                DW\_AT\_name("a")
+                DW\_AT\_type(reference to .L1)
+        ...
+\end{alltt}
+
+This example uses DW\_TAG\_compile\_unit for the section group,
+implying that the contents of the compilation unit are
+globally visible (in accordance with C++ language rules).
+DW\_TAG\_partial\_unit is not needed for the same reason.
+
+\subsubsection{Fortran Example}
+
+
+For a Fortran example, consider 
+Figure \refersec{app:duplicateeliminationexample2fortransource}.
+
+
+\paragraph{Duplicate elimination example 2: Fortran source} 
+\label{app:duplicateeliminationexample2fortransource}
+
+File CommonStuff.fh
+
+\begin{lstlisting}
+IMPLICIT INTEGER(A-Z)
+COMMON /Common1/ C(100)
+PARAMETER(SEVEN = 7)
+\end{lstlisting}
+
+File Func.f
+\begin{lstlisting}
+
+FUNCTION FOO (N)
+INCLUDE 'CommonStuff.fh'
+FOO = C(N + SEVEN)
+RETURN
+END
+\end{lstlisting}
+
+
+Section \refersec{app:duplicateeliminationexample2dwarfsectiongroup}
+shows the section group 
+corresponding to the included file CommonStuff.fh.
+
+\paragraph{Duplicate elimination example 2: DWARF section group}
+\label{app:duplicateeliminationexample2dwarfsectiongroup}
+
+\begin{alltt}
+==== Section group name:
+
+    my.f90.company.f90.CommonStuff.fh.654321
+
+== section .debug\_info
+
+DW.myf90.CommonStuff.fh.654321.1:    ! linker global symbol
+    DW\_TAG\_partial\_unit
+        ! ...compilation unit attributes, including...
+        DW\_AT\_language(DW\_LANG\_Fortran90)
+        DW\_AT\_identifier\_case(DW\_ID\_case\_insensitive)
+
+DW.myf90.CommonStuff.fh.654321.2: ! linker global symbol
+3\$: DW\_TAG\_array\_type
+        ! unnamed
+        DW\_AT\_type(reference to DW.f90.F90\$main.f.2)
+            ! base type INTEGER
+        DW\_TAG\_subrange\_type
+            DW\_AT\_type(reference to DW.f90.F90\$main.f.2)
+                ! base type INTEGER)
+            DW\_AT\_lower\_bound(constant 1)
+            DW\_AT\_upper\_bound(constant 100)
+
+DW.myf90.CommonStuff.fh.654321.3: ! linker global symbol
+    DW\_TAG\_common\_block
+        DW\_AT\_name("Common1")
+        DW\_AT\_location(Address of common block Common1)
+        DW\_TAG\_variable
+            DW\_AT\_name("C")
+            DW\_AT\_type(reference to 3\$)
+            DW\_AT\_location(address of C)
+
+DW.myf90.CommonStuff.fh.654321.4: ! linker global symbol
+    DW\_TAG\_constant
+        DW\_AT\_name("SEVEN")
+        DW\_AT\_type(reference to DW.f90.F90\$main.f.2)
+            ! base type INTEGER
+        DW\_AT\_const\_value(constant 7)
+\end{alltt}
+
+Section \refersec{app:duplicateeliminationexample2primaryunit}
+shows the sections for the primary compilation unit.
+
+
+
+\paragraph{Duplicate elimination example 2: primary unit }
+\label{app:duplicateeliminationexample2primaryunit}
+\begin{alltt}
+== section .text
+    [code for function Foo]
+
+== section .debug\_info
+    DW\_TAG\_compile\_unit
+        DW\_TAG\_subprogram
+            DW\_AT\_name("Foo")
+            DW\_AT\_type(reference to DW.f90.F90\$main.f.2)
+                ! base type INTEGER
+            DW\_TAG\_imported\_unit
+                DW\_AT\_import(reference to
+                    DW.myf90.CommonStuff.fh.654321.1)
+            DW\_TAG\_common\_inclusion ! For Common1
+                DW\_AT\_common\_reference(reference to
+                    DW.myf90.CommonStuff.fh.654321.3)
+            DW\_TAG\_variable ! For function result
+                DW\_AT\_name("Foo")
+                    DW\_AT\_type(reference to DW.f90.F90\$main.f.2)
+                        ! base type INTEGER
+\end{alltt}
+
+A companion main program is shown in 
+Section \refersec{app:duplicateeliminationexample2companionsource}
+
+\paragraph{Duplicate elimination example 2: companion source }
+\label{app:duplicateeliminationexample2companionsource}
+
+File Main.f 
+
+\begin{lstlisting}
+INCLUDE 'CommonStuff.fh'
+C(50) = 8
+PRINT *, 'Result = ', FOO(50 - SEVEN)
+END
+\end{lstlisting}
+
+That main program results in an object file that
+contained a duplicate of the section group named
+my.f90.company.f90.CommonStuff.fh.654321 
+corresponding to the
+included file as well as the remainder of the main subprogram
+as shown in 
+Section \refersec{app:duplicateeliminationexample2companiondwarf}.
+
+\paragraph{Duplicate elimination example 2: companion DWARF }
+\label{app:duplicateeliminationexample2companiondwarf}
+
+\begin{alltt}
+== section .debug\_info
+    DW\_TAG\_compile\_unit
+        DW\_AT\_name(F90\$main)
+        DW\_TAG\_base\_type
+            DW\_AT\_name("INTEGER")
+            DW\_AT\_encoding(DW\_ATE\_signed)
+            DW\_AT\_byte\_size(...)
+
+        DW\_TAG\_base\_type
+            ...
+        ...  ! other base types
+        DW\_TAG\_subprogram
+            DW\_AT\_name("F90\$main")
+            DW\_TAG\_imported\_unit
+                DW\_AT\_import(reference to
+                    DW.myf90.CommonStuff.fh.654321.1)
+            DW\_TAG\_common\_inclusion ! for Common1
+                DW\_AT\_common\_reference(reference to
+                    DW.myf90.CommonStuff.fh.654321.3)
+            ...
+\end{alltt}
+
+
+This example uses DW\_TAG\_partial\_unit for the section group
+because the included declarations are not independently
+visible as global entities.
+
+
+\subsubsection{C Example}
+
+The C++ example in this Section might appear to be equally
+valid as a C example. However, it is prudent to include
+a DW\_TAG\_imported\_unit in the primary unit (see Figure 84)
+with an DW\_AT\_import attribute that refers to the proper unit
+in the section group.
+
+\textit{The C rules for consistency of global (file scope) symbols
+across compilations are less strict than for C++; inclusion
+of the import unit attribute assures that the declarations of
+the proper section group are considered before declarations
+from other compilations.}
+
+
+\section{Using Type Units}
+\label{app:usingtypeunits}
+
+A large portion of debug information is type information, and
+in a typical compilation environment, many types are duplicated
+many times. One method of controlling the amount of duplication
+is separating each type into a separate .debug\_types section
+and arranging for the linker to recognize and eliminate
+duplicates at the individual type level.
+
+Using this technique, each substantial type definition is
+placed in its own individual section, while the remainder
+of the DWARF information (non-type information, incomplete
+type declarations, and definitions of trivial types) is
+placed in the usual debug information section. In a typical
+implementation, the relocatable object file may contain one
+of each of these debug sections:
+
+\begin{alltt}
+.debug\_abbrev
+.debug\_info
+.debug\_line
+\end{alltt}
+
+and any number of these additional sections:
+
+\begin{alltt}
+.debug\_types
+\end{alltt}
+
+As discussed in the previous section 
+(Section \refersec{app:usingcompilationunits}), 
+many
+linkers today support the concept of a COMDAT group or
+linkonce section. The general idea is that a ``key'' can be
+attached to a section or a group of sections, and the linker
+will include only one copy of a section group (or individual
+section) for any given key. For .debug\_types sections, the
+key is the type signature formed from the algorithm given in
+Section \refersec{datarep:typesignaturecomputation}.
+
+\subsection{Signature Computation Example}
+\label{app:signaturecomputationexample}
+
+As an example, consider a C++ header file 
+containing the type definitions shown
+in Section \refersec{app:typesignatureexamplescsource}.
+
+\subsubsection{ Type signature examples: C++ source}
+\label{app:typesignatureexamplescsource}
+\begin{lstlisting}
+namespace N {
+
+ struct B;
+
+ struct C {
+     int x;
+     int y;
+ };
+
+ class A {
+   public:
+     A(int v);
+     int v();
+   private:
+     int v_;
+     struct A *next;
+     struct B *bp;
+     struct C c;
+ };
+
+ }
+\end{lstlisting}
+
+Next, consider one possible representation of the DWARF
+information that describes the type “struct C” as shown
+in 
+\refersec{app:typesignaturecomputation1dwarfrepresentation}:
+
+\subsubsection{Type signature  computation 1: DWARF representation}
+\label{app:typesignaturecomputation1dwarfrepresentation}
+
+\begin{alltt}
+  DW\_TAG\_type\_unit
+      DW\_AT\_language: DW\_LANG\_C\_plus\_plus (4)
+    DW\_TAG\_namespace
+        DW\_AT\_name: "N"
+L1:
+      DW\_TAG\_structure\_type
+          DW\_AT\_name: "C"
+          DW\_AT\_byte\_size: 8
+          DW\_AT\_decl\_file: 1
+          DW\_AT\_decl\_line: 5
+        DW\_TAG\_member
+            DW\_AT\_name: "x"
+            DW\_AT\_decl\_file: 1
+            DW\_AT\_decl\_line: 6
+            DW\_AT\_type: reference to L2
+            DW\_AT\_data\_member\_location: 0
+        DW\_TAG\_member
+            DW\_AT\_name: "y"
+            DW\_AT\_decl\_file: 1
+            DW\_AT\_decl\_line: 7
+            DW\_AT\_type: reference to L2
+            DW\_AT\_data\_member\_location: 4
+L2:
+     DW\_TAG\_base\_type
+         DW\_AT\_byte\_size: 4
+         DW\_AT\_encoding: DW\_ATE\_signed
+         DW\_AT\_name: "int"
+\end{alltt}
+
+In computing a signature for the type N::C, flatten the type
+description into a byte stream according to the procedure
+outlined in 
+Section \refersec{datarep:typesignaturecomputation}.
+The result is shown in 
+Section \refersec{app:typesignaturecomputation1flattenedbytestream}.
+
+\subsubsection{Type signature  computation 1: flattened byte stream}
+\label{app:typesignaturecomputation1flattenedbytestream}
+
+\begin{alltt}
+// Step 2: 'C' DW\_TAG\_namespace "N"
+0x43 0x39 0x4e 0x00
+// Step 3: 'D' DW\_TAG\_structure\_type
+0x44 0x13
+// Step 4: 'A' DW\_AT\_name DW\_FORM\_string "C"
+0x41 0x03 0x08 0x43 0x00
+// Step 4: 'A' DW\_AT\_byte\_size DW\_FORM\_sdata 8
+0x41 0x0b 0x0d 0x08
+// Step 7: First child ("x")
+    // Step 3: 'D' DW\_TAG\_member
+    0x44 0x0d
+    // Step 4: 'A' DW\_AT\_name DW\_FORM\_string "x"
+    0x41 0x03 0x08 0x78 0x00
+    // Step 4: 'A' DW\_AT\_data\_member\_location DW\_FORM\_sdata 0
+    0x41 0x38 0x0d 0x00
+    // Step 6: 'T' DW\_AT\_type (type \#2)
+    0x54 0x49
+        // Step 3: 'D' DW\_TAG\_base\_type
+        0x44 0x24
+        // Step 4: 'A' DW\_AT\_name DW\_FORM\_string "int"
+        0x41 0x03 0x08 0x69 0x6e 0x74 0x00
+        // Step 4: 'A' DW\_AT\_byte\_size DW\_FORM\_sdata 4
+        0x41 0x0b 0x0d 0x04
+        // Step 4: 'A' DW\_AT\_encoding DW\_FORM\_sdata DW\_ATE\_signed
+        0x41 0x3e 0x0d 0x05
+        // Step 7: End of DW\_TAG\_base\_type "int"
+        0x00
+    // Step 7: End of DW\_TAG\_member "x"
+    0x00
+// Step 7: Second child ("y")
+    // Step 3: 'D' DW\_TAG\_member
+    0x44 0x0d
+    // Step 4: 'A' DW\_AT\_name DW\_FORM\_string "y"
+    0x41 0x03 0x08 0x78 0x00
+    // Step 4: 'A' DW\_AT\_data\_member\_location DW\_FORM\_sdata 4
+    0x41 0x38 0x0d 0x04
+    // Step 6: 'R' DW\_AT\_type (type \#2)
+    0x52 0x49 0x02
+    // Step 7: End of DW\_TAG\_member "y"
+    0x00
+// Step 7: End of DW\_TAG\_structure\_type "C"
+0x00
+\end{alltt}
+
+Running an MD5 hash over this byte stream, and taking the
+low\dash order 64 bits, yields the final signature: 
+0xd28081e8 dcf5070a.
+
+Next, consider a representation of the DWARF information that
+describes the type ``class A'' as shown in 
+Section \refersec{app:typesignaturecomputation2dwarfrepresentation}.
+
+
+\subsubsection{Type signature  computation 2: DWARF representation}
+\label{app:typesignaturecomputation2dwarfrepresentation}
+
+\begin{alltt}
+  DW\_TAG\_type\_unit
+      DW\_AT\_language: DW\_LANG\_C\_plus\_plus (4)
+    DW\_TAG\_namespace
+          DW\_AT\_name: "N"
+L1:
+        DW\_TAG\_class\_type
+             DW\_AT\_name: "A"
+             DW\_AT\_byte\_size: 20
+             DW\_AT\_decl\_file: 1
+             DW\_AT\_decl\_line: 10
+           DW\_TAG\_member
+                DW\_AT\_name: "v\_"
+                DW\_AT\_decl\_file: 1
+                DW\_AT\_decl\_line: 15
+                DW\_AT\_type: reference to L2
+                DW\_AT\_data\_member\_location: 0
+                DW\_AT\_accessibility: DW\_ACCESS\_private
+          DW\_TAG\_member
+               DW\_AT\_name: "next"
+               DW\_AT\_decl\_file: 1
+               DW\_AT\_decl\_line: 16
+               DW\_AT\_type: reference to L3
+               DW\_AT\_data\_member\_location: 4
+               DW\_AT\_accessibility: DW\_ACCESS\_private
+          DW\_TAG\_member
+               DW\_AT\_name: "bp"
+               DW\_AT\_decl\_file: 1
+               DW\_AT\_decl\_line: 17
+               DW\_AT\_type: reference to L4
+               DW\_AT\_data\_member\_location: 8
+               DW\_AT\_accessibility: DW\_ACCESS\_private
+          DW\_TAG\_member
+               DW\_AT\_name: "c"
+               DW\_AT\_decl\_file: 1
+               DW\_AT\_decl\_line: 18
+               DW\_AT\_type: 0xd28081e8 dcf5070a (signature for struct C)
+               DW\_AT\_data\_member\_location: 12
+               DW\_AT\_accessibility: DW\_ACCESS\_private
+       DW\_TAG\_subprogram
+           DW\_AT\_external: 1
+           DW\_AT\_name: "A"
+           DW\_AT\_decl\_file: 1
+           DW\_AT\_decl\_line: 12
+           DW\_AT\_declaration: 1
+        DW\_TAG\_formal\_parameter
+           DW\_AT\_type: reference to L3
+           DW\_AT\_artificial: 1
+        DW\_TAG\_formal\_parameter
+           DW\_AT\_type: reference to L2
+       DW\_TAG\_subprogram
+           DW\_AT\_external: 1
+           DW\_AT\_name: "v"
+           DW\_AT\_decl\_file: 1
+           DW\_AT\_decl\_line: 13
+           DW\_AT\_type: reference to L2
+           DW\_AT\_declaration: 1
+         DW\_TAG\_formal\_parameter
+           DW\_AT\_type: reference to L3
+           DW\_AT\_artificial: 1
+L2:
+    DW\_TAG\_base\_type
+         DW\_AT\_byte\_size: 4
+         DW\_AT\_encoding: DW\_ATE\_signed
+         DW\_AT\_name: "int"
+L3:
+    DW\_TAG\_pointer\_type
+         DW\_AT\_type: reference to L1
+L4:
+    DW\_TAG\_pointer\_type
+         DW\_AT\_type: reference to L5
+    DW\_TAG\_namespace
+         DW\_AT\_name: "N"
+L5:
+       DW\_TAG\_structure\_type
+           DW\_AT\_name: "B"
+           DW\_AT\_declaration: 1
+\end{alltt}
+
+In this example, the structure types N::A and N::C have each
+been placed in separate type units.  For N::A, the actual
+definition of the type begins at label L1. The definition
+involves references to the int base type and to two pointer
+types. The information for each of these referenced types is
+also included in this type unit, since base types and pointer
+types are trivial types that are not worth the overhead of a
+separate type unit. The last pointer type contains a reference
+to an incomplete type N::B, which is also included here as
+a declaration, since the complete type is unknown and its
+signature is therefore unavailable. There is also a reference
+to N::C, using DW\_FORM\_sig8 to refer to the type signature
+for that type.
+
+In computing a signature for the type N::A, flatten the type
+description into a byte stream according to the procedure
+outlined in 
+Section \refersec{datarep:typesignaturecomputation}.
+The result is shown in 
+Section \refersec{app:typesignatureexample2flattenedbytestream}.
+
+\subsubsection{Type signature example 2: flattenedbytestream}
+\label{app:typesignatureexample2flattenedbytestream}
+
+\begin{alltt}
+// Step 2: 'C' DW\_TAG\_namespace "N"
+0x43 0x39 0x4e 0x00
+// Step 3: 'D' DW\_TAG\_class\_type
+0x44 0x02
+// Step 4: 'A' DW\_AT\_name DW\_FORM\_string "A"
+0x41 0x03 0x08 0x41 0x00
+// Step 4: 'A' DW\_AT\_byte\_size DW\_FORM\_sdata 20
+0x41 0x0b 0x0d 0x14
+// Step 7: First child ("v\_")
+    // Step 3: 'D' DW\_TAG\_member
+    0x44 0x0d
+    // Step 4: 'A' DW\_AT\_name DW\_FORM\_string "v\_"
+    0x41 0x03 0x08 0x76 0x5f 0x00
+    // Step 4: 'A' DW\_AT\_accessibility DW\_FORM\_sdata DW\_ACCESS\_private
+    0x41 0x32 0x0d 0x03
+    // Step 4: 'A' DW\_AT\_data\_member\_location DW\_FORM\_sdata 0
+    0x41 0x38 0x0d 0x00
+    // Step 6: 'T' DW\_AT\_type (type \#2)
+    0x54 0x49
+        // Step 3: 'D' DW\_TAG\_base\_type
+        0x44 0x24
+        // Step 4: 'A' DW\_AT\_name DW\_FORM\_string "int"
+        0x41 0x03 0x08 0x69 0x6e 0x74 0x00
+        // Step 4: 'A' DW\_AT\_byte\_size DW\_FORM\_sdata 4
+        0x41 0x0b 0x0d 0x04
+        // Step 4: 'A' DW\_AT\_encoding DW\_FORM\_sdata DW\_ATE\_signed
+        0x41 0x3e 0x0d 0x05
+        // Step 7: End of DW\_TAG\_base\_type "int"
+        0x00
+    // Step 7: End of DW\_TAG\_member "v\_"
+    0x00
+// Step 7: Second child ("next")
+    // Step 3: 'D' DW\_TAG\_member
+    0x44 0x0d
+    // Step 4: 'A' DW\_AT\_name DW\_FORM\_string "next"
+    0x41 0x03 0x08 0x6e 0x65 0x78 0x74 0x00
+    // Step 4: 'A' DW\_AT\_accessibility DW\_FORM\_sdata DW\_ACCESS\_private
+    0x41 0x32 0x0d 0x03
+    // Step 4: 'A' DW\_AT\_data\_member\_location DW\_FORM\_sdata 4
+    0x41 0x38 0x0d 0x04
+    // Step 6: 'T' DW\_AT\_type (type \#3)
+    0x54 0x49
+        // Step 3: 'D' DW\_TAG\_pointer\_type
+        0x44 0x0f
+        // Step 5: 'N' DW\_AT\_type
+        0x4e 0x49
+        // Step 5: 'C' DW\_AT\_namespace "N" 'E'
+        0x43 0x39 0x4e 0x00 0x45
+        // Step 5: "A"
+        0x41 0x00
+        // Step 7: End of DW\_TAG\_pointer\_type
+        0x00
+    // Step 7: End of DW\_TAG\_member "next"
+    0x00
+// Step 7: Third child ("bp")
+    // Step 3: 'D' DW\_TAG\_member
+    0x44 0x0d
+    // Step 4: 'A' DW\_AT\_name DW\_FORM\_string "bp"
+    0x41 0x03 0x08 0x62 0x70 0x00
+    // Step 4: 'A' DW\_AT\_accessibility DW\_FORM\_sdata DW\_ACCESS\_private
+    0x41 0x32 0x0d 0x03
+    // Step 4: 'A' DW\_AT\_data\_member\_location DW\_FORM\_sdata 8
+    0x41 0x38 0x0d 0x08
+    // Step 6: 'T' DW\_AT\_type (type \#4)
+    0x54 0x49
+        // Step 3: 'D' DW\_TAG\_pointer\_type
+0x44 0x0f
+        // Step 5: 'N' DW\_AT\_type
+        0x4e 0x49
+        // Step 5: 'C' DW\_AT\_namespace "N" 'E'
+        0x43 0x39 0x4e 0x00 0x45
+        // Step 5: "B"
+        0x42 0x00
+        // Step 7: End of DW\_TAG\_pointer\_type
+        0x00
+    // Step 7: End of DW\_TAG\_member "next"
+    0x00
+// Step 7: Fourth child ("c")
+    // Step 3: 'D' DW\_TAG\_member
+    0x44 0x0d
+    // Step 4: 'A' DW\_AT\_name DW\_FORM\_string "c"
+    0x41 0x03 0x08 0x63 0x00
+    // Step 4: 'A' DW\_AT\_accessibility DW\_FORM\_sdata DW\_ACCESS\_private
+    0x41 0x32 0x0d 0x03
+    // Step 4: 'A' DW\_AT\_data\_member\_location DW\_FORM\_sdata 12
+    0x41 0x38 0x0d 0x0c
+    // Step 6: 'T' DW\_AT\_type (type \#5)
+    0x54 0x49
+        // Step 2: 'C' DW\_TAG\_namespace "N"
+        0x43 0x39 0x4e 0x00
+        // Step 3: 'D' DW\_TAG\_structure\_type
+        0x44 0x13
+        // Step 4: 'A' DW\_AT\_name DW\_FORM\_string "C"
+        0x41 0x03 0x08 0x43 0x00
+        // Step 4: 'A' DW\_AT\_byte\_size DW\_FORM\_sdata 8
+        0x41 0x0b 0x0d 0x08
+        // Step 7: First child ("x")
+            // Step 3: 'D' DW\_TAG\_member
+            0x44 0x0d
+            // Step 4: 'A' DW\_AT\_name DW\_FORM\_string "x"
+            0x41 0x03 0x08 0x78 0x00
+            // Step 4: 'A' DW\_AT\_data\_member\_location DW\_FORM\_sdata 0
+            0x41 0x38 0x0d 0x00
+            // Step 6: 'R' DW\_AT\_type (type \#2)
+            0x52 0x49 0x02
+            // Step 7: End of DW\_TAG\_member "x"
+            0x00
+        // Step 7: Second child ("y")
+            // Step 3: 'D' DW\_TAG\_member
+            0x44 0x0d
+            // Step 4: 'A' DW\_AT\_name DW\_FORM\_string "y"
+            0x41 0x03 0x08 0x79 0x00
+            // Step 4: 'A' DW\_AT\_data\_member\_location DW\_FORM\_sdata 4
+            0x41 0x38 0x0d 0x04
+            // Step 6: 'R' DW\_AT\_type (type \#2)
+            0x52 0x49 0x02
+            // Step 7: End of DW\_TAG\_member "y"
+            0x00
+        // Step 7: End of DW\_TAG\_structure\_type "C"
+        0x00
+    // Step 7: End of DW\_TAG\_member "c"
+    0x00
+// Step 7: Fifth child ("A")
+    // Step 3: 'S' DW\_TAG\_subprogram "A"
+    0x53 0x2e 0x41 0x00
+// Step 7: Sixth child ("v")
+    // Step 3: 'S' DW\_TAG\_subprogram "v"
+    0x53 0x2e 0x76 0x00
+// Step 7: End of DW\_TAG\_structure\_type "A"
+0x00
+\end{alltt}
+
+Running an MD5 hash over this byte stream, and taking the
+low-order 64 bits, yields the final signature: 0xd6d160f5
+5589f6e9.
+
+
+A source file that includes this header file may declare a
+variable of type N::A, and its DWARF information may look
+that shown in 
+Section \refersec{app:typesignatureexampleusage}.
+
+
+\subsubsection{Type signature example usage}
+\label{app:typesignatureexampleusage}
+
+\begin{alltt}
+  DW\_TAG\_compile\_unit
+  ...
+  DW\_TAG\_subprogram
+    ...
+    DW\_TAG\_variable
+      DW\_AT\_name: "a"
+      DW\_AT\_type: (signature) 0xd6d160f5 5589f6e9
+      DW\_AT\_location: ...
+    ...
+\end{alltt}
+
+\subsection{Type Signature Computation Grammar}
+\label{app:typesignaturecomputationgrammar}
+
+This section
+presents a semi-formal grammar that may aid in understanding
+how the bytes of the flattened type description are formed
+during the type signature computation algorithm of Section
+Section \refersec{datarep:typesignaturecomputation}. 
+
+
+\begin{alltt}
+signature
+    : opt-context debug-entry attributes children
+
+opt-context           // Step 2
+    : 'C' tag-code string opt-context
+    : empty
+
+debug-entry           // Step 3
+    : 'D' tag-code
+
+attributes            // Steps 4, 5, 6
+    : attribute attributes
+    : empty
+
+attribute
+    : 'A' at-code form-encoded-value     // Normal attributes
+    : 'N' at-code opt-context 'E' string // Reference to type
+                                         // by name
+    : 'R' at-code back-ref               // Back-reference 
+                                         // to visited type
+    : 'T' at-code signature              // Recursive type
+children             //  Step 7
+    : child children
+    : '\\0'
+
+child
+    : 'S' tag-code string
+    : signature
+tag-code
+    : <ULEB128>
+at-code
+    : <ULEB128>
+form-encoded-value
+    : DW\_FORM\_sdata value
+    : DW\_FORM\_flag value
+    : DW\_FORM\_string string
+    : DW\_FORM\_block block
+DW\_FORM\_string
+    : '\\x08'
+DW\_FORM\_block
+    : '\\x09'
+DW\_FORM\_flag
+    : '\\x0c'
+DW\_FORM\_sdata
+    : '\\x0d'
+value
+    : <SLEB128>
+block
+    : <ULEB128> <fixed-length-block>
+                      // The ULEB128 gives the length of the block
+back-ref
+    : <ULEB128>
+string
+    : <null-terminated-string>
+empty
+    :
+\end{alltt}
+
+
+\section{Summary of Compression Techniques}
+\label{app:summaryofcompressiontechniques}
+\subsection{\#include compression}
+\label{app:includecompression}
+
+C++ has a much greater problem than C with the number and
+size of the headers included and the amount of data in each,
+but even with C there is substantial header file information
+duplication.
+
+A reasonable approach is to put each header file in its own
+section group, using the naming rules mentioned above. The
+section groups are marked to ensure duplicate removal.
+
+All data instances and code instances (even if they came
+from the header files above) are put into non-section group
+sections such as the base object file .debug\_info section.
+
+\subsection{Eliminating function duplication}
+\label{app:eliminatingfunctionduplication}
+
+
+Function templates (C++) result in code for the same template
+instantiation being compiled into multiple archives or
+relocatable objects. The linker wants to keep only one of a
+given entity. The DWARF description, and everything else for
+this function, should be reduced to just a single copy.
+
+For each such code group (function template in this example)
+the compiler assigns a name for the group which will match
+all other instantiations of this function but match nothing
+else. The section groups are marked to ensure duplicate
+removal, so that the second and subsequent definitions seen
+by the static linker are simply discarded.
+
+
+References to other .debug\_info sections follow the approach
+suggested above, but the naming rule might be slightly
+different in that the 
+\begin{alltt}
+<file-designator> 
+\end{alltt}
+should be interpreted
+as a 
+\begin{alltt}
+<function-designator>.
+\end{alltt}
+
+
+
+\subsection{Single-function-per-DWARF-compilation-unit}
+\label{app:singlefunctionperdwarfcompilationunit}
+
+Section groups can help make it easy for a linker to completely
+remove unused functions.
+
+Such section groups are not marked for duplicate removal,
+since the functions are not duplicates of anything.
+
+Each function is given a compilation unit and a section
+group. Each such compilation unit is complete, with its own
+text, data, and DWARF sections.
+
+There will also be a compilation unit that has the file\dash level
+declarations and definitions. Other per\dash function compilation
+unit DWARF information (.debug\_info) points to this common
+file\dash level compilation unit using DW\_TAG\_imported\_unit.
+
+Section groups can use DW\_FORM\_ref\_addr and internal labels
+(section\dash relative relocations) to refer to the main object
+file sections, as the section groups here are either deleted
+as unused or kept. There is no possibility (aside from error)
+of a group from some other compilation being used in place
+of one of these groups.
+
+
+\subsection{Inlining and out-of-line-instances}
+\label{app:inliningandoutoflineinstances}
+
+Abstract instances and concrete-out-of-line instances may be
+put in distinct compilation units using section groups. This
+makes possible some useful duplicate DWARF elimination.
+
+\textit{No special provision for eliminating class duplication
+resulting from template instantiation is made here, though
+nothing prevents eliminating such duplicates using section
+groups.}
+
+
+\subsection{Separate Type Units}
+\label{app:separatetypeunits}
+
+Each complete declaration of a globally-visible type can be
+placed in its own separate type section, with a group key
+derived from the type signature. The linker can then remove
+all duplicate type declarations based on the key.
+

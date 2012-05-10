@@ -1,0 +1,82 @@
+
+\chapter[Encoding/Decoding (Informative)]{Variable Length Data: Encoding/Decoding (Informative)}
+\label{app:variablelengthdataencodingdecodinginformative}
+Here are algorithms expressed in a C-like pseudo-code to
+encode and decode signed and unsigned numbers in LEB128
+representation.
+
+\begin{figure}[here]
+\caption{Algorithm to encode an unsigned integer}
+\begin{lstlisting}
+do
+{
+    byte = low order 7 bits of value;
+    value >>= 7;
+    if (value != 0) /* more bytes to come */
+        set high order bit of byte;
+    emit byte;
+} while (value != 0);
+\end{lstlisting}
+\end{figure}
+\begin{figure}[here]
+\caption{Algorithm to encode a signed integer}
+\begin{lstlisting}
+more = 1;
+negative = (value < 0);
+size = no. of bits in signed integer;
+while(more)
+{
+    byte = low order 7 bits of value;
+    value >>= 7;
+    /* the following is unnecessary if the
+      * implementation of >>= uses an arithmetic rather
+      * than logical shift for a signed left operand
+      */
+    if (negative)
+        /* sign extend */
+        value |= - (1 <<(size - 7));
+    /* sign bit of byte is second high order bit (0x40) */
+    if ((value == 0 && sign bit of byte is clear) ||
+        (value == -1 && sign bit of byte is set))
+        more = 0;
+    else
+        set high order bit of byte;
+    emit byte;
+}
+\end{lstlisting}
+\end{figure}
+\begin{figure}[here]
+\caption{Algorithm to decode an unsigned LEB128 integer}
+\begin{lstlisting}
+result = 0;
+shift = 0;
+while(true)
+{
+    byte = next byte in input;
+    result |= (low order 7 bits of byte << shift);
+    if (high order bit of byte == 0)
+        break;
+    shift += 7;
+}
+\end{lstlisting}
+\end{figure}
+\begin{figure}[here]
+\caption{Algorithm to decode a signed LEB128 integer}
+\begin{lstlisting}
+result = 0;
+shift = 0;
+size = number of bits in signed integer;
+while(true)
+{
+    byte = next byte in input;
+    result |= (low order 7 bits of byte << shift);
+    shift += 7;
+    /* sign bit of byte is second high order bit (0x40) */
+    if (high order bit of byte == 0)
+        break;
+}
+if ((shift <size) \&\& (sign bit of byte is set))
+    /* sign extend */
+    result |= - (1 << shift);
+\end{lstlisting}
+\end{figure}

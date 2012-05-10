@@ -1,0 +1,1385 @@
+\chapter{Program Scope Entries}
+\label{chap:programscopeentries} 
+This section describes debugging information entries that
+relate to different levels of program scope: compilation,
+module, subprogram, and so on. Except for separate type
+entries (see Section \refersec{chap:separatetypeunitentries}), 
+these entries may be thought of
+as bounded by ranges of text addresses within the program.
+
+\section{Unit Entries}
+An object file may contain one or more compilation units,
+of which there are three kinds: normal compilation units,
+partial compilation units and type units. A partial compilation
+unit is related to one or more other compilation units that
+import it. A type unit represents a single complete type in a
+separate unit. Either a normal compilation unit or a partial
+compilation unit may be logically incorporated into another
+compilation unit using an imported unit entry.
+
+\subsection[Normal and Partial CU Entries]{Normal and Partial Compilation Unit Entries}
+\label{chap:normalandpartialcompilationunitentries}
+
+A normal compilation unit is represented by a debugging
+information entry with the tag DW\_TAG\_compile\_unit. A partial
+compilation unit is represented by a debugging information
+entry with the tag DW\_TAG\_partial\_unit.
+
+In a simple normal compilation, a single compilation unit with
+the tag 
+DW\-\_TAG\-\_compile\-\_unit represents a complete object file
+and the tag 
+DW\-\_TAG\-\_partial\-\_unit is not used. 
+In a compilation
+employing the DWARF space compression and duplicate elimination
+techniques from 
+Appendix \refersec{app:usingcompilationunits}, 
+multiple compilation units using
+the tags 
+DW\-\_TAG\-\_compile\-\_unit and/or 
+DW\-\_TAG\-\_partial\-\_unit are
+used to represent portions of an object file.
+
+\textit{A normal compilation unit typically represents the text and
+data contributed to an executable by a single relocatable
+object file. It may be derived from several source files,
+including pre\dash processed ``include files.'' A partial
+compilation unit typically represents a part of the text
+and data of a relocatable object file, in a manner that can
+potentially be shared with the results of other compilations
+to save space. It may be derived from an ``include file'',
+template instantiation, or other implementation\dash dependent
+portion of a compilation. A normal compilation unit can also
+function in a manner similar to a partial compilation unit
+in some cases.}
+
+A compilation unit entry owns debugging information
+entries that represent all or part of the declarations
+made in the corresponding compilation. In the case of a
+partial compilation unit, the containing scope of its owned
+declarations is indicated by imported unit entries in one
+or more other compilation unit entries that refer to that
+partial compilation unit (see 
+Section \refersec{chap:importedunitentries}).
+
+
+Compilation unit entries may have the following attributes:
+
+\begin{enumerate}[1]
+\item Either a DW\_AT\_low\_pc and DW\_AT\_high\_pc pair of
+attributes or a DW\_AT\_ranges attribute whose values encode the
+contiguous or non\dash contiguous address ranges, respectively,
+of the machine instructions generated for the compilation
+unit (see Section {chap:codeaddressesandranges}).  
+A DW\_AT\_low\_pc attribute may also
+be specified in combination with DW\_AT\_ranges to specify the
+default base address for use in location lists (see Section
+\refersec{chap:locationlists}) and range lists 
+(see Section \refersec{chap:noncontiguousaddressranges}).
+
+\item A DW\_AT\_name attribute whose value is a null\dash terminated
+string containing the full or relative path name of the primary
+source file from which the compilation unit was derived.
+
+\item A DW\_AT\_language attribute whose constant value is an
+integer code indicating the source language of the compilation
+unit. The set of language names and their meanings are given
+in 
+Figure \refersec{fig:languagenames}.
+
+\begin{figure}[here]
+\centering
+\caption{Language names}
+\label{fig:languagenames}
+\begin{tabular}{ll}
+Language name & Meaning\\ \hline
+DW\_LANG\_Ada83 \dag&ISO Ada:1983 \\
+DW\_LANG\_Ada95 \dag&ISO Ada:1995 \\
+DW\_LANG\_C&Non-standardized C, such as K\&R \\
+DW\_LANG\_C89&ISO C:1989 \\
+DW\_LANG\_C99 & ISO C:1999 \\
+DW\_LANG\_C\_plus\_plus&ISO C++:1998 \\
+DW\_LANG\_Cobol74& ISO Cobol:1974 \\
+DW\_LANG\_Cobol85 & ISO Cobol:1985 \\
+DW\_LANG\_D \dag & D \\
+DW\_LANG\_Fortran77 &ISO FORTRAN 77\\
+DW\_LANG\_Fortran90 & ISO Fortran 90\\
+DW\_LANG\_Fortran95 & ISO Fortran 95\\
+DW\_LANG\_Java & Java\\
+DW\_LANG\_Modula2 & ISO Modula\dash 2:1996\\
+DW\_LANG\_ObjC & Objective C\\
+DW\_LANG\_ObjC\_plus\_plus & Objective C++\\
+DW\_LANG\_Pascal83 & ISO Pascal:1983\\
+DW\_LANG\_PLI \dag & ANSI PL/I:1976\\
+DW\_LANG\_Python \dag & Python\\
+DW\_LANG\_UPC &Unified Parallel C\\ \hline
+\dag \ \ Support for these languages is limited.& \\
+\end{tabular}
+\end{figure}
+
+\item A DW\_AT\_stmt\_list attribute whose value is a section
+offset to the line number information for this compilation
+unit.  This information is placed in a separate object file
+section from the debugging information entries themselves. The
+value of the statement list attribute is the offset in the
+.debug\_line section of the first byte of the line number
+information for this compilation unit 
+(see Section \refersec{chap:linenumberinformation}).
+
+\item A DW\_AT\_macro\_info attribute whose value is a section
+offset to the macro information for this compilation unit.
+This information is placed in a separate object file section
+from the debugging information entries themselves. The
+value of the macro information attribute is the offset in
+the .debug\_macinfo section of the first byte of the macro
+information for this compilation unit 
+(see Section \refersec{chap:macroinformation}).
+
+\item  A DW\_AT\_comp\_dir attribute whose value is a
+null\dash terminated string containing the current working directory
+of the compilation command that produced this compilation
+unit in whatever form makes sense for the host system.
+
+\item  A DW\_AT\_producer attribute whose value is a null\dash
+terminated string containing information about the compiler
+that produced the compilation unit. The actual contents of
+the string will be specific to each producer, but should
+begin with the name of the compiler vendor or some other
+identifying character sequence that should avoid confusion
+with other producer values.
+
+
+\item  A DW\_AT\_identifier\_case attribute whose integer
+constant value is a code describing the treatment
+of identifiers within this compilation unit. The
+set of identifier case codes is given in Figure
+\refersec{fig:identifiercasecodes}.
+
+\begin{figure}[here]
+\autorows[0pt]{c}{1}{l}{
+\addtoindex{DW\_ID\_case\_sensitive},
+\addtoindex{DW\_ID\_up\_case},
+\addtoindex{DW\_ID\_down\_case},
+\addtoindex{DW\_ID\_case\_insensitive}
+}
+\caption{Identifier case codes}\label{fig:identifiercasecodes}
+\end{figure}
+
+DW\_ID\_case\_sensitive is the default for all compilation units
+that do not have this attribute.  It indicates that names given
+as the values of DW\_AT\_name attributes in debugging information
+entries for the compilation unit reflect the names as they
+appear in the source program. The debugger should be sensitive
+to the case of identifier names when doing identifier lookups.
+
+DW\_ID\_up\_case means that the producer of the debugging
+information for this compilation unit converted all source
+names to upper case. The values of the name attributes may not
+reflect the names as they appear in the source program. The
+debugger should convert all names to upper case when doing
+lookups.
+
+DW\_ID\_down\_case means that the producer of the debugging
+information for this compilation unit converted all source
+names to lower case. The values of the name attributes may not
+reflect the names as they appear in the source program. The
+debugger should convert all names to lower case when doing
+lookups.
+
+DW\_ID\_case\_insensitive means that the values of the name
+attributes reflect the names as they appear in the source
+program but that a case insensitive lookup should be used to
+access those names.
+
+\item A DW\_AT\_base\_types attribute whose value is a reference.
+
+This attribute points to a debugging information entry
+representing another compilation unit.  It may be used
+to specify the compilation unit containing the base type
+entries used by entries in the current compilation unit
+(see Section \refersec{chap:basetypeentries}).
+
+This attribute provides a consumer a way to find the definition
+of base types for a compilation unit that does not itself
+contain such definitions. This allows a consumer, for example,
+to interpret a type conversion to a base type correctly.
+
+\item A DW\_AT\_use\_UTF8 attribute, which is a flag whose
+presence indicates that all strings (such as the names of
+declared entities in the source program) are represented
+using the UTF\dash 8 representation 
+(see Section \refersec{datarep:attributeencodings}).
+
+
+\item A DW\_AT\_main\_subprogram attribute, which is a flag
+whose presence indicates that the compilation unit contains a
+subprogram that has been identified as the starting function
+of the program. If more than one compilation unit contains
+this flag, any one of them may contain the starting function.
+
+\textit{Fortran has a PROGRAM statement which is used
+to specify and provide a user\dash specified name for the main
+subroutine of a program. C uses the name “main” to identify
+the main subprogram of a program. Some other languages provide
+similar or other means to identify the main subprogram of
+a program.}
+
+\end{enumerate}
+
+The  base address of a compilation unit is defined as the
+value of the DW\_AT\_low\_pc attribute, if present; otherwise,
+it is undefined. If the base address is undefined, then any
+DWARF entry or structure defined in terms of the base address
+of that compilation unit is not valid.
+
+
+\subsection{Imported Unit Entries}
+\label{chap:importedunitentries}
+The place where a normal or partial unit is imported is
+represented by a debugging information entry with the tag
+DW\_TAG\_imported\_unit. An imported unit entry contains a
+DW\_AT\_import attribute whose value is a reference to the
+normal or partial compilation unit whose declarations logically
+belong at the place of the imported unit entry.
+
+An imported unit entry does not necessarily correspond to
+any entity or construct in the source program. It is merely
+“glue” used to relate a partial unit, or a compilation
+unit used as a partial unit, to a place in some other
+compilation unit.
+
+\subsection{Separate Type Unit Entries}
+\label{chap:separatetypeunitentries}
+An object file may contain any number of separate type
+unit entries, each representing a single complete type
+definition. Each type unit must be uniquely identified by
+a 64\dash bit signature, stored as part of the type unit, which
+can be used to reference the type definition from debugging
+information entries in other compilation units and type units.
+
+A type unit is represented by a debugging information entry
+with the tag DW\-\_TAG\-\_type\-\_unit. 
+A type unit entry owns debugging
+information entries that represent the definition of a single
+type, plus additional debugging information entries that may
+be necessary to include as part of the definition of the type.
+
+A type unit entry may have a DW\_AT\_language attribute, whose
+constant value is an integer code indicating the source
+language used to define the type. The set of language names
+and their meanings are given in Figure \refersec{fig:languagenames}.
+
+A type unit entry for a given type T owns a debugging
+information entry that represents a defining declaration
+of type T. If the type is nested within enclosing types or
+namespaces, the debugging information entry for T is nested
+within debugging information entries describing its containers;
+otherwise, T is a direct child of the type unit entry.
+
+A type unit entry may also own additional debugging information
+entries that represent declarations of additional types that
+are referenced by type T and have not themselves been placed in
+separate type units. Like T, if an additional type U is nested
+within enclosing types or namespaces, the debugging information
+entry for U is nested within entries describing its containers;
+otherwise, U is a direct child of the type unit entry.
+
+The containing entries for types T and U are declarations,
+and the outermost containing entry for any given type T or
+U is a direct child of the type unit entry. The containing
+entries may be shared among the additional types and between
+T and the additional types.
+
+Types are not required to be placed in type units. In general,
+only large types such as structure, class, enumeration, and
+union types included from header files should be considered
+for separate type units. Base types and other small types
+are not usually worth the overhead of placement in separate
+type units. Types that are unlikely to be replicated, such
+as those defined in the main source file, are also better
+left in the main compilation unit.
+
+\section{Module, Namespace and Importing Entries}
+\textit{Modules and namespaces provide a means to collect related
+entities into a single entity and to manage the names of
+those entities.}
+
+\subsection{Module Entries}
+\label{chap:moduleentries}
+\textit{Several languages have the concept of a ``module.''
+A Modula\dash 2 definition module may be represented by a module
+entry containing a declaration attribute (DW\_AT\_declaration). A
+Fortran 90 module may also be represented by a module entry
+(but no declaration attribute is warranted because Fortran
+has no concept of a corresponding module body).}
+
+A module is represented by a debugging information entry
+with the tag DW\_TAG\_module.  Module entries may own other
+debugging information entries describing program entities
+whose declaration scopes end at the end of the module itself.
+
+If the module has a name, the module entry has a DW\_AT\_name
+attribute whose value is a null\dash terminated string containing
+the module name as it appears in the source program.
+
+The module entry may have either a DW\_AT\_low\_pc and
+DW\_AT\_high\_pc pair of attributes or a DW\_AT\_ranges attribute
+whose values encode the contiguous or non\dash contiguous address
+ranges, respectively, of the machine instructions generated for
+the module initialization code 
+(see Section \refersec{chap:codeaddressesandranges}). 
+It may also
+have a DW\_AT\_entry\_pc attribute whose value is the address of
+the first executable instruction of that initialization code
+(see Section \refersec{chap:entryaddress}).
+
+If the module has been assigned a priority, it may have a
+DW\_AT\_priority attribute. The value of this attribute is a
+reference to another debugging information entry describing
+a variable with a constant value. The value of this variable
+is the actual constant value of the module’s priority,
+represented as it would be on the target architecture.
+
+\subsection{Namespace Entries}
+\label{chap:namespaceentries}
+\textit{C++ has the notion of a namespace, which provides a way to
+implement name hiding, so that names of unrelated things
+do not accidentally clash in the global namespace when an
+application is linked together.}
+
+A namespace is represented by a debugging information entry
+with the tag DW\-\_TAG\-\_namespace. A namespace extension is
+represented by a DW\-\_TAG\-\_namespace entry with a DW\-\_AT\-\_extension
+attribute referring to the previous extension, or if there
+is no previous extension, to the original DW\-\_TAG\-\_namespace
+entry. A namespace extension entry does not need to duplicate
+information in a previous extension entry of the namespace
+nor need it duplicate information in the original namespace
+entry. (Thus, for a namespace with a name, a DW\_AT\_name
+attribute need only be attached directly to the original
+DW\-\_TAG\-\_namespace entry.)
+
+Namespace and namespace extension entries may own other
+debugging information entries describing program entities
+whose declarations occur in the namespace.
+
+\textit{For C++, such owned program entities may be declarations,
+including certain declarations that are also object or
+function definitions.}
+
+If a type, variable, or function declared in a namespace is
+defined outside of the body of the namespace declaration,
+that type, variable, or function definition entry has a
+DW\-\_AT\-\_specification attribute whose value is a reference to the
+debugging information entry representing the declaration of
+the type, variable or function. Type, variable, or function
+entries with a DW\-\_AT\-\_specification attribute do not need
+to duplicate information provided by the declaration entry
+referenced by the specification attribute.
+
+\textit{The C++ global namespace (the namespace referred to by
+``::f'', for example) is not explicitly represented in
+DWARF with a namespace entry (thus mirroring the situation
+in C++ source).  Global items may be simply declared with no
+reference to a namespace.}
+
+\textit{The C++ compilation unit specific ``unnamed namespace'' may
+be represented by a namespace entry with no name attribute in
+the original namespace declaration entry (and therefore no name
+attribute in any namespace extension entry of this namespace).
+}
+
+\textit{A compiler emitting namespace information may choose to
+explicitly represent namespace extensions, or to represent the
+final namespace declaration of a compilation unit; this is a
+quality\dash of\dash implementation issue and no specific requirements
+are given here. If only the final namespace is represented,
+it is impossible for a debugger to interpret using declaration
+references in exactly the manner defined by the C++ language.
+}
+
+\textit{Emitting all namespace declaration information in all
+compilation units can result in a significant increase in the
+size of the debug information and significant duplication of
+information across compilation units. The C++ namespace std,
+for example, is large and will probably be referenced in
+every C++ compilation unit.
+}
+
+\textit{For a C++ namespace example, see Appendix \refersec{app:namespaceexample}.
+}
+
+
+
+\subsection{Imported (or Renamed) Declaration Entries} 
+\label{chap:importedorrenameddeclarationentries}
+\textit{Some languages support the concept of importing into or making
+accessible in a given unit declarations made in a different
+module or scope. An imported declaration may sometimes be
+given another name.
+}
+
+An imported declaration is represented by one or
+more debugging information entries with the tag
+DW\_TAG\_imported\_declaration. When an overloaded entity
+is imported, there is one imported declaration entry for
+each overloading. Each imported declaration entry has a
+DW\_AT\_import attribute, whose value is a reference to the
+debugging information entry representing the declaration that
+is being imported.
+
+An imported declaration may also have a DW\_AT\_name attribute
+whose value is a null\dash terminated string containing the
+name, as it appears in the source program, by which the
+imported entity is to be known in the context of the imported
+declaration entry (which may be different than the name of
+the entity being imported). If no name is present, then the
+name by which the entity is to be known is the same as the
+name of the entity being imported.
+
+An imported declaration entry with a name attribute may be
+used as a general means to rename or provide an alias for
+an entity, regardless of the context in which the importing
+declaration or the imported entity occurs.
+
+\textit{A C++ namespace alias may be represented by an imported
+declaration entry with a name attribute whose value is
+a null\dash terminated string containing the alias name as it
+appears in the source program and an import attribute whose
+value is a reference to the applicable original namespace or
+namespace extension entry.
+}
+
+\textit{A C++ using declaration may be represented by one or more
+imported declaration entries.  When the using declaration
+refers to an overloaded function, there is one imported
+declaration entry corresponding to each overloading. Each
+imported declaration entry has no name attribute but it does
+have an import attribute that refers to the entry for the
+entity being imported. (C++ provides no means to ``rename''
+an imported entity, other than a namespace).
+}
+
+\textit{A Fortran use statement with an ``only list'' may be
+represented by a series of imported declaration entries,
+one (or more) for each entity that is imported. An entity
+that is renamed in the importing context may be represented
+by an imported declaration entry with a name attribute that
+specifies the new local name.
+}
+
+\subsection{Imported Module Entries}
+\label{chap:importedmoduleentries}
+
+\textit{Some languages support the concept of importing into or making
+accessible in a given unit all of the declarations contained
+within a separate module or namespace.
+}
+
+An imported module declaration is represented by a debugging
+information entry with the tag DW\-\_TAG\-\_imported\-\_module. An
+imported module entry contains a DW\-\_AT\-\_import attribute
+whose value is a reference to the module or namespace entry
+containing the definition and/or declaration entries for
+the entities that are to be imported into the context of the
+imported module entry.
+
+An imported module declaration may own a set of imported
+declaration entries, each of which refers to an entry in the
+module whose corresponding entity is to be known in the context
+of the imported module declaration by a name other than its
+name in that module. Any entity in the module that is not
+renamed in this way is known in the context of the imported
+module entry by the same name as it is declared in the module.
+
+\textit{A C++ using directive may be represented by an imported module
+entry, with an import attribute referring to the namespace
+entry of the appropriate extension of the namespace (which
+might be the original namespace entry) and no owned entries.
+}
+
+\textit{A Fortran use statement with a “rename list” may be
+represented by an imported module entry with an import
+attribute referring to the module and owned entries
+corresponding to those entities that are renamed as part of
+being imported.
+}
+
+\textit{A Fortran use statement with neither a “rename list” nor
+an “only list” may be represented by an imported module
+entry with an import attribute referring to the module and
+no owned child entries.
+}
+
+\textit{A use statement with an “only list” is represented by a
+series of individual imported declaration entries as described
+in Section \refersec{chap:importedorrenameddeclarationentries}.
+}
+
+\textit{A Fortran use statement for an entity in a module that is
+itself imported by a use statement without an explicit mention
+may be represented by an imported declaration entry that refers
+to the original debugging information entry. For example, given
+}
+\begin{lstlisting}
+module A
+integer X, Y, Z
+end module
+
+module B
+use A
+end module
+
+module C
+use B, only Q => X
+end module
+\end{lstlisting}
+
+the imported declaration entry for Q within module C refers
+directly to the variable declaration entry for A in module A
+because there is no explicit representation for X in module B.
+
+A similar situation arises for a C++ using declaration that
+imports an entity in terms of a namespace alias. See 
+Appendix  \refersec{app:namespaceexample}
+for an example.
+
+
+\section{Subroutine and Entry Point Entries}
+\label{chap:subroutineandentrypointentries}
+
+The following tags exist to describe debugging information entries for subroutines and entry
+points:
+
+\begin{tabular}{lp{9.0cm}}
+DW\_TAG\_subprogram & A subroutine or function. \\
+DW\_TAG\_inlined\_subroutine & A particular inlined 
+  instance of a subroutine or function. \\
+DW\_TAG\_entry\_point & An alternate entry point. \\
+\end{tabular}
+
+\subsection{General Subroutine and Entry Point Information}
+\label{chap:generalsubroutineandentrypointinformation}
+
+It may also have a DW\_AT\_linkage\_name attribute as
+described in Section \refersec{chap:linkagenames}.
+
+If the name of the subroutine described by an entry with the
+tag DW\_TAG\_subprogram is visible outside of its containing
+compilation unit, that entry has a DW\_AT\_external attribute,
+which is a flag.
+
+\textit{Additional attributes for functions that are members of a
+class or structure are described in 
+Section \refersec{chap:memberfunctionentries}.
+}
+
+A subroutine entry may contain a DW\_AT\_main\_subprogram
+attribute which is a flag whose presence indicates that the
+subroutine has been identified as the starting function of
+the program.  If more than one subprogram contains this flag,
+any one of them may be the starting subroutine of the program.
+
+\textit{Fortran has a PROGRAM statement which is used to specify
+and provide a user\dash supplied name for the main subroutine of
+a program.
+}
+
+\textit{A common debugger feature is to allow the debugger user to call
+a subroutine within the subject program. In certain cases,
+however, the generated code for a subroutine will not obey
+the standard calling conventions for the target architecture
+and will therefore not be safe to call from within a debugger.
+}
+
+A subroutine entry may contain a DW\_AT\_calling\_convention
+attribute, whose value is an integer constant. The set of
+calling convention codes is given in 
+Figure \refersec{fig:callingconventioncodes}.
+
+\begin{figure}[here]
+\autorows[0pt]{c}{1}{l}{
+\addtoindex{DW\_CC\_normal},
+\addtoindex{DW\_CC\_program},
+\addtoindex{DW\_CC\_nocall},
+}
+\caption{Calling convention codes}\label{fig:callingconventioncodes}
+\end{figure}
+
+If this attribute is not present, or its value is the constant
+DW\_CC\_normal, then the subroutine may be safely called by
+obeying the ``standard'' calling conventions of the target
+architecture. If the value of the calling convention attribute
+is the constant DW\_CC\_nocall, the subroutine does not obey
+standard calling conventions, and it may not be safe for the
+debugger to call this subroutine.
+
+If the semantics of the language of the compilation unit
+containing the subroutine entry distinguishes between ordinary
+subroutines and subroutines that can serve as the ``main
+program,'' that is, subroutines that cannot be called
+directly according to the ordinary calling conventions,
+then the debugging information entry for such a subroutine
+may have a calling convention attribute whose value is the
+constant DW\_CC\_program.
+
+\textit{The DW\_CC\_program value is intended to support Fortran main
+programs which in some implementations may not be callable
+or which must be invoked in a special way. It is not intended
+as a way of finding the entry address for the program.
+}
+
+\textit{In C there is a difference between the types of functions
+declared using function prototype style declarations and
+those declared using non\dash prototype declarations.
+}
+
+A subroutine entry declared with a function prototype style
+declaration may have a 
+DW\-\_AT\-\_prototyped attribute, which is
+a flag.
+
+\textit{The Fortran language allows the keywords elemental, pure
+and recursive to be included as part of the declaration of
+a subroutine; these attributes reflect that usage. These
+attributes are not relevant for languages that do not support
+similar keywords or syntax. In particular, the DW\_AT\_recursive
+attribute is neither needed nor appropriate in languages such
+as C where functions support recursion by default.
+}
+
+A subprogram entry may have a DW\_AT\_elemental attribute, which
+is a flag. The attribute indicates whether the subroutine
+or entry point was declared with the ``elemental'' keyword
+or property.
+
+A subprogram entry may have a DW\_AT\_pure attribute, which is
+a flag. The attribute indicates whether the subroutine was
+declared with the ``pure'' keyword or property.
+
+A subprogram entry may have a DW\_AT\_recursive attribute, which
+is a flag. The attribute indicates whether the subroutine
+or entry point was declared with the ``recursive'' keyword
+or property.
+
+
+
+\subsection{Subroutine and Entry Point Return Types}
+\label{chap:subroutineandentrypointreturntypes}
+
+If the subroutine or entry point is a function that returns a
+value, then its debugging information entry has a DW\_AT\_type
+attribute to denote the type returned by that function.
+
+\textit{Debugging information entries for C void functions should
+not have an attribute for the return type.  }
+
+
+\subsection{Subroutine and Entry Point Locations}
+\label{chap:subroutineandentrypointlocations}
+
+A subroutine entry may have either a DW\_AT\_low\_pc and
+DW\_AT\_high\_pc pair of attributes or a DW\_AT\_ranges attribute
+whose values encode the contiguous or non\dash contiguous address
+ranges, respectively, of the machine instructions generated
+for the subroutine (see 
+Section \refersec{chap:codeaddressesandranges}).
+
+A subroutine entry may also have a DW\_AT\_entry\_pc attribute
+whose value is the address of the first executable instruction
+of the subroutine (see 
+Section \refersec{chap:entryaddress}).
+
+An entry point has a DW\_AT\_low\_pc attribute whose value is the
+relocated address of the first machine instruction generated
+for the entry point.
+
+\textit{While the DW\_AT\_entry\_pc attribute might also seem appropriate
+for this purpose, historically the DW\_AT\_low\_pc attribute
+was used before the DW\_AT\_entry\_pc was introduced (in DWARF
+Version 3). There is insufficient reason to change this.}
+
+Subroutines and entry points may also have DW\_AT\_segment and
+DW\_AT\_address\_class attributes, as appropriate, to specify
+which segments the code for the subroutine resides in and
+the addressing mode to be used in calling that subroutine.
+
+A subroutine entry representing a subroutine declaration
+that is not also a definition does not have code address or
+range attributes.
+
+
+\subsection{Declarations Owned by Subroutines and Entry Points} 
+\label{chap:declarationsownedbysubroutinesandentrypoints}
+
+The declarations enclosed by a subroutine or entry point are
+represented by debugging information entries that are owned
+by the subroutine or entry point entry. Entries representing
+the formal parameters of the subroutine or entry point appear
+in the same order as the corresponding declarations in the
+source program.
+
+\textit{There is no ordering requirement for entries for declarations
+that are children of subroutine or entry point entries but
+that do not represent formal parameters. The formal parameter
+entries may be interspersed with other entries used by formal
+parameter entries, such as type entries.}
+
+The unspecified parameters of a variable parameter list are
+represented by a debugging information entry with the tag
+DW\_TAG\_unspecified\_parameters.
+
+The entry for a subroutine that includes a Fortran common block
+has a child entry with the tag 
+DW\-\_TAG\-\_common\-\_inclusion. The
+common inclusion entry has a 
+DW\-\_AT\-\_common\-\_reference attribute
+whose value is a reference to the debugging information entry
+for the common block being included 
+(see Section \refersec{chap:commonblockentries}).
+
+\subsection{Low-Level Information}
+\label{chap:lowlevelinformation}
+
+A subroutine or entry point entry may have a DW\_AT\_return\_addr
+attribute, whose value is a location description. The location
+calculated is the place where the return address for the
+subroutine or entry point is stored.
+
+A subroutine or entry point entry may also have a
+DW\_AT\_frame\_base attribute, whose value is a location
+description that computes the “frame base” for the
+subroutine or entry point. If the location description is
+a simple register location description, the given register
+contains the frame base address. If the location description is
+a DWARF expression, the result of evaluating that expression
+is the frame base address. Finally, for a location list,
+this interpretation applies to each location description
+contained in the list of location list entries.
+
+\textit{The use of one of the DW\_OP\_reg~\textless~n~\textgreater 
+operations in this
+context is equivalent to using 
+DW\_OP\_breg~\textless~n~\textgreater(0) 
+but more
+compact. However, these are not equivalent in general.}
+
+\textit{The frame base for a procedure is typically an address fixed
+relative to the first unit of storage allocated for the
+procedure’s stack frame. The DW\_AT\_frame\_base attribute
+can be used in several ways:}
+
+\begin{enumerate}[1.]
+\item \textit{In procedures that need location lists to locate local
+variables, the DW\_AT\_frame\_base can hold the needed location
+list, while all variables’ location descriptions can be
+simpler ones involving the frame base.}
+
+\item \textit{It can be used in resolving ``up\dash level'' addressing
+within nested routines. 
+(See also DW\_AT\_static\_link FIXME REF , below)}
+\end{enumerate}
+
+\textit{Some languages support nested subroutines. In such languages,
+it is possible to reference the local variables of an
+outer subroutine from within an inner subroutine. The
+DW\_AT\_static\_link and DW\_AT\_frame\_base attributes allow
+debuggers to support this same kind of referencing.}
+
+If a subroutine or entry point is nested, it may have a
+DW\_AT\_static\_link attribute, whose value is a location
+description that computes the frame base of the relevant
+instance of the subroutine that immediately encloses the
+subroutine or entry point.
+
+In the context of supporting nested subroutines, the
+DW\_AT\_frame\_base attribute value should obey the following
+constraints:
+
+\begin{enumerate}[1.]
+\item It should compute a value that does not change during the
+life of the procedure, and
+
+\item The computed value should be unique among instances of
+the same subroutine. (For typical DW\_AT\_frame\_base use, this
+means that a recursive subroutine’s stack frame must have
+non\dash zero size.)
+\end{enumerate}
+
+\textit{If a debugger is attempting to resolve an up\dash level reference
+to a variable, it uses the nesting structure of DWARF to
+determine which subroutine is the lexical parent and the
+DW\_AT\_static\_link value to identify the appropriate active
+frame of the parent. It can then attempt to find the reference
+within the context of the parent.}
+
+
+
+\subsection{Types Thrown by Exceptions}
+\label{chap:typesthrownbyexceptions}
+
+\textit{In C++ a subroutine may declare a set of types which
+it may validly throw.}
+
+If a subroutine explicitly declares that it may throw
+an exception for one or more types, each such type is
+represented by a debugging information entry with the tag
+DW\-\_TAG\-\_thrown\-\_type.  Each such entry is a child of the entry
+representing the subroutine that may throw this type. Each
+thrown type entry contains a DW\-\_AT\-\_type attribute, whose
+value is a reference to an entry describing the type of the
+exception that may be thrown.
+
+\subsection{Function Template Instantiations}
+\label{chap:functiontemplateinstantiations}
+
+\textit{In C++, a function template is a generic definition of
+a function that is instantiated differently when called with
+values of different types. DWARF does not represent the generic
+template definition, but does represent each instantiation.}
+
+A template instantiation is represented by a debugging
+information entry with the tag DW\_TAG\_subprogram. With four
+exceptions, such an entry will contain the same attributes and
+will have the same types of child entries as would an entry
+for a subroutine defined explicitly using the instantiation
+types. The exceptions are:
+
+\begin{enumerate}[1.]
+\item Each formal parameterized type declaration appearing in the
+template definition is represented by a debugging information
+entry with the tag DW\-\_TAG\-\_template\-\_type\-\_parameter. Each
+such entry has a DW\-\_AT\-\_name attribute, whose value is a
+null\dash terminated string containing the name of the formal
+type parameter as it appears in the source program. The
+template type parameter entry also has a DW\_AT\_type attribute
+describing the actual type by which the formal is replaced
+for this instantiation.
+
+\item The subprogram entry and each of its child entries reference
+a template type parameter entry in any circumstance where
+the template definition referenced a formal parameterized type.
+
+\item If the compiler has generated a special compilation unit
+to hold the template instantiation and that compilation unit
+has a different name from the compilation unit containing
+the template definition, the name attribute for the debugging
+information entry representing that compilation unit is empty
+or omitted.
+
+\item If the subprogram entry representing the template
+instantiation or any of its child entries contain declaration
+coordinate attributes, those attributes refer to the source
+for the template definition, not to any source generated
+artificially by the compiler for this instantiation.
+\end{enumerate}
+
+
+
+\subsection{Inlinable and Inlined Subroutines}
+A declaration or a definition of an inlinable subroutine
+is represented by a debugging information entry with the
+tag DW\_TAG\_subprogram. The entry for a subroutine that is
+explicitly declared to be available for inline expansion or
+that was expanded inline implicitly by the compiler has a
+DW\_AT\_inline attribute whose value is an integer constant. The
+set of values for the DW\_AT\_inline attribute is given in
+Figure \refersec{fig:inlinecodes}.
+
+\begin{figure}[here]
+\centering
+\caption{Inline codes}
+\label{fig:inlinecodes}
+\begin{tabular}{lp{9cm}}
+Name&Meaning\\ \hline
+DW\_INL\_not\_inlined & Not delared inline nor inlined by the
+  compiler(equivalent to the absense of the containing
+  DW\-\_AT\-\_linline attribute) \\
+DW\_INL\_inlined & Not declared inline but inlined by the compiler \\
+DW\_INL\_declared\_not\_inlined & Declared inline but 
+  not inlined by the compiler \\
+DW\_INL\_declared\_inlined & Declared inline and inlined by the compiler \\
+\end{tabular}
+\end{figure}
+
+\textit{In C++, a function or a constructor declared with
+constexpr is implicitly declared inline. The abstract inline
+instance (see below) is represented by a debugging information
+entry with the tag DW\_TAG\_subprogram. Such an entry has a
+DW\_AT\_inline attribute whose value is DW\_INL\_inlined.}
+
+
+\paragraph{Abstract Instances}
+\label{chap:abstractinstances}
+Any debugging information entry that is owned (either
+directly or indirectly) by a debugging information entry
+that contains the DW\_AT\_inline attribute is referred to
+as an “abstract instance entry.” Any subroutine entry
+that contains a DW\_AT\_inline attribute whose value is other
+than DW\_INL\_not\_inlined is known as an “abstract instance
+root.” Any set of abstract instance entries that are all
+children (either directly or indirectly) of some abstract
+instance root, together with the root itself, is known as
+an “abstract instance tree.” However, in the case where
+an abstract instance tree is nested within another abstract
+instance tree, the entries in the nested abstract instance
+tree are not considered to be entries in the outer abstract
+instance tree.
+
+Each abstract instance root is either part of a larger
+tree (which gives a context for the root) or uses
+DW\_AT\_specification to refer to the declaration in context.
+
+\textit{For example, in C++ the context might be a namespace
+declaration or a class declaration.}
+
+\textit{Abstract instance trees are defined so that no entry is part
+of more than one abstract instance tree. This simplifies the
+following descriptions.}
+
+A debugging information entry that is a member of an abstract
+instance tree should not contain any attributes which describe
+aspects of the subroutine which vary between distinct inlined
+expansions or distinct out\dash of\dash line expansions. For example,
+the DW\-\_AT\-\_low\-\_pc,
+DW\-\_AT\-\_high\-\_pc, DW\-\_AT\-\_ranges, 
+DW\-\_AT\-\_entry\-\_pc, DW\-\_AT\-\_location,
+DW\-\_AT\-\_return\-\_addr, DW\-\_AT\-\_start\-\_scope, and 
+DW\-\_AT\-\_segment
+attributes typically should be omitted; however, this list
+is not exhaustive.
+
+\textit{It would not make sense normally to put these attributes into
+abstract instance entries since such entries do not represent
+actual (concrete) instances and thus do not actually exist at
+run\dash time.  However, 
+see Appendix \refersec{app:inlineouteronenormalinner} 
+for a contrary example.}
+
+The rules for the relative location of entries belonging to
+abstract instance trees are exactly the same as for other
+similar types of entries that are not abstract. Specifically,
+the rule that requires that an entry representing a declaration
+be a direct child of the entry representing the scope of the
+declaration applies equally to both abstract and non\dash abstract
+entries. Also, the ordering rules for formal parameter entries,
+member entries, and so on, all apply regardless of whether
+or not a given entry is abstract.
+
+\paragraph{Concrete Inlined Instances}
+\label{chap:concreteinlinedinstances}
+
+Each inline expansion of a subroutine is represented
+by a debugging information entry with the tag
+DW\_TAG\_inlined\_subroutine. Each such entry should be a direct
+child of the entry that represents the scope within which
+the inlining occurs.
+
+Each inlined subroutine entry may have either a DW\_AT\_low\_pc
+and DW\_AT\_high\_pc pair of attributes or a DW\_AT\_ranges
+attribute whose values encode the contiguous or non\dash contiguous
+address ranges, respectively, of the machine instructions
+generated for the inlined subroutine (see 
+Section \refersec{chap:codeaddressesandranges}). An
+inlined subroutine entry may also contain a DW\_AT\_entry\_pc
+attribute, representing the first executable instruction of
+the inline expansion (see 
+Section \refersec{chap:entryaddress}).
+
+An inlined subroutine entry may also have DW\-\_AT\-\_call\-\_file,
+DW\-\_AT\-\_call\-\_line and DW\-\_AT\-\_call\-\_column attributes, 
+each of whose
+value is an integer constant. These attributes represent the
+source file, source line number, and source column number,
+respectively, of the first character of the statement or
+expression that caused the inline expansion. The call file,
+call line, and call column attributes are interpreted in
+the same way as the declaration file, declaration line, and
+declaration column attributes, respectively (see 
+Section \refersec{chap:declarationcoordinates}).
+
+The call file, call line and call column coordinates do not
+describe the coordinates of the subroutine declaration that
+was inlined, rather they describe the coordinates of the call.
+
+An inlined subroutine entry may have a DW\_AT\_const\_expr
+attribute, which is a flag whose presence indicates that the
+subroutine has been evaluated as a compile\dash time constant. Such
+an entry may also have a DW\_AT\_const\_value attribute,
+whose value may be of any form that is appropriate for the
+representation of the subroutine's return value. The value of
+this attribute is the actual return value of the subroutine,
+represented as it would be on the target architecture.
+
+\textit{In C++, if a function or a constructor declared with constexpr
+is called with constant expressions, then the corresponding
+concrete inlined instance has a DW\_AT\_const\_expr attribute,
+as well as a DW\_AT\_const\_value attribute whose value represents
+the actual return value of the concrete inlined instance.}
+
+Any debugging information entry that is owned (either
+directly or indirectly) by a debugging information entry
+with the tag DW\_TAG\_inlined\_subroutine is referred to as a
+“concrete inlined instance entry.” Any entry that has
+the tag DW\_TAG\_inlined\_subroutine is known as a “concrete
+inlined instance root.” Any set of concrete inlined instance
+entries that are all children (either directly or indirectly)
+of some concrete inlined instance root, together with the root
+itself, is known as a ``concrete inlined instance tree.''
+However, in the case where a concrete inlined instance tree
+is nested within another concrete instance tree, the entries
+in the nested concrete instance tree are not considered to
+be entries in the outer concrete instance tree.
+
+\textit{Concrete inlined instance trees are defined so that no entry
+is part of more than one concrete inlined instance tree. This
+simplifies later descriptions.}
+
+Each concrete inlined instance tree is uniquely associated
+with one (and only one) abstract instance tree.
+
+\textit{Note, however, that the reverse is not true. Any given abstract
+instance tree may be associated with several different concrete
+inlined instance trees, or may even be associated with zero
+concrete inlined instance trees.}
+
+Concrete inlined instance entries may omit attributes that
+are not specific to the concrete instance (but present in
+the abstract instance) and need include only attributes that
+are specific to the concrete instance (but omitted in the
+abstract instance). In place of these omitted attributes, each
+concrete inlined instance entry has a DW\_AT\_abstract\_origin
+attribute that may be used to obtain the missing information
+(indirectly) from the associated abstract instance entry. The
+value of the abstract origin attribute is a reference to the
+associated abstract instance entry.
+
+If an entry within a concrete inlined instance tree contains
+attributes describing the declaration coordinates of that
+entry, then those attributes should refer to the file, line
+and column of the original declaration of the subroutine,
+not to the point at which it was inlined. As a consequence,
+they may usually be omitted from any entry that has an abstract
+origin attribute.
+
+For each pair of entries that are associated via a
+DW\-\_AT\-\_abstract\-\_origin attribute, both members of the pair
+have the same tag. So, for example, an entry with the tag
+DW\-\_TAG\-\_variable can only be associated with another entry
+that also has the tag DW\-\_TAG\-\_variable. The only exception
+to this rule is that the root of a concrete instance tree
+(which must always have the tag DW\-\_TAG\-\_\-inlined\_subroutine)
+can only be associated with the root of its associated abstract
+instance tree (which must have the tag DW\-\_TAG\-\_subprogram).
+
+In general, the structure and content of any given concrete
+inlined instance tree will be closely analogous to the
+structure and content of its associated abstract instance
+tree. There are a few exceptions:
+
+\begin{enumerate}[1.]
+\item An entry in the concrete instance tree may be omitted if
+it contains only a DW\-\_AT\-\_abstract\-\_origin attribute and either
+has no children, or its children are omitted. Such entries
+would provide no useful information. In C\dash like languages,
+such entries frequently include types, including structure,
+union, class, and interface types; and members of types. If any
+entry within a concrete inlined instance tree needs to refer
+to an entity declared within the scope of the relevant inlined
+subroutine and for which no concrete instance entry exists,
+the reference should refer to the abstract instance entry.
+
+\item Entries in the concrete instance tree which are associated
+with entries in the abstract instance tree such that neither
+has a DW\_AT\_name attribute, and neither is referenced by
+any other debugging information entry, may be omitted. This
+may happen for debugging information entries in the abstract
+instance trees that became unnecessary in the concrete instance
+tree because of additional information available there. For
+example, an anonymous variable might have been created and
+described in the abstract instance tree, but because of
+the actual parameters for a particular inlined expansion,
+it could be described as a constant value without the need
+for that separate debugging information entry.
+
+\item A concrete instance tree may contain entries which do
+not correspond to entries in the abstract instance tree
+to describe new entities that are specific to a particular
+inlined expansion. In that case, they will not have associated
+entries in the abstract instance tree, should not contain
+DW\_AT\_abstract\_origin attributes, and must contain all their
+own attributes directly. This allows an abstract instance tree
+to omit debugging information entries for anonymous entities
+that are unlikely to be needed in most inlined expansions. In
+any expansion which deviates from that expectation, the
+entries can be described in its concrete inlined instance tree.
+
+\end{enumerate}
+
+\paragraph{Out-of-Line Instances of Inlined Subroutines}
+\label{chap:outoflineinstancesofinlinedsubroutines}
+Under some conditions, compilers may need to generate concrete
+executable instances of inlined subroutines other than at
+points where those subroutines are actually called. Such
+concrete instances of inlined subroutines are referred to as
+``concrete out\dash of\dash line instances.''
+
+\textit{In C++, for example, taking the address of a function declared
+to be inline can necessitate the generation of a concrete
+out\dash of\dash line instance of the given function.}
+
+The DWARF representation of a concrete out\dash of\dash line instance
+of an inlined subroutine is essentially the same as for a
+concrete inlined instance of that subroutine (as described in
+the preceding section). The representation of such a concrete
+out\dash of\dash line instance makes use of DW\_AT\_abstract\_origin
+attributes in exactly the same way as they are used for
+a concrete inlined instance (that is, as references to
+corresponding entries within the associated abstract instance
+tree).
+
+The differences between the DWARF representation of a
+concrete out\dash of\dash line instance of a given subroutine and the
+representation of a concrete inlined instance of that same
+subroutine are as follows:
+
+\begin{enumerate}[1.]
+\item  The root entry for a concrete out\dash of\dash line instance
+of a given inlined subroutine has the same tag as does its
+associated (abstract) inlined subroutine entry (that is, tag
+DW\_TAG\_subprogram rather than DW\_TAG\_inlined\_subroutine).
+
+\item The root entry for a concrete out\dash of\dash line instance tree
+is normally owned by the same parent entry that also owns
+the root entry of the associated abstract instance. However,
+it is not required that the abstract and out\dash of\dash line instance
+trees be owned by the same parent entry.
+
+\end{enumerate}
+
+\paragraph{Nested Inlined Subroutines}
+\label{nestedinlinedsubroutines}
+Some languages and compilers may permit the logical nesting of
+a subroutine within another subroutine, and may permit either
+the outer or the nested subroutine, or both, to be inlined.
+
+For a non\dash inlined subroutine nested within an inlined
+subroutine, the nested subroutine is described normally in
+both the abstract and concrete inlined instance trees for
+the outer subroutine. All rules pertaining to the abstract
+and concrete instance trees for the outer subroutine apply
+also to the abstract and concrete instance entries for the
+nested subroutine.
+
+For an inlined subroutine nested within another inlined
+subroutine, the following rules apply to their abstract and
+concrete instance trees:
+
+\begin{enumerate}[1.]
+\item The abstract instance tree for the nested subroutine is
+described within the abstract instance tree for the outer
+subroutine according to the rules in 
+Section \refersec{chap:abstractinstances}, and
+without regard to the fact that it is within an outer abstract
+instance tree.
+
+\item Any abstract instance tree for a nested subroutine is
+always omitted within the concrete instance tree for an
+outer subroutine.
+
+\item  A concrete instance tree for a nested subroutine is
+always omitted within the abstract instance tree for an
+outer subroutine.
+
+\item The concrete instance tree for any inlined or out-of-line
+expansion of the nested subroutine is described within a
+concrete instance tree for the outer subroutine according
+to the rules in 
+Sections \refersec{chap:concreteinlinedinstances} or 
+\refersec{chap:outoflineinstancesofinlinedsubroutines}
+, respectively,
+and without regard to the fact that it is within an outer
+concrete instance tree.
+\end{enumerate}
+
+See Appendix \refersec{app:inliningexamples} 
+for discussion and examples.
+
+\subsection{Trampolines}
+\label{chap:trampolines}
+
+\textit{A trampoline is a compiler\dash generated subroutine that serves as
+an intermediary in making a call to another subroutine. It may
+adjust parameters and/or the result (if any) as appropriate
+to the combined calling and called execution contexts.}
+
+A trampoline is represented by a debugging information entry
+with the tag DW\-\_TAG\-\_subprogram or DW\-\_TAG\-\_inlined\-\_subroutine
+that has a DW\_AT\_trampoline attribute. The value of that
+attribute indicates the target subroutine of the trampoline,
+that is, the subroutine to which the trampoline passes
+control. (A trampoline entry may but need not also have a
+DW\_AT\_artificial attribute.)
+
+The value of the trampoline attribute may be represented
+using any of the following forms, which are listed in order
+of preference:
+
+\begin{itemize}
+\item If the value is of class reference, then the value
+specifies the debugging information entry of the target
+subprogram.
+
+\item If the value is of class address, then the value is
+the relocated address of the target subprogram.
+
+\item If the value is of class string, then the value is the
+(possibly mangled) name of the target subprogram.
+
+\item If the value is of class flag, then the value true
+indicates that the containing subroutine is a trampoline but
+that the target subroutine is not known.
+\end{itemize}
+
+
+The target subprogram may itself be a trampoline. (A sequence
+of trampolines necessarily ends with a non\dash trampoline
+subprogram.)
+
+\textit{In C++, trampolines may be used to implement derived virtual
+member functions; such trampolines typically adjust the
+implicit this pointer parameter in the course of passing
+control.  Other languages and environments may use trampolines
+in a manner sometimes known as transfer functions or transfer
+vectors.}
+
+\textit{Trampolines may sometimes pass control to the target
+subprogram using a branch or jump instruction instead of a
+call instruction, thereby leaving no trace of their existence
+in the subsequent execution context. }
+
+\textit{This attribute helps make it feasible for a debugger to arrange
+that stepping into a trampoline or setting a breakpoint in
+a trampoline will result in stepping into or setting the
+breakpoint in the target subroutine instead. This helps to
+hide the compiler generated subprogram from the user. }
+
+\textit{If the target subroutine is not known, a debugger may choose
+to repeatedly step until control arrives in a new subroutine
+which can be assumed to be the target subroutine. }
+
+
+
+\section{Lexical Block Entries}
+\label{chap:lexicalblockentries}
+
+\textit{A lexical block is a bracketed sequence of source statements
+that may contain any number of declarations. In some languages
+(including C and C++), blocks can be nested within other
+blocks to any depth.}
+
+A lexical block is represented by a debugging information
+entry with the tag DW\-\_TAG\-\_lexical\-\_block.
+
+The lexical block entry may have either a DW\_AT\_low\_pc and
+DW\_AT\_high\_pc pair of attributes or a DW\_AT\_ranges attribute
+whose values encode the contiguous or non-contiguous address
+ranges, respectively, of the machine instructions generated
+for the lexical block 
+(see Section \refersec{chap:codeaddressesandranges}).
+
+If a name has been given to the lexical block in the source
+program, then the corresponding lexical block entry has a
+DW\_AT\_name attribute whose value is a null-terminated string
+containing the name of the lexical block as it appears in
+the source program.
+
+\textit{This is not the same as a C or C++ label (see below).}
+
+The lexical block entry owns debugging information entries that
+describe the declarations within that lexical block. There is
+one such debugging information entry for each local declaration
+of an identifier or inner lexical block.
+
+\section{Label Entries}
+\label{chap:labelentries}
+
+A label is a way of identifying a source statement. A labeled
+statement is usually the target of one or more ``go to''
+statements.
+
+A label is represented by a debugging information entry with
+the tag DW\_TAG\_label. The entry for a label should be owned by
+the debugging information entry representing the scope within
+which the name of the label could be legally referenced within
+the source program.
+
+The label entry has a DW\_AT\_low\_pc attribute whose value
+is the relocated address of the first machine instruction
+generated for the statement identified by the label in
+the source program.  The label entry also has a DW\_AT\_name
+attribute whose value is a null-terminated string containing
+the name of the label as it appears in the source program.
+
+
+\section{With Statement Entries}
+\label{chap:withstatemententries}
+
+\textit{Both Pascal and Modula\dash 2 support the concept of a ``with''
+statement. The with statement specifies a sequence of
+executable statements within which the fields of a record
+variable may be referenced, unqualified by the name of the
+record variable.}
+
+A with statement is represented by a debugging information
+entry with the tag DW\-\_TAG\-\_with\-\_stmt.
+
+A with statement entry may have either a DW\_AT\_low\_pc and
+DW\_AT\_high\_pc pair of attributes or a DW\_AT\_ranges attribute
+whose values encode the contiguous or non\dash contiguous address
+ranges, respectively, of the machine instructions generated
+for the with statement 
+(see Section \refersec{chap:codeaddressesandranges}).
+
+The with statement entry has a DW\_AT\_type attribute, denoting
+the type of record whose fields may be referenced without full
+qualification within the body of the statement. It also has
+a DW\_AT\_location attribute, describing how to find the base
+address of the record object referenced within the body of
+the with statement.
+
+\section{Try and Catch Block Entries}
+\label{chap:tryandcatchblockentries}
+
+\textit{In C++ a lexical block may be designated as a ``catch
+block.'' A catch block is an exception handler that handles
+exceptions thrown by an immediately preceding ``try block.''
+A catch block designates the type of the exception that it
+can handle.}
+
+A try block is represented by a debugging information entry
+with the tag DW\_TAG\_try\_block.  A catch block is represented by
+a debugging information entry with the tag DW\_TAG\_catch\_block.
+
+Both try and catch block entries may have either a
+DW\_AT\_low\_pc and DW\_AT\_high\_pc pair of attributes or a
+DW\_AT\_ranges attribute whose values encode the contiguous
+or non- contiguous address ranges, respectively, of the
+machine instructions generated for the block (see Section
+\refersec{chap:codeaddressesandranges}).
+
+Catch block entries have at least one child entry, an
+entry representing the type of exception accepted by
+that catch block. This child entry has one of the tags
+DW\_TAG\_formal\_parameter or DW\_TAG\_unspecified\_parameters,
+and will have the same form as other parameter entries.
+
+The siblings immediately following a try block entry are its
+corresponding catch block entries.
+
+
+
+
+
+
+
