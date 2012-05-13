@@ -10,7 +10,7 @@ various aspects of the DWARF debugging information format.
 \label{app:compilationunitsandabbreviationstableexample}
 
 
-Figure 48  FIXME REF
+Figure \refersec{fig:compilationunitsandabbreviationstable}
 depicts the relationship of the abbreviations tables contained
 in the .debug\_abbrev section to the information contained in
 the .debug\_info section. Values are given in symbolic form,
@@ -27,8 +27,129 @@ File myfile2.c
 typedef char* strp;
 \end{lstlisting}
 
+% Ensures we get the following float out before we go on.
+\clearpage
+\begin{figure}[here]
+%\centering
+\begin{minipage}{0.4\textwidth}
+\centering
+Compilation Unit 1: .debug\_info
+\begin{framed}
+\scriptsize
+\begin{alltt}
+\textit{length}
+4
+\textit{a1 (abbreviations table offset)}
+4
+\vspace{0.01cm}
+\hrule
+1
+"myfile.c"
+"Best Compiler Corp: Version 1.3"
+"/home/mydir/src"
+DW\_LANG\_C89
+0x0
+0x55
+DW\_FORM\_sec\_offset
+0x0
+\vspace{0.01cm}
+\hrule
+2
+“char”
+DW\_ATE\_unsigned\_char
+1
+\vspace{0.01cm}
+\hrule
+3
+e1
+\vspace{0.01cm}
+\hrule
+4
+“POINTER”
+e2
+\vspace{0.01cm}
+\hrule
+0
+\end{alltt}
+%
+%
+\end{framed}
+Compilation Unit 2: .debug\_info
+\begin{framed}
+\scriptsize
+\begin{alltt}
+\textit{length}
+4
+\textit{a1 (abbreviations table offset)}
+4
+\vspace{0.01cm}
+\hrule
+...
+\vspace{0.01cm}
+\hrule
+4
+“strp”
+e2
+\vspace{0.01cm}
+\hrule
+...
+\end{alltt}
+%
+%
+\end{framed}
+\end{minipage}
+\hfill
+\begin{minipage}{0.4\textwidth}
+\centering
+Abbreviation Table: .debug\_abbrev
+\begin{framed}
+\scriptsize
+\begin{alltt}
+DW\_TAG\_compile\_unit
+DW\_CHILDREN\_yes
+DW\_AT\_name       DW\_FORM\_string
+DW\_AT\_producer   DW\_FORM\_string
+DW\_AT\_comp\_dir   DW\_FORM\_string
+DW\_AT\_language   DW\_FORM\_data1
+DW\_AT\_low\_pc     DW\_FORM\_addr
+DW\_AT\_high\_pc    DW\_FORM\_data1
+DW\_AT\_stmt\_list  DW\_FORM\_indirect
+0                  0
+\vspace{0.01cm}
+\hrule
+2
+DW\_TAG\_base\_type
+DW\_CHILDREN\_no
+DW\_AT\_name       DW\_FORM\_string
+DW\_AT\_encoding   DW\_FORM\_data1
+DW\_AT\_byte\_size  DW\_FORM\_data1
+0
+\vspace{0.01cm}
+\hrule
+3
+DW\_TAG\_pointer\_type
+DW\_CHILDREN\_no
+DW\_AT\_type       DW\_FORM\_ref4
+0
+\vspace{0.01cm}
+\hrule
+4
+DW\_TAG\_typedef
+DW\_CHILDREN\_no
+DW\_AT\_name      DW\_FORM\_string
+DW\_AT\_type      DW\_FORM\_ref\_addr
+0
+\vspace{0.01cm}
+\hrule
+0
+\end{alltt}
+\end{framed}
+\end{minipage}
+\caption{Compilation units and abbreviations table} \label{fig:compilationunitsandabbreviationstable}
+\end{figure}
 
-Needs content FIXME
+% Ensures we get the above float out before we go on.
+\clearpage
 
 \section{Aggregate Examples}
 \label{app:aggregateexamples}
@@ -872,7 +993,7 @@ DW\_LNE\_end\_sequence &&0x0, 0x1, 0x1 \\
 \end{centering}
 
 
-Figure 62  FIXME REF
+Table \refersec{tab:linenumberprogramexamplealternateencoding}
 shows an alternate 
 encoding of the same program using 
 standard opcodes to advance
@@ -979,7 +1100,6 @@ An abstract table
 for the foo subroutine
 is shown in 
 Table \refersec{tab:callframeinformationexampleconceptualmatrix}.
-Figure 64. FIXME REF 
 Corresponding fragments from the
 .debug\_frame section are shown in 
 Table \refersec{tab:callframeinformationexamplecommoninformationentryencoding}.
@@ -1476,8 +1596,7 @@ A concrete inlined instance of OUTER is illustrated in
 \refersec{app:inliningexample3concreteinstance}.
 
 Notice in 
-Figure 73 FIXME REF
-\refersec{app:inliningexample3concreteinstance}
+\refersec{app:inliningexample3abstractinstance}
 that there is no DWARF representation for
 INNER at all; the representation of INNER does not vary across
 instances of OUTER and the abstract instance of OUTER includes
