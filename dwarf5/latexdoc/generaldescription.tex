@@ -608,51 +608,43 @@ that index the stack assume that the top of the stack (most
 recently added entry) has index 0.
 
 \begin{enumerate}[1]
-\label{chap:DWOPdup}
-\item DW\_OP\_dup \\
+\item \livetarg{chap:DWOPdup}{DW\_OP\_dup} \\
 The DW\_OP\_dup operation duplicates the value at the top of the stack.
 
-\label{chap:DWOPdrop}
-\item DW\_OP\_drop \\
+\item \livetarg{chap:DWOPdrop}{DW\_OP\_drop} \\
 The DW\_OP\_drop operation pops the value at the top of the stack.
 
-\label{chap:DWOPpick}
-\item DW\_OP\_pick \\
+\item \livetarg{chap:DWOPpick}{DW\_OP\_pick} \\
 The single operand of the DW\_OP\_pick operation provides a
 1\dash byte index. A copy of the stack entry with the specified
 index (0 through 255, inclusive) is pushed onto the stack.
 
-\label{chap:DWOPover}
-\item DW\_OP\_over \\
+\item \livetarg{chap:DWOPover}{DW\_OP\_over} \\
 The DW\_OP\_over operation duplicates the entry currently second
 in the stack at the top of the stack. 
 This is equivalent to
 a DW\_OP\_pick operation, with index 1.  
 
-\label{chap:DWOPswap}
-\item DW\_OP\_swap \\
+\item \livetarg{chap:DWOPswap}{DW\_OP\_swap} \\
 The DW\_OP\_swap operation swaps the top two stack entries. 
 The entry at the top of the
 stack becomes the second stack entry, 
 and the second entry becomes the top of the stack.
 
-\label{chap:DWOProt}
-\item DW\_OP\_rot \\
+\item \livetarg{chap:DWOProt}{DW\_OP\_rot} \\
 The DW\_OP\_rot operation rotates the first three stack
 entries. The entry at the top of the stack becomes the third
 stack entry, the second entry becomes the top of the stack,
 and the third entry becomes the second entry.
 
-\label{chap:DWOPderef}
-\item  DW\_OP\_deref \\
+\item  \livetarg{chap:DWOPderef}{DW\_OP\_deref} \\
 The DW\_OP\_deref operation pops the top stack entry and 
 treats it as an address. The value
 retrieved from that address is pushed. 
 The size of the data retrieved from the dereferenced
 address is the size of an address on the target machine.
 
-\label{chap:DWOPderefsize}
-\item DW\_OP\_deref\_size \\
+\item \livetarg{chap:DWOPderefsize}{DW\_OP\_deref\_size} \\
 The DW\_OP\_deref\_size operation behaves like the DW\_OP\_deref
 operation: it pops the top stack entry and treats it as an
 address. The value retrieved from that address is pushed. In
@@ -664,8 +656,7 @@ than the size of an address on the target machine. The data
 retrieved is zero extended to the size of an address on the
 target machine before being pushed onto the expression stack.
 
-\label{chap:DWOPxderef}
-\item DW\_OP\_xderef \\
+\item \livetarg{chap:DWOPxderef}{DW\_OP\_xderef} \\
 The DW\_OP\_xderef operation provides an extended dereference
 mechanism. The entry at the top of the stack is treated as an
 address. The second stack entry is treated as an “address
@@ -676,8 +667,7 @@ address calculation and pushed as the new stack top. The size
 of the data retrieved from the dereferenced address is the
 size of an address on the target machine.
 
-\label{chap:DWOPxderefsize}
-\item  DW\_OP\_xderef\_size \\
+\item \livetarg{chap:DWOPxderefsize}{DW\_OP\_xderef\_size}\\
 The DW\_OP\_xderef\_size operation behaves like the
 DW\_OP\_xderef operation.The entry at the top of the stack is
 treated as an address. The second stack entry is treated as
@@ -693,8 +683,7 @@ than the size of an address on the target machine. The data
 retrieved is zero extended to the size of an address on the
 target machine before being pushed onto the expression stack.
 
-\label{chap:DWOPpushobjectaddress}
-\item DW\_OP\_push\_object\_address \\
+\item \livetarg{chap:DWOPpushobjectaddress}{DW\_OP\_push\_object\_address}\\
 The DW\_OP\_push\_object\_address operation pushes the address
 of the object currently being evaluated as part of evaluation
 of a user presented expression. This object may correspond
@@ -709,8 +698,7 @@ to evaluation of a DW\_AT\_data\_member\_location to access a
 data member of a structure. For an example, see 
 Appendix \refersec{app:aggregateexamples}.
 
-\label{chap:DWOPformtlsaddress}
-\item DW\_OP\_form\_tls\_address \\
+\item \livetarg{chap:DWOPformtlsaddress}{DW\_OP\_form\_tls\_address} \\
 The DW\_OP\_form\_tls\_address operation pops a value from the
 stack, translates it into an address in the current thread's
 thread\dash local storage block, and pushes the address. If the
@@ -733,8 +721,7 @@ to describe using ordinary DWARF location descriptions.
 DW\_OP\_form\_tls\_address leaves the computation to the
 consumer.
 
-\label{chap:DWOPcallframecfa}
-\item DW\_OP\_call\_frame\_cfa \\
+\item \livetarg{chap:DWOPcallframecfa}{DW\_OP\_call\_frame\_cfa} \\
 The DW\_OP\_call\_frame\_cfa operation pushes the value of the
 CFA, obtained from the Call Frame Information 
 (see Section \refersec{chap:callframeinformation}).
@@ -757,90 +744,75 @@ performed modulo one plus the largest representable address
 bits). Such operations do not cause an exception on overflow.
 
 \begin{enumerate}[1]
-\label{chap:DWOPabs}
-\item DW\_OP\_abs  \\
+\item \livetarg{chap:DWOPabs}{DW\_OP\_abs}  \\
 The DW\_OP\_abs operation pops the top stack entry, interprets
 it as a signed value and pushes its absolute value. If the
 absolute value cannot be represented, the result is undefined.
 
-\label{chap:DWOPand}
-\item DW\_OP\_and \\
+\item \livetarg{chap:DWOPand}{DW\_OP\_and} \\
 The DW\_OP\_and operation pops the top two stack values, performs
 a bitwise and operation on the two, and pushes the result.
 
-\label{chap:DWOPdiv}
-\item DW\_OP\_div \\
+\item \label{chap:DWOPdiv}{DW\_OP\_div} \\
 The DW\_OP\_div operation pops the top two stack values, divides the former second entry by
 the former top of the stack using signed division, and pushes the result.
 
-\label{chap:DWOPminus}
-\item DW\_OP\_minus \\
+\item \livetarg{chap:DWOPminus}{DW\_OP\_minus} \\
 The DW\_OP\_minus operation pops the top two stack values, subtracts the former top of the
 stack from the former second entry, and pushes the result.
 
-\label{chap:DWOPmod}
-\item DW\_OP\_mod \\
+\item \livetarg{chap:DWOPmod}{DW\_OP\_mod}\\
 The DW\_OP\_mod operation pops the top two stack values and pushes the result of the
 calculation: former second stack entry modulo the former top of the stack.
 
-\label{chap:DWOPmul}
-\item DW\_OP\_mul \\
+\item \livetarg{chap:DWOPmul}{DW\_OP\_mul} \\
 The DW\_OP\_mul operation pops the top two stack entries, multiplies them together, and
 pushes the result.
 
-\label{chap:DWOPneg}
-\item  DW\_OP\_neg \\
+\item  \livetarg{chap:DWOPneg}{DW\_OP\_neg} \\
 The DW\_OP\_neg operation pops the top stack entry, interprets
 it as a signed value and pushes its negation. If the negation
 cannot be represented, the result is undefined.
 
-\label{chap:DWOPnot}
-\item  DW\_OP\_not \\
+\item  \livetarg{chap:DWOPnot}{DW\_OP\_not} \\
 The DW\_OP\_not operation pops the top stack entry, and pushes
 its bitwise complement.
 
-\label{chap:DWOPor}
-\item  DW\_OP\_or \\
+\item  \livetarg{chap:DWOPor}{DW\_OP\_or} \\
 The DW\_OP\_or operation pops the top two stack entries, performs
 a bitwise or operation on the two, and pushes the result.
 
-\label{chap:DWOPplus}
-\item  DW\_OP\_plus \\
+\item  \livetarg{chap:DWOPplus}{DW\_OP\_plus} \\
 The DW\_OP\_plus operation pops the top two stack entries,
 adds them together, and pushes the result.
 
-\label{chap:DWOPplusuconst}
-\item  DW\_OP\_plus\_uconst \\
+\item  \livetarg{chap:DWOPplusuconst}{DW\_OP\_plus\_uconst} \\
 The DW\_OP\_plus\_uconst operation pops the top stack entry,
 adds it to the unsigned LEB128 constant operand and pushes
 the result.  This operation is supplied specifically to be
 able to encode more field offsets in two bytes than can be
 done with “DW\_OP\_litn DW\_OP\_plus”.
 
-\label{chap:DWOPshl}
-\item DW\_OP\_shl \\
+\item \livetarg{chap:DWOPshl}{DW\_OP\_shl} \\
 The DW\_OP\_shl operation pops the top two stack entries,
 shifts the former second entry left (filling with zero bits)
 by the number of bits specified by the former top of the stack,
 and pushes the result.
 
-\label{chap:DWOPshr}
-\item DW\_OP\_shr \\
+\item \livetarg{chap:DWOPshr}{DW\_OP\_shr} \\
 The DW\_OP\_shr operation pops the top two stack entries,
 shifts the former second entry right logically (filling with
 zero bits) by the number of bits specified by the former top
 of the stack, and pushes the result.
 
-\label{chap:DWOPshra}
-\item DW\_OP\_shra \\
+\item \livetarg{chap:DWOPshra}{DW\_OP\_shra} \\
 The DW\_OP\_shra operation pops the top two stack entries,
 shifts the former second entry right arithmetically (divide
 the magnitude by 2, keep the same sign for the result) by
 the number of bits specified by the former top of the stack,
 and pushes the result.
 
-\label{chap:DWOPxor}
-\item DW\_OP\_xor \\
+\item \livetarg{chap:DWOPxor}{DW\_OP\_xor} \\
 The DW\_OP\_xor operation pops the top two stack entries,
 performs a bitwise exclusive\dash or operation on the two, and
 pushes the result.
@@ -948,34 +920,34 @@ examples illustrate their behavior graphically.
 \begin{tabular}{rrcrr} 
  &Before & Operation&& After \\
 
-0& 17& \livelink{DW\_OP\_dup}{chap:DWOPdup} &0 &17 \\
+0& 17& \livelink{chap:DWOPdup}{DW\_OP\_dup} &0 &17 \\
 1&   29& &  1 & 17 \\
 2& 1000 & & 2 & 29\\
 & & &         3&1000\\
 & & & & \\
-0 & 17 & \livelink{DW\_OP\_drop}{chap:DWOPdrop} & 0 & 29 \\
+0 & 17 & \livelink{chap:DWOPdrop}{DW\_OP\_drop} & 0 & 29 \\
 1 &29  &            & 1 & 1000 \\
 2 &1000& & &          \\
 
 & & & & \\
-0 & 17 & \livelink{DW\_OP\_pick}{chap:DWOPpick} & 0 & 1000 \\
+0 & 17 & \livelink{chap:DWOPpick}{DW\_OP\_pick} & 0 & 1000 \\
 1 & 29 & & 1&17 \\
 2 &1000& &2&29 \\
   &    & &3&1000 \\
 
 & & & & \\
-0&17& \livelink{DW\_OP\_over}{chap:DWOPover}&0&29 \\
+0&17& \livelink{chap:DWOPover}{DW\_OP\_over}&0&29 \\
 1&29& &  1&17 \\
 2&1000 & & 2&29\\
  &     & & 3&1000 \\
 
 & & & & \\
-0&17& \livelink{DW\_OP\_swap}{chap:DWOPswap} &0&29 \\
+0&17& \livelink{chap:DWOPswap}{DW\_OP\_swap} &0&29 \\
 1&29& &  1&17 \\
 2&1000 & & 2&1000 \\
 
 & & & & \\
-0&17&\livelink{DW\_OP\_rot}{chap:DWOProt} & 0 &29 \\
+0&17&\livelink{chap:DWOProt}{DW\_OP\_rot} & 0 &29 \\
 1&29 & & 1 & 1000 \\
 2& 1000 & &  2 & 17 \\
 \end{tabular}
@@ -1027,7 +999,7 @@ described below.
 
 The two forms are distinguished in a context sensitive
 manner. As the value of an attribute, a location description
-is encoded using class \livelink{exprloc}{chap:exprloc}  
+is encoded using class \livelink{chap:exprloc}{exprloc}  
 FIXME HYPERREF WRONG
 and a location list is encoded
 using class loclistptr (which serves as an offset into a
