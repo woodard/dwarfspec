@@ -467,14 +467,14 @@ and which are given a common interpretation according to the
 attribute in which the form is used.
 
 Form DW\_FORM\_sec\_offset is a member of more than one class,
-namely lineptr, loclistptr, macptr or rangelistptr; the list
+namely \livelink{chap:lineptr}{lineptr}, \livelink{chap:loclistptr}{loclistptr}, \livelink{chap:macptr}{macptr} or \livelink{chap:rangelistptr}{rangelistptr}; the list
 of classes allowed by the applicable attribute in 
 Table \refersec{tab:attributeencodings}
 determines the class of the form.
 
 \textit{In DWARF V3 the forms DW\_FORM\_data4 and DW\_FORM\_data8 were
-members of either class constant or one of the classes lineptr,
-loclistptr, macptr or rangelistptr, depending on context. In
+members of either class constant or one of the classes \livelink{chap:lineptr}{lineptr},
+\livelink{chap:loclistptr}{loclistptr}, \livelink{chap:macptr}{macptr} or \livelink{chap:rangelistptr}{rangelistptr}, depending on context. In
 DWARF V4 DW\_FORM\_data4 and DW\_FORM\_data8 are members of class
 constant in all cases. The new DW\_FORM\_sec\_offset replaces
 their usage for the other classes.}
@@ -546,7 +546,7 @@ unsigned integers respectively, rather than
 DW\_FORM\_data\textless n \textgreater.}
 
 
-\item exprloc \\
+\item \livelink{chap:exprloc}{exprloc} \\
 This is an unsigned LEB128 length followed by the
 number of information bytes specified by the length
 (DW\_FORM\_exprloc). The information bytes contain a DWARF
@@ -564,7 +564,7 @@ it indicates the presence of the attribute. In the second
 case, the attribute is implicitly indicated as present, and
 no value is encoded in the debugging information entry itself.
 
-\item lineptr \\
+\item \livelink{chap:lineptr}{lineptr} \\
 This is an offset into the .debug\_line section
 (DW\_FORM\_sec\_offset). It consists of an offset from the
 beginning of the .debug\_line section to the first byte of
@@ -577,7 +577,7 @@ in the 64\dash bit DWARF format, it is an 8\dash byte unsigned value
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
 
-\item loclistptr \\
+\item \livelink{chap:loclistptr}{loclistptr} \\
 This is an offset into the .debug\_loc section
 (DW\_FORM\_sec\_offset). It consists of an offset from the
 beginning of the .debug\_loc section to the first byte of
@@ -590,7 +590,7 @@ in the 64\dash bit DWARF format, it is an 8\dash byte unsigned value
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
 
-\item macptr \\
+\item \livelink{chap:macptr}{macptr} \\
 This is an offset into the .debug\_macinfo section
 (DW\_FORM\_sec\_offset). It consists of an offset from the
 beginning of the .debug\_macinfo section to the first byte of
@@ -602,7 +602,7 @@ DWARF format, this offset is a 4\dash byte unsigned value;
 in the 64\dash bit DWARF format, it is an 8\dash byte unsigned value
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
-\item rangelistptr \\
+\item \livelink{chap:rangelistptr}{rangelistptr} \\
 This is an offset into the .debug\_ranges section
 (DW\_FORM\_sec\_offset). 
 It consists of an
@@ -617,7 +617,7 @@ format, it is an 8\dash byte unsigned value (see Section
 \refersec{datarep:32bitand64bitdwarfformats}).
 \end{itemize}
 
-\textit{Because classes lineptr, loclistptr, macptr and rangelistptr
+\textit{Because classes \livelink{chap:lineptr}{lineptr}, \livelink{chap:loclistptr}{loclistptr}, \livelink{chap:macptr}{macptr} and \livelink{chap:rangelistptr}{rangelistptr}
 share a common representation, it is not possible for an
 attribute to allow more than one of these classes}
 
@@ -713,8 +713,8 @@ not. However, the UTF\dash 8 representation is strongly recommended.
 
 \end{itemize}
 
-In no case does an attribute use one of the classes lineptr,
-loclistptr, macptr or rangelistptr to point into either the
+In no case does an attribute use one of the classes \livelink{chap:lineptr}{lineptr},
+\livelink{chap:loclistptr}{loclistptr}, \livelink{chap:macptr}{macptr} or \livelink{chap:rangelistptr}{rangelistptr} to point into either the
 .debug\_info or .debug\_str section.
 
 The form encodings are listed in 
@@ -825,13 +825,13 @@ DW\_CHILDREN\_yes&0x01 \\ \hline
   \hline
 \endlastfoot
 DW\_AT\_sibling&0x01&reference \\
-DW\_AT\_location&0x02&exprloc, loclistptr   \\
+DW\_AT\_location&0x02&\livelink{chap:exprloc}{exprloc}, \livelink{chap:loclistptr}{loclistptr}   \\
 DW\_AT\_name&0x03&string   \\
 DW\_AT\_ordering&0x09&constant   \\
-DW\_AT\_byte\_size&0x0b&constant, exprloc, reference   \\
-DW\_AT\_bit\_offset&0x0c&constant, exprloc, reference   \\
-DW\_AT\_bit\_size&0x0d&constant, exprloc, reference   \\
-DW\_AT\_stmt\_list&0x10&lineptr   \\
+DW\_AT\_byte\_size&0x0b&constant, \livelink{chap:exprloc}{exprloc}, reference   \\
+DW\_AT\_bit\_offset&0x0c&constant, \livelink{chap:exprloc}{exprloc}, reference   \\
+DW\_AT\_bit\_size&0x0d&constant, \livelink{chap:exprloc}{exprloc}, reference   \\
+DW\_AT\_stmt\_list&0x10&\livelink{chap:lineptr}{lineptr}   \\
 DW\_AT\_low\_pc&0x11&address   \\
 DW\_AT\_high\_pc&0x12&address, constant   \\
 DW\_AT\_language&0x13&constant   \\
@@ -839,7 +839,7 @@ DW\_AT\_discr&0x15&reference   \\
 DW\_AT\_discr\_value&0x16&constant   \\
 DW\_AT\_visibility&0x17&constant   \\
 DW\_AT\_import&0x18&reference   \\
-DW\_AT\_string\_length&0x19&exprloc, loclistptr   \\
+DW\_AT\_string\_length&0x19&\livelink{chap:exprloc}{exprloc}, \livelink{chap:loclistptr}{loclistptr}   \\
 DW\_AT\_common\_reference&0x1a&reference   \\
 DW\_AT\_comp\_dir&0x1b&string   \\
 DW\_AT\_const\_value&0x1c&block, constant, string   \\
@@ -847,22 +847,22 @@ DW\_AT\_containing\_type&0x1d&reference     \\
 DW\_AT\_default\_value&0x1e&reference     \\
 DW\_AT\_inline&0x20&constant     \\
 DW\_AT\_is\_optional&0x21&flag     \\
-DW\_AT\_lower\_bound&0x22&constant, exprloc, reference     \\
+DW\_AT\_lower\_bound&0x22&constant, \livelink{chap:exprloc}{exprloc}, reference     \\
 DW\_AT\_producer&0x25&string     \\
 DW\_AT\_prototyped&0x27&flag     \\
-DW\_AT\_return\_addr&0x2a&exprloc, loclistptr     \\
+DW\_AT\_return\_addr&0x2a&\livelink{chap:exprloc}{exprloc}, \livelink{chap:loclistptr}{loclistptr}     \\
 % FIXME: lower case , not Constant
-DW\_AT\_start\_scope&0x2c&Constant, rangelistptr     \\
-DW\_AT\_bit\_stride&0x2e&constant, exprloc, reference     \\
-DW\_AT\_upper\_bound&0x2f&constant, exprloc, reference     \\
+DW\_AT\_start\_scope&0x2c&Constant, \livelink{chap:rangelistptr}{rangelistptr}     \\
+DW\_AT\_bit\_stride&0x2e&constant, \livelink{chap:exprloc}{exprloc}, reference     \\
+DW\_AT\_upper\_bound&0x2f&constant, \livelink{chap:exprloc}{exprloc}, reference     \\
 DW\_AT\_abstract\_origin&0x31&reference     \\
 DW\_AT\_accessibility&0x32&constant     \\
 DW\_AT\_address\_class&0x33&constant     \\
 DW\_AT\_artificial&0x34&flag     \\
 DW\_AT\_base\_types&0x35&reference     \\
 DW\_AT\_calling\_convention&0x36&constant     \\
-DW\_AT\_count&0x37&constant, exprloc, reference     \\
-DW\_AT\_data\_member\_location&0x38&constant, exprloc, loclistptr     \\
+DW\_AT\_count&0x37&constant, \livelink{chap:exprloc}{exprloc}, reference     \\
+DW\_AT\_data\_member\_location&0x38&constant, \livelink{chap:exprloc}{exprloc}, \livelink{chap:loclistptr}{loclistptr}     \\
 DW\_AT\_decl\_column&0x39&constant     \\
 DW\_AT\_decl\_file&0x3a&constant     \\
 DW\_AT\_decl\_line&0x3b&constant     \\
@@ -870,30 +870,30 @@ DW\_AT\_declaration&0x3c&flag     \\
 DW\_AT\_discr\_list&0x3d&block     \\
 DW\_AT\_encoding&0x3e&constant     \\
 DW\_AT\_external&0x3f&flag     \\
-DW\_AT\_frame\_base&0x40&exprloc, loclistptr     \\
+DW\_AT\_frame\_base&0x40&\livelink{chap:exprloc}{exprloc}, \livelink{chap:loclistptr}{loclistptr}     \\
 DW\_AT\_friend&0x41&reference     \\
 DW\_AT\_identifier\_case&0x42&constant    \\
-DW\_AT\_macro\_info&0x43&macptr    \\
+DW\_AT\_macro\_info&0x43&\livelink{chap:macptr}{macptr}    \\
 DW\_AT\_namelist\_item&0x44&reference    \\
 DW\_AT\_priority&0x45&reference    \\
-DW\_AT\_segment&0x46&exprloc, loclistptr    \\
+DW\_AT\_segment&0x46&\livelink{chap:exprloc}{exprloc}, \livelink{chap:loclistptr}{loclistptr}    \\
 DW\_AT\_specification&0x47&reference    \\
-DW\_AT\_static\_link&0x48&exprloc, loclistptr    \\
+DW\_AT\_static\_link&0x48&\livelink{chap:exprloc}{exprloc}, \livelink{chap:loclistptr}{loclistptr}    \\
 DW\_AT\_type&0x49&reference    \\
-DW\_AT\_use\_location&0x4a&exprloc, loclistptr    \\
+DW\_AT\_use\_location&0x4a&\livelink{chap:exprloc}{exprloc}, \livelink{chap:loclistptr}{loclistptr}    \\
 DW\_AT\_variable\_parameter&0x4b&flag    \\
 DW\_AT\_virtuality&0x4c&constant    \\
-DW\_AT\_vtable\_elem\_location&0x4d&exprloc, loclistptr    \\
+DW\_AT\_vtable\_elem\_location&0x4d&\livelink{chap:exprloc}{exprloc}, \livelink{chap:loclistptr}{loclistptr}    \\
 
 
-DW\_AT\_allocated&0x4e&constant, exprloc, reference     \\
-DW\_AT\_associated&0x4f&constant, exprloc, reference     \\
-DW\_AT\_data\_location&0x50&exprloc     \\
-DW\_AT\_byte\_stride&0x51&constant, exprloc, reference     \\
+DW\_AT\_allocated&0x4e&constant, \livelink{chap:exprloc}{exprloc}, reference     \\
+DW\_AT\_associated&0x4f&constant, \livelink{chap:exprloc}{exprloc}, reference     \\
+DW\_AT\_data\_location&0x50&\livelink{chap:exprloc}{exprloc}     \\
+DW\_AT\_byte\_stride&0x51&constant, \livelink{chap:exprloc}{exprloc}, reference     \\
 DW\_AT\_entry\_pc&0x52&address     \\
 DW\_AT\_use\_UTF8&0x53&flag     \\
 DW\_AT\_extension&0x54&reference     \\
-DW\_AT\_ranges&0x55&rangelistptr     \\
+DW\_AT\_ranges&0x55&\livelink{chap:rangelistptr}{rangelistptr}     \\
 DW\_AT\_trampoline&0x56&address, flag, reference, string     \\
 DW\_AT\_call\_column&0x57&constant     \\
 DW\_AT\_call\_file&0x58&constant     \\
@@ -961,8 +961,8 @@ DW\_FORM\_ref4&0x13&reference         \\
 DW\_FORM\_ref8&0x14&reference \\
 DW\_FORM\_ref\_udata&0x15&reference  \\
 DW\_FORM\_indirect&0x16&(see Section \refersec{datarep:abbreviationstables}) \\
-DW\_FORM\_sec\_offset \ddag &0x17&lineptr, loclistptr, macptr, rangelistptr \\
-DW\_FORM\_exprloc \ddag &0x18&exprloc \\
+DW\_FORM\_sec\_offset \ddag &0x17&\livelink{chap:lineptr}{lineptr}, \livelink{chap:loclistptr}{loclistptr}, \livelink{chap:macptr}{macptr}, \livelink{chap:rangelistptr}{rangelistptr} \\
+DW\_FORM\_exprloc \ddag &0x18&\livelink{chap:exprloc}{exprloc} \\
 DW\_FORM\_flag\_present \ddag &0x19&flag \\
 DW\_FORM\_ref\_sig8 \ddag &0x20&reference \\
  

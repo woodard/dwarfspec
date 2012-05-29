@@ -7,17 +7,17 @@ import sys
 import fileio
 
 refclass = { 
-"address":"chap:address", 
-"block":"chap:block", 
-"constant":"chap:constant", 
+#"address":"chap:address", 
+#"block":"chap:block", 
+#"constant":"chap:constant", 
 "exprloc":"chap:exprloc", 
-"flag":"chap:flag",
+#"flag":"chap:flag",
 "lineptr":"chap:lineptr",
 "loclistptr":"chap:loclistptr",
 "macptr":"chap:macptr",
-"rangelistptr":"chap:rangelistptr",
-"reference":"chap:reference",
-"string":"chap:string" }
+"rangelistptr":"chap:rangelistptr" }
+#"reference":"chap:reference",
+#"string":"chap:string" }
 
 def ischar(tok,c):
    if tok._class != "ind":
@@ -64,7 +64,7 @@ def transfunc(linetoks):
          changes = changes +  1
          append_to_out(outtoks,tmp)
       else:
-        if  ischar(linetoks[tnumin - 1],"{") != "y" or ischar(linetoks[tnumin+1],"}") != "y":
+        if  ischar(linetoks[tnumin - 1],"{") == "n" and ischar(linetoks[tnumin+1],"}") == "n":
           tmp = transformone(t, rawtok);
           append_to_out(outtoks,tmp)
           changes = changes +  1
