@@ -1,0 +1,84 @@
+These tools are intended to help updating the latex
+source of a DWARF document to get its references
+complete and correct.
+
+Our fundamental approach is to tokenize the input line-by-line
+and then use trivial pattern matching to determine what
+tokens need updating on what lines.  Always trying to ensure
+that unless we intend to change a line that it is emitted
+byte-for-byte unchanged.  We change lines (in most cases)
+by simply inserting new tokens on the line (or possibly
+inserting characters into a token).
+
+Because latex names are non-traditional (compared to
+other languages) we adopt an inefficient but
+simple scanning and lexing approach.
+
+Every latex source file is read completely into an dwfile object 
+which contains a 
+List of lines
+   each line composed of a list of tokens
+       each token described below.
+
+If we are writing out updated latex source we want all the
+unchanged text output to match the input.  No spacing changes
+and no changes except what the task at hand is to do.
+So the tokens serve that task.
+
+For example, one task at hand might be to find every DW_*
+reference and ensure it is either a link target (livetarg) or a
+link (livelink), and rewrite any that are neither as a link.
+(see our latex commands livelink and livetarg in latex source).
+
+
+Another task at hand might be to take every DW_ and rewrite
+things like  DW\_AT\_foo as DW\-\_AT\-\_foo  so that latex
+can hyphenate.
+
+Sometimes we'll want to read a single latex file, sometimes several of them.
+ 
+If we're reading all the files at once (for some reason) we construct
+an overall 
+   List of LFile (LFile mentioned above).
+
+
+TOKENS:
+This part is idiosyncratic to reflect our other goals.
+
+INDIVIDUAL TOKEN characters:
+{
+}
+[
+]
+space-character
+tab-character
+are individual tokens.
+All 4 forms (tex, underbar, std, label) are identical.
+
+The space or tab character is an individual token.
+All 4 forms (tex, underbar, std, label) are identical.
+
+We swallow the input linefeed (or CR-LF) on input,
+it does not appear in the tokens.
+
+IDENTIFIER:
+The letters in \-_A-Za-z0-9 allowed in an identifier.
+An identifier begins with one of _ \ letter and has
+at least one letter in it.
+Identifers are held in multiple strings in a token
+        tex:   (meaning with \_ and possibly \-)
+        underbar:  (meaning with \_, no \-)
+        std:   (meaning with _ no \, as in the DWARF std)  
+        label: (meaning with no _ or \ the form used as part of labels )
+
+OTHER:
+All other characters are considered letters which are
+to be reproduced on output.  A glob of such are simply considered
+a non-identifier single token. 
+All 4 forms (tex, underbar, std, label) are identical.
+
+
+Performance:
+We simply don't care about performance as long as a task takes
+less than a few minutes. There are only about 70,000 words in a complete
+document so we ignore efficiency issues.
