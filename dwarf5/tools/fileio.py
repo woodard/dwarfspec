@@ -60,6 +60,12 @@ class dwtoken:
     self._label = []
     # Class is "id", "ind","other","none"
     self._class = "none"
+  def insertid(self,string):
+    self._class =  "id"
+    self._tex = list(string)
+    self._underbar = self._tex
+    self._std = self._tex
+    self._label = self._tex
   def setIndivid(self,c):
     self._tex = [c]
     self._underbar = [c]
@@ -247,6 +253,9 @@ class  dwline:
     for t in self._toks:
       t.dwwrite(outfile)
     outfile.write("\n")
+  def dwtransformline(self,callfunc):
+    toks = callfunc(self._toks)
+    self._toks = toks
     
 
 class dwfile:
@@ -293,6 +302,9 @@ class dwfile:
     for l in self._lines:
       l.dwwrite(outfile,lnum)
       lnum = lnum + 1
+  def dwtransformline(self,callfunc):
+    for l in self._lines:
+      l.dwtransformline(callfunc)
     
 
 
@@ -312,7 +324,9 @@ class dwfiles:
   def dwwrite(self):
     for f in self._files:
       f.dwwrite()
-
+  def dwtransformline(self,callfunc):
+    for f in self._files:
+      f.dwtransformline(callfunc)
 
 
 def readFilelist(filelist):

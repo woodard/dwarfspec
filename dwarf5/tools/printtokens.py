@@ -9,7 +9,6 @@ def print_args():
   cur = 1
   filelist = []
   while  len(sys.argv) > cur:
-    print "argv[",cur,"] = ", sys.argv[cur]
     v = sys.argv[cur]
     filelist += [v]
     cur = int(cur) + 1
