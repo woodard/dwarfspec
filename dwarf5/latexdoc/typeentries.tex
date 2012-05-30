@@ -333,16 +333,16 @@ order in the source presentation.
 \centering
 \begin{tabular}{lp{9cm}}
 Name&Meaning\\ \hline
-DW\_TAG\_const\_type &  C or C++ const qualified type \\
-DW\_TAG\_packed\_type& Pascal or Ada packed type \\
-DW\_TAG\_pointer\_type & Pointer to an object of the type being modified \\
-DW\_TAG\_reference\_type& C++ (lvalue) reference to an object of the type 
+\livetarg{chap:DWTAGconsttype}{DW\_TAG\_const\_type} &  C or C++ const qualified type \\
+\livetarg{chap:DWTAGpackedtype}{DW\_TAG\_packed\_type}& Pascal or Ada packed type \\
+\livetarg{chap:DWTAGpointertype}{DW\_TAG\_pointer\_type} & Pointer to an object of the type being modified \\
+\livetarg{chap:DWTAGreferencetype}{DW\_TAG\_reference\_type}& C++ (lvalue) reference to an object of the type 
 being modified \\
-DW\_TAG\_restrict\_type&C restrict qualified type \\
-DW\_TAG\_rvalue\_reference\_type & C++ rvalue reference to an object of the type
+\livetarg{chap:DWTAGrestrictype}{DW\_TAG\_restrict\_type}&C restrict qualified type \\
+\livetarg{chap:DWTAGrvaluereferencetype}{DW\_TAG\_rvalue\_reference\_type} & C++ rvalue reference to an object of the type
 being modified \\
-DW\_TAG\_shared\_type&UPC shared qualified type \\
-DW\_TAG\_volatile\_type&C or C++ volatile qualified type \\
+\livetarg{chap:DWTAGsharedtype}{DW\_TAG\_shared\_type}&UPC shared qualified type \\
+\livetarg{chap:DWTAGvolatiletype}{DW\_TAG\_volatile\_type}&C or C++ volatile qualified type \\
 \end{tabular}
 \caption{Type modifier tags}
 \label{fig:typemodifiertags}
@@ -381,7 +381,8 @@ volatile unsigned char * const restrict p;
 \label{chap:typedefentries}
 A named type that is defined in terms of another type
 definition is represented by a debugging information entry with
-the tag DW\_TAG\_typedef. The typedef entry has a DW\_AT\_name
+the tag \livetarg{chap:DWTAGtypedef}{DW\_TAG\_typedef}. 
+The typedef entry has a DW\_AT\_name
 attribute whose value is a null-terminated string containing
 the name of the typedef as it appears in the source program.
 
@@ -407,7 +408,8 @@ Many languages share the concept of an ``array,'' which is
 a table of components of identical type.
 
 An array type is represented by a debugging information entry
-with the tag DW\_TAG\_array\_type. If a name has been given to
+with the tag \livetarg{chap:DWTAGarraytype}{DW\_TAG\_array\_type}. 
+If a name has been given to
 the array type in the source program, then the corresponding
 array type entry has a DW\_AT\_name attribute whose value is a
 null-terminated string containing the array type name as it
@@ -514,8 +516,10 @@ be understood to apply to C++ structures as well.}
 
 
 Structure, union, and class types are represented by debugging
-information entries with the tags DW\_TAG\_structure\_type,
-DW\_TAG\_union\_type, and DW\_TAG\_class\_type,
+information entries with 
+the tags \livetarg{chap:DWTAGstructuretype}{DW\_TAG\_structure\_type},
+\livetarg{chap:DWTAGuniontype}{DW\_TAG\_union\_type}, 
+and \livetarg{chap:DWTAGclasstype}{DW\_TAG\_class\_type},
 respectively. If a name has been given to the structure,
 union, or class in the source program, then the corresponding
 structure type, union type, or class type entry has a
@@ -606,7 +610,8 @@ in Java is similar to a C++ or Java class with only abstract
 methods and constant data members.}
 
 Interface types are represented by debugging information
-entries with the tag DW\_TAG\_interface\_type.
+entries with the 
+tag \livetarg{chap:DWTAGinterfacetype}{DW\_TAG\_interface\_type}.
 
 An interface type entry has a DW\_AT\_name attribute, whose
 value is a null-terminated string containing the type name
@@ -633,7 +638,8 @@ derived, extended or implementing class or interface owns
 debugging information entries describing each of the classes
 or interfaces it is derived from, extending or implementing,
 respectively, ordered as they were in the source program. Each
-such entry has the tag DW\_TAG\_inheritance.
+such entry has the 
+tag \livetarg{chap:DWTAGinheritance}{DW\_TAG\_inheritance}.
 
 An inheritance entry has a DW\_AT\_type attribute whose value is
 a reference to the debugging information entry describing the
@@ -702,7 +708,8 @@ entities.
 Each ``friend'' declared by a structure, union or class
 type may be represented by a debugging information entry
 that is a child of the structure, union or class type entry;
-the friend entry has the tag DW\_TAG\_friend.
+the friend entry has the 
+tag \livetarg{chap:DWTAGfriend}{DW\_TAG\_friend}.
 
 A friend entry has a DW\_AT\_friend attribute, whose value is
 a reference to the debugging information entry describing
@@ -713,8 +720,9 @@ the declaration of the friend.
 \label{chap:datamemberentries}
 
 A data member (as opposed to a member function) is
-represented by a debugging information entry with the tag
-DW\_TAG\_member. The member entry for a named member has
+represented by a debugging information entry with the 
+tag \livetarg{chap:DWTAGmember}{DW\_TAG\_member}. 
+The member entry for a named member has
 a DW\_AT\_name attribute whose value is a null-terminated
 string containing the member name as it appears in the source
 program. If the member entry describes an anonymous union, the
@@ -1073,7 +1081,9 @@ for this instantiation.
 
 \item Each formal parameterized value declaration appearing in the
 template definition is represented by a debugging information
-entry with the tag DW\_TAG\_template\_value\_parameter. Each
+entry with the 
+tag \livetarg{chap:DWTAGtemplatevalueparameter}{DW\_TAG\_template\_value\_parameter}. 
+Each
 such entry may have a DW\_AT\_name attribute, whose value is
 a null\dash terminated string containing the name of the formal
 value parameter as it appears in the source program. The
@@ -1111,7 +1121,8 @@ generated artificially by the compiler.
 \label{chap:variantentries}
 
 A variant part of a structure is represented by a debugging
-information entry with the tag DW\_TAG\_variant\_part and is
+information entry with the 
+tag \livetarg{chap:DWTAGvariantpart}{DW\_TAG\_variant\_part} and is
 owned by the corresponding structure type entry.
 
 If the variant part has a discriminant, the discriminant is
@@ -1179,7 +1190,8 @@ Semantically, the condition is ‛true’ if the conditional
 variable's value matches any of the described constants,
 and the condition is ‛false’ otherwise.}
 
-The DW\_TAG\_condition debugging information entry describes a
+The \livetarg{chap:DWTAGcondition}{DW\_TAG\_condition} debugging information entry
+describes a
 logical condition that tests whether a given data item’s
 value matches one of a set of constant values. If a name
 has been given to the condition, the condition entry has a
@@ -1220,7 +1232,8 @@ type entry.}
 a fixed number of symbolic values.}
 
 An enumeration type is represented by a debugging information
-entry with the tag DW\_TAG\_enumeration\_type.
+entry with the tag 
+\livetarg{chap:DWTAGenumerationtype}{DW\_TAG\_enumeration\_type}.
 
 If a name has been given to the enumeration type in the source
 program, then the corresponding enumeration type entry has
@@ -1255,7 +1268,9 @@ is represented using DW\_TAG\_enumeration\_type in combination
 with DW\_AT\_enum\_class.}
 
 Each enumeration literal is represented by a debugging
-information entry with the tag DW\_TAG\_enumerator. Each
+information entry with the 
+tag \livetarg{chap:DWTAGenumerator}{DW\_TAG\_enumerator}. 
+Each
 such entry is a child of the enumeration type entry, and the
 enumerator entries appear in the same order as the declarations
 of the enumeration literals in the source program.
@@ -1347,7 +1362,8 @@ machine concept, not the class string as used in this document
 (except for the name attribute).
 
 A string type is represented by a debugging information entry
-with the tag DW\_TAG\_string\_type. If a name has been given to
+with the tag \livetarg{chap:DWTAGstringtype}{DW\_TAG\_string\_type}. 
+If a name has been given to
 the string type in the source program, then the corresponding
 string type entry has a DW\_AT\_name attribute whose value is
 a null\dash terminated string containing the string type name as
@@ -1379,7 +1395,8 @@ storage needed to hold a value of the string type.
 a group of values of ordinal type.}
 
 A set is represented by a debugging information entry with
-the tag DW\_TAG\_set\_type. If a name has been given to the
+the tag \livetarg{chap:DWTAGsettype}{DW\_TAG\_set\_type}. 
+If a name has been given to the
 set type, then the set type entry has a DW\_AT\_name attribute
 whose value is a null\dash terminated string containing the
 set type name as it appears in the source program.
@@ -1489,7 +1506,7 @@ structure is a unique type.}
 
 A debugging information entry representing the type of an
 object that is a pointer to a structure or class member has
-the tag DW\_TAG\_ptr\_to\_member\_type.
+the tag \livetarg{chap:DWTAGptrtomembertype}{DW\_TAG\_ptr\_to\_member\_type}.
 
 If the pointer to member type has a name, the pointer to
 member entry has a DW\_AT\_name attribute, whose value is a
@@ -1532,7 +1549,7 @@ whose address is being calculated.
 \begin{lstlisting}
     object.*mbr_ptr
 \end{lstlisting}
-
+% FIXME: object and mbr\_ptr should be distinguished from italic. See DW4.
 \textit{where mbr\_ptr has some pointer to member type, a debugger should:}
 
 \textit{1. Push the value of mbr\_ptr onto the DWARF expression stack.}
@@ -1549,7 +1566,9 @@ given in the type of mbr\_ptr.}
 files.}
 
 A file type is represented by a debugging information entry
-with the tag DW\_TAG\_file\_type. If the file type has a name,
+with the 
+\livetarg{chap:DWTAGfiletype}{tag DW\_TAG\_file\_type}. 
+If the file type has a name,
 the file type entry has a DW\_AT\_name attribute, whose value
 is a null\dash terminated string containing the type name as it
 appears in the source program.
@@ -1641,7 +1660,8 @@ see Appendix \refersec{app:aggregateexamples}.}
 
 A type named using a template alias is represented
 by a debugging information entry with the tag
-DW\-\_TAG\-\_template\-\_alias. The template alias entry has a
+\livetarg{chap:DWTAGtemplatealias}{DW\-\_TAG\-\_template\-\_alias}. 
+The template alias entry has a
 DW\-\_AT\-\_name attribute whose value is a null\dash terminated string
 containing the name of the template alias as it appears in
 the source program. The template alias entry also contains a

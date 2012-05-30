@@ -21,9 +21,11 @@ compilation unit using an imported unit entry.
 \label{chap:normalandpartialcompilationunitentries}
 
 A normal compilation unit is represented by a debugging
-information entry with the tag DW\_TAG\_compile\_unit. A partial
+information entry with the 
+tag \livetarg{chap:DWTAGcompileunit}{DW\_TAG\_compile\_unit}. A partial
 compilation unit is represented by a debugging information
-entry with the tag DW\_TAG\_partial\_unit.
+entry with the 
+tag \livetarg{chap:DWTAGpartialunit}{DW\_TAG\_partial\_unit}.
 
 In a simple normal compilation, a single compilation unit with
 the tag 
@@ -236,8 +238,9 @@ of that compilation unit is not valid.
 \subsection{Imported Unit Entries}
 \label{chap:importedunitentries}
 The place where a normal or partial unit is imported is
-represented by a debugging information entry with the tag
-DW\_TAG\_imported\_unit. An imported unit entry contains a
+represented by a debugging information entry with the 
+tag \livetarg{chap:DWTAGimportedunit}{DW\_TAG\_imported\_unit}. 
+An imported unit entry contains a
 DW\_AT\_import attribute whose value is a reference to the
 normal or partial compilation unit whose declarations logically
 belong at the place of the imported unit entry.
@@ -258,7 +261,7 @@ can be used to reference the type definition from debugging
 information entries in other compilation units and type units.
 
 A type unit is represented by a debugging information entry
-with the tag DW\-\_TAG\-\_type\-\_unit. 
+with the tag \livetarg{chap:DWTAGtypeunit}{DW\-\_TAG\-\_type\-\_unit}. 
 A type unit entry owns debugging
 information entries that represent the definition of a single
 type, plus additional debugging information entries that may
@@ -314,7 +317,9 @@ Fortran 90 module may also be represented by a module entry
 has no concept of a corresponding module body).}
 
 A module is represented by a debugging information entry
-with the tag DW\_TAG\_module.  Module entries may own other
+with the 
+tag \livetarg{chap:DWTAGmodule}{DW\_TAG\_module}.  
+Module entries may own other
 debugging information entries describing program entities
 whose declaration scopes end at the end of the module itself.
 
@@ -348,14 +353,19 @@ do not accidentally clash in the global namespace when an
 application is linked together.}
 
 A namespace is represented by a debugging information entry
-with the tag DW\-\_TAG\-\_namespace. A namespace extension is
-represented by a DW\-\_TAG\-\_namespace entry with a DW\-\_AT\-\_extension
+with the 
+tag \livetarg{chap:DWTAGnamespace}{DW\-\_TAG\-\_namespace}. 
+A namespace extension is
+represented by a DW\-\_TAG\-\_namespace entry 
+with a DW\-\_AT\-\_extension
 attribute referring to the previous extension, or if there
-is no previous extension, to the original DW\-\_TAG\-\_namespace
+is no previous extension, to the original 
+DW\-\_TAG\-\_namespace
 entry. A namespace extension entry does not need to duplicate
 information in a previous extension entry of the namespace
 nor need it duplicate information in the original namespace
-entry. (Thus, for a namespace with a name, a DW\_AT\_name
+entry. (Thus, for a namespace with a name, 
+a DW\_AT\_name
 attribute need only be attached directly to the original
 DW\-\_TAG\-\_namespace entry.)
 
@@ -420,8 +430,9 @@ given another name.
 }
 
 An imported declaration is represented by one or
-more debugging information entries with the tag
-DW\_TAG\_imported\_declaration. When an overloaded entity
+more debugging information entries with the 
+tag \livetarg{chap:DWTARGimporteddeclaration}{DW\_TAG\_imported\_declaration}. 
+When an overloaded entity
 is imported, there is one imported declaration entry for
 each overloading. Each imported declaration entry has a
 DW\_AT\_import attribute, whose value is a reference to the
@@ -477,7 +488,9 @@ within a separate module or namespace.
 }
 
 An imported module declaration is represented by a debugging
-information entry with the tag DW\-\_TAG\-\_imported\-\_module. An
+information entry with the 
+tag \livetarg{chap:DWTAGimportedmodule}{DW\-\_TAG\-\_imported\-\_module}.
+An
 imported module entry contains a DW\-\_AT\-\_import attribute
 whose value is a reference to the module or namespace entry
 containing the definition and/or declaration entries for
@@ -552,10 +565,10 @@ The following tags exist to describe debugging information entries for subroutin
 points:
 
 \begin{tabular}{lp{9.0cm}}
-DW\_TAG\_subprogram & A subroutine or function. \\
+\livetarg{chap:DWTAGsubprogram}{DW\_TAG\_subprogram} & A subroutine or function. \\
 DW\_TAG\_inlined\_subroutine & A particular inlined 
   instance of a subroutine or function. \\
-DW\_TAG\_entry\_point & An alternate entry point. \\
+\livetarg{chap:DWTAGentrypoint}{DW\_TAG\_entry\_point} & An alternate entry point. \\
 \end{tabular}
 
 \subsection{General Subroutine and Entry Point Information}
@@ -727,11 +740,12 @@ parameter entries, such as type entries.}
 
 The unspecified parameters of a variable parameter list are
 represented by a debugging information entry with the tag
-DW\_TAG\_unspecified\_parameters.
+\livetarg{chap:DWTAGunspecifiedparameters}{DW\_TAG\_unspecified\_parameters}.
 
 The entry for a subroutine that includes a Fortran common block
-has a child entry with the tag 
-DW\-\_TAG\-\_common\-\_inclusion. The
+has a child entry with the 
+tag \livetarg{chap:DWTAGcommoninclusion}{DW\-\_TAG\-\_common\-\_inclusion}. 
+The
 common inclusion entry has a 
 DW\-\_AT\-\_common\-\_reference attribute
 whose value is a reference to the debugging information entry
@@ -826,7 +840,8 @@ it may validly throw.}
 If a subroutine explicitly declares that it may throw
 an exception for one or more types, each such type is
 represented by a debugging information entry with the tag
-DW\-\_TAG\-\_thrown\-\_type.  Each such entry is a child of the entry
+\livetarg{chap:DWTAGthrowntype}{DW\-\_TAG\-\_thrown\-\_type}.  
+Each such entry is a child of the entry
 representing the subroutine that may throw this type. Each
 thrown type entry contains a DW\-\_AT\-\_type attribute, whose
 value is a reference to an entry describing the type of the
@@ -850,7 +865,9 @@ types. The exceptions are:
 \begin{enumerate}[1.]
 \item Each formal parameterized type declaration appearing in the
 template definition is represented by a debugging information
-entry with the tag DW\-\_TAG\-\_template\-\_type\-\_parameter. Each
+entry with the 
+tag \livetarg{chap:DWTAGtemplatetypeparameter}{DW\-\_TAG\-\_template\-\_type\-\_parameter}. 
+Each
 such entry has a DW\-\_AT\-\_name attribute, whose value is a
 null\dash terminated string containing the name of the formal
 type parameter as it appears in the source program. The
@@ -972,8 +989,9 @@ or not a given entry is abstract.
 \label{chap:concreteinlinedinstances}
 
 Each inline expansion of a subroutine is represented
-by a debugging information entry with the tag
-DW\_TAG\_inlined\_subroutine. Each such entry should be a direct
+by a debugging information entry with the 
+tag \livetarg{chap:DWTAGinlinedsubroutine}{DW\_TAG\_inlined\_subroutine}. 
+Each such entry should be a direct
 child of the entry that represents the scope within which
 the inlining occurs.
 
@@ -1281,7 +1299,8 @@ that may contain any number of declarations. In some languages
 blocks to any depth.}
 
 A lexical block is represented by a debugging information
-entry with the tag DW\-\_TAG\-\_lexical\-\_block.
+entry with the 
+tag \livetarg{chap:DWTAGlexicalblock}{DW\-\_TAG\-\_lexical\-\_block}.
 
 The lexical block entry may have either a DW\_AT\_low\_pc and
 DW\_AT\_high\_pc pair of attributes or a DW\_AT\_ranges attribute
@@ -1311,7 +1330,9 @@ statement is usually the target of one or more ``go to''
 statements.
 
 A label is represented by a debugging information entry with
-the tag DW\_TAG\_label. The entry for a label should be owned by
+the 
+tag \livetarg{chap:DWTAGlabel}{DW\_TAG\_label}. 
+The entry for a label should be owned by
 the debugging information entry representing the scope within
 which the name of the label could be legally referenced within
 the source program.
@@ -1334,7 +1355,7 @@ variable may be referenced, unqualified by the name of the
 record variable.}
 
 A with statement is represented by a debugging information
-entry with the tag DW\-\_TAG\-\_with\-\_stmt.
+entry with the tag \livetarg{chap:DWTAGwithstmt}{DW\-\_TAG\-\_with\-\_stmt}.
 
 A with statement entry may have either a DW\_AT\_low\_pc and
 DW\_AT\_high\_pc pair of attributes or a DW\_AT\_ranges attribute
@@ -1360,8 +1381,10 @@ A catch block designates the type of the exception that it
 can handle.}
 
 A try block is represented by a debugging information entry
-with the tag DW\_TAG\_try\_block.  A catch block is represented by
-a debugging information entry with the tag DW\_TAG\_catch\_block.
+with the tag \livetarg{chap:DWTAGtryblock}{DW\_TAG\_try\_block}.  
+A catch block is represented by
+a debugging information entry with 
+the tag \livetarg{chap:DWTAGcatchblock}{DW\_TAG\_catch\_block}.
 
 Both try and catch block entries may have either a
 DW\_AT\_low\_pc and DW\_AT\_high\_pc pair of attributes or a
