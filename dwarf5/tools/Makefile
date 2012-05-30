@@ -1,5 +1,8 @@
 # Makefile which tests the python internals for sanity.
 
+all:
+	echo 'make clean' and 'make test' do something.
+	echo default does nothing
 clean:
 	-rm -f *.pyc
 	-rm -f *.tmp

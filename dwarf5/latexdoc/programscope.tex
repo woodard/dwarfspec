@@ -29,17 +29,17 @@ tag \livetarg{chap:DWTAGpartialunit}{DW\_TAG\_partial\_unit}.
 
 In a simple normal compilation, a single compilation unit with
 the tag 
-DW\-\_TAG\-\_compile\-\_unit represents a complete object file
+\livelink{chap:DWTAGcompileunit}{DW\-\_TAG\-\_compile\-\_unit} represents a complete object file
 and the tag 
-DW\-\_TAG\-\_partial\-\_unit is not used. 
+\livelink{chap:DWTAGpartialunit}{DW\-\_TAG\-\_partial\-\_unit} is not used. 
 In a compilation
 employing the DWARF space compression and duplicate elimination
 techniques from 
 Appendix \refersec{app:usingcompilationunits}, 
 multiple compilation units using
 the tags 
-DW\-\_TAG\-\_compile\-\_unit and/or 
-DW\-\_TAG\-\_partial\-\_unit are
+\livelink{chap:DWTAGcompileunit}{DW\-\_TAG\-\_compile\-\_unit} and/or 
+\livelink{chap:DWTAGpartialunit}{DW\-\_TAG\-\_partial\-\_unit} are
 used to represent portions of an object file.
 
 \textit{A normal compilation unit typically represents the text and
@@ -356,18 +356,18 @@ A namespace is represented by a debugging information entry
 with the 
 tag \livetarg{chap:DWTAGnamespace}{DW\-\_TAG\-\_namespace}. 
 A namespace extension is
-represented by a DW\-\_TAG\-\_namespace entry 
+represented by a \livelink{chap:DWTAGnamespace}{DW\-\_TAG\-\_namespace} entry 
 with a DW\-\_AT\-\_extension
 attribute referring to the previous extension, or if there
 is no previous extension, to the original 
-DW\-\_TAG\-\_namespace
+\livelink{chap:DWTAGnamespace}{DW\-\_TAG\-\_namespace}
 entry. A namespace extension entry does not need to duplicate
 information in a previous extension entry of the namespace
 nor need it duplicate information in the original namespace
 entry. (Thus, for a namespace with a name, 
 a DW\_AT\_name
 attribute need only be attached directly to the original
-DW\-\_TAG\-\_namespace entry.)
+\livelink{chap:DWTAGnamespace}{DW\-\_TAG\-\_namespace} entry.)
 
 Namespace and namespace extension entries may own other
 debugging information entries describing program entities
@@ -566,7 +566,7 @@ points:
 
 \begin{tabular}{lp{9.0cm}}
 \livetarg{chap:DWTAGsubprogram}{DW\_TAG\_subprogram} & A subroutine or function. \\
-DW\_TAG\_inlined\_subroutine & A particular inlined 
+\livelink{chap:DWTAGinlinedsubroutine}{DW\_TAG\_inlined\_subroutine} & A particular inlined 
   instance of a subroutine or function. \\
 \livetarg{chap:DWTAGentrypoint}{DW\_TAG\_entry\_point} & An alternate entry point. \\
 \end{tabular}
@@ -578,7 +578,7 @@ It may also have a DW\_AT\_linkage\_name attribute as
 described in Section \refersec{chap:linkagenames}.
 
 If the name of the subroutine described by an entry with the
-tag DW\_TAG\_subprogram is visible outside of its containing
+tag \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram} is visible outside of its containing
 compilation unit, that entry has a DW\_AT\_external attribute,
 which is a flag.
 
@@ -856,7 +856,7 @@ values of different types. DWARF does not represent the generic
 template definition, but does represent each instantiation.}
 
 A template instantiation is represented by a debugging
-information entry with the tag DW\_TAG\_subprogram. With four
+information entry with the tag \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}. With four
 exceptions, such an entry will contain the same attributes and
 will have the same types of child entries as would an entry
 for a subroutine defined explicitly using the instantiation
@@ -898,7 +898,7 @@ artificially by the compiler for this instantiation.
 \subsection{Inlinable and Inlined Subroutines}
 A declaration or a definition of an inlinable subroutine
 is represented by a debugging information entry with the
-tag DW\_TAG\_subprogram. The entry for a subroutine that is
+tag \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}. The entry for a subroutine that is
 explicitly declared to be available for inline expansion or
 that was expanded inline implicitly by the compiler has a
 DW\_AT\_inline attribute whose value is an integer constant. The
@@ -924,7 +924,7 @@ DW\_INL\_declared\_inlined & Declared inline and inlined by the compiler \\
 \textit{In C++, a function or a constructor declared with
 constexpr is implicitly declared inline. The abstract inline
 instance (see below) is represented by a debugging information
-entry with the tag DW\_TAG\_subprogram. Such an entry has a
+entry with the tag \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}. Such an entry has a
 DW\_AT\_inline attribute whose value is DW\_INL\_inlined.}
 
 
@@ -1039,10 +1039,10 @@ the actual return value of the concrete inlined instance.}
 
 Any debugging information entry that is owned (either
 directly or indirectly) by a debugging information entry
-with the tag DW\_TAG\_inlined\_subroutine is referred to as a
-“concrete inlined instance entry.” Any entry that has
-the tag DW\_TAG\_inlined\_subroutine is known as a “concrete
-inlined instance root.” Any set of concrete inlined instance
+with the tag \livelink{chap:DWTAGinlinedsubroutine}{DW\_TAG\_inlined\_subroutine} is referred to as a
+``concrete inlined instance entry.'' Any entry that has
+the tag \livelink{chap:DWTAGinlinedsubroutine}{DW\_TAG\_inlined\_subroutine} 
+is known as a ``concrete inlined instance root.'' Any set of concrete inlined instance
 entries that are all children (either directly or indirectly)
 of some concrete inlined instance root, together with the root
 itself, is known as a ``concrete inlined instance tree.''
@@ -1085,12 +1085,12 @@ origin attribute.
 For each pair of entries that are associated via a
 DW\-\_AT\-\_abstract\-\_origin attribute, both members of the pair
 have the same tag. So, for example, an entry with the tag
-DW\-\_TAG\-\_variable can only be associated with another entry
-that also has the tag DW\-\_TAG\-\_variable. The only exception
+\livelink{chap:DWTAGvariable}{DW\-\_TAG\-\_variable} can only be associated with another entry
+that also has the tag \livelink{chap:DWTAGvariable}{DW\-\_TAG\-\_variable}. The only exception
 to this rule is that the root of a concrete instance tree
-(which must always have the tag DW\-\_TAG\-\_\-inlined\_subroutine)
+(which must always have the tag \livelink{chap:DWTAGinlinedsubroutine}{DW\-\_TAG\-\_\-inlined\_subroutine})
 can only be associated with the root of its associated abstract
-instance tree (which must have the tag DW\-\_TAG\-\_subprogram).
+instance tree (which must have the tag \livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram}).
 
 In general, the structure and content of any given concrete
 inlined instance tree will be closely analogous to the
@@ -1167,7 +1167,7 @@ subroutine are as follows:
 \item  The root entry for a concrete out\dash of\dash line instance
 of a given inlined subroutine has the same tag as does its
 associated (abstract) inlined subroutine entry (that is, tag
-DW\_TAG\_subprogram rather than DW\_TAG\_inlined\_subroutine).
+\livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram} rather than \livelink{chap:DWTAGinlinedsubroutine}{DW\_TAG\_inlined\_subroutine}).
 
 \item The root entry for a concrete out\dash of\dash line instance tree
 is normally owned by the same parent entry that also owns
@@ -1234,7 +1234,7 @@ adjust parameters and/or the result (if any) as appropriate
 to the combined calling and called execution contexts.}
 
 A trampoline is represented by a debugging information entry
-with the tag DW\-\_TAG\-\_subprogram or DW\-\_TAG\-\_inlined\-\_subroutine
+with the tag \livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram} or \livelink{chap:DWTAGinlinedsubroutine}{DW\-\_TAG\-\_inlined\-\_subroutine}
 that has a DW\_AT\_trampoline attribute. The value of that
 attribute indicates the target subroutine of the trampoline,
 that is, the subroutine to which the trampoline passes
@@ -1396,7 +1396,7 @@ machine instructions generated for the block (see Section
 Catch block entries have at least one child entry, an
 entry representing the type of exception accepted by
 that catch block. This child entry has one of the tags
-DW\_TAG\_formal\_parameter or DW\_TAG\_unspecified\_parameters,
+\livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter} or \livelink{chap:DWTAGunspecifiedparameters}{DW\_TAG\_unspecified\_parameters},
 and will have the same form as other parameter entries.
 
 The siblings immediately following a try block entry are its

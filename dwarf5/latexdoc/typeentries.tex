@@ -237,9 +237,9 @@ bits on the left are not stored in an instance of the type.
 
 For a data type with a non\dash decimal and non\dash binary scale factor,
 the fixed binary type entry has a DW\_AT\_small attribute which
-references a DW\_TAG\_constant entry. The scale factor value
+references a \livelink{chap:DWTAGconstant}{DW\_TAG\_constant} entry. The scale factor value
 is interpreted in accordance with the value defined by the
-DW\_TAG\_constant entry. The value represented is the product
+\livelink{chap:DWTAGconstant}{DW\_TAG\_constant} entry. The value represented is the product
 of the integer value in memory and the associated constant
 entry for the type.
 
@@ -314,13 +314,13 @@ describing a base type, a user-defined type or another type
 modifier.
 
 A modified type entry describing a pointer or reference
-type (using DW\_TAG\_pointer\_type, DW\_TAG\_reference\_type or
-DW\_TAG\_rvalue\_reference\_type) may have a DW\_AT\_address\_class
+type (using \livelink{chap:DWTAGpointertype}{DW\_TAG\_pointer\_type}, \livelink{chap:DWTAGreferencetype}{DW\_TAG\_reference\_type} or
+\livelink{chap:DWTAGrvaluereferencetype}{DW\_TAG\_rvalue\_reference\_type}) may have a DW\_AT\_address\_class
 attribute to describe how objects having the given pointer
 or reference type ought to be dereferenced.
 
 A modified type entry describing a shared qualified type
-(using DW\_TAG\_shared\_type) may have a DW\_AT\_count attribute
+(using \livelink{chap:DWTAGsharedtype}{DW\_TAG\_shared\_type}) may have a DW\_AT\_count attribute
 whose value is a constant expressing the blocksize of the
 type. If no count attribute is present, then the “infinite”
 blocksize is assumed.
@@ -360,21 +360,21 @@ declarations:}
 const unsigned char * volatile p;
     which represents a volatile pointer to a constant
     character. This is encoded in DWARF as:
-        DW_TAG_variable(p) -->
-            DW_TAG_volatile_type -->
-                DW_TAG_pointer_type -->
-                    DW_TAG_const_type -->
-                        DW_TAG_base_type(unsigned char)
+        \livelink{chap:DWTAGvariable}{DW_TAG_variable}(p) -->
+            \livelink{chap:DWTAGvolatiletype}{DW_TAG_volatile_type} -->
+                \livelink{chap:DWTAGpointertype}{DW_TAG_pointer_type} -->
+                    \livelink{chap:DWTAGconsttype}{DW_TAG_const_type} -->
+                        \livelink{chap:DWTAGbasetype}{DW_TAG_base_type}(unsigned char)
 
 volatile unsigned char * const restrict p;
     on the other hand, represents a restricted constant
     pointer to a volatile character. This is encoded as:
-        DW_TAG_variable(p) -->
-            DW_TAG_restrict_type -->
-                DW_TAG_const_type -->
-                    DW_TAG_pointer_type -->
-                        DW_TAG_volatile_type -->
-                            DW_TAG_base_type(unsigned char)
+        \livelink{chap:DWTAGvariable}{DW_TAG_variable}(p) -->
+            \livelink{chap:DWTAGrestricttype}{DW_TAG_restrict_type} -->
+                \livelink{chap:DWTAGconsttype}{DW_TAG_const_type} -->
+                    \livelink{chap:DWTAGpointertype}{DW_TAG_pointer_type} -->
+                        \livelink{chap:DWTAGvolatiletype}{DW_TAG_volatile_type} -->
+                            \livelink{chap:DWTAGbasetype}{DW_TAG_base_type}(unsigned char)
 
 \end{verbatim}
 
@@ -397,7 +397,7 @@ it does not contain a type attribute.
 terms of another type may be called a type alias, a subtype,
 a constrained type and other terms. A type name declared with
 no defining details may be termed an incomplete, forward
-or hidden type. While the DWARF DW\_TAG\_typedef entry was
+or hidden type. While the DWARF \livelink{chap:DWTAGtypedef}{DW\_TAG\_typedef} entry was
 originally inspired by the like named construct in C and C++,
 it is broadly suitable for similar constructs (by whatever
 source syntax) in other languages.}
@@ -463,8 +463,8 @@ the number of array elements by the size of each element.}
 
 
 Each array dimension is described by a debugging information
-entry with either the tag DW\_TAG\_subrange\_type or the tag
-DW\_TAG\_enumeration\_type. These entries are children of the
+entry with either the tag \livelink{chap:DWTAGsubrangetype}{DW\_TAG\_subrange\_type} or the tag
+\livelink{chap:DWTAGenumerationtype}{DW\_TAG\_enumeration\_type}. These entries are children of the
 array type entry and are ordered to reflect the appearance of
 the dimensions in the source program (i.e., leftmost dimension
 first, next to leftmost second, and so on).
@@ -993,7 +993,7 @@ as well as specify the size of the data member) }
 \label{chap:memberfunctionentries}
 
 A member function is represented by a debugging information
-entry with the tag DW\_TAG\_subprogram. The member function entry
+entry with the tag \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}. The member function entry
 may contain the same attributes and follows the same rules
 as non\dash member global subroutine entries 
 (see Section \refersec{chap:subroutineandentrypointentries}).
@@ -1062,8 +1062,8 @@ constant values. DWARF does not represent the generic template
 definition, but does represent each instantiation.}
 
 A class template instantiation is represented by a
-debugging information entry with the tag DW\_TAG\_class\_type,
-DW\_TAG\_structure\_type or DW\_TAG\_union\_type. With five
+debugging information entry with the tag \livelink{chap:DWTAGclasstype}{DW\_TAG\_class\_type},
+\livelink{chap:DWTAGstructuretype}{DW\_TAG\_structure\_type} or \livelink{chap:DWTAGuniontype}{DW\_TAG\_union\_type}. With five
 exceptions, such an entry will contain the same attributes
 and have the same types of child entries as would an entry
 for a class type defined explicitly using the instantiation
@@ -1072,7 +1072,7 @@ types and values. The exceptions are:
 \begin{enumerate}[1.]
 \item Each formal parameterized type declaration appearing in the
 template definition is represented by a debugging information
-entry with the tag DW\_TAG\_template\_type\_parameter. Each
+entry with the tag \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}. Each
 such entry may have a DW\_AT\_name attribute, whose value is
 a null\dash terminated string containing the name of the formal
 type parameter as it appears in the source program. The
@@ -1201,16 +1201,16 @@ DW\_AT\_name attribute whose value is a null\dash terminated string
 giving the condition name as it appears in the source program.
 
 The condition entry's parent entry describes the conditional
-variable; normally this will be a DW\_TAG\_variable,
-DW\_TAG\_member or DW\_TAG\_formal\_parameter entry. If the parent
+variable; normally this will be a \livelink{chap:DWTAGvariable}{DW\_TAG\_variable},
+\livelink{chap:DWTAGmember}{DW\_TAG\_member} or \livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter} entry. If the parent
 entry has an array type, the condition can test any individual
 element, but not the array as a whole. The condition entry
 implicitly specifies a “comparison type” that is the
 type of an array element if the parent has an array type;
 otherwise it is the type of the parent entry.
 
-The condition entry owns DW\_TAG\_constant and/or
-DW\_TAG\_subrange\_type entries that describe the constant
+The condition entry owns \livelink{chap:DWTAGconstant}{DW\_TAG\_constant} and/or
+\livelink{chap:DWTAGsubrangetype}{DW\_TAG\_subrange\_type} entries that describe the constant
 values associated with the condition. If any child entry has
 a DW\_AT\_type attribute, that attribute should describe a type
 compatible with the comparison type (according to the source
@@ -1266,7 +1266,7 @@ required.
 integral type determined by the compiler from the properties of
 the enumeration literal values. A C++ type declaration written
 using enum class declares a strongly typed enumeration and
-is represented using DW\_TAG\_enumeration\_type in combination
+is represented using \livelink{chap:DWTAGenumerationtype}{DW\_TAG\_enumeration\_type} in combination
 with DW\_AT\_enum\_class.}
 
 Each enumeration literal is represented by a debugging
@@ -1343,13 +1343,13 @@ interpretations:
 \begin{enumerate}[1.]
 \item The formal parameters of a parameter list (that have a
 specific type) are represented by a debugging information entry
-with the tag DW\_TAG\_formal\_parameter. Each formal parameter
+with the tag \livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter}. Each formal parameter
 entry has a DW\_AT\_type attribute that refers to the type of
 the formal parameter.
 
 \item The unspecified parameters of a variable parameter list
 are represented by a debugging information entry with the
-tag DW\_TAG\_unspecified\_parameters.
+tag \livelink{chap:DWTAGunspecifiedparameters}{DW\_TAG\_unspecified\_parameters}.
 \end{enumerate}
 
 
@@ -1573,7 +1573,7 @@ files.}
 
 A file type is represented by a debugging information entry
 with the 
-\livetarg{chap:DWTAGfiletype}{tag DW\_TAG\_file\_type}. 
+\livetarg{chap:DWTAGfiletype}{DW\_TAG\_file\_type}. 
 If the file type has a name,
 the file type entry has a DW\_AT\_name attribute, whose value
 is a null\dash terminated string containing the type name as it
@@ -1679,7 +1679,7 @@ the following child entries:
 \item Each formal parameterized type declaration appearing
 in the template alias declaration is represented
 by a debugging information entry with the tag
-DW\-\_TAG\-\_template\-\_type\-\_parameter. Each such entry may have
+\livelink{chap:DWTAGtemplatetypeparameter}{DW\-\_TAG\-\_template\-\_type\-\_parameter}. Each such entry may have
 a DW\_AT\_name attribute, whose value is a null\dash terminated
 string containing the name of the formal type parameter as it
 appears in the source program. The template type parameter
@@ -1689,7 +1689,7 @@ type by which the formal is replaced for this instantiation.
 \item Each formal parameterized value declaration
 appearing in the template alias declaration is
 represented by a debugging information entry with the tag
-DW\-\_TAG\-\_template\-\_value\-\_parameter. Each such entry may have
+\livelink{chap:DWTAGtemplatevalueparameter}{DW\-\_TAG\-\_template\-\_value\-\_parameter}. Each such entry may have
 a DW\-\_AT\-\_name attribute, whose value is a null\dash terminated
 string containing the name of the formal value parameter
 as it appears in the source program. The template value

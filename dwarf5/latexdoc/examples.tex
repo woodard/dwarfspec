@@ -105,7 +105,7 @@ Abbreviation Table: .debug\_abbrev
 \begin{framed}
 \scriptsize
 \begin{alltt}
-DW\_TAG\_compile\_unit
+\livelink{chap:DWTAGcompileunit}{DW\_TAG\_compile\_unit}
 DW\_CHILDREN\_yes
 DW\_AT\_name       DW\_FORM\_string
 DW\_AT\_producer   DW\_FORM\_string
@@ -118,7 +118,7 @@ DW\_AT\_stmt\_list  DW\_FORM\_indirect
 \vspace{0.01cm}
 \hrule
 2
-DW\_TAG\_base\_type
+\livelink{chap:DWTAGbasetype}{DW\_TAG\_base\_type}
 DW\_CHILDREN\_no
 DW\_AT\_name       DW\_FORM\_string
 DW\_AT\_encoding   DW\_FORM\_data1
@@ -127,14 +127,14 @@ DW\_AT\_byte\_size  DW\_FORM\_data1
 \vspace{0.01cm}
 \hrule
 3
-DW\_TAG\_pointer\_type
+\livelink{chap:DWTAGpointertype}{DW\_TAG\_pointer\_type}
 DW\_CHILDREN\_no
 DW\_AT\_type       DW\_FORM\_ref4
 0
 \vspace{0.01cm}
 \hrule
 4
-DW\_TAG\_typedef
+\livelink{chap:DWTAGtypedef}{DW\_TAG\_typedef}
 DW\_CHILDREN\_no
 DW\_AT\_name      DW\_FORM\_string
 DW\_AT\_type      DW\_FORM\_ref\_addr
@@ -285,7 +285,7 @@ Section \refersec{app:fortran90exampledwarfdescription}.
 \begin{alltt}
 ! Description for type of 'ap'
 
-1\$: \addtoindex{DW\_TAG\_array\_type}
+1\$: \livelink{chap:DWTAGarraytype}{DW\_TAG\_array\_type}
         ! No name, default (Fortran) ordering, default stride
         DW\_AT\_type(reference to REAL)
         DW\_AT\_associated(expression= ! Test 'ptr\_assoc' flag
@@ -300,7 +300,7 @@ Section \refersec{app:fortran90exampledwarfdescription}.
             DW\_OP\_lit<n> ! where n == offset(base)
             DW\_OP\_plus
             DW\_OP\_deref) ! Type of index of array 'ap'
-2\$:     \addtoindex{DW\_TAG\_subrange\_type}
+2\$:     \livelink{chap:DWTAGsubrangetype}{DW\_TAG\_subrange\_type}
         ! No name, default stride
         DW\_AT\_type(reference to INTEGER)
         DW\_AT\_lower\_bound(expression=
@@ -316,7 +316,7 @@ Section \refersec{app:fortran90exampledwarfdescription}.
                          !  offset(desc, dims) +
                          !  offset(dims\_str, upper\_bound)
             DW\_OP\_plus
-            \addtoindex{DW\_OP\_deref})
+            DW\_OP\_deref)
         !  Note: for the m'th dimension, the second operator becomes
         !  DW\_OP\_lit<x> where
         !  x == offset(desc, dims) +
@@ -325,19 +325,19 @@ Section \refersec{app:fortran90exampledwarfdescription}.
         !  That is, the expression does not get longer for each
         !  successive dimension (other than to express the larger
         !  offsets involved).
-3\$: DW\_TAG\_structure\_type
+3\$: \livelink{chap:DWTAGstructuretype}{DW\_TAG\_structure\_type}
         DW\_AT\_name("array\_ptr")
         DW\_AT\_byte\_size(constant sizeof(REAL) + sizeof(desc<1>))
-4\$:     DW\_TAG\_member
+4\$:     \livelink{chap:DWTAGmember}{DW\_TAG\_member}
             DW\_AT\_name("myvar")
             DW\_AT\_type(reference to REAL)
             DW\_AT\_data\_member\_location(constant 0)
-5\$:     DW\_TAG\_member
+5\$:     \livelink{chap:DWTAGmember}{DW\_TAG\_member}
             DW\_AT\_name("ap");
             DW\_AT\_type(reference to 1\$)
             DW\_AT\_data\_member\_location(constant sizeof(REAL))
 
-6\$: DW\_TAG\_array\_type
+6\$: \livelink{chap:DWTAGarraytype}{DW\_TAG\_array\_type}
         ! No name, default (Fortran) ordering, default stride
         DW\_AT\_type(reference to 3\$)
         DW\_AT\_allocated(expression=
@@ -355,7 +355,7 @@ Section \refersec{app:fortran90exampledwarfdescription}.
             DW\_OP\_plus
             DW\_OP\_deref)
 
-7\$: DW\_TAG\_subrange\_type
+7\$: \livelink{chap:DWTAGsubrangetype}{DW\_TAG\_subrange\_type}
         ! No name, default stride
         DW\_AT\_type(reference to INTEGER)
         DW\_AT\_lower\_bound(expression=
@@ -369,7 +369,7 @@ Section \refersec{app:fortran90exampledwarfdescription}.
             DW\_OP\_plus
             DW\_OP\_deref)
 
-8\$: DW\_TAG\_variable
+8\$: \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
         DW\_AT\_name("arrays")
         DW\_AT\_type(reference to 6\$)
         DW\_AT\_location(expression=
@@ -554,49 +554,49 @@ of this example and therefore not shown.
 \label{app:adaexampledwarfdescription}
 
 \begin{alltt}
-11\$: DW\_TAG\_variable
+11\$: \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
         DW\_AT\_name("M")
         DW\_AT\_type(reference to INTEGER)
-12\$: DW\_TAG\_array\_type
+12\$: \livelink{chap:DWTAGarraytype}{DW\_TAG\_array\_type}
         ! No name, default (Ada) order, default stride
         DW\_AT\_type(reference to INTEGER)
-13\$:    DW\_TAG\_subrange\_type
+13\$:    \livelink{chap:DWTAGsubrangetype}{DW\_TAG\_subrange\_type}
             DW\_AT\_type(reference to INTEGER)
             DW\_AT\_lower\_bound(constant 1)
             DW\_AT\_upper\_bound(reference to variable M at 11\$)
-14\$: DW\_TAG\_variable
+14\$: \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
         DW\_AT\_name("VEC1")
         DW\_AT\_type(reference to array type at 12\$)
     . . .
-21\$: DW\_TAG\_subrange\_type
+21\$: \livelink{chap:DWTAGsubrangetype}{DW\_TAG\_subrange\_type}
         DW\_AT\_name("TEENY")
         DW\_AT\_type(reference to INTEGER)
         DW\_AT\_lower\_bound(constant 1)
         DW\_AT\_upper\_bound(constant 100)
 
       . . .
-26\$: DW\_TAG\_structure\_type
+26\$: \livelink{chap:DWTAGstructuretype}{DW\_TAG\_structure\_type}
         DW\_AT\_name("REC2")
-27\$:   DW\_TAG\_member
+27\$:   \livelink{chap:DWTAGmember}{DW\_TAG\_member}
             DW\_AT\_name("N")
             DW\_AT\_type(reference to subtype TEENY at 21\$)
             DW\_AT\_data\_member\_location(constant 0)
-28\$:   DW\_TAG\_array\_type
+28\$:   \livelink{chap:DWTAGarraytype}{DW\_TAG\_array\_type}
             ! No name, default (Ada) order, default stride
             ! Default data location
             DW\_AT\_TYPE(reference to INTEGER)
-29\$:       DW\_TAG\_subrange\_type
+29\$:       \livelink{chap:DWTAGsubrangetype}{DW\_TAG\_subrange\_type}
                 DW\_AT\_type(reference to subrange TEENY at 21\$)
                 DW\_AT\_lower\_bound(constant 1)
                 DW\_AT\_upper\_bound(reference to member N at 27\$)
-30\$:   DW\_TAG\_member
+30\$:   \livelink{chap:DWTAGmember}{DW\_TAG\_member}
             DW\_AT\_name("VEC2")
             DW\_AT\_type(reference to array “subtype” at 28\$)
             DW\_AT\_data\_member\_location(machine=
                 DW\_OP\_lit<n> ! where n == offset(REC2, VEC2)
                 DW\_OP\_plus)
       . . .
-41\$: DW\_TAG\_variable
+41\$: \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
         DW\_AT\_name("OBJ2B")
         DW\_AT\_type(reference to REC2 at 26\$)
         DW\_AT\_location(...as appropriate...)
@@ -632,7 +632,7 @@ The DWARF representation in
 Section \refersec{app:packedrecordexampledwarfdescription} 
 is
 appropriate. 
-DW\_TAG\_packed\_type entries could be added to
+\livelink{chap:DWTAGpackedtype}{DW\_TAG\_packed\_type} entries could be added to
 better represent the source, but these do not otherwise affect
 the example and are omitted for clarity. Note that this same
 representation applies to both typical big\dash \ and 
@@ -645,21 +645,21 @@ Section \refersec{chap:datamemberentries}.
 \label{app:packedrecordexampledwarfdescription}
 \begin{alltt}
 
-21\$: DW\_TAG\_structure\_type ! anonymous type for F2
-        DW\_TAG\_member
+21\$: \livelink{chap:DWTAGstructuretype}{DW\_TAG\_structure\_type} ! anonymous type for F2
+        \livelink{chap:DWTAGmember}{DW\_TAG\_member}
             DW\_AT\_name("F3")
             DW\_AT\_type(reference to 11\$)
-22\$: DW\_TAG\_array\_type ! anonymous type for F4
+22\$: \livelink{chap:DWTAGarraytype}{DW\_TAG\_array\_type} ! anonymous type for F4
         DW\_AT\_type(reference to 20\$)
-        DW\_TAG\_subrange\_type
+        \livelink{chap:DWTAGsubrangetype}{DW\_TAG\_subrange\_type}
             DW\_AT\_type(reference to 11\$)
             DW\_AT\_lower\_bound(0)
             DW\_AT\_upper\_bound(1)
         DW\_AT\_bit\_stride(2)
         DW\_AT\_bit\_size(4)
-23\$: DW\_TAG\_structure\_type ! anonymous type for V
+23\$: \livelink{chap:DWTAGstructuretype}{DW\_TAG\_structure\_type} ! anonymous type for V
         DW\_AT\_bit\_size(39)
-        DW\_TAG\_member
+        \livelink{chap:DWTAGmember}{DW\_TAG\_member}
             DW\_AT\_name("F1")
             DW\_AT\_type(reference to 10\$)
             DW\_AT\_data\_bit\_offset(0)! may be omitted
@@ -679,7 +679,7 @@ Section \refersec{chap:datamemberentries}.
             DW\_AT\_type(reference to 20\$) ! type T
             DW\_AT\_data\_bit\_offset(37)
             DW\_AT\_bit\_size(2) ! may be omitted
-     DW\_TAG\_variable
+     \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
         DW\_AT\_name("V")
         DW\_AT\_type(reference to 23\$)
         DW\_AT\_location(...)
@@ -742,76 +742,76 @@ is appropriate.
 \label{app:namespaceexampledwarfdescription}
 \begin{alltt}
 
-1\$:  DW\_TAG\_base\_type
+1\$:  \livelink{chap:DWTAGbasetype}{DW\_TAG\_base\_type}
         DW\_AT\_name("int")
         ...
-2\$:  DW\_TAG\_base\_type
+2\$:  \livelink{chap:DWTAGbasetype}{DW\_TAG\_base\_type}
         DW\_AT\_name("float")
         ...
-6\$:  DW\_TAG\_namespace
+6\$:  \livelink{chap:DWTAGnamespace}{DW\_TAG\_namespace}
         ! no DW\_AT\_name attribute
 7\$:
-        DW\_TAG\_variable
+        \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
             DW\_AT\_name("i")
             DW\_AT\_type(reference to 1\$)
             DW\_AT\_location ...
             ...
-10\$: DW\_TAG\_namespace
+10\$: \livelink{chap:DWTAGnamespace}{DW\_TAG\_namespace}
         DW\_AT\_name("A")
-20\$:    DW\_TAG\_namespace
+20\$:    \livelink{chap:DWTAGnamespace}{DW\_TAG\_namespace}
             DW\_AT\_name("B")
-30\$:        DW\_TAG\_variable
+30\$:        \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
                 DW\_AT\_name("j")
                 DW\_AT\_type(reference to 1\$)
                 DW\_AT\_location ...
                 ...
-34\$:        DW\_TAG\_subprogram
+34\$:        \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}
                 DW\_AT\_name("myfunc")
                 DW\_AT\_type(reference to 1\$)
                 ...
-36\$:        DW\_TAG\_subprogram
+36\$:        \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}
                 DW\_AT\_name("myfunc")
                 DW\_AT\_type(reference to 2\$)
                 ...
-38\$:        DW\_TAG\_subprogram
+38\$:        \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}
                 DW\_AT\_name("myfunc2")
                 DW\_AT\_low\_pc ...
                 DW\_AT\_high\_pc ...
-                \addtoindex{DW\_AT\_type}(reference to 1\$)
+                DW\_AT\_type(reference to 1\$)
                 ...
 
-40\$: DW\_TAG\_namespace
+40\$: \livelink{chap:DWTAGnamespace}{DW\_TAG\_namespace}
         DW\_AT\_name("Y")
-        DW\_TAG\_imported\_declaration    ! (1) using-declaration
+        \livelink{chap:DWTAGimporteddeclaration}{DW\_TAG\_imported\_declaration}    ! (1) using-declaration
             DW\_AT\_import(reference to 30\$)
-        DW\_TAG\_variable
+        \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
             DW\_AT\_name("foo")
             DW\_AT\_type(reference to 1\$)
             DW\_AT\_location ...
             ...
-     DW\_TAG\_imported\_declaration       ! (2) using declaration
+     \livelink{chap:DWTAGimporteddeclaration}{DW\_TAG\_imported\_declaration}       ! (2) using declaration
         DW\_AT\_import(reference to 30\$)
-        DW\_TAG\_imported\_declaration    ! (3) namespace alias
+        \livelink{chap:DWTAGimporteddeclaration}{DW\_TAG\_imported\_declaration}    ! (3) namespace alias
             DW\_AT\_name("Foo")
             DW\_AT\_import(reference to 20\$)
-        DW\_TAG\_imported\_declaration    ! (4) using declaration
+        \livelink{chap:DWTAGimporteddeclaration}{DW\_TAG\_imported\_declaration}    ! (4) using declaration
             DW\_AT\_import(reference to 34\$) ! - part 1
-        DW\_TAG\_imported\_declaration    ! (4) using declaration
+        \livelink{chap:DWTAGimporteddeclaration}{DW\_TAG\_imported\_declaration}    ! (4) using declaration
             DW\_AT\_import(reference to 36\$) !  - part 2
-        DW\_TAG\_imported\_module         ! (5) using directive
+        \livelink{chap:DWTAGimportedmodule}{DW\_TAG\_imported\_module}         ! (5) using directive
             DW\_AT\_import(reference to 20\$)
-        DW\_TAG\_namespace
+        \livelink{chap:DWTAGnamespace}{DW\_TAG\_namespace}
             DW\_AT\_extension(reference to 10\$)
-            DW\_TAG\_namespace
+            \livelink{chap:DWTAGnamespace}{DW\_TAG\_namespace}
                 DW\_AT\_extension(reference to 20\$)
-                DW\_TAG\_imported\_module ! (6) using directive
+                \livelink{chap:DWTAGimportedmodule}{DW\_TAG\_imported\_module} ! (6) using directive
                     DW\_AT\_import(reference to 40\$)
-                DW\_TAG\_variable
+                \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
                     DW\_AT\_name("k")
                     DW\_AT\_type(reference to 1\$)
                     DW\_AT\_location ...
                     ...
-60\$: DW\_TAG\_subprogram
+60\$: \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}
         DW\_AT\_specification(reference to 34\$)
         DW\_AT\_low\_pc ...
         DW\_AT\_high\_pc ...
@@ -848,26 +848,26 @@ is appropriate.
 
 
 \begin{alltt}
-1\$: DW\_TAG\_unspecified\_type
+1\$: \livelink{chap:DWTAGunspecifiedtype}{DW\_TAG\_unspecified\_type}
         DW\_AT\_name("void")
                 ...
-2\$ DW\_TAG\_base\_type
+2\$ \livelink{chap:DWTAGbasetype}{DW\_TAG\_base\_type}
         DW\_AT\_name("int")
         ...
-3\$: DW\_TAG\_class\_type
+3\$: \livelink{chap:DWTAGclasstype}{DW\_TAG\_class\_type}
         DW\_AT\_name("A")
         ...
-4\$:    DW\_TAG\_pointer\_type
+4\$:    \livelink{chap:DWTAGpointertype}{DW\_TAG\_pointer\_type}
             DW\_AT\_type(reference to 3\$)
             ...
-5\$:    DW\_TAG\_const\_type
+5\$:    \livelink{chap:DWTAGconsttype}{DW\_TAG\_const\_type}
             DW\_AT\_type(reference to 3\$)
             ...
-6\$:    DW\_TAG\_pointer\_type
+6\$:    \livelink{chap:DWTAGpointertype}{DW\_TAG\_pointer\_type}
             DW\_AT\_type(reference to 5\$)
             ...
 
-7\$:    DW\_TAG\_subprogram
+7\$:    \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}
             DW\_AT\_declaration
             DW\_AT\_name("func1")
             DW\_AT\_type(reference to 1\$)
@@ -875,7 +875,7 @@ is appropriate.
                 ! References a formal parameter in this 
                 ! member function
             ...
-8\$:        DW\_TAG\_formal\_parameter
+8\$:        \livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter}
                 DW\_AT\_artificial(true)
                 DW\_AT\_name("this")
                 DW\_AT\_type(reference to 4\$)
@@ -884,11 +884,11 @@ is appropriate.
                     ! or volatile
                 DW\_AT\_location ...
                 ...
-9\$:        DW\_TAG\_formal\_parameter
+9\$:        \livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter}
                 DW\_AT\_name(x1)
                 DW\_AT\_type(reference to 2\$)
                 ...
-10\$:    DW\_TAG\_subprogram
+10\$:    \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}
              DW\_AT\_declaration
              DW\_AT\_name("func2")
              DW\_AT\_type(reference to 1\$)
@@ -896,7 +896,7 @@ is appropriate.
              ! References a formal parameter in this 
              ! member function
              ...
-11\$:        DW\_TAG\_formal\_parameter
+11\$:        \livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter}
                  DW\_AT\_artificial(true)
                  DW\_AT\_name("this")
                  DW\_AT\_type(reference to 6\$)
@@ -904,14 +904,14 @@ is appropriate.
                  !     func2 marked as const
                  DW\_AT\_location ...
                  ...
-12\$:    DW\_TAG\_subprogram
+12\$:    \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}
              DW\_AT\_declaration
              DW\_AT\_name("func3")
              DW\_AT\_type(reference to 1\$)
              ...
                  ! No object pointer reference formal parameter
                  ! implies func3 is static
-13\$:        DW\_TAG\_formal\_parameter
+13\$:        \livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter}
                  DW\_AT\_name(x3)
                  DW\_AT\_type(reference to 2\$)
                  ...
@@ -1345,17 +1345,17 @@ Section \refersec{app:inliningexample1concreteinstance}.
     ! Abstract instance for OUTER
     !
 OUTER.AI.1.1:
-    DW\_TAG\_subprogram
+    \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}
         DW\_AT\_name("OUTER")
         DW\_AT\_inline(DW\_INL\_declared\_inlined)
         ! No low/high PCs
 OUTER.AI.1.2:
-        DW\_TAG\_formal\_parameter
+        \livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter}
             DW\_AT\_name("OUTER\_FORMAL")
             DW\_AT\_type(reference to integer)
             ! No location
 OUTER.AI.1.3:
-        DW\_TAG\_variable
+        \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
             DW\_AT\_name("OUTER\_LOCAL")
             DW\_AT\_type(reference to integer)
             ! No location
@@ -1363,23 +1363,23 @@ OUTER.AI.1.3:
         ! Abstract instance for INNER
         !
 INNER.AI.1.1:
-        DW\_TAG\_subprogram
+        \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}
             DW\_AT\_name("INNER")
             DW\_AT\_inline(DW\_INL\_declared\_inlined)
             ! No low/high PCs
 INNER.AI.1.2:
-            DW\_TAG\_formal\_parameter
+            \livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter}
                 DW\_AT\_name("INNER\_FORMAL")
                 DW\_AT\_type(reference to integer)
                 ! No location
 INNER.AI.1.3:
-            DW\_TAG\_variable
+            \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
                 DW\_AT\_name("INNER\_LOCAL")
                 DW\_AT\_type(reference to integer)
                 ! No location
             ...
             0
-        ! No DW\_TAG\_inlined\_subroutine (concrete instance)
+        ! No \livelink{chap:DWTAGinlinedsubroutine}{DW\_TAG\_inlined\_subroutine} (concrete instance)
         ! for INNER corresponding to calls of INNER
         ...
         0
@@ -1392,40 +1392,40 @@ INNER.AI.1.3:
 ! Concrete instance for call "OUTER(7)"
 !
 OUTER.CI.1.1:
-    DW\_TAG\_inlined\_subroutine
+    \livelink{chap:DWTAGinlinedsubroutine}{DW\_TAG\_inlined\_subroutine}
         ! No name
         DW\_AT\_abstract\_origin(reference to OUTER.AI.1.1)
         DW\_AT\_low\_pc(...)
         DW\_AT\_high\_pc(...)
 OUTER.CI.1.2:
-        DW\_TAG\_formal\_parameter
+        \livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter}
             ! No name
             DW\_AT\_abstract\_origin(reference to OUTER.AI.1.2)
             DW\_AT\_const\_value(7)
 OUTER.CI.1.3:
-        DW\_TAG\_variable
+        \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
             ! No name
             DW\_AT\_abstract\_origin(reference to OUTER.AI.1.3)
             DW\_AT\_location(...)
         !
-        ! No DW\_TAG\_subprogram (abstract instance) for INNER
+        ! No \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram} (abstract instance) for INNER
         !
         ! Concrete instance for call INNER(OUTER\_LOCAL)
         !
 INNER.CI.1.1:
-        DW\_TAG\_inlined\_subroutine
+        \livelink{chap:DWTAGinlinedsubroutine}{DW\_TAG\_inlined\_subroutine}
             ! No name
             DW\_AT\_abstract\_origin(reference to INNER.AI.1.1)
             DW\_AT\_low\_pc(...)
             DW\_AT\_high\_pc(...)
             DW\_AT\_static\_link(...)
 INNER.CI.1.2:
-            DW\_TAG\_formal\_parameter
+            \livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter}
                 ! No name
                 DW\_AT\_abstract\_origin(reference to INNER.AI.1.2)
                 DW\_AT\_location(...)
 INNER.CI.1.3:
-             DW\_TAG\_variable
+             \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
                 ! No name
                 DW\_AT\_abstract\_origin(reference to INNER.AI.1.3)
                 DW\_AT\_location(...)
@@ -1484,17 +1484,17 @@ instance of OUTER that contains the calls.
     ! Abstract instance for OUTER
     !
 OUTER.AI.2.1:
-    DW\_TAG\_subprogram
+    \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}
         DW\_AT\_name("OUTER")
         DW\_AT\_inline(DW\_INL\_declared\_inlined)
         ! No low/high PCs
 OUTER.AI.2.2:
-        DW\_TAG\_formal\_parameter
+        \livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter}
             DW\_AT\_name("OUTER\_FORMAL")
             DW\_AT\_type(reference to integer)
             ! No location
 OUTER.AI.2.3:
-        DW\_TAG\_variable
+        \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
             DW\_AT\_name("OUTER\_LOCAL")
             DW\_AT\_type(reference to integer)
             ! No location
@@ -1502,17 +1502,17 @@ OUTER.AI.2.3:
         ! Nested out-of-line INNER subprogram
         !
 OUTER.AI.2.4:
-        DW\_TAG\_subprogram
+        \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}
             DW\_AT\_name("INNER")
             ! No DW\_AT\_inline
             ! No low/high PCs, frame\_base, etc.
 OUTER.AI.2.5:
-            DW\_TAG\_formal\_parameter
+            \livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter}
                 DW\_AT\_name("INNER\_FORMAL")
                 DW\_AT\_type(reference to integer)
                 ! No location
 OUTER.AI.2.6:
-            DW\_TAG\_variable
+            \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
                 DW\_AT\_name("INNER\_LOCAL")
                 DW\_AT\_type(reference to integer)
                 ! No location
@@ -1529,18 +1529,18 @@ OUTER.AI.2.6:
     ! Concrete instance for call "OUTER(7)"
     !
 OUTER.CI.2.1:
-    DW\_TAG\_inlined\_subroutine
+    \livelink{chap:DWTAGinlinedsubroutine}{DW\_TAG\_inlined\_subroutine}
         ! No name
         DW\_AT\_abstract\_origin(reference to OUTER.AI.2.1)
         DW\_AT\_low\_pc(...)
         DW\_AT\_high\_pc(...)
 OUTER.CI.2.2:
-        DW\_TAG\_formal\_parameter
+        \livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter}
             ! No name
             DW\_AT\_abstract\_origin(reference to OUTER.AI.2.2)
             DW\_AT\_location(...)
 OUTER.CI.2.3:
-        DW\_TAG\_variable
+        \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
             ! No name
             DW\_AT\_abstract\_origin(reference to OUTER.AI.2.3)
             DW\_AT\_location(...)
@@ -1548,7 +1548,7 @@ OUTER.CI.2.3:
         ! Nested out-of-line INNER subprogram
         !
 OUTER.CI.2.4:
-        DW\_TAG\_subprogram
+        \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}
             ! No name
             DW\_AT\_abstract\_origin(reference to OUTER.AI.2.4)
             DW\_AT\_low\_pc(...)
@@ -1556,12 +1556,12 @@ OUTER.CI.2.4:
             DW\_AT\_frame\_base(...)
             DW\_AT\_static\_link(...)
 OUTER.CI.2.5:
-            DW\_TAG\_formal\_parameter
+            \livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter}
                 ! No name
                 DW\_AT\_abstract\_origin(reference to OUTER.AI.2.5)
                 DW\_AT\_location(...)
 OUTER.CI.2.6:
-            DW\_TAG\_variable
+            \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
                 ! No name
                 DW\_AT\_abstract\_origin(reference to OUTER.AT.2.6)
                 DW\_AT\_location(...)
@@ -1634,17 +1634,17 @@ for accessing purposes.)
     ! Abstract instance for OUTER
     !
 OUTER.AI.3.1:
-    DW\_TAG\_subprogram
+    \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}
         DW\_AT\_name("OUTER")
         DW\_AT\_inline(DW\_INL\_declared\_inlined)
         ! No low/high PCs
 OUTER.AI.3.2:
-        DW\_TAG\_formal\_parameter
+        \livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter}
             DW\_AT\_name("OUTER\_FORMAL")
             DW\_AT\_type(reference to integer)
             ! No location
 OUTER.AI.3.3:
-        DW\_TAG\_variable
+        \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
             DW\_AT\_name("OUTER\_LOCAL")
             DW\_AT\_type(reference to integer)
             ! No location
@@ -1652,19 +1652,19 @@ OUTER.AI.3.3:
         ! Normal INNER
         !
 OUTER.AI.3.4:
-        DW\_TAG\_subprogram
+        \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}
             DW\_AT\_name("INNER")
             DW\_AT\_low\_pc(...)
             DW\_AT\_high\_pc(...)
             DW\_AT\_frame\_base(...)
             DW\_AT\_static\_link(...)
 OUTER.AI.3.5:
-            DW\_TAG\_formal\_parameter
+            \livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter}
                 DW\_AT\_name("INNER\_FORMAL")
                 DW\_AT\_type(reference to integer)
                 DW\_AT\_location(...)
 OUTER.AI.3.6:
-            DW\_TAG\_variable
+            \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
                 DW\_AT\_name("INNER\_LOCAL")
                 DW\_AT\_type(reference to integer)
                 DW\_AT\_location(...)
@@ -1681,25 +1681,25 @@ OUTER.AI.3.6:
     ! Concrete instance for call "OUTER(7)"
     !
 OUTER.CI.3.1:
-    DW\_TAG\_inlined\_subroutine
+    \livelink{chap:DWTAGinlinedsubroutine}{DW\_TAG\_inlined\_subroutine}
         ! No name
         DW\_AT\_abstract\_origin(reference to OUTER.AI.3.1)
         DW\_AT\_low\_pc(...)
         DW\_AT\_high\_pc(...)
         DW\_AT\_frame\_base(...)
 OUTER.CI.3.2:
-        DW\_TAG\_formal\_parameter
+        \livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter}
             ! No name
             DW\_AT\_abstract\_origin(reference to OUTER.AI.3.2)
             ! No type
             DW\_AT\_location(...)
 OUTER.CI.3.3:
-        DW\_TAG\_variable
+        \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
             ! No name
             DW\_AT\_abstract\_origin(reference to OUTER.AI.3.3)
             ! No type
             DW\_AT\_location(...)
-        ! No DW\_TAG\_subprogram for "INNER"
+        ! No \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram} for "INNER"
         ...
         0
 \end{alltt}
@@ -1727,42 +1727,42 @@ Section \refersec{app:constantexpressionsdwarfdescription}.
 
       ! For variable mass
       !
-1\$:  DW\_TAG\_const\_type
+1\$:  \livelink{chap:DWTAGconsttype}{DW\_TAG\_const\_type}
         DW\_AT\_type(reference to "double")
-2\$:  DW\_TAG\_variable
+2\$:  \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
         DW\_AT\_name("mass")
         DW\_AT\_type(reference to 1\$)
         DW\_AT\_const\_expr(true)
         DW\_AT\_const\_value(9.8)
       ! Abstract instance for square
       !
-10\$: DW\_TAG\_subprogram
+10\$: \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}
         DW\_AT\_name("square")
         DW\_AT\_type(reference to "int")
         DW\_AT\_inline(DW\_INL\_inlined)
-11\$:   DW\_TAG\_formal\_parameter
+11\$:   \livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter}
             DW\_AT\_name("x")
             DW\_AT\_type(reference to "int")
       ! Concrete instance for square(9)
       !
-20\$: DW\_TAG\_inlined\_subroutine
+20\$: \livelink{chap:DWTAGinlinedsubroutine}{DW\_TAG\_inlined\_subroutine}
         DW\_AT\_abstract\_origin(reference to 10\$)
         DW\_AT\_const\_expr(present)
         DW\_AT\_const\_value(81)
-        DW\_TAG\_formal\_parameter
+        \livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter}
             DW\_AT\_abstract\_origin(reference to 11\$)
             DW\_AT\_const\_value(9)
       ! Anonymous array type for arr
       !
-30\$: DW\_TAG\_array\_type
+30\$: \livelink{chap:DWTAGarraytype}{DW\_TAG\_array\_type}
         DW\_AT\_type(reference to "float")
         DW\_AT\_byte\_size(324) ! 81*4
-        DW\_TAG\_subrange\_type
+        \livelink{chap:DWTAGsubrangetype}{DW\_TAG\_subrange\_type}
             DW\_AT\_type(reference to "int")
             DW\_AT\_upper\_bound(reference to 20\$)
       ! Variable arr
       !
-40\$: DW\_TAG\_variable
+40\$: \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
         DW\_AT\_name("arr")
         DW\_AT\_type(reference to 30\$)
 \end{alltt}
@@ -1788,18 +1788,18 @@ char32_t chr_b = U'h';
 
 ! DWARF description
 !
-1\$: DW\_TAG\_base\_type
+1\$: \livelink{chap:DWTAGbasetype}{DW\_TAG\_base\_type}
         DW\_AT\_name("char16\_t")
         DW\_AT\_encoding(DW\_ATE\_UTF)
         DW\_AT\_byte\_size(2)
-2\$: DW\_TAG\_base\_type
+2\$: \livelink{chap:DWTAGbasetype}{DW\_TAG\_base\_type}
         DW\_AT\_name("char32\_t")
         DW\_AT\_encoding(DW\_ATE\_UTF)
         DW\_AT\_byte\_size(4)
-3\$: DW\_TAG\_variable
+3\$: \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
         DW\_AT\_name("chr\_a")
         DW\_AT\_type(reference to 1\$)
-4\$: DW\_TAG\_variable
+4\$: \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
         DW\_AT\_name("chr\_b")
         DW\_AT\_type(reference to 2\$)
 \end{alltt}
@@ -1825,18 +1825,18 @@ E e1;
 \begin{alltt}
 ! DWARF description
 !
-11\$: DW\_TAG\_enumeration\_type
+11\$: \livelink{chap:DWTAGenumerationtype}{DW\_TAG\_enumeration\_type}
         DW\_AT\_name("E")
         DW\_AT\_type(reference to "int")
         DW\_AT\_enum\_class(present)
-12\$:   DW\_TAG\_enumerator
+12\$:   \livelink{chap:DWTAGenumerator}{DW\_TAG\_enumerator}
             DW\_AT\_name("E1")
             DW\_AT\_const\_value(0)
 13\$:
-         DW\_TAG\_enumerator
+         \livelink{chap:DWTAGenumerator}{DW\_TAG\_enumerator}
             DW\_AT\_name("E2")
             DW\_AT\_const\_value(100)
-14\$: DW\_TAG\_variable
+14\$: \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
         DW\_AT\_name("e1")
         DW\_AT\_type(reference to 11\$)
 \end{alltt}
@@ -1864,21 +1864,21 @@ wrapper<int> obj;
 \begin{alltt}
 ! DWARF description
 !
-11\$: DW\_TAG\_structure\_type
+11\$: \livelink{chap:DWTAGstructuretype}{DW\_TAG\_structure\_type}
         DW\_AT\_name("wrapper")
-12\$: DW\_TAG\_template\_type\_parameter
+12\$: \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}
         DW\_AT\_name("T")
         DW\_AT\_type(reference to "int")
-13\$ DW\_TAG\_member
+13\$ \livelink{chap:DWTAGmember}{DW\_TAG\_member}
         DW\_AT\_name("comp")
         DW\_AT\_type(reference to 12\$)
-14\$: DW\_TAG\_variable
+14\$: \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
         DW\_AT\_name("obj")
         DW\_AT\_type(reference to 11\$)
 \end{alltt}
 
 The actual type of the component comp is int, but in the DWARF
-the type references the DW\_TAG\_template\_type\_parameter for
+the type references the \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter} for
 T, which in turn references int. This implies that in the
 original template comp was of type T and that was replaced
 with int in the instance.  There exist situations where it is
@@ -1911,28 +1911,28 @@ Section \refersec{app:ctemplateexample2}.
 \begin{alltt}
 ! DWARF description
 !
-11\$: DW\_TAG\_structure\_type
+11\$: \livelink{chap:DWTAGstructuretype}{DW\_TAG\_structure\_type}
         DW\_AT\_name("wrapper")
-12\$:   DW\_TAG\_template\_type\_parameter
+12\$:   \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}
             DW\_AT\_name("T")
             DW\_AT\_type(reference to "int")
-13\$    DW\_TAG\_member
+13\$    \livelink{chap:DWTAGmember}{DW\_TAG\_member}
             DW\_AT\_name("comp")
             DW\_AT\_type(reference to 12\$)
-14\$: DW\_TAG\_variable
+14\$: \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
         DW\_AT\_name("obj")
         DW\_AT\_type(reference to 11\$)
-21\$: DW\_TAG\_subprogram
+21\$: \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}
         DW\_AT\_name("consume")
-22\$:   DW\_TAG\_template\_type\_parameter
+22\$:   \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}
             DW\_AT\_name("U")
             DW\_AT\_type(reference to "int")
-23\$:   DW\_TAG\_formal\_parameter
+23\$:   \livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter}
             DW\_AT\_name("formal")
             DW\_AT\_type(reference to 11\$)
 \end{alltt}
 
-In the DW\_TAG\_subprogram entry for the instance of consume,
+In the \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram} entry for the instance of consume,
 U is described as 
 int. 
 The type of formal is 
@@ -1999,27 +1999,27 @@ Beta<long> b;
 \begin{alltt}
 ! DWARF representation for variable 'b'
 !
-20\$: DW\_TAG\_structure\_type
+20\$: \livelink{chap:DWTAGstructuretype}{DW\_TAG\_structure\_type}
         DW\_AT\_name("Alpha")
-21\$:   DW\_TAG\_template\_type\_parameter
+21\$:   \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}
             DW\_AT\_name("T")
             DW\_AT\_type(reference to "long")
-22\$:   DW\_TAG\_template\_type\_parameter
+22\$:   \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}
             DW\_AT\_name("U")
             DW\_AT\_type(reference to "long")
-23\$:   DW\_TAG\_member
+23\$:   \livelink{chap:DWTAGmember}{DW\_TAG\_member}
             DW\_AT\_name("tango")
             DW\_AT\_type(reference to 21\$)
-24\$:   DW\_TAG\_member
+24\$:   \livelink{chap:DWTAGmember}{DW\_TAG\_member}
             DW\_AT\_name("uniform")
             DW\_AT\_type(reference to 22\$)
-25\$: DW\_TAG\_template\_alias
+25\$: \livelink{chap:DWTAGtemplatealias}{DW\_TAG\_template\_alias}
         DW\_AT\_name("Beta")
         DW\_AT\_type(reference to 20\$)
-26\$:   DW\_TAG\_template\_type\_parameter
+26\$:   \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}
             DW\_AT\_name("V")
             DW\_AT\_type(reference to "long")
-27\$: DW\_TAG\_variable
+27\$: \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
         DW\_AT\_name("b")
         DW\_AT\_type(reference to 25\$)
 \end{alltt}
@@ -2041,37 +2041,37 @@ X<Z<int>> z;
 \begin{alltt}
 ! DWARF representation for X<Y<int>>
 !
-30\$: DW\_TAG\_structure\_type
+30\$: \livelink{chap:DWTAGstructuretype}{DW\_TAG\_structure\_type}
         DW\_AT\_name("Y")
-31\$:   DW\_TAG\_template\_type\_parameter
+31\$:   \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}
             DW\_AT\_name("TY")
             DW\_AT\_type(reference to "int")
-32\$: DW\_TAG\_structure\_type
+32\$: \livelink{chap:DWTAGstructuretype}{DW\_TAG\_structure\_type}
         DW\_AT\_name("X")
-33\$:   DW\_TAG\_template\_type\_parameter
+33\$:   \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}
             DW\_AT\_name("TX")
             DW\_AT\_type(reference to 30\$)
 
 ! DWARF representation for X<Z<int>>
 !
-40\$: DW\_TAG\_template\_alias
+40\$: \livelink{chap:DWTAGtemplatealias}{DW\_TAG\_template\_alias}
 using Z = Y<int>;
         DW\_AT\_name("Z")
         DW\_AT\_type(reference to 30\$)
-41\$:   DW\_TAG\_template\_type\_parameter
+41\$:   \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}
             DW\_AT\_name("T")
             DW\_AT\_type(reference to "int")
-42\$: DW\_TAG\_structure\_type
+42\$: \livelink{chap:DWTAGstructuretype}{DW\_TAG\_structure\_type}
         DW\_AT\_name("X")
-43\$:   DW\_TAG\_template\_type\_parameter
+43\$:   \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}
             DW\_AT\_name("TX")
             DW\_AT\_type(reference to 40\$)
 ! Note that 32\$ and 42\$ are actually the same type
 !
-50\$: DW\_TAG\_variable
+50\$: \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
         DW\_AT\_name("y")
         DW\_AT\_type(reference to \$32)
-51\$: DW\_TAG\_variable
+51\$: \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
         DW\_AT\_name("z")
         DW\_AT\_type(reference to \$42)
 \end{alltt}

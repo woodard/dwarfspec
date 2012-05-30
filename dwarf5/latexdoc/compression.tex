@@ -301,18 +301,18 @@ normally not usable and
 DW\_FORM\_ref\_addr is not necessary
 for a local label.)}
 
-\textbf{Use of DW\_TAG\_compile\_unit versus 
-DW\_TAG\_partial\_unit}
+\textbf{Use of \livelink{chap:DWTAGcompileunit}{DW\_TAG\_compile\_unit} versus 
+\livelink{chap:DWTAGpartialunit}{DW\_TAG\_partial\_unit}}
 
 A section group compilation unit that uses 
-DW\_TAG\_compile\_unit
+\livelink{chap:DWTAGcompileunit}{DW\_TAG\_compile\_unit}
 is like any other compilation unit, in that its contents
 are evaluated by consumers as though it were an ordinary
 compilation unit.
 
 An \#include directive appearing outside any other
 declarations is a good candidate to be represented using
-DW\_TAG\_compile\_unit. 
+\livelink{chap:DWTAGcompileunit}{DW\_TAG\_compile\_unit}. 
 However, an \#include appearing inside
 a C++ namespace declaration or a function, for example, is
 not a good candidate because the entities included are not
@@ -321,36 +321,36 @@ necessarily file level entities.
 This also applies to Fortran INCLUDE lines when declarations
 are included into a procedure or module context.
 
-Consequently a compiler must use DW\_TAG\_partial\_unit (instead
-of DW\_TAG\_compile\_unit) in a section group whenever the section
+Consequently a compiler must use \livelink{chap:DWTAGpartialunit}{DW\_TAG\_partial\_unit} (instead
+of \livelink{chap:DWTAGcompileunit}{DW\_TAG\_compile\_unit}) in a section group whenever the section
 group contents are not necessarily globally visible. This
 directs consumers to ignore that compilation unit when scanning
 top level declarations and definitions.
 
-The DW\_TAG\_partial\_unit compilation unit will be referenced
+The \livelink{chap:DWTAGpartialunit}{DW\_TAG\_partial\_unit} compilation unit will be referenced
 from elsewhere and the referencing locations give the
 appropriate context for interpreting the partial compilation
 unit.
 
-A DW\_TAG\_partial\_unit entry may have, as appropriate, any of
-the attributes assigned to a DW\_TAG\_compile\_unit.
+A \livelink{chap:DWTAGpartialunit}{DW\_TAG\_partial\_unit} entry may have, as appropriate, any of
+the attributes assigned to a \livelink{chap:DWTAGcompileunit}{DW\_TAG\_compile\_unit}.
 
 
-\textbf{Use of DW\_TAG\_imported\_unit}
+\textbf{Use of \livelink{chap:DWTAGimportedunit}{DW\_TAG\_imported\_unit}}
 
-A DW\_TAG\_imported\_unit debugging information entry has an
-DW\_AT\_import attribute referencing a DW\_TAG\_compile\_unit or
-DW\_TAG\_partial\_unit debugging information entry.
+A \livelink{chap:DWTAGimportedunit}{DW\_TAG\_imported\_unit} debugging information entry has an
+DW\_AT\_import attribute referencing a \livelink{chap:DWTAGcompileunit}{DW\_TAG\_compile\_unit} or
+\livelink{chap:DWTAGpartialunit}{DW\_TAG\_partial\_unit} debugging information entry.
 
-A DW\_TAG\_imported\_unit debugging information entry refers
+A \livelink{chap:DWTAGimportedunit}{DW\_TAG\_imported\_unit} debugging information entry refers
 to a 
-DW\_TAG\_compile\_unit or 
-DW\_TAG\_partial\_unit debugging
+\livelink{chap:DWTAGcompileunit}{DW\_TAG\_compile\_unit} or 
+\livelink{chap:DWTAGpartialunit}{DW\_TAG\_partial\_unit} debugging
 information entry to specify that the 
-DW\_TAG\_compile\_unit or
-DW\_TAG\_partial\_unit contents logically appear at the point
+\livelink{chap:DWTAGcompileunit}{DW\_TAG\_compile\_unit} or
+\livelink{chap:DWTAGpartialunit}{DW\_TAG\_partial\_unit} contents logically appear at the point
 of the 
-DW\_TAG\_imported\_unit entry.
+\livelink{chap:DWTAGimportedunit}{DW\_TAG\_imported\_unit} entry.
 
 
 \textbf{Use of DW\_FORM\_ref\_addr}
@@ -438,17 +438,17 @@ wa.h.
     my.compiler.company.cpp.wa.h.123456
 == section .debug\_info
 DW.cpp.wa.h.123456.1: ! linker global symbol
-    DW\_TAG\_compile\_unit
+    \livelink{chap:DWTAGcompileunit}{DW\_TAG\_compile\_unit}
         DW\_AT\_language(DW\_LANG\_C\_plus\_plus)
         ...  ! other unit attributes
 DW.cpp.wa.h.123456.2: ! linker global symbol
-    DW\_TAG\_base\_type
+    \livelink{chap:DWTAGbasetype}{DW\_TAG\_base\_type}
         DW\_AT\_name("int")
 DW.cpp.wa.h.123456.3: ! linker global symbol
-    DW\_TAG\_structure\_type
+    \livelink{chap:DWTAGstructuretype}{DW\_TAG\_structure\_type}
         DW\_AT\_NAME("A")
 DW.cpp.wa.h.123456.4: ! linker global symbol
-        DW\_TAG\_member
+        \livelink{chap:DWTAGmember}{DW\_TAG\_member}
         DW\_AT\_name("i")
         DW\_AT\_type(DW\_FORM\_refn to DW.cpp.wa.h.123456.2)
             ! (This is a local reference, so the more
@@ -467,23 +467,23 @@ in the section group shown above.
 == section .text
     [generated code for function f]
 == section .debug\_info
-    DW\_TAG\_compile\_unit
+    \livelink{chap:DWTAGcompileunit}{DW\_TAG\_compile\_unit}
 .L1:                   ! local (non-linker) symbol
-        DW\_TAG\_reference\_type
+        \livelink{chap:DWTAGreferencetype}{DW\_TAG\_reference\_type}
             DW\_AT\_type(reference to DW.cpp.wa.h.123456.3)
-        DW\_TAG\_subprogram
+        \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}
             DW\_AT\_name("f")
             DW\_AT\_type(reference to DW.cpp.wa.h.123456.2)
-            DW\_TAG\_variable
+            \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
                 DW\_AT\_name("a")
                 DW\_AT\_type(reference to .L1)
         ...
 \end{alltt}
 
-This example uses DW\_TAG\_compile\_unit for the section group,
+This example uses \livelink{chap:DWTAGcompileunit}{DW\_TAG\_compile\_unit} for the section group,
 implying that the contents of the compilation unit are
 globally visible (in accordance with C++ language rules).
-DW\_TAG\_partial\_unit is not needed for the same reason.
+\livelink{chap:DWTAGpartialunit}{DW\_TAG\_partial\_unit} is not needed for the same reason.
 
 \subsubsection{Fortran Example}
 
@@ -529,33 +529,33 @@ corresponding to the included file CommonStuff.fh.
 == section .debug\_info
 
 DW.myf90.CommonStuff.fh.654321.1:    ! linker global symbol
-    DW\_TAG\_partial\_unit
+    \livelink{chap:DWTAGpartialunit}{DW\_TAG\_partial\_unit}
         ! ...compilation unit attributes, including...
         DW\_AT\_language(DW\_LANG\_Fortran90)
         DW\_AT\_identifier\_case(DW\_ID\_case\_insensitive)
 
 DW.myf90.CommonStuff.fh.654321.2: ! linker global symbol
-3\$: DW\_TAG\_array\_type
+3\$: \livelink{chap:DWTAGarraytype}{DW\_TAG\_array\_type}
         ! unnamed
         DW\_AT\_type(reference to DW.f90.F90\$main.f.2)
             ! base type INTEGER
-        DW\_TAG\_subrange\_type
+        \livelink{chap:DWTAGsubrangetype}{DW\_TAG\_subrange\_type}
             DW\_AT\_type(reference to DW.f90.F90\$main.f.2)
                 ! base type INTEGER)
             DW\_AT\_lower\_bound(constant 1)
             DW\_AT\_upper\_bound(constant 100)
 
 DW.myf90.CommonStuff.fh.654321.3: ! linker global symbol
-    DW\_TAG\_common\_block
+    \livelink{chap:DWTAGcommonblock}{DW\_TAG\_common\_block}
         DW\_AT\_name("Common1")
         DW\_AT\_location(Address of common block Common1)
-        DW\_TAG\_variable
+        \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
             DW\_AT\_name("C")
             DW\_AT\_type(reference to 3\$)
             DW\_AT\_location(address of C)
 
 DW.myf90.CommonStuff.fh.654321.4: ! linker global symbol
-    DW\_TAG\_constant
+    \livelink{chap:DWTAGconstant}{DW\_TAG\_constant}
         DW\_AT\_name("SEVEN")
         DW\_AT\_type(reference to DW.f90.F90\$main.f.2)
             ! base type INTEGER
@@ -574,18 +574,18 @@ shows the sections for the primary compilation unit.
     [code for function Foo]
 
 == section .debug\_info
-    DW\_TAG\_compile\_unit
-        DW\_TAG\_subprogram
+    \livelink{chap:DWTAGcompileunit}{DW\_TAG\_compile\_unit}
+        \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}
             DW\_AT\_name("Foo")
             DW\_AT\_type(reference to DW.f90.F90\$main.f.2)
                 ! base type INTEGER
-            DW\_TAG\_imported\_unit
+            \livelink{chap:DWTAGimportedunit}{DW\_TAG\_imported\_unit}
                 DW\_AT\_import(reference to
                     DW.myf90.CommonStuff.fh.654321.1)
-            DW\_TAG\_common\_inclusion ! For Common1
+            \livelink{chap:DWTAGcommoninclusion}{DW\_TAG\_common\_inclusion} ! For Common1
                 DW\_AT\_common\_reference(reference to
                     DW.myf90.CommonStuff.fh.654321.3)
-            DW\_TAG\_variable ! For function result
+            \livelink{chap:DWTAGvariable}{DW\_TAG\_variable} ! For function result
                 DW\_AT\_name("Foo")
                     DW\_AT\_type(reference to DW.f90.F90\$main.f.2)
                         ! base type INTEGER
@@ -619,29 +619,29 @@ Section \refersec{app:duplicateeliminationexample2companiondwarf}.
 
 \begin{alltt}
 == section .debug\_info
-    DW\_TAG\_compile\_unit
+    \livelink{chap:DWTAGcompileunit}{DW\_TAG\_compile\_unit}
         DW\_AT\_name(F90\$main)
-        DW\_TAG\_base\_type
+        \livelink{chap:DWTAGbasetype}{DW\_TAG\_base\_type}
             DW\_AT\_name("INTEGER")
             DW\_AT\_encoding(DW\_ATE\_signed)
             DW\_AT\_byte\_size(...)
 
-        DW\_TAG\_base\_type
+        \livelink{chap:DWTAGbasetype}{DW\_TAG\_base\_type}
             ...
         ...  ! other base types
-        DW\_TAG\_subprogram
+        \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}
             DW\_AT\_name("F90\$main")
-            DW\_TAG\_imported\_unit
+            \livelink{chap:DWTAGimportedunit}{DW\_TAG\_imported\_unit}
                 DW\_AT\_import(reference to
                     DW.myf90.CommonStuff.fh.654321.1)
-            DW\_TAG\_common\_inclusion ! for Common1
+            \livelink{chap:DWTAGcommoninclusion}{DW\_TAG\_common\_inclusion} ! for Common1
                 DW\_AT\_common\_reference(reference to
                     DW.myf90.CommonStuff.fh.654321.3)
             ...
 \end{alltt}
 
 
-This example uses DW\_TAG\_partial\_unit for the section group
+This example uses \livelink{chap:DWTAGpartialunit}{DW\_TAG\_partial\_unit} for the section group
 because the included declarations are not independently
 visible as global entities.
 
@@ -650,7 +650,7 @@ visible as global entities.
 
 The C++ example in this Section might appear to be equally
 valid as a C example. However, it is prudent to include
-a DW\_TAG\_imported\_unit in the primary unit (see Figure 84)
+a \livelink{chap:DWTAGimportedunit}{DW\_TAG\_imported\_unit} in the primary unit (see Figure 84)
 with an DW\_AT\_import attribute that refers to the proper unit
 in the section group.
 
@@ -744,30 +744,30 @@ in
 \label{app:typesignaturecomputation1dwarfrepresentation}
 
 \begin{alltt}
-  DW\_TAG\_type\_unit
+  \livelink{chap:DWTAGtypeunit}{DW\_TAG\_type\_unit}
       DW\_AT\_language: DW\_LANG\_C\_plus\_plus (4)
-    DW\_TAG\_namespace
+    \livelink{chap:DWTAGnamespace}{DW\_TAG\_namespace}
         DW\_AT\_name: "N"
 L1:
-      DW\_TAG\_structure\_type
+      \livelink{chap:DWTAGstructuretype}{DW\_TAG\_structure\_type}
           DW\_AT\_name: "C"
           DW\_AT\_byte\_size: 8
           DW\_AT\_decl\_file: 1
           DW\_AT\_decl\_line: 5
-        DW\_TAG\_member
+        \livelink{chap:DWTAGmember}{DW\_TAG\_member}
             DW\_AT\_name: "x"
             DW\_AT\_decl\_file: 1
             DW\_AT\_decl\_line: 6
             DW\_AT\_type: reference to L2
             DW\_AT\_data\_member\_location: 0
-        DW\_TAG\_member
+        \livelink{chap:DWTAGmember}{DW\_TAG\_member}
             DW\_AT\_name: "y"
             DW\_AT\_decl\_file: 1
             DW\_AT\_decl\_line: 7
             DW\_AT\_type: reference to L2
             DW\_AT\_data\_member\_location: 4
 L2:
-     DW\_TAG\_base\_type
+     \livelink{chap:DWTAGbasetype}{DW\_TAG\_base\_type}
          DW\_AT\_byte\_size: 4
          DW\_AT\_encoding: DW\_ATE\_signed
          DW\_AT\_name: "int"
@@ -784,16 +784,16 @@ Section \refersec{app:typesignaturecomputation1flattenedbytestream}.
 \label{app:typesignaturecomputation1flattenedbytestream}
 
 \begin{alltt}
-// Step 2: 'C' DW\_TAG\_namespace "N"
+// Step 2: 'C' \livelink{chap:DWTAGnamespace}{DW\_TAG\_namespace} "N"
 0x43 0x39 0x4e 0x00
-// Step 3: 'D' DW\_TAG\_structure\_type
+// Step 3: 'D' \livelink{chap:DWTAGstructuretype}{DW\_TAG\_structure\_type}
 0x44 0x13
 // Step 4: 'A' DW\_AT\_name DW\_FORM\_string "C"
 0x41 0x03 0x08 0x43 0x00
 // Step 4: 'A' DW\_AT\_byte\_size DW\_FORM\_sdata 8
 0x41 0x0b 0x0d 0x08
 // Step 7: First child ("x")
-    // Step 3: 'D' DW\_TAG\_member
+    // Step 3: 'D' \livelink{chap:DWTAGmember}{DW\_TAG\_member}
     0x44 0x0d
     // Step 4: 'A' DW\_AT\_name DW\_FORM\_string "x"
     0x41 0x03 0x08 0x78 0x00
@@ -801,7 +801,7 @@ Section \refersec{app:typesignaturecomputation1flattenedbytestream}.
     0x41 0x38 0x0d 0x00
     // Step 6: 'T' DW\_AT\_type (type \#2)
     0x54 0x49
-        // Step 3: 'D' DW\_TAG\_base\_type
+        // Step 3: 'D' \livelink{chap:DWTAGbasetype}{DW\_TAG\_base\_type}
         0x44 0x24
         // Step 4: 'A' DW\_AT\_name DW\_FORM\_string "int"
         0x41 0x03 0x08 0x69 0x6e 0x74 0x00
@@ -809,12 +809,12 @@ Section \refersec{app:typesignaturecomputation1flattenedbytestream}.
         0x41 0x0b 0x0d 0x04
         // Step 4: 'A' DW\_AT\_encoding DW\_FORM\_sdata DW\_ATE\_signed
         0x41 0x3e 0x0d 0x05
-        // Step 7: End of DW\_TAG\_base\_type "int"
+        // Step 7: End of \livelink{chap:DWTAGbasetype}{DW\_TAG\_base\_type} "int"
         0x00
-    // Step 7: End of DW\_TAG\_member "x"
+    // Step 7: End of \livelink{chap:DWTAGmember}{DW\_TAG\_member} "x"
     0x00
 // Step 7: Second child ("y")
-    // Step 3: 'D' DW\_TAG\_member
+    // Step 3: 'D' \livelink{chap:DWTAGmember}{DW\_TAG\_member}
     0x44 0x0d
     // Step 4: 'A' DW\_AT\_name DW\_FORM\_string "y"
     0x41 0x03 0x08 0x78 0x00
@@ -822,9 +822,9 @@ Section \refersec{app:typesignaturecomputation1flattenedbytestream}.
     0x41 0x38 0x0d 0x04
     // Step 6: 'R' DW\_AT\_type (type \#2)
     0x52 0x49 0x02
-    // Step 7: End of DW\_TAG\_member "y"
+    // Step 7: End of \livelink{chap:DWTAGmember}{DW\_TAG\_member} "y"
     0x00
-// Step 7: End of DW\_TAG\_structure\_type "C"
+// Step 7: End of \livelink{chap:DWTAGstructuretype}{DW\_TAG\_structure\_type} "C"
 0x00
 \end{alltt}
 
@@ -841,80 +841,80 @@ Section \refersec{app:typesignaturecomputation2dwarfrepresentation}.
 \label{app:typesignaturecomputation2dwarfrepresentation}
 
 \begin{alltt}
-  DW\_TAG\_type\_unit
+  \livelink{chap:DWTAGtypeunit}{DW\_TAG\_type\_unit}
       DW\_AT\_language: DW\_LANG\_C\_plus\_plus (4)
-    DW\_TAG\_namespace
+    \livelink{chap:DWTAGnamespace}{DW\_TAG\_namespace}
           DW\_AT\_name: "N"
 L1:
-        DW\_TAG\_class\_type
+        \livelink{chap:DWTAGclasstype}{DW\_TAG\_class\_type}
              DW\_AT\_name: "A"
              DW\_AT\_byte\_size: 20
              DW\_AT\_decl\_file: 1
              DW\_AT\_decl\_line: 10
-           DW\_TAG\_member
+           \livelink{chap:DWTAGmember}{DW\_TAG\_member}
                 DW\_AT\_name: "v\_"
                 DW\_AT\_decl\_file: 1
                 DW\_AT\_decl\_line: 15
                 DW\_AT\_type: reference to L2
                 DW\_AT\_data\_member\_location: 0
                 DW\_AT\_accessibility: DW\_ACCESS\_private
-          DW\_TAG\_member
+          \livelink{chap:DWTAGmember}{DW\_TAG\_member}
                DW\_AT\_name: "next"
                DW\_AT\_decl\_file: 1
                DW\_AT\_decl\_line: 16
                DW\_AT\_type: reference to L3
                DW\_AT\_data\_member\_location: 4
                DW\_AT\_accessibility: DW\_ACCESS\_private
-          DW\_TAG\_member
+          \livelink{chap:DWTAGmember}{DW\_TAG\_member}
                DW\_AT\_name: "bp"
                DW\_AT\_decl\_file: 1
                DW\_AT\_decl\_line: 17
                DW\_AT\_type: reference to L4
                DW\_AT\_data\_member\_location: 8
                DW\_AT\_accessibility: DW\_ACCESS\_private
-          DW\_TAG\_member
+          \livelink{chap:DWTAGmember}{DW\_TAG\_member}
                DW\_AT\_name: "c"
                DW\_AT\_decl\_file: 1
                DW\_AT\_decl\_line: 18
                DW\_AT\_type: 0xd28081e8 dcf5070a (signature for struct C)
                DW\_AT\_data\_member\_location: 12
                DW\_AT\_accessibility: DW\_ACCESS\_private
-       DW\_TAG\_subprogram
+       \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}
            DW\_AT\_external: 1
            DW\_AT\_name: "A"
            DW\_AT\_decl\_file: 1
            DW\_AT\_decl\_line: 12
            DW\_AT\_declaration: 1
-        DW\_TAG\_formal\_parameter
+        \livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter}
            DW\_AT\_type: reference to L3
            DW\_AT\_artificial: 1
-        DW\_TAG\_formal\_parameter
+        \livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter}
            DW\_AT\_type: reference to L2
-       DW\_TAG\_subprogram
+       \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}
            DW\_AT\_external: 1
            DW\_AT\_name: "v"
            DW\_AT\_decl\_file: 1
            DW\_AT\_decl\_line: 13
            DW\_AT\_type: reference to L2
            DW\_AT\_declaration: 1
-         DW\_TAG\_formal\_parameter
+         \livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter}
            DW\_AT\_type: reference to L3
            DW\_AT\_artificial: 1
 L2:
-    DW\_TAG\_base\_type
+    \livelink{chap:DWTAGbasetype}{DW\_TAG\_base\_type}
          DW\_AT\_byte\_size: 4
          DW\_AT\_encoding: DW\_ATE\_signed
          DW\_AT\_name: "int"
 L3:
-    DW\_TAG\_pointer\_type
+    \livelink{chap:DWTAGpointertype}{DW\_TAG\_pointer\_type}
          DW\_AT\_type: reference to L1
 L4:
-    DW\_TAG\_pointer\_type
+    \livelink{chap:DWTAGpointertype}{DW\_TAG\_pointer\_type}
          DW\_AT\_type: reference to L5
-    DW\_TAG\_namespace
+    \livelink{chap:DWTAGnamespace}{DW\_TAG\_namespace}
          DW\_AT\_name: "N"
 L5:
-       DW\_TAG\_structure\_type
+       \livelink{chap:DWTAGstructuretype}{DW\_TAG\_structure\_type}
            DW\_AT\_name: "B"
            DW\_AT\_declaration: 1
 \end{alltt}
@@ -944,16 +944,16 @@ Section \refersec{app:typesignatureexample2flattenedbytestream}.
 \label{app:typesignatureexample2flattenedbytestream}
 
 \begin{alltt}
-// Step 2: 'C' DW\_TAG\_namespace "N"
+// Step 2: 'C' \livelink{chap:DWTAGnamespace}{DW\_TAG\_namespace} "N"
 0x43 0x39 0x4e 0x00
-// Step 3: 'D' DW\_TAG\_class\_type
+// Step 3: 'D' \livelink{chap:DWTAGclasstype}{DW\_TAG\_class\_type}
 0x44 0x02
 // Step 4: 'A' DW\_AT\_name DW\_FORM\_string "A"
 0x41 0x03 0x08 0x41 0x00
 // Step 4: 'A' DW\_AT\_byte\_size DW\_FORM\_sdata 20
 0x41 0x0b 0x0d 0x14
 // Step 7: First child ("v\_")
-    // Step 3: 'D' DW\_TAG\_member
+    // Step 3: 'D' \livelink{chap:DWTAGmember}{DW\_TAG\_member}
     0x44 0x0d
     // Step 4: 'A' DW\_AT\_name DW\_FORM\_string "v\_"
     0x41 0x03 0x08 0x76 0x5f 0x00
@@ -963,7 +963,7 @@ Section \refersec{app:typesignatureexample2flattenedbytestream}.
     0x41 0x38 0x0d 0x00
     // Step 6: 'T' DW\_AT\_type (type \#2)
     0x54 0x49
-        // Step 3: 'D' DW\_TAG\_base\_type
+        // Step 3: 'D' \livelink{chap:DWTAGbasetype}{DW\_TAG\_base\_type}
         0x44 0x24
         // Step 4: 'A' DW\_AT\_name DW\_FORM\_string "int"
         0x41 0x03 0x08 0x69 0x6e 0x74 0x00
@@ -971,12 +971,12 @@ Section \refersec{app:typesignatureexample2flattenedbytestream}.
         0x41 0x0b 0x0d 0x04
         // Step 4: 'A' DW\_AT\_encoding DW\_FORM\_sdata DW\_ATE\_signed
         0x41 0x3e 0x0d 0x05
-        // Step 7: End of DW\_TAG\_base\_type "int"
+        // Step 7: End of \livelink{chap:DWTAGbasetype}{DW\_TAG\_base\_type} "int"
         0x00
-    // Step 7: End of DW\_TAG\_member "v\_"
+    // Step 7: End of \livelink{chap:DWTAGmember}{DW\_TAG\_member} "v\_"
     0x00
 // Step 7: Second child ("next")
-    // Step 3: 'D' DW\_TAG\_member
+    // Step 3: 'D' \livelink{chap:DWTAGmember}{DW\_TAG\_member}
     0x44 0x0d
     // Step 4: 'A' DW\_AT\_name DW\_FORM\_string "next"
     0x41 0x03 0x08 0x6e 0x65 0x78 0x74 0x00
@@ -986,7 +986,7 @@ Section \refersec{app:typesignatureexample2flattenedbytestream}.
     0x41 0x38 0x0d 0x04
     // Step 6: 'T' DW\_AT\_type (type \#3)
     0x54 0x49
-        // Step 3: 'D' DW\_TAG\_pointer\_type
+        // Step 3: 'D' \livelink{chap:DWTAGpointertype}{DW\_TAG\_pointer\_type}
         0x44 0x0f
         // Step 5: 'N' DW\_AT\_type
         0x4e 0x49
@@ -994,12 +994,12 @@ Section \refersec{app:typesignatureexample2flattenedbytestream}.
         0x43 0x39 0x4e 0x00 0x45
         // Step 5: "A"
         0x41 0x00
-        // Step 7: End of DW\_TAG\_pointer\_type
+        // Step 7: End of \livelink{chap:DWTAGpointertype}{DW\_TAG\_pointer\_type}
         0x00
-    // Step 7: End of DW\_TAG\_member "next"
+    // Step 7: End of \livelink{chap:DWTAGmember}{DW\_TAG\_member} "next"
     0x00
 // Step 7: Third child ("bp")
-    // Step 3: 'D' DW\_TAG\_member
+    // Step 3: 'D' \livelink{chap:DWTAGmember}{DW\_TAG\_member}
     0x44 0x0d
     // Step 4: 'A' DW\_AT\_name DW\_FORM\_string "bp"
     0x41 0x03 0x08 0x62 0x70 0x00
@@ -1009,7 +1009,7 @@ Section \refersec{app:typesignatureexample2flattenedbytestream}.
     0x41 0x38 0x0d 0x08
     // Step 6: 'T' DW\_AT\_type (type \#4)
     0x54 0x49
-        // Step 3: 'D' DW\_TAG\_pointer\_type
+        // Step 3: 'D' \livelink{chap:DWTAGpointertype}{DW\_TAG\_pointer\_type}
 0x44 0x0f
         // Step 5: 'N' DW\_AT\_type
         0x4e 0x49
@@ -1017,12 +1017,12 @@ Section \refersec{app:typesignatureexample2flattenedbytestream}.
         0x43 0x39 0x4e 0x00 0x45
         // Step 5: "B"
         0x42 0x00
-        // Step 7: End of DW\_TAG\_pointer\_type
+        // Step 7: End of \livelink{chap:DWTAGpointertype}{DW\_TAG\_pointer\_type}
         0x00
-    // Step 7: End of DW\_TAG\_member "next"
+    // Step 7: End of \livelink{chap:DWTAGmember}{DW\_TAG\_member} "next"
     0x00
 // Step 7: Fourth child ("c")
-    // Step 3: 'D' DW\_TAG\_member
+    // Step 3: 'D' \livelink{chap:DWTAGmember}{DW\_TAG\_member}
     0x44 0x0d
     // Step 4: 'A' DW\_AT\_name DW\_FORM\_string "c"
     0x41 0x03 0x08 0x63 0x00
@@ -1032,16 +1032,16 @@ Section \refersec{app:typesignatureexample2flattenedbytestream}.
     0x41 0x38 0x0d 0x0c
     // Step 6: 'T' DW\_AT\_type (type \#5)
     0x54 0x49
-        // Step 2: 'C' DW\_TAG\_namespace "N"
+        // Step 2: 'C' \livelink{chap:DWTAGnamespace}{DW\_TAG\_namespace} "N"
         0x43 0x39 0x4e 0x00
-        // Step 3: 'D' DW\_TAG\_structure\_type
+        // Step 3: 'D' \livelink{chap:DWTAGstructuretype}{DW\_TAG\_structure\_type}
         0x44 0x13
         // Step 4: 'A' DW\_AT\_name DW\_FORM\_string "C"
         0x41 0x03 0x08 0x43 0x00
         // Step 4: 'A' DW\_AT\_byte\_size DW\_FORM\_sdata 8
         0x41 0x0b 0x0d 0x08
         // Step 7: First child ("x")
-            // Step 3: 'D' DW\_TAG\_member
+            // Step 3: 'D' \livelink{chap:DWTAGmember}{DW\_TAG\_member}
             0x44 0x0d
             // Step 4: 'A' DW\_AT\_name DW\_FORM\_string "x"
             0x41 0x03 0x08 0x78 0x00
@@ -1049,10 +1049,10 @@ Section \refersec{app:typesignatureexample2flattenedbytestream}.
             0x41 0x38 0x0d 0x00
             // Step 6: 'R' DW\_AT\_type (type \#2)
             0x52 0x49 0x02
-            // Step 7: End of DW\_TAG\_member "x"
+            // Step 7: End of \livelink{chap:DWTAGmember}{DW\_TAG\_member} "x"
             0x00
         // Step 7: Second child ("y")
-            // Step 3: 'D' DW\_TAG\_member
+            // Step 3: 'D' \livelink{chap:DWTAGmember}{DW\_TAG\_member}
             0x44 0x0d
             // Step 4: 'A' DW\_AT\_name DW\_FORM\_string "y"
             0x41 0x03 0x08 0x79 0x00
@@ -1060,19 +1060,19 @@ Section \refersec{app:typesignatureexample2flattenedbytestream}.
             0x41 0x38 0x0d 0x04
             // Step 6: 'R' DW\_AT\_type (type \#2)
             0x52 0x49 0x02
-            // Step 7: End of DW\_TAG\_member "y"
+            // Step 7: End of \livelink{chap:DWTAGmember}{DW\_TAG\_member} "y"
             0x00
-        // Step 7: End of DW\_TAG\_structure\_type "C"
+        // Step 7: End of \livelink{chap:DWTAGstructuretype}{DW\_TAG\_structure\_type} "C"
         0x00
-    // Step 7: End of DW\_TAG\_member "c"
+    // Step 7: End of \livelink{chap:DWTAGmember}{DW\_TAG\_member} "c"
     0x00
 // Step 7: Fifth child ("A")
-    // Step 3: 'S' DW\_TAG\_subprogram "A"
+    // Step 3: 'S' \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram} "A"
     0x53 0x2e 0x41 0x00
 // Step 7: Sixth child ("v")
-    // Step 3: 'S' DW\_TAG\_subprogram "v"
+    // Step 3: 'S' \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram} "v"
     0x53 0x2e 0x76 0x00
-// Step 7: End of DW\_TAG\_structure\_type "A"
+// Step 7: End of \livelink{chap:DWTAGstructuretype}{DW\_TAG\_structure\_type} "A"
 0x00
 \end{alltt}
 
@@ -1091,11 +1091,11 @@ Section \refersec{app:typesignatureexampleusage}.
 \label{app:typesignatureexampleusage}
 
 \begin{alltt}
-  DW\_TAG\_compile\_unit
+  \livelink{chap:DWTAGcompileunit}{DW\_TAG\_compile\_unit}
   ...
-  DW\_TAG\_subprogram
+  \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}
     ...
-    DW\_TAG\_variable
+    \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
       DW\_AT\_name: "a"
       DW\_AT\_type: (signature) 0xd6d160f5 5589f6e9
       DW\_AT\_location: ...
@@ -1238,7 +1238,7 @@ text, data, and DWARF sections.
 There will also be a compilation unit that has the file\dash level
 declarations and definitions. Other per\dash function compilation
 unit DWARF information (.debug\_info) points to this common
-file\dash level compilation unit using DW\_TAG\_imported\_unit.
+file\dash level compilation unit using \livelink{chap:DWTAGimportedunit}{DW\_TAG\_imported\_unit}.
 
 Section groups can use DW\_FORM\_ref\_addr and internal labels
 (section\dash relative relocations) to refer to the main object
