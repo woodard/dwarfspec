@@ -194,9 +194,9 @@ format, the value is a 64\dash bit unsigned integer.
 \begin{center}
 \begin{tabular}{lll}
 Form & Role  \\ \hline
-DW\-\_FORM\-\_ref\-\_addr& offset in .debug\_info \\
-DW\-\_FORM\-\_sec\-\_offset& offset in a section other than .debug\_info or .debug\_str \\
-DW\-\_FORM\-\_strp&offset in .debug\_str \\
+\livelink{chap:DWFORMrefaddr}{DW\-\_FORM\-\_ref\-\_addr}& offset in .debug\_info \\
+\livetarg{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset}& offset in a section other than .debug\_info or .debug\_str \\
+\livelink{chap:DWFORMstrp}{DW\-\_FORM\-\_strp}&offset in .debug\_str \\
 DW\-\_OP\-\_call\-\_ref&offset in .debug\_info \\
 \end{tabular}
 \end{center}
@@ -359,7 +359,7 @@ offset portion of an address.
 A 64\dash bit unique signature of the type described in this type
 unit.  
 
-\textit{An attribute that refers(using DW\-\_FORM\-\_ref\-\_sig8) to
+\textit{An attribute that refers(using \livelink{chap:DWFORMrefsig8}{DW\-\_FORM\-\_ref\-\_sig8}) to
 the primary type contained in this type unit uses this value.}
 
 
@@ -440,7 +440,8 @@ is an unsigned LEB128 number representing the attribute’s
 form. The series of attribute specifications ends with an
 entry containing 0 for the name and 0 for the form.
 
-The attribute form DW\-\_FORM\-\_indirect is a special case. For
+The attribute form 
+\livetarg{chap:DWFORMindirect}{DW\-\_FORM\-\_indirect} is a special case. For
 attributes with this form, the attribute value itself in the
 .debug\_info or .debug\_types section begins with an unsigned
 LEB128 number that represents its form. This allows producers
@@ -467,17 +468,17 @@ class is a set of forms which have related representations
 and which are given a common interpretation according to the
 attribute in which the form is used.
 
-Form DW\-\_FORM\-\_sec\-\_offset is a member of more than one class,
+Form \livelink{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset} is a member of more than one class,
 namely \livelink{chap:lineptr}{lineptr}, \livelink{chap:loclistptr}{loclistptr}, \livelink{chap:macptr}{macptr} or \livelink{chap:rangelistptr}{rangelistptr}; the list
 of classes allowed by the applicable attribute in 
 Table \refersec{tab:attributeencodings}
 determines the class of the form.
 
-\textit{In DWARF V3 the forms DW\-\_FORM\-\_data4 and DW\-\_FORM\-\_data8 were
+\textit{In DWARF V3 the forms \livelink{chap:DWFORMdata4}{DW\-\_FORM\-\_data4} and \livelink{chap:DWFORMdata8}{DW\-\_FORM\-\_data8} were
 members of either class constant or one of the classes \livelink{chap:lineptr}{lineptr},
 \livelink{chap:loclistptr}{loclistptr}, \livelink{chap:macptr}{macptr} or \livelink{chap:rangelistptr}{rangelistptr}, depending on context. In
-DWARF V4 DW\-\_FORM\-\_data4 and DW\-\_FORM\-\_data8 are members of class
-constant in all cases. The new DW\-\_FORM\-\_sec\-\_offset replaces
+DWARF V4 \livelink{chap:DWFORMdata4}{DW\-\_FORM\-\_data4} and \livelink{chap:DWFORMdata8}{DW\-\_FORM\-\_data8} are members of class
+constant in all cases. The new \livelink{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset} replaces
 their usage for the other classes.}
 
 Each possible form belongs to one or more of the following classes:
@@ -485,7 +486,8 @@ Each possible form belongs to one or more of the following classes:
 \begin{itemize}
 \item address \\
 Represented as an object of appropriate size to hold an
-address on the target machine (DW\-\_FORM\-\_addr). The size is
+address on the target machine 
+(\livetarg{chap:DWFORMaddr}{DW\-\_FORM\-\_addr}). The size is
 encoded in the compilation unit header 
 (see Section \refersec{datarep:compilationunitheader}).
 This address is relocatable in a relocatable object file and
@@ -496,24 +498,24 @@ Blocks come in four forms:
 
 \begin{myindentpara}{1cm}
 A 1\dash byte length followed by 0 to 255 contiguous information
-bytes (DW\-\_FORM\-\_block1).
+bytes (\livetarg{chap:DWFORMblock1}{DW\-\_FORM\-\_block1}).
 \end{myindentpara}
 
 \begin{myindentpara}{1cm}
 A 2\dash byte length followed by 0 to 65,535 contiguous information
-bytes (DW\-\_FORM\-\_block2).
+bytes (\livetarg{chap:DWFORMblock2}{DW\-\_FORM\-\_block2}).
 \end{myindentpara}
 
 
 \begin{myindentpara}{1cm}
 A 4\dash byte length followed by 0 to 4,294,967,295 contiguous
-information bytes (DW\-\_FORM\-\_block4).
+information bytes (\livetarg{chap:DWFORMblock4}{DW\-\_FORM\-\_block4}).
 \end{myindentpara}
 
 
 \begin{myindentpara}{1cm}
 An unsigned LEB128 length followed by the number of bytes
-specified by the length (DW\-\_FORM\-\_block).
+specified by the length (\livetarg{chap:DWFORMblock}{DW\-\_FORM\-\_block}).
 \end{myindentpara}
 
 In all forms, the length is the number of information bytes
@@ -524,33 +526,43 @@ debugging information entries or data bytes.
 \item constant \\
 There are six forms of constants. There are fixed length
 constant data forms for one, two, four and eight byte values
-(respectively, DW\-\_FORM\-\_data1, DW\-\_FORM\-\_data2, DW\-\_FORM\-\_data4,
-and DW\-\_FORM\-\_data8). There are also variable length constant
+(respectively, 
+\livetarg{chap:DWFORMdata1}{DW\-\_FORM\-\_data1}, 
+\livetarg{chap:DWFORMdata2}{DW\-\_FORM\-\_data2}, 
+\livetarg{chap:DWFORMdata4}{DW\-\_FORM\-\_data4},
+and \livetarg{chap:DWFORMdata8}{DW\-\_FORM\-\_data8}). 
+There are also variable length constant
 data forms encoded using LEB128 numbers (see below). Both
-signed (DW\-\_FORM\-\_sdata) and unsigned (DW\-\_FORM\-\_udata) variable
+signed (\livetarg{chap:DWFORMsdata}{DW\-\_FORM\-\_sdata}) and unsigned 
+(\livetarg{chap:DWFORMudata}{DW\-\_FORM\-\_udata}) variable
 length constants are available
 
-The data in DW\-\_FORM\-\_data1, DW\-\_FORM\-\_data2, DW\-\_FORM\-\_data4 and
-DW\-\_FORM\-\_data8 can be anything. Depending on context, it may
+The data in \livelink{chap:DWFORMdata1}{DW\-\_FORM\-\_data1}, 
+\livelink{chap:DWFORMdata2}{DW\-\_FORM\-\_data2}, 
+\livelink{chap:DWFORMdata4}{DW\-\_FORM\-\_data4} and
+\livelink{chap:DWFORMdata8}{DW\-\_FORM\-\_data8} 
+can be anything. Depending on context, it may
 be a signed integer, an unsigned integer, a floating\dash point
 constant, or anything else. A consumer must use context to
 know how to interpret the bits, which if they are target
 machine data (such as an integer or floating point constant)
 will be in target machine byte\dash order.
 
-\textit{If one of the DW\-\_FORM\-\_data<n> forms is used to represent a
+\textit{If one of the \livetarg{chap:DWFORMdata}{DW\-\_FORM\-\_data}<n> forms is used to represent a
 signed or unsigned integer, it can be hard for a consumer
 to discover the context necessary to determine which
 interpretation is intended. Producers are therefore strongly
-encouraged to use DW\-\_FORM\-\_sdata or DW\-\_FORM\-\_udata for signed and
+encouraged to use \livelink{chap:DWFORMsdata}{DW\-\_FORM\-\_sdata} or 
+\livelink{chap:DWFORMudata}{DW\-\_FORM\-\_udata} for signed and
 unsigned integers respectively, rather than 
-DW\-\_FORM\-\_data\textless n \textgreater.}
+\livelink{chap:DWFORMdata}{DW\-\_FORM\-\_data} \textless n \textgreater.}
 
 
 \item \livelink{chap:exprloc}{exprloc} \\
 This is an unsigned LEB128 length followed by the
 number of information bytes specified by the length
-(DW\-\_FORM\-\_exprloc). The information bytes contain a DWARF
+(\livetarg{chap:DWFORMexprloc}{DW\-\_FORM\-\_exprloc}). 
+The information bytes contain a DWARF
 expression 
 (see Section \refersec{chap:dwarfexpressions}) 
 or location description 
@@ -558,7 +570,8 @@ or location description
 
 \item flag \\
 A flag is represented explicitly as a single byte of data
-(DW\-\_FORM\-\_flag) or implicitly (DW\-\_FORM\-\_flag\-\_present). In the
+(\livetarg{chap:DWFORMflag}{DW\-\_FORM\-\_flag}) or 
+implicitly (\livetarg{chap:DWFORMflagpresent}{DW\-\_FORM\-\_flag\-\_present}). In the
 first case, if the flag has value zero, it indicates the
 absence of the attribute; if the flag has a non\dash zero value,
 it indicates the presence of the attribute. In the second
@@ -567,7 +580,7 @@ no value is encoded in the debugging information entry itself.
 
 \item \livelink{chap:lineptr}{lineptr} \\
 This is an offset into the .debug\_line section
-(DW\-\_FORM\-\_sec\-\_offset). It consists of an offset from the
+(\livelink{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset}). It consists of an offset from the
 beginning of the .debug\_line section to the first byte of
 the data making up the line number list for the compilation
 unit. 
@@ -580,7 +593,7 @@ in the 64\dash bit DWARF format, it is an 8\dash byte unsigned value
 
 \item \livelink{chap:loclistptr}{loclistptr} \\
 This is an offset into the .debug\_loc section
-(DW\-\_FORM\-\_sec\-\_offset). It consists of an offset from the
+(\livelink{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset}). It consists of an offset from the
 beginning of the .debug\_loc section to the first byte of
 the data making up the location list for the compilation
 unit. 
@@ -593,7 +606,7 @@ in the 64\dash bit DWARF format, it is an 8\dash byte unsigned value
 
 \item \livelink{chap:macptr}{macptr} \\
 This is an offset into the .debug\_macinfo section
-(DW\-\_FORM\-\_sec\-\_offset). It consists of an offset from the
+(\livelink{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset}). It consists of an offset from the
 beginning of the .debug\_macinfo section to the first byte of
 the data making up the macro information list for the compilation
 unit. 
@@ -605,7 +618,7 @@ in the 64\dash bit DWARF format, it is an 8\dash byte unsigned value
 
 \item \livelink{chap:rangelistptr}{rangelistptr} \\
 This is an offset into the .debug\_ranges section
-(DW\-\_FORM\-\_sec\-\_offset). 
+(\livelink{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset}). 
 It consists of an
 offset from the beginning of the .debug\_ranges section
 to the beginning of the non\dash contiguous address ranges
@@ -633,10 +646,14 @@ reference is an offset from the first byte of the compilation
 header for the compilation unit containing the reference. There
 are five forms for this type of reference. There are fixed
 length forms for one, two, four and eight byte offsets
-(respectively, DW\-\_FORM\-\_ref1, DW\-\_FORM\-\_ref2, DW\-\_FORM\-\_ref4,
-and DW\-\_FORM\-\_ref8). There is also an unsigned variable
+(respectively, \livetarg{chap:DWFORMref1}{DW\-\_FORM\-\_ref1}, 
+\livetarg{chap:DWFORMref2}{DW\-\_FORM\-\_ref2}, 
+\livetarg{chap:DWFORMref4}{DW\-\_FORM\-\_ref4},
+and \livetarg{chap:DWFORMref8}{DW\-\_FORM\-\_ref8}). 
+There is also an unsigned variable
 length offset encoded form that uses unsigned LEB128 numbers
-(DW\-\_FORM\-\_ref\-\_udata). Because this type of reference is within
+(\livetarg{chap:DWFORMrefudata}{DW\-\_FORM\-\_ref\-\_udata}). 
+Because this type of reference is within
 the containing compilation unit no relocation of the value
 is required.
 
@@ -645,7 +662,7 @@ information entry within a .debug\_info section; in particular,
 it may refer to an entry in a different compilation unit
 from the unit containing the reference, and may refer to an
 entry in a different shared object.  This type of reference
-(DW\-\_FORM\-\_ref\-\_addr) is an offset from the beginning of the
+(\livetarg{chap:DWFORMrefaddr}{DW\-\_FORM\-\_ref\-\_addr}) is an offset from the beginning of the
 .debug\_info section of the target executable or shared object;
 it is relocatable in a relocatable object file and frequently
 relocated in an executable file or shared object. For
@@ -658,7 +675,7 @@ unsigned value
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
 A debugging information entry that may be referenced by
-another compilation unit using DW\-\_FORM\-\_ref\-\_addr must have a
+another compilation unit using \livelink{chap:DWFORMrefaddr}{DW\-\_FORM\-\_ref\-\_addr} must have a
 global symbolic name.
 
 For a reference from one executable or shared object to
@@ -670,7 +687,8 @@ or when the reference is used.
 
 The third type of reference can identify any debugging
 information type entry that has been placed in its own
-type unit. This type of reference (DW\-\_FORM\-\_ref\-\_sig8) is the
+type unit. This type of 
+reference (\livetarg{chap:DWFORMrefsig8}{DW\-\_FORM\-\_ref\-\_sig8}) is the
 64\dash bit type signature 
 (see Section \refersec{datarep:typesignaturecomputation}) 
 that was computed
@@ -689,10 +707,13 @@ header.
 \item string \\
 A string is a sequence of contiguous non\dash null bytes followed by
 one null byte. A string may be represented immediately in the
-debugging information entry itself (DW\-\_FORM\-\_string), or may
+debugging information entry itself 
+(\livetarg{chap:DWFORMstring}{DW\-\_FORM\-\_string}), or may
 be represented as an offset into a string table contained in
-the .debug\_str section of the object file (DW\-\_FORM\-\_strp). In
-the 32\dash bit DWARF format, the representation of a DW\-\_FORM\-\_strp
+the .debug\_str section of the object file 
+(\livetarg{chap:DWFORMstrp}{DW\-\_FORM\-\_strp}). In
+the 32\dash bit DWARF format, the representation of a 
+\livelink{chap:DWFORMstrp}{DW\-\_FORM\-\_strp}
 value is a 4\dash byte unsigned offset; in the 64\dash bit DWARF format,
 it is an 8\dash byte unsigned offset 
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
@@ -941,31 +962,31 @@ DW\-\_CHILDREN\-\_yes&0x01 \\ \hline
 \endfoot
   \hline
 \endlastfoot
-DW\-\_FORM\-\_addr&0x01&address  \\
-DW\-\_FORM\-\_block2&0x03&block \\
-DW\-\_FORM\-\_block4&0x04&block  \\
-DW\-\_FORM\-\_data2&0x05&constant \\
-DW\-\_FORM\-\_data4&0x06&constant \\
-DW\-\_FORM\-\_data8&0x07&constant \\
-DW\-\_FORM\-\_string&0x08&string \\
-DW\-\_FORM\-\_block&0x09&block \\
-DW\-\_FORM\-\_block1&0x0a&block \\
-DW\-\_FORM\-\_data1&0x0b&constant \\
-DW\-\_FORM\-\_flag&0x0c&flag \\
-DW\-\_FORM\-\_sdata&0x0d&constant    \\
-DW\-\_FORM\-\_strp&0x0e&string         \\
-DW\-\_FORM\-\_udata&0x0f&constant         \\
-DW\-\_FORM\-\_ref\-\_addr&0x10&reference         \\
-DW\-\_FORM\-\_ref1&0x11&reference          \\
-DW\-\_FORM\-\_ref2&0x12&reference         \\
-DW\-\_FORM\-\_ref4&0x13&reference         \\
-DW\-\_FORM\-\_ref8&0x14&reference \\
-DW\-\_FORM\-\_ref\-\_udata&0x15&reference  \\
-DW\-\_FORM\-\_indirect&0x16&(see Section \refersec{datarep:abbreviationstables}) \\
-DW\-\_FORM\-\_sec\-\_offset \ddag &0x17&\livelink{chap:lineptr}{lineptr}, \livelink{chap:loclistptr}{loclistptr}, \livelink{chap:macptr}{macptr}, \livelink{chap:rangelistptr}{rangelistptr} \\
-DW\-\_FORM\-\_exprloc \ddag &0x18&\livelink{chap:exprloc}{exprloc} \\
-DW\-\_FORM\-\_flag\-\_present \ddag &0x19&flag \\
-DW\-\_FORM\-\_ref\-\_sig8 \ddag &0x20&reference \\
+\livelink{chap:DWFORMaddr}{DW\-\_FORM\-\_addr}&0x01&address  \\
+\livelink{chap:DWFORMblock2}{DW\-\_FORM\-\_block2}&0x03&block \\
+\livelink{chap:DWFORMblock4}{DW\-\_FORM\-\_block4}&0x04&block  \\
+\livelink{chap:DWFORMdata2}{DW\-\_FORM\-\_data2}&0x05&constant \\
+\livelink{chap:DWFORMdata4}{DW\-\_FORM\-\_data4}&0x06&constant \\
+\livelink{chap:DWFORMdata8}{DW\-\_FORM\-\_data8}&0x07&constant \\
+\livelink{chap:DWFORMstring}{DW\-\_FORM\-\_string}&0x08&string \\
+\livelink{chap:DWFORMblock}{DW\-\_FORM\-\_block}&0x09&block \\
+\livelink{chap:DWFORMblock1}{DW\-\_FORM\-\_block1}&0x0a&block \\
+\livelink{chap:DWFORMdata1}{DW\-\_FORM\-\_data1}&0x0b&constant \\
+\livelink{chap:DWFORMflag}{DW\-\_FORM\-\_flag}&0x0c&flag \\
+\livelink{chap:DWFORMsdata}{DW\-\_FORM\-\_sdata}&0x0d&constant    \\
+\livelink{chap:DWFORMstrp}{DW\-\_FORM\-\_strp}&0x0e&string         \\
+\livelink{chap:DWFORMudata}{DW\-\_FORM\-\_udata}&0x0f&constant         \\
+\livelink{chap:DWFORMrefaddr}{DW\-\_FORM\-\_ref\-\_addr}&0x10&reference         \\
+\livelink{chap:DWFORMref1}{DW\-\_FORM\-\_ref1}&0x11&reference          \\
+\livelink{chap:DWFORMref2}{DW\-\_FORM\-\_ref2}&0x12&reference         \\
+\livelink{chap:DWFORMref4}{DW\-\_FORM\-\_ref4}&0x13&reference         \\
+\livelink{chap:DWFORMref8}{DW\-\_FORM\-\_ref8}&0x14&reference \\
+\livelink{chap:DWFORMrefudata}{DW\-\_FORM\-\_ref\-\_udata}&0x15&reference  \\
+\livelink{chap:DWFORMindirect}{DW\-\_FORM\-\_indirect}&0x16&(see Section \refersec{datarep:abbreviationstables}) \\
+\livelink{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset} \ddag &0x17&\livelink{chap:lineptr}{lineptr}, \livelink{chap:loclistptr}{loclistptr}, \livelink{chap:macptr}{macptr}, \livelink{chap:rangelistptr}{rangelistptr} \\
+\livelink{chap:DWFORMexprloc}{DW\-\_FORM\-\_exprloc} \ddag &0x18&\livelink{chap:exprloc}{exprloc} \\
+\livelink{chap:DWFORMflagpresent}{DW\-\_FORM\-\_flag\-\_present} \ddag &0x19&flag \\
+\livelink{chap:DWFORMrefsig8}{DW\-\_FORM\-\_ref\-\_sig8} \ddag &0x20&reference \\
  
 \end{longtable}
 \ddag  FORM new in DWARF Version 4 
@@ -2103,10 +2124,10 @@ the value consists of the form code (encoded as an unsigned
 LEB128 value) followed by the encoding of the value according
 to the form code. To ensure reproducibility of the signature,
 the set of forms used in the signature computation is limited
-to the following: DW\-\_FORM\-\_sdata, 
-DW\-\_FORM\-\_flag, 
-DW\-\_FORM\-\_string,
-and DW\-\_FORM\-\_block.
+to the following: \livelink{chap:DWFORMsdata}{DW\-\_FORM\-\_sdata}, 
+\livelink{chap:DWFORMflag}{DW\-\_FORM\-\_flag}, 
+\livelink{chap:DWFORMstring}{DW\-\_FORM\-\_string},
+and \livelink{chap:DWFORMblock}{DW\-\_FORM\-\_block}.
 
 \item If the tag in Step 3 is one of \livelink{chap:DWTAGpointertype}{DW\-\_TAG\-\_pointer\-\_type},
 \livelink{chap:DWTAGreferencetype}{DW\-\_TAG\-\_reference\-\_type}, 
