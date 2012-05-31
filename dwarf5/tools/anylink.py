@@ -1,6 +1,13 @@
 # Copyright 2012 DWARF Debugging Information Format Committee
 #
-# All DW_TAG_* entries not in {} are turned into \livelink.
+# Handles the testing and update for all DW_* prefixes.
+# Called by taglink and other convenience apps to do their work.
+#
+# Run as an app itself, the options are
+#    python anylink [-t prefix] ... [-all] [file] ...
+#    Use either -all or one or more -t, as in examples:
+#    python anylink -t DW_ACCESS_ -t DW_OP_   test.in test2.in
+#    python anylink -all    test.in test2.in 
 
 import sys
 import fileio
@@ -158,10 +165,9 @@ def islegalprefix(prefix):
   return "n"
 
 def printlegals():
-  print "legal tarrgets  for -t options are: ",
+  print >>sys.stderr,"legal targets  for -t options are: "
   for t in legalprefix:
-    print legalprefix,
-  print ""
+    print >>sys.stderr, t
   
 
 def read_all_args():
@@ -182,15 +188,18 @@ def read_all_args():
         targlist += [v2]
       else:
         print >> sys.stderr , "A -t has invalid target list entry", v2
+        printlegals()
         sys.exit(1)
     else:
       filelist += [v]
     cur = int(cur) + 1
   if len(targlist) < 1:
     print >> sys.stderr , "No targets specified."
+    printlegals()
     sys.exit(1)
   if len(filelist) < 1:
     print >> sys.stderr , "No files specified."
+    printlegals()
     sys.exit(1)
   process_files(targlist,filelist)
 
