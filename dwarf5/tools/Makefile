@@ -35,4 +35,8 @@ test:
 	# checking for idempotence
 	python attrlink.py attrlink.in.out
 	diff attrlink.in.out.out attrlink.base
+	python formlink.py formlink.in
+	diff formlink.in.out formlink.base
+	python formlink.py formlink.in.out
+	diff formlink.in.out.out formlink.base
      
