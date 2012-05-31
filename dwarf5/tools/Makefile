@@ -25,4 +25,9 @@ test:
 	diff test1.in.out.out taglink.base
 	python printstandard.py printstandard.in >printstandard.out
 	diff printstandard.out printstandard.base
+	python tohyphen.py tohyphen.in
+	diff tohyphen.in.out tohyphen.base
+	# checking for idempotence
+	python tohyphen.py tohyphen.in.out
+	diff tohyphen.in.out.out tohyphen.base
      
