@@ -6,7 +6,7 @@ import sys
 import anylink
 
 if __name__ == '__main__':
-  anylink.read_args("DW_TAG_")
+  anylink.read_file_args(["DW_TAG_"])
   
 
 

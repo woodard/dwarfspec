@@ -5,7 +5,7 @@
 import sys
 import fileio
 
-global myprefix
+global mytarglist
 
 def ischar(tok,c):
    if tok._class != "ind":
@@ -43,10 +43,11 @@ def isdesiredname(stdname):
       We don't want something like plain DW_TAG  or 
       plain DW_TAG_ to get modified.
   """
-  global myprefix
-  if stdname.startswith(myprefix):
-    if len(stdname) > len(myprefix):
-      return "y"
+  global mytarglist
+  for mt  in mytarglist:
+    if stdname.startswith(mt):
+      if len(stdname) > len(mt):
+        return "y"
   return "n"
 
 def dwspace(tok):
@@ -108,20 +109,93 @@ def transfunc(linetoks):
     # End of for loop.
   return outtoks
 
-def read_args(targprefix):
+def process_files(targlist,filelist):
+  global mytarglist
+  mytarglist = targlist
+  dwf = fileio.readFilelist(filelist)
+  dwf.dwtransformline(transfunc)
+  dwf.dwwrite()
+
+def read_file_args(targlist):
   cur = 1
-  global myprefix
-  myprefix = targprefix
   filelist = []
   while  len(sys.argv) > cur:
     v = sys.argv[cur]
     filelist += [v]
     cur = int(cur) + 1
-
-  dwf = fileio.readFilelist(filelist)
-  dwf.dwtransformline(transfunc)
-  dwf.dwwrite()
-
+  process_files(targlist,filelist)
   
 
+
+legalprefix = ["DW_ACCESS_",
+"DW_ADDR_",
+"DW_AT_",
+"DW_ATE_",
+"DW_CC_",
+"DW_CFA_",
+"DW_CHILDREN_",
+"DW_DSC_",
+"DW_DS_",
+"DW_END_",
+"DW_FORM_",
+"DW_ID_",
+"DW_INL_",
+"DW_LANG_",
+"DW_LNE_",
+"DW_LNS_",
+"DW_MACINFO_",
+"DW_OP_",
+"DW_ORD_",
+"DW_TAG_",
+"DW_VIRTUALITY_",
+"DW_VIS_" ]
+
+def islegalprefix(prefix):
+  for t in legalprefix:
+    if t == prefix:
+      # All is ok.
+      return "y"
+  return "n"
+
+def printlegals():
+  print "legal tarrgets  for -t options are: ",
+  for t in legalprefix:
+    print legalprefix,
+  print ""
+  
+
+def read_all_args():
+  filelist = []
+  targlist = []
+  cur = 1
+  while  len(sys.argv) > cur:
+    v = sys.argv[cur]
+    if v == "-all":
+      targlist = legalprefix
+    elif v == "-t":
+      cur = int(cur) + 1
+      if cur >= len(sys.argv):
+        print >> sys.stderr , "A -t has no target list entry"
+        sys.exit(1)
+      v2 = sys.argv[cur]
+      if islegalprefix(v2) == "y":
+        targlist += [v2]
+      else:
+        print >> sys.stderr , "A -t has invalid target list entry", v2
+        sys.exit(1)
+    else:
+      filelist += [v]
+    cur = int(cur) + 1
+  if len(targlist) < 1:
+    print >> sys.stderr , "No targets specified."
+    sys.exit(1)
+  if len(filelist) < 1:
+    print >> sys.stderr , "No files specified."
+    sys.exit(1)
+  process_files(targlist,filelist)
+
+#  anylink [-t <class>] ... [file] ...
+
+if __name__ == '__main__':
+  read_all_args()
 

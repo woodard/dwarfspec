@@ -6,6 +6,6 @@ import sys
 import anylink
 
 if __name__ == '__main__':
-  anylink.read_args("DW_FORM_")
+  anylink.read_file_args(["DW_FORM_"])
 
 
