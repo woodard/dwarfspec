@@ -68,22 +68,22 @@ Section \refersec{chap:importedunitentries}).
 Compilation unit entries may have the following attributes:
 
 \begin{enumerate}[1]
-\item Either a DW\-\_AT\-\_low\-\_pc and DW\-\_AT\-\_high\-\_pc pair of
-attributes or a DW\-\_AT\-\_ranges attribute whose values encode the
+\item Either a \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} and \livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair of
+attributes or a \livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} attribute whose values encode the
 contiguous or non\dash contiguous address ranges, respectively,
 of the machine instructions generated for the compilation
 unit (see Section {chap:codeaddressesandranges}).  
-A DW\-\_AT\-\_low\-\_pc attribute may also
-be specified in combination with DW\-\_AT\-\_ranges to specify the
+A \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} attribute may also
+be specified in combination with \livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} to specify the
 default base address for use in location lists (see Section
 \refersec{chap:locationlists}) and range lists 
 (see Section \refersec{chap:noncontiguousaddressranges}).
 
-\item A DW\-\_AT\-\_name attribute whose value is a null\dash terminated
+\item A \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute whose value is a null\dash terminated
 string containing the full or relative path name of the primary
 source file from which the compilation unit was derived.
 
-\item A DW\-\_AT\-\_language attribute whose constant value is an
+\item A \livelink{chap:DWATlanguage}{DW\-\_AT\-\_language} attribute whose constant value is an
 integer code indicating the source language of the compilation
 unit. The set of language names and their meanings are given
 in 
@@ -119,7 +119,7 @@ DW\-\_LANG\-\_UPC &Unified Parallel C\\ \hline
 \end{tabular}
 \end{figure}
 
-\item A DW\-\_AT\-\_stmt\-\_list attribute whose value is a section
+\item A \livelink{chap:DWATstmtlist}{DW\-\_AT\-\_stmt\-\_list} attribute whose value is a section
 offset to the line number information for this compilation
 unit.  This information is placed in a separate object file
 section from the debugging information entries themselves. The
@@ -128,7 +128,7 @@ value of the statement list attribute is the offset in the
 information for this compilation unit 
 (see Section \refersec{chap:linenumberinformation}).
 
-\item A DW\-\_AT\-\_macro\-\_info attribute whose value is a section
+\item A \livelink{chap:DWATmacroinfo}{DW\-\_AT\-\_macro\-\_info} attribute whose value is a section
 offset to the macro information for this compilation unit.
 This information is placed in a separate object file section
 from the debugging information entries themselves. The
@@ -137,12 +137,12 @@ the .debug\_macinfo section of the first byte of the macro
 information for this compilation unit 
 (see Section \refersec{chap:macroinformation}).
 
-\item  A DW\-\_AT\-\_comp\-\_dir attribute whose value is a
+\item  A \livelink{chap:DWATcompdir}{DW\-\_AT\-\_comp\-\_dir} attribute whose value is a
 null\dash terminated string containing the current working directory
 of the compilation command that produced this compilation
 unit in whatever form makes sense for the host system.
 
-\item  A DW\-\_AT\-\_producer attribute whose value is a null\dash
+\item  A \livelink{chap:DWATproducer}{DW\-\_AT\-\_producer} attribute whose value is a null\dash
 terminated string containing information about the compiler
 that produced the compilation unit. The actual contents of
 the string will be specific to each producer, but should
@@ -151,7 +151,7 @@ identifying character sequence that should avoid confusion
 with other producer values.
 
 
-\item  A DW\-\_AT\-\_identifier\-\_case attribute whose integer
+\item  A \livelink{chap:DWATidentifiercase}{DW\-\_AT\-\_identifier\-\_case} attribute whose integer
 constant value is a code describing the treatment
 of identifiers within this compilation unit. The
 set of identifier case codes is given in Figure
@@ -169,7 +169,7 @@ set of identifier case codes is given in Figure
 
 DW\-\_ID\-\_case\-\_sensitive is the default for all compilation units
 that do not have this attribute.  It indicates that names given
-as the values of DW\-\_AT\-\_name attributes in debugging information
+as the values of \livelink{chap:DWATname}{DW\-\_AT\-\_name} attributes in debugging information
 entries for the compilation unit reflect the names as they
 appear in the source program. The debugger should be sensitive
 to the case of identifier names when doing identifier lookups.
@@ -193,7 +193,7 @@ attributes reflect the names as they appear in the source
 program but that a case insensitive lookup should be used to
 access those names.
 
-\item A DW\-\_AT\-\_base\-\_types attribute whose value is a reference.
+\item A \livelink{chap:DWATbasetypes}{DW\-\_AT\-\_base\-\_types} attribute whose value is a reference.
 
 This attribute points to a debugging information entry
 representing another compilation unit.  It may be used
@@ -206,14 +206,14 @@ of base types for a compilation unit that does not itself
 contain such definitions. This allows a consumer, for example,
 to interpret a type conversion to a base type correctly.
 
-\item A DW\-\_AT\-\_use\-\_UTF8 attribute, which is a flag whose
+\item A \livelink{chap:DWATuseUTF8}{DW\-\_AT\-\_use\-\_UTF8} attribute, which is a flag whose
 presence indicates that all strings (such as the names of
 declared entities in the source program) are represented
 using the UTF\dash 8 representation 
 (see Section \refersec{datarep:attributeencodings}).
 
 
-\item A DW\-\_AT\-\_main\-\_subprogram attribute, which is a flag
+\item A \livelink{chap:DWATmainsubprogram}{DW\-\_AT\-\_main\-\_subprogram} attribute, which is a flag
 whose presence indicates that the compilation unit contains a
 subprogram that has been identified as the starting function
 of the program. If more than one compilation unit contains
@@ -229,7 +229,7 @@ a program.}
 \end{enumerate}
 
 The  base address of a compilation unit is defined as the
-value of the DW\-\_AT\-\_low\-\_pc attribute, if present; otherwise,
+value of the \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} attribute, if present; otherwise,
 it is undefined. If the base address is undefined, then any
 DWARF entry or structure defined in terms of the base address
 of that compilation unit is not valid.
@@ -241,7 +241,7 @@ The place where a normal or partial unit is imported is
 represented by a debugging information entry with the 
 tag \livetarg{chap:DWTAGimportedunit}{DW\-\_TAG\-\_imported\-\_unit}. 
 An imported unit entry contains a
-DW\-\_AT\-\_import attribute whose value is a reference to the
+\livelink{chap:DWATimport}{DW\-\_AT\-\_import} attribute whose value is a reference to the
 normal or partial compilation unit whose declarations logically
 belong at the place of the imported unit entry.
 
@@ -267,7 +267,7 @@ information entries that represent the definition of a single
 type, plus additional debugging information entries that may
 be necessary to include as part of the definition of the type.
 
-A type unit entry may have a DW\-\_AT\-\_language attribute, whose
+A type unit entry may have a \livelink{chap:DWATlanguage}{DW\-\_AT\-\_language} attribute, whose
 constant value is an integer code indicating the source
 language used to define the type. The set of language names
 and their meanings are given in Figure \refersec{fig:languagenames}.
@@ -311,7 +311,7 @@ those entities.}
 \label{chap:moduleentries}
 \textit{Several languages have the concept of a ``module.''
 A Modula\dash 2 definition module may be represented by a module
-entry containing a declaration attribute (DW\-\_AT\-\_declaration). A
+entry containing a declaration attribute (\livelink{chap:DWATdeclaration}{DW\-\_AT\-\_declaration}). A
 Fortran 90 module may also be represented by a module entry
 (but no declaration attribute is warranted because Fortran
 has no concept of a corresponding module body).}
@@ -323,23 +323,23 @@ Module entries may own other
 debugging information entries describing program entities
 whose declaration scopes end at the end of the module itself.
 
-If the module has a name, the module entry has a DW\-\_AT\-\_name
+If the module has a name, the module entry has a \livelink{chap:DWATname}{DW\-\_AT\-\_name}
 attribute whose value is a null\dash terminated string containing
 the module name as it appears in the source program.
 
-The module entry may have either a DW\-\_AT\-\_low\-\_pc and
-DW\-\_AT\-\_high\-\_pc pair of attributes or a DW\-\_AT\-\_ranges attribute
+The module entry may have either a \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} and
+\livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair of attributes or a \livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} attribute
 whose values encode the contiguous or non\dash contiguous address
 ranges, respectively, of the machine instructions generated for
 the module initialization code 
 (see Section \refersec{chap:codeaddressesandranges}). 
 It may also
-have a DW\-\_AT\-\_entry\-\_pc attribute whose value is the address of
+have a \livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc} attribute whose value is the address of
 the first executable instruction of that initialization code
 (see Section \refersec{chap:entryaddress}).
 
 If the module has been assigned a priority, it may have a
-DW\-\_AT\-\_priority attribute. The value of this attribute is a
+\livelink{chap:DWATpriority}{DW\-\_AT\-\_priority} attribute. The value of this attribute is a
 reference to another debugging information entry describing
 a variable with a constant value. The value of this variable
 is the actual constant value of the module’s priority,
@@ -357,7 +357,7 @@ with the
 tag \livetarg{chap:DWTAGnamespace}{DW\-\_TAG\-\_namespace}. 
 A namespace extension is
 represented by a \livelink{chap:DWTAGnamespace}{DW\-\_TAG\-\_namespace} entry 
-with a DW\-\_AT\-\_extension
+with a \livelink{chap:DWATextension}{DW\-\_AT\-\_extension}
 attribute referring to the previous extension, or if there
 is no previous extension, to the original 
 \livelink{chap:DWTAGnamespace}{DW\-\_TAG\-\_namespace}
@@ -365,7 +365,7 @@ entry. A namespace extension entry does not need to duplicate
 information in a previous extension entry of the namespace
 nor need it duplicate information in the original namespace
 entry. (Thus, for a namespace with a name, 
-a DW\-\_AT\-\_name
+a \livelink{chap:DWATname}{DW\-\_AT\-\_name}
 attribute need only be attached directly to the original
 \livelink{chap:DWTAGnamespace}{DW\-\_TAG\-\_namespace} entry.)
 
@@ -380,10 +380,10 @@ function definitions.}
 If a type, variable, or function declared in a namespace is
 defined outside of the body of the namespace declaration,
 that type, variable, or function definition entry has a
-DW\-\_AT\-\_specification attribute whose value is a reference to the
+\livelink{chap:DWATspecification}{DW\-\_AT\-\_specification} attribute whose value is a reference to the
 debugging information entry representing the declaration of
 the type, variable or function. Type, variable, or function
-entries with a DW\-\_AT\-\_specification attribute do not need
+entries with a \livelink{chap:DWATspecification}{DW\-\_AT\-\_specification} attribute do not need
 to duplicate information provided by the declaration entry
 referenced by the specification attribute.
 
@@ -435,11 +435,11 @@ tag \livetarg{chap:DWTAGimporteddeclaration}{DW\-\_TAG\-\_imported\-\_declaratio
 When an overloaded entity
 is imported, there is one imported declaration entry for
 each overloading. Each imported declaration entry has a
-DW\-\_AT\-\_import attribute, whose value is a reference to the
+\livelink{chap:DWATimport}{DW\-\_AT\-\_import} attribute, whose value is a reference to the
 debugging information entry representing the declaration that
 is being imported.
 
-An imported declaration may also have a DW\-\_AT\-\_name attribute
+An imported declaration may also have a \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute
 whose value is a null\dash terminated string containing the
 name, as it appears in the source program, by which the
 imported entity is to be known in the context of the imported
@@ -491,7 +491,7 @@ An imported module declaration is represented by a debugging
 information entry with the 
 tag \livetarg{chap:DWTAGimportedmodule}{DW\-\_TAG\-\_imported\-\_module}.
 An
-imported module entry contains a DW\-\_AT\-\_import attribute
+imported module entry contains a \livelink{chap:DWATimport}{DW\-\_AT\-\_import} attribute
 whose value is a reference to the module or namespace entry
 containing the definition and/or declaration entries for
 the entities that are to be imported into the context of the
@@ -574,12 +574,12 @@ points:
 \subsection{General Subroutine and Entry Point Information}
 \label{chap:generalsubroutineandentrypointinformation}
 
-It may also have a DW\-\_AT\-\_linkage\-\_name attribute as
+It may also have a \livelink{chap:DWATlinkagename}{DW\-\_AT\-\_linkage\-\_name} attribute as
 described in Section \refersec{chap:linkagenames}.
 
 If the name of the subroutine described by an entry with the
 tag \livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram} is visible outside of its containing
-compilation unit, that entry has a DW\-\_AT\-\_external attribute,
+compilation unit, that entry has a \livelink{chap:DWATexternal}{DW\-\_AT\-\_external} attribute,
 which is a flag.
 
 \textit{Additional attributes for functions that are members of a
@@ -587,7 +587,7 @@ class or structure are described in
 Section \refersec{chap:memberfunctionentries}.
 }
 
-A subroutine entry may contain a DW\-\_AT\-\_main\-\_subprogram
+A subroutine entry may contain a \livelink{chap:DWATmainsubprogram}{DW\-\_AT\-\_main\-\_subprogram}
 attribute which is a flag whose presence indicates that the
 subroutine has been identified as the starting function of
 the program.  If more than one subprogram contains this flag,
@@ -605,7 +605,7 @@ the standard calling conventions for the target architecture
 and will therefore not be safe to call from within a debugger.
 }
 
-A subroutine entry may contain a DW\-\_AT\-\_calling\-\_convention
+A subroutine entry may contain a \livelink{chap:DWATcallingconvention}{DW\-\_AT\-\_calling\-\_convention}
 attribute, whose value is an integer constant. The set of
 calling convention codes is given in 
 Figure \refersec{fig:callingconventioncodes}.
@@ -649,28 +649,28 @@ those declared using non\dash prototype declarations.
 
 A subroutine entry declared with a function prototype style
 declaration may have a 
-DW\-\_AT\-\_prototyped attribute, which is
+\livelink{chap:DWATprototyped}{DW\-\_AT\-\_prototyped} attribute, which is
 a flag.
 
 \textit{The Fortran language allows the keywords elemental, pure
 and recursive to be included as part of the declaration of
 a subroutine; these attributes reflect that usage. These
 attributes are not relevant for languages that do not support
-similar keywords or syntax. In particular, the DW\-\_AT\-\_recursive
+similar keywords or syntax. In particular, the \livelink{chap:DWATrecursive}{DW\-\_AT\-\_recursive}
 attribute is neither needed nor appropriate in languages such
 as C where functions support recursion by default.
 }
 
-A subprogram entry may have a DW\-\_AT\-\_elemental attribute, which
+A subprogram entry may have a \livelink{chap:DWATelemental}{DW\-\_AT\-\_elemental} attribute, which
 is a flag. The attribute indicates whether the subroutine
 or entry point was declared with the ``elemental'' keyword
 or property.
 
-A subprogram entry may have a DW\-\_AT\-\_pure attribute, which is
+A subprogram entry may have a \livelink{chap:DWATpure}{DW\-\_AT\-\_pure} attribute, which is
 a flag. The attribute indicates whether the subroutine was
 declared with the ``pure'' keyword or property.
 
-A subprogram entry may have a DW\-\_AT\-\_recursive attribute, which
+A subprogram entry may have a \livelink{chap:DWATrecursive}{DW\-\_AT\-\_recursive} attribute, which
 is a flag. The attribute indicates whether the subroutine
 or entry point was declared with the ``recursive'' keyword
 or property.
@@ -681,7 +681,7 @@ or property.
 \label{chap:subroutineandentrypointreturntypes}
 
 If the subroutine or entry point is a function that returns a
-value, then its debugging information entry has a DW\-\_AT\-\_type
+value, then its debugging information entry has a \livelink{chap:DWATtype}{DW\-\_AT\-\_type}
 attribute to denote the type returned by that function.
 
 \textit{Debugging information entries for C void functions should
@@ -691,29 +691,29 @@ not have an attribute for the return type.  }
 \subsection{Subroutine and Entry Point Locations}
 \label{chap:subroutineandentrypointlocations}
 
-A subroutine entry may have either a DW\-\_AT\-\_low\-\_pc and
-DW\-\_AT\-\_high\-\_pc pair of attributes or a DW\-\_AT\-\_ranges attribute
+A subroutine entry may have either a \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} and
+\livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair of attributes or a \livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} attribute
 whose values encode the contiguous or non\dash contiguous address
 ranges, respectively, of the machine instructions generated
 for the subroutine (see 
 Section \refersec{chap:codeaddressesandranges}).
 
-A subroutine entry may also have a DW\-\_AT\-\_entry\-\_pc attribute
+A subroutine entry may also have a \livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc} attribute
 whose value is the address of the first executable instruction
 of the subroutine (see 
 Section \refersec{chap:entryaddress}).
 
-An entry point has a DW\-\_AT\-\_low\-\_pc attribute whose value is the
+An entry point has a \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} attribute whose value is the
 relocated address of the first machine instruction generated
 for the entry point.
 
-\textit{While the DW\-\_AT\-\_entry\-\_pc attribute might also seem appropriate
-for this purpose, historically the DW\-\_AT\-\_low\-\_pc attribute
-was used before the DW\-\_AT\-\_entry\-\_pc was introduced (in DWARF
+\textit{While the \livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc} attribute might also seem appropriate
+for this purpose, historically the \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} attribute
+was used before the \livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc} was introduced (in DWARF
 Version 3). There is insufficient reason to change this.}
 
-Subroutines and entry points may also have DW\-\_AT\-\_segment and
-DW\-\_AT\-\_address\-\_class attributes, as appropriate, to specify
+Subroutines and entry points may also have \livelink{chap:DWATsegment}{DW\-\_AT\-\_segment} and
+\livelink{chap:DWATaddressclass}{DW\-\_AT\-\_address\-\_class} attributes, as appropriate, to specify
 which segments the code for the subroutine resides in and
 the addressing mode to be used in calling that subroutine.
 
@@ -747,7 +747,7 @@ has a child entry with the
 tag \livetarg{chap:DWTAGcommoninclusion}{DW\-\_TAG\-\_common\-\_inclusion}. 
 The
 common inclusion entry has a 
-DW\-\_AT\-\_common\-\_reference attribute
+\livelink{chap:DWATcommonreference}{DW\-\_AT\-\_common\-\_reference} attribute
 whose value is a reference to the debugging information entry
 for the common block being included 
 (see Section \refersec{chap:commonblockentries}).
@@ -755,13 +755,13 @@ for the common block being included
 \subsection{Low-Level Information}
 \label{chap:lowlevelinformation}
 
-A subroutine or entry point entry may have a DW\-\_AT\-\_return\-\_addr
+A subroutine or entry point entry may have a \livelink{chap:DWATreturnaddr}{DW\-\_AT\-\_return\-\_addr}
 attribute, whose value is a location description. The location
 calculated is the place where the return address for the
 subroutine or entry point is stored.
 
 A subroutine or entry point entry may also have a
-DW\-\_AT\-\_frame\-\_base attribute, whose value is a location
+\livelink{chap:DWATframebase}{DW\-\_AT\-\_frame\-\_base} attribute, whose value is a location
 description that computes the “frame base” for the
 subroutine or entry point. If the location description is
 a simple register location description, the given register
@@ -780,18 +780,18 @@ compact. However, these are not equivalent in general.}
 
 \textit{The frame base for a procedure is typically an address fixed
 relative to the first unit of storage allocated for the
-procedure’s stack frame. The DW\-\_AT\-\_frame\-\_base attribute
+procedure’s stack frame. The \livelink{chap:DWATframebase}{DW\-\_AT\-\_frame\-\_base} attribute
 can be used in several ways:}
 
 \begin{enumerate}[1.]
 \item \textit{In procedures that need location lists to locate local
-variables, the DW\-\_AT\-\_frame\-\_base can hold the needed location
+variables, the \livelink{chap:DWATframebase}{DW\-\_AT\-\_frame\-\_base} can hold the needed location
 list, while all variables’ location descriptions can be
 simpler ones involving the frame base.}
 
 \item \textit{It can be used in resolving ``up\dash level'' addressing
 within nested routines. 
-(See also DW\-\_AT\-\_static\-\_link, below)}
+(See also \livelink{chap:DWATstaticlink}{DW\-\_AT\-\_static\-\_link}, below)}
 %The -See also- here is ok, the DW\-\_AT should be
 %a hyperref to the def itself, which is earlier in this document.
 \end{enumerate}
@@ -799,17 +799,17 @@ within nested routines.
 \textit{Some languages support nested subroutines. In such languages,
 it is possible to reference the local variables of an
 outer subroutine from within an inner subroutine. The
-DW\-\_AT\-\_static\-\_link and DW\-\_AT\-\_frame\-\_base attributes allow
+\livelink{chap:DWATstaticlink}{DW\-\_AT\-\_static\-\_link} and \livelink{chap:DWATframebase}{DW\-\_AT\-\_frame\-\_base} attributes allow
 debuggers to support this same kind of referencing.}
 
 If a subroutine or entry point is nested, it may have a
-DW\-\_AT\-\_static\-\_link attribute, whose value is a location
+\livelink{chap:DWATstaticlink}{DW\-\_AT\-\_static\-\_link} attribute, whose value is a location
 description that computes the frame base of the relevant
 instance of the subroutine that immediately encloses the
 subroutine or entry point.
 
 In the context of supporting nested subroutines, the
-DW\-\_AT\-\_frame\-\_base attribute value should obey the following
+\livelink{chap:DWATframebase}{DW\-\_AT\-\_frame\-\_base} attribute value should obey the following
 constraints:
 
 \begin{enumerate}[1.]
@@ -817,7 +817,7 @@ constraints:
 life of the procedure, and
 
 \item The computed value should be unique among instances of
-the same subroutine. (For typical DW\-\_AT\-\_frame\-\_base use, this
+the same subroutine. (For typical \livelink{chap:DWATframebase}{DW\-\_AT\-\_frame\-\_base} use, this
 means that a recursive subroutine’s stack frame must have
 non\dash zero size.)
 \end{enumerate}
@@ -825,7 +825,7 @@ non\dash zero size.)
 \textit{If a debugger is attempting to resolve an up\dash level reference
 to a variable, it uses the nesting structure of DWARF to
 determine which subroutine is the lexical parent and the
-DW\-\_AT\-\_static\-\_link value to identify the appropriate active
+\livelink{chap:DWATstaticlink}{DW\-\_AT\-\_static\-\_link} value to identify the appropriate active
 frame of the parent. It can then attempt to find the reference
 within the context of the parent.}
 
@@ -843,7 +843,7 @@ represented by a debugging information entry with the tag
 \livetarg{chap:DWTAGthrowntype}{DW\-\_TAG\-\_thrown\-\_type}.  
 Each such entry is a child of the entry
 representing the subroutine that may throw this type. Each
-thrown type entry contains a DW\-\_AT\-\_type attribute, whose
+thrown type entry contains a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute, whose
 value is a reference to an entry describing the type of the
 exception that may be thrown.
 
@@ -868,10 +868,10 @@ template definition is represented by a debugging information
 entry with the 
 tag \livetarg{chap:DWTAGtemplatetypeparameter}{DW\-\_TAG\-\_template\-\_type\-\_parameter}. 
 Each
-such entry has a DW\-\_AT\-\_name attribute, whose value is a
+such entry has a \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute, whose value is a
 null\dash terminated string containing the name of the formal
 type parameter as it appears in the source program. The
-template type parameter entry also has a DW\-\_AT\-\_type attribute
+template type parameter entry also has a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute
 describing the actual type by which the formal is replaced
 for this instantiation.
 
@@ -901,8 +901,8 @@ is represented by a debugging information entry with the
 tag \livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram}. The entry for a subroutine that is
 explicitly declared to be available for inline expansion or
 that was expanded inline implicitly by the compiler has a
-DW\-\_AT\-\_inline attribute whose value is an integer constant. The
-set of values for the DW\-\_AT\-\_inline attribute is given in
+\livelink{chap:DWATinline}{DW\-\_AT\-\_inline} attribute whose value is an integer constant. The
+set of values for the \livelink{chap:DWATinline}{DW\-\_AT\-\_inline} attribute is given in
 Figure \refersec{fig:inlinecodes}.
 
 \begin{figure}[here]
@@ -913,7 +913,7 @@ Figure \refersec{fig:inlinecodes}.
 Name&Meaning\\ \hline
 DW\-\_INL\-\_not\-\_inlined & Not delared inline nor inlined by the
   compiler(equivalent to the absense of the containing
-  DW\-\_AT\-\_linline attribute) \\
+  \livelink{chap:DWATinline}{DW\-\_AT\-\_inline} attribute) \\
 DW\-\_INL\-\_inlined & Not declared inline but inlined by the compiler \\
 DW\-\_INL\-\_declared\-\_not\-\_inlined & Declared inline but 
   not inlined by the compiler \\
@@ -925,16 +925,16 @@ DW\-\_INL\-\_declared\-\_inlined & Declared inline and inlined by the compiler \
 constexpr is implicitly declared inline. The abstract inline
 instance (see below) is represented by a debugging information
 entry with the tag \livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram}. Such an entry has a
-DW\-\_AT\-\_inline attribute whose value is DW\-\_INL\-\_inlined.}
+\livelink{chap:DWATinline}{DW\-\_AT\-\_inline} attribute whose value is DW\-\_INL\-\_inlined.}
 
 
 \paragraph{Abstract Instances}
 \label{chap:abstractinstances}
 Any debugging information entry that is owned (either
 directly or indirectly) by a debugging information entry
-that contains the DW\-\_AT\-\_inline attribute is referred to
+that contains the \livelink{chap:DWATinline}{DW\-\_AT\-\_inline} attribute is referred to
 as an “abstract instance entry.” Any subroutine entry
-that contains a DW\-\_AT\-\_inline attribute whose value is other
+that contains a \livelink{chap:DWATinline}{DW\-\_AT\-\_inline} attribute whose value is other
 than DW\-\_INL\-\_not\-\_inlined is known as an “abstract instance
 root.” Any set of abstract instance entries that are all
 children (either directly or indirectly) of some abstract
@@ -947,7 +947,7 @@ instance tree.
 
 Each abstract instance root is either part of a larger
 tree (which gives a context for the root) or uses
-DW\-\_AT\-\_specification to refer to the declaration in context.
+\livelink{chap:DWATspecification}{DW\-\_AT\-\_specification} to refer to the declaration in context.
 
 \textit{For example, in C++ the context might be a namespace
 declaration or a class declaration.}
@@ -960,11 +960,11 @@ A debugging information entry that is a member of an abstract
 instance tree should not contain any attributes which describe
 aspects of the subroutine which vary between distinct inlined
 expansions or distinct out\dash of\dash line expansions. For example,
-the DW\-\_AT\-\_low\-\_pc,
-DW\-\_AT\-\_high\-\_pc, DW\-\_AT\-\_ranges, 
-DW\-\_AT\-\_entry\-\_pc, DW\-\_AT\-\_location,
-DW\-\_AT\-\_return\-\_addr, DW\-\_AT\-\_start\-\_scope, and 
-DW\-\_AT\-\_segment
+the \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc},
+\livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc}, \livelink{chap:DWATranges}{DW\-\_AT\-\_ranges}, 
+\livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc}, \livelink{chap:DWATlocation}{DW\-\_AT\-\_location},
+\livelink{chap:DWATreturnaddr}{DW\-\_AT\-\_return\-\_addr}, \livelink{chap:DWATstartscope}{DW\-\_AT\-\_start\-\_scope}, and 
+\livelink{chap:DWATsegment}{DW\-\_AT\-\_segment}
 attributes typically should be omitted; however, this list
 is not exhaustive.
 
@@ -995,19 +995,19 @@ Each such entry should be a direct
 child of the entry that represents the scope within which
 the inlining occurs.
 
-Each inlined subroutine entry may have either a DW\-\_AT\-\_low\-\_pc
-and DW\-\_AT\-\_high\-\_pc pair of attributes or a DW\-\_AT\-\_ranges
+Each inlined subroutine entry may have either a \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc}
+and \livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair of attributes or a \livelink{chap:DWATranges}{DW\-\_AT\-\_ranges}
 attribute whose values encode the contiguous or non\dash contiguous
 address ranges, respectively, of the machine instructions
 generated for the inlined subroutine (see 
 Section \refersec{chap:codeaddressesandranges}). An
-inlined subroutine entry may also contain a DW\-\_AT\-\_entry\-\_pc
+inlined subroutine entry may also contain a \livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc}
 attribute, representing the first executable instruction of
 the inline expansion (see 
 Section \refersec{chap:entryaddress}).
 
-An inlined subroutine entry may also have DW\-\_AT\-\_call\-\_file,
-DW\-\_AT\-\_call\-\_line and DW\-\_AT\-\_call\-\_column attributes, 
+An inlined subroutine entry may also have \livelink{chap:DWATcallfile}{DW\-\_AT\-\_call\-\_file},
+\livelink{chap:DWATcallline}{DW\-\_AT\-\_call\-\_line} and \livelink{chap:DWATcallcolumn}{DW\-\_AT\-\_call\-\_column} attributes, 
 each of whose
 value is an integer constant. These attributes represent the
 source file, source line number, and source column number,
@@ -1022,10 +1022,10 @@ The call file, call line and call column coordinates do not
 describe the coordinates of the subroutine declaration that
 was inlined, rather they describe the coordinates of the call.
 
-An inlined subroutine entry may have a DW\-\_AT\-\_const\-\_expr
+An inlined subroutine entry may have a \livelink{chap:DWATconstexpr}{DW\-\_AT\-\_const\-\_expr}
 attribute, which is a flag whose presence indicates that the
 subroutine has been evaluated as a compile\dash time constant. Such
-an entry may also have a DW\-\_AT\-\_const\-\_value attribute,
+an entry may also have a \livelink{chap:DWATconstvalue}{DW\-\_AT\-\_const\-\_value} attribute,
 whose value may be of any form that is appropriate for the
 representation of the subroutine's return value. The value of
 this attribute is the actual return value of the subroutine,
@@ -1033,8 +1033,8 @@ represented as it would be on the target architecture.
 
 \textit{In C++, if a function or a constructor declared with constexpr
 is called with constant expressions, then the corresponding
-concrete inlined instance has a DW\-\_AT\-\_const\-\_expr attribute,
-as well as a DW\-\_AT\-\_const\-\_value attribute whose value represents
+concrete inlined instance has a \livelink{chap:DWATconstexpr}{DW\-\_AT\-\_const\-\_expr} attribute,
+as well as a \livelink{chap:DWATconstvalue}{DW\-\_AT\-\_const\-\_value} attribute whose value represents
 the actual return value of the concrete inlined instance.}
 
 Any debugging information entry that is owned (either
@@ -1068,7 +1068,7 @@ are not specific to the concrete instance (but present in
 the abstract instance) and need include only attributes that
 are specific to the concrete instance (but omitted in the
 abstract instance). In place of these omitted attributes, each
-concrete inlined instance entry has a DW\-\_AT\-\_abstract\-\_origin
+concrete inlined instance entry has a \livelink{chap:DWATabstractorigin}{DW\-\_AT\-\_abstract\-\_origin}
 attribute that may be used to obtain the missing information
 (indirectly) from the associated abstract instance entry. The
 value of the abstract origin attribute is a reference to the
@@ -1083,7 +1083,7 @@ they may usually be omitted from any entry that has an abstract
 origin attribute.
 
 For each pair of entries that are associated via a
-DW\-\_AT\-\_abstract\-\_origin attribute, both members of the pair
+\livelink{chap:DWATabstractorigin}{DW\-\_AT\-\_abstract\-\_origin} attribute, both members of the pair
 have the same tag. So, for example, an entry with the tag
 \livelink{chap:DWTAGvariable}{DW\-\_TAG\-\_variable} can only be associated with another entry
 that also has the tag \livelink{chap:DWTAGvariable}{DW\-\_TAG\-\_variable}. The only exception
@@ -1099,7 +1099,7 @@ tree. There are a few exceptions:
 
 \begin{enumerate}[1.]
 \item An entry in the concrete instance tree may be omitted if
-it contains only a DW\-\_AT\-\_abstract\-\_origin attribute and either
+it contains only a \livelink{chap:DWATabstractorigin}{DW\-\_AT\-\_abstract\-\_origin} attribute and either
 has no children, or its children are omitted. Such entries
 would provide no useful information. In C\dash like languages,
 such entries frequently include types, including structure,
@@ -1111,7 +1111,7 @@ the reference should refer to the abstract instance entry.
 
 \item Entries in the concrete instance tree which are associated
 with entries in the abstract instance tree such that neither
-has a DW\-\_AT\-\_name attribute, and neither is referenced by
+has a \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute, and neither is referenced by
 any other debugging information entry, may be omitted. This
 may happen for debugging information entries in the abstract
 instance trees that became unnecessary in the concrete instance
@@ -1127,7 +1127,7 @@ not correspond to entries in the abstract instance tree
 to describe new entities that are specific to a particular
 inlined expansion. In that case, they will not have associated
 entries in the abstract instance tree, should not contain
-DW\-\_AT\-\_abstract\-\_origin attributes, and must contain all their
+\livelink{chap:DWATabstractorigin}{DW\-\_AT\-\_abstract\-\_origin} attributes, and must contain all their
 own attributes directly. This allows an abstract instance tree
 to omit debugging information entries for anonymous entities
 that are unlikely to be needed in most inlined expansions. In
@@ -1152,7 +1152,7 @@ The DWARF representation of a concrete out\dash of\dash line instance
 of an inlined subroutine is essentially the same as for a
 concrete inlined instance of that subroutine (as described in
 the preceding section). The representation of such a concrete
-out\dash of\dash line instance makes use of DW\-\_AT\-\_abstract\-\_origin
+out\dash of\dash line instance makes use of \livelink{chap:DWATabstractorigin}{DW\-\_AT\-\_abstract\-\_origin}
 attributes in exactly the same way as they are used for
 a concrete inlined instance (that is, as references to
 corresponding entries within the associated abstract instance
@@ -1235,11 +1235,11 @@ to the combined calling and called execution contexts.}
 
 A trampoline is represented by a debugging information entry
 with the tag \livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram} or \livelink{chap:DWTAGinlinedsubroutine}{DW\-\_TAG\-\_inlined\-\_subroutine}
-that has a DW\-\_AT\-\_trampoline attribute. The value of that
+that has a \livelink{chap:DWATtrampoline}{DW\-\_AT\-\_trampoline} attribute. The value of that
 attribute indicates the target subroutine of the trampoline,
 that is, the subroutine to which the trampoline passes
 control. (A trampoline entry may but need not also have a
-DW\-\_AT\-\_artificial attribute.)
+\livelink{chap:DWATartificial}{DW\-\_AT\-\_artificial} attribute.)
 
 The value of the trampoline attribute may be represented
 using any of the following forms, which are listed in order
@@ -1302,8 +1302,8 @@ A lexical block is represented by a debugging information
 entry with the 
 tag \livetarg{chap:DWTAGlexicalblock}{DW\-\_TAG\-\_lexical\-\_block}.
 
-The lexical block entry may have either a DW\-\_AT\-\_low\-\_pc and
-DW\-\_AT\-\_high\-\_pc pair of attributes or a DW\-\_AT\-\_ranges attribute
+The lexical block entry may have either a \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} and
+\livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair of attributes or a \livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} attribute
 whose values encode the contiguous or non-contiguous address
 ranges, respectively, of the machine instructions generated
 for the lexical block 
@@ -1311,7 +1311,7 @@ for the lexical block
 
 If a name has been given to the lexical block in the source
 program, then the corresponding lexical block entry has a
-DW\-\_AT\-\_name attribute whose value is a null-terminated string
+\livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute whose value is a null-terminated string
 containing the name of the lexical block as it appears in
 the source program.
 
@@ -1337,10 +1337,10 @@ the debugging information entry representing the scope within
 which the name of the label could be legally referenced within
 the source program.
 
-The label entry has a DW\-\_AT\-\_low\-\_pc attribute whose value
+The label entry has a \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} attribute whose value
 is the relocated address of the first machine instruction
 generated for the statement identified by the label in
-the source program.  The label entry also has a DW\-\_AT\-\_name
+the source program.  The label entry also has a \livelink{chap:DWATname}{DW\-\_AT\-\_name}
 attribute whose value is a null-terminated string containing
 the name of the label as it appears in the source program.
 
@@ -1357,17 +1357,17 @@ record variable.}
 A with statement is represented by a debugging information
 entry with the tag \livetarg{chap:DWTAGwithstmt}{DW\-\_TAG\-\_with\-\_stmt}.
 
-A with statement entry may have either a DW\-\_AT\-\_low\-\_pc and
-DW\-\_AT\-\_high\-\_pc pair of attributes or a DW\-\_AT\-\_ranges attribute
+A with statement entry may have either a \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} and
+\livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair of attributes or a \livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} attribute
 whose values encode the contiguous or non\dash contiguous address
 ranges, respectively, of the machine instructions generated
 for the with statement 
 (see Section \refersec{chap:codeaddressesandranges}).
 
-The with statement entry has a DW\-\_AT\-\_type attribute, denoting
+The with statement entry has a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute, denoting
 the type of record whose fields may be referenced without full
 qualification within the body of the statement. It also has
-a DW\-\_AT\-\_location attribute, describing how to find the base
+a \livelink{chap:DWATlocation}{DW\-\_AT\-\_location} attribute, describing how to find the base
 address of the record object referenced within the body of
 the with statement.
 
@@ -1387,8 +1387,8 @@ a debugging information entry with
 the tag \livetarg{chap:DWTAGcatchblock}{DW\-\_TAG\-\_catch\-\_block}.
 
 Both try and catch block entries may have either a
-DW\-\_AT\-\_low\-\_pc and DW\-\_AT\-\_high\-\_pc pair of attributes or a
-DW\-\_AT\-\_ranges attribute whose values encode the contiguous
+\livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} and \livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair of attributes or a
+\livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} attribute whose values encode the contiguous
 or non- contiguous address ranges, respectively, of the
 machine instructions generated for the block (see Section
 \refersec{chap:codeaddressesandranges}).
