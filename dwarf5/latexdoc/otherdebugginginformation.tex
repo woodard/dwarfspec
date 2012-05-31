@@ -1403,7 +1403,7 @@ compilation system authoring body may specify an alternate
 default value for any or all columns.
 
 \item padding (array of ubyte) \\
-Enough DW\-\_CFA\-\_nop instructions to make the size of this entry
+Enough \livelink{chap:DWCFAnop}{DW\-\_CFA\-\_nop} instructions to make the size of this entry
 match the length value above.
 \end{enumerate}
 
@@ -1437,7 +1437,7 @@ The number of bytes of program instructions described by this entry.
 A sequence of table defining instructions that are described below.
 
 \item 6. padding (array of ubyte) \\
-Enough DW\-\_CFA\-\_nop instructions to make the size of this
+Enough \livelink{chap:DWCFAnop}{DW\-\_CFA\-\_nop} instructions to make the size of this
 entry match the length value above.
 \end{enumerate}
 
@@ -1475,8 +1475,8 @@ these instructions because its use would be circular.
 \end{itemize}
 
 \textit{Call frame instructions to which these restrictions apply
-include DW\-\_CFA\-\_def\-\_cfa\-\_expression, DW\-\_CFA\-\_expression
-and DW\-\_CFA\-\_val\-\_expression.}
+include \livelink{chap:DWCFAdefcfaexpression}{DW\-\_CFA\-\_def\-\_cfa\-\_expression}, \livelink{chap:DWCFAexpression}{DW\-\_CFA\-\_expression}
+and \livelink{chap:DWCFAvalexpression}{DW\-\_CFA\-\_val\-\_expression}.}
 
 \subsubsection{Row Creation Instructions}
 \label{chap:rowcreationinstructions}
@@ -1484,7 +1484,7 @@ and DW\-\_CFA\-\_val\-\_expression.}
 \begin{enumerate}[1.]
 
 \item \textbf{DW\-\_CFA\-\_set\-\_loc} \\
-The DW\-\_CFA\-\_set\-\_loc instruction takes a single operand that
+The \livetarg{chap:DWCFAsetloc}{DW\-\_CFA\-\_set\-\_loc} instruction takes a single operand that
 represents a target address. The required action is to create a
 new table row using the specified address as the location. All
 other values in the new row are initially identical to the
@@ -1495,7 +1495,7 @@ selector of the given length.
 
 
 \item \textbf{DW\-\_CFA\-\_advance\-\_loc} \\
-The DW\-\_CFA\-\_advance instruction takes a single operand (encoded
+The \livetarg{chap:DWCFAadvanceloc}{DW\-\_CFA\-\_advanceloc} instruction takes a single operand (encoded
 with the opcode) that represents a constant delta. The required
 action is to create a new table row with a location value that
 is computed by taking the current entry’s location value
@@ -1505,21 +1505,21 @@ other values in the new row are initially identical to the
 current row
 
 \item \textbf{DW\-\_CFA\-\_advance\-\_loc1} \\
-The DW\-\_CFA\-\_advance\-\_loc1 instruction takes a single ubyte
+The \livetarg{chap:DWCFAadvanceloc1}{DW\-\_CFA\-\_advance\-\_loc1} instruction takes a single ubyte
 operand that represents a constant delta. This instruction
-is identical to DW\-\_CFA\-\_advance\-\_loc except for the encoding
+is identical to \livetarg{chap:DWCFAadvanceloc}{DW\-\_CFA\-\_advance\-\_loc} except for the encoding
 and size of the delta operand.
 
 \item \textbf{DW\-\_CFA\-\_advance\-\_loc2} \\
-The DW\-\_CFA\-\_advance\-\_loc2 instruction takes a single uhalf
+The \livetarg{chap:DWCFAadvanceloc2}{DW\-\_CFA\-\_advance\-\_loc2} instruction takes a single uhalf
 operand that represents a constant delta. This instruction
-is identical to DW\-\_CFA\-\_advance\-\_loc except for the encoding
+is identical to \livelink{chap:DWCFAadvanceloc}{DW\-\_CFA\-\_advance\-\_loc} except for the encoding
 and size of the delta operand.
 
 \item \textbf{DW\-\_CFA\-\_advance\-\_loc4} \\
-The DW\-\_CFA\-\_advance\-\_loc4 instruction takes a single uword
+The \livetarg{chap:DWCFAadvanceloc4}{DW\-\_CFA\-\_advance\-\_loc4} instruction takes a single uword
 operand that represents a constant delta. This instruction
-is identical to DW\-\_CFA\-\_advance\-\_loc except for the encoding
+is identical to \livelink{chap:DWCFAadvanceloc}{DW\-\_CFA\-\_advance\-\_loc} except for the encoding
 and size of the delta operand.
 
 \end{enumerate}
@@ -1529,22 +1529,22 @@ and size of the delta operand.
 
 \begin{enumerate}[1.]
 \item \textbf{DW\-\_CFA\-\_def\-\_cfa} \\
-The DW\-\_CFA\-\_def\-\_cfa instruction takes two unsigned LEB128
+The \livetarg{chap:DWCFAdefcfa}{DW\-\_CFA\-\_def\-\_cfa} instruction takes two unsigned LEB128
 operands representing a register number and a (non\dash factored)
 offset. The required action is to define the current CFA rule
 to use the provided register and offset.
 
 \item \textbf{ DW\-\_CFA\-\_def\-\_cfa\-\_sf} \\
-The DW\-\_CFA\-\_def\-\_cfa\-\_sf instruction takes two operands:
+The \livetarg{chap:DWCFAdefcfasf}{DW\-\_CFA\-\_def\-\_cfa\-\_sf} instruction takes two operands:
 an unsigned LEB128 value representing a register number and a
 signed LEB128 factored offset. This instruction is identical
-to DW\-\_CFA\-\_def\-\_cfa except that the second operand is signed
+to \livelink{chap:DWCFAdefcfa}{DW\-\_CFA\-\_def\-\_cfa} except that the second operand is signed
 and factored. The resulting offset is factored\_offset *
 data\_alignment\_factor.
 
 
 \item \textbf{DW\-\_CFA\-\_def\-\_cfa\-\_register} \\
-The DW\-\_CFA\-\_def\-\_cfa\-\_register instruction takes a single
+The \livetarg{chap:DWCFAdefcfaregister}{DW\-\_CFA\-\_def\-\_cfa\-\_register} instruction takes a single
 unsigned LEB128 operand representing a register number. The
 required action is to define the current CFA rule to use
 the provided register (but to keep the old offset). This
@@ -1554,7 +1554,7 @@ to use a register and offset.
 
 
 \item \textbf{DW\-\_CFA\-\_def\-\_cfa\-\_offset} \\
-The DW\-\_CFA\-\_def\-\_cfa\-\_offset instruction takes a single
+The \livetarg{chap:DWCFAdefcfaoffset}{DW\-\_CFA\-\_def\-\_cfa\-\_offset} instruction takes a single
 unsigned LEB128 operand representing a (non-factored)
 offset. The required action is to define the current CFA rule
 to use the provided offset (but to keep the old register). This
@@ -1563,16 +1563,16 @@ to use a register and offset.
 
 
 \item \textbf{DW\-\_CFA\-\_def\-\_cfa\-\_offset\-\_sf} \\
-The DW\-\_CFA\-\_def\-\_cfa\-\_offset\-\_sf instruction takes a signed
+The \livetarg{chap:DWCFAdefcfaoffsetsf}{DW\-\_CFA\-\_def\-\_cfa\-\_offset\-\_sf} instruction takes a signed
 LEB128 operand representing a factored offset. This instruction
-is identical to DW\-\_CFA\-\_def\-\_cfa\-\_offset except that the
+is identical to \livelink{chap:DWCFAdefcfaoffset}{DW\-\_CFA\-\_def\-\_cfa\-\_offset} except that the
 operand is signed and factored. The resulting offset is
 factored\_offset * data\_alignment\_factor. This operation
 is valid only if the current CFA rule is defined to use a
 register and offset.
 
 \item \textbf{DW\-\_CFA\-\_def\-\_cfa\-\_expression} \\
-The DW\-\_CFA\-\_def\-\_cfa\-\_expression instruction takes a single
+The \livetarg{chap:DWCFAdefcfaexpression}{DW\-\_CFA\-\_def\-\_cfa\-\_expression} instruction takes a single
 operand encoded as a \livelink{chap:DWFORMexprloc}{DW\-\_FORM\-\_exprloc} value representing a
 DWARF expression. The required action is to establish that
 expression as the means by which the current CFA is computed.
@@ -1588,19 +1588,19 @@ expression operators that can be used.
 
 \begin{enumerate}[1.]
 \item \textbf{DW\-\_CFA\-\_undefined} \\
-The DW\-\_CFA\-\_undefined instruction takes a single unsigned
+The \livetarg{chap:DWCFAundefined}{DW\-\_CFA\-\_undefined} instruction takes a single unsigned
 LEB128 operand that represents a register number. The required
 action is to set the rule for the specified register to
 ``undefined.''
 
 \item \textbf{DW\-\_CFA\-\_same\-\_value} \\
-The DW\-\_CFA\-\_same\-\_value instruction takes a single unsigned
+The \livetarg{chap:DWCFAsamevalue}{DW\-\_CFA\-\_same\-\_value} instruction takes a single unsigned
 LEB128 operand that represents a register number. The required
 action is to set the rule for the specified register to
 ``same value.''
 
 \item \textbf{DW\-\_CFA\-\_offset} \\
-The DW\-\_CFA\-\_offset instruction takes two operands: a register
+The \livetarg{chap:DWCFAoffset}{DW\-\_CFA\-\_offset} instruction takes two operands: a register
 number (encoded with the opcode) and an unsigned LEB128
 constant representing a factored offset. The required action
 is to change the rule for the register indicated by the
@@ -1609,21 +1609,21 @@ N is
 \textit{factored offset * data\_alignment\_factor.}
 
 \item \textbf{DW\-\_CFA\-\_offset\-\_extended} \\
-The DW\-\_CFA\-\_offset\-\_extended instruction takes two unsigned
+The \livetarg{chap:DWCFAoffsetextended}{DW\-\_CFA\-\_offset\-\_extended} instruction takes two unsigned
 LEB128 operands representing a register number and a factored
-offset. This instruction is identical to DW\-\_CFA\-\_offset except
+offset. This instruction is identical to \livelink{chap:DWCFAoffset}{DW\-\_CFA\-\_offset} except
 for the encoding and size of the register operand.
 
 \item \textbf{ DW\-\_CFA\-\_offset\-\_extended\-\_sf} \\
-The DW\-\_CFA\-\_offset\-\_extended\-\_sf instruction takes two operands:
+The \livetarg{chap:DWCFAoffsetextendedsf}{DW\-\_CFA\-\_offset\-\_extended\-\_sf} instruction takes two operands:
 an unsigned LEB128 value representing a register number and a
 signed LEB128 factored offset. This instruction is identical
-to DW\-\_CFA\-\_offset\-\_extended except that the second operand is
+to \livelink{chap:DWCFAoffsetextended}{DW\-\_CFA\-\_offset\-\_extended} except that the second operand is
 signed and factored. The resulting offset is 
 \textit{factored\_offset * data\_alignment\_factor}.
 
 \item \textbf{DW\-\_CFA\-\_val\-\_offset} \\
-The DW\-\_CFA\-\_val\-\_offset instruction takes two unsigned
+The \livetarg{chap:DWCFAvaloffset}{DW\-\_CFA\-\_val\-\_offset} instruction takes two unsigned
 LEB128 operands representing a register number and a
 factored offset. The required action is to change the rule
 for the register indicated by the register number to be a
@@ -1631,23 +1631,26 @@ val\_offset(N) rule where the value of N is
 \textit{factored\_offset * data\_alignment\_factor}.
 
 \item \textbf{DW\-\_CFA\-\_val\-\_offset\-\_sf} \\
-The DW\-\_CFA\-\_val\-\_offset\-\_sf instruction takes two operands: an
+The \livetarg{chap:DWCFAvaloffsetsf}{DW\-\_CFA\-\_val\-\_offset\-\_sf} instruction takes two operands: an
 unsigned LEB128 value representing a register number and a
 signed LEB128 factored offset. This instruction is identical
-to DW\-\_CFA\-\_val\-\_offset except that the second operand is signed
+to \livelink{chap:DWCFAvaloffset}{DW\-\_CFA\-\_val\-\_offset} except that the second operand is signed
 and factored. The resulting offset is 
 \textit{factored\_offset * data\_alignment\_factor}.
 
 \item \textbf{DW\-\_CFA\-\_register} \\
-The DW\-\_CFA\-\_register instruction takes two unsigned LEB128
+The \livetarg{chap:DWCFAregister}{DW\-\_CFA\-\_register} instruction takes two unsigned LEB128
 operands representing register numbers. The required action
 is to set the rule for the first register to be register(R)
 where R is the second register.
 
 \item \textbf{DW\-\_CFA\-\_expression} \\
-The DW\-\_CFA\-\_expression instruction takes two operands: an
+The \livetarg{chap:DWCFAexpression}{DW\-\_CFA\-\_expression} 
+instruction takes two operands: an
 unsigned LEB128 value representing a register number, and
-a \livelink{chap:DWFORMblock}{DW\-\_FORM\-\_block} value representing a DWARF expression. The
+a \livelink{chap:DWFORMblock}{DW\-\_FORM\-\_block} 
+value representing a DWARF expression. 
+The
 required action is to change the rule for the register
 indicated by the register number to be an expression(E)
 rule where E is the DWARF expression. That is, the DWARF
@@ -1660,9 +1663,10 @@ regarding restrictions on the DWARF
 expression operators that can be used.
 
 \item \textbf{DW\-\_CFA\-\_val\-\_expression} \\
-The DW\-\_CFA\-\_val\-\_expression instruction takes two operands:
+The \livetarg{chap:DWCFAvalexpression}{DW\-\_CFA\-\_val\-\_expression} instruction takes two operands:
 an unsigned LEB128 value representing a register number, and
-a \livelink{chap:DWFORMblock}{DW\-\_FORM\-\_block} value representing a DWARF expression. The
+a \livelink{chap:DWFORMblock}{DW\-\_FORM\-\_block} 
+value representing a DWARF expression. The
 required action is to change the rule for the register
 indicated by the register number to be a val\_expression(E)
 rule where E is the DWARF expression. That is, the DWARF
@@ -1675,16 +1679,16 @@ regarding restrictions on the DWARF
 expression operators that can be used.
 
 \item \textbf{ DW\-\_CFA\-\_restore} \\
-The DW\-\_CFA\-\_restore instruction takes a single operand (encoded
+The \livetarg{chap:DWCFArestore}{DW\-\_CFA\-\_restore} instruction takes a single operand (encoded
 with the opcode) that represents a register number. The
 required action is to change the rule for the indicated
 register to the rule assigned it by the initial\_instructions
 in the CIE.
 
 \item \textbf{DW\-\_CFA\-\_restore\-\_extended} \\
-The DW\-\_CFA\-\_restore\-\_extended instruction takes a single unsigned
+The \livetarg{chap:DWCFArestoreextended}{DW\-\_CFA\-\_restore\-\_extended} instruction takes a single unsigned
 LEB128 operand that represents a register number. This
-instruction is identical to DW\-\_CFA\-\_restore except for the
+instruction is identical to \livelink{chap:DWCFArestore}{DW\-\_CFA\-\_restore} except for the
 encoding and size of the register operand.
 
 \end{enumerate}
@@ -1701,13 +1705,13 @@ body of a function.}
 \begin{enumerate}[1.]
 
 \item \textbf{DW\-\_CFA\-\_remember\-\_state} \\
-The DW\-\_CFA\-\_remember\-\_state instruction takes no operands. The
+The \livetarg{chap:DWCFArememberstate}{DW\-\_CFA\-\_remember\-\_state} instruction takes no operands. The
 required action is to push the set of rules for every register
 onto an implicit stack.
 
 
 \item \textbf{DW\-\_CFA\-\_restore\-\_state} \\
-The DW\-\_CFA\-\_restore\-\_state instruction takes no operands. The
+The \livetarg{chap:DWCFArestorestate}{DW\-\_CFA\-\_restore\-\_state} instruction takes no operands. The
 required action is to pop the set of rules off the implicit
 stack and place them in the current row.
 
@@ -1717,7 +1721,7 @@ stack and place them in the current row.
 \label{chap:paddinginstruction}
 \begin{enumerate}[1.]
 \item \textbf{DW\-\_CFA\-\_nop} \\
-The DW\-\_CFA\-\_nop instruction has no operands and no required
+The \livetarg{chap:DWCFAnop}{DW\-\_CFA\-\_nop} instruction has no operands and no required
 actions. It is used as padding to make a CIE or FDE an
 appropriate size
 
@@ -1737,16 +1741,17 @@ contained in the FDE. If so, then:}
 initial\_instructions field of the associated CIE.}
 
 \item \textit{Read and process the FDE’s instruction
-sequence until a DW\-\_CFA\-\_advance\-\_loc, DW\-\_CFA\-\_set\-\_loc, or the
+sequence until a \livelink{chap:DWCFAadvanceloc}{DW\-\_CFA\-\_advance\-\_loc}, 
+\livelink{chap:DWCFAsetloc}{DW\-\_CFA\-\_set\-\_loc}, or the
 end of the instruction stream is encountered.}
 
-\item \textit{ If a DW\-\_CFA\-\_advance\-\_loc or DW\-\_CFA\-\_set\-\_loc
+\item \textit{ If a \livelink{chap:DWCFAadvanceloc}{DW\-\_CFA\-\_advance\-\_loc} or \livelink{chap:DWCFAsetloc}{DW\-\_CFA\-\_set\-\_loc}
 instruction is encountered, then compute a new location value
 (L2). If L1 >= L2 then process the instruction and go back
 to step 2.}
 
 \item \textit{ The end of the instruction stream can be thought
-of as a DW\-\_CFA\-\_set\-\_loc (initial\_location + address\_range)
+of as a \livelink{chap:DWCFAsetloc}{DW\-\_CFA\-\_set\-\_loc} (initial\_location + address\_range)
 instruction. Note that the FDE is ill-formed if L2 is less
 than L1.}
 
@@ -1770,7 +1775,7 @@ Return Address.}
 
 If a Return Address register is defined in the virtual
 unwind table, and its rule is undefined (for example, by
-DW\-\_CFA\-\_undefined), then there is no return address and no
+\livelink{chap:DWCFAundefined}{DW\-\_CFA\-\_undefined}), then there is no return address and no
 call address, and the virtual unwind of stack activations
 is complete.
 
