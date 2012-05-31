@@ -393,7 +393,7 @@ line number program are special opcodes.} \\
 standard opcodes &
 These have a ubyte opcode field which may be followed by zero or more
 LEB128 operands (except for 
-DW\-\_LNS\-\_fixed\-\_advance\-\_pc, see below).
+\livelink{chap:DWLNSfixedadvancepc}{DW\-\_LNS\-\_fixed\-\_advance\-\_pc}, see below).
 The opcode implies the number of operands and their meanings, but the
 line number program header also specifies the number of operands for
 each standard opcode. \\
@@ -471,7 +471,7 @@ unoptimized code.}
 \textit{A more sophisticated approach might involve multiple entries in
 the matrix for a line number; in this case, at least one entry
 (often but not necessarily only one) specifies a recommended
-breakpoint location for the line number. DW\-\_LNS\-\_negate\-\_stmt
+breakpoint location for the line number. \livelink{chap:DWLNSnegatestmt}{DW\-\_LNS\-\_negate\-\_stmt}
 opcodes in the line number program control which matrix entries
 constitute such a recommendation and default\_is\_stmt might
 be either ``true'' or ``false''. This approach might be
@@ -575,7 +575,7 @@ instead of file names in the file register.
 
 \textit{A compiler may generate a single null byte for the file
 names field and define file names using the extended opcode
-DW\-\_LNE\-\_define\-\_file.}
+\livelink{chap:DWLNEdefinefile}{DW\-\_LNE\-\_define\-\_file}.}
 
 
 \end{enumerate}
@@ -759,47 +759,47 @@ actions performed by these opcodes are as follows:
 \begin{enumerate}[1.]
 
 \item \textbf{DW\-\_LNS\-\_copy} \\
-The DW\-\_LNS\-\_copy opcode takes no operands. It appends a row
+The \livetarg{chap:DWLNScopy}{DW\-\_LNS\-\_copy} opcode takes no operands. It appends a row
 to the matrix using the current values of the state machine
 registers. Then it sets the discriminator register to 0,
 and sets the basic\_block, prologue\_end and epilogue\_begin
 registers to ``false.''
 
 \item \textbf{DW\-\_LNS\-\_advance\-\_pc} \\
-The DW\-\_LNS\-\_advance\-\_pc opcode takes a single unsigned LEB128
+The \livetarg{chap:DWLNSadvancepc}{DW\-\_LNS\-\_advance\-\_pc} opcode takes a single unsigned LEB128
 operand as the operation advance and modifies the address
 and op\_index registers as specified in 
 Section \refersec{chap:specialopcodes}.
 
 \item \textbf{DW\-\_LNS\-\_advance\-\_line} \\
-The DW\-\_LNS\-\_advance\-\_line opcode takes a single signed LEB128
+The \livetarg{chap:DWLNSadvanceline}{DW\-\_LNS\-\_advance\-\_line} opcode takes a single signed LEB128
 operand and adds that value to the line register of the
 state machine.
 
 \item \textbf{DW\-\_LNS\-\_set\-\_file} \\ 
-The DW\-\_LNS\-\_set\-\_file opcode takes a single
+The \livetarg{chap:DWLNSsetfile}{DW\-\_LNS\-\_set\-\_file} opcode takes a single
 unsigned LEB128 operand and stores it in the file register
 of the state machine.
 
 \item \textbf{DW\-\_LNS\-\_set\-\_column} \\ 
-The DW\-\_LNS\-\_set\-\_column opcode takes a
+The \livetarg{chap:DWLNSsetcolumn}{DW\-\_LNS\-\_set\-\_column} opcode takes a
 single unsigned LEB128 operand and stores it in the column
 register of the state machine.
 
 \item \textbf{DW\-\_LNS\-\_negate\-\_stmt} \\
-The DW\-\_LNS\-\_negate\-\_stmt opcode takes no
+The \livetarg{chap:DWLNSnegatestmt}{DW\-\_LNS\-\_negate\-\_stmt} opcode takes no
 operands. It sets the is\_stmt register of the state machine
 to the logical negation of its current value.
 
 \item \textbf{DW\-\_LNS\-\_set\-\_basic\-\_block} \\
-The DW\-\_LNS\-\_set\-\_basic\-\_block opcode
+The \livetarg{chap:DWLNSsetbasicblock}{DW\-\_LNS\-\_set\-\_basic\-\_block} opcode
 takes no operands. It sets the basic\_block register of the
 state machine to ``true.''
 
 
 
 \item \textbf{DW\-\_LNS\-\_const\-\_add\-\_pc} \\
-The DW\-\_LNS\-\_const\-\_add\-\_pc opcode takes
+The \livetarg{chap:DWLNSconstaddpc}{DW\-\_LNS\-\_const\-\_add\-\_pc} opcode takes
 no operands. It advances the address and op\_index registers
 by the increments corresponding to special opcode 255.
 
@@ -807,14 +807,14 @@ by the increments corresponding to special opcode 255.
 by a small amount, it can use a single special opcode,
 which occupies a single byte. When it needs to advance the
 address by up to twice the range of the last special opcode,
-it can use DW\-\_LNS\-\_const\-\_add\-\_pc followed by a special opcode,
+it can use \livelink{chap:DWLNSconstaddpc}{DW\-\_LNS\-\_const\-\_add\-\_pc} followed by a special opcode,
 for a total of two bytes. Only if it needs to advance the
 address by more than twice that range will it need to use
-both DW\-\_LNS\-\_advance\-\_pc and a special opcode, requiring three
+both \livelink{chap:DWLNSadvancepc}{DW\-\_LNS\-\_advance\-\_pc} and a special opcode, requiring three
 or more bytes.}
 
 \item \textbf{DW\-\_LNS\-\_fixed\-\_advance\-\_pc} \\ 
-The DW\-\_LNS\-\_fixed\-\_advance\-\_pc opcode
+The \livetarg{chap:DWLNSfixedadvancepc}{DW\-\_LNS\-\_fixed\-\_advance\-\_pc} opcode
 takes a single uhalf (unencoded) operand and adds it to the
 address register of the state machine and sets the op\_index
 register to 0. This is the only standard opcode whose operand
@@ -822,14 +822,14 @@ is \textbf{not} a variable length number. It also does
 \textbf{not} multiply the
 operand by the minimum\_instruction\_length field of the header.
 
-\textit{Existing assemblers cannot emit DW\-\_LNS\-\_advance\-\_pc or special
+\textit{Existing assemblers cannot emit \livelink{chap:DWLNSadvancepc}{DW\-\_LNS\-\_advance\-\_pc} or special
 opcodes because they cannot encode LEB128 numbers or judge when
 the computation of a special opcode overflows and requires
-the use of DW\-\_LNS\-\_advance\-\_pc. Such assemblers, however, can
-use DW\-\_LNS\-\_fixed\-\_advance\-\_pc instead, sacrificing compression.}
+the use of \livelink{chap:DWLNSadvancepc}{DW\-\_LNS\-\_advance\-\_pc}. Such assemblers, however, can
+use \livelink{chap:DWLNSfixedadvancepc}{DW\-\_LNS\-\_fixed\-\_advance\-\_pc} instead, sacrificing compression.}
 
 \item \textbf{DW\-\_LNS\-\_set\-\_prologue\-\_end} \\
-The DW\-\_LNS\-\_set\-\_prologue\-\_end
+The \livetarg{chap:DWLNSsetprologueend}{DW\-\_LNS\-\_set\-\_prologue\-\_end}
 opcode takes no operands. It sets the prologue\_end register
 to ``true''.
 
@@ -855,7 +855,7 @@ subroutines).}
 
 
 \item \textbf{DW\-\_LNS\-\_set\-\_epilogue\-\_begin} \\
-The DW\-\_LNS\-\_set\-\_epilogue\-\_begin opcode takes no operands. It
+The \livetarg{chap:DWLNSsetepiloguebegin}{DW\-\_LNS\-\_set\-\_epilogue\-\_begin} opcode takes no operands. It
 sets the epilogue\_begin register to ``true''.
 
 \textit{When a breakpoint is set on the exit of a function or execution
@@ -876,7 +876,7 @@ subroutines).}
 epilogue begin may occur at the same address.}
 
 \item \textbf{DW\-\_LNS\-\_set\-\_isa} \\
-The DW\-\_LNS\-\_set\-\_isa opcode takes a single
+The \livetarg{chap:DWLNSsetisa}{DW\-\_LNS\-\_set\-\_isa} opcode takes a single
 unsigned LEB128 operand and stores that value in the isa
 register of the state machine.
 \end{enumerate}
@@ -889,19 +889,19 @@ The extended opcodes are as follows:
 \begin{enumerate}[1.]
 
 \item \textbf{DW\-\_LNE\-\_end\-\_sequence} \\
-The DW\-\_LNE\-\_end\-\_sequence opcode takes no operands. It sets the
+The \livetarg{chap:DWLNEendsequence}{DW\-\_LNE\-\_end\-\_sequence} opcode takes no operands. It sets the
 end\_sequence register of the state machine to “true” and
 appends a row to the matrix using the current values of the
 state-machine registers. Then it resets the registers to the
 initial values specified above 
 (see Section \refersec{chap:statemachineregisters}). 
 Every line
-number program sequence must end with a DW\-\_LNE\-\_end\-\_sequence
+number program sequence must end with a \livelink{chap:DWLNEendsequence}{DW\-\_LNE\-\_end\-\_sequence}
 instruction which creates a row whose address is that of the
 byte after the last target machine instruction of the sequence.
 
 \item \textbf{DW\-\_LNE\-\_set\-\_address} \\
-The DW\-\_LNE\-\_set\-\_address opcode takes a single relocatable
+The \livetarg{chap:DWLNEsetaddress}{DW\-\_LNE\-\_set\-\_address} opcode takes a single relocatable
 address as an operand. The size of the operand is the size
 of an address on the target machine. It sets the address
 register to the value given by the relocatable address and
@@ -914,7 +914,7 @@ stores a relocatable value into it instead.}
 
 \item \textbf{DW\-\_LNE\-\_define\-\_file} \\
 
-The DW\-\_LNE\-\_define\-\_file opcode takes four operands:
+The \livetarg{chap:DWLNEdefinefile}{DW\-\_LNE\-\_define\-\_file} opcode takes four operands:
 
 \begin{enumerate}[1.]
 
@@ -950,11 +950,12 @@ name exactly matches that given in the \livelink{chap:DWATname}{DW\-\_AT\-\_name
 in the compilation unit, and whose directory index is 0. The
 files are numbered, starting at 1, in the order in which they
 appear; the names in the header come before names defined by
-the DW\-\_LNE\-\_define\-\_file instruction. These numbers are used
+the \livelink{chap:DWLNEdefinefile}{DW\-\_LNE\-\_define\-\_file} instruction. These numbers are used
 in the file register of the state machine.
 
 \item \textbf{DW\-\_LNE\-\_set\-\_discriminator} \\
-The DW\-\_LNE\-\_set\-\_discriminator opcode takes a single
+The \livetarg{chap:DWLNEsetdiscriminator}{DW\-\_LNE\-\_set\-\_discriminator}
+opcode takes a single
 parameter, an unsigned LEB128 integer. It sets the
 discriminator register to the new value.
 
@@ -993,32 +994,35 @@ code of 0.
 The valid macinfo types are as follows:
 
 \begin{tabular}{ll}
-DW\-\_MACINFO\-\_define 
+\livelink{chap:DWMACINFOdefine}{DW\-\_MACINFO\-\_define} 
 &A macro definition.\\
-DW\-\_MACINFO\-\_undef
+\livelink{chap:DWMACINFOundef}{DW\-\_MACINFO\-\_undef}
 &A macro undefinition.\\
-DW\-\_MACINFO\-\_start\-\_file
+\livelink{chap:DWMACINFOstartfile}{DW\-\_MACINFO\-\_start\-\_file}
 &The start of a new source file inclusion.\\
-DW\-\_MACINFO\-\_end\-\_file
+\livelink{chap:DWMACINFOendfile}{DW\-\_MACINFO\-\_end\-\_file}
 &The end of the current source file inclusion.\\
-DW\-\_MACINFO\-\_vendor\-\_ext
+\livelink{chap:DWMACINFOvendorext}{DW\-\_MACINFO\-\_vendor\-\_ext}
 & Vendor specific macro information directives.\\
 \end{tabular}
 
 \subsubsection{Define and Undefine Entries}
 \label{chap:defineandundefineentries}
 
-All DW\-\_MACINFO\-\_define and DW\-\_MACINFO\-\_undef entries have two
+All 
+\livetarg{chap:DWMACINFOdefine}{DW\-\_MACINFO\-\_define} and 
+\livetarg{chap:DWMACINFOundef}{DW\-\_MACINFO\-\_undef} entries have two
 operands. The first operand encodes the line number of the
 source line on which the relevant defining or undefining
 macro directives appeared.
 
 The second operand consists of a null-terminated character
-string. In the case of a DW\-\_MACINFO\-\_undef entry, the value
+string. In the case of a 
+\livelink{chap:DWMACINFOundef}{DW\-\_MACINFO\-\_undef} entry, the value
 of this string will be simply the name of the pre- processor
 symbol that was undefined at the indicated source line.
 
-In the case of a DW\-\_MACINFO\-\_define entry, the value of this
+In the case of a \livelink{chap:DWMACINFOdefine}{DW\-\_MACINFO\-\_define} entry, the value of this
 string will be the name of the macro symbol that was defined
 at the indicated source line, followed immediately by the macro
 formal parameter list including the surrounding parentheses (in
@@ -1044,7 +1048,7 @@ name of the defined macro from the following definition text.
 
 \subsubsection{Start File Entries}
 \label{chap:startfileentries}
-Each DW\-\_MACINFO\-\_start\-\_file entry also has two operands. The
+Each \livetarg{chap:DWMACINFOstartfile}{DW\-\_MACINFO\-\_start\-\_file} entry also has two operands. The
 first operand encodes the line number of the source line on
 which the inclusion macro directive occurred.
 
@@ -1056,27 +1060,27 @@ the inclusion directive on the indicated source line.
 
 \subsubsection{End File Entries}
 \label{chap:endfileentries}
-A DW\-\_MACINFO\-\_end\-\_file entry has no operands. The presence of
+A \livetarg{chap:DWMACINFOendfile}{DW\-\_MACINFO\-\_end\-\_file} entry has no operands. The presence of
 the entry marks the end of the current source file inclusion.
 
 \subsubsection{Vendor Extension Entries}
 \label{chap:vendorextensionentries}
-A DW\-\_MACINFO\-\_vendor\-\_ext entry has two operands. The first
+A \livetarg{chap:DWMACINFOvendorext}{DW\-\_MACINFO\-\_vendor\-\_ext} entry has two operands. The first
 is a constant. The second is a null-terminated character
 string. The meaning and/or significance of these operands is
 intentionally left undefined by this specification.
 
 \textit{A consumer must be able to totally ignore all
-DW\-\_MACINFO\-\_vendor\-\_ext entries that it does not understand
+\livelink{chap:DWMACINFOvendorext}{DW\-\_MACINFO\-\_vendor\-\_ext} entries that it does not understand
 (see Section \refersec{datarep:vendorextensibility}).}
 
 
 \subsection{Base Source Entries} 
 \label{chap:basesourceentries}
 
-A producer shall generate DW\-\_MACINFO\-\_start\-\_file and
-DW\-\_MACINFO\-\_end\-\_file entries for the source file submitted to
-the compiler for compilation. This DW\-\_MACINFO\-\_start\-\_file entry
+A producer shall generate \livelink{chap:DWMACINFOstartfile}{DW\-\_MACINFO\-\_start\-\_file} and
+\livelink{chap:DWMACINFOendfile}{DW\-\_MACINFO\-\_end\-\_file} entries for the source file submitted to
+the compiler for compilation. This \livelink{chap:DWMACINFOstartfile}{DW\-\_MACINFO\-\_start\-\_file} entry
 has the value 0 in its line number operand and references
 the file entry in the line number information table for the
 primary source file.
@@ -1085,21 +1089,21 @@ primary source file.
 \subsection{Macinfo Entries For Command Line Options}
 \label{chap:macinfoentriesforcommandlineoptions}
 
-In addition to producing DW\-\_MACINFO\-\_define and DW\-\_MACINFO\-\_undef
+In addition to producing \livelink{chap:DWMACINFOdefine}{DW\-\_MACINFO\-\_define} and \livelink{chap:DWMACINFOundef}{DW\-\_MACINFO\-\_undef}
 entries for each of the define and undefine directives
 processed during compilation, the DWARF producer should
-generate a DW\-\_MACINFO\-\_define or DW\-\_MACINFO\-\_undef entry for
+generate a \livelink{chap:DWMACINFOdefine}{DW\-\_MACINFO\-\_define} or \livelink{chap:DWMACINFOundef}{DW\-\_MACINFO\-\_undef} entry for
 each pre-processor symbol which is defined or undefined by
 some means other than via a define or undefine directive
 within the compiled source text. In particular, pre-processor
 symbol definitions and un- definitions which occur as a
 result of command line options (when invoking the compiler)
-should be represented by their own DW\-\_MACINFO\-\_define and
-DW\-\_MACINFO\-\_undef entries.
+should be represented by their own \livelink{chap:DWMACINFOdefine}{DW\-\_MACINFO\-\_define} and
+\livelink{chap:DWMACINFOundef}{DW\-\_MACINFO\-\_undef} entries.
 
-All such DW\-\_MACINFO\-\_define and DW\-\_MACINFO\-\_undef entries
+All such \livelink{chap:DWMACINFOdefine}{DW\-\_MACINFO\-\_define} and \livelink{chap:DWMACINFOundef}{DW\-\_MACINFO\-\_undef} entries
 representing compilation options should appear before the
-first DW\-\_MACINFO\-\_start\-\_file entry for that compilation unit
+first \livelink{chap:DWMACINFOstartfile}{DW\-\_MACINFO\-\_start\-\_file} entry for that compilation unit
 and should encode the value 0 in their line number operands.
 
 
