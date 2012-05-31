@@ -30,4 +30,9 @@ test:
 	# checking for idempotence
 	python tohyphen.py tohyphen.in.out
 	diff tohyphen.in.out.out tohyphen.base
+	python attrlink.py attrlink.in
+	diff attrlink.in.out attrlink.base
+	# checking for idempotence
+	python attrlink.py attrlink.in.out
+	diff attrlink.in.out.out attrlink.base
      
