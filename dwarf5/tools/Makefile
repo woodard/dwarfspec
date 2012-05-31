@@ -15,6 +15,14 @@ test:
 	diff test1.in test1.in.out
 	python refclassfixup.py test2.in
 	diff test2.in.out test2.base
-	python refclassfixup.py test2.in.out
 	# checking for idempotence
+	python refclassfixup.py test2.in.out
 	diff test2.in.out test2.in.out.out
+	python taglink.py test1.in
+	diff test1.in.out taglink.base
+	# checking for idempotence
+	python taglink.py test1.in.out
+	diff test1.in.out.out taglink.base
+	python printstandard.py printstandard.in >printstandard.out
+	diff printstandard.out printstandard.base
+     

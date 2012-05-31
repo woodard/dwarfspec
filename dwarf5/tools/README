@@ -2,6 +2,37 @@ These tools are intended to help updating the latex
 source of a DWARF document to get its references
 complete and correct.
 
+CAUTION: 
+The tools don't really do parsing and
+the lexical processing is barely adequate for the task.
+
+They don't understand the % means 'comment', so avoid
+comments containing latex code or anything like latex.
+
+The tools are not necessarily equivalent in what
+details of input they accept.   For example, 
+Some will handle  \livelink{chap:DWTAGfoo}{  DW\_TAG\_foo  }
+(notice the spaces around the DW\_TAG\_foo) and some won't.
+So use \livelink{chap:DWTAGfoo}{DW\_TAG\_foo} instead with
+no pointless spaces (or newlines). Then you won't be disappointed.
+
+The tools assume you use \livelink and other local commands.
+If you use the native latex equivalent the tools won't understand.
+
+
+The requirement of the \ before _ in latex is annoying.
+You can avoid work typing that cruft by just typeing
+DW_TAG_foo  and running  tohyphen.py on the text, which will
+turn it into   DW\-\_TAG\-\_foo which is what you want.
+The hyphens result in nicely formatted lines with line breaks.
+Without the \- there are lots of ugly super-long lines.
+
+Various character (% - and more) have special meaning to latex.
+So just typing them and expecting them to appear in the generated
+document is going to result in disappointment.  See the use
+of \dash in the document.
+
+
 Our fundamental approach is to tokenize the input line-by-line
 and then use trivial pattern matching to determine what
 tokens need updating on what lines.  Always trying to ensure
@@ -14,6 +45,7 @@ Because latex names are non-traditional (compared to
 other languages) we adopt an inefficient but
 simple scanning and lexing approach.
 
+BORING DETAILS (you can ignore what follows):
 Every latex source file is read completely into an dwfile object 
 which contains a 
 List of lines
