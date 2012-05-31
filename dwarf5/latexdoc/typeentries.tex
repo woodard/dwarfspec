@@ -49,7 +49,7 @@ a value of the type.
 \textit{For example, the C type int on a machine that uses 32\dash bit
 integers is represented by a base type entry with a name
 attribute whose value is “int”, an encoding attribute
-whose value is DW\-\_ATE\-\_signed and a byte size attribute whose
+whose value is \livelink{chap:DWATEsigned}{DW\-\_ATE\-\_signed} and a byte size attribute whose
 value is 4.}
 
 If the value of an object of the given type does not fully
@@ -123,42 +123,42 @@ DWARF V3 defines the following combinations:
 \centering
 \begin{tabular}{lp{9cm}}
 Name&Meaning\\ \hline
-DW\-\_ATE\-\_address &  linear machine address (for
+\livetarg{chap:DWATEaddress}{DW\-\_ATE\-\_address} &  linear machine address (for
   segmented addresses see
   Section \refersec{chap:segmentedaddresses}) \\
-DW\-\_ATE\-\_boolean& true or false \\
+\livetarg{chap:DWATEboolean}{DW\-\_ATE\-\_boolean}& true or false \\
 
-DW\-\_ATE\-\_complex\-\_float& complex binary floating\dash point number \\
-DW\-\_ATE\-\_float & binary floating\dash point number \\
-DW\-\_ATE\-\_imaginary\-\_float& imaginary binary floating\dash point number \\
-DW\-\_ATE\-\_signed& signed binary integer \\
-DW\-\_ATE\-\_signed\-\_char& signed character \\
-DW\-\_ATE\-\_unsigned & unsigned binary integer \\
-DW\-\_ATE\-\_unsigned\-\_char & unsigned character \\
-DW\-\_ATE\-\_packed\-\_decimal  & packed decimal \\
-DW\-\_ATE\-\_numeric\-\_string& numeric string \\
-DW\-\_ATE\-\_edited & edited string \\
-DW\-\_ATE\-\_signed\-\_fixed & signed fixed\dash point scaled integer \\
-DW\-\_ATE\-\_unsigned\-\_fixed& unsigned fixed\dash point scaled integer \\
-DW\-\_ATE\-\_decimal\-\_float & decimal floating\dash point number \\ 
-DW\-\_ATE\-\_UTF & Unicode character \\
+\livetarg{chap:DWATEcomplexfloat}{DW\-\_ATE\-\_complex\-\_float}& complex binary floating\dash point number \\
+\livetarg{chap:DWATEfloat}{DW\-\_ATE\-\_float} & binary floating\dash point number \\
+\livetarg{chap:DWATEimaginaryfloat}{DW\-\_ATE\-\_imaginary\-\_float}& imaginary binary floating\dash point number \\
+\livetarg{chap:DWATEsigned}{DW\-\_ATE\-\_signed}& signed binary integer \\
+\livetarg{chap:DWATEsignedchar}{DW\-\_ATE\-\_signed\-\_char}& signed character \\
+\livetarg{chap:DWATEunsigned}{DW\-\_ATE\-\_unsigned} & unsigned binary integer \\
+\livetarg{chap:DWATEunsignedchar}{DW\-\_ATE\-\_unsigned\-\_char} & unsigned character \\
+\livetarg{chap:DWATEpackeddecimal}{DW\-\_ATE\-\_packed\-\_decimal}  & packed decimal \\
+\livetarg{chap:DWATEnumericstring}{DW\-\_ATE\-\_numeric\-\_string}& numeric string \\
+\livetarg{chap:DWATEedited}{DW\-\_ATE\-\_edited} & edited string \\
+\livetarg{chap:DWATEsignedfixed}{DW\-\_ATE\-\_signed\-\_fixed} & signed fixed\dash point scaled integer \\
+\livetarg{chap:DWATEunsignedfixed}{DW\-\_ATE\-\_unsigned\-\_fixed}& unsigned fixed\dash point scaled integer \\
+\livetarg{chap:DWATEdecimalfloat}{DW\-\_ATE\-\_decimal\-\_float} & decimal floating\dash point number \\ 
+\livetarg{chap:DWATEUTF}{DW\-\_ATE\-\_UTF} & Unicode character \\
 \end{tabular}
 \caption{Encoding attribute values}
 \label{fig:encodingattributevalues}
 \end{figure}
 
-\textit{The DW\-\_ATE\-\_decimal\-\_float encoding is intended for
+\textit{The \livelink{chap:DWATEdecimalfloat}{DW\-\_ATE\-\_decimal\-\_float} encoding is intended for
 floating\dash point representations that have a power\dash of\dash ten
 exponent, such as that specified in IEEE 754R.}
 
-\textit{The DW\-\_ATE\-\_UTF encoding is intended for Unicode string
+\textit{The \livelink{chap:DWATEUTF}{DW\-\_ATE\-\_UTF} encoding is intended for Unicode string
 encodings (see the Universal Character Set standard,
 ISO/IEC 10646\dash 1:1993). For example, the C++ type char16\_t is
 represented by a base type entry with a name attribute whose
 value is “char16\_t”, an encoding attribute whose value
-is DW\-\_ATE\-\_UTF and a byte size attribute whose value is 2.}
+is \livelink{chap:DWATEUTF}{DW\-\_ATE\-\_UTF} and a byte size attribute whose value is 2.}
 
-The DW\-\_ATE\-\_packed\-\_decimal and DW\-\_ATE\-\_numeric\-\_string base types
+The \livelink{chap:DWATEpackeddecimal}{DW\-\_ATE\-\_packed\-\_decimal} and \livelink{chap:DWATEnumericstring}{DW\-\_ATE\-\_numeric\-\_string} base types
 represent packed and unpacked decimal string numeric data
 types, respectively, either of which may be either signed
 or unsigned. These base types are used in combination with
@@ -188,7 +188,7 @@ decimal point to the left; if the absolute value of the scale
 is larger than the digit count, this implies additional zero
 digits on the left are not stored in an instance of the type.
 
-The DW\-\_ATE\-\_edited base type is used to represent an edited
+The \livelink{chap:DWATEedited}{DW\-\_ATE\-\_edited} base type is used to represent an edited
 numeric or alphanumeric data type. It is used in combination
 with an \livelink{chap:DWATpicturestring}{DW\-\_AT\-\_picture\-\_string} attribute whose value is a 
 null\dash terminated string containing the target\dash dependent picture
@@ -197,8 +197,8 @@ string associated with the type.
 If the edited base type entry describes an edited numeric
 data type, the edited type entry has a \livelink{chap:DWATdigitcount}{DW\-\_AT\-\_digit\-\_count} and a
 \livelink{chap:DWATdecimalscale}{DW\-\_AT\-\_decimal\-\_scale} attribute. These attributes have the same
-interpretation as described for the DW\-\_ATE\-\_packed\-\_decimal and
-DW\-\_ATE\-\_numeric\-\_string base types. If the edited type entry
+interpretation as described for the \livelink{chap:DWATEpackeddecimal}{DW\-\_ATE\-\_packed\-\_decimal} and
+\livelink{chap:DWATEnumericstring}{DW\-\_ATE\-\_numeric\-\_string} base types. If the edited type entry
 describes an edited alphanumeric data type, the edited type
 entry does not have these attributes.
 
@@ -209,18 +209,18 @@ distinguish edited numeric from edited alphanumeric, although
 in principle the digit count and scale are derivable by
 interpreting the picture string.}
 
-The DW\-\_ATE\-\_signed\-\_fixed and DW\-\_ATE\-\_unsigned\-\_fixed entries
+The \livelink{chap:DWATEsignedfixed}{DW\-\_ATE\-\_signed\-\_fixed} and \livelink{chap:DWATEunsignedfixed}{DW\-\_ATE\-\_unsigned\-\_fixed} entries
 describe signed and unsigned fixed\dash point binary data types,
 respectively.
 
 The fixed binary type entries have a \livelink{chap:DWATdigitcount}{DW\-\_AT\-\_digit\-\_count}
 attribute with the same interpretation as described for the
-DW\-\_ATE\-\_packed\-\_decimal and DW\-\_ATE\-\_numeric\-\_string base types.
+\livelink{chap:DWATEpackeddecimal}{DW\-\_ATE\-\_packed\-\_decimal} and \livelink{chap:DWATEnumericstring}{DW\-\_ATE\-\_numeric\-\_string} base types.
 
 For a data type with a decimal scale factor, the fixed binary
 type entry has a \livelink{chap:DWATdecimalscale}{DW\-\_AT\-\_decimal\-\_scale} attribute with the same
-interpretation as described for the DW\-\_ATE\-\_packed\-\_decimal
-and DW\-\_ATE\-\_numeric\-\_string base types.
+interpretation as described for the \livelink{chap:DWATEpackeddecimal}{DW\-\_ATE\-\_packed\-\_decimal}
+and \livelink{chap:DWATEnumericstring}{DW\-\_ATE\-\_numeric\-\_string} base types.
 
 For a data type with a binary scale factor, the fixed
 binary type entry has a \livelink{chap:DWATbinaryscale}{DW\-\_AT\-\_binary\-\_scale} attribute. The
