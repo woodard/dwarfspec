@@ -6,7 +6,7 @@ user\dash defined types.
 
 If the scope of the declaration of a named type begins after
 the low pc value for the scope most closely enclosing the
-declaration, the declaration may have a DW\_AT\_start\_scope
+declaration, the declaration may have a DW\-\_AT\-\_start\-\_scope
 attribute as described for objects in 
 Section \refersec{chap:dataobjectentries}.
 
@@ -21,27 +21,27 @@ A base type is represented by a debugging information entry
 with the tag 
 \livetarg{chap:DWTAGbasetype}{DW\-\_TAG\-\_base\-\_type}.
 
-A base type entry has a DW\_AT\_name attribute whose value is
+A base type entry has a DW\-\_AT\-\_name attribute whose value is
 a null\dash terminated string containing the name of the base type
 as recognized by the programming language of the compilation
 unit containing the base type entry.
 
-A base type entry has a DW\_AT\_encoding attribute describing
+A base type entry has a DW\-\_AT\-\_encoding attribute describing
 how the base type is encoded and is to be interpreted. The
 value of this attribute is an integer constant. The set of
-values and their meanings for the DW\_AT\_encoding attribute
+values and their meanings for the DW\-\_AT\-\_encoding attribute
 is given in 
 Figure \refersec{fig:encodingattributevalues}
 and following text.  
 
 A base type entry
-may have a DW\_AT\_endianity attribute as described in 
+may have a DW\-\_AT\-\_endianity attribute as described in 
 Section \refersec{chap:dataobjectentries}. 
 If omitted, the encoding assumes the representation that
 is the default for the target architecture.
 
-A base type entry has either a DW\_AT\_byte\_size attribute
-or a DW\_AT\_bit\_size attribute whose integer constant value
+A base type entry has either a DW\-\_AT\-\_byte\-\_size attribute
+or a DW\-\_AT\-\_bit\-\_size attribute whose integer constant value
 (see Section \refersec{chap:byteandbitsizes}) 
 is the amount of storage needed to hold
 a value of the type.
@@ -49,13 +49,13 @@ a value of the type.
 \textit{For example, the C type int on a machine that uses 32\dash bit
 integers is represented by a base type entry with a name
 attribute whose value is “int”, an encoding attribute
-whose value is DW\_ATE\_signed and a byte size attribute whose
+whose value is DW\-\_ATE\-\_signed and a byte size attribute whose
 value is 4.}
 
 If the value of an object of the given type does not fully
 occupy the storage described by a byte size attribute,
-the base type entry may also have a DW\_AT\_bit\_size and a
-DW\_AT\_data\_bit\_offset attribute, both of whose values are
+the base type entry may also have a DW\-\_AT\-\_bit\-\_size and a
+DW\-\_AT\-\_data\-\_bit\-\_offset attribute, both of whose values are
 integer constant values (
 see Section \refersec{chap:staticanddynamicvaluesofattributes}). 
 The bit size
@@ -70,31 +70,31 @@ target system to locate the beginning of the storage and
 value. If this attribute is omitted a default data bit offset
 of zero is assumed.
 
-\textit{Attribute DW\_AT\_data\_bit\_offset is new in DWARF Version 4 and
+\textit{Attribute DW\-\_AT\-\_data\-\_bit\-\_offset is new in DWARF Version 4 and
 is also used for bit field members 
 (see Section \refersec{chap:datamemberentries}). 
 It
-replaces the attribute DW\_AT\_bit\_offset when used for base
+replaces the attribute DW\-\_AT\-\_bit\-\_offset when used for base
 types as defined in DWARF V3 and earlier. The earlier attribute
 is defined in a manner suitable for bit field members on
 big\dash endian architectures but which is wasteful for use on
 little\dash endian architectures.}
 
-\textit{The attribute DW\_AT\_bit\_offset is deprecated in DWARF Version
+\textit{The attribute DW\-\_AT\-\_bit\-\_offset is deprecated in DWARF Version
 4 for use in base types, but implementations may continue to
 support its use for compatibility.}
 
 \textit{The DWARF Version 3 definition of these attributes is as follows.}
 
 \begin{myindentpara}{1cm}
-\textit{A base type entry has a DW\_AT\_byte\_size attribute, whose value
+\textit{A base type entry has a DW\-\_AT\-\_byte\-\_size attribute, whose value
 (see Section 2.19) is the size in bytes of the storage unit
 used to represent an object of the given type.}
 
 \textit{If the value of an object of the given type does not fully
 occupy the storage unit described by the byte size attribute,
-the base type entry may have a DW\_AT\_bit\_size attribute and a
-DW\_AT\_bit\_offset attribute, both of whose values (see Section
+the base type entry may have a DW\-\_AT\-\_bit\-\_size attribute and a
+DW\-\_AT\-\_bit\-\_offset attribute, both of whose values (see Section
 2.19) are integers. The bit size attribute describes the actual
 size in bits used to represent a value of the given type.
 The bit offset attribute describes the offset in bits of the
@@ -106,66 +106,66 @@ order bit of the storage unit used to contain that value.}
 defines the following combinations of attributes:}
 
 \begin{itemize}
-\item \textit{DW\_AT\_byte\_size}
-\item \textit{DW\_AT\_bit\_size}
-\item \textit{DW\_AT\_byte\_size, DW\_AT\_bit\_size 
-and optionally DW\_AT\_data\_bit\_offset}
+\item \textit{DW\-\_AT\-\_byte\-\_size}
+\item \textit{DW\-\_AT\-\_bit\-\_size}
+\item \textit{DW\-\_AT\-\_byte\-\_size, DW\-\_AT\-\_bit\-\_size 
+and optionally DW\-\_AT\-\_data\-\_bit\-\_offset}
 \end{itemize}
 DWARF V3 defines the following combinations:
 % FIXME: the figure below interferes with the following
 % bullet list, which looks horrible as a result.
 \begin{itemize}
-\item \textit{DW\_AT\_byte\_size}
-\item \textit{DW\_AT\_byte\_size, DW\_AT\_bit\_size and DW\_AT\_bit\_offset}
+\item \textit{DW\-\_AT\-\_byte\-\_size}
+\item \textit{DW\-\_AT\-\_byte\-\_size, DW\-\_AT\-\_bit\-\_size and DW\-\_AT\-\_bit\-\_offset}
 \end{itemize}
 
 \begin{figure}[!here]
 \centering
 \begin{tabular}{lp{9cm}}
 Name&Meaning\\ \hline
-DW\_ATE\_address &  linear machine address (for
+DW\-\_ATE\-\_address &  linear machine address (for
   segmented addresses see
   Section \refersec{chap:segmentedaddresses}) \\
-DW\_ATE\_boolean& true or false \\
+DW\-\_ATE\-\_boolean& true or false \\
 
-DW\_ATE\_complex\_float& complex binary floating\dash point number \\
-DW\_ATE\_float & binary floating\dash point number \\
-DW\_ATE\_imaginary\_float& imaginary binary floating\dash point number \\
-DW\_ATE\_signed& signed binary integer \\
-DW\_ATE\_signed\_char& signed character \\
-DW\_ATE\_unsigned & unsigned binary integer \\
-DW\_ATE\_unsigned\_char & unsigned character \\
-DW\_ATE\_packed\_decimal  & packed decimal \\
-DW\_ATE\_numeric\_string& numeric string \\
-DW\_ATE\_edited & edited string \\
-DW\_ATE\_signed\_fixed & signed fixed\dash point scaled integer \\
-DW\_ATE\_unsigned\_fixed& unsigned fixed\dash point scaled integer \\
-DW\_ATE\_decimal\_float & decimal floating\dash point number \\ 
-DW\_ATE\_UTF & Unicode character \\
+DW\-\_ATE\-\_complex\-\_float& complex binary floating\dash point number \\
+DW\-\_ATE\-\_float & binary floating\dash point number \\
+DW\-\_ATE\-\_imaginary\-\_float& imaginary binary floating\dash point number \\
+DW\-\_ATE\-\_signed& signed binary integer \\
+DW\-\_ATE\-\_signed\-\_char& signed character \\
+DW\-\_ATE\-\_unsigned & unsigned binary integer \\
+DW\-\_ATE\-\_unsigned\-\_char & unsigned character \\
+DW\-\_ATE\-\_packed\-\_decimal  & packed decimal \\
+DW\-\_ATE\-\_numeric\-\_string& numeric string \\
+DW\-\_ATE\-\_edited & edited string \\
+DW\-\_ATE\-\_signed\-\_fixed & signed fixed\dash point scaled integer \\
+DW\-\_ATE\-\_unsigned\-\_fixed& unsigned fixed\dash point scaled integer \\
+DW\-\_ATE\-\_decimal\-\_float & decimal floating\dash point number \\ 
+DW\-\_ATE\-\_UTF & Unicode character \\
 \end{tabular}
 \caption{Encoding attribute values}
 \label{fig:encodingattributevalues}
 \end{figure}
 
-\textit{The DW\_ATE\_decimal\_float encoding is intended for
+\textit{The DW\-\_ATE\-\_decimal\-\_float encoding is intended for
 floating\dash point representations that have a power\dash of\dash ten
 exponent, such as that specified in IEEE 754R.}
 
-\textit{The DW\_ATE\_UTF encoding is intended for Unicode string
+\textit{The DW\-\_ATE\-\_UTF encoding is intended for Unicode string
 encodings (see the Universal Character Set standard,
 ISO/IEC 10646\dash 1:1993). For example, the C++ type char16\_t is
 represented by a base type entry with a name attribute whose
 value is “char16\_t”, an encoding attribute whose value
-is DW\_ATE\_UTF and a byte size attribute whose value is 2.}
+is DW\-\_ATE\-\_UTF and a byte size attribute whose value is 2.}
 
-The DW\_ATE\_packed\_decimal and DW\_ATE\_numeric\_string base types
+The DW\-\_ATE\-\_packed\-\_decimal and DW\-\_ATE\-\_numeric\-\_string base types
 represent packed and unpacked decimal string numeric data
 types, respectively, either of which may be either signed
 or unsigned. These base types are used in combination with
-DW\_AT\_decimal\_sign, DW\_AT\_digit\_count and DW\_AT\_decimal\_scale
+DW\-\_AT\-\_decimal\-\_sign, DW\-\_AT\-\_digit\-\_count and DW\-\_AT\-\_decimal\-\_scale
 attributes.
 
-A DW\_AT\_decimal\_sign attribute is an integer constant that
+A DW\-\_AT\-\_decimal\-\_sign attribute is an integer constant that
 conveys the representation of the sign of the decimal type
 (see Figure \refersec{fig:decimalsignattributevalues}). 
 Its integer constant value is interpreted to
@@ -173,11 +173,11 @@ mean that the type has a leading overpunch, trailing overpunch,
 leading separate or trailing separate sign representation or,
 alternatively, no sign at all.
 
-The DW\_AT\_digit\_count attribute is an integer constant
+The DW\-\_AT\-\_digit\-\_count attribute is an integer constant
 value that represents the number of digits in an instance of
 the type.
 
-The DW\_AT\_decimal\_scale attribute is an integer constant value
+The DW\-\_AT\-\_decimal\-\_scale attribute is an integer constant value
 that represents the exponent of the base ten scale factor to
 be applied to an instance of the type. A scale of zero puts the
 decimal point immediately to the right of the least significant
@@ -188,43 +188,43 @@ decimal point to the left; if the absolute value of the scale
 is larger than the digit count, this implies additional zero
 digits on the left are not stored in an instance of the type.
 
-The DW\_ATE\_edited base type is used to represent an edited
+The DW\-\_ATE\-\_edited base type is used to represent an edited
 numeric or alphanumeric data type. It is used in combination
-with an DW\_AT\_picture\_string attribute whose value is a 
+with an DW\-\_AT\-\_picture\-\_string attribute whose value is a 
 null\dash terminated string containing the target\dash dependent picture
 string associated with the type.
 
 If the edited base type entry describes an edited numeric
-data type, the edited type entry has a DW\_AT\_digit\_count and a
-DW\_AT\_decimal\_scale attribute. These attributes have the same
-interpretation as described for the DW\_ATE\_packed\_decimal and
-DW\_ATE\_numeric\_string base types. If the edited type entry
+data type, the edited type entry has a DW\-\_AT\-\_digit\-\_count and a
+DW\-\_AT\-\_decimal\-\_scale attribute. These attributes have the same
+interpretation as described for the DW\-\_ATE\-\_packed\-\_decimal and
+DW\-\_ATE\-\_numeric\-\_string base types. If the edited type entry
 describes an edited alphanumeric data type, the edited type
 entry does not have these attributes.
 
 
-\textit{The presence or absence of the DW\_AT\_digit\_count and
-DW\_AT\_decimal\_scale attributes allows a debugger to easily
+\textit{The presence or absence of the DW\-\_AT\-\_digit\-\_count and
+DW\-\_AT\-\_decimal\-\_scale attributes allows a debugger to easily
 distinguish edited numeric from edited alphanumeric, although
 in principle the digit count and scale are derivable by
 interpreting the picture string.}
 
-The DW\_ATE\_signed\_fixed and DW\_ATE\_unsigned\_fixed entries
+The DW\-\_ATE\-\_signed\-\_fixed and DW\-\_ATE\-\_unsigned\-\_fixed entries
 describe signed and unsigned fixed\dash point binary data types,
 respectively.
 
-The fixed binary type entries have a DW\_AT\_digit\_count
+The fixed binary type entries have a DW\-\_AT\-\_digit\-\_count
 attribute with the same interpretation as described for the
-DW\_ATE\_packed\_decimal and DW\_ATE\_numeric\_string base types.
+DW\-\_ATE\-\_packed\-\_decimal and DW\-\_ATE\-\_numeric\-\_string base types.
 
 For a data type with a decimal scale factor, the fixed binary
-type entry has a DW\_AT\_decimal\_scale attribute with the same
-interpretation as described for the DW\_ATE\_packed\_decimal
-and DW\_ATE\_numeric\_string base types.
+type entry has a DW\-\_AT\-\_decimal\-\_scale attribute with the same
+interpretation as described for the DW\-\_ATE\-\_packed\-\_decimal
+and DW\-\_ATE\-\_numeric\-\_string base types.
 
 For a data type with a binary scale factor, the fixed
-binary type entry has a DW\_AT\_binary\_scale attribute. The
-DW\_AT\_binary\_scale attribute is an integer constant value
+binary type entry has a DW\-\_AT\-\_binary\-\_scale attribute. The
+DW\-\_AT\-\_binary\-\_scale attribute is an integer constant value
 that represents the exponent of the base two scale factor to
 be applied to an instance of the type.  Zero scale puts the
 binary point immediately to the right of the least significant
@@ -236,24 +236,24 @@ larger than the number of bits, this implies additional zero
 bits on the left are not stored in an instance of the type.
 
 For a data type with a non\dash decimal and non\dash binary scale factor,
-the fixed binary type entry has a DW\_AT\_small attribute which
-references a \livelink{chap:DWTAGconstant}{DW\_TAG\_constant} entry. The scale factor value
+the fixed binary type entry has a DW\-\_AT\-\_small attribute which
+references a \livelink{chap:DWTAGconstant}{DW\-\_TAG\-\_constant} entry. The scale factor value
 is interpreted in accordance with the value defined by the
-\livelink{chap:DWTAGconstant}{DW\_TAG\_constant} entry. The value represented is the product
+\livelink{chap:DWTAGconstant}{DW\-\_TAG\-\_constant} entry. The value represented is the product
 of the integer value in memory and the associated constant
 entry for the type.
 
-\textit{The DW\_AT\_small attribute is defined with the Ada small
+\textit{The DW\-\_AT\-\_small attribute is defined with the Ada small
 attribute in mind.}
 
 \begin{figure}[here]
 \centering
 \begin{tabular}{lp{9cm}}
 Name&Meaning\\ \hline
-DW\_DS\_unsigned &  unsigned \\
-DW\_DS\_leading\_overpunch & Sign is encoded in the most significant digit in a target\dash dependent  manner \\
-DW\_DS\_trailing\_overpunch & Sign is encoded in the least significant digit in a target\dash dependent manner \\
-DW\_DS\_leading\_separate & Decimal type: Sign a ``+'' or ``-'' character 
+DW\-\_DS\-\_unsigned &  unsigned \\
+DW\-\_DS\-\_leading\-\_overpunch & Sign is encoded in the most significant digit in a target\dash dependent  manner \\
+DW\-\_DS\-\_trailing\-\_overpunch & Sign is encoded in the least significant digit in a target\dash dependent manner \\
+DW\-\_DS\-\_leading\-\_separate & Decimal type: Sign a ``+'' or ``-'' character 
 to the right of the least significant digit. \\
 &Packed decimal type: Least significant nibble contains
 a target\dash dependent value
@@ -270,10 +270,10 @@ may be explicitly indicated.
 
 An unspecified (implicit, unknown, ambiguous or nonexistent)
 type is represented by a debugging information entry with
-the tag \livetarg{chap:DWTAGunspecifiedtype}{DW\_TAG\_unspecified\_type}. 
+the tag \livetarg{chap:DWTAGunspecifiedtype}{DW\-\_TAG\-\_unspecified\-\_type}. 
 If a name has been given
 to the type, then the corresponding unspecified type entry
-has a DW\_AT\_name attribute whose value is a null\dash terminated
+has a DW\-\_AT\-\_name attribute whose value is a null\dash terminated
 string containing the name as it appears in the source program.
 
 The interpretation of this debugging information entry is
@@ -304,23 +304,23 @@ Figure \refersec{fig:typemodifiertags}.
 
 If a name has been given to the modified type in the source
 program, then the corresponding modified type entry has
-a DW\_AT\_name attribute whose value is a null-terminated
+a DW\-\_AT\-\_name attribute whose value is a null-terminated
 string containing the modified type name as it appears in
 the source program.
 
-Each of the type modifier entries has a DW\_AT\_type attribute,
+Each of the type modifier entries has a DW\-\_AT\-\_type attribute,
 whose value is a reference to a debugging information entry
 describing a base type, a user-defined type or another type
 modifier.
 
 A modified type entry describing a pointer or reference
-type (using \livelink{chap:DWTAGpointertype}{DW\_TAG\_pointer\_type}, \livelink{chap:DWTAGreferencetype}{DW\_TAG\_reference\_type} or
-\livelink{chap:DWTAGrvaluereferencetype}{DW\_TAG\_rvalue\_reference\_type}) may have a DW\_AT\_address\_class
+type (using \livelink{chap:DWTAGpointertype}{DW\-\_TAG\-\_pointer\-\_type}, \livelink{chap:DWTAGreferencetype}{DW\-\_TAG\-\_reference\-\_type} or
+\livelink{chap:DWTAGrvaluereferencetype}{DW\-\_TAG\-\_rvalue\-\_reference\-\_type}) may have a DW\-\_AT\-\_address\-\_class
 attribute to describe how objects having the given pointer
 or reference type ought to be dereferenced.
 
 A modified type entry describing a shared qualified type
-(using \livelink{chap:DWTAGsharedtype}{DW\_TAG\_shared\_type}) may have a DW\_AT\_count attribute
+(using \livelink{chap:DWTAGsharedtype}{DW\-\_TAG\-\_shared\-\_type}) may have a DW\-\_AT\-\_count attribute
 whose value is a constant expressing the blocksize of the
 type. If no count attribute is present, then the “infinite”
 blocksize is assumed.
@@ -334,16 +334,16 @@ order in the source presentation.
 \centering
 \begin{tabular}{lp{9cm}}
 Name&Meaning\\ \hline
-\livetarg{chap:DWTAGconsttype}{DW\_TAG\_const\_type} &  C or C++ const qualified type \\
-\livetarg{chap:DWTAGpackedtype}{DW\_TAG\_packed\_type}& Pascal or Ada packed type \\
-\livetarg{chap:DWTAGpointertype}{DW\_TAG\_pointer\_type} & Pointer to an object of the type being modified \\
-\livetarg{chap:DWTAGreferencetype}{DW\_TAG\_reference\_type}& C++ (lvalue) reference to an object of the type 
+\livetarg{chap:DWTAGconsttype}{DW\-\_TAG\-\_const\-\_type} &  C or C++ const qualified type \\
+\livetarg{chap:DWTAGpackedtype}{DW\-\_TAG\-\_packed\-\_type}& Pascal or Ada packed type \\
+\livetarg{chap:DWTAGpointertype}{DW\-\_TAG\-\_pointer\-\_type} & Pointer to an object of the type being modified \\
+\livetarg{chap:DWTAGreferencetype}{DW\-\_TAG\-\_reference\-\_type}& C++ (lvalue) reference to an object of the type 
 being modified \\
-\livetarg{chap:DWTAGrestricttype}{DW\_TAG\_restrict\_type}&C restrict qualified type \\
-\livetarg{chap:DWTAGrvaluereferencetype}{DW\_TAG\_rvalue\_reference\_type} & C++ rvalue reference to an object of the type
+\livetarg{chap:DWTAGrestricttype}{DW\-\_TAG\-\_restrict\-\_type}&C restrict qualified type \\
+\livetarg{chap:DWTAGrvaluereferencetype}{DW\-\_TAG\-\_rvalue\-\_reference\-\_type} & C++ rvalue reference to an object of the type
 being modified \\
-\livetarg{chap:DWTAGsharedtype}{DW\_TAG\_shared\_type}&UPC shared qualified type \\
-\livetarg{chap:DWTAGvolatiletype}{DW\_TAG\_volatile\_type}&C or C++ volatile qualified type \\
+\livetarg{chap:DWTAGsharedtype}{DW\-\_TAG\-\_shared\-\_type}&UPC shared qualified type \\
+\livetarg{chap:DWTAGvolatiletype}{DW\-\_TAG\-\_volatile\-\_type}&C or C++ volatile qualified type \\
 \end{tabular}
 \caption{Type modifier tags}
 \label{fig:typemodifiertags}
@@ -360,21 +360,21 @@ declarations:}
 const unsigned char * volatile p;
     which represents a volatile pointer to a constant
     character. This is encoded in DWARF as:
-        \livelink{chap:DWTAGvariable}{DW_TAG_variable}(p) -->
-            \livelink{chap:DWTAGvolatiletype}{DW_TAG_volatile_type} -->
-                \livelink{chap:DWTAGpointertype}{DW_TAG_pointer_type} -->
-                    \livelink{chap:DWTAGconsttype}{DW_TAG_const_type} -->
-                        \livelink{chap:DWTAGbasetype}{DW_TAG_base_type}(unsigned char)
+        \livelink{chap:DWTAGvariable}{DW\-\_TAG\-\_variable}(p) -->
+            \livelink{chap:DWTAGvolatiletype}{DW\-\_TAG\-\_volatile\-\_type} -->
+                \livelink{chap:DWTAGpointertype}{DW\-\_TAG\-\_pointer\-\_type} -->
+                    \livelink{chap:DWTAGconsttype}{DW\-\_TAG\-\_const\-\_type} -->
+                        \livelink{chap:DWTAGbasetype}{DW\-\_TAG\-\_base\-\_type}(unsigned char)
 
 volatile unsigned char * const restrict p;
     on the other hand, represents a restricted constant
     pointer to a volatile character. This is encoded as:
-        \livelink{chap:DWTAGvariable}{DW_TAG_variable}(p) -->
-            \livelink{chap:DWTAGrestricttype}{DW_TAG_restrict_type} -->
-                \livelink{chap:DWTAGconsttype}{DW_TAG_const_type} -->
-                    \livelink{chap:DWTAGpointertype}{DW_TAG_pointer_type} -->
-                        \livelink{chap:DWTAGvolatiletype}{DW_TAG_volatile_type} -->
-                            \livelink{chap:DWTAGbasetype}{DW_TAG_base_type}(unsigned char)
+        \livelink{chap:DWTAGvariable}{DW\-\_TAG\-\_variable}(p) -->
+            \livelink{chap:DWTAGrestricttype}{DW\-\_TAG\-\_restrict\-\_type} -->
+                \livelink{chap:DWTAGconsttype}{DW\-\_TAG\-\_const\-\_type} -->
+                    \livelink{chap:DWTAGpointertype}{DW\-\_TAG\-\_pointer\-\_type} -->
+                        \livelink{chap:DWTAGvolatiletype}{DW\-\_TAG\-\_volatile\-\_type} -->
+                            \livelink{chap:DWTAGbasetype}{DW\-\_TAG\-\_base\-\_type}(unsigned char)
 
 \end{verbatim}
 
@@ -382,12 +382,12 @@ volatile unsigned char * const restrict p;
 \label{chap:typedefentries}
 A named type that is defined in terms of another type
 definition is represented by a debugging information entry with
-the tag \livetarg{chap:DWTAGtypedef}{DW\_TAG\_typedef}. 
-The typedef entry has a DW\_AT\_name
+the tag \livetarg{chap:DWTAGtypedef}{DW\-\_TAG\-\_typedef}. 
+The typedef entry has a DW\-\_AT\-\_name
 attribute whose value is a null-terminated string containing
 the name of the typedef as it appears in the source program.
 
-The typedef entry may also contain a DW\_AT\_type attribute whose
+The typedef entry may also contain a DW\-\_AT\-\_type attribute whose
 value is a reference to the type named by the typedef. If
 the debugging information entry for a typedef represents
 a declaration of the type that is not also a definition,
@@ -397,7 +397,7 @@ it does not contain a type attribute.
 terms of another type may be called a type alias, a subtype,
 a constrained type and other terms. A type name declared with
 no defining details may be termed an incomplete, forward
-or hidden type. While the DWARF \livelink{chap:DWTAGtypedef}{DW\_TAG\_typedef} entry was
+or hidden type. While the DWARF \livelink{chap:DWTAGtypedef}{DW\-\_TAG\-\_typedef} entry was
 originally inspired by the like named construct in C and C++,
 it is broadly suitable for similar constructs (by whatever
 source syntax) in other languages.}
@@ -409,28 +409,28 @@ Many languages share the concept of an ``array,'' which is
 a table of components of identical type.
 
 An array type is represented by a debugging information entry
-with the tag \livetarg{chap:DWTAGarraytype}{DW\_TAG\_array\_type}. 
+with the tag \livetarg{chap:DWTAGarraytype}{DW\-\_TAG\-\_array\-\_type}. 
 If a name has been given to
 the array type in the source program, then the corresponding
-array type entry has a DW\_AT\_name attribute whose value is a
+array type entry has a DW\-\_AT\-\_name attribute whose value is a
 null-terminated string containing the array type name as it
 appears in the source program.
 
 The array type entry describing a multidimensional array may
-have a DW\_AT\_ordering attribute whose integer constant value is
+have a DW\-\_AT\-\_ordering attribute whose integer constant value is
 interpreted to mean either row-major or column-major ordering
 of array elements. The set of values and their meanings
 for the ordering attribute are listed in 
 Figure \refersec{fig:arrayordering}. 
 If no
 ordering attribute is present, the default ordering for the
-source language (which is indicated by the DW\_AT\_language
+source language (which is indicated by the DW\-\_AT\-\_language
 attribute of the enclosing compilation unit entry) is assumed.
 
 \begin{figure}[here]
 \autorows[0pt]{c}{1}{l}{
-\addtoindex{DW\_ORD\_col\_major},
-\addtoindex{DW\_ORD\_row\_major}
+\addtoindex{DW\-\_ORD\-\_col\-\_major},
+\addtoindex{DW\-\_ORD\-\_row\-\_major}
 }
 \caption{Array ordering}\label{fig:arrayordering}
 \end{figure}
@@ -438,21 +438,21 @@ attribute of the enclosing compilation unit entry) is assumed.
 The ordering attribute may optionally appear on one-dimensional
 arrays; it will be ignored.
 
-An array type entry has a DW\_AT\_type attribute describing
+An array type entry has a DW\-\_AT\-\_type attribute describing
 the type of each element of the array.
 
 If the amount of storage allocated to hold each element of an
 object of the given array type is different from the amount
 of storage that is normally allocated to hold an individual
 object of the indicated element type, then the array type
-entry has either a DW\_AT\_byte\_stride or a DW\_AT\_bit\_stride
+entry has either a DW\-\_AT\-\_byte\-\_stride or a DW\-\_AT\-\_bit\-\_stride
 attribute, whose value 
 (see Section \refersec{chap:staticanddynamicvaluesofattributes}) 
 is the size of each
 element of the array.
 
-The array type entry may have either a DW\_AT\_byte\_size or a
-DW\_AT\_bit\_size attribute 
+The array type entry may have either a DW\-\_AT\-\_byte\-\_size or a
+DW\-\_AT\-\_bit\-\_size attribute 
 (see Section \refersec{chap:byteandbitsizes}), 
 whose value is the
 amount of storage needed to hold an instance of the array type.
@@ -463,8 +463,8 @@ the number of array elements by the size of each element.}
 
 
 Each array dimension is described by a debugging information
-entry with either the tag \livelink{chap:DWTAGsubrangetype}{DW\_TAG\_subrange\_type} or the tag
-\livelink{chap:DWTAGenumerationtype}{DW\_TAG\_enumeration\_type}. These entries are children of the
+entry with either the tag \livelink{chap:DWTAGsubrangetype}{DW\-\_TAG\-\_subrange\-\_type} or the tag
+\livelink{chap:DWTAGenumerationtype}{DW\-\_TAG\-\_enumeration\-\_type}. These entries are children of the
 array type entry and are ordered to reflect the appearance of
 the dimensions in the source program (i.e., leftmost dimension
 first, next to leftmost second, and so on).
@@ -475,7 +475,7 @@ be represented by a debugging information entry for a
 multidimensional array.
 
 Other attributes especially applicable to arrays are
-DW\_AT\_allocated, DW\_AT\_associated and DW\_AT\_data\_location,
+DW\-\_AT\-\_allocated, DW\-\_AT\-\_associated and DW\-\_AT\-\_data\-\_location,
 which are described in 
 Section \refersec{chap:dynamictypeproperties}. 
 For relevant examples,
@@ -518,13 +518,13 @@ be understood to apply to C++ structures as well.}
 
 Structure, union, and class types are represented by debugging
 information entries with 
-the tags \livetarg{chap:DWTAGstructuretype}{DW\_TAG\_structure\_type},
-\livetarg{chap:DWTAGuniontype}{DW\_TAG\_union\_type}, 
-and \livetarg{chap:DWTAGclasstype}{DW\_TAG\_class\_type},
+the tags \livetarg{chap:DWTAGstructuretype}{DW\-\_TAG\-\_structure\-\_type},
+\livetarg{chap:DWTAGuniontype}{DW\-\_TAG\-\_union\-\_type}, 
+and \livetarg{chap:DWTAGclasstype}{DW\-\_TAG\-\_class\-\_type},
 respectively. If a name has been given to the structure,
 union, or class in the source program, then the corresponding
 structure type, union type, or class type entry has a
-DW\_AT\_name attribute whose value is a null\dash terminated string
+DW\-\_AT\-\_name attribute whose value is a null\dash terminated string
 containing the type name as it appears in the source program.
 
 The members of a structure, union, or class are represented
@@ -534,32 +534,32 @@ and appear in the same order as the corresponding declarations
 in the source program.
 
 A structure type, union type or class type entry may have
-either a DW\_AT\_byte\_size or a DW\_AT\_bit\_size attribute 
+either a DW\-\_AT\-\_byte\-\_size or a DW\-\_AT\-\_bit\-\_size attribute 
 (see Section \refersec{chap:byteandbitsizes}), 
 whose value is the amount of storage needed
 to hold an instance of the structure, union or class type,
 including any padding.  An incomplete structure, union or
 class type is represented by a structure, union or class
 entry that does not have a byte size attribute and that has
-a DW\_AT\_declaration attribute.
+a DW\-\_AT\-\_declaration attribute.
 
 If the complete declaration of a type has been placed in
 a separate type unit 
 (see Section \refersec{chap:separatetypeunitentries}), 
 an incomplete
 declaration of that type in the compilation unit may provide
-the unique 64\dash bit signature of the type using a DW\_AT\_signature
+the unique 64\dash bit signature of the type using a DW\-\_AT\-\_signature
 attribute.
 
 If a structure, union or class entry represents the definition
 of a structure, class or union member corresponding to a prior
 incomplete structure, class or union, the entry may have a
-DW\_AT\_specification attribute whose value is a reference to
+DW\-\_AT\-\_specification attribute whose value is a reference to
 the debugging information entry representing that incomplete
 declaration.
 
 Structure, union and class entries containing the
-DW\_AT\_specification attribute do not need to duplicate
+DW\-\_AT\-\_specification attribute do not need to duplicate
 information provided by the declaration entry referenced by the
 specification attribute.  In particular, such entries do not
 need to contain an attribute for the name of the structure,
@@ -579,14 +579,14 @@ within the type declaration.}
 If the definition for a given member of the structure, union
 or class does not appear within the body of the declaration,
 that member also has a debugging information entry describing
-its definition. That latter entry has a DW\_AT\_specification
+its definition. That latter entry has a DW\-\_AT\-\_specification
 attribute referencing the debugging information entry
 owned by the body of the structure, union or class entry and
 representing a non\dash defining declaration of the data, function
 or type member. The referenced entry will not have information
 about the location of that member (low and high pc attributes
 for function members, location descriptions for data members)
-and will have a DW\_AT\_declaration attribute.
+and will have a DW\-\_AT\-\_declaration attribute.
 
 \textit{Consider a nested class whose 
 definition occurs outside of the containing class definition, as in:}
@@ -612,9 +612,9 @@ methods and constant data members.}
 
 Interface types are represented by debugging information
 entries with the 
-tag \livetarg{chap:DWTAGinterfacetype}{DW\_TAG\_interface\_type}.
+tag \livetarg{chap:DWTAGinterfacetype}{DW\-\_TAG\-\_interface\-\_type}.
 
-An interface type entry has a DW\_AT\_name attribute, whose
+An interface type entry has a DW\-\_AT\-\_name attribute, whose
 value is a null-terminated string containing the type name
 as it appears in the source program.
 
@@ -640,15 +640,15 @@ debugging information entries describing each of the classes
 or interfaces it is derived from, extending or implementing,
 respectively, ordered as they were in the source program. Each
 such entry has the 
-tag \livetarg{chap:DWTAGinheritance}{DW\_TAG\_inheritance}.
+tag \livetarg{chap:DWTAGinheritance}{DW\-\_TAG\-\_inheritance}.
 
-An inheritance entry has a DW\_AT\_type attribute whose value is
+An inheritance entry has a DW\-\_AT\-\_type attribute whose value is
 a reference to the debugging information entry describing the
 class or interface from which the parent class or structure
 of the inheritance entry is derived, extended or implementing.
 
 An inheritance entry for a class that derives from or extends
-another class or struct also has a DW\_AT\_data\_member\_location
+another class or struct also has a DW\-\_AT\-\_data\-\_member\-\_location
 attribute, whose value describes the location of the beginning
 of the inherited type relative to the beginning address of the
 derived class. If that value is a constant, it is the offset
@@ -665,14 +665,14 @@ members
 (see Section \refersec{chap:datamemberentries}).  }
 
 An inheritance entry may have a
-DW\_AT\_accessibility attribute. If no accessibility attribute
+DW\-\_AT\-\_accessibility attribute. If no accessibility attribute
 is present, private access is assumed for an entry of a class
 and public access is assumed for an entry of an interface,
 struct or union.
 
 If the class referenced by the inheritance entry serves
 as a C++ virtual base class, the inheritance entry has a
-DW\_AT\_virtuality attribute.
+DW\-\_AT\-\_virtuality attribute.
 
 \textit{For a C++ virtual base, the data member location attribute
 will usually consist of a non-trivial location description.}
@@ -689,16 +689,16 @@ names.}
 If a derived class or structure contains access declarations,
 each such declaration may be represented by a debugging
 information entry with the tag 
-\livetarg{chap:DWTAGaccessdeclaration}{DW\_TAG\_access\_declaration}. 
+\livetarg{chap:DWTAGaccessdeclaration}{DW\-\_TAG\-\_access\-\_declaration}. 
 Each
 such entry is a child of the class or structure type entry.
 
-An access declaration entry has a DW\_AT\_name attribute, whose
+An access declaration entry has a DW\-\_AT\-\_name attribute, whose
 value is a null-terminated string representing the name used
 in the declaration in the source program, including any class
 or structure qualifiers.
 
-An access declaration entry also has a DW\_AT\_accessibility
+An access declaration entry also has a DW\-\_AT\-\_accessibility
 attribute describing the declared accessibility of the named
 entities.
 
@@ -710,9 +710,9 @@ Each ``friend'' declared by a structure, union or class
 type may be represented by a debugging information entry
 that is a child of the structure, union or class type entry;
 the friend entry has the 
-tag \livetarg{chap:DWTAGfriend}{DW\_TAG\_friend}.
+tag \livetarg{chap:DWTAGfriend}{DW\-\_TAG\-\_friend}.
 
-A friend entry has a DW\_AT\_friend attribute, whose value is
+A friend entry has a DW\-\_AT\-\_friend attribute, whose value is
 a reference to the debugging information entry describing
 the declaration of the friend.
 
@@ -722,22 +722,22 @@ the declaration of the friend.
 
 A data member (as opposed to a member function) is
 represented by a debugging information entry with the 
-tag \livetarg{chap:DWTAGmember}{DW\_TAG\_member}. 
+tag \livetarg{chap:DWTAGmember}{DW\-\_TAG\-\_member}. 
 The member entry for a named member has
-a DW\_AT\_name attribute whose value is a null-terminated
+a DW\-\_AT\-\_name attribute whose value is a null-terminated
 string containing the member name as it appears in the source
 program. If the member entry describes an anonymous union, the
 name attribute is omitted or consists of a single zero byte.
 
-The data member entry has a DW\_AT\_type attribute to denote
+The data member entry has a DW\-\_AT\-\_type attribute to denote
 the type of that member.
 
-A data member entry may have a DW\_AT\_accessibility
+A data member entry may have a DW\-\_AT\-\_accessibility
 attribute. If no accessibility attribute is present, private
 access is assumed for an entry of a class and public access
 is assumed for an entry of a structure, union, or interface.
 
-A data member entry may have a DW\_AT\_mutable attribute,
+A data member entry may have a DW\-\_AT\-\_mutable attribute,
 which is a flag. This attribute indicates whether the data
 member was declared with the mutable storage class specifier.
 
@@ -755,12 +755,12 @@ the target system.
 
 The member entry corresponding to a data member that is
 defined in a structure, union or class may have either a
-DW\_AT\_data\_member\_location attribute or a DW\_AT\_data\_bit\_offset
+DW\-\_AT\-\_data\-\_member\-\_location attribute or a DW\-\_AT\-\_data\-\_bit\-\_offset
 attribute. If the beginning of the data member is the same as
 the beginning of the containing entity then neither attribute
 is required.
 
-For a DW\_AT\_data\_member\_location attribute there are two cases:
+For a DW\-\_AT\-\_data\-\_member\-\_location attribute there are two cases:
 
 \begin{enumerate}[1.]
 
@@ -778,21 +778,21 @@ the evaluation is the base address of the member entry.
 
 \textit{The push on the DWARF expression stack of the base address of
 the containing construct is equivalent to execution of the
-DW\_OP\_push\_object\_address operation 
+DW\-\_OP\-\_push\-\_object\-\_address operation 
 (see Section \refersec{chap:stackoperations});
-DW\_OP\_push\_object\_address therefore is not needed at the
+DW\-\_OP\-\_push\-\_object\-\_address therefore is not needed at the
 beginning of a location description for a data member. The
 result of the evaluation is a location--either an address or
 the name of a register, not an offset to the member.}
 
-\textit{A DW\_AT\_data\_member\_location attribute that has the form of a
+\textit{A DW\-\_AT\-\_data\-\_member\-\_location attribute that has the form of a
 location description is not valid for a data member contained
 in an entity that is not byte aligned because DWARF operations
 do not allow for manipulating or computing bit offsets.}
 
 \end{enumerate}
 
-For a DW\_AT\_data\_bit\_offset attribute, the value is an integer
+For a DW\-\_AT\-\_data\-\_bit\-\_offset attribute, the value is an integer
 constant 
 (see Section \refersec{chap:staticanddynamicvaluesofattributes}) 
 that specifies the number of bits
@@ -803,14 +803,14 @@ per byte.
 
 If the size of a data member is not the same as the size
 of the type given for the data member, the data member has
-either a DW\_AT\_byte\_size or a DW\_AT\_bit\_size attribute whose
+either a DW\-\_AT\-\_byte\-\_size or a DW\-\_AT\-\_bit\-\_size attribute whose
 integer constant value 
 (see Section \refersec{chap:staticanddynamicvaluesofattributes}) 
 is the amount
 of storage needed to hold the value of the data member.
 
 \textit{C and C++ bit fields typically require the use of the
-DW\_AT\_data\_bit\_offset and DW\_AT\_bit\_size attributes.}
+DW\-\_AT\-\_data\-\_bit\-\_offset and DW\-\_AT\-\_bit\-\_size attributes.}
 
 \textit{This Standard uses the following bit numbering and direction
 conventions in examples. These conventions are for illustrative
@@ -900,7 +900,7 @@ the target architecture may or may not make this seem natural.}
 and arrays, see 
 Appendix \refersec{app:pascalexample}.}
 
-\textit{Attribute DW\_AT\_data\_bit\_offset is new in DWARF Version 4 and
+\textit{Attribute DW\-\_AT\-\_data\-\_bit\-\_offset is new in DWARF Version 4 and
 is also used for base types 
 (see Section \refersec{chap:basetypeentries}). 
 It replaces the
@@ -926,7 +926,7 @@ as follows.}
 entry has the following attributes:}
 
 \begin{itemize}
-\item \textit{A DW\_AT\_byte\_size attribute whose value (see Section
+\item \textit{A DW\-\_AT\-\_byte\-\_size attribute whose value (see Section
 2.19) is the number of bytes that contain an instance of the
 bit field and any padding bits.}
 
@@ -934,11 +934,11 @@ bit field and any padding bits.}
 object containing the bit field can be inferred from the type
 attribute of the data member containing the bit field.}
 
-\item \textit{A DW\_AT\_bit\_offset attribute whose value (see Section
+\item \textit{A DW\-\_AT\-\_bit\-\_offset attribute whose value (see Section
 2.19) is the number of bits to the left of the leftmost
 (most significant) bit of the bit field value.}
 
-\item \textit{A DW\_AT\_bit\_size attribute whose value (see Section
+\item \textit{A DW\-\_AT\-\_bit\-\_size attribute whose value (see Section
 2.19) is the number of bits occupied by the bit field value.}
 
 \end{itemize}
@@ -969,7 +969,7 @@ data member)}
 % FIXME: the indentation of the following line is suspect.
 \textit{optionally together with}
 
-\item  \textit{either DW\_AT\_byte\_size or DW\-\_AT\-\_bit\-\_size (to
+\item  \textit{either DW\-\_AT\-\_byte\-\_size or DW\-\_AT\-\_bit\-\_size (to
 specify the size of the data member)}
 
 \end{itemize}
@@ -977,14 +977,14 @@ specify the size of the data member)}
 \textit{DWARF V3 defines the following combinations}
 
 \begin{itemize}
-\item \textit{DW\_AT\_data\_member\_location (to specify the beginning
+\item \textit{DW\-\_AT\-\_data\-\_member\-\_location (to specify the beginning
 of the data member, except this specification is only partial
 in the case of a bit field) }
 
 % FIXME: the indentation of the following line is suspect.
 \textit{optionally together with}
 
-\item \textit{DW\_AT\_byte\_size, DW\-\_AT\-\_bit\-\_size and DW\-\_AT\_bit\_offset
+\item \textit{DW\-\_AT\-\_byte\-\_size, DW\-\_AT\-\_bit\-\_size and DW\-\_AT\-\_bit\-\_offset
 (to further specify the beginning of a bit field data member
 as well as specify the size of the data member) }
 \end{itemize}
@@ -993,12 +993,12 @@ as well as specify the size of the data member) }
 \label{chap:memberfunctionentries}
 
 A member function is represented by a debugging information
-entry with the tag \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}. The member function entry
+entry with the tag \livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram}. The member function entry
 may contain the same attributes and follows the same rules
 as non\dash member global subroutine entries 
 (see Section \refersec{chap:subroutineandentrypointentries}).
 
-A member function entry may have a DW\_AT\_accessibility
+A member function entry may have a DW\-\_AT\-\_accessibility
 attribute. If no accessibility attribute is present, private
 access is assumed for an entry of a class and public access
 is assumed for an entry of a structure, union or interface.
@@ -1010,7 +1010,7 @@ If the member function entry describes an explicit member
 function, then that entry has a DW\-\_AT\-\_explicit attribute.
 
 An entry for a virtual function also has a
-DW\_AT\_vtable\_elem\_location attribute whose value contains
+DW\-\_AT\-\_vtable\-\_elem\-\_location attribute whose value contains
 a location description yielding the address of the slot
 for the function within the virtual function table for the
 enclosing class. The address of an object of the enclosing
@@ -1018,16 +1018,16 @@ type is pushed onto the expression stack before the location
 description is evaluated.
 
 If the member function entry describes a non\dash static member
-function, then that entry has a DW\_AT\_object\_pointer attribute
+function, then that entry has a DW\-\_AT\-\_object\-\_pointer attribute
 whose value is a reference to the formal parameter entry
 that corresponds to the object for which the function is
 called. The name attribute of that formal parameter is defined
 by the current language (for example, this for C++ or self
 for Objective C and some other languages). That parameter
-also has a DW\_AT\_artificial attribute whose value is true.
+also has a DW\-\_AT\-\_artificial attribute whose value is true.
 
 Conversely, if the member function entry describes a static
-member function, the entry does not have a DW\_AT\_object\_pointer
+member function, the entry does not have a DW\-\_AT\-\_object\-\_pointer
 attribute.
 
 If the member function entry describes a non\dash static member
@@ -1039,12 +1039,12 @@ const\dash volatile qualification.
 If a subroutine entry represents the defining declaration
 of a member function and that definition appears outside of
 the body of the enclosing class declaration, the subroutine
-entry has a DW\_AT\_specification attribute, whose value is
+entry has a DW\-\_AT\-\_specification attribute, whose value is
 a reference to the debugging information entry representing
 the declaration of this function member. The referenced entry
 will be a child of some class (or structure) type entry.
 
-Subroutine entries containing the DW\_AT\_specification
+Subroutine entries containing the DW\-\_AT\-\_specification
 attribute do not need to duplicate information provided
 by the declaration entry referenced by the specification
 attribute. In particular, such entries do not need to contain
@@ -1062,8 +1062,8 @@ constant values. DWARF does not represent the generic template
 definition, but does represent each instantiation.}
 
 A class template instantiation is represented by a
-debugging information entry with the tag \livelink{chap:DWTAGclasstype}{DW\_TAG\_class\_type},
-\livelink{chap:DWTAGstructuretype}{DW\_TAG\_structure\_type} or \livelink{chap:DWTAGuniontype}{DW\_TAG\_union\_type}. With five
+debugging information entry with the tag \livelink{chap:DWTAGclasstype}{DW\-\_TAG\-\_class\-\_type},
+\livelink{chap:DWTAGstructuretype}{DW\-\_TAG\-\_structure\-\_type} or \livelink{chap:DWTAGuniontype}{DW\-\_TAG\-\_union\-\_type}. With five
 exceptions, such an entry will contain the same attributes
 and have the same types of child entries as would an entry
 for a class type defined explicitly using the instantiation
@@ -1072,25 +1072,25 @@ types and values. The exceptions are:
 \begin{enumerate}[1.]
 \item Each formal parameterized type declaration appearing in the
 template definition is represented by a debugging information
-entry with the tag \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}. Each
-such entry may have a DW\_AT\_name attribute, whose value is
+entry with the tag \livelink{chap:DWTAGtemplatetypeparameter}{DW\-\_TAG\-\_template\-\_type\-\_parameter}. Each
+such entry may have a DW\-\_AT\-\_name attribute, whose value is
 a null\dash terminated string containing the name of the formal
 type parameter as it appears in the source program. The
-template type parameter entry also has a DW\_AT\_type attribute
+template type parameter entry also has a DW\-\_AT\-\_type attribute
 describing the actual type by which the formal is replaced
 for this instantiation.
 
 \item Each formal parameterized value declaration appearing in the
 template definition is represented by a debugging information
 entry with the 
-tag \livetarg{chap:DWTAGtemplatevalueparameter}{DW\_TAG\_template\_value\_parameter}. 
+tag \livetarg{chap:DWTAGtemplatevalueparameter}{DW\-\_TAG\-\_template\-\_value\-\_parameter}. 
 Each
-such entry may have a DW\_AT\_name attribute, whose value is
+such entry may have a DW\-\_AT\-\_name attribute, whose value is
 a null\dash terminated string containing the name of the formal
 value parameter as it appears in the source program. The
-template value parameter entry also has a DW\_AT\_type attribute
+template value parameter entry also has a DW\-\_AT\-\_type attribute
 describing the type of the parameterized value. Finally,
-the template value parameter entry has a DW\_AT\_const\_value
+the template value parameter entry has a DW\-\_AT\-\_const\-\_value
 attribute, whose value is the actual constant value of the
 value parameter for this instantiation as represented on the
 target architecture.
@@ -1123,33 +1123,33 @@ generated artificially by the compiler.
 
 A variant part of a structure is represented by a debugging
 information entry with the 
-tag \livetarg{chap:DWTAGvariantpart}{DW\_TAG\_variant\_part} and is
+tag \livetarg{chap:DWTAGvariantpart}{DW\-\_TAG\-\_variant\-\_part} and is
 owned by the corresponding structure type entry.
 
 If the variant part has a discriminant, the discriminant is
 represented by a separate debugging information entry which
 is a child of the variant part entry. This entry has the form
 of a structure data member entry. The variant part entry will
-have a DW\_AT\_discr attribute whose value is a reference to
+have a DW\-\_AT\-\_discr attribute whose value is a reference to
 the member entry for the discriminant.
 
 If the variant part does not have a discriminant (tag field),
-the variant part entry has a DW\_AT\_type attribute to represent
+the variant part entry has a DW\-\_AT\-\_type attribute to represent
 the tag type.
 
 Each variant of a particular variant part is represented by
 a debugging information entry with the 
-tag \livetarg{chap:DWTAGvariant}{DW\_TAG\_variant}
+tag \livetarg{chap:DWTAGvariant}{DW\-\_TAG\-\_variant}
 and is a child of the variant part entry. The value that
 selects a given variant may be represented in one of three
-ways. The variant entry may have a DW\_AT\_discr\_value attribute
+ways. The variant entry may have a DW\-\_AT\-\_discr\-\_value attribute
 whose value represents a single case label. The value of this
 attribute is encoded as an LEB128 number. The number is signed
 if the tag type for the variant part containing this variant
 is a signed type. The number is unsigned if the tag type is
 an unsigned type.
 
-Alternatively, the variant entry may contain a DW\_AT\_discr\_list
+Alternatively, the variant entry may contain a DW\-\_AT\-\_discr\-\_list
 attribute, whose value represents a list of discriminant
 values. This list is represented by any of the block forms and
 may contain a mixture of case labels and label ranges. Each
@@ -1157,7 +1157,7 @@ item on the list is prefixed with a discriminant value
 descriptor that determines whether the list item represents
 a single label or a label range. A single case label is
 represented as an LEB128 number as defined above for the
-DW\_AT\_discr\_value attribute. A label range is represented by
+DW\-\_AT\-\_discr\-\_value attribute. A label range is represented by
 two LEB128 numbers, the low value of the range followed by the
 high value. Both values follow the rules for signedness just
 described. The discriminant value descriptor is an integer
@@ -1166,15 +1166,15 @@ Figure \refersec{fig:discriminantdescriptorvalues}.
 
 \begin{figure}[here]
 \autorows[0pt]{c}{1}{l}{
-\addtoindex{DW\_DSC\_label},
-\addtoindex{DW\_DSC\_range}
+\addtoindex{DW\-\_DSC\-\_label},
+\addtoindex{DW\-\_DSC\-\_range}
 }
 \caption{Discriminant descriptor values}\label{fig:discriminantdescriptorvalues}
 \end{figure}
 
-If a variant entry has neither a DW\_AT\_discr\_value
-attribute nor a DW\_AT\_discr\_list attribute, or if it has
-a DW\_AT\_discr\_list attribute with 0 size, the variant is a
+If a variant entry has neither a DW\-\_AT\-\_discr\-\_value
+attribute nor a DW\-\_AT\-\_discr\-\_list attribute, or if it has
+a DW\-\_AT\-\_discr\-\_list attribute with 0 size, the variant is a
 default variant.
 
 The components selected by a particular variant are represented
@@ -1192,27 +1192,27 @@ Semantically, the condition is ‛true’ if the conditional
 variable's value matches any of the described constants,
 and the condition is ‛false’ otherwise.}
 
-The \livetarg{chap:DWTAGcondition}{DW\_TAG\_condition} debugging information entry
+The \livetarg{chap:DWTAGcondition}{DW\-\_TAG\-\_condition} debugging information entry
 describes a
 logical condition that tests whether a given data item’s
 value matches one of a set of constant values. If a name
 has been given to the condition, the condition entry has a
-DW\_AT\_name attribute whose value is a null\dash terminated string
+DW\-\_AT\-\_name attribute whose value is a null\dash terminated string
 giving the condition name as it appears in the source program.
 
 The condition entry's parent entry describes the conditional
-variable; normally this will be a \livelink{chap:DWTAGvariable}{DW\_TAG\_variable},
-\livelink{chap:DWTAGmember}{DW\_TAG\_member} or \livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter} entry. If the parent
+variable; normally this will be a \livelink{chap:DWTAGvariable}{DW\-\_TAG\-\_variable},
+\livelink{chap:DWTAGmember}{DW\-\_TAG\-\_member} or \livelink{chap:DWTAGformalparameter}{DW\-\_TAG\-\_formal\-\_parameter} entry. If the parent
 entry has an array type, the condition can test any individual
 element, but not the array as a whole. The condition entry
 implicitly specifies a “comparison type” that is the
 type of an array element if the parent has an array type;
 otherwise it is the type of the parent entry.
 
-The condition entry owns \livelink{chap:DWTAGconstant}{DW\_TAG\_constant} and/or
-\livelink{chap:DWTAGsubrangetype}{DW\_TAG\_subrange\_type} entries that describe the constant
+The condition entry owns \livelink{chap:DWTAGconstant}{DW\-\_TAG\-\_constant} and/or
+\livelink{chap:DWTAGsubrangetype}{DW\-\_TAG\-\_subrange\-\_type} entries that describe the constant
 values associated with the condition. If any child entry has
-a DW\_AT\_type attribute, that attribute should describe a type
+a DW\-\_AT\-\_type attribute, that attribute should describe a type
 compatible with the comparison type (according to the source
 language); otherwise the child’s type is the same as the
 comparison type.
@@ -1235,17 +1235,17 @@ a fixed number of symbolic values.}
 
 An enumeration type is represented by a debugging information
 entry with the tag 
-\livetarg{chap:DWTAGenumerationtype}{DW\_TAG\_enumeration\_type}.
+\livetarg{chap:DWTAGenumerationtype}{DW\-\_TAG\-\_enumeration\-\_type}.
 
 If a name has been given to the enumeration type in the source
 program, then the corresponding enumeration type entry has
-a DW\_AT\_name attribute whose value is a null\dash terminated
+a DW\-\_AT\-\_name attribute whose value is a null\dash terminated
 string containing the enumeration type name as it appears
-in the source program. This entry also has a DW\_AT\_byte\_size
+in the source program. This entry also has a DW\-\_AT\-\_byte\-\_size
 attribute whose integer constant value is the number of bytes
 required to hold an instance of the enumeration.
 
-The enumeration type entry may have a DW\_AT\_type attribute
+The enumeration type entry may have a DW\-\_AT\-\_type attribute
 which refers to the underlying data type used to implement
 the enumeration.
 
@@ -1257,7 +1257,7 @@ If an enumeration type has type safe semantics such that
 \item Enumerators are not implicitly converted to another type
 \end{enumerate}
 
-then the enumeration type entry may have a DW\_AT\_enum\_class
+then the enumeration type entry may have a DW\-\_AT\-\_enum\-\_class
 attribute, which is a flag. In a language that offers only
 one kind of enumeration declaration, this attribute is not
 required.
@@ -1266,21 +1266,21 @@ required.
 integral type determined by the compiler from the properties of
 the enumeration literal values. A C++ type declaration written
 using enum class declares a strongly typed enumeration and
-is represented using \livelink{chap:DWTAGenumerationtype}{DW\_TAG\_enumeration\_type} in combination
-with DW\_AT\_enum\_class.}
+is represented using \livelink{chap:DWTAGenumerationtype}{DW\-\_TAG\-\_enumeration\-\_type} in combination
+with DW\-\_AT\-\_enum\-\_class.}
 
 Each enumeration literal is represented by a debugging
 information entry with the 
-tag \livetarg{chap:DWTAGenumerator}{DW\_TAG\_enumerator}. 
+tag \livetarg{chap:DWTAGenumerator}{DW\-\_TAG\-\_enumerator}. 
 Each
 such entry is a child of the enumeration type entry, and the
 enumerator entries appear in the same order as the declarations
 of the enumeration literals in the source program.
 
-Each enumerator entry has a DW\_AT\_name attribute, whose
+Each enumerator entry has a DW\-\_AT\-\_name attribute, whose
 value is a null\dash terminated string containing the name of the
 enumeration literal as it appears in the source program. Each
-enumerator entry also has a DW\_AT\_const\_value attribute,
+enumerator entry also has a DW\-\_AT\-\_const\-\_value attribute,
 whose value is the actual numeric value of the enumerator as
 represented on the target system.
 
@@ -1288,13 +1288,13 @@ represented on the target system.
 If the enumeration type occurs as the description of a
 dimension of an array type, and the stride for that dimension
 is different than what would otherwise be determined, then
-the enumeration type entry has either a DW\_AT\_byte\_stride
-or DW\_AT\_bit\_stride attribute which specifies the separation
+the enumeration type entry has either a DW\-\_AT\-\_byte\-\_stride
+or DW\-\_AT\-\_bit\-\_stride attribute which specifies the separation
 between successive elements along the dimension as described
 in 
 Section \refersec{chap:visibilityofdeclarations}. 
-The value of the DW\_AT\_bit\_stride attribute
-is interpreted as bits and the value of the DW\_AT\_byte\_stride
+The value of the DW\-\_AT\-\_bit\-\_stride attribute
+is interpreted as bits and the value of the DW\-\_AT\-\_byte\-\_stride
 attribute is interpreted as bytes.
 
 
@@ -1311,15 +1311,15 @@ user\dash defined type.
 
 A subroutine type is represented by a debugging information
 entry with the 
-tag \livetarg{chap:DWTAGsubroutinetype}{DW\_TAG\_subroutine\_type}. 
+tag \livetarg{chap:DWTAGsubroutinetype}{DW\-\_TAG\-\_subroutine\-\_type}. 
 If a name has
 been given to the subroutine type in the source program,
-then the corresponding subroutine type entry has a DW\_AT\_name
+then the corresponding subroutine type entry has a DW\-\_AT\-\_name
 attribute whose value is a null\dash terminated string containing
 the subroutine type name as it appears in the source program.
 
 If the subroutine type describes a function that returns
-a value, then the subroutine type entry has a DW\_AT\_type
+a value, then the subroutine type entry has a DW\-\_AT\-\_type
 attribute to denote the type returned by the subroutine. If
 the types of the arguments are necessary to describe the
 subroutine type, then the corresponding subroutine type
@@ -1333,7 +1333,7 @@ declared using function prototype style declarations and
 those declared using non\dash prototype declarations.
 
 A subroutine entry declared with a function prototype style
-declaration may have a DW\_AT\_prototyped attribute, which is
+declaration may have a DW\-\_AT\-\_prototyped attribute, which is
 a flag.
 
 Each debugging information entry owned by a subroutine
@@ -1343,13 +1343,13 @@ interpretations:
 \begin{enumerate}[1.]
 \item The formal parameters of a parameter list (that have a
 specific type) are represented by a debugging information entry
-with the tag \livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter}. Each formal parameter
-entry has a DW\_AT\_type attribute that refers to the type of
+with the tag \livelink{chap:DWTAGformalparameter}{DW\-\_TAG\-\_formal\-\_parameter}. Each formal parameter
+entry has a DW\-\_AT\-\_type attribute that refers to the type of
 the formal parameter.
 
 \item The unspecified parameters of a variable parameter list
 are represented by a debugging information entry with the
-tag \livelink{chap:DWTAGunspecifiedparameters}{DW\_TAG\_unspecified\_parameters}.
+tag \livelink{chap:DWTAGunspecifiedparameters}{DW\-\_TAG\-\_unspecified\-\_parameters}.
 \end{enumerate}
 
 
@@ -1366,18 +1366,18 @@ machine concept, not the class string as used in this document
 (except for the name attribute).
 
 A string type is represented by a debugging information entry
-with the tag \livetarg{chap:DWTAGstringtype}{DW\_TAG\_string\_type}. 
+with the tag \livetarg{chap:DWTAGstringtype}{DW\-\_TAG\-\_string\-\_type}. 
 If a name has been given to
 the string type in the source program, then the corresponding
-string type entry has a DW\_AT\_name attribute whose value is
+string type entry has a DW\-\_AT\-\_name attribute whose value is
 a null\dash terminated string containing the string type name as
 it appears in the source program.
 
-The string type entry may have a DW\_AT\_string\_length attribute
+The string type entry may have a DW\-\_AT\-\_string\-\_length attribute
 whose value is a location description yielding the location
 where the length of the string is stored in the program. The
-string type entry may also have a DW\_AT\_byte\_size attribute
-or DW\_AT\_bit\_size attribute, whose value 
+string type entry may also have a DW\-\_AT\-\_byte\-\_size attribute
+or DW\-\_AT\-\_bit\-\_size attribute, whose value 
 (see Section \refersec{chap:byteandbitsizes}) 
 is the size of the data to be retrieved from the location
 referenced by the string length attribute. If no (byte or bit)
@@ -1385,7 +1385,7 @@ size attribute is present, the size of the data to be retrieved
 is the same as the size of an address on the target machine.
 
 If no string length attribute is present, the string type
-entry may have a DW\_AT\_byte\_size attribute or DW\_AT\_bit\_size
+entry may have a DW\-\_AT\-\_byte\-\_size attribute or DW\-\_AT\-\_bit\-\_size
 attribute, whose value 
 (see Section \refersec{chap:byteandbitsizes}) 
 is the amount of
@@ -1399,20 +1399,20 @@ storage needed to hold a value of the string type.
 a group of values of ordinal type.}
 
 A set is represented by a debugging information entry with
-the tag \livetarg{chap:DWTAGsettype}{DW\_TAG\_set\_type}. 
+the tag \livetarg{chap:DWTAGsettype}{DW\-\_TAG\-\_set\-\_type}. 
 If a name has been given to the
-set type, then the set type entry has a DW\_AT\_name attribute
+set type, then the set type entry has a DW\-\_AT\-\_name attribute
 whose value is a null\dash terminated string containing the
 set type name as it appears in the source program.
 
-The set type entry has a DW\_AT\_type attribute to denote the
+The set type entry has a DW\-\_AT\-\_type attribute to denote the
 type of an element of the set.
 
 If the amount of storage allocated to hold each element of an
 object of the given set type is different from the amount of
 storage that is normally allocated to hold an individual object
 of the indicated element type, then the set type entry has
-either a DW\_AT\_byte\_size attribute, or DW\_AT\_bit\_size attribute
+either a DW\-\_AT\-\_byte\-\_size attribute, or DW\-\_AT\-\_bit\-\_size attribute
 whose value (see Section \refersec{chap:byteandbitsizes}) is
 the amount of storage needed to hold a value of the set type.
 
@@ -1428,14 +1428,14 @@ the bounds of array dimensions.}
 
 A subrange type is represented by a debugging information
 entry with the 
-tag \livetarg{chap:DWTAGsubrangetype}{DW\_TAG\_subrange\_type}. 
+tag \livetarg{chap:DWTAGsubrangetype}{DW\-\_TAG\-\_subrange\-\_type}. 
 If a name has been
 given to the subrange type, then the subrange type entry
-has a DW\_AT\_name attribute whose value is a null\dash terminated
+has a DW\-\_AT\-\_name attribute whose value is a null\dash terminated
 string containing the subrange type name as it appears in
 the source program.
 
-The subrange entry may have a DW\_AT\_type attribute to describe
+The subrange entry may have a DW\-\_AT\-\_type attribute to describe
 the type of object, called the basis type, of whose values
 this subrange is a subset.
 
@@ -1443,13 +1443,13 @@ If the amount of storage allocated to hold each element of an
 object of the given subrange type is different from the amount
 of storage that is normally allocated to hold an individual
 object of the indicated element type, then the subrange
-type entry has a DW\_AT\_byte\_size attribute or DW\_AT\_bit\_size
+type entry has a DW\-\_AT\-\_byte\-\_size attribute or DW\-\_AT\-\_bit\-\_size
 attribute, whose value 
 (see Section \refersec{chap:staticanddynamicvaluesofattributes})
 is the amount of
 storage needed to hold a value of the subrange type.
 
-The subrange entry may have a DW\_AT\_threads\_scaled attribute,
+The subrange entry may have a DW\-\_AT\-\_threads\-\_scaled attribute,
 which is a flag. If present, this attribute indicates whether
 this subrange represents a UPC array bound which is scaled
 by the runtime THREADS value (the number of UPC threads in
@@ -1461,10 +1461,10 @@ this execution of the program).
 int shared foo[34*THREADS][10][20];
 \end{lstlisting}
 
-The subrange entry may have the attributes DW\_AT\_lower\_bound
-and DW\_AT\_upper\_bound to specify, respectively, the lower
-and upper bound values of the subrange. The DW\_AT\_upper\_bound
-attribute may be replaced by a DW\_AT\_count attribute, whose
+The subrange entry may have the attributes DW\-\_AT\-\_lower\-\_bound
+and DW\-\_AT\-\_upper\-\_bound to specify, respectively, the lower
+and upper bound values of the subrange. The DW\-\_AT\-\_upper\-\_bound
+attribute may be replaced by a DW\-\_AT\-\_count attribute, whose
 value describes the number of elements in the subrange rather
 than the value of the last element. The value of each of
 these attributes is determined as described in 
@@ -1496,8 +1496,8 @@ integer with the same size as an address on the target machine.
 If the subrange type occurs as the description of a dimension
 of an array type, and the stride for that dimension is
 different than what would otherwise be determined, then
-the subrange type entry has either a DW\_AT\_byte\_stride or
-DW\_AT\_bit\_stride attribute which specifies the separation
+the subrange type entry has either a DW\-\_AT\-\_byte\-\_stride or
+DW\-\_AT\-\_bit\-\_stride attribute which specifies the separation
 between successive elements along the dimension as described
 in 
 Section \refersec{chap:byteandbitsizes}.
@@ -1512,23 +1512,23 @@ structure is a unique type.}
 
 A debugging information entry representing the type of an
 object that is a pointer to a structure or class member has
-the tag \livetarg{chap:DWTAGptrtomembertype}{DW\_TAG\_ptr\_to\_member\_type}.
+the tag \livetarg{chap:DWTAGptrtomembertype}{DW\-\_TAG\-\_ptr\-\_to\-\_member\-\_type}.
 
 If the pointer to member type has a name, the pointer to
-member entry has a DW\_AT\_name attribute, whose value is a
+member entry has a DW\-\_AT\-\_name attribute, whose value is a
 null\dash terminated string containing the type name as it appears
 in the source program.
 
-The pointer to member entry has a DW\_AT\_type attribute to
+The pointer to member entry has a DW\-\_AT\-\_type attribute to
 describe the type of the class or structure member to which
 objects of this type may point.
 
-The pointer to member entry also has a DW\_AT\_containing\_type
+The pointer to member entry also has a DW\-\_AT\-\_containing\-\_type
 attribute, whose value is a reference to a debugging
 information entry for the class or structure to whose members
 objects of this type may point.
 
-The pointer to member entry has a DW\_AT\_use\_location attribute
+The pointer to member entry has a DW\-\_AT\-\_use\-\_location attribute
 whose value is a location description that computes the
 address of the member of the class to which the pointer to
 member entry points.
@@ -1539,12 +1539,12 @@ or structure and to any instance of the pointer or member
 type. The method is thus associated with the type entry,
 rather than with each instance of the type.}
 
-The DW\_AT\_use\_location description is used in conjunction
+The DW\-\_AT\-\_use\-\_location description is used in conjunction
 with the location descriptions for a particular object of the
 given pointer to member type and for a particular structure or
-class instance. The DW\_AT\_use\_location attribute expects two
+class instance. The DW\-\_AT\-\_use\-\_location attribute expects two
 values to be pushed onto the DWARF expression stack before
-the DW\_AT\_use\_location description is evaluated. The first
+the DW\-\_AT\-\_use\-\_location description is evaluated. The first
 value pushed is the value of the pointer to member object
 itself. The second value pushed is the base address of the
 entire structure or union instance containing the member
@@ -1562,7 +1562,7 @@ whose address is being calculated.
 
 \textit{2. Push the base address of object onto the DWARF expression stack.}
 
-\textit{3. Evaluate the DW\_AT\_use\_location description 
+\textit{3. Evaluate the DW\-\_AT\-\_use\-\_location description 
 given in the type of mbr\_ptr.}
 
 \section{File Type Entries}
@@ -1573,17 +1573,17 @@ files.}
 
 A file type is represented by a debugging information entry
 with the 
-\livetarg{chap:DWTAGfiletype}{DW\_TAG\_file\_type}. 
+\livetarg{chap:DWTAGfiletype}{DW\-\_TAG\-\_file\-\_type}. 
 If the file type has a name,
-the file type entry has a DW\_AT\_name attribute, whose value
+the file type entry has a DW\-\_AT\-\_name attribute, whose value
 is a null\dash terminated string containing the type name as it
 appears in the source program.
 
-The file type entry has a DW\_AT\_type attribute describing
+The file type entry has a DW\-\_AT\-\_type attribute describing
 the type of the objects contained in the file.
 
-The file type entry also has a DW\_AT\_byte\_size or
-DW\_AT\_bit\_size attribute, whose value 
+The file type entry also has a DW\-\_AT\-\_byte\-\_size or
+DW\-\_AT\-\_bit\-\_size attribute, whose value 
 (see Section \refersec{chap:staticanddynamicvaluesofattributes})
 is the amount of storage need to hold a value of the file type.
 
@@ -1596,7 +1596,7 @@ is the amount of storage need to hold a value of the file type.
 information, including a location and/or run\dash time parameters,
 about the data that represents the value for that object.}
 
-The DW\_AT\_data\_location attribute may be used with any
+The DW\-\_AT\-\_data\-\_location attribute may be used with any
 type that provides one or more levels of hidden indirection
 and/or run\dash time parameters in its representation. Its value
 is a location description. The result of evaluating this
@@ -1605,9 +1605,9 @@ When this attribute is omitted, the address of the data is
 the same as the address of the object.
 
 \textit{This location description will typically begin with
-DW\_OP\_push\_object\_address which loads the address of the
+DW\-\_OP\-\_push\-\_object\-\_address which loads the address of the
 object which can then serve as a descriptor in subsequent
-calculation. For an example using DW\_AT\_data\_location for a
+calculation. For an example using DW\-\_AT\-\_data\-\_location for a
 Fortran 90 array, see 
 Appendix \refersec{app:fortran90example}.}
 
@@ -1618,14 +1618,14 @@ Appendix \refersec{app:fortran90example}.}
 may be dynamically allocated or associated with a variable
 under explicit program control.}
 
-The DW\_AT\_allocated attribute may optionally be used with any
+The DW\-\_AT\-\_allocated attribute may optionally be used with any
 type for which objects of the type can be explicitly allocated
 and deallocated. The presence of the attribute indicates that
 objects of the type are allocatable and deallocatable. The
 integer value of the attribute (see below) specifies whether
 an object of the type is currently allocated or not.
 
-The DW\_AT\_associated attribute may optionally be used with
+The DW\-\_AT\-\_associated attribute may optionally be used with
 any type for which objects of the type can be dynamically
 associated with other objects. The presence of the attribute
 indicates that objects of the type can be associated. The
@@ -1642,20 +1642,20 @@ Section \refersec{chap:staticanddynamicvaluesofattributes}.
 A non\dash zero value is interpreted as allocated or associated,
 and zero is interpreted as not allocated or not associated.
 
-\textit{For Fortran 90, if the DW\_AT\_associated attribute is present,
+\textit{For Fortran 90, if the DW\-\_AT\-\_associated attribute is present,
 the type has the POINTER property where either the parent
 variable is never associated with a dynamic object or the
 implementation does not track whether the associated object
-is static or dynamic. If the DW\_AT\_allocated attribute is
-present and the DW\_AT\_associated attribute is not, the type
+is static or dynamic. If the DW\-\_AT\-\_allocated attribute is
+present and the DW\-\_AT\-\_associated attribute is not, the type
 has the ALLOCATABLE property. If both attributes are present,
 then the type should be assumed to have the POINTER property
-(and not ALLOCATABLE); the DW\_AT\_allocated attribute may then
+(and not ALLOCATABLE); the DW\-\_AT\-\_allocated attribute may then
 be used to indicate that the association status of the object
 resulted from execution of an ALLOCATE statement rather than
 pointer assignment.}
 
-\textit{For examples using DW\_AT\_allocated for Ada and Fortran 90
+\textit{For examples using DW\-\_AT\-\_allocated for Ada and Fortran 90
 arrays, 
 see Appendix \refersec{app:aggregateexamples}.}
 
@@ -1680,7 +1680,7 @@ the following child entries:
 in the template alias declaration is represented
 by a debugging information entry with the tag
 \livelink{chap:DWTAGtemplatetypeparameter}{DW\-\_TAG\-\_template\-\_type\-\_parameter}. Each such entry may have
-a DW\_AT\_name attribute, whose value is a null\dash terminated
+a DW\-\_AT\-\_name attribute, whose value is a null\dash terminated
 string containing the name of the formal type parameter as it
 appears in the source program. The template type parameter
 entry also has a DW\-\_AT\-\_type attribute describing the actual

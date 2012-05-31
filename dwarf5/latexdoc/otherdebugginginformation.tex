@@ -101,7 +101,7 @@ pairs. Each pair consists of the section offset from the
 beginning of the compilation unit corresponding to the current
 set to the debugging information entry for the given object,
 followed by a null\dash terminated character string representing
-the name of the object as given by the DW\_AT\_name attribute
+the name of the object as given by the DW\-\_AT\-\_name attribute
 of the referenced debugging information entry. Each set of
 names is terminated by an offset field containing zero (and
 no following string).
@@ -110,7 +110,7 @@ no following string).
 In the case of the name of a function member or static data
 member of a C++ structure, class or union, the name presented
 in the .debug\_pubnames section is not the simple name given
-by the DW\_AT\_name attribute of the referenced debugging
+by the DW\-\_AT\-\_name attribute of the referenced debugging
 information entry, but rather the fully qualified name of
 the data or function member.
 
@@ -471,7 +471,7 @@ unoptimized code.}
 \textit{A more sophisticated approach might involve multiple entries in
 the matrix for a line number; in this case, at least one entry
 (often but not necessarily only one) specifies a recommended
-breakpoint location for the line number. DW\_LNS\_negate\_stmt
+breakpoint location for the line number. DW\-\_LNS\-\_negate\-\_stmt
 opcodes in the line number program control which matrix entries
 constitute such a recommendation and default\_is\_stmt might
 be either ``true'' or ``false''. This approach might be
@@ -539,7 +539,7 @@ values:
 path name of a source file. If the entry contains a file
 name or relative path name, the file is located relative
 to either the compilation directory (as specified by the
-DW\_AT\_comp\_dir attribute given in the compilation unit) or one
+DW\-\_AT\-\_comp\-\_dir attribute given in the compilation unit) or one
 of the directories listed in the include\_directories section.
 
 \item An unsigned LEB128 number representing the directory
@@ -565,7 +565,7 @@ section, and so on. The directory index is ignored for file
 names that represent full path names.
 
 The primary source file is described by an entry whose path
-name exactly matches that given in the DW\_AT\_name attribute
+name exactly matches that given in the DW\-\_AT\-\_name attribute
 in the compilation unit, and whose directory is understood
 to be given by the implicit entry with index 0.
 
@@ -575,7 +575,7 @@ instead of file names in the file register.
 
 \textit{A compiler may generate a single null byte for the file
 names field and define file names using the extended opcode
-DW\_LNE\_define\_file.}
+DW\-\_LNE\-\_define\-\_file.}
 
 
 \end{enumerate}
@@ -758,48 +758,48 @@ actions performed by these opcodes are as follows:
 
 \begin{enumerate}[1.]
 
-\item \textbf{DW\_LNS\_copy} \\
-The DW\_LNS\_copy opcode takes no operands. It appends a row
+\item \textbf{DW\-\_LNS\-\_copy} \\
+The DW\-\_LNS\-\_copy opcode takes no operands. It appends a row
 to the matrix using the current values of the state machine
 registers. Then it sets the discriminator register to 0,
 and sets the basic\_block, prologue\_end and epilogue\_begin
 registers to ``false.''
 
-\item \textbf{DW\_LNS\_advance\_pc} \\
-The DW\_LNS\_advance\_pc opcode takes a single unsigned LEB128
+\item \textbf{DW\-\_LNS\-\_advance\-\_pc} \\
+The DW\-\_LNS\-\_advance\-\_pc opcode takes a single unsigned LEB128
 operand as the operation advance and modifies the address
 and op\_index registers as specified in 
 Section \refersec{chap:specialopcodes}.
 
-\item \textbf{DW\_LNS\_advance\_line} \\
-The DW\_LNS\_advance\_line opcode takes a single signed LEB128
+\item \textbf{DW\-\_LNS\-\_advance\-\_line} \\
+The DW\-\_LNS\-\_advance\-\_line opcode takes a single signed LEB128
 operand and adds that value to the line register of the
 state machine.
 
-\item \textbf{DW\_LNS\_set\_file} \\ 
-The DW\_LNS\_set\_file opcode takes a single
+\item \textbf{DW\-\_LNS\-\_set\-\_file} \\ 
+The DW\-\_LNS\-\_set\-\_file opcode takes a single
 unsigned LEB128 operand and stores it in the file register
 of the state machine.
 
-\item \textbf{DW\_LNS\_set\_column} \\ 
-The DW\_LNS\_set\_column opcode takes a
+\item \textbf{DW\-\_LNS\-\_set\-\_column} \\ 
+The DW\-\_LNS\-\_set\-\_column opcode takes a
 single unsigned LEB128 operand and stores it in the column
 register of the state machine.
 
-\item \textbf{DW\_LNS\_negate\_stmt} \\
-The DW\_LNS\_negate\_stmt opcode takes no
+\item \textbf{DW\-\_LNS\-\_negate\-\_stmt} \\
+The DW\-\_LNS\-\_negate\-\_stmt opcode takes no
 operands. It sets the is\_stmt register of the state machine
 to the logical negation of its current value.
 
-\item \textbf{DW\_LNS\_set\_basic\_block} \\
-The DW\_LNS\_set\_basic\_block opcode
+\item \textbf{DW\-\_LNS\-\_set\-\_basic\-\_block} \\
+The DW\-\_LNS\-\_set\-\_basic\-\_block opcode
 takes no operands. It sets the basic\_block register of the
 state machine to ``true.''
 
 
 
-\item \textbf{DW\_LNS\_const\_add\_pc} \\
-The DW\_LNS\_const\_add\_pc opcode takes
+\item \textbf{DW\-\_LNS\-\_const\-\_add\-\_pc} \\
+The DW\-\_LNS\-\_const\-\_add\-\_pc opcode takes
 no operands. It advances the address and op\_index registers
 by the increments corresponding to special opcode 255.
 
@@ -807,14 +807,14 @@ by the increments corresponding to special opcode 255.
 by a small amount, it can use a single special opcode,
 which occupies a single byte. When it needs to advance the
 address by up to twice the range of the last special opcode,
-it can use DW\_LNS\_const\_add\_pc followed by a special opcode,
+it can use DW\-\_LNS\-\_const\-\_add\-\_pc followed by a special opcode,
 for a total of two bytes. Only if it needs to advance the
 address by more than twice that range will it need to use
-both DW\_LNS\_advance\_pc and a special opcode, requiring three
+both DW\-\_LNS\-\_advance\-\_pc and a special opcode, requiring three
 or more bytes.}
 
-\item \textbf{DW\_LNS\_fixed\_advance\_pc} \\ 
-The DW\_LNS\_fixed\_advance\_pc opcode
+\item \textbf{DW\-\_LNS\-\_fixed\-\_advance\-\_pc} \\ 
+The DW\-\_LNS\-\_fixed\-\_advance\-\_pc opcode
 takes a single uhalf (unencoded) operand and adds it to the
 address register of the state machine and sets the op\_index
 register to 0. This is the only standard opcode whose operand
@@ -822,14 +822,14 @@ is \textbf{not} a variable length number. It also does
 \textbf{not} multiply the
 operand by the minimum\_instruction\_length field of the header.
 
-\textit{Existing assemblers cannot emit DW\_LNS\_advance\_pc or special
+\textit{Existing assemblers cannot emit DW\-\_LNS\-\_advance\-\_pc or special
 opcodes because they cannot encode LEB128 numbers or judge when
 the computation of a special opcode overflows and requires
-the use of DW\_LNS\_advance\_pc. Such assemblers, however, can
-use DW\_LNS\_fixed\_advance\_pc instead, sacrificing compression.}
+the use of DW\-\_LNS\-\_advance\-\_pc. Such assemblers, however, can
+use DW\-\_LNS\-\_fixed\-\_advance\-\_pc instead, sacrificing compression.}
 
-\item \textbf{DW\_LNS\_set\_prologue\_end} \\
-The DW\_LNS\_set\_prologue\_end
+\item \textbf{DW\-\_LNS\-\_set\-\_prologue\-\_end} \\
+The DW\-\_LNS\-\_set\-\_prologue\-\_end
 opcode takes no operands. It sets the prologue\_end register
 to ``true''.
 
@@ -854,8 +854,8 @@ information entries of the compilation (including inlined
 subroutines).}
 
 
-\item \textbf{DW\_LNS\_set\_epilogue\_begin} \\
-The DW\_LNS\_set\_epilogue\_begin opcode takes no operands. It
+\item \textbf{DW\-\_LNS\-\_set\-\_epilogue\-\_begin} \\
+The DW\-\_LNS\-\_set\-\_epilogue\-\_begin opcode takes no operands. It
 sets the epilogue\_begin register to ``true''.
 
 \textit{When a breakpoint is set on the exit of a function or execution
@@ -875,8 +875,8 @@ subroutines).}
 \textit{In the case of a trivial function, both prologue end and
 epilogue begin may occur at the same address.}
 
-\item \textbf{DW\_LNS\_set\_isa} \\
-The DW\_LNS\_set\_isa opcode takes a single
+\item \textbf{DW\-\_LNS\-\_set\-\_isa} \\
+The DW\-\_LNS\-\_set\-\_isa opcode takes a single
 unsigned LEB128 operand and stores that value in the isa
 register of the state machine.
 \end{enumerate}
@@ -888,20 +888,20 @@ The extended opcodes are as follows:
 
 \begin{enumerate}[1.]
 
-\item \textbf{DW\_LNE\_end\_sequence} \\
-The DW\_LNE\_end\_sequence opcode takes no operands. It sets the
+\item \textbf{DW\-\_LNE\-\_end\-\_sequence} \\
+The DW\-\_LNE\-\_end\-\_sequence opcode takes no operands. It sets the
 end\_sequence register of the state machine to “true” and
 appends a row to the matrix using the current values of the
 state-machine registers. Then it resets the registers to the
 initial values specified above 
 (see Section \refersec{chap:statemachineregisters}). 
 Every line
-number program sequence must end with a DW\_LNE\_end\_sequence
+number program sequence must end with a DW\-\_LNE\-\_end\-\_sequence
 instruction which creates a row whose address is that of the
 byte after the last target machine instruction of the sequence.
 
-\item \textbf{DW\_LNE\_set\_address} \\
-The DW\_LNE\_set\_address opcode takes a single relocatable
+\item \textbf{DW\-\_LNE\-\_set\-\_address} \\
+The DW\-\_LNE\-\_set\-\_address opcode takes a single relocatable
 address as an operand. The size of the operand is the size
 of an address on the target machine. It sets the address
 register to the value given by the relocatable address and
@@ -912,9 +912,9 @@ affect the address register add a delta to it. This instruction
 stores a relocatable value into it instead.}
 
 
-\item \textbf{DW\_LNE\_define\_file} \\
+\item \textbf{DW\-\_LNE\-\_define\-\_file} \\
 
-The DW\_LNE\_define\_file opcode takes four operands:
+The DW\-\_LNE\-\_define\-\_file opcode takes four operands:
 
 \begin{enumerate}[1.]
 
@@ -922,7 +922,7 @@ The DW\_LNE\_define\_file opcode takes four operands:
 path name of a source file. If the entry contains a file
 name or a relative path name, the file is located relative
 to either the compilation directory (as specified by the
-DW\_AT\_comp\_dir attribute given in the compilation unit)
+DW\-\_AT\-\_comp\-\_dir attribute given in the compilation unit)
 or one of the directories in the include\_directories section.
 
 \item An unsigned LEB128 number representing the directory index
@@ -946,15 +946,15 @@ directory index is ignored for file names that represent full
 path names.
 
 The primary source file is described by an entry whose path
-name exactly matches that given in the DW\_AT\_name attribute
+name exactly matches that given in the DW\-\_AT\-\_name attribute
 in the compilation unit, and whose directory index is 0. The
 files are numbered, starting at 1, in the order in which they
 appear; the names in the header come before names defined by
-the DW\_LNE\_define\_file instruction. These numbers are used
+the DW\-\_LNE\-\_define\-\_file instruction. These numbers are used
 in the file register of the state machine.
 
-\item \textbf{DW\_LNE\_set\_discriminator} \\
-The DW\_LNE\_set\_discriminator opcode takes a single
+\item \textbf{DW\-\_LNE\-\_set\-\_discriminator} \\
+The DW\-\_LNE\-\_set\-\_discriminator opcode takes a single
 parameter, an unsigned LEB128 integer. It sets the
 discriminator register to the new value.
 
@@ -993,32 +993,32 @@ code of 0.
 The valid macinfo types are as follows:
 
 \begin{tabular}{ll}
-DW\_MACINFO\_define 
+DW\-\_MACINFO\-\_define 
 &A macro definition.\\
-DW\_MACINFO\_undef
+DW\-\_MACINFO\-\_undef
 &A macro undefinition.\\
-DW\_MACINFO\_start\_file
+DW\-\_MACINFO\-\_start\-\_file
 &The start of a new source file inclusion.\\
-DW\_MACINFO\_end\_file
+DW\-\_MACINFO\-\_end\-\_file
 &The end of the current source file inclusion.\\
-DW\_MACINFO\_vendor\_ext
+DW\-\_MACINFO\-\_vendor\-\_ext
 & Vendor specific macro information directives.\\
 \end{tabular}
 
 \subsubsection{Define and Undefine Entries}
 \label{chap:defineandundefineentries}
 
-All DW\_MACINFO\_define and DW\_MACINFO\_undef entries have two
+All DW\-\_MACINFO\-\_define and DW\-\_MACINFO\-\_undef entries have two
 operands. The first operand encodes the line number of the
 source line on which the relevant defining or undefining
 macro directives appeared.
 
 The second operand consists of a null-terminated character
-string. In the case of a DW\_MACINFO\_undef entry, the value
+string. In the case of a DW\-\_MACINFO\-\_undef entry, the value
 of this string will be simply the name of the pre- processor
 symbol that was undefined at the indicated source line.
 
-In the case of a DW\_MACINFO\_define entry, the value of this
+In the case of a DW\-\_MACINFO\-\_define entry, the value of this
 string will be the name of the macro symbol that was defined
 at the indicated source line, followed immediately by the macro
 formal parameter list including the surrounding parentheses (in
@@ -1044,7 +1044,7 @@ name of the defined macro from the following definition text.
 
 \subsubsection{Start File Entries}
 \label{chap:startfileentries}
-Each DW\_MACINFO\_start\_file entry also has two operands. The
+Each DW\-\_MACINFO\-\_start\-\_file entry also has two operands. The
 first operand encodes the line number of the source line on
 which the inclusion macro directive occurred.
 
@@ -1056,27 +1056,27 @@ the inclusion directive on the indicated source line.
 
 \subsubsection{End File Entries}
 \label{chap:endfileentries}
-A DW\_MACINFO\_end\_file entry has no operands. The presence of
+A DW\-\_MACINFO\-\_end\-\_file entry has no operands. The presence of
 the entry marks the end of the current source file inclusion.
 
 \subsubsection{Vendor Extension Entries}
 \label{chap:vendorextensionentries}
-A DW\_MACINFO\_vendor\_ext entry has two operands. The first
+A DW\-\_MACINFO\-\_vendor\-\_ext entry has two operands. The first
 is a constant. The second is a null-terminated character
 string. The meaning and/or significance of these operands is
 intentionally left undefined by this specification.
 
 \textit{A consumer must be able to totally ignore all
-DW\_MACINFO\_vendor\_ext entries that it does not understand
+DW\-\_MACINFO\-\_vendor\-\_ext entries that it does not understand
 (see Section \refersec{datarep:vendorextensibility}).}
 
 
 \subsection{Base Source Entries} 
 \label{chap:basesourceentries}
 
-A producer shall generate DW\_MACINFO\_start\_file and
-DW\_MACINFO\_end\_file entries for the source file submitted to
-the compiler for compilation. This DW\_MACINFO\_start\_file entry
+A producer shall generate DW\-\_MACINFO\-\_start\-\_file and
+DW\-\_MACINFO\-\_end\-\_file entries for the source file submitted to
+the compiler for compilation. This DW\-\_MACINFO\-\_start\-\_file entry
 has the value 0 in its line number operand and references
 the file entry in the line number information table for the
 primary source file.
@@ -1085,21 +1085,21 @@ primary source file.
 \subsection{Macinfo Entries For Command Line Options}
 \label{chap:macinfoentriesforcommandlineoptions}
 
-In addition to producing DW\_MACINFO\_define and DW\_MACINFO\_undef
+In addition to producing DW\-\_MACINFO\-\_define and DW\-\_MACINFO\-\_undef
 entries for each of the define and undefine directives
 processed during compilation, the DWARF producer should
-generate a DW\_MACINFO\_define or DW\_MACINFO\_undef entry for
+generate a DW\-\_MACINFO\-\_define or DW\-\_MACINFO\-\_undef entry for
 each pre-processor symbol which is defined or undefined by
 some means other than via a define or undefine directive
 within the compiled source text. In particular, pre-processor
 symbol definitions and un- definitions which occur as a
 result of command line options (when invoking the compiler)
-should be represented by their own DW\_MACINFO\_define and
-DW\_MACINFO\_undef entries.
+should be represented by their own DW\-\_MACINFO\-\_define and
+DW\-\_MACINFO\-\_undef entries.
 
-All such DW\_MACINFO\_define and DW\_MACINFO\_undef entries
+All such DW\-\_MACINFO\-\_define and DW\-\_MACINFO\-\_undef entries
 representing compilation options should appear before the
-first DW\_MACINFO\_start\_file entry for that compilation unit
+first DW\-\_MACINFO\-\_start\-\_file entry for that compilation unit
 and should encode the value 0 in their line number operands.
 
 
@@ -1403,7 +1403,7 @@ compilation system authoring body may specify an alternate
 default value for any or all columns.
 
 \item padding (array of ubyte) \\
-Enough DW\_CFA\_nop instructions to make the size of this entry
+Enough DW\-\_CFA\-\_nop instructions to make the size of this entry
 match the length value above.
 \end{enumerate}
 
@@ -1437,7 +1437,7 @@ The number of bytes of program instructions described by this entry.
 A sequence of table defining instructions that are described below.
 
 \item 6. padding (array of ubyte) \\
-Enough DW\_CFA\_nop instructions to make the size of this
+Enough DW\-\_CFA\-\_nop instructions to make the size of this
 entry match the length value above.
 \end{enumerate}
 
@@ -1466,25 +1466,25 @@ because there is no mapping from call frame information to
 any corresponding debugging compilation unit information,
 thus there is no way to interpret the call offset.
 
-\item DW\_OP\_push\_object\_address is not meaningful in an operand
+\item DW\-\_OP\-\_push\-\_object\-\_address is not meaningful in an operand
 of these instructions because there is no object context to
 provide a value to push.
 
-\item DW\_OP\_call\_frame\_cfa is not meaningful in an operand of
+\item DW\-\_OP\-\_call\-\_frame\-\_cfa is not meaningful in an operand of
 these instructions because its use would be circular.
 \end{itemize}
 
 \textit{Call frame instructions to which these restrictions apply
-include DW\_CFA\_def\_cfa\_expression, DW\_CFA\_expression
-and DW\_CFA\_val\_expression.}
+include DW\-\_CFA\-\_def\-\_cfa\-\_expression, DW\-\_CFA\-\_expression
+and DW\-\_CFA\-\_val\-\_expression.}
 
 \subsubsection{Row Creation Instructions}
 \label{chap:rowcreationinstructions}
 
 \begin{enumerate}[1.]
 
-\item \textbf{DW\_CFA\_set\_loc} \\
-The DW\_CFA\_set\_loc instruction takes a single operand that
+\item \textbf{DW\-\_CFA\-\_set\-\_loc} \\
+The DW\-\_CFA\-\_set\-\_loc instruction takes a single operand that
 represents a target address. The required action is to create a
 new table row using the specified address as the location. All
 other values in the new row are initially identical to the
@@ -1494,8 +1494,8 @@ is non- zero, the initial location is preceded by a segment
 selector of the given length.
 
 
-\item \textbf{DW\_CFA\_advance\_loc} \\
-The DW\_CFA\_advance instruction takes a single operand (encoded
+\item \textbf{DW\-\_CFA\-\_advance\-\_loc} \\
+The DW\-\_CFA\-\_advance instruction takes a single operand (encoded
 with the opcode) that represents a constant delta. The required
 action is to create a new table row with a location value that
 is computed by taking the current entry’s location value
@@ -1504,22 +1504,22 @@ and adding the value of
 other values in the new row are initially identical to the
 current row
 
-\item \textbf{DW\_CFA\_advance\_loc1} \\
-The DW\_CFA\_advance\_loc1 instruction takes a single ubyte
+\item \textbf{DW\-\_CFA\-\_advance\-\_loc1} \\
+The DW\-\_CFA\-\_advance\-\_loc1 instruction takes a single ubyte
 operand that represents a constant delta. This instruction
-is identical to DW\_CFA\_advance\_loc except for the encoding
+is identical to DW\-\_CFA\-\_advance\-\_loc except for the encoding
 and size of the delta operand.
 
-\item \textbf{DW\_CFA\_advance\_loc2} \\
-The DW\_CFA\_advance\_loc2 instruction takes a single uhalf
+\item \textbf{DW\-\_CFA\-\_advance\-\_loc2} \\
+The DW\-\_CFA\-\_advance\-\_loc2 instruction takes a single uhalf
 operand that represents a constant delta. This instruction
-is identical to DW\_CFA\_advance\_loc except for the encoding
+is identical to DW\-\_CFA\-\_advance\-\_loc except for the encoding
 and size of the delta operand.
 
-\item \textbf{DW\_CFA\_advance\_loc4} \\
-The DW\_CFA\_advance\_loc4 instruction takes a single uword
+\item \textbf{DW\-\_CFA\-\_advance\-\_loc4} \\
+The DW\-\_CFA\-\_advance\-\_loc4 instruction takes a single uword
 operand that represents a constant delta. This instruction
-is identical to DW\_CFA\_advance\_loc except for the encoding
+is identical to DW\-\_CFA\-\_advance\-\_loc except for the encoding
 and size of the delta operand.
 
 \end{enumerate}
@@ -1528,23 +1528,23 @@ and size of the delta operand.
 \label{chap:cfadefinitioninstructions}
 
 \begin{enumerate}[1.]
-\item \textbf{DW\_CFA\_def\_cfa} \\
-The DW\_CFA\_def\_cfa instruction takes two unsigned LEB128
+\item \textbf{DW\-\_CFA\-\_def\-\_cfa} \\
+The DW\-\_CFA\-\_def\-\_cfa instruction takes two unsigned LEB128
 operands representing a register number and a (non\dash factored)
 offset. The required action is to define the current CFA rule
 to use the provided register and offset.
 
-\item \textbf{ DW\_CFA\_def\_cfa\_sf} \\
-The DW\_CFA\_def\_cfa\_sf instruction takes two operands:
+\item \textbf{ DW\-\_CFA\-\_def\-\_cfa\-\_sf} \\
+The DW\-\_CFA\-\_def\-\_cfa\-\_sf instruction takes two operands:
 an unsigned LEB128 value representing a register number and a
 signed LEB128 factored offset. This instruction is identical
-to DW\_CFA\_def\_cfa except that the second operand is signed
+to DW\-\_CFA\-\_def\-\_cfa except that the second operand is signed
 and factored. The resulting offset is factored\_offset *
 data\_alignment\_factor.
 
 
-\item \textbf{DW\_CFA\_def\_cfa\_register} \\
-The DW\_CFA\_def\_cfa\_register instruction takes a single
+\item \textbf{DW\-\_CFA\-\_def\-\_cfa\-\_register} \\
+The DW\-\_CFA\-\_def\-\_cfa\-\_register instruction takes a single
 unsigned LEB128 operand representing a register number. The
 required action is to define the current CFA rule to use
 the provided register (but to keep the old offset). This
@@ -1553,8 +1553,8 @@ to use a register and offset.
 
 
 
-\item \textbf{DW\_CFA\_def\_cfa\_offset} \\
-The DW\_CFA\_def\_cfa\_offset instruction takes a single
+\item \textbf{DW\-\_CFA\-\_def\-\_cfa\-\_offset} \\
+The DW\-\_CFA\-\_def\-\_cfa\-\_offset instruction takes a single
 unsigned LEB128 operand representing a (non-factored)
 offset. The required action is to define the current CFA rule
 to use the provided offset (but to keep the old register). This
@@ -1562,18 +1562,18 @@ operation is valid only if the current CFA rule is defined
 to use a register and offset.
 
 
-\item \textbf{DW\_CFA\_def\_cfa\_offset\_sf} \\
-The DW\_CFA\_def\_cfa\_offset\_sf instruction takes a signed
+\item \textbf{DW\-\_CFA\-\_def\-\_cfa\-\_offset\-\_sf} \\
+The DW\-\_CFA\-\_def\-\_cfa\-\_offset\-\_sf instruction takes a signed
 LEB128 operand representing a factored offset. This instruction
-is identical to DW\_CFA\_def\_cfa\_offset except that the
+is identical to DW\-\_CFA\-\_def\-\_cfa\-\_offset except that the
 operand is signed and factored. The resulting offset is
 factored\_offset * data\_alignment\_factor. This operation
 is valid only if the current CFA rule is defined to use a
 register and offset.
 
-\item \textbf{DW\_CFA\_def\_cfa\_expression} \\
-The DW\_CFA\_def\_cfa\_expression instruction takes a single
-operand encoded as a DW\_FORM\_exprloc value representing a
+\item \textbf{DW\-\_CFA\-\_def\-\_cfa\-\_expression} \\
+The DW\-\_CFA\-\_def\-\_cfa\-\_expression instruction takes a single
+operand encoded as a DW\-\_FORM\-\_exprloc value representing a
 DWARF expression. The required action is to establish that
 expression as the means by which the current CFA is computed.
 See 
@@ -1587,20 +1587,20 @@ expression operators that can be used.
 \label{chap:registerruleinstructions}
 
 \begin{enumerate}[1.]
-\item \textbf{DW\_CFA\_undefined} \\
-The DW\_CFA\_undefined instruction takes a single unsigned
+\item \textbf{DW\-\_CFA\-\_undefined} \\
+The DW\-\_CFA\-\_undefined instruction takes a single unsigned
 LEB128 operand that represents a register number. The required
 action is to set the rule for the specified register to
 ``undefined.''
 
-\item \textbf{DW\_CFA\_same\_value} \\
-The DW\_CFA\_same\_value instruction takes a single unsigned
+\item \textbf{DW\-\_CFA\-\_same\-\_value} \\
+The DW\-\_CFA\-\_same\-\_value instruction takes a single unsigned
 LEB128 operand that represents a register number. The required
 action is to set the rule for the specified register to
 ``same value.''
 
-\item \textbf{DW\_CFA\_offset} \\
-The DW\_CFA\_offset instruction takes two operands: a register
+\item \textbf{DW\-\_CFA\-\_offset} \\
+The DW\-\_CFA\-\_offset instruction takes two operands: a register
 number (encoded with the opcode) and an unsigned LEB128
 constant representing a factored offset. The required action
 is to change the rule for the register indicated by the
@@ -1608,46 +1608,46 @@ register number to be an offset(N) rule where the value of
 N is 
 \textit{factored offset * data\_alignment\_factor.}
 
-\item \textbf{DW\_CFA\_offset\_extended} \\
-The DW\_CFA\_offset\_extended instruction takes two unsigned
+\item \textbf{DW\-\_CFA\-\_offset\-\_extended} \\
+The DW\-\_CFA\-\_offset\-\_extended instruction takes two unsigned
 LEB128 operands representing a register number and a factored
-offset. This instruction is identical to DW\_CFA\_offset except
+offset. This instruction is identical to DW\-\_CFA\-\_offset except
 for the encoding and size of the register operand.
 
-\item \textbf{ DW\_CFA\_offset\_extended\_sf} \\
-The DW\_CFA\_offset\_extended\_sf instruction takes two operands:
+\item \textbf{ DW\-\_CFA\-\_offset\-\_extended\-\_sf} \\
+The DW\-\_CFA\-\_offset\-\_extended\-\_sf instruction takes two operands:
 an unsigned LEB128 value representing a register number and a
 signed LEB128 factored offset. This instruction is identical
-to DW\_CFA\_offset\_extended except that the second operand is
+to DW\-\_CFA\-\_offset\-\_extended except that the second operand is
 signed and factored. The resulting offset is 
 \textit{factored\_offset * data\_alignment\_factor}.
 
-\item \textbf{DW\_CFA\_val\_offset} \\
-The DW\_CFA\_val\_offset instruction takes two unsigned
+\item \textbf{DW\-\_CFA\-\_val\-\_offset} \\
+The DW\-\_CFA\-\_val\-\_offset instruction takes two unsigned
 LEB128 operands representing a register number and a
 factored offset. The required action is to change the rule
 for the register indicated by the register number to be a
 val\_offset(N) rule where the value of N is 
 \textit{factored\_offset * data\_alignment\_factor}.
 
-\item \textbf{DW\_CFA\_val\_offset\_sf} \\
-The DW\_CFA\_val\_offset\_sf instruction takes two operands: an
+\item \textbf{DW\-\_CFA\-\_val\-\_offset\-\_sf} \\
+The DW\-\_CFA\-\_val\-\_offset\-\_sf instruction takes two operands: an
 unsigned LEB128 value representing a register number and a
 signed LEB128 factored offset. This instruction is identical
-to DW\_CFA\_val\_offset except that the second operand is signed
+to DW\-\_CFA\-\_val\-\_offset except that the second operand is signed
 and factored. The resulting offset is 
 \textit{factored\_offset * data\_alignment\_factor}.
 
-\item \textbf{DW\_CFA\_register} \\
-The DW\_CFA\_register instruction takes two unsigned LEB128
+\item \textbf{DW\-\_CFA\-\_register} \\
+The DW\-\_CFA\-\_register instruction takes two unsigned LEB128
 operands representing register numbers. The required action
 is to set the rule for the first register to be register(R)
 where R is the second register.
 
-\item \textbf{DW\_CFA\_expression} \\
-The DW\_CFA\_expression instruction takes two operands: an
+\item \textbf{DW\-\_CFA\-\_expression} \\
+The DW\-\_CFA\-\_expression instruction takes two operands: an
 unsigned LEB128 value representing a register number, and
-a DW\_FORM\_block value representing a DWARF expression. The
+a DW\-\_FORM\-\_block value representing a DWARF expression. The
 required action is to change the rule for the register
 indicated by the register number to be an expression(E)
 rule where E is the DWARF expression. That is, the DWARF
@@ -1659,10 +1659,10 @@ See Section \refersec{chap:callframeinstructions}
 regarding restrictions on the DWARF
 expression operators that can be used.
 
-\item \textbf{DW\_CFA\_val\_expression} \\
-The DW\_CFA\_val\_expression instruction takes two operands:
+\item \textbf{DW\-\_CFA\-\_val\-\_expression} \\
+The DW\-\_CFA\-\_val\-\_expression instruction takes two operands:
 an unsigned LEB128 value representing a register number, and
-a DW\_FORM\_block value representing a DWARF expression. The
+a DW\-\_FORM\-\_block value representing a DWARF expression. The
 required action is to change the rule for the register
 indicated by the register number to be a val\_expression(E)
 rule where E is the DWARF expression. That is, the DWARF
@@ -1674,17 +1674,17 @@ See Section \refersec{chap:callframeinstructions}
 regarding restrictions on the DWARF
 expression operators that can be used.
 
-\item \textbf{ DW\_CFA\_restore} \\
-The DW\_CFA\_restore instruction takes a single operand (encoded
+\item \textbf{ DW\-\_CFA\-\_restore} \\
+The DW\-\_CFA\-\_restore instruction takes a single operand (encoded
 with the opcode) that represents a register number. The
 required action is to change the rule for the indicated
 register to the rule assigned it by the initial\_instructions
 in the CIE.
 
-\item \textbf{DW\_CFA\_restore\_extended} \\
-The DW\_CFA\_restore\_extended instruction takes a single unsigned
+\item \textbf{DW\-\_CFA\-\_restore\-\_extended} \\
+The DW\-\_CFA\-\_restore\-\_extended instruction takes a single unsigned
 LEB128 operand that represents a register number. This
-instruction is identical to DW\_CFA\_restore except for the
+instruction is identical to DW\-\_CFA\-\_restore except for the
 encoding and size of the register operand.
 
 \end{enumerate}
@@ -1700,14 +1700,14 @@ body of a function.}
 
 \begin{enumerate}[1.]
 
-\item \textbf{DW\_CFA\_remember\_state} \\
-The DW\_CFA\_remember\_state instruction takes no operands. The
+\item \textbf{DW\-\_CFA\-\_remember\-\_state} \\
+The DW\-\_CFA\-\_remember\-\_state instruction takes no operands. The
 required action is to push the set of rules for every register
 onto an implicit stack.
 
 
-\item \textbf{DW\_CFA\_restore\_state} \\
-The DW\_CFA\_restore\_state instruction takes no operands. The
+\item \textbf{DW\-\_CFA\-\_restore\-\_state} \\
+The DW\-\_CFA\-\_restore\-\_state instruction takes no operands. The
 required action is to pop the set of rules off the implicit
 stack and place them in the current row.
 
@@ -1716,8 +1716,8 @@ stack and place them in the current row.
 \subsubsection{Padding Instruction}
 \label{chap:paddinginstruction}
 \begin{enumerate}[1.]
-\item \textbf{DW\_CFA\_nop} \\
-The DW\_CFA\_nop instruction has no operands and no required
+\item \textbf{DW\-\_CFA\-\_nop} \\
+The DW\-\_CFA\-\_nop instruction has no operands and no required
 actions. It is used as padding to make a CIE or FDE an
 appropriate size
 
@@ -1737,16 +1737,16 @@ contained in the FDE. If so, then:}
 initial\_instructions field of the associated CIE.}
 
 \item \textit{Read and process the FDE’s instruction
-sequence until a DW\_CFA\_advance\_loc, DW\_CFA\_set\_loc, or the
+sequence until a DW\-\_CFA\-\_advance\-\_loc, DW\-\_CFA\-\_set\-\_loc, or the
 end of the instruction stream is encountered.}
 
-\item \textit{ If a DW\_CFA\_advance\_loc or DW\_CFA\_set\_loc
+\item \textit{ If a DW\-\_CFA\-\_advance\-\_loc or DW\-\_CFA\-\_set\-\_loc
 instruction is encountered, then compute a new location value
 (L2). If L1 >= L2 then process the instruction and go back
 to step 2.}
 
 \item \textit{ The end of the instruction stream can be thought
-of as a DW\_CFA\_set\_loc (initial\_location + address\_range)
+of as a DW\-\_CFA\-\_set\-\_loc (initial\_location + address\_range)
 instruction. Note that the FDE is ill-formed if L2 is less
 than L1.}
 
@@ -1770,7 +1770,7 @@ Return Address.}
 
 If a Return Address register is defined in the virtual
 unwind table, and its rule is undefined (for example, by
-DW\_CFA\_undefined), then there is no return address and no
+DW\-\_CFA\-\_undefined), then there is no return address and no
 call address, and the virtual unwind of stack activations
 is complete.
 
