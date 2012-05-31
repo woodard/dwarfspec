@@ -28,6 +28,8 @@ def isIdNext(c):
   if  ord(c) >= ord('0') and ord(c) <= ord('9'):
     return "y"
   # This is so we allow the colon in our tags
+  # Unfortunately, this gives trouble if we have a
+  # : at the end of a DW* name on input.
   if c == ":":
     return "y"
   if c == "\\":
