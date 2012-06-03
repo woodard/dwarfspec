@@ -62,5 +62,7 @@ test:
 	#
 	python uses.py uses.in >uses.in.out 
 	diff uses.in.out uses.base
+	python uses.py usesc.in >usesc.in.out
+	diff usesc.in.out usesc.base
 
      

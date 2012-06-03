@@ -78,6 +78,10 @@ def isbrace(tok,brace):
      return "y"
   return "n"
 
+def toknamestring(t):
+  """ Turn a token into its string as a string """
+  return ''.join(t._tex)
+
 
 def pickup(linetoks,tnumin,pattern,myfile,linenum):
   """ The token pattern characters are
@@ -96,7 +100,6 @@ def pickup(linetoks,tnumin,pattern,myfile,linenum):
   inlen = len(linetoks) 
   curnum = tnumin
   curtok = linetoks[curnum]
-  outtoks += [curtok]
   patterncharnum = -1
   for c in pattern:
     patterncharnum = patterncharnum + 1
@@ -159,7 +162,7 @@ def pickup(linetoks,tnumin,pattern,myfile,linenum):
   return outtoks,numabsorbed
 
 def reftodict(d,k,v):
-  keystring = ''.join(k._token._tex)
+  keystring = toknamestring(k._token)
   if d.has_key(keystring) == 0:
      d[keystring] =  [v]
   else:
@@ -169,7 +172,7 @@ def reftodict(d,k,v):
 
 def deftodict(d,k,v):
   global dupdefcount
-  keystring = ''.join(k._token._tex)
+  keystring = toknamestring(k._token)
   if d.has_key(keystring) == 0:
      d[keystring] =  [v]
   else:
@@ -314,9 +317,53 @@ def read_file_args(targlist):
     filelist += [v]
     cur = int(cur) + 1
   process_files(filelist)
+
+def sort_tokmlist(mylist):
+   aux = [ (''.join(x._token._tex),x) for x in mylist ]
+   aux.sort()
+   return[ (x[1]) for x in aux]
   
+def printdups(d,name):
+  lablist = d.keys()
+  if len(lablist) < 1:
+    return
+  lablist.sort()
+  for k in lablist:
+     tokmlist = d[k]
+     stokmlist = sort_tokmlist(tokmlist)
+     if len(stokmlist) > 1:
+       print name,k,
+       for i in range (len(stokmlist)):
+         t = stokmlist[i]
+         if i == 0:
+           print t._file._name, t._line,
+         else:
+           print ", ",t._file._name, t._line,
+       print ""
 
+def print_stats():
+  global linkdefinitionsdict
+  global linkusesdict
+  global labeldefinitionsdict
+  global labelusesdict
+  global ignorethesedict
+  global indexsetdict
+  global dupdefcount
+  global unresolveddwdict
+ 
+  if dupdefcount > 0:
+    print "Duplicate definitions count: ",dupdefcount
 
+  printdups(labeldefinitionsdict,"Duplicated Labels")
+  printdups(linkdefinitionsdict,"Duplicated Links")
+
+  lablist = unresolveddwdict.keys()
+  if len(lablist) >0:
+    lablist.sort()
+    for k in lablist:
+      print "Unresolved DW string:",k
+
+  #FIXME More reporting needed.
 
 def read_all_args():
   filelist = []
@@ -331,6 +378,7 @@ def read_all_args():
     printlegals()
     sys.exit(1)
   process_files(filelist)
+  print_stats()
 
 #  anylink [-t <class>] ... [file] ...
 
