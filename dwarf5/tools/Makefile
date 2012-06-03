@@ -56,4 +56,11 @@ test:
 	diff anylinkt.in.out anylinkt.base
 	python anylink.py -t DW_ACCESS_ -t DW_OP_ anylinkt.in.out
 	diff anylinkt.in.out.out anylinkt.base
+	#
+	python uses.py usesb.in >usesb.in.out 
+	diff usesb.in.out usesb.base
+	#
+	python uses.py uses.in >uses.in.out 
+	diff uses.in.out uses.base
+
      

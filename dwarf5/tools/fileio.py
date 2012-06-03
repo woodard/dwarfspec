@@ -255,8 +255,8 @@ class  dwline:
     for t in self._toks:
       t.dwwrite(outfile)
     outfile.write("\n")
-  def dwtransformline(self,callfunc):
-    toks = callfunc(self._toks)
+  def dwtransformline(self,callfunc,myfile,lnum):
+    toks = callfunc(self._toks,myfile,lnum)
     self._toks = toks
     
 
@@ -304,9 +304,11 @@ class dwfile:
     for l in self._lines:
       l.dwwrite(outfile,lnum)
       lnum = lnum + 1
-  def dwtransformline(self,callfunc):
+  def dwtransformline(self,callfunc,myfile):
+    lnum=1
     for l in self._lines:
-      l.dwtransformline(callfunc)
+      l.dwtransformline(callfunc,myfile,lnum)
+      lnum = lnum + 1
     
 
 
@@ -328,7 +330,7 @@ class dwfiles:
       f.dwwrite()
   def dwtransformline(self,callfunc):
     for f in self._files:
-      f.dwtransformline(callfunc)
+      f.dwtransformline(callfunc,f)
 
 
 def readFilelist(filelist):

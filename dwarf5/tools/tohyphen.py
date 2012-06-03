@@ -17,7 +17,7 @@ def convertToHyphen(s):
   os = ''.join(out)
   return os
 
-def transfunc(linetoks):
+def transfunc(linetoks,myfile,linenum):
   if len(linetoks) < 1:
     return linetoks
   outtoks = []

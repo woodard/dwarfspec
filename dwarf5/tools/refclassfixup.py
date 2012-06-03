@@ -49,7 +49,7 @@ def append_to_out(out,addthese):
   for a in addthese:
     out += [a]
 
-def transfunc(linetoks):
+def transfunc(linetoks,myfile,linenum):
   if len(linetoks) < 1:
     return linetoks
   tnumin = 0

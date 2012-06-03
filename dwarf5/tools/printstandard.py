@@ -8,7 +8,7 @@
 import sys
 import fileio
 
-def transfunc(linetoks):
+def transfunc(linetoks,myfile,linenum):
   if len(linetoks) < 1:
     return linetoks
   tnumin = 0
