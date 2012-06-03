@@ -139,8 +139,8 @@ def pickup(linetoks,tnumin,pattern,myfile,linenum):
         return outtoks,numabsorbed
     elif c == "*":
       outlist = []
+      curtok = linetoks[curnum]
       while isbrace(curtok,"}") == "n":
-        curtok = linetoks[curnum]
         if dwspace(curtok) == "n":
            outlist += [curtok]
         curnum = curnum + 1
@@ -150,6 +150,7 @@ def pickup(linetoks,tnumin,pattern,myfile,linenum):
             print "ERROR insufficient tokens on line for pattern ", pattern," line " ,linenum," file ",myfile._name
           return outtoks,numabsorbed
         numabsorbed = numabsorbed + 1
+        curtok = linetoks[curnum]
       # Found a right brace, so done here.
       outtoks += [outlist]
     else:
@@ -257,6 +258,12 @@ def refersecprocess(linetoks,tnumin,myfile,linenum):
 def transfunc(linetoks,myfile,linenum):
   if len(linetoks) < 1:
     return linetoks
+  initialtok = linetoks[0]
+  if ''.join(initialtok._tex) == "\\newcommand":
+    # We ignore newcommand lines, they are not stuff
+    # we want to look at, they are new macros, not macro uses.
+    # We don't want to transform or touch them, nor report on them.
+    return linetoks
   tnumin = 0
   lasttoknum = len(linetoks)
   while tnumin < lasttoknum:
@@ -313,6 +320,7 @@ def read_file_args(targlist):
 
 def read_all_args():
   filelist = []
+  fileio.setkeepordeletecomments("d")
   cur = 1
   while  len(sys.argv) > cur:
     v = sys.argv[cur]

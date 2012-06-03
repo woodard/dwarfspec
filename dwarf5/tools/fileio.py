@@ -4,6 +4,11 @@
 
 import sys
 
+# Keep if  "k" 
+# Otherwise delete.
+global keepcomments
+keepcomments = "k"
+
 def isIdStart(c):
   if isIndivid(c) == "y":
     return "n"
@@ -177,7 +182,15 @@ class  dwline:
     """
     dwclass = "none"
     combotok = dwtoken()
+    charnum= -1 
+    global keepcomments
     for c in rec:
+      charnum = charnum +1
+      if keepcomments == "d" and c == "%" and ( charnum == 0 or rec[charnum - 1] != "\\" ):  
+        # Not keeping comments. We drop % and following to end of line 
+        # unless preceeded by \ 
+        break
+
       if c == "\n" or c == "\r":
           # Just drop these for now. Allowing them
           # would not be harmful.
@@ -332,6 +345,11 @@ class dwfiles:
     for f in self._files:
       f.dwtransformline(callfunc,f)
 
+
+def setkeepordeletecomments(val):
+  """ Pass in "k" or "d" to keep or delete comments, respectively """
+  global keepcomments
+  keepcomments = val
 
 def readFilelist(filelist):
   dwf = dwfiles()
