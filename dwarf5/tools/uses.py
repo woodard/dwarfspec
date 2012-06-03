@@ -361,7 +361,9 @@ def print_stats():
   if len(lablist) >0:
     lablist.sort()
     for k in lablist:
-      print "Unresolved DW string:",k
+      tokm = unresolveddwdict[k][0]
+      print "Unresolved DW string:", toknamestring(tokm._token)," at ",tokm._file._name,tokm._line
+
 
   #FIXME More reporting needed.
 
