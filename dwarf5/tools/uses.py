@@ -341,6 +341,21 @@ def printdups(d,name):
            print ", ",t._file._name, t._line,
        print ""
 
+def printoddDWentries(d,title):
+  """ An odd entry is one where the label text
+      does not match the condensed DW name properly.
+      \livelink{chap:DWTAGfoo}{DW_TAG_fx}
+      for example. 
+  """
+  names = d.keys()
+  for n in names:
+    if n.startswith("chap:DW"):
+      tn = d[n][0]
+      keytok = tn._token
+      toklab = "chap:" + ''.join(keytok._label)
+      if n != toklab:
+        print title, toknamestring(keytok),"mismatch", n ,tn._file._name,tn._line
+
 def print_stats():
   global linkdefinitionsdict
   global linkusesdict
@@ -372,6 +387,10 @@ def print_stats():
        tm = linkdefinitionsdict.get(t)
        print  "Unused:",t, tm[0]._file._name,tm[0]._line
     
+  printoddDWentries(linkdefinitionsdict,"link definitions");
+  printoddDWentries(linkusesdict,"link uses");
+  printoddDWentries(labeldefinitionsdict,"label definitions");
+  printoddDWentries(labelusesdict,"label uses");
   
 
 
