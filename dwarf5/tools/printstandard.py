@@ -5,6 +5,8 @@
 # Try    
 #           python printstandard.py *.tex  |sort|uniq
 
+# Useful in case certain random typos creep in to the .tex
+
 import sys
 import fileio
 

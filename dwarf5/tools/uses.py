@@ -1,13 +1,17 @@
 # Copyright 2012 DWARF Debugging Information Format Committee
 #
-# Handles the testing and update for all DW_* prefixes.
-# Called by taglink and other convenience apps to do their work.
+# Looks for odd things in the .tex source
+# and prints some information about oddities.
+# It does not create new .tex, it just 
+# prints (to standard-out) potential issues in the .tex files.
 #
-# Run as an app itself, the options are
-#    python anylink [-t prefix] ... [-all] [file] ...
-#    Use either -all or one or more -t, as in examples:
-#    python anylink -t DW_ACCESS_ -t DW_OP_   test.in test2.in
-#    python anylink -all    test.in test2.in 
+# It sort of parses the source lines, but the parsing
+# is barely adequate to the task of finding
+# oddities. Just barely.
+#
+# Run as (for example)
+#   python uses.py ../latexdoc/*.tex
+
 
 import sys
 import fileio

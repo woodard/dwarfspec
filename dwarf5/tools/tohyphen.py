@@ -1,7 +1,8 @@
 # Copyright 2012 DWARF Debugging Information Format Committee
 #
 # Convert DW_ and DW\_ names to DW\-\_ 
-#
+# python tohyphen.py *.tex
+# The output files have .out appended to the name.
 
 import sys
 import fileio

@@ -1,6 +1,9 @@
+# Copyright 2012 DWARF Debugging Information Format Committee
 
 # All the little classes used in storing latex source data.
-# Copyright 2012 DWARF Debugging Information Format Committee
+# Reads in the tex source and builds internal lists of the
+# tokenized source.  The tokenization is adequate
+# for our purposes, but just barely adequate.
 
 import sys
 
