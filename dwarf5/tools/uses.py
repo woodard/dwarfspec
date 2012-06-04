@@ -364,6 +364,16 @@ def print_stats():
       tokm = unresolveddwdict[k][0]
       print "Unresolved DW string:", toknamestring(tokm._token)," at ",tokm._file._name,tokm._line
 
+  targlist = linkdefinitionsdict.keys()
+  targlist.sort()
+  for t in targlist:
+     u = linkusesdict.get(t)
+     if u == None:
+       tm = linkdefinitionsdict.get(t)
+       print  "Unused:",t, tm[0]._file._name,tm[0]._line
+    
+  
+
 
   #FIXME More reporting needed.
 
