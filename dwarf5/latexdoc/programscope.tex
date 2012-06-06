@@ -748,14 +748,14 @@ The unspecified parameters of a variable parameter list are
 represented by a debugging information entry with the tag
 \livetarg{chap:DWTAGunspecifiedparameters}{DW\-\_TAG\-\_unspecified\-\_parameters}.
 
-The entry for a subroutine that includes a Fortran common block
+The entry for a subroutine that includes a Fortran common \nolink{block}
 has a child entry with the 
 tag \livetarg{chap:DWTAGcommoninclusion}{DW\-\_TAG\-\_common\-\_inclusion}. 
 The
 common inclusion entry has a 
 \livelink{chap:DWATcommonreference}{DW\-\_AT\-\_common\-\_reference} attribute
 whose value is a reference to the debugging information entry
-for the common block being included 
+for the common \nolink{block} being included 
 (see Section \refersec{chap:commonblockentries}).
 
 \subsection{Low-Level Information}
@@ -1301,34 +1301,36 @@ which can be assumed to be the target subroutine. }
 \section{Lexical Block Entries}
 \label{chap:lexicalblockentries}
 
-\textit{A lexical block is a bracketed sequence of source statements
+\textit{A lexical \nolink{block} is a bracketed sequence of source statements
 that may contain any number of declarations. In some languages
-(including C and C++), blocks can be nested within other
-blocks to any depth.}
+(including C and C++), \nolink{blocks} can be nested within other
+\nolink{blocks} to any depth.}
 
-A lexical block is represented by a debugging information
+A lexical \nolink{block} is represented by a debugging information
 entry with the 
 tag \livetarg{chap:DWTAGlexicalblock}{DW\-\_TAG\-\_lexical\-\_block}.
 
-The lexical block entry may have either a \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} and
-\livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair of attributes or a \livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} attribute
+The lexical \nolink{block} entry may have 
+either a \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} and
+\livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair of 
+attributes or a \livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} attribute
 whose values encode the contiguous or non-contiguous address
 ranges, respectively, of the machine instructions generated
-for the lexical block 
+for the lexical \nolink{block} 
 (see Section \refersec{chap:codeaddressesandranges}).
 
-If a name has been given to the lexical block in the source
-program, then the corresponding lexical block entry has a
+If a name has been given to the lexical \nolink{block} in the source
+program, then the corresponding lexical \nolink{block} entry has a
 \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute whose value is a null-terminated string
-containing the name of the lexical block as it appears in
+containing the name of the lexical \nolink{block} as it appears in
 the source program.
 
 \textit{This is not the same as a C or C++ label (see below).}
 
-The lexical block entry owns debugging information entries that
-describe the declarations within that lexical block. There is
+The lexical \nolink{block} entry owns debugging information entries that
+describe the declarations within that lexical \nolink{block}. There is
 one such debugging information entry for each local declaration
-of an identifier or inner lexical block.
+of an identifier or inner lexical \nolink{block}.
 
 \section{Label Entries}
 \label{chap:labelentries}
@@ -1382,33 +1384,33 @@ the with statement.
 \section{Try and Catch Block Entries}
 \label{chap:tryandcatchblockentries}
 
-\textit{In C++ a lexical block may be designated as a ``catch
-block.'' A catch block is an exception handler that handles
-exceptions thrown by an immediately preceding ``try block.''
-A catch block designates the type of the exception that it
+\textit{In C++ a lexical \nolink{block} may be designated as a ``catch
+\nolink{block}.'' A catch \nolink{block} is an exception handler that handles
+exceptions thrown by an immediately preceding ``try \nolink{block}.''
+A catch \nolink{block} designates the type of the exception that it
 can handle.}
 
-A try block is represented by a debugging information entry
+A try \nolink{block} is represented by a debugging information entry
 with the tag \livetarg{chap:DWTAGtryblock}{DW\-\_TAG\-\_try\-\_block}.  
-A catch block is represented by
+A catch \nolink{block} is represented by
 a debugging information entry with 
 the tag \livetarg{chap:DWTAGcatchblock}{DW\-\_TAG\-\_catch\-\_block}.
 
-Both try and catch block entries may have either a
+Both try and catch \nolink{block} entries may have either a
 \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} and \livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair of attributes or a
 \livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} attribute whose values encode the contiguous
 or non- contiguous address ranges, respectively, of the
-machine instructions generated for the block (see Section
+machine instructions generated for the \nolink{block} (see Section
 \refersec{chap:codeaddressesandranges}).
 
-Catch block entries have at least one child entry, an
+Catch \nolink{block} entries have at least one child entry, an
 entry representing the type of exception accepted by
-that catch block. This child entry has one of the tags
+that catch \nolink{block}. This child entry has one of the tags
 \livelink{chap:DWTAGformalparameter}{DW\-\_TAG\-\_formal\-\_parameter} or \livelink{chap:DWTAGunspecifiedparameters}{DW\-\_TAG\-\_unspecified\-\_parameters},
 and will have the same form as other parameter entries.
 
-The siblings immediately following a try block entry are its
-corresponding catch block entries.
+The siblings immediately following a try \nolink{block} entry are its
+corresponding catch \nolink{block} entries.
 
 
 

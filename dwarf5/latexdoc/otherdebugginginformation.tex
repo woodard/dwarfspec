@@ -214,7 +214,7 @@ object code. The matrix would have columns for:}
 \item \textit{the source file name}
 \item \textit{the source line number}
 \item \textit{the source column number}
-\item \textit{whether this insruction is the beginning of a basic block}
+\item \textit{whether this insruction is the beginning of a basic \nolink{block}}
 \item \textit{and so on}
 \end{itemize}
 
@@ -256,12 +256,12 @@ A series of byte\dash coded
 line number information instructions representing
 one compilation unit. \\
 
-basic block &
+basic \nolink{block} &
  A sequence of instructions where only the first instruction may be a
 branch target and only the last instruction may transfer control. A
-procedure invocation is defined to be an exit from a basic block.
+procedure invocation is defined to be an exit from a basic \nolink{block}.
 
-\textit{A basic block does not necessarily correspond to a specific source code
+\textit{A basic \nolink{block} does not necessarily correspond to a specific source code
 construct.} \\
 
 sequence &
@@ -321,7 +321,7 @@ statement. \\
 
 basic\_block  &
 A boolean indicating that the current instruction is the beginning of a basic
-block. \\
+\nolink{block}. \\
 
 end\_sequence &
 A boolean indicating that the current address is that of the first byte after
@@ -347,11 +347,11 @@ encoding be defined by the ABI authoring committee for each
 architecture. \\
 
 discriminator &
-An unsigned integer identifying the block to which the
+An unsigned integer identifying the \nolink{block} to which the
 current instruction belongs. Discriminator values are assigned
 arbitrarily by the DWARF producer and serve to distinguish
-among multiple blocks that may all be associated with the
-same source file, line, and column. Where only one block
+among multiple \nolink{block} that may all be associated with the
+same source file, line, and column. Where only one \nolink{block}
 exists for a given source position, the discriminator value
 should be zero. \\
 \end{longtable}
@@ -1187,7 +1187,8 @@ special things.}
 
 \begin{itemize} % bullet list
 
-\item \textit{Prologue and epilogue code is not always in distinct blocks
+\item \textit{Prologue and epilogue code is not always in 
+distinct \nolink{block}
 at the beginning and end of a subroutine. It is common
 to duplicate the epilogue code at the site of each return
 from the code. Sometimes a compiler breaks up the register
@@ -1787,7 +1788,7 @@ is complete.
 calling address, but that need not be the case, especially if
 the producer knows in some way the call never will return. The
 context of the 'return address' might be on a different line,
-in a different lexical block, or past the end of the calling
+in a different lexical \nolink{block}, or past the end of the calling
 subroutine. If a consumer were to assume that it was in the
 same context as the calling address, the unwind might fail.}
 

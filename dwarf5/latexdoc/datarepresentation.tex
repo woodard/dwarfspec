@@ -496,7 +496,7 @@ encoded in the compilation unit header
 This address is relocatable in a relocatable object file and
 is relocated in an executable file or shared object.
 
-\item block \\
+\item \livelink{chap:block}{block} \\
 Blocks come in four forms:
 
 \begin{myindentpara}{1cm}
@@ -868,7 +868,7 @@ Child determination name& Value\\ \hline
 \livelink{chap:DWATstringlength}{DW\-\_AT\-\_string\-\_length}&0x19&\livelink{chap:exprloc}{exprloc}, \livelink{chap:loclistptr}{loclistptr}   \\
 \livelink{chap:DWATcommonreference}{DW\-\_AT\-\_common\-\_reference}&0x1a&reference   \\
 \livelink{chap:DWATcompdir}{DW\-\_AT\-\_comp\-\_dir}&0x1b&string   \\
-\livelink{chap:DWATconstvalue}{DW\-\_AT\-\_const\-\_value}&0x1c&block, constant, string   \\
+\livelink{chap:DWATconstvalue}{DW\-\_AT\-\_const\-\_value}&0x1c&\livelink{chap:block}{block}, constant, string   \\
 \livelink{chap:DWATcontainingtype}{DW\-\_AT\-\_containing\-\_type}&0x1d&reference     \\
 \livelink{chap:DWATdefaultvalue}{DW\-\_AT\-\_default\-\_value}&0x1e&reference     \\
 \livelink{chap:DWATinline}{DW\-\_AT\-\_inline}&0x20&constant     \\
@@ -893,7 +893,7 @@ Child determination name& Value\\ \hline
 \livelink{chap:DWATdeclfile}{DW\-\_AT\-\_decl\-\_file}&0x3a&constant     \\
 \livelink{chap:DWATdeclline}{DW\-\_AT\-\_decl\-\_line}&0x3b&constant     \\
 \livelink{chap:DWATdeclaration}{DW\-\_AT\-\_declaration}&0x3c&\livelink{chap:flag}{flag}     \\
-\livelink{chap:DWATdiscrlist}{DW\-\_AT\-\_discr\-\_list}&0x3d&block     \\
+\livelink{chap:DWATdiscrlist}{DW\-\_AT\-\_discr\-\_list}&0x3d&\livelink{chap:block}{block}     \\
 \livelink{chap:DWATencoding}{DW\-\_AT\-\_encoding}&0x3e&constant     \\
 \livelink{chap:DWATexternal}{DW\-\_AT\-\_external}&0x3f&\livelink{chap:flag}{flag}     \\
 \livelink{chap:DWATframebase}{DW\-\_AT\-\_frame\-\_base}&0x40&\livelink{chap:exprloc}{exprloc}, \livelink{chap:loclistptr}{loclistptr}     \\
@@ -967,14 +967,14 @@ Child determination name& Value\\ \hline
   \hline
 \endlastfoot
 \livelink{chap:DWFORMaddr}{DW\-\_FORM\-\_addr}&0x01&address  \\
-\livelink{chap:DWFORMblock2}{DW\-\_FORM\-\_block2}&0x03&block \\
-\livelink{chap:DWFORMblock4}{DW\-\_FORM\-\_block4}&0x04&block  \\
+\livelink{chap:DWFORMblock2}{DW\-\_FORM\-\_block2}&0x03&\livelink{chap:block}{block} \\
+\livelink{chap:DWFORMblock4}{DW\-\_FORM\-\_block4}&0x04&\livelink{chap:block}{block}  \\
 \livelink{chap:DWFORMdata2}{DW\-\_FORM\-\_data2}&0x05&constant \\
 \livelink{chap:DWFORMdata4}{DW\-\_FORM\-\_data4}&0x06&constant \\
 \livelink{chap:DWFORMdata8}{DW\-\_FORM\-\_data8}&0x07&constant \\
 \livelink{chap:DWFORMstring}{DW\-\_FORM\-\_string}&0x08&string \\
-\livelink{chap:DWFORMblock}{DW\-\_FORM\-\_block}&0x09&block \\
-\livelink{chap:DWFORMblock1}{DW\-\_FORM\-\_block1}&0x0a&block \\
+\livelink{chap:DWFORMblock}{DW\-\_FORM\-\_block}&0x09&\livelink{chap:block}{block} \\
+\livelink{chap:DWFORMblock1}{DW\-\_FORM\-\_block1}&0x0a&\livelink{chap:block}{block} \\
 \livelink{chap:DWFORMdata1}{DW\-\_FORM\-\_data1}&0x0b&constant \\
 \livelink{chap:DWFORMflag}{DW\-\_FORM\-\_flag}&0x0c&\livelink{chap:flag}{flag} \\
 \livelink{chap:DWFORMsdata}{DW\-\_FORM\-\_sdata}&0x0d&constant    \\
@@ -1104,7 +1104,7 @@ gives algorithms for encoding and decoding these forms.
 \subsection{DWARF Expressions}
 \label{datarep:dwarfexpressions}
 
-A DWARF expression is stored in a block of contiguous
+A DWARF expression is stored in a \nolink{block} of contiguous
 bytes. The bytes form a sequence of operations. Each operation
 is a 1\dash byte code that identifies that operation, followed by
 zero or more bytes of additional data. The encodings for the
@@ -1214,7 +1214,7 @@ Table \refersec{tab:dwarfoperationencodings}.
 \livelink{chap:DWOPbitpiece}{DW\-\_OP\-\_bit\-\_piece}&0x9d &2&ULEB128 size followed by \\
 &&&ULEB128 offset\\
 \livelink{chap:DWOPimplicitvalue}{DW\-\_OP\-\_implicit\-\_value}&0x9e &2&ULEB128 size followed by \\
-&&&block of that size\\
+&&&\nolink{block} of that size\\
 \livelink{chap:DWOPstackvalue}{DW\-\_OP\-\_stack\-\_value} &0x9f &0& \\
 \livetarg{chap:DWOPlouser}{DW\-\_OP\-\_lo\-\_user} &0xe0 && \\
 \livetarg{chap:DWOPhiuser}{DW\-\_OP\-\_hi\-\_user} &0xff && \\
@@ -1236,9 +1236,9 @@ Each entry in a location list is either a location list entry,
 a base address selection entry, or an end of list entry.
 
 A location list entry consists of two address offsets followed
-by a 2\dash byte length, followed by a block of contiguous bytes
+by a 2\dash byte length, followed by a \nolink{block} of contiguous bytes
 that contains a DWARF location description. The length
-specifies the number of bytes in that block. The two offsets
+specifies the number of bytes in that \nolink{block}. The two offsets
 are the same size as an address on the target machine.
 
 A base address selection entry and an end of list entry each

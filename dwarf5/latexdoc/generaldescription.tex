@@ -188,7 +188,7 @@ actually declared in the source \\
 \livetarg{chap:DWATcallingconvention}{DW\-\_AT\-\_calling\-\_convention} 
 &Subprogram calling convention \\
 &\livetarg{chap:DWATcommonreference}{DW\-\_AT\-\_common\-\_reference} \\
-&Common block usage \\
+&Common \nolink{block} usage \\
 \livetarg{chap:DWATcompdir}{DW\-\_AT\-\_comp\-\_dir}
 &Compilation directory \\
 \livetarg{chap:DWATconstvalue}{DW\-\_AT\-\_const\-\_value}
@@ -434,7 +434,7 @@ of other debugging entries and by permitting the same debugging
 information entry to be one of many owned by another debugging
 information entry. 
 This makes it possible, for example, to
-describe the static block structure within a source file,
+describe the static \nolink{block} structure within a source file,
 to show the members of a structure, union, or class, and to
 associate declarations with source files or source files
 with shared objects.  
@@ -709,21 +709,21 @@ Appendix \refersec{app:aggregateexamples}.
 \item \livetarg{chap:DWOPformtlsaddress}{DW\-\_OP\-\_form\-\_tls\-\_address} \\
 The \livelink{chap:DWOPformtlsaddress}{DW\-\_OP\-\_form\-\_tls\-\_address} operation pops a value from the
 stack, translates it into an address in the current thread's
-thread\dash local storage block, and pushes the address. If the
+thread\dash local storage \nolink{block}, and pushes the address. If the
 DWARF expression containing the \livelink{chap:DWOPformtlsaddress}{DW\-\_OP\-\_form\-\_tls\-\_address}
 operation belongs to the main executable's DWARF info, the
 operation uses the main executable's thread\dash local storage
-block; if the expression belongs to a shared library's
+\nolink{block}; if the expression belongs to a shared library's
 DWARF info, then it uses that shared library's thread\dash local
-storage block.  Some implementations of C and C++ support a
+storage \nolink{block}.  Some implementations of C and C++ support a
 \_\_thread storage class. Variables with this storage class
 have distinct values and addresses in distinct threads, much
 as automatic variables have distinct values and addresses in
-each function invocation. Typically, there is a single block
+each function invocation. Typically, there is a single \nolink{block}
 of storage containing all \_\_thread variables declared in
-the main executable, and a separate block for the variables
+the main executable, and a separate \nolink{block} for the variables
 declared in each shared library. Computing the address of
-the appropriate block can be complex (in some cases, the
+the appropriate \nolink{block} can be complex (in some cases, the
 compiler emits a function call to do it), and difficult
 to describe using ordinary DWARF location descriptions.
 \livelink{chap:DWOPformtlsaddress}{DW\-\_OP\-\_form\-\_tls\-\_address} leaves the computation to the
@@ -982,7 +982,7 @@ and/or other
 DWARF operations specific to describing locations. They are
 sufficient for describing the location of any object as long
 as its lifetime is either static or the same as the lexical
-block that owns it, and it does not move during its lifetime.
+\nolink{block} that owns it, and it does not move during its lifetime.
 
 Single location descriptions are of two kinds:
 \begin{enumerate}[a]
@@ -1108,9 +1108,9 @@ or is computed from other locations and values in the program.
 \item \livetarg{chap:DWOPimplicitvalue}{DW\-\_OP\-\_implicit\-\_value} \\
 The \livelink{chap:DWOPimplicitvalue}{DW\-\_OP\-\_implicit\-\_value} operation specifies an immediate value
 using two operands: an unsigned LEB128 length, followed by
-a block representing the value in the memory representation
+a \nolink{block} representing the value in the memory representation
 of the target machine. The length operand gives the length
-in bytes of the block.
+in bytes of the \nolink{block}.
 
 \item \livetarg{chap:DWOPstackvalue}{DW\-\_OP\-\_stack\-\_value} \\
 The \livelink{chap:DWOPstackvalue}{DW\-\_OP\-\_stack\-\_value} operation specifies that the object
@@ -1595,7 +1595,7 @@ multiple whitespace characters may be compressed.}
 
 \section{Data Locations and DWARF Procedures}
 Any debugging information entry describing a data object (which
-includes variables and parameters) or common block may have a
+includes variables and parameters) or common \nolink{block} may have a
 \livelink{chap:DWATlocation}{DW\-\_AT\-\_location} attribute, whose value is a location description
 (see Section 2.6).  
 
@@ -1619,7 +1619,7 @@ DWARF expression operator
 Any debugging information entry describing an entity that has
 a machine code address or range of machine code addresses,
 which includes compilation units, module initialization,
-subroutines, ordinary blocks, try/catch blocks, labels and
+subroutines, ordinary \nolink{block}, try/catch \nolink{blocks}, labels and
 the like, may have
 
 \begin{itemize}
@@ -1751,8 +1751,8 @@ cases, the entry address needs to be specified explicitly.}
 
 Any debugging information entry describing an entity that has
 a range of code addresses, which includes compilation units,
-module initialization, subroutines, ordinary blocks, try/catch
-blocks, and the like, may have a \livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc} attribute to
+module initialization, subroutines, ordinary \nolink{block}, try/catch
+\nolink{blocks}, and the like, may have a \livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc} attribute to
 indicate the first executable instruction within that range
 of addresses. The value of the \livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc} attribute is a
 relocated address. If no \livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc} attribute is present,
