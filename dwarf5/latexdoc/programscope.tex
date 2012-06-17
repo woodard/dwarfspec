@@ -218,7 +218,7 @@ using the UTF\dash 8 representation
 whose presence indicates that the compilation unit contains a
 subprogram that has been identified as the starting function
 of the program. If more than one compilation unit contains
-this flag, any one of them may contain the starting function.
+this \nolink{flag}, any one of them may contain the starting function.
 
 \textit{Fortran has a PROGRAM statement which is used
 to specify and provide a user\dash specified name for the main
@@ -593,7 +593,7 @@ attribute which is
 a \livelink{chap:flag}{flag} whose presence indicates that the
 subroutine has been identified as the starting function of
 the program.  If more than one subprogram contains this 
-\livelink{chap:flag}{flag},
+\nolink{flag},
 any one of them may be the starting subroutine of the program.
 
 \textit{Fortran has a PROGRAM statement which is used to specify
@@ -1301,36 +1301,44 @@ which can be assumed to be the target subroutine. }
 \section{Lexical Block Entries}
 \label{chap:lexicalblockentries}
 
-\textit{A lexical \nolink{block} is a bracketed sequence of source statements
+\textit{A lexical \livetargi{chap:lexicalblock}{block}{lexical block} is a bracketed sequence of source statements
 that may contain any number of declarations. In some languages
 (including C and C++), \nolink{blocks} can be nested within other
 \nolink{blocks} to any depth.}
 
+% We do not need to link to the preceeding paragraph.
 A lexical \nolink{block} is represented by a debugging information
 entry with the 
 tag \livetarg{chap:DWTAGlexicalblock}{DW\-\_TAG\-\_lexical\-\_block}.
 
-The lexical \nolink{block} entry may have 
+The lexical \livetargi{chap:lexicalblockentry}{block}{lexical block entry} entry
+may have 
 either a \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} and
 \livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair of 
 attributes or a \livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} attribute
 whose values encode the contiguous or non-contiguous address
 ranges, respectively, of the machine instructions generated
-for the lexical \nolink{block} 
+for the lexical \livelink(chap:lexicalblock}{block} 
 (see Section \refersec{chap:codeaddressesandranges}).
 
-If a name has been given to the lexical \nolink{block} in the source
-program, then the corresponding lexical \nolink{block} entry has a
-\livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute whose value is a null-terminated string
-containing the name of the lexical \nolink{block} as it appears in
+If a name has been given to the lexical \livelink(chap:lexicalblock}{block} 
+in the source
+program, then the corresponding 
+lexical \livelink{chap:lexicalblockentry}{block} entry has a
+\livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute whose 
+value is a null\dash terminated string
+containing the name of the lexical \livelink(chap:lexicalblock}{block} 
+as it appears in
 the source program.
 
 \textit{This is not the same as a C or C++ label (see below).}
 
-The lexical \nolink{block} entry owns debugging information entries that
-describe the declarations within that lexical \nolink{block}. There is
+The lexical \livelink(chap:lexicalblockentry}{block} entry owns 
+debugging information entries that
+describe the declarations within that lexical \livelink(chap:lexicalblock}{block}. 
+There is
 one such debugging information entry for each local declaration
-of an identifier or inner lexical \nolink{block}.
+of an identifier or inner lexical \livelink(chap:lexicalblock}{block}.
 
 \section{Label Entries}
 \label{chap:labelentries}
@@ -1384,33 +1392,43 @@ the with statement.
 \section{Try and Catch Block Entries}
 \label{chap:tryandcatchblockentries}
 
-\textit{In C++ a lexical \nolink{block} may be designated as a ``catch
-\nolink{block}.'' A catch \nolink{block} is an exception handler that handles
-exceptions thrown by an immediately preceding ``try \nolink{block}.''
-A catch \nolink{block} designates the type of the exception that it
+\textit{In C++ a lexical \livelink(chap:lexicalblock}{block} may be 
+designated as a ``catch \nolink{block}.'' 
+A catch \livetargi{chap:catchblock}{block}{catch block} is an 
+exception handler that handles
+exceptions thrown by an immediately 
+preceding ``try \livelink{chap:tryblock}{block}.''
+A catch \livelink{chap:catchblock}{block} 
+designates the type of the exception that it
 can handle.}
 
-A try \nolink{block} is represented by a debugging information entry
+A try \livetargi{chap:tryblock}{block}{try block} is represented 
+by a debugging information entry
 with the tag \livetarg{chap:DWTAGtryblock}{DW\-\_TAG\-\_try\-\_block}.  
-A catch \nolink{block} is represented by
+A catch \livelink{chap:catchblock}{block} is represented by
 a debugging information entry with 
 the tag \livetarg{chap:DWTAGcatchblock}{DW\-\_TAG\-\_catch\-\_block}.
 
+% nolink as we have links just above and do not have a combo link for both
 Both try and catch \nolink{block} entries may have either a
 \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} and \livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair of attributes or a
 \livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} attribute whose values encode the contiguous
-or non- contiguous address ranges, respectively, of the
-machine instructions generated for the \nolink{block} (see Section
+or non\dash contiguous address ranges, respectively, of the
+machine instructions generated for the \livelink{chap:lexicalblock}{block}
+(see Section
 \refersec{chap:codeaddressesandranges}).
 
-Catch \nolink{block} entries have at least one child entry, an
+Catch \livelink{chap:catchblock}{block} entries have at 
+least one child entry, an
 entry representing the type of exception accepted by
-that catch \nolink{block}. This child entry has one of the tags
+that catch \livelink{chap:catchblock}{block}. 
+This child entry has one of the tags
 \livelink{chap:DWTAGformalparameter}{DW\-\_TAG\-\_formal\-\_parameter} or \livelink{chap:DWTAGunspecifiedparameters}{DW\-\_TAG\-\_unspecified\-\_parameters},
 and will have the same form as other parameter entries.
 
-The siblings immediately following a try \nolink{block} entry are its
-corresponding catch \nolink{block} entries.
+The siblings immediately following 
+a try \livelink{chap:tryblock}{block} entry are its
+corresponding catch \livelink{chap:catchblock}{block} entries.
 
 
 

@@ -349,7 +349,7 @@ corresponding to a declaration\\
 \livetarg{chap:DWATuseUTF8}{DW\-\_AT\-\_use\-\_UTF8}
 &Compilation unit uses UTF\dash 8 strings \\
 \livetarg{chap:DWATvariableparameter}{DW\-\_AT\-\_variable\-\_parameter}
-&Non\dash constant parameter flag \\
+&Non\dash constant parameter \livelink{chap:flag}{flag} \\
 \livetarg{chap:DWATvirtuality}{DW\-\_AT\-\_virtuality}
 &Virtuality indication \\
 &Virtuality of base class \\
@@ -434,7 +434,8 @@ of other debugging entries and by permitting the same debugging
 information entry to be one of many owned by another debugging
 information entry. 
 This makes it possible, for example, to
-describe the static \nolink{block} structure within a source file,
+describe the static \livelink{chap:lexicalblock}{block} structure 
+within a source file,
 to show the members of a structure, union, or class, and to
 associate declarations with source files or source files
 with shared objects.  
@@ -710,7 +711,8 @@ Appendix \refersec{app:aggregateexamples}.
 The \livelink{chap:DWOPformtlsaddress}{DW\-\_OP\-\_form\-\_tls\-\_address} operation pops a value from the
 stack, translates it into an address in the current thread's
 thread\dash local storage \nolink{block}, and pushes the address. If the
-DWARF expression containing the \livelink{chap:DWOPformtlsaddress}{DW\-\_OP\-\_form\-\_tls\-\_address}
+DWARF expression containing 
+the \livelink{chap:DWOPformtlsaddress}{DW\-\_OP\-\_form\-\_tls\-\_address}
 operation belongs to the main executable's DWARF info, the
 operation uses the main executable's thread\dash local storage
 \nolink{block}; if the expression belongs to a shared library's
@@ -982,7 +984,8 @@ and/or other
 DWARF operations specific to describing locations. They are
 sufficient for describing the location of any object as long
 as its lifetime is either static or the same as the lexical
-\nolink{block} that owns it, and it does not move during its lifetime.
+\livelink{chap:lexicalblock}{block} that owns it, 
+and it does not move during its lifetime.
 
 Single location descriptions are of two kinds:
 \begin{enumerate}[a]
@@ -1619,7 +1622,9 @@ DWARF expression operator
 Any debugging information entry describing an entity that has
 a machine code address or range of machine code addresses,
 which includes compilation units, module initialization,
-subroutines, ordinary \nolink{block}, try/catch \nolink{blocks}, labels and
+subroutines, ordinary \livelink{chap:lexicalblock}{block}, 
+try/catch \nolink{blocks} (see Section\refersec{chap:tryandcatchblockentries}), 
+labels and
 the like, may have
 
 \begin{itemize}
@@ -1751,8 +1756,11 @@ cases, the entry address needs to be specified explicitly.}
 
 Any debugging information entry describing an entity that has
 a range of code addresses, which includes compilation units,
-module initialization, subroutines, ordinary \nolink{block}, try/catch
-\nolink{blocks}, and the like, may have a \livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc} attribute to
+module initialization, subroutines, 
+ordinary \livelink{chap:lexicalblock}{block}, 
+try/catch \nolink{blocks} (see Section \refersec{chap:tryandcatchblockentries}),
+and the like, 
+may have a \livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc} attribute to
 indicate the first executable instruction within that range
 of addresses. The value of the \livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc} attribute is a
 relocated address. If no \livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc} attribute is present,
