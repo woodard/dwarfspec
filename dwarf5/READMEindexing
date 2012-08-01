@@ -75,11 +75,26 @@ a definition of the term.  The intent is that clicking
 on the word or phrase in the document switches you to
 a display of the definition.
 
+--- Linking of attributes
 Attributes in DWARF may have multiple definition points, so
 for example DW_AT_abstract_origin links one to the attribute table
 and that in turn links to the 3 distinct definitions.
 Other than Attributes though, links are usually directly
 to the definition.
+
+It is critical that the hypertarget and livelink be
+separated to avoid problems with latex. Example:
+
+out\dash of\dash line instance 
+\hypertarget{chap:DWATabstractoriginoutoflineinstance}
+makes use of
+\livelink{chap:DWATabstractorigin}{DW\-\_AT\-\_abstract\-\_origin}
+
+If the 'makes use of' or some other text is not between
+the hypertarget and hyperlink latex produces output text of
+chap:DWATabstractorigin instead of thinking of it as a link.
+
+--- Linking (continued)
 
 The first argument in a livelink/livetarg/livetargi command
 is a string that must be unique to the target, it is used
