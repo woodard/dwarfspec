@@ -40,7 +40,10 @@ Section \refersec{chap:dataobjectentries}.
 If omitted, the encoding assumes the representation that
 is the default for the target architecture.
 
-A base type entry has either a \livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size} attribute
+A base type entry has 
+\hypertarget{chap:DWATbytesizedataobjectordatatypesize}
+either a \livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size} attribute
+\hypertarget{chap:DWATbitsizebasetypebitsize}
 or a \livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size} attribute whose integer constant value
 (see Section \refersec{chap:byteandbitsizes}) 
 is the amount of storage needed to hold
@@ -74,13 +77,15 @@ of zero is assumed.
 is also used for bit field members 
 (see Section \refersec{chap:datamemberentries}). 
 It
+\hypertarget{chap:DWATbitoffsetbasetypebitlocation}
 replaces the attribute \livelink{chap:DWATbitoffset}{DW\-\_AT\-\_bit\-\_offset} when used for base
 types as defined in DWARF V3 and earlier. The earlier attribute
 is defined in a manner suitable for bit field members on
 big\dash endian architectures but which is wasteful for use on
 little\dash endian architectures.}
 
-\textit{The attribute \livelink{chap:DWATbitoffset}{DW\-\_AT\-\_bit\-\_offset} is deprecated in DWARF Version
+\textit{The attribute \livelink{chap:DWATbitoffset}{DW\-\_AT\-\_bit\-\_offset} is 
+deprecated in DWARF Version
 4 for use in base types, but implementations may continue to
 support its use for compatibility.}
 
@@ -222,6 +227,7 @@ type entry has a \livelink{chap:DWATdecimalscale}{DW\-\_AT\-\_decimal\-\_scale} 
 interpretation as described for the \livelink{chap:DWATEpackeddecimal}{DW\-\_ATE\-\_packed\-\_decimal}
 and \livelink{chap:DWATEnumericstring}{DW\-\_ATE\-\_numeric\-\_string} base types.
 
+\hypertarget{chap:DWATbinaryscalebinaryscalefactorforfixedpointtype}
 For a data type with a binary scale factor, the fixed
 binary type entry has a \livelink{chap:DWATbinaryscale}{DW\-\_AT\-\_binary\-\_scale} attribute. The
 \livelink{chap:DWATbinaryscale}{DW\-\_AT\-\_binary\-\_scale} attribute is an integer constant value
@@ -453,7 +459,10 @@ the type of each element of the array.
 If the amount of storage allocated to hold each element of an
 object of the given array type is different from the amount
 of storage that is normally allocated to hold an individual
-object of the indicated element type, then the array type
+\hypertarget{chap:DWATbitstridearrayelementstrideofarraytype}
+object of the 
+\hypertarget{chap:DWATbytestridearrayelementstrideofarraytype}
+indicated element type, then the array type
 entry has either a \livelink{chap:DWATbytestride}{DW\-\_AT\-\_byte\-\_stride} or a \livelink{chap:DWATbitstride}{DW\-\_AT\-\_bit\-\_stride}
 attribute, whose value 
 (see Section \refersec{chap:staticanddynamicvaluesofattributes}) 
@@ -546,6 +555,7 @@ in the source program.
 
 A structure type, union type or class type entry may have
 either a \livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size} or a \livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size} attribute 
+\hypertarget{chap:DWATbitsizedatamemberbitsize}
 (see Section \refersec{chap:byteandbitsizes}), 
 whose value is the amount of storage needed
 to hold an instance of the structure, union or class type,
@@ -922,6 +932,7 @@ Appendix \refersec{app:pascalexample}.}
 is also used for base types 
 (see Section \refersec{chap:basetypeentries}). 
 It replaces the
+\livetarg{chap:DWATbitoffsetdatamemberbitlocation}
 attributes \livelink{chap:DWATbitoffset}{DW\-\_AT\-\_bit\-\_offset} and \livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size} when used to
 identify the beginning of bit field data members as defined
 in DWARF V3 and earlier. The earlier attributes are defined
@@ -1307,7 +1318,9 @@ represented on the target system.
 
 If the enumeration type occurs as the description of a
 dimension of an array type, and the stride for that dimension
+\hypertarget{chap:DWATbytestrideenumerationstridedimensionofarraytype}
 is different than what would otherwise be determined, then
+\hypertarget{chap:DWATbitstrideenumerationstridedimensionofarraytype}
 the enumeration type entry has either a \livelink{chap:DWATbytestride}{DW\-\_AT\-\_byte\-\_stride}
 or \livelink{chap:DWATbitstride}{DW\-\_AT\-\_bit\-\_stride} attribute which specifies the separation
 between successive elements along the dimension as described
@@ -1516,7 +1529,9 @@ integer with the same size as an address on the target machine.
 
 If the subrange type occurs as the description of a dimension
 of an array type, and the stride for that dimension is
+\hypertarget{chap:DWATbytestridesubrangestridedimensionofarraytype}
 different than what would otherwise be determined, then
+\hypertarget{chap:DWATbitstridesubrangestridedimensionofarraytype}
 the subrange type entry has either a \livelink{chap:DWATbytestride}{DW\-\_AT\-\_byte\-\_stride} or
 \livelink{chap:DWATbitstride}{DW\-\_AT\-\_bit\-\_stride} attribute which specifies the separation
 between successive elements along the dimension as described
