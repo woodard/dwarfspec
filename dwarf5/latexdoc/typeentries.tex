@@ -57,7 +57,9 @@ value is 4.}
 
 If the value of an object of the given type does not fully
 occupy the storage described by a byte size attribute,
-the base type entry may also have a \livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size} and a
+\hypertarget{chap:DWATdatabitoffsetbasetypebitlocation}
+the base type entry may also have a 
+\livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size} and a
 \livelink{chap:DWATdatabitoffset}{DW\-\_AT\-\_data\-\_bit\-\_offset} attribute, both of whose values are
 integer constant values (
 see Section \refersec{chap:staticanddynamicvaluesofattributes}). 
@@ -163,11 +165,21 @@ represented by a base type entry with a name attribute whose
 value is “char16\_t”, an encoding attribute whose value
 is \livelink{chap:DWATEUTF}{DW\-\_ATE\-\_UTF} and a byte size attribute whose value is 2.}
 
-The \livelink{chap:DWATEpackeddecimal}{DW\-\_ATE\-\_packed\-\_decimal} and \livelink{chap:DWATEnumericstring}{DW\-\_ATE\-\_numeric\-\_string} base types
+The 
+\livelink{chap:DWATEpackeddecimal}{DW\-\_ATE\-\_packed\-\_decimal} 
+and 
+\livelink{chap:DWATEnumericstring}{DW\-\_ATE\-\_numeric\-\_string} 
+base types
 represent packed and unpacked decimal string numeric data
 types, respectively, either of which may be either signed
-or unsigned. These base types are used in combination with
-\livelink{chap:DWATdecimalsign}{DW\-\_AT\-\_decimal\-\_sign}, \livelink{chap:DWATdigitcount}{DW\-\_AT\-\_digit\-\_count} and \livelink{chap:DWATdecimalscale}{DW\-\_AT\-\_decimal\-\_scale}
+or unsigned. 
+\hypertarget{chap:DWATdecimalsigndecimalsignrepresentation}
+These 
+\hypertarget{chap:DWATdigitcountdigitcountforpackeddecimalornumericstringtype}
+base types are used in combination with
+\livelink{chap:DWATdecimalsign}{DW\-\_AT\-\_decimal\-\_sign}, 
+\livelink{chap:DWATdigitcount}{DW\-\_AT\-\_digit\-\_count} and 
+\livelink{chap:DWATdecimalscale}{DW\-\_AT\-\_decimal\-\_scale}
 attributes.
 
 A \livelink{chap:DWATdecimalsign}{DW\-\_AT\-\_decimal\-\_sign} attribute is an integer constant that
@@ -178,10 +190,13 @@ mean that the type has a leading overpunch, trailing overpunch,
 leading separate or trailing separate sign representation or,
 alternatively, no sign at all.
 
-The \livelink{chap:DWATdigitcount}{DW\-\_AT\-\_digit\-\_count} attribute is an integer constant
+The 
+\livelink{chap:DWATdigitcount}{DW\-\_AT\-\_digit\-\_count}
+attribute is an integer constant
 value that represents the number of digits in an instance of
 the type.
 
+\hypertarget{chap:DWATdecimalscaledecimalscalefactor}
 The \livelink{chap:DWATdecimalscale}{DW\-\_AT\-\_decimal\-\_scale} attribute is an integer constant value
 that represents the exponent of the base ten scale factor to
 be applied to an instance of the type. A scale of zero puts the
@@ -669,7 +684,9 @@ class or interface from which the parent class or structure
 of the inheritance entry is derived, extended or implementing.
 
 An inheritance entry for a class that derives from or extends
-another class or struct also has a \livelink{chap:DWATdatamemberlocation}{DW\-\_AT\-\_data\-\_member\-\_location}
+\hypertarget{chap:DWATdatamemberlocationinheritedmemberlocation}
+another class or struct also has a 
+\livelink{chap:DWATdatamemberlocation}{DW\-\_AT\-\_data\-\_member\-\_location}
 attribute, whose value describes the location of the beginning
 of the inherited type relative to the beginning address of the
 derived class. If that value is a constant, it is the offset
@@ -782,7 +799,10 @@ conventions that are appropriate to the current language on
 the target system.
 
 The member entry corresponding to a data member that is
-defined in a structure, union or class may have either a
+\hypertarget{chap:DWATdatabitoffsetdatamemberbitlocation}
+defined 
+\hypertarget{chap:DWATdatamemberlocationdatamemberlocation}
+in a structure, union or class may have either a
 \livelink{chap:DWATdatamemberlocation}{DW\-\_AT\-\_data\-\_member\-\_location} attribute or a \livelink{chap:DWATdatabitoffset}{DW\-\_AT\-\_data\-\_bit\-\_offset}
 attribute. If the beginning of the data member is the same as
 the beginning of the containing entity then neither attribute
@@ -1161,29 +1181,37 @@ tag \livetarg{chap:DWTAGvariantpart}{DW\-\_TAG\-\_variant\-\_part} and is
 owned by the corresponding structure type entry.
 
 If the variant part has a discriminant, the discriminant is
+\hypertarget{chap:DWATdiscrdiscriminantofvariantpart}
 represented by a separate debugging information entry which
 is a child of the variant part entry. This entry has the form
 of a structure data member entry. The variant part entry will
-have a \livelink{chap:DWATdiscr}{DW\-\_AT\-\_discr} attribute whose value is a reference to
+have a 
+\livelink{chap:DWATdiscr}{DW\-\_AT\-\_discr} attribute whose value is a reference to
 the member entry for the discriminant.
 
 If the variant part does not have a discriminant (tag field),
-the variant part entry has a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute to represent
+the variant part entry has a 
+\livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute to represent
 the tag type.
 
 Each variant of a particular variant part is represented by
+\hypertarget{chap:DWATdiscrvaluediscriminantvalue}
 a debugging information entry with the 
 tag \livetarg{chap:DWTAGvariant}{DW\-\_TAG\-\_variant}
 and is a child of the variant part entry. The value that
 selects a given variant may be represented in one of three
-ways. The variant entry may have a \livelink{chap:DWATdiscrvalue}{DW\-\_AT\-\_discr\-\_value} attribute
+ways. The variant entry may have a 
+\livelink{chap:DWATdiscrvalue}{DW\-\_AT\-\_discr\-\_value} attribute
 whose value represents a single case label. The value of this
 attribute is encoded as an LEB128 number. The number is signed
 if the tag type for the variant part containing this variant
 is a signed type. The number is unsigned if the tag type is
 an unsigned type.
 
-Alternatively, the variant entry may contain a \livelink{chap:DWATdiscrlist}{DW\-\_AT\-\_discr\-\_list}
+Alternatively, 
+\hypertarget{chap:DWATdiscrlistlistofdiscriminantvalues}
+the variant entry may contain a 
+\livelink{chap:DWATdiscrlist}{DW\-\_AT\-\_discr\-\_list}
 attribute, whose value represents a list of discriminant
 values. This list is represented by any of the 
 \livelink{chap:block}{block} forms and
@@ -1647,7 +1675,9 @@ is the amount of storage need to hold a value of the file type.
 information, including a location and/or run\dash time parameters,
 about the data that represents the value for that object.}
 
-The \livelink{chap:DWATdatalocation}{DW\-\_AT\-\_data\-\_location} attribute may be used with any
+\hypertarget{chap:DWATdatalocationindirectiontoactualdata}
+The \livelink{chap:DWATdatalocation}{DW\-\_AT\-\_data\-\_location} 
+attribute may be used with any
 type that provides one or more levels of hidden indirection
 and/or run\dash time parameters in its representation. Its value
 is a location description. The result of evaluating this
