@@ -65,7 +65,8 @@ partial compilation unit (see
 Section \refersec{chap:importedunitentries}).
 
 
-Compilation unit entries may have the following attributes:
+Compilation unit entries may have the following 
+attributes:
 
 \begin{enumerate}[1]
 \item Either a \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} and \livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair of
@@ -86,6 +87,7 @@ containing the full or relative path name of the primary
 source file from which the compilation unit was derived.
 
 \item A \livelink{chap:DWATlanguage}{DW\-\_AT\-\_language} attribute whose constant value is an
+\hypertarget{chap:DWATlanguageprogramminglanguage}
 integer code indicating the source language of the compilation
 unit. The set of language names and their meanings are given
 in 
@@ -160,7 +162,9 @@ identifying character sequence that should avoid confusion
 with other producer values.
 
 
-\item  A \livelink{chap:DWATidentifiercase}{DW\-\_AT\-\_identifier\-\_case} attribute whose integer
+\item  A \livelink{chap:DWATidentifiercase}{DW\-\_AT\-\_identifier\-\_case} 
+attribute whose integer
+\hypertarget{chap:DWATidentifiercaseidentifiercaserule}
 constant value is a code describing the treatment
 of identifiers within this compilation unit. The
 set of identifier case codes is given in Figure
@@ -252,7 +256,9 @@ of that compilation unit is not valid.
 
 \subsection{Imported Unit Entries}
 \label{chap:importedunitentries}
-The place where a normal or partial unit is imported is
+The 
+\hypertarget{chap:DWATimportimportedunit}
+place where a normal or partial unit is imported is
 represented by a debugging information entry with the 
 tag \livetarg{chap:DWTAGimportedunit}{DW\-\_TAG\-\_imported\-\_unit}. 
 An imported unit entry contains a
@@ -453,14 +459,18 @@ given another name.
 An imported declaration is represented by one or
 more debugging information entries with the 
 tag \livetarg{chap:DWTAGimporteddeclaration}{DW\-\_TAG\-\_imported\-\_declaration}. 
-When an overloaded entity
+When 
+\hypertarget{chap:DWATimportimporteddeclaration}
+an overloaded entity
 is imported, there is one imported declaration entry for
 each overloading. Each imported declaration entry has a
 \livelink{chap:DWATimport}{DW\-\_AT\-\_import} attribute, whose value is a reference to the
 debugging information entry representing the declaration that
 is being imported.
 
-An imported declaration may also have a \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute
+An imported declaration may also have a 
+\livelink{chap:DWATname}{DW\-\_AT\-\_name}
+attribute
 whose value is a null\dash terminated string containing the
 name, as it appears in the source program, by which the
 imported entity is to be known in the context of the imported
@@ -475,6 +485,7 @@ an entity, regardless of the context in which the importing
 declaration or the imported entity occurs.
 
 \textit{A C++ namespace alias may be represented by an imported
+\hypertarget{chap:DWATimportnamespacealias}
 declaration entry with a name attribute whose value is
 a null\dash terminated string containing the alias name as it
 appears in the source program and an import attribute whose
@@ -483,6 +494,7 @@ namespace extension entry.
 }
 
 \textit{A C++ using declaration may be represented by one or more
+\hypertarget{chap:DWATimportnamespaceusingdeclaration}
 imported declaration entries.  When the using declaration
 refers to an overloaded function, there is one imported
 declaration entry corresponding to each overloading. Each
@@ -527,6 +539,7 @@ renamed in this way is known in the context of the imported
 module entry by the same name as it is declared in the module.
 
 \textit{A C++ using directive may be represented by an imported module
+\hypertarget{chap:DWATimportnamespaceusingdirective}
 entry, with an import attribute referring to the namespace
 entry of the appropriate extension of the namespace (which
 might be the original namespace entry) and no owned entries.
@@ -818,7 +831,9 @@ attribute, whose value is a location description. The location
 calculated is the place where the return address for the
 subroutine or entry point is stored.
 
-A subroutine or entry point entry may also have a
+A 
+\hypertarget{chap:DWATframebasesubroutineframebaseaddress}
+subroutine or entry point entry may also have a
 \livelink{chap:DWATframebase}{DW\-\_AT\-\_frame\-\_base} attribute, whose value is a location
 description that computes the “frame base” for the
 subroutine or entry point. If the location description is
@@ -959,7 +974,10 @@ artificially by the compiler for this instantiation.
 \subsection{Inlinable and Inlined Subroutines}
 A declaration or a definition of an inlinable subroutine
 is represented by a debugging information entry with the
-tag \livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram}. The entry for a subroutine that is
+tag 
+\livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram}.
+The entry for a subroutine that is
+\hypertarget{chap:DWATinlineinlinedsubroutine}
 explicitly declared to be available for inline expansion or
 that was expanded inline implicitly by the compiler has a
 \livelink{chap:DWATinline}{DW\-\_AT\-\_inline} attribute whose value is an integer constant. The
@@ -992,8 +1010,10 @@ entry with the tag \livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram}. Suc
 \paragraph{Abstract Instances}
 \label{chap:abstractinstances}
 Any debugging information entry that is owned (either
+\hypertarget{chap:DWATinlineabstracttinstance}
 directly or indirectly) by a debugging information entry
-that contains the \livelink{chap:DWATinline}{DW\-\_AT\-\_inline} attribute is referred to
+that contains the 
+\livelink{chap:DWATinline}{DW\-\_AT\-\_inline} attribute is referred to
 as an ``abstract instance entry.'' Any subroutine entry
 that contains a \livelink{chap:DWATinline}{DW\-\_AT\-\_inline} attribute whose value is other
 than \livelink{chap:DWINLnotinlined}{DW\-\_INL\-\_not\-\_inlined} is known as 
