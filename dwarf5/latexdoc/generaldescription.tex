@@ -300,41 +300,40 @@ actually declared in the source} \\
 \livetarg{chap:DWATordering}{DW\-\_AT\-\_ordering}
 &\livelink{chap:DWATorderingarrayrowcolumnordering}{Array row/column ordering} \\
 \livetarg{chap:DWATpicturestring}{DW\-\_AT\-\_picture\-\_string}
-&Picture string for numeric string type\\
+&\livelink{chap:DWATpicturestringpicturestringfornumericstringtype}{Picture string for numeric string type} \\
 \livetarg{chap:DWATpriority}{DW\-\_AT\-\_priority}
-&Module priority\\
+&\livelink{chap:DWATprioritymodulepriority}{Module priority}\\
 \livetarg{chap:DWATproducer}{DW\-\_AT\-\_producer}
-&Compiler identification\\
+&\livelink{chap:DWATproducercompileridentification}{Compiler identification}\\
 \livetarg{chap:DWATprototyped}{DW\-\_AT\-\_prototyped}
-&Subroutine prototype\\
+&\livelink{chap:DWATprototypedsubroutineprototype}{Subroutine prototype}\\
 \livetarg{chap:DWATpure}{DW\-\_AT\-\_pure}
-&Pure property of a subroutine\\
+&\livelink{chap:DWATpurepurepropertyofasubroutine}{Pure property of a subroutine} \\
 \livetarg{chap:DWATranges}{DW\-\_AT\-\_ranges}
-&Non\dash contiguous range of code addresses\\
+&\livelink{chap:DWATrangesnoncontiguousrangeofcodeaddresses}{Non-contiguous range of code addresses} \\
 \livetarg{chap:DWATrecursive}{DW\-\_AT\-\_recursive}
-&Recursive property of a subroutine\\
+&\livelink{chap:DWATrecursiverecursivepropertyofasubroutine}{Recursive property of a subroutine} \\
 \livetarg{chap:DWATreturnaddr}{DW\-\_AT\-\_return\-\_addr}
-&Subroutine return address save location\\
+&\livelink{chap:DWATreturnaddrsubroutinereturnaddresssavelocation}{Subroutine return address save location} \\
 \livetarg{chap:DWATsegment}{DW\-\_AT\-\_segment}
-&Addressing information\\
+&\livelink{chap:DWATsegmentaddressinginformation}{Addressing information} \\
 \livetarg{chap:DWATsibling}{DW\-\_AT\-\_sibling}
-&Debugging information entry relationship\\
+&\livelink{chap:DWATsiblingdebugginginformationentryrelationship}{Debugging information entry relationship} \\
 \livetarg{chap:DWATsmall}{DW\-\_AT\-\_small}
-&Scale factor for fixed\dash point type\\
+&\livelink{chap:DWATsmallscalefactorforfixedpointtype}{Scale factor for fixed-point type} \\
 \livetarg{chap:DWATsignature}{DW\-\_AT\-\_signature}
-&Type signature\\
+&\livelink{chap:DWATsignaturetypesignature}{Type signature}\\
 \livetarg{chap:DWATspecification}{DW\-\_AT\-\_specification}
-&Incomplete, non\dash defining, or separate declaration
-corresponding to a declaration\\
+&\livelink{chap:DWATspecificationincompletenondefiningorseparatedeclaration}{Incomplete, non-defining, or separate declaration corresponding to a declaration } \\
 \livetarg{chap:DWATstartscope}{DW\-\_AT\-\_start\-\_scope}
-&Object declaration\\
-&Type declaration\\
+&\livelink{chap:DWATstartscopeobjectdeclaration}{Object declaration}\\
+&\livelink{chap:DWATstartscopetypedeclaration}{Type declaration}\\
 \livetarg{chap:DWATstaticlink}{DW\-\_AT\-\_static\-\_link}
-&Location of uplevel frame\\
+&\livelink{chap:DWATstaticlinklocationofuplevelframe}{Location of uplevel frame} \\
 \livetarg{chap:DWATstmtlist}{DW\-\_AT\-\_stmt\-\_list}
-&Line number information for unit\\
+&\livelink{chap:DWATstmtlistlinenumberinformationforunit}{Line number information for unit}\\
 \livetarg{chap:DWATstringlength}{DW\-\_AT\-\_string\-\_length}
-&String length of string type\\
+&\livelink{chap:DWATstringlengthstringlengthofstringtype}{String length of string type} \\
 \livetarg{chap:DWATthreadsscaled}{DW\-\_AT\-\_threads\-\_scaled}
 &UPC array bound THREADS scale factor\\
 \livetarg{chap:DWATtrampoline}{DW\-\_AT\-\_trampoline}
@@ -477,6 +476,7 @@ children are represented as siblings of the first child.
 A chain of sibling entries is terminated by a null entry.
 
 In cases where a producer of debugging information feels that
+\hypertarget{chap:DWATsiblingdebugginginformationentryrelationship}
 it will be important for consumers of that information to
 quickly scan chains of sibling entries, while ignoring the
 children of individual siblings, that producer may attach a
@@ -1475,8 +1475,11 @@ given segment rather than as locations within a single flat
 address space.}
 
 Any debugging information entry that contains a description
+\hypertarget{chap:DWATsegmentaddressinginformation}
 of the location of an object or subroutine may have
-a \livelink{chap:DWATsegment}{DW\-\_AT\-\_segment} attribute, whose value is a location
+a 
+\livelink{chap:DWATsegment}{DW\-\_AT\-\_segment}
+attribute, whose value is a location
 description. The description evaluates to the segment selector
 of the item being described. If the entry containing the
 \livelink{chap:DWATsegment}{DW\-\_AT\-\_segment} attribute has a \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc}, \livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc},
@@ -1553,6 +1556,37 @@ void myfunc()
 \textit{C scoping rules require that the 
 value of the variable x passed to the function g is the value of the
 global variable x rather than of the local version.}
+
+\subsection{Non-Defining Declarations}
+A debugging information entry that represents a non-defining or otherwise incomplete
+declaration of a program entity has a 
+\livelink{chap:DWATdeclaration}{DW\-\_AT\-\_declaration} 
+attribute, which is a 
+\livelink{chap:flag}{flag}.
+
+\subsection{Declarations Completing Non-Defining Declarations}
+A debugging information entry that represents a 
+\hypertarget{chap:DWATspecificationincompletenondefiningorseparatedeclaration}
+declaration that completes another (earlier) 
+non\dash defining declaration may have a 
+\livelink{chap:DWATspecification}{DW\-\_AT\-\_specification}
+attribute whose value is a reference to
+the debugging information entry representing the non-defining declaration. A debugging
+information entry with a 
+\livelink{chap:DWATspecification}{DW\-\_AT\-\_specification} 
+attribute does not need to duplicate information
+provided by the debugging information entry referenced by that specification attribute.
+
+It is not the case that all attributes of the debugging information entry referenced by a
+\livelink{chap:DWATspecification}{DW\-\_AT\-\_specification} attribute 
+apply to the referring debugging information entry.
+
+\textit{For example,
+\livelink{chap:DWATsibling}{DW\-\_AT\-\_sibling} and 
+\livelink{chap:DWATdeclaration}{DW\-\_AT\-\_declaration} 
+clearly cannot apply to a referring
+entry.}
+
 
 
 \section{Declaration Coordinates}
@@ -1639,6 +1673,7 @@ DWARF expression operator
 Any debugging information entry describing an entity that has
 a machine code address or range of machine code addresses,
 which includes compilation units, module initialization,
+\hypertarget{chap:DWATrangesnoncontiguousrangeofcodeaddresses}
 subroutines, ordinary \livelink{chap:lexicalblock}{block}, 
 try/catch \nolink{blocks} (see Section\refersec{chap:tryandcatchblockentries}), 
 labels and
