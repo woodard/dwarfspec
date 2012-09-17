@@ -488,7 +488,13 @@ of the entry to which the attribute is attached.
 
 \section{Target Addresses}
 \label{chap:targetaddresses}
-Many places in this document refer to the size of an address
+Many places in this document 
+refer
+\addtoindexx{address size|see{size of an address}}
+to the size 
+\addtoindexx{address!size of an|see{size of an address}}
+of an
+\addtoindexi{address}{size of an address}
 on the target architecture (or equivalently, target machine)
 to which a DWARF description applies. For processors which
 can be configured to have different address sizes or different
@@ -647,10 +653,14 @@ stack entry, the second entry becomes the top of the stack,
 and the third entry becomes the second entry.
 
 \item  \livetarg{chap:DWOPderef}{DW\-\_OP\-\_deref} \\
-The \livelink{chap:DWOPderef}{DW\-\_OP\-\_deref} operation pops the top stack entry and 
+The 
+\livelink{chap:DWOPderef}{DW\-\_OP\-\_deref} 
+operation 
+pops the top stack entry and 
 treats it as an address. The value
 retrieved from that address is pushed. 
-The size of the data retrieved from the dereferenced
+The size of the data retrieved from the 
+\addtoindexi{dereferenced}{address!dereference operator}
 address is the size of an address on the target machine.
 
 \item \livetarg{chap:DWOPderefsize}{DW\-\_OP\-\_deref\-\_size} \\
@@ -668,24 +678,30 @@ target machine before being pushed onto the expression stack.
 \item \livetarg{chap:DWOPxderef}{DW\-\_OP\-\_xderef} \\
 The \livelink{chap:DWOPxderef}{DW\-\_OP\-\_xderef} operation provides an extended dereference
 mechanism. The entry at the top of the stack is treated as an
-address. The second stack entry is treated as an “address
-space identifier” for those architectures that support
-multiple address spaces. The top two stack elements are popped,
+address. The second stack entry is treated as an ``address
+space identifier'' for those architectures that support
+\addtoindexi{multiple}{address space!multiple}
+address spaces. The top two stack elements are popped,
 and a data item is retrieved through an implementation\dash defined
 address calculation and pushed as the new stack top. The size
-of the data retrieved from the dereferenced address is the
+of the data retrieved from the 
+\addtoindexi{dereferenced}{address!dereference operator}
+address is the
 size of an address on the target machine.
 
 \item \livetarg{chap:DWOPxderefsize}{DW\-\_OP\-\_xderef\-\_size}\\
 The \livelink{chap:DWOPxderefsize}{DW\-\_OP\-\_xderef\-\_size} operation behaves like the
 \livelink{chap:DWOPxderef}{DW\-\_OP\-\_xderef} operation.The entry at the top of the stack is
 treated as an address. The second stack entry is treated as
-an “address space identifier” for those architectures
-that support multiple address spaces. The top two stack
+an ``address space identifier'' for those architectures
+that support 
+\addtoindexi{multiple}{address space!multiple}
+address spaces. The top two stack
 elements are popped, and a data item is retrieved through an
 implementation\dash defined address calculation and pushed as the
 new stack top. In the \livelink{chap:DWOPxderefsize}{DW\-\_OP\-\_xderef\-\_size} operation, however,
-the size in bytes of the data retrieved from the dereferenced
+the size in bytes of the data retrieved from the 
+\addtoindexi{dereferenced}{address!dereference operator}
 address is specified by the single operand. This operand is a
 1\dash byte unsigned integral constant whose value may not be larger
 than the size of an address on the target machine. The data
@@ -702,7 +718,9 @@ structure, or class whose address has been dynamically
 determined by an earlier step during user expression
 evaluation.  This operator provides explicit functionality
 (especially for arrays involving descriptors) that is analogous
-to the implicit push of the base address of a structure prior
+to the implicit push of the base 
+\addtoindexi{address}{address!implicit push of base}
+of a structure prior
 to evaluation of a \livelink{chap:DWATdatamemberlocation}{DW\-\_AT\-\_data\-\_member\-\_location} to access a
 data member of a structure. For an example, see 
 Appendix \refersec{app:aggregateexamples}.
@@ -1280,8 +1298,12 @@ attribute whose value is an offset from the beginning of
 the .debug\_loc section to the first byte of the list for the
 object in question.
 
-Each entry in a location list is either a location list entry,
-a base address selection entry, or an end of list entry.
+Each entry in a location list is either a location 
+\addtoindexi{list}{address selection|see{base address selection}} 
+entry,
+a 
+\addtoindexi{base}{base address selection entry!in location list} 
+address selection entry, or an end of list entry.
 
 A location list entry consists of:
 
@@ -1290,7 +1312,9 @@ A location list entry consists of:
 This address offset has the size of an address and is
 relative to the applicable base address of the compilation
 unit referencing this location list. It marks the beginning
-of the address range over which the location is valid.
+of the address 
+\addtoindexi{range}{address range!in location list} 
+over which the location is valid.
 
 \item An ending address offset.  This address offset again
 has the size of an address and is relative to the applicable
@@ -1325,7 +1349,10 @@ list do not collectively cover the entire range over which the
 object in question is defined, it is assumed that the object is
 not available for the portion of the range that is not covered.
 
-A base address selection entry consists of:
+A base 
+\addtoindexi{address}{address selection|see{base address selection}}
+selection 
+\addtoindexi{entry}{base address selection entry!in location list}:
 \begin{enumerate}[1]
 \item The value of the largest representable 
 address offset (for example, 0xffffffff when the size of
@@ -1477,7 +1504,10 @@ which is a \livelink{chap:flag}{flag}.
 \section{Segmented Addresses}
 \label{chap:segmentedaddresses}
 \textit{In some systems, addresses are specified as offsets within a
-given segment rather than as locations within a single flat
+given 
+\addtoindexx{address space!segmented}
+segment rather than as locations within a single flat
+\addtoindexx{address space!flat}.
 address space.}
 
 Any debugging information entry that contains a description
@@ -1501,16 +1531,23 @@ its containing compilation unit entry have \livelink{chap:DWATsegment}{DW\-\_AT\
 attributes, then the entry is assumed to exist within a flat
 address space. Similarly, if the entry has a \livelink{chap:DWATsegment}{DW\-\_AT\-\_segment}
 attribute containing an empty location description, that
-entry is assumed to exist within a flat address space.
+entry is assumed to exist within a 
+\addtoindexi{flat}{address space!flat}.
+address space.
 
-\textit{Some systems support different classes of addresses. The
+\textit{Some systems support different classes of 
+addresses
+\addtoindexx{address class!attribute}. 
+The
 address class may affect the way a pointer is dereferenced
 or the way a subroutine is called.}
 
 
 Any debugging information entry representing a pointer or
-reference type or a subroutine or subroutine type may have
-a \livelink{chap:DWATaddressclass}{DW\-\_AT\-\_address\-\_class} attribute, whose value is an integer
+reference type or a subroutine or subroutine type may 
+have a 
+\livelink{chap:DWATaddressclass}{DW\-\_AT\-\_address\-\_class}
+attribute, whose value is an integer
 constant.  The set of permissible values is specific to
 each target architecture. The value \livetarg{chap:DWADDRnone}{DW\-\_ADDR\-\_none}, 
 however,
@@ -1758,7 +1795,9 @@ A range list entry consists of:
 \begin{enumerate}[1]
 \item A beginning address offset. This address offset has the size of an address and is relative to
 the applicable base address of the compilation unit referencing this range list. It marks the
-beginning of an address range.
+beginning of an 
+\addtoindexi{address}{address range!in range list} 
+range.
 
 \item An ending address offset. This address offset again has the size of an address and is relative
 to the applicable base address of the compilation unit referencing this range list. It marks the
