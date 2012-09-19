@@ -3,7 +3,8 @@
 % references to chapter 7 look like  {datarep:...}
 This section describes debugging information that is not
 represented in the form of debugging information entries and
-is not contained within a .debug\_info or .debug\_types section.
+is not contained within a \addtoindex{.debug\_info} or 
+\addtoindex{.debug\_types} section.
 
 In the descriptions that follow, these terms are used to
 specify the representation of DWARF sections:
@@ -59,8 +60,11 @@ more condensed format.
 \subsection{Lookup by Name}
 
 For lookup by name, two tables are maintained in separate
-object file sections named .debug\_pubnames for objects and
-functions, and .debug\_pubtypes for types. Each table consists
+object file sections named 
+\addtoindex{.debug\_pubnames} for objects and
+functions, and 
+\addtoindex{.debug\_pubtypes}
+for types. Each table consists
 of sets of variable length entries. Each set describes the
 names of global objects and functions, or global types,
 respectively, whose definitions are represented by debugging
@@ -69,7 +73,8 @@ information entries owned by a single compilation unit.
 \textit{C++ member functions with a definition in the class declaration
 are definitions in every compilation unit containing the
 class declaration, but if there is no concrete out\dash of\dash line
-instance there is no need to have a .debug\_pubnames entry
+instance there is no need to have a 
+\addtoindex{.debug\_pubnames} entry
 for the member function.}
 
 Each set begins with a header containing four values:
@@ -88,11 +93,13 @@ to the name lookup table and is independent of the DWARF
 version number.
 
 \item debug\_info\_offset (section offset) \\
-The offset from the beginning of the .debug\_info section of
+The offset from the beginning of the 
+\addtoindex{.debug\_info} section of
 the compilation unit header referenced by the set.
 
 \item debug\_info\_length (section length) \\
-The size in bytes of the contents of the .debug\_info section
+The size in bytes of the contents of the 
+\addtoindex{.debug\_info} section
 generated to represent that compilation unit.
 \end{enumerate}
 
@@ -109,7 +116,9 @@ no following string).
 
 In the case of the name of a function member or static data
 member of a C++ structure, class or union, the name presented
-in the .debug\_pubnames section is not the simple name given
+in the 
+\addtoindex{.debug\_pubnames} 
+section is not the simple name given
 by the \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute of the referenced debugging
 information entry, but rather the fully qualified name of
 the data or function member.
@@ -117,7 +126,8 @@ the data or function member.
 \subsection{Lookup by Address}
 
 For lookup by address, a table is maintained in a separate
-object file section called .debug\_aranges. The table consists
+object file section called 
+\addtoindex{.debug\_aranges}. The table consists
 of sets of variable length entries, each set describing the
 portion of the program’s address space that is covered by
 a single compilation unit.
@@ -140,7 +150,8 @@ independent of the DWARF version number.
 
 \item debug\_info\_offset (section offset) \\
 The offset from the
-beginning of the .debug\_info or .debug\_types section of the
+beginning of the \addtoindex{.debug\_info} or 
+\addtoindex{.debug\_types} section of the
 compilation unit header referenced by the set.
 
 \item address\_size (ubyte) \\
@@ -194,11 +205,12 @@ of the source files and to single step from line to line,
 or statement to statement.}
 
 Line number information generated for a compilation unit is
-represented in the .debug\_line section of an object file and
+represented in the 
+\addtoindex{.debug\_line} section of an object file and
 is referenced by a corresponding compilation unit debugging
 information entry 
 (see Section \refersec{chap:generalsubroutineandentrypointinformation}) 
-in the .debug\_info
+in the \addtoindex{.debug\_info}
 section.
 
 \textit{Some computer architectures employ more than one instruction
@@ -206,10 +218,11 @@ set (for example, the ARM and MIPS architectures support
 a 32\dash bit as well as a 16\dash bit instruction set). Because the
 instruction set is a function of the program counter, it is
 convenient to encode the applicable instruction set in the
-.debug\_line section as well.}
+\addtoindex{.debug\_line} section as well.}
 
 \textit{If space were not a consideration, the information provided
-in the .debug\_line section could be represented as a large
+in the \addtoindex{.debug\_line} 
+section could be represented as a large
 matrix, with one row for each instruction in the emitted
 object code. The matrix would have columns for:}
 
@@ -984,7 +997,8 @@ programmer wrote it. The macro information table provides a way
 of preserving the original source in the debugging information.}
 
 As described in Section 3.1.1, the macro information for a
-given compilation unit is represented in the .debug\_macinfo
+given compilation unit is represented in the 
+\addtoindex{.debug\_macinfo}
 section of an object file. The macro information for each
 compilation unit is represented as a series of “macinfo”
 entries. Each macinfo entry consists of a “type code” and
@@ -1114,7 +1128,8 @@ and should encode the value 0 in their line number operands.
 \subsection{General rules and restrictions}
 \label{chap:generalrulesandrestrictions}
 
-All macinfo entries within a .debug\_macinfo section for a
+All macinfo entries within a \addtoindex{.debug\_macinfo}
+section for a
 given compilation unit appear in the same order in which the
 directives were processed by the compiler.
 
@@ -1317,7 +1332,9 @@ starting at the beginning address of each subroutine in
 the program.}
 
 The virtual unwind information is encoded in a self-contained
-section called .debug\_frame.  Entries in a .debug\_frame section
+section called 
+\addtoindex{.debug\_frame}.  Entries in a 
+\addtoindex{.debug\_frame} section
 are aligned on a multiple of the address size relative to
 the start of the section and come in two forms: a Common
 Information Entry (CIE) and a Frame Description Entry (FDE).
@@ -1329,7 +1346,7 @@ to the parts of that function.}
 
 A Common Information Entry holds information that is shared
 among many Frame Description Entries. There is at least one
-CIE in every non-empty .debug\_frame section. A CIE contains
+CIE in every non-empty \addtoindex{.debug\_frame} section. A CIE contains
 the following fields, in order:
 
 \begin{enumerate}[1.]
@@ -1373,8 +1390,8 @@ which is needed to unwind a stack frame. For example, this
 might be information about dynamically allocated data which
 needs to be freed on exit from the routine.}
 
-\textit{Because the .debug\_frame section is useful independently of
-any .debug\_info section, the augmentation string always uses
+\textit{Because the \addtoindex{.debug\_frame} section is useful independently of
+any \addtoindex{.debug\_info} section, the augmentation string always uses
 UTF\dash 8 encoding.}
 
 \item  address\_size (ubyte) \\
@@ -1432,7 +1449,8 @@ plus the value of length must be an integral multiple of the
 address size.
 
 \item   CIE\_pointer (4 or 8 bytes, see Section \refersec{datarep:32bitand64bitdwarfformats}) \\
-A constant offset into the .debug\_frame section that denotes
+A constant offset into the \addtoindex{.debug\_frame}
+section that denotes
 the CIE that is associated with this FDE.
 
 \item  initial\_location (segment selector and target address) \\

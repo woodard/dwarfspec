@@ -5,28 +5,29 @@
 \thicklines
 \begin{picture}(0,0)
 \footnotesize
-  \put(10,0) { .debug\_aranges }
+  \put(10,0) { \addtoindex{.debug\_aranges} }
   \put(40,0) { \circle{80}}
-  \put(180,0) { .debug\_frame }
+  \put(180,0) { \addtoindex{.debug\_frame} }
   \put(210,0) { \circle{80}}
-  \put(350,0) { .debug\_abbrev }
+  \put(350,0) { \addtoindex{.debug\_abbrev} }
   \put(380,0) { \circle{80}}
 
   \put(40,-40){\line(0,-1){30}}
   \put(-10,-90){\framebox(110,20){To compilation unit (a)} }
   \put(40,-90){\vector(0,-1){35}}
 
-  \put(350,-90) { .debug\_str }
+  \put(350,-90) { \addtoindex{.debug\_str} }
   \put(380,-90) {\circle{80}}
 
-  \put(10,-180) { .debug\_info }
+  \put(10,-180) { \addtoindex{.debug\_info} }
   \put(40,-180) {\circle{100}}
+  \put(10,-195) { \addtoindex{.debug\_types} }
 
 
-  \put(350,-180) { .debug\_loc }
+  \put(350,-180) { \addtoindex{.debug\_loc} }
   \put(380,-180) {\circle{80}}
 
-  \put(350,-270) { .debug\_ranges }
+  \put(350,-270) { \addtoindex{.debug\_ranges} }
   \put(380,-270) {\circle{80}}
 
   \put(80,-140){\line(3, 2){90}}
@@ -61,68 +62,79 @@
   \put(-10,-270){\framebox(110,20){To compilation unit (b)} }
   \put(40,-320){\line(0,1){50}}
 
-  \put(0,-360) { .debug\_pubnames }
-  \put(0,-375) { .debug\_pubtypes } 
+  \put(0,-360) { \addtoindex{.debug\_pubnames} }
+  \put(0,-375) { \addtoindex{.debug\_pubtypes} } 
   \put(40, -360) { \circle{80}}
-  \put(175,-360) { .debug\_line }
+  \put(175,-360) { \addtoindex{.debug\_line} }
   \put(210,-360) { \circle{80}}
-  \put(350,-360) { .debug\_macinfo}
+  \put(350,-360) { \addtoindex{.debug\_macinfo} }
   \put(380,-360) { \circle{80}}
 
 \end{picture}
 
 \clearpage
 \begin{enumerate}[(a)]  
-\item  .debug\_aranges  \\
+\item  \addtoindex{.debug\_aranges}  \\
 The debug\_info\_offset value in
-the header is the offset in the .debug\_info section of the
+the header is
+the offset in the \addtoindex{.debug\_info} section of the
 corresponding compilation unit header (not the compilation
 unit entry).
 
-\item .debug\_pubnames and .debug\_pubtypes \\
+%b
+\item \addtoindex{.debug\_pubnames} and \addtoindex{.debug\_pubtypes} \\
 The debug\_info\_offset value in the header is the offset in the
-.debug\_info section of the corresponding compilation unit header (not
+\addtoindex{.debug\_info} section of the 
+corresponding compilation unit header (not
 the compilation unit entry). Each pubname/pubtype has the offset (within
 the corresponding compilation unit) of the applicable debugging
 information entry.
 
-\item .debug\_info and .debug\_types \\
+%c
+\item \addtoindex{.debug\_info} and \addtoindex{.debug\_types} \\
 The debug\_abbrev\_offset value in the header is the offset in the
-.debug\_abbrev section of the abbreviations for that compilation unit.
-(d) .debug\_info and .debug\_types
-Attribute values of class string may have form \livelink{chap:DWFORMstrp}{DW\-\_FORM\-\_strp}, whose
-value is the offset in the .debug\_str section of the corresponding string.
+\addtoindex{.debug\_abbrev} 
+section of the abbreviations for that compilation unit.
 
-\item  .debug\_info and .debug\_types \\
+%d
+\item  \addtoindex{.debug\_info} and \addtoindex{.debug\_types} \\
 Attribute values of class string may have form \livelink{chap:DWFORMstrp}{DW\-\_FORM\-\_strp}, whose
-value is the offset in the .debug\_str section of the corresponding string.
+value is the offset in the \addtoindex{.debug\_str}
+section of the corresponding string.
 
-\item .debug\_loc \\
+%e
+\item \addtoindex{.debug\_loc} \\
 The operand of the \livelink{chap:DWOPcallref}{DW\-\_OP\-\_call\-\_ref} DWARF expression operator is the
-offset of a debugging information entry in the .debug\_info section.
+offset of a debugging information entry in the 
+\addtoindex{.debug\_info} section.
 
-\item .debug\_info \\
+%f
+\item \addtoindex{.debug\_info} \\
 An attribute value of class \livelink{chap:loclistptr}{loclistptr} (specifically form
-\livelink{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset}) is an offset within the .debug\_loc section of a
+\livelink{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset}) is an offset within the \addtoindex{.debug\_loc} section of a
 location list.
 
-\item .debug\_info \\
+%g
+\item \addtoindex{.debug\_info} \\
 An attribute value of class \livelink{chap:rangelistptr}{rangelistptr} (specifically form
-\livelink{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset}) is an offset within the .debug\_ranges section of
+\livelink{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset}) is an offset within the \addtoindex{.debug\_ranges} section of
 a range list.
 
-
-\item .debug\_info \\
-An attribute value of class \livelink{chap:macptr}{macptr} (specifically form
-\livelink{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset}) is an offset within the .debug\_macinfo section
+%h
+\item \addtoindex{.debug\_info} \\
+An attribute value of class 
+\livelink{chap:macptr}{macptr} (specifically form
+\livelink{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset}) is an 
+offset within the 
+\addtoindex{.debug\_macinfo} section
 of the beginning of the macro information for the referencing unit.
 
-
-\item .debug\_info \\
-An attribute value of class \livelink{chap:lineptr}{lineptr} (specifically form
-\livelink{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset}) is an offset in the .debug\_line section of the
+%i
+\item \addtoindex{.debug\_info} \\
+An attribute value of class 
+\livelink{chap:lineptr}{lineptr} (specifically form
+\livelink{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset}) 
+is an offset in the 
+\addtoindex{.debug\_line} section of the
 beginning of the line number information for the referencing unit.
 \end{enumerate}
-
-
-
