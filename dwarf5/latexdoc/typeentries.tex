@@ -273,7 +273,8 @@ is interpreted in accordance with the value defined by the
 of the integer value in memory and the associated constant
 entry for the type.
 
-\textit{The \livelink{chap:DWATsmall}{DW\-\_AT\-\_small} attribute is defined with the Ada small
+\textit{The \livelink{chap:DWATsmall}{DW\-\_AT\-\_small} attribute 
+is defined with the \addtoindex{Ada} small
 attribute in mind.}
 
 \begin{figure}[here]
@@ -325,7 +326,7 @@ Sections \refersec{chap:unspecifiedtypeentries} and
 %The following reference was valid, so the following is probably correct.
 Section \refersec{chap:typedefentries}, 
 respectively). As another
-example, in Ada such an unspecified type entry can be referred
+example, in \addtoindex{Ada} such an unspecified type entry can be referred
 to by the type attribute of an access type where the denoted
 type is incomplete (the name is declared as a type but the
 definition is deferred to a separate compilation unit). Type
@@ -378,8 +379,8 @@ order in the source presentation.
 \centering
 \begin{tabular}{lp{9cm}}
 Name&Meaning\\ \hline
-\livetarg{chap:DWTAGconsttype}{DW\-\_TAG\-\_const\-\_type} &  C or C++ const qualified type \\
-\livetarg{chap:DWTAGpackedtype}{DW\-\_TAG\-\_packed\-\_type}& Pascal or Ada packed type \\
+\livetarg{chap:DWTAGconsttype}{DW\-\_TAG\-\_const\-\_type} &  C or C++ const qualified type \addtoindexx{C} \addtoindexx{C++} \\
+\livetarg{chap:DWTAGpackedtype}{DW\-\_TAG\-\_packed\-\_type}& Pascal or Ada packed type \addtoindexx{Ada} \addtoindexx{Pascal} \\
 \livetarg{chap:DWTAGpointertype}{DW\-\_TAG\-\_pointer\-\_type} & Pointer to an object of the type being modified \\
 \livetarg{chap:DWTAGreferencetype}{DW\-\_TAG\-\_reference\-\_type}& C++ (lvalue) reference to an object of the type 
 being modified \\
@@ -721,7 +722,9 @@ members
 
 An inheritance entry 
 \hypertarget{chap:DWATaccessibilitycppinheritedmembers}
-may have a
+may 
+\addtoindexx{accessibility attribute}
+have a
 \livelink{chap:DWATaccessibility}{DW\-\_AT\-\_accessibility}
 attribute. If no accessibility attribute
 is present, private access is assumed for an entry of a class
@@ -741,6 +744,7 @@ will usually consist of a non-trivial location description.}
 \label{chap:accessdeclarations}
 
 \textit{In C++, a derived class may contain access declarations that
+\addtoindex{access declaration entry}
 change the accessibility of individual class members from the
 overall accessibility specified by the inheritance declaration.
 A single access declaration may refer to a set of overloaded
@@ -760,7 +764,8 @@ or structure qualifiers.
 
 An access declaration entry 
 \hypertarget{chap:DWATaccessibilitycppbaseclasses}
-also has a 
+also 
+has a 
 \livelink{chap:DWATaccessibility}{DW\-\_AT\-\_accessibility}
 attribute describing the declared accessibility of the named
 entities.
@@ -796,7 +801,10 @@ name attribute is omitted or consists of a single zero byte.
 The data member entry has a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute to denote
 the type of that member.
 
-A data member entry may have a \livelink{chap:DWATaccessibility}{DW\-\_AT\-\_accessibility}
+A data member entry may 
+\addtoindexx{accessibility attribute}
+have a 
+\livelink{chap:DWATaccessibility}{DW\-\_AT\-\_accessibility}
 attribute. If no accessibility attribute is present, private
 access is assumed for an entry of a class and public access
 is assumed for an entry of a structure, union, or interface.
@@ -972,7 +980,8 @@ Appendix \refersec{app:pascalexample}.}
 
 \textit{Attribute \livelink{chap:DWATdatabitoffset}{DW\-\_AT\-\_data\-\_bit\-\_offset} is new in DWARF Version 4 and
 is also used for base types 
-(see Section \refersec{chap:basetypeentries}). 
+(see Section 
+\refersec{chap:basetypeentries}). 
 It replaces the
 \livetarg{chap:DWATbitoffsetdatamemberbitlocation}
 attributes \livelink{chap:DWATbitoffset}{DW\-\_AT\-\_bit\-\_offset} and \livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size} when used to
@@ -980,10 +989,12 @@ identify the beginning of bit field data members as defined
 in DWARF V3 and earlier. The earlier attributes are defined
 in a manner suitable for bit field members on big-endian
 architectures but which is either awkward or incomplete for
-use on little-endian architectures.  (\livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size} also
+use on little-endian architectures.  
+(\livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size} also
 has other uses that are not affected by this change.)}
 
-\textit{The \livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size}, \livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size} and 
+\textit{The \livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size}, 
+\livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size} and 
 \livelink{chap:DWATbitoffset}{DW\-\_AT\-\_bit\-\_offset}
 attribute combination is deprecated for data members in DWARF
 Version 4, but implementations may continue to support this
@@ -1069,7 +1080,10 @@ may contain the same attributes and follows the same rules
 as non\dash member global subroutine entries 
 (see Section \refersec{chap:subroutineandentrypointentries}).
 
-A member function entry may have a \livelink{chap:DWATaccessibility}{DW\-\_AT\-\_accessibility}
+A 
+\addtoindexx{accessibility attribute}
+member function entry may have a 
+\livelink{chap:DWATaccessibility}{DW\-\_AT\-\_accessibility}
 attribute. If no accessibility attribute is present, private
 access is assumed for an entry of a class and public access
 is assumed for an entry of a structure, union or interface.
@@ -1591,9 +1605,20 @@ Section \refersec{chap:staticanddynamicvaluesofattributes}.
 
 If the lower bound value is missing, the value is assumed to
 be a language\dash dependent default constant. The default lower
-bound is 0 for C, C++, D, Java, Objective C, Objective C++,
-Python, and UPC. The default lower bound is 1 for Ada, COBOL,
-Fortran, Modula\dash 2, Pascal and PL/I.
+bound is 0 for 
+\addtoindex{C}, \addtoindex{C++}, 
+\addtoindex{D}, 
+\addtoindex{Java}, 
+\addtoindex{Objective C}, 
+\addtoindex{Objective C++},
+\addtoindex{Python}, and 
+\addtoindex{UPC}. 
+The default lower bound is 1 for 
+\addtoindex{Ada}, \addtoindex{COBOL},
+\addtoindex{Fortran}, 
+\addtoindex{Modula}\dash 2, 
+\addtoindex{Pascal} and 
+\addtoindex{PL/I}.
 
 \textit{No other default lower bound values are currently defined.}
 
@@ -1786,7 +1811,9 @@ Section \refersec{chap:staticanddynamicvaluesofattributes}.
 A non\dash zero value is interpreted as allocated or associated,
 and zero is interpreted as not allocated or not associated.
 
-\textit{For Fortran 90, if the \livelink{chap:DWATassociated}{DW\-\_AT\-\_associated} attribute is present,
+\textit{For \addtoindex{Fortran} 90, 
+if the \livelink{chap:DWATassociated}{DW\-\_AT\-\_associated} 
+attribute is present,
 the type has the POINTER property where either the parent
 variable is never associated with a dynamic object or the
 implementation does not track whether the associated object
@@ -1799,7 +1826,9 @@ be used to indicate that the association status of the object
 resulted from execution of an ALLOCATE statement rather than
 pointer assignment.}
 
-\textit{For examples using \livelink{chap:DWATallocated}{DW\-\_AT\-\_allocated} for Ada and Fortran 90
+\textit{For examples using 
+\livelink{chap:DWATallocated}{DW\-\_AT\-\_allocated} for \addtoindex{Ada} and 
+\addtoindex{Fortran} 90
 arrays, 
 see Appendix \refersec{app:aggregateexamples}.}
 
