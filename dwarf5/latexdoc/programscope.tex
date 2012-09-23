@@ -1025,13 +1025,18 @@ Any debugging information entry that is owned (either
 directly or indirectly) by a debugging information entry
 that contains the 
 \livelink{chap:DWATinline}{DW\-\_AT\-\_inline} attribute is referred to
-as an ``abstract instance entry.'' Any subroutine entry
+\addtoindexx{abstract instance!entry}
+as an ``abstract instance entry.'' 
+Any subroutine entry
 that contains a \livelink{chap:DWATinline}{DW\-\_AT\-\_inline} attribute whose value is other
-than \livelink{chap:DWINLnotinlined}{DW\-\_INL\-\_not\-\_inlined} is known as 
+than \livelink{chap:DWINLnotinlined}{DW\-\_INL\-\_not\-\_inlined}
+is known as 
+\addtoindexx{abstract instance!root}
 an ``abstract instance root.'' 
 Any set of abstract instance entries that are all
 children (either directly or indirectly) of some abstract
 instance root, together with the root itself, is known as
+\addtoindexx{abstract instance!tree}
 an ``abstract instance tree.'' However, in the case where
 an abstract instance tree is nested within another abstract
 instance tree, the entries in the nested abstract instance
@@ -1039,6 +1044,7 @@ tree are not considered to be entries in the outer abstract
 instance tree.
 
 Each abstract instance root is either part of a larger
+\addtoindexx{abstract instance!root}
 tree (which gives a context for the root) or uses
 \livelink{chap:DWATspecification}{DW\-\_AT\-\_specification} to refer to the declaration in context.
 
@@ -1178,6 +1184,7 @@ are specific to the concrete instance (but omitted in the
 abstract instance). In place of these omitted attributes, each
 \hypertarget{chap:DWATabstractorigininlineinstance}
 concrete inlined instance entry 
+\addtoindexx{abstract origin attribute}
 has a 
 \livelink{chap:DWATabstractorigin}{DW\-\_AT\-\_abstract\-\_origin}
 attribute that may be used to obtain the missing information
@@ -1194,6 +1201,7 @@ they may usually be omitted from any entry that has an abstract
 origin attribute.
 
 For each pair of entries that are associated via a
+\addtoindexx{abstract origin attribute}
 \livelink{chap:DWATabstractorigin}{DW\-\_AT\-\_abstract\-\_origin} attribute, both members of the pair
 have the same tag. So, for example, an entry with the tag
 \livelink{chap:DWTAGvariable}{DW\-\_TAG\-\_variable} can only be associated with another entry
@@ -1210,7 +1218,9 @@ tree. There are a few exceptions:
 
 \begin{enumerate}[1.]
 \item An entry in the concrete instance tree may be omitted if
-it contains only a \livelink{chap:DWATabstractorigin}{DW\-\_AT\-\_abstract\-\_origin} attribute and either
+it contains only a 
+\addtoindexx{abstract origin attribute}
+\livelink{chap:DWATabstractorigin}{DW\-\_AT\-\_abstract\-\_origin} attribute and either
 has no children, or its children are omitted. Such entries
 would provide no useful information. In C\dash like languages,
 such entries frequently include types, including structure,
@@ -1238,6 +1248,7 @@ not correspond to entries in the abstract instance tree
 to describe new entities that are specific to a particular
 inlined expansion. In that case, they will not have associated
 entries in the abstract instance tree, should not contain
+\addtoindexx{abstract origin attribute}
 \livelink{chap:DWATabstractorigin}{DW\-\_AT\-\_abstract\-\_origin} attributes, and must contain all their
 own attributes directly. This allows an abstract instance tree
 to omit debugging information entries for anonymous entities
@@ -1265,7 +1276,9 @@ concrete inlined instance of that subroutine (as described in
 the preceding section). The representation of such a concrete
 % It is critical that the hypertarget and livelink be
 % separated to avoid problems with latex.
-out\dash of\dash line instance 
+out\dash of\dash line 
+\addtoindexx{abstract origin attribute}
+instance 
 \hypertarget{chap:DWATabstractoriginoutoflineinstance}
 makes use of 
 \livelink{chap:DWATabstractorigin}{DW\-\_AT\-\_abstract\-\_origin}
@@ -1309,6 +1322,8 @@ nested subroutine.
 
 For an inlined subroutine nested within another inlined
 subroutine, the following rules apply to their abstract and
+\addtoindexx{abstract instance!nested}
+\addtoindexx{concrete instance!nested}
 concrete instance trees:
 
 \begin{enumerate}[1.]

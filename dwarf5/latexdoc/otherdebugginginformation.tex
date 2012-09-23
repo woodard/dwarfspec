@@ -1405,14 +1405,20 @@ its address size must match the address size here.
 The size of a segment selector in this CIE and any FDEs that
 use it, in bytes.
 
-\item  code\_alignment\_factor (unsigned LEB128) \\
-A constant that is factored out of all advance location
+\item  \addtoindex{code\_alignment\_factor} (unsigned LEB128) \\
+\addtoindex{code alignment factor}
+A 
+\addtoindexx{\textless caf\textgreater|see{code alignment factor}}
+constant that is factored out of all advance location
 instructions (see 
 Section \refersec{chap:rowcreationinstructions}).
 
 
-\item  data\_alignment\_factor (signed LEB128) \\
-A constant that is factored out of certain offset instructions
+\item  \addtoindex{data\_alignment\_factor} (signed LEB128) \\
+\addtoindexx{data alignment factor}
+A 
+\addtoindexx{\textless daf\textgreater|see{data alignment factor}}
+constant that is factored out of certain offset instructions
 (see below). The resulting value is  \textit{(operand *
 data\_alignment\_factor)}.
 
@@ -1529,7 +1535,8 @@ with the opcode) that represents a constant delta. The required
 action is to create a new table row with a location value that
 is computed by taking the current entry’s location value
 and adding the value of 
-\textit{delta * code\_alignment\_factor}. All
+\textit{delta * \addtoindex{code\_alignment\_factor}}. 
+All
 other values in the new row are initially identical to the
 current row
 
@@ -1569,7 +1576,7 @@ an unsigned LEB128 value representing a register number and a
 signed LEB128 factored offset. This instruction is identical
 to \livelink{chap:DWCFAdefcfa}{DW\-\_CFA\-\_def\-\_cfa} except that the second operand is signed
 and factored. The resulting offset is factored\_offset *
-data\_alignment\_factor.
+\addtoindex{data\_alignment\_factor}.
 
 
 \item \textbf{DW\-\_CFA\-\_def\-\_cfa\-\_register} \\
@@ -1596,7 +1603,8 @@ The \livetarg{chap:DWCFAdefcfaoffsetsf}{DW\-\_CFA\-\_def\-\_cfa\-\_offset\-\_sf}
 LEB128 operand representing a factored offset. This instruction
 is identical to \livelink{chap:DWCFAdefcfaoffset}{DW\-\_CFA\-\_def\-\_cfa\-\_offset} except that the
 operand is signed and factored. The resulting offset is
-factored\_offset * data\_alignment\_factor. This operation
+factored\_offset * \addtoindex{data\_alignment\_factor}.
+This operation
 is valid only if the current CFA rule is defined to use a
 register and offset.
 
@@ -1635,7 +1643,7 @@ constant representing a factored offset. The required action
 is to change the rule for the register indicated by the
 register number to be an offset(N) rule where the value of
 N is 
-\textit{factored offset * data\_alignment\_factor.}
+\textit{factored offset * \addtoindex{data\_alignment\_factor}}.
 
 \item \textbf{DW\-\_CFA\-\_offset\-\_extended} \\
 The \livetarg{chap:DWCFAoffsetextended}{DW\-\_CFA\-\_offset\-\_extended} instruction takes two unsigned
@@ -1649,7 +1657,7 @@ an unsigned LEB128 value representing a register number and a
 signed LEB128 factored offset. This instruction is identical
 to \livelink{chap:DWCFAoffsetextended}{DW\-\_CFA\-\_offset\-\_extended} except that the second operand is
 signed and factored. The resulting offset is 
-\textit{factored\_offset * data\_alignment\_factor}.
+\textit{factored\_offset * \addtoindex{data\_alignment\_factor}}.
 
 \item \textbf{DW\-\_CFA\-\_val\-\_offset} \\
 The \livetarg{chap:DWCFAvaloffset}{DW\-\_CFA\-\_val\-\_offset} instruction takes two unsigned
@@ -1657,7 +1665,7 @@ LEB128 operands representing a register number and a
 factored offset. The required action is to change the rule
 for the register indicated by the register number to be a
 val\_offset(N) rule where the value of N is 
-\textit{factored\_offset * data\_alignment\_factor}.
+\textit{factored\_offset * \addtoindex{data\_alignment\_factor}}.
 
 \item \textbf{DW\-\_CFA\-\_val\-\_offset\-\_sf} \\
 The \livetarg{chap:DWCFAvaloffsetsf}{DW\-\_CFA\-\_val\-\_offset\-\_sf} instruction takes two operands: an
@@ -1665,7 +1673,7 @@ unsigned LEB128 value representing a register number and a
 signed LEB128 factored offset. This instruction is identical
 to \livelink{chap:DWCFAvaloffset}{DW\-\_CFA\-\_val\-\_offset} except that the second operand is signed
 and factored. The resulting offset is 
-\textit{factored\_offset * data\_alignment\_factor}.
+\textit{factored\_offset * \addtoindex{data\_alignment\_factor}}.
 
 \item \textbf{DW\-\_CFA\-\_register} \\
 The \livetarg{chap:DWCFAregister}{DW\-\_CFA\-\_register} instruction takes two unsigned LEB128

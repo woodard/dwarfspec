@@ -12,6 +12,7 @@ various aspects of the DWARF debugging information format.
 
 Figure \refersec{fig:compilationunitsandabbreviationstable}
 depicts the relationship of the abbreviations tables contained
+\addtoindexx{abbreviations table!example}
 \addtoindexx{.debug\_abbrev example}
 \addtoindexx{.debug\_info example}
 in the \addtoindex{.debug\_abbrev}
@@ -1349,7 +1350,7 @@ Section \refersec{app:inliningexample1concreteinstance}.
 \label{app:inliningexample1abstractinstance}
 \begin{alltt}
     ! Abstract instance for OUTER
-    !
+    ! \addtoindexx{abstract instance!example}
 OUTER.AI.1.1:
     \livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram}
         \livelink{chap:DWATname}{DW\-\_AT\-\_name}("OUTER")
@@ -1396,7 +1397,7 @@ INNER.AI.1.3:
 \label{app:inliningexample1concreteinstance}
 \begin{alltt}
 ! Concrete instance for call "OUTER(7)"
-!
+! \addtoindexx{concrete instance!example}
 OUTER.CI.1.1:
     \livelink{chap:DWTAGinlinedsubroutine}{DW\-\_TAG\-\_inlined\-\_subroutine}
         ! No name
@@ -1449,36 +1450,48 @@ INNER.CI.1.3:
 
 In the second alternative we assume that subprogram INNER
 is not inlinable for some reason, but subprogram OUTER is
-inlinable. Each concrete inlined instance of OUTER has its
-own normal instance of INNER. The abstract instance for OUTER,
+inlinable. 
+\addtoindexx{concrete instance!example}
+Each concrete inlined instance of OUTER has its
+own normal instance of INNER. 
+The abstract instance for OUTER,
+\addtoindexx{abstract instance!example}
 which includes INNER, is shown in 
 Section \refersec{app:inliningexample2abstractinstance}.
 
 Note that the debugging information in this Figure differs from
 that in 
 Section \refersec{app:inliningexample1abstractinstance}
-in that INNER lacks a \livelink{chap:DWATinline}{DW\-\_AT\-\_inline} attribute
+in that INNER lacks a 
+\livelink{chap:DWATinline}{DW\-\_AT\-\_inline} attribute
 and therefore is not a distinct abstract instance. INNER
 is merely an out\dash of\dash line routine that is part of OUTER’s
 abstract instance. This is reflected in the Figure 70 by
+\addtoindexx{abstract instance!example}
 the fact that the labels for INNER use the substring OUTER
 instead of INNER.
 
-A resulting concrete inlined instance of OUTER is shown in
+A resulting 
+\addtoindexx{concrete instance!example}
+concrete inlined instance of OUTER is shown in
 Section \refersec{app:inliningexample2concreteinstance}.
 
 Notice in 
 Section \refersec{app:inliningexample2concreteinstance}.
 that OUTER is expanded as a concrete
+\addtoindexx{concrete instance!example}
 inlined instance, and that INNER is nested within it as a
 concrete out\dash of\dash line subprogram. Because INNER is cloned
 for each inline expansion of OUTER, only the invariant
 attributes of INNER 
 (for example, \livelink{chap:DWATname}{DW\-\_AT\-\_name}) are specified
 in the abstract instance of OUTER, and the low\dash level,
+\addtoindexx{abstract instance!example}
 instance\dash specific attributes of INNER (for example,
-\livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc}) are specified in each concrete instance of OUTER.
 
+\livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc}) are specified in 
+each concrete instance of OUTER.
+\addtoindexx{concrete instance!example}
 The several calls of INNER within OUTER are compiled as normal
 calls to the instance of INNER that is specific to the same
 instance of OUTER that contains the calls.
@@ -1488,7 +1501,7 @@ instance of OUTER that contains the calls.
 \label{app:inliningexample2abstractinstance}
 \begin{alltt}
     ! Abstract instance for OUTER
-    !
+    ! \addtoindex{abstract instance}
 OUTER.AI.2.1:
     \livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram}
         \livelink{chap:DWATname}{DW\-\_AT\-\_name}("OUTER")
@@ -1582,12 +1595,16 @@ OUTER.CI.2.6:
 
 In the third approach, one normal subprogram for INNER is
 compiled which is called from all concrete inlined instances of
+\addtoindexx{concrete instance!example}
+\addtoindexx{abstract instance!example}
 OUTER. The abstract instance for OUTER is shown in 
 Section \refersec{app:inliningexample3abstractinstance}.
 
 The most distinctive aspect of that Figure is that subprogram
 INNER exists only within the abstract instance of OUTER,
 and not in OUTER’s concrete instance. In the abstract
+\addtoindexx{concrete instance!example}
+\addtoindexx{abstract instance!example}
 instance of OUTER, the description of INNER has the full
 complement of attributes that would be expected for a
 normal subprogram. While attributes such as \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc},
@@ -1608,13 +1625,17 @@ INNER at all; the representation of INNER does not vary across
 instances of OUTER and the abstract instance of OUTER includes
 the complete description of INNER, so that the description of
 INNER may be (and for reasons of space efficiency, should be)
-omitted from each concrete instance of OUTER.
+omitted from each 
+\addtoindexx{concrete instance!example}
+concrete instance of OUTER.
 
 There is one aspect of this approach that is problematical from
 the DWARF perspective. The single compiled instance of INNER
 is assumed to access up\dash level variables of OUTER; however,
 those variables may well occur at varying positions within
-the frames that contain the concrete inlined instances. A
+the frames that contain the 
+\addtoindexx{concrete instance!example}
+concrete inlined instances. A
 compiler might implement this in several ways, including the
 use of additional compiler generated parameters that provide
 reference parameters for the up\dash level variables, or a compiler
@@ -1638,7 +1659,7 @@ for accessing purposes.)
 \label{app:inliningexample3abstractinstance}
 \begin{alltt}
     ! Abstract instance for OUTER
-    !
+    ! \addtoindexx{abstract instance!example}
 OUTER.AI.3.1:
     \livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram}
         \livelink{chap:DWATname}{DW\-\_AT\-\_name}("OUTER")
@@ -1685,7 +1706,7 @@ OUTER.AI.3.6:
 \label{app:inliningexample3concreteinstance}
 \begin{alltt}
     ! Concrete instance for call "OUTER(7)"
-    !
+    ! \addtoindexx{concrete instance!example}
 OUTER.CI.3.1:
     \livelink{chap:DWTAGinlinedsubroutine}{DW\-\_TAG\-\_inlined\-\_subroutine}
         ! No name
@@ -1750,7 +1771,7 @@ Section \refersec{app:constantexpressionsdwarfdescription}.
             \livelink{chap:DWATname}{DW\-\_AT\-\_name}("x")
             \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to "int")
       ! Concrete instance for square(9)
-      !
+      ! \addtoindexx{concrete instance!example}
 20\$: \livelink{chap:DWTAGinlinedsubroutine}{DW\-\_TAG\-\_inlined\-\_subroutine}
         \livelink{chap:DWATabstractorigin}{DW\-\_AT\-\_abstract\-\_origin}(reference to 10\$)
         \livelink{chap:DWATconstexpr}{DW\-\_AT\-\_const\-\_expr}(present)
