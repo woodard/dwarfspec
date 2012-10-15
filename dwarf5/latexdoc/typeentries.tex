@@ -38,7 +38,9 @@ Figure \refersec{fig:encodingattributevalues}
 and following text.  
 
 A base type entry
-may have a \livelink{chap:DWATendianity}{DW\-\_AT\-\_endianity} attribute as described in 
+may have a \livelink{chap:DWATendianity}{DW\-\_AT\-\_endianity} attribute
+\addtoindexx{endianity attribute}
+as described in 
 Section \refersec{chap:dataobjectentries}. 
 If omitted, the encoding assumes the representation that
 is the default for the target architecture.
@@ -47,12 +49,15 @@ A base type entry has
 \hypertarget{chap:DWATbytesizedataobjectordatatypesize}
 either a \livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size} attribute
 \hypertarget{chap:DWATbitsizebasetypebitsize}
-or a \livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size} attribute whose integer constant value
+or a \livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size} attribute 
+\addtoindex{bit size attribute}
+whose integer constant value
 (see Section \refersec{chap:byteandbitsizes}) 
 is the amount of storage needed to hold
 a value of the type.
 
-\textit{For example, the C type int on a machine that uses 32\dash bit
+\textit{For example, the 
+\addtoindex{C} type int on a machine that uses 32\dash bit
 integers is represented by a base type entry with a name
 attribute whose value is “int”, an encoding attribute
 whose value is \livelink{chap:DWATEsigned}{DW\-\_ATE\-\_signed} and a byte size attribute whose
@@ -61,9 +66,12 @@ value is 4.}
 If the value of an object of the given type does not fully
 occupy the storage described by a byte size attribute,
 \hypertarget{chap:DWATdatabitoffsetbasetypebitlocation}
-the base type entry may also have a 
+the base type entry may also have 
+\addtoindexx{bit size attribute}
+a 
 \livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size} and a
-\livelink{chap:DWATdatabitoffset}{DW\-\_AT\-\_data\-\_bit\-\_offset} attribute, both of whose values are
+\livelink{chap:DWATdatabitoffset}{DW\-\_AT\-\_data\-\_bit\-\_offset} attribute, 
+both of whose values are
 integer constant values (
 see Section \refersec{chap:staticanddynamicvaluesofattributes}). 
 The bit size
@@ -78,12 +86,19 @@ target system to locate the beginning of the storage and
 value. If this attribute is omitted a default data bit offset
 of zero is assumed.
 
-\textit{Attribute \livelink{chap:DWATdatabitoffset}{DW\-\_AT\-\_data\-\_bit\-\_offset} is new in DWARF Version 4 and
+\textit{Attribute 
+\livelink{chap:DWATdatabitoffset}{DW\-\_AT\-\_data\-\_bit\-\_offset} 
+is 
+\addtoindexx{bit offset attribute}
+new in DWARF Version 4 and
 is also used for bit field members 
 (see Section \refersec{chap:datamemberentries}). 
 It
 \hypertarget{chap:DWATbitoffsetbasetypebitlocation}
-replaces the attribute \livelink{chap:DWATbitoffset}{DW\-\_AT\-\_bit\-\_offset} when used for base
+replaces the attribute 
+\livelink{chap:DWATbitoffset}{DW\-\_AT\-\_bit\-\_offset} 
+when used for base
+\addtoindexx{bit offset attribute (V3)}
 types as defined in DWARF V3 and earlier. The earlier attribute
 is defined in a manner suitable for bit field members on
 big\dash endian architectures but which is wasteful for use on
@@ -98,14 +113,19 @@ support its use for compatibility.}
 
 \begin{myindentpara}{1cm}
 \textit{A base type entry has a \livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size} attribute, whose value
-(see Section 2.19) is the size in bytes of the storage unit
+(see Section \refersec{chap:staticanddynamicvaluesofattributes})
+is the size in bytes of the storage unit
 used to represent an object of the given type.}
 
 \textit{If the value of an object of the given type does not fully
 occupy the storage unit described by the byte size attribute,
-the base type entry may have a \livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size} attribute and a
-\livelink{chap:DWATbitoffset}{DW\-\_AT\-\_bit\-\_offset} attribute, both of whose values (see Section
-2.19) are integers. The bit size attribute describes the actual
+the base type entry may have a 
+\livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size} attribute 
+\addtoindexx{bit size attribute (V3)}
+and a
+\livelink{chap:DWATbitoffset}{DW\-\_AT\-\_bit\-\_offset} attribute, both of whose values 
+(see Section \refersec{chap:staticanddynamicvaluesofattributes}) 
+are integers. The bit size attribute describes the actual
 size in bits used to represent a value of the given type.
 The bit offset attribute describes the offset in bits of the
 high order bit of a value of the given type from the high
@@ -163,7 +183,8 @@ exponent, such as that specified in IEEE 754R.}
 
 \textit{The \livelink{chap:DWATEUTF}{DW\-\_ATE\-\_UTF} encoding is intended for Unicode string
 encodings (see the Universal Character Set standard,
-ISO/IEC 10646\dash 1:1993). For example, the C++ type char16\_t is
+ISO/IEC 10646\dash 1:1993). For example, the 
+\addtoindex{C++} type char16\_t is
 represented by a base type entry with a name attribute whose
 value is “char16\_t”, an encoding attribute whose value
 is \livelink{chap:DWATEUTF}{DW\-\_ATE\-\_UTF} and a byte size attribute whose value is 2.}
@@ -250,6 +271,7 @@ and \livelink{chap:DWATEnumericstring}{DW\-\_ATE\-\_numeric\-\_string} base type
 
 \hypertarget{chap:DWATbinaryscalebinaryscalefactorforfixedpointtype}
 For a data type with a binary scale factor, the fixed
+\addtoindexx{binary scale attribute}
 binary type entry has a \livelink{chap:DWATbinaryscale}{DW\-\_AT\-\_binary\-\_scale} attribute. The
 \livelink{chap:DWATbinaryscale}{DW\-\_AT\-\_binary\-\_scale} attribute is an integer constant value
 that represents the exponent of the base two scale factor to
@@ -316,7 +338,8 @@ string containing the name as it appears in the source program.
 
 The interpretation of this debugging information entry is
 intentionally left flexible to allow it to be interpreted
-appropriately in different languages. For example, in C and C++
+appropriately in different languages. For example, in 
+\addtoindex{C} and \addtoindex{C++}
 the language implementation can provide an unspecified type
 entry with the name “void” which can be referenced by the
 type attribute of pointer types and typedef declarations for
@@ -444,7 +467,8 @@ terms of another type may be called a type alias, a subtype,
 a constrained type and other terms. A type name declared with
 no defining details may be termed an incomplete, forward
 or hidden type. While the DWARF \livelink{chap:DWTAGtypedef}{DW\-\_TAG\-\_typedef} entry was
-originally inspired by the like named construct in C and C++,
+originally inspired by the like named construct in 
+\addtoindex{C} and \addtoindex{C++},
 it is broadly suitable for similar constructs (by whatever
 source syntax) in other languages.}
 
@@ -502,8 +526,15 @@ of storage that is normally allocated to hold an individual
 object of the 
 \hypertarget{chap:DWATbytestridearrayelementstrideofarraytype}
 indicated element type, then the array type
-entry has either a \livelink{chap:DWATbytestride}{DW\-\_AT\-\_byte\-\_stride} or a \livelink{chap:DWATbitstride}{DW\-\_AT\-\_bit\-\_stride}
-attribute, whose value 
+\addtoindexx{bit stride attribute}
+entry has either a 
+\livelink{chap:DWATbytestride}{DW\-\_AT\-\_byte\-\_stride} 
+or 
+\addtoindexx{byte stride attribute}
+a \livelink{chap:DWATbitstride}{DW\-\_AT\-\_bit\-\_stride}
+attribute, 
+\addtoindexx{bit stride attribute}
+whose value 
 (see Section \refersec{chap:staticanddynamicvaluesofattributes}) 
 is the size of each
 element of the array.
@@ -544,32 +575,40 @@ Appendix \refersec{app:fortran90example}.
 \section{ Structure, Union, Class and Interface Type Entries}
 \label{chap:structureunionclassandinterfacetypeentries}
 
-\textit{The languages C, C++, and Pascal, among others, allow the
+\textit{The languages 
+\addtoindex{C}, 
+\addtoindex{C++}, and 
+\addtoindex{Pascal}, among others, allow the
 programmer to define types that are collections of related
-components. In C and C++, these collections are called
-“structures.” In Pascal, they are called “records.”
+components. In \addtoindex{C} and \addtoindex{C++}, these collections are called
+“structures.” In \addtoindex{Pascal}, they are called “records.”
 The components may be of different types. The components are
-called “members” in C and C++, and “fields” in Pascal.}
+called “members” in \addtoindex{C} and 
+\addtoindex{C++}, and “fields” in \addtoindex{Pascal}.}
 
 \textit{The components of these collections each exist in their
 own space in computer memory. The components of a C or C++
 “union” all coexist in the same memory.}
 
-\textit{Pascal and other languages have a “discriminated union,”
+\textit{\addtoindex{Pascal} and 
+other languages have a “discriminated union,”
 also called a “variant record.” Here, selection of a
 number of alternative substructures (“variants”) is based
 on the value of a component that is not part of any of those
 substructures (the “discriminant”).}
 
-\textit{C++ and Java have the notion of "class”, which is in some
+\textit{\addtoindex{C++} and 
+\addtoindex{Java} have the notion of ``class'', which is in some
 ways similar to a structure. A class may have “member
 functions” which are subroutines that are within the scope
 of a class or structure.}
 
-\textit{The C++ notion of structure is more general than in C, being
+\textit{The \addtoindex{C++} notion of 
+structure is more general than in \addtoindex{C}, being
 equivalent to a class with minor differences. Accordingly,
-in the following discussion statements about C++ classes may
-be understood to apply to C++ structures as well.}
+in the following discussion statements about 
+\addtoindex{C++} classes may
+be understood to apply to \addtoindex{C++} structures as well.}
 
 \subsection{Structure, Union and Class Type Entries}
 \label{chap:structureunionandclasstypeentries}
@@ -627,7 +666,8 @@ need to contain an attribute for the name of the structure,
 class or union they represent if such information is already
 provided in the declaration.
 
-\textit{For C and C++, data member declarations occurring within
+\textit{For \addtoindex{C} and \addtoindex{C++}, 
+data member declarations occurring within
 the declaration of a structure, union or class type are
 considered to be “definitions” of those members, with
 the exception of “static” data members, whose definitions
@@ -667,8 +707,10 @@ facilitate DWARF space compression
 \subsection{Interface Type Entries}
 \label{chap:interfacetypeentries}
 
-\textit{The Java language defines "interface" types. An interface
-in Java is similar to a C++ or Java class with only abstract
+\textit{The \addtoindex{Java} language defines ``interface'' types. 
+An interface
+in Java is similar to a \addtoindex{C++} or 
+\addtoindex{Java} class with only abstract
 methods and constant data members.}
 
 Interface types are represented by debugging information
@@ -687,10 +729,10 @@ declarations in the source program.
 \subsection{Derived or Extended Structs, Classes and Interfaces}
 \label{chap:derivedorextendedstructsclasesandinterfaces}
 
-\textit{In C++, a class (or struct) may be ``derived from'' or be a
+\textit{In \addtoindex{C++}, a class (or struct) may be ``derived from'' or be a
 ``subclass of'' another class. In Java, an interface may ``extend''
-one or more other interfaces, and a class may "extend" another
-class and/or "implement" one or more interfaces. All of these
+one or more other interfaces, and a class may ``extend'' another
+class and/or ``implement'' one or more interfaces. All of these
 relationships may be described using the following. Note that
 in Java, the distinction between extends and implements is
 implied by the entities at the two ends of the relationship.}
@@ -741,16 +783,16 @@ struct or union.
 If 
 \hypertarget{chap:DWATvirtualityvirtualityofbaseclass}
 the class referenced by the inheritance entry serves
-as a C++ virtual base class, the inheritance entry has a
+as a \addtoindex{C++} virtual base class, the inheritance entry has a
 \livelink{chap:DWATvirtuality}{DW\-\_AT\-\_virtuality} attribute.
 
-\textit{For a C++ virtual base, the data member location attribute
+\textit{For a \addtoindex{C++} virtual base, the data member location attribute
 will usually consist of a non-trivial location description.}
 
 \subsection{Access Declarations}
 \label{chap:accessdeclarations}
 
-\textit{In C++, a derived class may contain access declarations that
+\textit{In \addtoindex{C++}, a derived class may contain access declarations that
 \addtoindex{access declaration entry}
 change the accessibility of individual class members from the
 overall accessibility specified by the inheritance declaration.
@@ -825,9 +867,10 @@ which is a \livelink{chap:flag}{flag}.
 This attribute indicates whether the data
 member was declared with the mutable storage class specifier.
 
-The 
+The beginning of a data member 
 \addtoindex{beginning of a data member} 
 is described relative to
+\addtoindexx{beginning of an object}
 the beginning of the object in which it is immediately
 contained. In general, the beginning is characterized by
 both an address and a bit offset within the byte at that
@@ -892,13 +935,17 @@ per byte.
 
 If the size of a data member is not the same as the size
 of the type given for the data member, the data member has
-either a \livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size} or a \livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size} attribute whose
+\addtoindexx{bit size attribute}
+either a \livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size} 
+or a \livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size} attribute whose
 integer constant value 
 (see Section \refersec{chap:staticanddynamicvaluesofattributes}) 
 is the amount
 of storage needed to hold the value of the data member.
 
-\textit{C and C++ bit fields typically require the use of the
+\textit{\addtoindex{C} and \addtoindex{C++} 
+\addtoindex{bit fields} 
+typically require the use of the
 \livelink{chap:DWATdatabitoffset}{DW\-\_AT\-\_data\-\_bit\-\_offset} and \livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size} attributes.}
 
 \textit{This Standard uses the following bit numbering and direction
@@ -920,9 +967,13 @@ the low\dash order bit of the object.}
 \end{itemize}
 
 
-\textit{In either case, the bit so identified is defined as the beginning of the object.}
+\textit{In either case, the bit so identified is defined as the 
+\addtoindexx{beginning of an object}
+beginning of the object.}
 
-\textit{For example, take one possible representation of the following C structure definition in both big\dash and little\dash endian byte orders:}
+\textit{For example, take one possible representation of the following 
+\addtoindex{C} structure definition 
+in both big\dash and little\dash endian byte orders:}
 
 \begin{lstlisting}
 struct S {
@@ -1019,20 +1070,30 @@ as follows.}
 entry has the following attributes:}
 
 \begin{itemize}
-\item \textit{A \livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size} attribute whose value (see Section
-2.19) is the number of bytes that contain an instance of the
+\item \textit{A \livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size} 
+attribute whose value 
+(see Section \refersec{chap:staticanddynamicvaluesofattributes}) 
+is the number of bytes that contain an instance of the
 bit field and any padding bits.}
 
 \textit{The byte size attribute may be omitted if the size of the
 object containing the bit field can be inferred from the type
 attribute of the data member containing the bit field.}
 
-\item \textit{A \livelink{chap:DWATbitoffset}{DW\-\_AT\-\_bit\-\_offset} attribute whose value (see Section
-2.19) is the number of bits to the left of the leftmost
+\item \textit{A \livelink{chap:DWATbitoffset}{DW\-\_AT\-\_bit\-\_offset} 
+attribute 
+\addtoindexx{bit offset attribute (V3)}
+whose value 
+(see Section \refersec{chap:staticanddynamicvaluesofattributes}) 
+is the number of bits to the left of the leftmost
 (most significant) bit of the bit field value.}
 
-\item \textit{A \livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size} attribute whose value (see Section
-2.19) is the number of bits occupied by the bit field value.}
+\item \textit{A \livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size} 
+attribute 
+\addtoindexx{bit size attribute (V3)}
+whose value 
+(see Section \refersec{chap:staticanddynamicvaluesofattributes}) 
+is the number of bits occupied by the bit field value.}
 
 \end{itemize}
 
@@ -1128,8 +1189,10 @@ function, then that entry has a \livelink{chap:DWATobjectpointer}{DW\-\_AT\-\_ob
 whose value is a reference to the formal parameter entry
 that corresponds to the object for which the function is
 called. The name attribute of that formal parameter is defined
-by the current language (for example, this for C++ or self
-for Objective C and some other languages). That parameter
+by the current language (for example, 
+this for \addtoindex{C++} or self
+for \addtoindex{Objective C} 
+and some other languages). That parameter
 also has a \livelink{chap:DWATartificial}{DW\-\_AT\-\_artificial} attribute whose value is true.
 
 Conversely, if the member function entry describes a static
@@ -1160,7 +1223,7 @@ whose definition they represent.
 \subsection{Class Template Instantiations}
 \label{chap:classtemplateinstantiations}
 
-\textit{In C++ a class template is a generic definition of a class
+\textit{In \addtoindex{C++} a class template is a generic definition of a class
 type that may be instantiated when an instance of the class
 is declared or defined. The generic description of the
 class may include both parameterized types and parameterized
@@ -1380,10 +1443,11 @@ In a language that offers only
 one kind of enumeration declaration, this attribute is not
 required.
 
-\textit{In C or C++, the underlying type will be the appropriate
+\textit{In \addtoindex{C} or \addtoindex{C++}, 
+the underlying type will be the appropriate
 integral type determined by the compiler from the properties of
 \hypertarget{chap:DWATenumclasstypesafeenumerationdefinition}
-the enumeration literal values. A C++ type declaration written
+the enumeration literal values. A \addtoindex{C++} type declaration written
 using enum class declares a strongly typed enumeration and
 is represented using \livelink{chap:DWTAGenumerationtype}{DW\-\_TAG\-\_enumeration\-\_type} in combination
 with \livelink{chap:DWATenumclass}{DW\-\_AT\-\_enum\-\_class}.}
@@ -1413,20 +1477,29 @@ dimension of an array type, and the stride for that dimension
 is different than what would otherwise be determined, then
 \hypertarget{chap:DWATbitstrideenumerationstridedimensionofarraytype}
 the enumeration type entry has either a \livelink{chap:DWATbytestride}{DW\-\_AT\-\_byte\-\_stride}
-or \livelink{chap:DWATbitstride}{DW\-\_AT\-\_bit\-\_stride} attribute which specifies the separation
+or \livelink{chap:DWATbitstride}{DW\-\_AT\-\_bit\-\_stride} attribute 
+\addtoindexx{bit stride attribute}
+which specifies the separation
 between successive elements along the dimension as described
 in 
 Section \refersec{chap:visibilityofdeclarations}. 
-The value of the \livelink{chap:DWATbitstride}{DW\-\_AT\-\_bit\-\_stride} attribute
-is interpreted as bits and the value of the \livelink{chap:DWATbytestride}{DW\-\_AT\-\_byte\-\_stride}
+The value of the 
+\livelink{chap:DWATbitstride}{DW\-\_AT\-\_bit\-\_stride} attribute
+\addtoindexx{bit stride attribute}
+is interpreted as bits and the value of 
+\addtoindexx{byte stride attribute}
+the 
+\livelink{chap:DWATbytestride}{DW\-\_AT\-\_byte\-\_stride}
 attribute is interpreted as bytes.
 
 
 \section{Subroutine Type Entries}
 \label{chap:subroutinetypeentries}
 
-It is possible in C to declare pointers to subroutines
-that return a value of a specific type. In both C and C++,
+It is possible in \addtoindex{C}
+to declare pointers to subroutines
+that return a value of a specific type. In both 
+\addtoindex{C} and \addtoindex{C++},
 it is possible to declare pointers to subroutines that not
 only return a value of a specific type, but accept only
 arguments of specific types. The type of such pointers would
@@ -1452,7 +1525,8 @@ arguments. These debugging information entries appear in the
 order that the corresponding argument types appear in the
 source program.
 
-In C there is a difference between the types of functions
+In \addtoindex{C} there 
+is a difference between the types of functions
 declared using function prototype style declarations and
 those declared using non\dash prototype declarations.
 
@@ -1653,8 +1727,13 @@ of an array type, and the stride for that dimension is
 \hypertarget{chap:DWATbytestridesubrangestridedimensionofarraytype}
 different than what would otherwise be determined, then
 \hypertarget{chap:DWATbitstridesubrangestridedimensionofarraytype}
-the subrange type entry has either a \livelink{chap:DWATbytestride}{DW\-\_AT\-\_byte\-\_stride} or
-\livelink{chap:DWATbitstride}{DW\-\_AT\-\_bit\-\_stride} attribute which specifies the separation
+the subrange type entry has either 
+\addtoindexx{byte stride attribute}
+a 
+\livelink{chap:DWATbytestride}{DW\-\_AT\-\_byte\-\_stride} or
+\livelink{chap:DWATbitstride}{DW\-\_AT\-\_bit\-\_stride} attribute 
+\addtoindexx{bit stride attribute}
+which specifies the separation
 between successive elements along the dimension as described
 in 
 Section \refersec{chap:byteandbitsizes}.
@@ -1664,7 +1743,7 @@ Section \refersec{chap:byteandbitsizes}.
 \section{Pointer to Member Type Entries}
 \label{chap:pointertomembertypeentries}
 
-\textit{In C++, a pointer to a data or function member of a class or
+\textit{In \addtoindex{C++}, a pointer to a data or function member of a class or
 structure is a unique type.}
 
 A debugging information entry representing the type of an
@@ -1751,7 +1830,12 @@ appears in the source program.
 The file type entry has a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute describing
 the type of the objects contained in the file.
 
-The file type entry also has a \livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size} or
+The file type entry also 
+\addtoindexx{byte size}
+has 
+\addtoindexx{bit size}
+a 
+\livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size} or
 \livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size} attribute, whose value 
 (see Section \refersec{chap:staticanddynamicvaluesofattributes})
 is the amount of storage need to hold a value of the file type.

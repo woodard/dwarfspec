@@ -243,9 +243,10 @@ subprogram that has been identified as the starting function
 of the program. If more than one compilation unit contains
 this \nolink{flag}, any one of them may contain the starting function.
 
-\textit{Fortran has a PROGRAM statement which is used
+\textit{\addtoindex{Fortran} has a PROGRAM statement which is used
 to specify and provide a user\dash specified name for the main
-subroutine of a program. C uses the name “main” to identify
+subroutine of a program. 
+\addtoindex{C} uses the name “main” to identify
 the main subprogram of a program. Some other languages provide
 similar or other means to identify the main subprogram of
 a program.}
@@ -336,10 +337,11 @@ those entities.}
 \subsection{Module Entries}
 \label{chap:moduleentries}
 \textit{Several languages have the concept of a ``module.''
+\addtoindexx{Modula-2}
 A Modula\dash 2 definition module may be represented by a module
 entry containing a declaration attribute (\livelink{chap:DWATdeclaration}{DW\-\_AT\-\_declaration}). A
-Fortran 90 module may also be represented by a module entry
-(but no declaration attribute is warranted because Fortran
+\addtoindex{Fortran 90} module may also be represented by a module entry
+(but no declaration attribute is warranted because \addtoindex{Fortran}
 has no concept of a corresponding module body).}
 
 A module is represented by a debugging information entry
@@ -376,7 +378,7 @@ represented as it would be on the target architecture.
 
 \subsection{Namespace Entries}
 \label{chap:namespaceentries}
-\textit{C++ has the notion of a namespace, which provides a way to
+\textit{\addtoindex{C++} has the notion of a namespace, which provides a way to
 implement name hiding, so that names of unrelated things
 do not accidentally clash in the global namespace when an
 application is linked together.}
@@ -405,7 +407,8 @@ Namespace and namespace extension entries may own other
 debugging information entries describing program entities
 whose declarations occur in the namespace.
 
-\textit{For C++, such owned program entities may be declarations,
+\textit{For \addtoindex{C++}, such 
+owned program entities may be declarations,
 including certain declarations that are also object or
 function definitions.}
 
@@ -419,13 +422,16 @@ entries with a \livelink{chap:DWATspecification}{DW\-\_AT\-\_specification} attr
 to duplicate information provided by the declaration entry
 referenced by the specification attribute.
 
-\textit{The C++ global namespace (the namespace referred to by
+\textit{The \addtoindex{C++} global namespace
+(the namespace referred to by
 ``::f'', for example) is not explicitly represented in
 DWARF with a namespace entry (thus mirroring the situation
-in C++ source).  Global items may be simply declared with no
+in \addtoindex{C++} source).  
+Global items may be simply declared with no
 reference to a namespace.}
 
-\textit{The C++ compilation unit specific ``unnamed namespace'' may
+\textit{The \addtoindex{C++} 
+compilation unit specific ``unnamed namespace'' may
 be represented by a namespace entry with no name attribute in
 the original namespace declaration entry (and therefore no name
 attribute in any namespace extension entry of this namespace).
@@ -437,18 +443,21 @@ final namespace declaration of a compilation unit; this is a
 quality\dash of\dash implementation issue and no specific requirements
 are given here. If only the final namespace is represented,
 it is impossible for a debugger to interpret using declaration
-references in exactly the manner defined by the C++ language.
+references in exactly the manner defined by the 
+\addtoindex{C++} language.
 }
 
 \textit{Emitting all namespace declaration information in all
 compilation units can result in a significant increase in the
 size of the debug information and significant duplication of
-information across compilation units. The C++ namespace std,
+information across compilation units. 
+The \addtoindex{C++} namespace std,
 for example, is large and will probably be referenced in
-every C++ compilation unit.
+every \addtoindex{C++} compilation unit.
 }
 
-\textit{For a C++ namespace example, see Appendix \refersec{app:namespaceexample}.
+\textit{For a \addtoindex{C++} namespace example, 
+see Appendix \refersec{app:namespaceexample}.
 }
 
 
@@ -492,7 +501,7 @@ used as a general means to rename or provide an alias for
 an entity, regardless of the context in which the importing
 declaration or the imported entity occurs.
 
-\textit{A C++ namespace alias may be represented by an imported
+\textit{A \addtoindex{C++} namespace alias may be represented by an imported
 \hypertarget{chap:DWATimportnamespacealias}
 declaration entry with a name attribute whose value is
 a null\dash terminated string containing the alias name as it
@@ -501,18 +510,19 @@ value is a reference to the applicable original namespace or
 namespace extension entry.
 }
 
-\textit{A C++ using declaration may be represented by one or more
+\textit{A \addtoindex{C++} using declaration may be represented by one or more
 \hypertarget{chap:DWATimportnamespaceusingdeclaration}
 imported declaration entries.  When the using declaration
 refers to an overloaded function, there is one imported
 declaration entry corresponding to each overloading. Each
 imported declaration entry has no name attribute but it does
 have an import attribute that refers to the entry for the
-entity being imported. (C++ provides no means to ``rename''
+entity being imported. (\addtoindex{C++} 
+provides no means to ``rename''
 an imported entity, other than a namespace).
 }
 
-\textit{A Fortran use statement with an ``only list'' may be
+\textit{A \addtoindex{Fortran} use statement with an ``only list'' may be
 represented by a series of imported declaration entries,
 one (or more) for each entity that is imported. An entity
 that is renamed in the importing context may be represented
@@ -546,21 +556,23 @@ name in that module. Any entity in the module that is not
 renamed in this way is known in the context of the imported
 module entry by the same name as it is declared in the module.
 
-\textit{A C++ using directive may be represented by an imported module
+\textit{A \addtoindex{C++} using directive 
+may be represented by an imported module
 \hypertarget{chap:DWATimportnamespaceusingdirective}
 entry, with an import attribute referring to the namespace
 entry of the appropriate extension of the namespace (which
 might be the original namespace entry) and no owned entries.
 }
 
-\textit{A Fortran use statement with a “rename list” may be
+\textit{A \addtoindex{Fortran} use statement with a “rename list” may be
 represented by an imported module entry with an import
 attribute referring to the module and owned entries
 corresponding to those entities that are renamed as part of
 being imported.
 }
 
-\textit{A Fortran use statement with neither a “rename list” nor
+\textit{A \addtoindex{Fortran} use statement 
+with neither a “rename list” nor
 an “only list” may be represented by an imported module
 entry with an import attribute referring to the module and
 no owned child entries.
@@ -571,7 +583,7 @@ series of individual imported declaration entries as described
 in Section \refersec{chap:importedorrenameddeclarationentries}.
 }
 
-\textit{A Fortran use statement for an entity in a module that is
+\textit{A \addtoindex{Fortran} use statement for an entity in a module that is
 itself imported by a use statement without an explicit mention
 may be represented by an imported declaration entry that refers
 to the original debugging information entry. For example, given
@@ -594,7 +606,7 @@ the imported declaration entry for Q within module C refers
 directly to the variable declaration entry for A in module A
 because there is no explicit representation for X in module B.
 
-A similar situation arises for a C++ using declaration that
+A similar situation arises for a \addtoindex{C++} using declaration that
 imports an entity in terms of a namespace alias. See 
 Appendix  \refersec{app:namespaceexample}
 for an example.
@@ -642,7 +654,7 @@ the program.  If more than one subprogram contains this
 \nolink{flag},
 any one of them may be the starting subroutine of the program.
 
-\textit{Fortran has a PROGRAM statement which is used to specify
+\textit{\addtoindex{Fortran} has a PROGRAM statement which is used to specify
 and provide a user\dash supplied name for the main subroutine of
 a program.
 }
@@ -688,13 +700,14 @@ then the debugging information entry for such a subroutine
 may have a calling convention attribute whose value is the
 constant \livetarg{chap:DWCCprogram}{DW\-\_CC\-\_program}.
 
-\textit{The \livelink{chap:DWCCprogram}{DW\-\_CC\-\_program} value is intended to support Fortran main
+\textit{The \livelink{chap:DWCCprogram}{DW\-\_CC\-\_program} value is intended to support \addtoindex{Fortran} main
 programs which in some implementations may not be callable
 or which must be invoked in a special way. It is not intended
 as a way of finding the entry address for the program.
 }
 
-\textit{In C there is a difference between the types of functions
+\textit{In \addtoindex{C}
+there is a difference between the types of functions
 declared using function prototype style declarations and
 those declared using non\dash prototype declarations.
 }
@@ -704,13 +717,15 @@ declaration may have a
 \livelink{chap:DWATprototyped}{DW\-\_AT\-\_prototyped} attribute, which is
 a \livelink{chap:flag}{flag}.
 
-\textit{The Fortran language allows the keywords elemental, pure
+\textit{The \addtoindex{Fortran} 
+language allows the keywords elemental, pure
 and recursive to be included as part of the declaration of
 a subroutine; these attributes reflect that usage. These
 attributes are not relevant for languages that do not support
 similar keywords or syntax. In particular, the \livelink{chap:DWATrecursive}{DW\-\_AT\-\_recursive}
 attribute is neither needed nor appropriate in languages such
-as C where functions support recursion by default.
+as \addtoindex{C} 
+where functions support recursion by default.
 }
 
 A subprogram entry 
@@ -750,7 +765,8 @@ the subroutine or entry point is a function that returns a
 value, then its debugging information entry has a \livelink{chap:DWATtype}{DW\-\_AT\-\_type}
 attribute to denote the type returned by that function.
 
-\textit{Debugging information entries for C void functions should
+\textit{Debugging information entries for 
+\addtoindex{C} void functions should
 not have an attribute for the return type.  }
 
 
@@ -822,7 +838,9 @@ represented by a debugging information entry with the tag
 \livetarg{chap:DWTAGunspecifiedparameters}{DW\-\_TAG\-\_unspecified\-\_parameters}.
 
 The entry for a subroutine that includes a 
-Fortran \livelink{chap:fortrancommonblock}{common} \livelink{chap:commonblockentry}{block}
+\addtoindex{Fortran} 
+\livelink{chap:fortrancommonblock}{common} 
+\livelink{chap:commonblockentry}{block}
 \addtoindexx{common block|see{Fortran common block}}
 has a child entry with the 
 tag \livetarg{chap:DWTAGcommoninclusion}{DW\-\_TAG\-\_common\-\_inclusion}. 
@@ -926,7 +944,7 @@ within the context of the parent.}
 \subsection{Types Thrown by Exceptions}
 \label{chap:typesthrownbyexceptions}
 
-\textit{In C++ a subroutine may declare a set of types which
+\textit{In \addtoindex{C++} a subroutine may declare a set of types which
 it may validly throw.}
 
 If a subroutine explicitly declares that it may throw
@@ -942,7 +960,7 @@ exception that may be thrown.
 \subsection{Function Template Instantiations}
 \label{chap:functiontemplateinstantiations}
 
-\textit{In C++, a function template is a generic definition of
+\textit{In \addtoindex{C++}, a function template is a generic definition of
 a function that is instantiated differently when called with
 values of different types. DWARF does not represent the generic
 template definition, but does represent each instantiation.}
@@ -1016,7 +1034,7 @@ Name&Meaning\\ \hline
 \end{tabular}
 \end{figure}
 
-\textit{In C++, a function or a constructor declared with
+\textit{In \addtoindex{C++}, a function or a constructor declared with
 constexpr is implicitly declared inline. The abstract inline
 instance (see below) is represented by a debugging information
 entry with the tag \livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram}. Such an entry has a
@@ -1053,7 +1071,7 @@ Each abstract instance root is either part of a larger
 tree (which gives a context for the root) or uses
 \livelink{chap:DWATspecification}{DW\-\_AT\-\_specification} to refer to the declaration in context.
 
-\textit{For example, in C++ the context might be a namespace
+\textit{For example, in \addtoindex{C++} the context might be a namespace
 declaration or a class declaration.}
 
 \textit{Abstract instance trees are defined so that no entry is part
@@ -1150,7 +1168,7 @@ representation of the subroutine's return value. The value of
 this attribute is the actual return value of the subroutine,
 represented as it would be on the target architecture.
 
-\textit{In C++, if a function or a constructor declared with constexpr
+\textit{In \addtoindex{C++}, if a function or a constructor declared with constexpr
 is called with constant expressions, then the corresponding
 concrete inlined instance has a \livelink{chap:DWATconstexpr}{DW\-\_AT\-\_const\-\_expr} attribute,
 as well as a \livelink{chap:DWATconstvalue}{DW\-\_AT\-\_const\-\_value} attribute whose value represents
@@ -1271,7 +1289,8 @@ points where those subroutines are actually called. Such
 concrete instances of inlined subroutines are referred to as
 ``concrete out\dash of\dash line instances.''
 
-\textit{In C++, for example, taking the address of a function declared
+\textit{In \addtoindex{C++}, for example, 
+taking the address of a function declared
 to be inline can necessitate the generation of a concrete
 out\dash of\dash line instance of the given function.}
 
@@ -1403,7 +1422,8 @@ The target subprogram may itself be a trampoline. (A sequence
 of trampolines necessarily ends with a non\dash trampoline
 subprogram.)
 
-\textit{In C++, trampolines may be used to implement derived virtual
+\textit{In \addtoindex{C++}, trampolines may be used 
+to implement derived virtual
 member functions; such trampolines typically adjust the
 implicit this pointer parameter in the course of passing
 control.  Other languages and environments may use trampolines
@@ -1432,7 +1452,8 @@ which can be assumed to be the target subroutine. }
 
 \textit{A lexical \livetargi{chap:lexicalblock}{block}{lexical block} is a bracketed sequence of source statements
 that may contain any number of declarations. In some languages
-(including C and C++), \nolink{blocks} can be nested within other
+(including \addtoindex{C} and \addtoindex{C++}),
+\nolink{blocks} can be nested within other
 \nolink{blocks} to any depth.}
 
 % We do not need to link to the preceeding paragraph.
@@ -1461,7 +1482,8 @@ containing the name of the lexical \livelink{chap:lexicalblock}{block}
 as it appears in
 the source program.
 
-\textit{This is not the same as a C or C++ label (see below).}
+\textit{This is not the same as a \addtoindex{C} or 
+\addtoindex{C++} label (see below).}
 
 The lexical \livelink{chap:lexicalblockentry}{block} entry owns 
 debugging information entries that
@@ -1496,7 +1518,9 @@ the name of the label as it appears in the source program.
 \section{With Statement Entries}
 \label{chap:withstatemententries}
 
-\textit{Both Pascal and Modula\dash 2 support the concept of a ``with''
+\textit{Both \addtoindex{Pascal} and 
+\addtoindexx{Modula-2}
+Modula\dash 2 support the concept of a ``with''
 statement. The with statement specifies a sequence of
 executable statements within which the fields of a record
 variable may be referenced, unqualified by the name of the
@@ -1522,7 +1546,7 @@ the with statement.
 \section{Try and Catch Block Entries}
 \label{chap:tryandcatchblockentries}
 
-\textit{In C++ a lexical \livelink{chap:lexicalblock}{block} may be 
+\textit{In \addtoindex{C++} a lexical \livelink{chap:lexicalblock}{block} may be 
 designated as a ``catch \nolink{block}.'' 
 A catch \livetargi{chap:catchblock}{block}{catch block} is an 
 exception handler that handles
