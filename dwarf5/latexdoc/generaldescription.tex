@@ -3,7 +3,7 @@
 \section{The Debugging Entry (DIE)}
 \label{chap:thedebuggingentrydie}
 DWARF uses a series of debugging information entries (DIEs) to 
-define a low\dash{} level
+define a low-level
 representation of a source program. 
 Each debugging information entry consists of an identifying
 tag and a series of 
@@ -432,7 +432,7 @@ string table.
 \clearpage
 \section{Relationship of Debugging Information Entries}
 \label{chap:relationshipofdebugginginformationentries}
-\textit{
+\textit{%
 A variety of needs can be met by permitting a single
 debugging information entry to “own” an arbitrary number
 of other debugging entries and by permitting the same debugging
@@ -456,7 +456,7 @@ The child
 entries of any node are exactly those debugging information
 entries owned by that node.  
 
-\textit{
+\textit{%
 While the ownership relation
 of the debugging information entries is represented as a
 tree, other relations among the entries exist, for example,
@@ -509,9 +509,7 @@ which is either the default for that processor or which is
 specified by the object file or executable file which contains
 the DWARF information.
 
-
-
-\textit{
+\textit{%
 For example, if a particular target architecture supports
 both 32\dash bit and 64\dash bit addresses, the compiler will generate
 an object file which specifies that it contains executable
@@ -520,12 +518,11 @@ that case, the DWARF debugging information contained in this
 object file will use the same address size.
 }
 
-\textit{
+\textit{%
 Architectures which have multiple instruction sets are
 supported by the isa entry in the line number information
 (see Section \refersec{chap:statemachineregisters}).
 }
-
 
 \section{DWARF Expressions}
 \label{chap:dwarfexpressions}
@@ -542,7 +539,7 @@ of operands is determined by the opcode.
 In addition to the
 general operations that are defined here, operations that are
 specific to location descriptions are defined in 
-Section \refersec{chap:locationdescriptions} .
+Section \refersec{chap:locationdescriptions}.
 
 \subsection{General Operations}
 \label{chap:generaloperations}
@@ -826,7 +823,7 @@ The \livelink{chap:DWOPplusuconst}{DW\-\_OP\-\_plus\-\_uconst} operation pops th
 adds it to the unsigned LEB128 constant operand and pushes
 the result.  This operation is supplied specifically to be
 able to encode more field offsets in two bytes than can be
-done with “\livelink{chap:DWOPlit}{DW\-\_OP\-\_litn}n \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus}”.
+done with “\livelink{chap:DWOPlit}{DW\-\_OP\-\_lit\textit{n}} \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus}”.
 
 \item \livetarg{chap:DWOPshl}{DW\-\_OP\-\_shl} \\
 The \livelink{chap:DWOPshl}{DW\-\_OP\-\_shl} operation pops the top two stack entries,
@@ -992,7 +989,7 @@ examples illustrate their behavior graphically.
 
 \section{Location Descriptions}
 \label{chap:locationdescriptions}
-\textit{ Debugging information must provide consumers a way to find
+\textit{Debugging information must provide consumers a way to find
 the location of program variables, determine the bounds
 of dynamic arrays and strings, and possibly to find the
 base address of a subroutine’s stack frame or the return
@@ -1007,7 +1004,7 @@ of two forms:
 \begin{enumerate}[1]
 \item \textit{Single location descriptions}, which are a language independent representation of
 addressing rules of arbitrary complexity built from 
-DWARF expressions (See section \refersec{chap:dwarfexpressions}) 
+DWARF expressions (See Section \refersec{chap:dwarfexpressions}) 
 and/or other
 DWARF operations specific to describing locations. They are
 sufficient for describing the location of any object as long
@@ -1459,7 +1456,8 @@ declared.}
 The 
 \hypertarget{chap:DWATvisibilityvisibilityofdeclaration}
 visibility of a declaration is represented 
-by a \livelink{chap:DWATvisibility}{DW\-\_AT\-\_visibility} attribute, whose value is a
+by a \livelink{chap:DWATvisibility}{DW\-\_AT\-\_visibility}
+attribute\addtoindexx{visibility attribute}, whose value is a
 constant drawn from the set of codes listed in 
 Figure \ref{fig:visibilitycodes}.
 
@@ -1482,7 +1480,8 @@ member functions and for virtual base classes.}
 The 
 \hypertarget{chap:DWATvirtualityvirtualityindication}
 virtuality of a declaration is represented by a
-\livelink{chap:DWATvirtuality}{DW\-\_AT\-\_virtuality} attribute, whose value is a constant drawn
+\livelink{chap:DWATvirtuality}{DW\-\_AT\-\_virtuality}
+attribute\addtoindexx{virtuality attribute}, whose value is a constant drawn
 from the set of codes listed in 
 Figure \ref{fig:virtualitycodes}.
 
@@ -1913,7 +1912,7 @@ evaluation of the expression yields the value of
 the attribute.
 \end{itemize}
 
-\textit{
+\textit{%
 Whether an attribute value can be dynamic depends on the
 rules of the applicable programming language.
 }

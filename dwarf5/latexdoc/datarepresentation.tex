@@ -8,6 +8,8 @@ and of other fundamental elements described above.
 
 \section{Vendor Extensibility}
 \label{datarep:vendorextensibility}
+\addtoindexx{vendor extensibility}
+\addtoindexx{vendor specific extensions|see{vendor extensibility}}
 
 To reserve a portion of the DWARF name space and ranges of
 enumeration values for use for vendor specific extensions,
@@ -24,7 +26,7 @@ DW\-\_LANG, DW\-\_LNE, DW\-\_CC or DW\-\_CFA respectively) followed by
 labels are \livetarg{chap:DWTAGlouser}{DW\-\_TAG\-\_lo\-\_user} and 
 \livetarg{chap:DWTAGhiuser}{DW\-\_TAG\-\_hi\-\_user}.}
 Values in the
-range between prefix\_lo\_user and prefix\_hi\_user inclusive,
+range between \textit{prefix}\_lo\_user and \textit{prefix}\_hi\_user inclusive,
 are reserved for vendor specific extensions. Vendors may
 use values in this range without conflicting with current or
 future system\dash defined values. All other values are reserved
@@ -36,12 +38,14 @@ the first special line number opcode. However, since the
 number of standard opcodes varies with the DWARF version,
 the range for extensions is also version dependent. Thus,
 \livetarg{chap:DWLNSlouser}{DW\-\_LNS\-\_lo\-\_user} and 
-\livetarg{chap:DWLNShiuser}{DW\-\_LNS\-\_hi\-\_user} symbols are not defined.}
+\livetarg{chap:DWLNShiuser}{DW\-\_LNS\-\_hi\-\_user} symbols are not defined.
+}
 
 Vendor defined tags, attributes, base type encodings, location
 atoms, language names, line number actions, calling conventions
 and call frame instructions, conventionally use the form
-prefix\_vendor\_id\_name, where vendor\_id is some identifying
+\text{prefix\_vendor\_id\_name}, where 
+\textit{vendor\_id}\addtoindexx{vendor id} is some identifying
 character sequence chosen so as to avoid conflicts with
 other vendors.
 
@@ -69,6 +73,7 @@ the semantics of previously existing tags.
 \label{datarep:reservedvalues}
 \subsection{Error Values}
 \label{datarep:errorvalues}
+\addtoindexx{reserved values!error}
 
 As a convenience for consumers of DWARF information, the value
 0 is reserved in the encodings for attribute names, attribute
@@ -82,6 +87,7 @@ not appear in DWARF debugging information.
 
 \subsection{Initial Length Values}
 \label{datarep:initiallengthvalues}
+\addtoindexx{reserved values!initial length}
 
 An initial length field is one of the length fields that occur
 at the beginning of those DWARF sections that have a header
@@ -305,7 +311,7 @@ integer that gives the actual length
 
 \item  version (uhalf)
 A 2\dash byte unsigned integer representing the version of the
-DWARF information for the compilation unit 
+DWARF information for the compilation unit\addtoindexx{version number!compilation unit} 
 (see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
 The value in this field is 4.
 
@@ -354,7 +360,7 @@ consists of the 4\dash byte value 0xffffffff followed by an
 
 \item  version (uhalf)
 A 2\dash byte unsigned integer representing the version of the
-DWARF information for the compilation unit 
+DWARF information for the compilation unit\addtoindexx{version number!type unit} 
 (see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
 The value in this field is 4.
 
@@ -882,7 +888,7 @@ Child determination name& Value\\ \hline
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|l|l}
-  \caption{Attribute encodings} \label{tab:attributeencodings} \\
+  \caption{Attribute encodings} \label{tab:attributeencodings} \addtoindexx{attribute encodings} \\
   \hline \\ \bfseries Attribute name&\bfseries Value &\bfseries Classes \\ \hline
 \endfirsthead
   \bfseries Attribute name&\bfseries Value &\bfseries Classes\\ \hline
@@ -891,105 +897,195 @@ Child determination name& Value\\ \hline
 \endfoot
   \hline
 \endlastfoot
-\livelink{chap:DWATsibling}{DW\-\_AT\-\_sibling}&0x01&reference \\
-\livelink{chap:DWATlocation}{DW\-\_AT\-\_location}&0x02&\livelink{chap:exprloc}{exprloc}, \livelink{chap:loclistptr}{loclistptr}   \\
-\livelink{chap:DWATname}{DW\-\_AT\-\_name}&0x03&string   \\
-\livelink{chap:DWATordering}{DW\-\_AT\-\_ordering}&0x09&constant   \\
-\livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size}&0x0b&constant, \livelink{chap:exprloc}{exprloc}, reference   \\
-\livelink{chap:DWATbitoffset}{DW\-\_AT\-\_bit\-\_offset}&0x0c&constant, \livelink{chap:exprloc}{exprloc}, reference   \\
-\livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size}&0x0d&constant, \livelink{chap:exprloc}{exprloc}, reference   \\
-\livelink{chap:DWATstmtlist}{DW\-\_AT\-\_stmt\-\_list}&0x10&\livelink{chap:lineptr}{lineptr}   \\
-\livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc}&0x11&address   \\
-\livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc}&0x12&address, constant   \\
-\livelink{chap:DWATlanguage}{DW\-\_AT\-\_language}&0x13&constant   \\
-\livelink{chap:DWATdiscr}{DW\-\_AT\-\_discr}&0x15&reference   \\
-\livelink{chap:DWATdiscrvalue}{DW\-\_AT\-\_discr\-\_value}&0x16&constant   \\
-\livelink{chap:DWATvisibility}{DW\-\_AT\-\_visibility}&0x17&constant   \\
-\livelink{chap:DWATimport}{DW\-\_AT\-\_import}&0x18&reference   \\
-\livelink{chap:DWATstringlength}{DW\-\_AT\-\_string\-\_length}&0x19&\livelink{chap:exprloc}{exprloc}, \livelink{chap:loclistptr}{loclistptr}   \\
-\livelink{chap:DWATcommonreference}{DW\-\_AT\-\_common\-\_reference}&0x1a&reference   \\
-\livelink{chap:DWATcompdir}{DW\-\_AT\-\_comp\-\_dir}&0x1b&string   \\
-\livelink{chap:DWATconstvalue}{DW\-\_AT\-\_const\-\_value}&0x1c&\livelink{chap:block}{block}, constant, string   \\
-\livelink{chap:DWATcontainingtype}{DW\-\_AT\-\_containing\-\_type}&0x1d&reference     \\
-\livelink{chap:DWATdefaultvalue}{DW\-\_AT\-\_default\-\_value}&0x1e&reference     \\
-\livelink{chap:DWATinline}{DW\-\_AT\-\_inline}&0x20&constant     \\
-\livelink{chap:DWATisoptional}{DW\-\_AT\-\_is\-\_optional}&0x21&\livelink{chap:flag}{flag}     \\
-\livelink{chap:DWATlowerbound}{DW\-\_AT\-\_lower\-\_bound}&0x22&constant, \livelink{chap:exprloc}{exprloc}, reference     \\
-\livelink{chap:DWATproducer}{DW\-\_AT\-\_producer}&0x25&string     \\
-\livelink{chap:DWATprototyped}{DW\-\_AT\-\_prototyped}&0x27&\livelink{chap:flag}{flag}     \\
-\livelink{chap:DWATreturnaddr}{DW\-\_AT\-\_return\-\_addr}&0x2a&\livelink{chap:exprloc}{exprloc}, \livelink{chap:loclistptr}{loclistptr}     \\
+\livelink{chap:DWATsibling}{DW\-\_AT\-\_sibling}&0x01&reference 
+        \addtoindexx{sibling attribute!encoding} \\
+\livelink{chap:DWATlocation}{DW\-\_AT\-\_location}&0x02&\livelink{chap:exprloc}{exprloc}, 
+        \livelink{chap:loclistptr}{loclistptr}\addtoindex{location attribute!encoding}   \\
+\livelink{chap:DWATname}{DW\-\_AT\-\_name}&0x03&string 
+        \addtoindexx{name attribute!encoding} \\
+\livelink{chap:DWATordering}{DW\-\_AT\-\_ordering}&0x09&constant 
+        \addtoindexx{ordering attribute!encoding}  \\
+\livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size}&0x0b&constant, \livelink{chap:exprloc}{exprloc}, 
+        reference \addtoindexx{byte size attribute!encoding} \\
+\livelink{chap:DWATbitoffset}{DW\-\_AT\-\_bit\-\_offset}&0x0c&constant, 
+        \livelink{chap:exprloc}{exprloc}, reference \addtoindexx{bit offset attribute!encoding}  \\
+\livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size}&0x0d&constant, 
+        \livelink{chap:exprloc}{exprloc}, reference \addtoindexx{bit size attribute!encoding} \\
+\livelink{chap:DWATstmtlist}{DW\-\_AT\-\_stmt\-\_list}&0x10&\livelink{chap:lineptr}{lineptr} 
+        \addtoindex{statement list attribute!encoding} \\
+\livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc}&0x11&address 
+        \addtoindexx{lowpc attribute!encoding}  \\
+\livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc}&0x12&address, constant 
+        \addtoindexx{highpc attribute!encoding}  \\
+\livelink{chap:DWATlanguage}{DW\-\_AT\-\_language}&0x13&constant 
+        \addtoindexx{language attribute!encoding}  \\
+\livelink{chap:DWATdiscr}{DW\-\_AT\-\_discr}&0x15&reference 
+        \addtoindexx{discriminant attribute!encoding}  \\
+\livelink{chap:DWATdiscrvalue}{DW\-\_AT\-\_discr\-\_value}&0x16&constant 
+        \addtoindexx{discriminant value attribute!encoding}  \\
+\livelink{chap:DWATvisibility}{DW\-\_AT\-\_visibility}&0x17&constant 
+        \addtoindexx{visibility attribute!encoding} \\
+\livelink{chap:DWATimport}{DW\-\_AT\-\_import}&0x18&reference 
+        \addtoindexx{import attribute!encoding}  \\
+\livelink{chap:DWATstringlength}{DW\-\_AT\-\_string\-\_length}&0x19&\livelink{chap:exprloc}{exprloc}, 
+        \livelink{chap:loclistptr}{loclistptr} \addtoindexx{string length attribute!encoding}  \\
+\livelink{chap:DWATcommonreference}{DW\-\_AT\-\_common\-\_reference}&0x1a&reference 
+        \addtoindexx{common reference attribute!encoding}  \\
+\livelink{chap:DWATcompdir}{DW\-\_AT\-\_comp\-\_dir}&0x1b&string 
+        \addtoindexx{compilation directory attribute!encoding}  \\
+\livelink{chap:DWATconstvalue}{DW\-\_AT\-\_const\-\_value}&0x1c&\livelink{chap:block}{block}, constant, string 
+        \addtoindexx{constant value attribute!encoding} \\
+\livelink{chap:DWATcontainingtype}{DW\-\_AT\-\_containing\-\_type}&0x1d&reference 
+        \addtoindexx{containing type attribute!encoding} \\
+\livelink{chap:DWATdefaultvalue}{DW\-\_AT\-\_default\-\_value}&0x1e&reference 
+        \addtoindexx{default value attribute!encoding} \\
+\livelink{chap:DWATinline}{DW\-\_AT\-\_inline}&0x20&constant 
+        \addtoindexx{inlineibute!encoding}  \\
+\livelink{chap:DWATisoptional}{DW\-\_AT\-\_is\-\_optional}&0x21&\livelink{chap:flag}{flag} 
+        \addtoindexx{is optional attribute!encoding} \\
+\livelink{chap:DWATlowerbound}{DW\-\_AT\-\_lower\-\_bound}&0x22&constant, 
+        \livelink{chap:exprloc}{exprloc}, reference \addtoindexx{lower bound attribute!encoding}  \\
+\livelink{chap:DWATproducer}{DW\-\_AT\-\_producer}&0x25&string \addtoindexx{producer attribute!encoding}  \\
+\livelink{chap:DWATprototyped}{DW\-\_AT\-\_prototyped}&0x27&\livelink{chap:flag}{flag} 
+        \addtoindexx{prototyped attribute!encoding}  \\
+\livelink{chap:DWATreturnaddr}{DW\-\_AT\-\_return\-\_addr}&0x2a&\livelink{chap:exprloc}{exprloc},
+        \livelink{chap:loclistptr}{loclistptr} \addtoindexx{return address attribute!encoding}  \\
 % FIXME: lower case , not Constant
-\livelink{chap:DWATstartscope}{DW\-\_AT\-\_start\-\_scope}&0x2c&Constant, \livelink{chap:rangelistptr}{rangelistptr}     \\
-\livelink{chap:DWATbitstride}{DW\-\_AT\-\_bit\-\_stride}&0x2e&constant, \livelink{chap:exprloc}{exprloc}, reference     \\
-\livelink{chap:DWATupperbound}{DW\-\_AT\-\_upper\-\_bound}&0x2f&constant, \livelink{chap:exprloc}{exprloc}, reference     \\
-\livelink{chap:DWATabstractorigin}{DW\-\_AT\-\_abstract\-\_origin}&0x31&reference     \\
-\livelink{chap:DWATaccessibility}{DW\-\_AT\-\_accessibility}&0x32&constant     \\
-\livelink{chap:DWATaddressclass}{DW\-\_AT\-\_address\-\_class}&0x33&constant     \\
-\livelink{chap:DWATartificial}{DW\-\_AT\-\_artificial}&0x34&\livelink{chap:flag}{flag}     \\
-\livelink{chap:DWATbasetypes}{DW\-\_AT\-\_base\-\_types}&0x35&reference     \\
-\livelink{chap:DWATcallingconvention}{DW\-\_AT\-\_calling\-\_convention}&0x36&constant     \\
-\livelink{chap:DWATcount}{DW\-\_AT\-\_count}&0x37&constant, \livelink{chap:exprloc}{exprloc}, reference     \\
-\livelink{chap:DWATdatamemberlocation}{DW\-\_AT\-\_data\-\_member\-\_location}&0x38&constant, \livelink{chap:exprloc}{exprloc}, \livelink{chap:loclistptr}{loclistptr}     \\
-\livelink{chap:DWATdeclcolumn}{DW\-\_AT\-\_decl\-\_column}&0x39&constant     \\
-\livelink{chap:DWATdeclfile}{DW\-\_AT\-\_decl\-\_file}&0x3a&constant     \\
-\livelink{chap:DWATdeclline}{DW\-\_AT\-\_decl\-\_line}&0x3b&constant     \\
-\livelink{chap:DWATdeclaration}{DW\-\_AT\-\_declaration}&0x3c&\livelink{chap:flag}{flag}     \\
-\livelink{chap:DWATdiscrlist}{DW\-\_AT\-\_discr\-\_list}&0x3d&\livelink{chap:block}{block}     \\
-\livelink{chap:DWATencoding}{DW\-\_AT\-\_encoding}&0x3e&constant     \\
-\livelink{chap:DWATexternal}{DW\-\_AT\-\_external}&0x3f&\livelink{chap:flag}{flag}     \\
-\livelink{chap:DWATframebase}{DW\-\_AT\-\_frame\-\_base}&0x40&\livelink{chap:exprloc}{exprloc}, \livelink{chap:loclistptr}{loclistptr}     \\
-\livelink{chap:DWATfriend}{DW\-\_AT\-\_friend}&0x41&reference     \\
-\livelink{chap:DWATidentifiercase}{DW\-\_AT\-\_identifier\-\_case}&0x42&constant    \\
-\livelink{chap:DWATmacroinfo}{DW\-\_AT\-\_macro\-\_info}&0x43&\livelink{chap:macptr}{macptr}    \\
-\livelink{chap:DWATnamelistitem}{DW\-\_AT\-\_namelist\-\_item}&0x44&reference    \\
-\livelink{chap:DWATpriority}{DW\-\_AT\-\_priority}&0x45&reference    \\
-\livelink{chap:DWATsegment}{DW\-\_AT\-\_segment}&0x46&\livelink{chap:exprloc}{exprloc}, \livelink{chap:loclistptr}{loclistptr}    \\
-\livelink{chap:DWATspecification}{DW\-\_AT\-\_specification}&0x47&reference    \\
-\livelink{chap:DWATstaticlink}{DW\-\_AT\-\_static\-\_link}&0x48&\livelink{chap:exprloc}{exprloc}, \livelink{chap:loclistptr}{loclistptr}    \\
-\livelink{chap:DWATtype}{DW\-\_AT\-\_type}&0x49&reference    \\
-\livelink{chap:DWATuselocation}{DW\-\_AT\-\_use\-\_location}&0x4a&\livelink{chap:exprloc}{exprloc}, \livelink{chap:loclistptr}{loclistptr}    \\
-\livelink{chap:DWATvariableparameter}{DW\-\_AT\-\_variable\-\_parameter}&0x4b&\livelink{chap:flag}{flag}    \\
-\livelink{chap:DWATvirtuality}{DW\-\_AT\-\_virtuality}&0x4c&constant    \\
-\livelink{chap:DWATvtableelemlocation}{DW\-\_AT\-\_vtable\-\_elem\-\_location}&0x4d&\livelink{chap:exprloc}{exprloc}, \livelink{chap:loclistptr}{loclistptr}    \\
+\livelink{chap:DWATstartscope}{DW\-\_AT\-\_start\-\_scope}&0x2c&Constant, 
+        \livelink{chap:rangelistptr}{rangelistptr} \addtoindexx{start scope attribute!encoding}  \\
+\livelink{chap:DWATbitstride}{DW\-\_AT\-\_bit\-\_stride}&0x2e&constant,
+        \livelink{chap:exprloc}{exprloc}, reference \addtoindexx{bit stride attribute!encoding}  \\
+\livelink{chap:DWATupperbound}{DW\-\_AT\-\_upper\-\_bound}&0x2f&constant,
+        \livelink{chap:exprloc}{exprloc}, reference \addtoindexx{upper bound attribute!encoding}  \\
+\livelink{chap:DWATabstractorigin}{DW\-\_AT\-\_abstract\-\_origin}&0x31&reference 
+        \addtoindexx{abstract origin attribute!encoding}  \\
+\livelink{chap:DWATaccessibility}{DW\-\_AT\-\_accessibility}&0x32&constant 
+        \addtoindexx{accessibility attribute!encoding}  \\
+\livelink{chap:DWATaddressclass}{DW\-\_AT\-\_address\-\_class}&0x33&constant 
+        \addtoindexx{address class atribute!encoding}  \\
+\livelink{chap:DWATartificial}{DW\-\_AT\-\_artificial}&0x34&\livelink{chap:flag}{flag} 
+        \addtoindexx{artificial attribute!encoding}  \\
+\livelink{chap:DWATbasetypes}{DW\-\_AT\-\_base\-\_types}&0x35&reference 
+        \addtoindexx{base types attribute!encoding}  \\
+\livelink{chap:DWATcallingconvention}{DW\-\_AT\-\_calling\-\_convention}&0x36&constant 
+        \addtoindexx{calling convention attribute!encoding} \\
+\livelink{chap:DWATcount}{DW\-\_AT\-\_count}&0x37&constant, \livelink{chap:exprloc}{exprloc}, reference 
+        \addtoindexx{count attribute!encoding}  \\
+\livelink{chap:DWATdatamemberlocation}{DW\-\_AT\-\_data\-\_member\-\_location}&0x38&constant, 
+        \livelink{chap:exprloc}{exprloc}, \livelink{chap:loclistptr}{loclistptr} 
+        \addtoindexx{data member attribute!encoding}  \\
+\livelink{chap:DWATdeclcolumn}{DW\-\_AT\-\_decl\-\_column}&0x39&constant 
+        \addtoindexx{declaration column attribute!encoding}  \\
+\livelink{chap:DWATdeclfile}{DW\-\_AT\-\_decl\-\_file}&0x3a&constant 
+        \addtoindexx{declaration file attribute!encoding}  \\
+\livelink{chap:DWATdeclline}{DW\-\_AT\-\_decl\-\_line}&0x3b&constant 
+        \addtoindexx{declaration line attribute!encoding}  \\
+\livelink{chap:DWATdeclaration}{DW\-\_AT\-\_declaration}&0x3c&\livelink{chap:flag}{flag} 
+        \addtoindexx{declaration attribute!encoding}  \\
+\livelink{chap:DWATdiscrlist}{DW\-\_AT\-\_discr\-\_list}&0x3d&\livelink{chap:block}{block} 
+        \addtoindexx{discriminant list attribute!encoding}  \\
+\livelink{chap:DWATencoding}{DW\-\_AT\-\_encoding}&0x3e&constant 
+        \addtoindexx{encoding attribute!encoding}  \\
+\livelink{chap:DWATexternal}{DW\-\_AT\-\_external}&0x3f&\livelink{chap:flag}{flag} 
+        \addtoindexx{external attribute!encoding}  \\
+\livelink{chap:DWATframebase}{DW\-\_AT\-\_frame\-\_base}&0x40&\livelink{chap:exprloc}{exprloc}, 
+        \livelink{chap:loclistptr}{loclistptr} \addtoindexx{frame base attribute!encoding}  \\
+\livelink{chap:DWATfriend}{DW\-\_AT\-\_friend}&0x41&reference 
+        \addtoindexx{friend attribute!encoding}  \\
+\livelink{chap:DWATidentifiercase}{DW\-\_AT\-\_identifier\-\_case}&0x42&constant 
+        \addtoindexx{identifier case attribute!encoding}  \\
+\livelink{chap:DWATmacroinfo}{DW\-\_AT\-\_macro\-\_info}&0x43&\livelink{chap:macptr}{macptr} 
+        \addtoindexx{macro information attribute!encoding}  \\
+\livelink{chap:DWATnamelistitem}{DW\-\_AT\-\_namelist\-\_item}&0x44&reference 
+        \addtoindexx{name list item attribute!encoding}  \\
+\livelink{chap:DWATpriority}{DW\-\_AT\-\_priority}&0x45&reference 
+        \addtoindexx{priority attribute!encoding}  \\
+\livelink{chap:DWATsegment}{DW\-\_AT\-\_segment}&0x46&\livelink{chap:exprloc}{exprloc}, 
+        \livelink{chap:loclistptr}{loclistptr} \addtoindexx{segment attribute!encoding}  \\
+\livelink{chap:DWATspecification}{DW\-\_AT\-\_specification}&0x47&reference 
+        \addtoindexx{specification attribute!encoding}  \\
+\livelink{chap:DWATstaticlink}{DW\-\_AT\-\_static\-\_link}&0x48&\livelink{chap:exprloc}{exprloc}, 
+        \livelink{chap:loclistptr}{loclistptr} \addtoindexx{static link attribute!encoding}  \\
+\livelink{chap:DWATtype}{DW\-\_AT\-\_type}&0x49&reference 
+        \addtoindexx{type attribute!encoding}  \\
+\livelink{chap:DWATuselocation}{DW\-\_AT\-\_use\-\_location}&0x4a&\livelink{chap:exprloc}{exprloc}, 
+        \livelink{chap:loclistptr}{loclistptr} \addtoindexx{location list attribute!encoding}  \\
+\livelink{chap:DWATvariableparameter}{DW\-\_AT\-\_variable\-\_parameter}&0x4b&\livelink{chap:flag}{flag} 
+        \addtoindexx{variable parameter attribute!encoding}  \\
+\livelink{chap:DWATvirtuality}{DW\-\_AT\-\_virtuality}&0x4c&constant 
+        \addtoindexx{virtuality attribute!encoding}  \\
+\livelink{chap:DWATvtableelemlocation}{DW\-\_AT\-\_vtable\-\_elem\-\_location}&0x4d&\livelink{chap:exprloc}{exprloc}, 
+        \livelink{chap:loclistptr}{loclistptr} \addtoindexx{vtable element location attribute!encoding}  \\
 
+\livelink{chap:DWATallocated}{DW\-\_AT\-\_allocated}&0x4e&constant, \livelink{chap:exprloc}{exprloc}, 
+        reference \addtoindexx{allocated attribute!encoding}  \\
+\livelink{chap:DWATassociated}{DW\-\_AT\-\_associated}&0x4f&constant, \livelink{chap:exprloc}{exprloc}, 
+        reference \addtoindexx{associated attribute!encoding}  \\
+\livelink{chap:DWATdatalocation}{DW\-\_AT\-\_data\-\_location}&0x50&\livelink{chap:exprloc}{exprloc} 
+        \addtoindexx{data location attribute!encoding}  \\
+\livelink{chap:DWATbytestride}{DW\-\_AT\-\_byte\-\_stride}&0x51&constant, \livelink{chap:exprloc}{exprloc}, 
+        reference \addtoindexx{byte stride attribute!encoding}  \\
+\livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc}&0x52&address 
+        \addtoindexx{entry pc attribute!encoding}  \\
+\livelink{chap:DWATuseUTF8}{DW\-\_AT\-\_use\-\_UTF8}&0x53&\livelink{chap:flag}{flag} 
+        \addtoindexx{use UTF8 attribute!encoding}  \\
+\livelink{chap:DWATextension}{DW\-\_AT\-\_extension}&0x54&reference 
+        \addtoindexx{extension attribute!encoding}  \\
+\livelink{chap:DWATranges}{DW\-\_AT\-\_ranges}&0x55&\livelink{chap:rangelistptr}{rangelistptr} 
+        \addtoindexx{ranges attribute!encoding}  \\
+\livelink{chap:DWATtrampoline}{DW\-\_AT\-\_trampoline}&0x56&address, \livelink{chap:flag}{flag}, 
+        reference, string \addtoindexx{trampoline attribute!encoding}  \\
+\livelink{chap:DWATcallcolumn}{DW\-\_AT\-\_call\-\_column}&0x57&constant 
+        \addtoindexx{call column attribute!encoding}  \\
+\livelink{chap:DWATcallfile}{DW\-\_AT\-\_call\-\_file}&0x58&constant 
+        \addtoindexx{call file attribute!encoding}  \\
+\livelink{chap:DWATcallline}{DW\-\_AT\-\_call\-\_line}&0x59&constant 
+        \addtoindexx{call line attribute!encoding}  \\
+\livelink{chap:DWATdescription}{DW\-\_AT\-\_description}&0x5a&string 
+        \addtoindexx{description attribute!encoding}  \\
+\livelink{chap:DWATbinaryscale}{DW\-\_AT\-\_binary\-\_scale}&0x5b&constant 
+        \addtoindexx{binary scale attribute!encoding}  \\
+\livelink{chap:DWATdecimalscale}{DW\-\_AT\-\_decimal\-\_scale}&0x5c&constant 
+        \addtoindexx{decimal scale attribute!encoding}  \\
+\livelink{chap:DWATsmall}{DW\-\_AT\-\_small} &0x5d&reference 
+        \addtoindexx{small attribute!encoding}  \\
+\livelink{chap:DWATdecimalsign}{DW\-\_AT\-\_decimal\-\_sign}&0x5e&constant 
+        \addtoindexx{decimal scale attribute!encoding}  \\
+\livelink{chap:DWATdigitcount}{DW\-\_AT\-\_digit\-\_count}&0x5f&constant 
+        \addtoindexx{digit count attribute!encoding}  \\
+\livelink{chap:DWATpicturestring}{DW\-\_AT\-\_picture\-\_string}&0x60&string 
+        \addtoindexx{picture string attribute!encoding}  \\
+\livelink{chap:DWATmutable}{DW\-\_AT\-\_mutable}&0x61&\livelink{chap:flag}{flag} 
+        \addtoindexx{mutable attribute!encoding}  \\
 
-\livelink{chap:DWATallocated}{DW\-\_AT\-\_allocated}&0x4e&constant, \livelink{chap:exprloc}{exprloc}, reference     \\
-\livelink{chap:DWATassociated}{DW\-\_AT\-\_associated}&0x4f&constant, \livelink{chap:exprloc}{exprloc}, reference     \\
-\livelink{chap:DWATdatalocation}{DW\-\_AT\-\_data\-\_location}&0x50&\livelink{chap:exprloc}{exprloc}     \\
-\livelink{chap:DWATbytestride}{DW\-\_AT\-\_byte\-\_stride}&0x51&constant, \livelink{chap:exprloc}{exprloc}, reference     \\
-\livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc}&0x52&address     \\
-\livelink{chap:DWATuseUTF8}{DW\-\_AT\-\_use\-\_UTF8}&0x53&\livelink{chap:flag}{flag}     \\
-\livelink{chap:DWATextension}{DW\-\_AT\-\_extension}&0x54&reference     \\
-\livelink{chap:DWATranges}{DW\-\_AT\-\_ranges}&0x55&\livelink{chap:rangelistptr}{rangelistptr}     \\
-\livelink{chap:DWATtrampoline}{DW\-\_AT\-\_trampoline}&0x56&address, \livelink{chap:flag}{flag}, reference, string     \\
-\livelink{chap:DWATcallcolumn}{DW\-\_AT\-\_call\-\_column}&0x57&constant     \\
-\livelink{chap:DWATcallfile}{DW\-\_AT\-\_call\-\_file}&0x58&constant     \\
-\livelink{chap:DWATcallline}{DW\-\_AT\-\_call\-\_line}&0x59&constant     \\
-\livelink{chap:DWATdescription}{DW\-\_AT\-\_description}&0x5a&string     \\
-\livelink{chap:DWATbinaryscale}{DW\-\_AT\-\_binary\-\_scale}&0x5b&constant     \\
-\livelink{chap:DWATdecimalscale}{DW\-\_AT\-\_decimal\-\_scale}&0x5c&constant     \\
-\livelink{chap:DWATsmall}{DW\-\_AT\-\_small} &0x5d&reference     \\
-\livelink{chap:DWATdecimalsign}{DW\-\_AT\-\_decimal\-\_sign}&0x5e&constant     \\
-\livelink{chap:DWATdigitcount}{DW\-\_AT\-\_digit\-\_count}&0x5f&constant     \\
-\livelink{chap:DWATpicturestring}{DW\-\_AT\-\_picture\-\_string}&0x60&string      \\
-\livelink{chap:DWATmutable}{DW\-\_AT\-\_mutable}&0x61&\livelink{chap:flag}{flag}     \\
-
-
-\livelink{chap:DWATthreadsscaled}{DW\-\_AT\-\_threads\-\_scaled}&0x62&\livelink{chap:flag}{flag}     \\
-\livelink{chap:DWATexplicit}{DW\-\_AT\-\_explicit}&0x63&\livelink{chap:flag}{flag}     \\
-\livelink{chap:DWATobjectpointer}{DW\-\_AT\-\_object\-\_pointer}&0x64&reference     \\
-\livelink{chap:DWATendianity}{DW\-\_AT\-\_endianity}&0x65&constant     \\
-\livelink{chap:DWATelemental}{DW\-\_AT\-\_elemental}&0x66&\livelink{chap:flag}{flag}     \\
-\livelink{chap:DWATpure}{DW\-\_AT\-\_pure}&0x67&\livelink{chap:flag}{flag}     \\
-\livelink{chap:DWATrecursive}{DW\-\_AT\-\_recursive}&0x68&\livelink{chap:flag}{flag}     \\
-\livelink{chap:DWATsignature}{DW\-\_AT\-\_signature} \ddag &0x69&reference     \\ 
-\livelink{chap:DWATmainsubprogram}{DW\-\_AT\-\_main\-\_subprogram} \ddag &0x6a&\livelink{chap:flag}{flag}     \\
-\livelink{chap:DWATdatabitoffset}{DW\-\_AT\-\_data\-\_bit\-\_offset} \ddag &0x6b&constant     \\
-\livelink{chap:DWATconstexpr}{DW\-\_AT\-\_const\-\_expr} \ddag &0x6c&\livelink{chap:flag}{flag}     \\
-\livelink{chap:DWATenumclass}{DW\-\_AT\-\_enum\-\_class} \ddag &0x6d&\livelink{chap:flag}{flag}     \\
-\livelink{chap:DWATlinkagename}{DW\-\_AT\-\_linkage\-\_name} \ddag &0x6e&string     \\
-\livetarg{chap:DWATlouser}{DW\-\_AT\-\_lo\-\_user}&0x2000 & ---     \\
-\livetarg{chap:DWAThiuser}{DW\-\_AT\-\_hi\-\_user}&0x3fff& ---     \\
+\livelink{chap:DWATthreadsscaled}{DW\-\_AT\-\_threads\-\_scaled}&0x62&\livelink{chap:flag}{flag} 
+        \addtoindexx{thread scaled attribute!encoding}  \\
+\livelink{chap:DWATexplicit}{DW\-\_AT\-\_explicit}&0x63&\livelink{chap:flag}{flag} 
+        \addtoindexx{explicit attribute!encoding}  \\
+\livelink{chap:DWATobjectpointer}{DW\-\_AT\-\_object\-\_pointer}&0x64&reference 
+        \addtoindexx{object pointer attribute!encoding}  \\
+\livelink{chap:DWATendianity}{DW\-\_AT\-\_endianity}&0x65&constant 
+        \addtoindexx{endianity attribute!encoding}  \\
+\livelink{chap:DWATelemental}{DW\-\_AT\-\_elemental}&0x66&\livelink{chap:flag}{flag} 
+        \addtoindexx{elemental attribute!encoding}  \\
+\livelink{chap:DWATpure}{DW\-\_AT\-\_pure}&0x67&\livelink{chap:flag}{flag} 
+        \addtoindexx{pure attribute!encoding}  \\
+\livelink{chap:DWATrecursive}{DW\-\_AT\-\_recursive}&0x68&\livelink{chap:flag}{flag} 
+        \addtoindexx{recursive attribute!encoding}  \\
+\livelink{chap:DWATsignature}{DW\-\_AT\-\_signature} \ddag &0x69&reference 
+        \addtoindexx{signature attribute!encoding}  \\ 
+\livelink{chap:DWATmainsubprogram}{DW\-\_AT\-\_main\-\_subprogram} \ddag &0x6a&\livelink{chap:flag}{flag} 
+        \addtoindexx{main subprogram attribute!encoding}  \\
+\livelink{chap:DWATdatabitoffset}{DW\-\_AT\-\_data\-\_bit\-\_offset} \ddag &0x6b&constant 
+        \addtoindexx{data bit offset attribute!encoding}  \\
+\livelink{chap:DWATconstexpr}{DW\-\_AT\-\_const\-\_expr} \ddag &0x6c&\livelink{chap:flag}{flag} 
+        \addtoindexx{constant expression attribute!encoding}  \\
+\livelink{chap:DWATenumclass}{DW\-\_AT\-\_enum\-\_class} \ddag &0x6d&\livelink{chap:flag}{flag} 
+        \addtoindexx{enumeration class attribute!encoding}  \\
+\livelink{chap:DWATlinkagename}{DW\-\_AT\-\_linkage\-\_name} \ddag &0x6e&string 
+        \addtoindexx{linkage name attribute!encoding}  \\
+\livetarg{chap:DWATlouser}{DW\-\_AT\-\_lo\-\_user}&0x2000 & --- \addtoindexx{low user attribute encoding}  \\
+\livetarg{chap:DWAThiuser}{DW\-\_AT\-\_hi\-\_user}&0x3fff& --- \addtoindexx{high user attribute encoding}  \\
 
 \end{longtable}
 \ddag  Attribute new in DWARF Version 4 
@@ -1039,6 +1135,8 @@ Child determination name& Value\\ \hline
 
 \section{Variable Length Data}
 \label{datarep:variablelengthdata}
+\addtoindexx{variable length data|see {LEB128}}
+\addtoindexx{LEB128 encoding}
 Integers may be encoded using ``Little Endian Base 128''
 (LEB128) numbers. LEB128 is a scheme for encoding integers
 densely that exploits the assumption that most integers are
@@ -1093,7 +1191,7 @@ gives algorithms for encoding and decoding these forms.
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|l|l}
-  \caption{Examples of unsigned LEB32 encodings} \label{tab:examplesofunsignedleb128encodings} \\
+  \caption{Examples of unsigned LEB128 encodings} \label{tab:examplesofunsignedleb128encodings} \\
   \hline \\ \bfseries Number&\bfseries First byte &\bfseries Second byte \\ \hline
 \endfirsthead
   \bfseries Number&\bfseries First Byte &\bfseries Second byte\\ \hline
@@ -1108,7 +1206,7 @@ gives algorithms for encoding and decoding these forms.
 129& 1 + 0x80 & 1 \\
 130& 2 + 0x80 & 1 \\
 12857& 57 + 0x80 & 100 \\
-
+\addtoindex{LEB128 encoding!examples}
 \end{longtable}
 \end{centering}
 
@@ -1117,7 +1215,7 @@ gives algorithms for encoding and decoding these forms.
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|l|l}
-  \caption{Examples of signed LEB32 encodings} \label{tab:examplesofsignedleb128encodings} \\
+  \caption{Examples of signed LEB128 encodings} \label{tab:examplesofsignedleb128encodings} \\
   \hline \\ \bfseries Number&\bfseries First byte &\bfseries Second byte \\ \hline
 \endfirsthead
   \bfseries Number&\bfseries First Byte &\bfseries Second byte\\ \hline
@@ -1712,7 +1810,8 @@ integer that gives the actual length
 
 \item  version (uhalf)
 A 2\dash byte unsigned integer representing the version of the
-DWARF information for the compilation unit
+DWARF information\addtoindexx{version number!compilation unit} for the compilation unit
+\addtoindexx{version number!name lookup table}
 (see Appendix \refersec{app:dwarfsectionversionnumbersinformative}).
 The value in this field is 4.
 
@@ -1770,7 +1869,8 @@ the actual length
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
 \item version (uhalf) \\
-A 2\dash byte version identifier containing the value 2 
+A 2\dash byte version identifier
+\addtoindexx{version number!address range table} containing the value 2 
 (see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
 
 \item debug\_info\_offset (section offset) \\
@@ -1815,7 +1915,8 @@ the terminating tuple.
 \section{Line Number Information}
 \label{datarep:linenumberinformation}
 
-The version number in the line number program header is 4
+The \addtoindexi{version number}{version number!line number information}
+in the line number program header is 4
 (see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
 
 The boolean values ``true'' and ``false'' 
@@ -1889,7 +1990,8 @@ Table \refersec{tab:linenumberextendedopcodeencodings}.
 
 The source line numbers and source file indices encoded in the
 macro information section are represented as unsigned LEB128
-numbers as are the constants in a \livelink{chap:DWMACINFOvendorext}{DW\-\_MACINFO\-\_vendor\-\_ext} entry.
+numbers as are the constants in a 
+\livelink{chap:DWMACINFOvendorext}{DW\-\_MACINFO\-\_vendor\-\_ext} entry.
 
 The macinfo type is encoded as a single byte. 
 The encodings are given in 
@@ -1925,8 +2027,8 @@ In the 32\dash bit DWARF format, the value of the CIE id in the
 CIE header is 0xffffffff; in the 64\dash bit DWARF format, the
 value is 0xffffffffffffffff.
 
-The value of the CIE version number is 4 
-(see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
+The value of the CIE \addtoindexi{version number}{version number!call frame information}
+is 4 (see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
 
 Call frame instructions are encoded in one or more bytes. The
 primary opcode is encoded in the high order two bits of
