@@ -71,7 +71,9 @@ the base type entry may also have
 a 
 \livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size} and a
 \livelink{chap:DWATdatabitoffset}{DW\-\_AT\-\_data\-\_bit\-\_offset} attribute, 
-both of whose values are
+both 
+\addtoindexx{data bit offset attribute}
+of whose values are
 integer constant values (
 see Section \refersec{chap:staticanddynamicvaluesofattributes}). 
 The bit size
@@ -90,7 +92,9 @@ of zero is assumed.
 \livelink{chap:DWATdatabitoffset}{DW\-\_AT\-\_data\-\_bit\-\_offset} 
 is 
 \addtoindexx{bit offset attribute}
-new in DWARF Version 4 and
+new 
+\addtoindexx{data bit offset attribute}
+in DWARF Version 4 and
 is also used for bit field members 
 (see Section \refersec{chap:datamemberentries}). 
 It
@@ -201,8 +205,14 @@ and
 \livelink{chap:DWATEnumericstring}{DW\-\_ATE\-\_numeric\-\_string} 
 base types
 represent packed and unpacked decimal string numeric data
-types, respectively, either of which may be either signed
-or unsigned. 
+types, respectively, either of which may be 
+either 
+\addtoindexx{decimal scale attribute}
+signed
+\addtoindexx{decimal sign attribute}
+or 
+\addtoindexx{digit count attribute}
+unsigned. 
 \hypertarget{chap:DWATdecimalsigndecimalsignrepresentation}
 These 
 \hypertarget{chap:DWATdigitcountdigitcountforpackeddecimalornumericstringtype}
@@ -212,7 +222,9 @@ base types are used in combination with
 \livelink{chap:DWATdecimalscale}{DW\-\_AT\-\_decimal\-\_scale}
 attributes.
 
-A \livelink{chap:DWATdecimalsign}{DW\-\_AT\-\_decimal\-\_sign} attribute is an integer constant that
+A \livelink{chap:DWATdecimalsign}{DW\-\_AT\-\_decimal\-\_sign} attribute 
+\addtoindexx{decimal sign attribute}
+is an integer constant that
 conveys the representation of the sign of the decimal type
 (see Figure \refersec{fig:decimalsignattributevalues}). 
 Its integer constant value is interpreted to
@@ -222,13 +234,17 @@ alternatively, no sign at all.
 
 The 
 \livelink{chap:DWATdigitcount}{DW\-\_AT\-\_digit\-\_count}
-attribute is an integer constant
+attribute 
+\addtoindexx{digit count attribute}
+is an integer constant
 value that represents the number of digits in an instance of
 the type.
 
 \hypertarget{chap:DWATdecimalscaledecimalscalefactor}
 The \livelink{chap:DWATdecimalscale}{DW\-\_AT\-\_decimal\-\_scale}
-attribute is an integer constant value
+attribute 
+\addtoindexx{decimal scale attribute}
+is an integer constant value
 that represents the exponent of the base ten scale factor to
 be applied to an instance of the type. A scale of zero puts the
 decimal point immediately to the right of the least significant
@@ -250,15 +266,21 @@ string associated with the type.
 
 If the edited base type entry describes an edited numeric
 data type, the edited type entry has a \livelink{chap:DWATdigitcount}{DW\-\_AT\-\_digit\-\_count} and a
-\livelink{chap:DWATdecimalscale}{DW\-\_AT\-\_decimal\-\_scale} attribute. These attributes have the same
-interpretation as described for the \livelink{chap:DWATEpackeddecimal}{DW\-\_ATE\-\_packed\-\_decimal} and
-\livelink{chap:DWATEnumericstring}{DW\-\_ATE\-\_numeric\-\_string} base types. If the edited type entry
+\livelink{chap:DWATdecimalscale}{DW\-\_AT\-\_decimal\-\_scale} attribute. 
+\addtoindexx{decimal scale attribute}
+These attributes have the same
+interpretation as described for the 
+\livelink{chap:DWATEpackeddecimal}{DW\-\_ATE\-\_packed\-\_decimal} and
+\livelink{chap:DWATEnumericstring}{DW\-\_ATE\-\_numeric\-\_string} base 
+types. If the edited type entry
 describes an edited alphanumeric data type, the edited type
 entry does not have these attributes.
 
 
 \textit{The presence or absence of the \livelink{chap:DWATdigitcount}{DW\-\_AT\-\_digit\-\_count} and
-\livelink{chap:DWATdecimalscale}{DW\-\_AT\-\_decimal\-\_scale} attributes allows a debugger to easily
+\livelink{chap:DWATdecimalscale}{DW\-\_AT\-\_decimal\-\_scale} attributes 
+\addtoindexx{decimal scale attribute}
+allows a debugger to easily
 distinguish edited numeric from edited alphanumeric, although
 in principle the digit count and scale are derivable by
 interpreting the picture string.}
@@ -267,20 +289,30 @@ The \livelink{chap:DWATEsignedfixed}{DW\-\_ATE\-\_signed\-\_fixed} and \livelink
 describe signed and unsigned fixed\dash point binary data types,
 respectively.
 
-The fixed binary type entries have a \livelink{chap:DWATdigitcount}{DW\-\_AT\-\_digit\-\_count}
+The fixed binary type entries have 
+\addtoindexx{digit count attribute}
+a 
+\livelink{chap:DWATdigitcount}{DW\-\_AT\-\_digit\-\_count}
 attribute with the same interpretation as described for the
 \livelink{chap:DWATEpackeddecimal}{DW\-\_ATE\-\_packed\-\_decimal} and \livelink{chap:DWATEnumericstring}{DW\-\_ATE\-\_numeric\-\_string} base types.
 
 For a data type with a decimal scale factor, the fixed binary
-type entry has a \livelink{chap:DWATdecimalscale}{DW\-\_AT\-\_decimal\-\_scale} attribute with the same
-interpretation as described for the \livelink{chap:DWATEpackeddecimal}{DW\-\_ATE\-\_packed\-\_decimal}
+type entry has a 
+\livelink{chap:DWATdecimalscale}{DW\-\_AT\-\_decimal\-\_scale} attribute 
+\addtoindexx{decimal scale attribute}
+with the same
+interpretation as described for the 
+\livelink{chap:DWATEpackeddecimal}{DW\-\_ATE\-\_packed\-\_decimal}
 and \livelink{chap:DWATEnumericstring}{DW\-\_ATE\-\_numeric\-\_string} base types.
 
 \hypertarget{chap:DWATbinaryscalebinaryscalefactorforfixedpointtype}
 For a data type with a binary scale factor, the fixed
 \addtoindexx{binary scale attribute}
-binary type entry has a \livelink{chap:DWATbinaryscale}{DW\-\_AT\-\_binary\-\_scale} attribute. The
-\livelink{chap:DWATbinaryscale}{DW\-\_AT\-\_binary\-\_scale} attribute is an integer constant value
+binary type entry has a 
+\livelink{chap:DWATbinaryscale}{DW\-\_AT\-\_binary\-\_scale} attribute. 
+The
+\livelink{chap:DWATbinaryscale}{DW\-\_AT\-\_binary\-\_scale} attribute 
+is an integer constant value
 that represents the exponent of the base two scale factor to
 be applied to an instance of the type.  Zero scale puts the
 binary point immediately to the right of the least significant
@@ -406,6 +438,7 @@ or reference type ought to be dereferenced.
 A modified type entry describing a shared qualified type
 (using \livelink{chap:DWTAGsharedtype}{DW\-\_TAG\-\_shared\-\_type}) may have a
 \livelink{chap:DWATcount}{DW\-\_AT\-\_count} attribute
+\addtoindexx{count attribute}
 whose value is a constant expressing the blocksize of the
 type. If no count attribute is present, then the “infinite”
 blocksize is assumed.
@@ -694,7 +727,9 @@ class or union they represent if such information is already
 provided in the declaration.
 
 \textit{For \addtoindex{C} and \addtoindex{C++}, 
-data member declarations occurring within
+data 
+\addtoindexx{data member|see {member entry (data)}}
+member declarations occurring within
 the declaration of a structure, union or class type are
 considered to be “definitions” of those members, with
 the exception of “static” data members, whose definitions
@@ -779,7 +814,9 @@ of the inheritance entry is derived, extended or implementing.
 
 An inheritance entry for a class that derives from or extends
 \hypertarget{chap:DWATdatamemberlocationinheritedmemberlocation}
-another class or struct also has a 
+another class or struct also has 
+\addtoindexx{data member location attribute}
+a 
 \livelink{chap:DWATdatamemberlocation}{DW\-\_AT\-\_data\-\_member\-\_location}
 attribute, whose value describes the location of the beginning
 of the inherited type relative to the beginning address of the
@@ -813,7 +850,8 @@ the class referenced by the inheritance entry serves
 as a \addtoindex{C++} virtual base class, the inheritance entry has a
 \livelink{chap:DWATvirtuality}{DW\-\_AT\-\_virtuality} attribute.
 
-\textit{For a \addtoindex{C++} virtual base, the data member location attribute
+\textit{For a \addtoindex{C++} virtual base, the 
+\addtoindex{data member location attribute}
 will usually consist of a non-trivial location description.}
 
 \subsection{Access Declarations}
@@ -913,7 +951,9 @@ The member entry corresponding to a data member that is
 \hypertarget{chap:DWATdatabitoffsetdatamemberbitlocation}
 defined 
 \hypertarget{chap:DWATdatamemberlocationdatamemberlocation}
-in a structure, union or class may have either a
+in a structure, union or class may have either
+\addtoindexx{data member location attribute}
+a
 \livelink{chap:DWATdatamemberlocation}{DW\-\_AT\-\_data\-\_member\-\_location} attribute or a
 \livelink{chap:DWATdatabitoffset}{DW\-\_AT\-\_data\-\_bit\-\_offset}
 attribute. If the beginning of the data member is the same as
@@ -921,6 +961,8 @@ the beginning of the containing entity then neither attribute
 is required.
 
 For a \livelink{chap:DWATdatamemberlocation}{DW\-\_AT\-\_data\-\_member\-\_location} attribute
+
+\addtoindexx{data member location attribute}
 there are two cases:
 
 \begin{enumerate}[1.]
@@ -948,7 +990,9 @@ result of the evaluation is a location--either an address or
 the name of a register, not an offset to the member.}
 
 \textit{A \livelink{chap:DWATdatamemberlocation}{DW\-\_AT\-\_data\-\_member\-\_location} 
-attribute that has the form of a
+attribute 
+\addtoindexx{data member location attribute}
+that has the form of a
 location description is not valid for a data member contained
 in an entity that is not byte aligned because DWARF operations
 do not allow for manipulating or computing bit offsets.}
@@ -975,8 +1019,13 @@ is the amount
 of storage needed to hold the value of the data member.
 
 \textit{\addtoindex{C} and \addtoindex{C++} 
+typically 
 \addtoindex{bit fields} 
-typically require the use of the
+require the use 
+\addtoindexx{data bit offset}
+of 
+\addtoindexx{data bit size}
+the
 \livelink{chap:DWATdatabitoffset}{DW\-\_AT\-\_data\-\_bit\-\_offset} and 
 \livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size} attributes.}
 
@@ -1737,8 +1786,14 @@ and upper bound values of the subrange. The
 \livelink{chap:DWATupperbound}{DW\-\_AT\-\_upper\-\_bound}
 attribute 
 \hypertarget{chap:DWATcountelementsofsubrangetype}
-may be replaced by a 
-\livelink{chap:DWATcount}{DW\-\_AT\-\_count} attribute, whose
+may 
+% FIXME: The following matches DWARF4: odd as there is no default count.
+\addtoindexx{count attribute!default}
+be 
+\addtoindexx{count attribute}
+replaced by a 
+\livelink{chap:DWATcount}{DW\-\_AT\-\_count} attribute, 
+whose
 value describes the number of elements in the subrange rather
 than the value of the last element. The value of each of
 these attributes is determined as described in 
@@ -1771,7 +1826,8 @@ basis type, the basis type is assumed to be the same as
 the object described by the lower bound attribute (if it
 references an object). If there is no lower bound attribute,
 or that attribute does not reference an object, the basis type
-is the type of the upper bound or count attribute (if either
+is the type of the upper bound or \addtoindex{count attribute}
+(if either
 of them references an object). If there is no upper bound or
 count attribute, or neither references an object, the type is
 assumed to be the same type, in the source language of the
