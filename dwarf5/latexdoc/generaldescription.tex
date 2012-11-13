@@ -554,15 +554,22 @@ Section \refersec{chap:locationdescriptions}.
 Each general operation represents a postfix operation on
 a simple stack machine. Each element of the stack is the
 size of an address on the target machine. The value on the
-top of the stack after ``executing'' the DWARF expression
-is taken to be the result (the address of the object, the
+top of the stack after ``executing'' the 
+\addtoindex{DWARF expression}
+is 
+\addtoindex{DWARF expression|see{location description}}
+taken to be the result (the address of the object, the
 value of the array bound, the length of a dynamic string,
 the desired value itself, and so on).
 
 \subsubsection{Literal Encodings}
 \label{chap:literalencodings}
-The following operations all push a value onto the DWARF
-stack. If the value of a constant in one of these operations
+The 
+\addtoindexx{DWARF expression!literal encodings}
+following operations all push a value onto the DWARF
+stack. 
+\addtoindexx{DWARF expression!stack operations}
+If the value of a constant in one of these operations
 is larger than can be stored in a single stack element, the
 value is truncated to the element size and the low\dash order bits
 are pushed on the stack.
@@ -599,6 +606,7 @@ a signed LEB128 integer constant.
 \subsubsection{Register Based Addressing}
 \label{chap:registerbasedaddressing}
 The following operations push a value onto the stack that is
+\addtoindexx{DWARF expression!register based addressing}
 the result of adding the contents of a register to a given
 signed offset.
 
@@ -629,7 +637,9 @@ a signed LEB128 offset.
 
 \subsubsection{Stack Operations}
 \label{chap:stackoperations}
-The following operations manipulate the DWARF stack. Operations
+The following 
+\addtoindexx{DWARF expression!stack operations}
+operations manipulate the DWARF stack. Operations
 that index the stack assume that the top of the stack (most
 recently added entry) has index 0.
 
@@ -776,7 +786,11 @@ space efficient to reference that.
 \end{enumerate}
 
 \subsubsection{Arithmetic and Logical Operations}
-The following provide arithmetic and logical operations. Except
+The 
+\addtoindexx{DWARF expression!arithmetic operations}
+following 
+\addtoindexx{DWARF expression!logical operations}
+provide arithmetic and logical operations. Except
 as otherwise specified, the arithmetic operations perfom
 addressing arithmetic, that is, unsigned arithmetic that is
 performed modulo one plus the largest representable address
@@ -861,7 +875,9 @@ pushes the result.
 
 \subsubsection{Control Flow Operations}
 \label{chap:controlflowoperations}
-The following operations provide simple control of the flow of a DWARF expression.
+The 
+\addtoindexx{DWARF expression!control flow operations}
+following operations provide simple control of the flow of a DWARF expression.
 \begin{enumerate}[1]
 \item  \livetarg{chap:DWOPle}{DW\-\_OP\-\_le}, \livetarg{chap:DWOPge}{DW\-\_OP\-\_ge}, \livetarg{chap:DWOPeq}{DW\-\_OP\-\_eq}, \livetarg{chap:DWOPlt}{DW\-\_OP\-\_lt}, \livetarg{chap:DWOPgt}{DW\-\_OP\-\_gt}, \livetarg{chap:DWOPne}{DW\-\_OP\-\_ne} \\
 The six relational operators each:
@@ -946,7 +962,9 @@ by prior agreement between the calling and called expressions.
 
 
 \subsubsection{Special Operations}
-There is one special operation currently defined:
+There 
+\addtoindexx{DWARF expression!special operations}
+is one special operation currently defined:
 \begin{enumerate}[1]
 \item \livetarg{chap:DWOPnop}{DW\-\_OP\-\_nop} \\
 The \livelink{chap:DWOPnop}{DW\-\_OP\-\_nop} operation is a place holder. It has no effect
@@ -954,7 +972,9 @@ on the location stack or any of its values.
 
 \end{enumerate}
 \subsection{Example Stack Operations}
-\textit {The stack operations defined in 
+\textit {The 
+\addtoindexx{DWARF expression!examples}
+stack operations defined in 
 Section \refersec{chap:stackoperations}.
 are fairly conventional, but the following
 examples illustrate their behavior graphically.
@@ -1745,10 +1765,15 @@ may have a
 \livelink{chap:DWATlocation}{DW\-\_AT\-\_location} attribute, whose value is a location description
 (see Section \refersec{chap:locationdescriptions}).
 
-A DWARF procedure is represented by any
-kind of debugging information entry that has a \livelink{chap:DWATlocation}{DW\-\_AT\-\_location}
-attribute. If a suitable entry is not otherwise available,
+A 
+\addtoindex{DWARF procedure}
+is represented by any
+kind of debugging information entry that has a 
+\livelink{chap:DWATlocation}{DW\-\_AT\-\_location}
+attribute. 
+If a suitable entry is not otherwise available,
 a DWARF procedure can be represented using a debugging
+\addtoindexx{DWARF procedure entry}
 information entry with the 
 tag \livetarg{chap:DWTAGdwarfprocedure}{DW\-\_TAG\-\_dwarf\-\_procedure}
 together with a \livelink{chap:DWATlocation}{DW\-\_AT\-\_location} attribute.  
@@ -1795,7 +1820,8 @@ the entry has a \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} attribute whose
 relocated address for the entity.  While the \livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc}
 attribute might also seem appropriate for this purpose,
 historically the \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} attribute was used before the
-\livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc} was introduced (in DWARF Version 3). There is
+\livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc} was introduced 
+(in \addtoindex{DWARF Version 3}). There is
 insufficient reason to change this.
 
 \subsection{Continuous Address Range}
