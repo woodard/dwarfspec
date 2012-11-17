@@ -29,7 +29,9 @@ a null\dash terminated string containing the name of the base type
 as recognized by the programming language of the compilation
 unit containing the base type entry.
 
-A base type entry has a \livelink{chap:DWATencoding}{DW\-\_AT\-\_encoding} attribute describing
+A base type entry has 
+\addtoindexx{encoding attribute}
+a \livelink{chap:DWATencoding}{DW\-\_AT\-\_encoding} attribute describing
 how the base type is encoded and is to be interpreted. The
 value of this attribute is an integer constant. The set of
 values and their meanings for the \livelink{chap:DWATencoding}{DW\-\_AT\-\_encoding} attribute
@@ -379,7 +381,6 @@ indicating positive or negative. \\
 \addtoindexx{void type|see{unspecified type entry}}
 Some languages have constructs in which a type 
 may be left unspecified or the absence of a type
-
 may be explicitly indicated.
 
 An unspecified (implicit, unknown, ambiguous or nonexistent)
@@ -617,7 +618,9 @@ the number of array elements by the size of each element.}
 
 
 Each array dimension is described by a debugging information
-entry with either the tag \livelink{chap:DWTAGsubrangetype}{DW\-\_TAG\-\_subrange\-\_type} or the tag
+entry with either the tag \livelink{chap:DWTAGsubrangetype}{DW\-\_TAG\-\_subrange\-\_type} or the 
+\addtoindexx{enumeration type entry!as array dimension}
+tag
 \livelink{chap:DWTAGenumerationtype}{DW\-\_TAG\-\_enumeration\-\_type}. These entries are
 children of the
 array type entry and are ordered to reflect the appearance of
@@ -806,6 +809,7 @@ may
 \addtoindexx{derived type (C++)|see{inheritance entry}}
 be ``derived from'' or be a
 ``subclass of'' another class. In Java, an interface may ``extend''
+\addtoindexx{extended type (Java)|see{inheritance entry}}
 one or more other interfaces, and a class may ``extend'' another
 class and/or ``implement'' one or more interfaces. All of these
 relationships may be described using the following. Note that
@@ -1282,7 +1286,9 @@ then that entry has a
 If 
 \hypertarget{chap:DWATexplicitexplicitpropertyofmemberfunction}
 the member function entry describes an explicit member
-function, then that entry has a 
+function, then that entry has 
+\addtoindexx{explicit attribute}
+a 
 \livelink{chap:DWATexplicit}{DW\-\_AT\-\_explicit} attribute.
 
 An 
@@ -1555,11 +1561,13 @@ in the source program. This entry also has a \livelink{chap:DWATbytesize}{DW\-\_
 attribute whose integer constant value is the number of bytes
 required to hold an instance of the enumeration.
 
-The enumeration type entry may have a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute
+The \addtoindex{enumeration type entry}
+may have a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute
 which refers to the underlying data type used to implement
 the enumeration.
 
-If an enumeration type has type safe semantics such that
+If an enumeration type has type safe 
+semantics such that
 
 \begin{enumerate}[1.]
 \item Enumerators are contained in the scope of the enumeration type, and/or
@@ -1567,7 +1575,9 @@ If an enumeration type has type safe semantics such that
 \item Enumerators are not implicitly converted to another type
 \end{enumerate}
 
-then the enumeration type entry may have a \livelink{chap:DWATenumclass}{DW\-\_AT\-\_enum\-\_class}
+then the \addtoindex{enumeration type entry} may 
+\addtoindexx{enum class|see{type-safe enumeration}}
+have a \livelink{chap:DWATenumclass}{DW\-\_AT\-\_enum\-\_class}
 attribute, which is a \livelink{chap:flag}{flag}. 
 In a language that offers only
 one kind of enumeration declaration, this attribute is not
@@ -1577,20 +1587,23 @@ required.
 the underlying type will be the appropriate
 integral type determined by the compiler from the properties of
 \hypertarget{chap:DWATenumclasstypesafeenumerationdefinition}
-the enumeration literal values. A \addtoindex{C++} type declaration written
+the enumeration literal values. 
+A \addtoindex{C++} type declaration written
 using enum class declares a strongly typed enumeration and
 is represented using \livelink{chap:DWTAGenumerationtype}{DW\-\_TAG\-\_enumeration\-\_type} 
 in combination with \livelink{chap:DWATenumclass}{DW\-\_AT\-\_enum\-\_class}.}
 
 Each enumeration literal is represented by a debugging
+\addtoindexx{enumeration literal|see{enumeration entry}}
 information entry with the 
 tag \livetarg{chap:DWTAGenumerator}{DW\-\_TAG\-\_enumerator}. 
 Each
-such entry is a child of the enumeration type entry, and the
+such entry is a child of the 
+\addtoindex{enumeration type entry}, and the
 enumerator entries appear in the same order as the declarations
 of the enumeration literals in the source program.
 
-Each enumerator entry has a 
+Each \addtoindex{enumerator entry} has a 
 \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute, whose
 value is a null\dash terminated string containing the name of the
 \hypertarget{chap:DWATconstvalueenumerationliteralvalue}
@@ -1602,6 +1615,7 @@ represented on the target system.
 
 
 If the enumeration type occurs as the description of a
+\addtoindexx{enumeration type endry!as array dimension}
 dimension of an array type, and the stride for that dimension
 \hypertarget{chap:DWATbytestrideenumerationstridedimensionofarraytype}
 is different than what would otherwise be determined, then

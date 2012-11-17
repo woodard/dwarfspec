@@ -13,7 +13,8 @@ Each debugging information entry consists of an identifying
 tag and a series of 
 \addtoindex{attributes}. 
 An entry, or group of entries together, provide a description of a
-corresponding entity in the source program. 
+corresponding 
+\addtoindex{entity} in the source program. 
 The tag specifies the class to which an entry belongs
 and the attributes define the specific characteristics of the entry.
 
@@ -1063,7 +1064,9 @@ described below.
 
 The two forms are distinguished in a context sensitive
 manner. As the value of an attribute, a location description
-is encoded using class \livelink{chap:exprloc}{exprloc}  
+is encoded using 
+\addtoindexx{exprloc class}
+class \livelink{chap:exprloc}{exprloc}  
 and a location list is encoded
 using class \livelink{chap:loclistptr}{loclistptr} (which serves as an offset into a
 separate location list table).
@@ -1181,7 +1184,8 @@ actual value of the object, rather than its location. The
 
 \paragraph{Empty Location Descriptions}
 
-An empty location description consists of a DWARF expression
+An \addtoindex{empty location description}
+consists of a DWARF expression
 containing no operations. It represents a piece or all of an
 object that is present in the source but not in the object code
 (perhaps due to optimization).
@@ -1338,7 +1342,9 @@ Each entry in a location list is either a location
 entry,
 a 
 \addtoindexi{base}{base address selection entry!in location list} 
-address selection entry, or an end of list entry.
+address selection entry, or an 
+\addtoindexx{end of list entry!in location list}
+end of list entry.
 
 A location list entry consists of:
 
@@ -1358,8 +1364,10 @@ list. It marks the first address past the end of the address
 range over which the location is valid. The ending address
 must be greater than or equal to the beginning address.
 
-\textit{A location list entry (but not a base address selection or end of list entry) whose beginning
-and ending addresses are equal has no effect because the size of the range covered by such
+\textit{A location list entry (but not a base address selection or 
+end of list entry) whose beginning
+and ending addresses are equal has no effect 
+because the size of the range covered by such
 an entry is zero.}
 
 \item A single location description 
@@ -1404,7 +1412,9 @@ affects only the list in which it is contained.}
 The end of any given location list is marked by an end of
 list entry, which consists of a 0 for the beginning address
 offset and a 0 for the ending address offset. A location list
-containing only an end of list entry describes an object that
+containing only an 
+\addtoindexx{end of list entry!in location list}
+end of list entry describes an object that
 exists in the source code but not in the executable program.
 
 Neither a base address selection entry nor an end of list
@@ -1559,8 +1569,14 @@ a
 attribute, whose value is a location
 description. The description evaluates to the segment selector
 of the item being described. If the entry containing the
-\livelink{chap:DWATsegment}{DW\-\_AT\-\_segment} attribute has a \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc}, \livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc},
-\livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} or \livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc} attribute, or a location
+\livelink{chap:DWATsegment}{DW\-\_AT\-\_segment} attribute has a 
+\livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc}, 
+\livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc},
+\livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} or 
+\livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc} attribute, 
+\addtoindexx{entry pc attribute}
+or 
+a location
 description that evaluates to an address, then those address
 values represent the offset portion of the address within
 the segment specified by \livelink{chap:DWATsegment}{DW\-\_AT\-\_segment}.
@@ -1863,7 +1879,9 @@ value is represented as an offset from the beginning of the
 
 Each entry in a range list is either a range list entry,
 \addtoindexx{base address selection entry!in range list}
-a base address selection entry, or an end of list entry.
+a base address selection entry, or an 
+\addtoindexx{end of list entry!in range list}
+end of list entry.
 
 A range list entry consists of:
 
@@ -1876,7 +1894,8 @@ range.
 
 \item An ending address offset. This address offset again has the size of an address and is relative
 to the applicable base address of the compilation unit referencing this range list. It marks the
-first address past the end of the address range.The ending address must be greater than or
+first address past the end of the address range.
+The ending address must be greater than or
 equal to the beginning address.
 
 \textit{A range list entry (but not a base address selection or end of list entry) whose beginning and
@@ -1912,13 +1931,17 @@ and ending address offsets of subsequent entries of the location list.
 affects only the list in which it is contained.}
 
 
-The end of any given range list is marked by an end of
-list entry, which consists of a 0 for the beginning address
+The end of any given range list is marked by an 
+\addtoindexx{end of list entry!in range list}
+end of list entry, 
+which consists of a 0 for the beginning address
 offset and a 0 for the ending address offset. A range list
 containing only an end of list entry describes an empty scope
 (which contains no instructions).
 
-\textit{A base address selection entry and an end of list entry for
+\textit{A base address selection entry and an 
+\addtoindexx{end of list entry!in range list}
+end of list entry for
 a range list are identical to a base address selection entry
 and end of list entry, respectively, for a location list
 (see Section \refersec{chap:locationlists}) 

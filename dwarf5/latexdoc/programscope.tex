@@ -363,14 +363,18 @@ attribute whose value is a null\dash terminated string containing
 the module name as it appears in the source program.
 
 The module entry may have either a \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} and
-\livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair of attributes or a \livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} attribute
+\livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} 
+pair of attributes or a 
+\livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} attribute
 whose values encode the contiguous or non\dash contiguous address
 ranges, respectively, of the machine instructions generated for
 the module initialization code 
 (see Section \refersec{chap:codeaddressesandranges}). 
 \hypertarget{chap:DWATentrypcentryaddressofmoduleinitialization}
 It may also
-have a \livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc} attribute whose value is the address of
+\addtoindexx{entry pc attribute!for module initialization}
+have a 
+\livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc} attribute whose value is the address of
 the first executable instruction of that initialization code
 (see Section \refersec{chap:entryaddress}).
 
@@ -397,7 +401,9 @@ A namespace extension is
 \hypertarget{chap:DWATextensionpreviousnamespaceextensionororiginalnamespace}
 represented by a 
 \livelink{chap:DWTAGnamespace}{DW\-\_TAG\-\_namespace} entry 
-with a 
+with 
+\addtoindexx{extension attribute}
+a 
 \livelink{chap:DWATextension}{DW\-\_AT\-\_extension}
 attribute referring to the previous extension, or if there
 is no previous extension, to the original 
@@ -622,7 +628,10 @@ for an example.
 \section{Subroutine and Entry Point Entries}
 \label{chap:subroutineandentrypointentries}
 
-The following tags exist to describe debugging information entries for subroutines and entry
+The following tags exist to describe 
+debugging information entries for subroutines and entry
+% FIXME: is entry point entry the right index 'entry'?
+\addtoindexx{entry point entry}
 points:
 
 \begin{tabular}{lp{9.0cm}}
@@ -642,7 +651,9 @@ If the name of the subroutine described by an entry with the
 tag \livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram}
 is visible outside of its containing
 \hypertarget{chap:DWATexternalexternalsubroutine}
-compilation unit, that entry has a 
+compilation unit, that entry has 
+\addtoindexx{external attribute}
+a 
 \livelink{chap:DWATexternal}{DW\-\_AT\-\_external} attribute,
 which is a \livelink{chap:flag}{flag}.
 
@@ -737,7 +748,9 @@ where functions support recursion by default.
 
 A subprogram entry 
 \hypertarget{chap:DWATelementalelementalpropertyofasubroutine}
-may have a 
+may have 
+\addtoindexx{elemental attribute}
+a 
 \livelink{chap:DWATelemental}{DW\-\_AT\-\_elemental} attribute, which
 is a \livelink{chap:flag}{flag}. 
 The attribute indicates whether the subroutine
@@ -789,7 +802,9 @@ Section \refersec{chap:codeaddressesandranges}).
 
 A 
 \hypertarget{chap:DWATentrypcentryaddressofsubprogram}
-subroutine entry may also have a 
+subroutine entry may also have 
+\addtoindexx{entry pc attribute!for subroutine}
+a 
 \livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc} attribute
 whose value is the address of the first executable instruction
 of the subroutine (see 
@@ -799,10 +814,17 @@ An entry point has a \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} attribute 
 relocated address of the first machine instruction generated
 for the entry point.
 
-\textit{While the \livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc} attribute might also seem appropriate
-for this purpose, historically the \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} attribute
-was used before the \livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc} was introduced (in DWARF
-Version 3). There is insufficient reason to change this.}
+\textit{While the 
+\livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc} attribute 
+\addtoindexx{entry pc attribute!for subroutine}
+might 
+also seem appropriate
+for this purpose, historically the 
+\livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} attribute
+was used before the 
+\livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc} was introduced (in
+\addtoindex{DWARF Version 3}). 
+There is insufficient reason to change this.}
 
 
 Subroutines 
@@ -956,8 +978,11 @@ within the context of the parent.}
 it may validly throw.}
 
 If a subroutine explicitly declares that it may throw
+\addtoindexx{exception thrown|see{thrown type entry}}
 an exception for one or more types, each such type is
-represented by a debugging information entry with the tag
+represented by a debugging information entry with 
+\addtoindexx{thrown type entry}
+the tag
 \livetarg{chap:DWTAGthrowntype}{DW\-\_TAG\-\_thrown\-\_type}.  
 Each such entry is a child of the entry
 representing the subroutine that may throw this type. Each
@@ -1090,9 +1115,12 @@ A debugging information entry that is a member of an abstract
 instance tree should not contain any attributes which describe
 aspects of the subroutine which vary between distinct inlined
 expansions or distinct out\dash of\dash line expansions. For example,
+\addtoindexx{entry pc attribute!and abstract instance}
 the \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc},
-\livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc}, \livelink{chap:DWATranges}{DW\-\_AT\-\_ranges}, 
-\livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc}, \livelink{chap:DWATlocation}{DW\-\_AT\-\_location},
+\livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc}, 
+\livelink{chap:DWATranges}{DW\-\_AT\-\_ranges}, 
+\livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc}, 
+\livelink{chap:DWATlocation}{DW\-\_AT\-\_location},
 \livelink{chap:DWATreturnaddr}{DW\-\_AT\-\_return\-\_addr}, \livelink{chap:DWATstartscope}{DW\-\_AT\-\_start\-\_scope}, and 
 \livelink{chap:DWATsegment}{DW\-\_AT\-\_segment}
 attributes typically should be omitted; however, this list
@@ -1134,7 +1162,9 @@ generated for the inlined subroutine (see
 Section \refersec{chap:codeaddressesandranges}). 
 An
 \hypertarget{chap:DWATentrypcentryaddressofinlinedsubprogram}
-inlined subroutine entry may also contain a 
+inlined subroutine entry may also contain 
+\addtoindexx{entry pc attribute!for inlined subprogram}
+a 
 \livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc}
 attribute, representing the first executable instruction of
 the inline expansion (see 

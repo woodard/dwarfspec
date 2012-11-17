@@ -348,7 +348,8 @@ A boolean indicating that the current instruction is the beginning of a
 
 \addtoindex{end\_sequence} &
 A boolean indicating that the current address is that of the first byte after
-the end of a sequence of target machine instructions. end\_sequence
+the end of a sequence of target machine instructions. 
+\addtoindex{end\_sequence}
 terminates a sequence of lines; therefore other information in the same
 row is not meaningful. \\
 
@@ -388,11 +389,11 @@ op\_index & 0 \\
 file & 1 \\
 line & 1 \\
 column & 0 \\
-is\_stmt & determined by \addtoindex{default\_is\_stmt} in the line number program header \\
-basic\_block & ``false'' \addtoindexx{basic block} \\
-end\_sequence & ``false'' \\
-prologue\_end & ``false'' \\
-epilogue\_begin & ``false'' \\
+\addtoindex{is\_stmt} & determined by \addtoindex{default\_is\_stmt} in the line number program header \\
+\addtoindex{basic\_block} & ``false'' \addtoindexx{basic block} \\
+\addtoindex{end\_sequence} & ``false'' \\
+\addtoindex{prologue\_end} & ``false'' \\
+\addtoindex{epilogue\_begin} & ``false'' \\
 isa & 0 \\
 discriminator & 0 \\
 \end{tabular}
@@ -627,14 +628,14 @@ Each ubyte special opcode has the following effect on the state machine:
 \item  Add a signed integer to the line register.
 
 \item  Modify the operation pointer by incrementing the
-address and op\_index registers as described below.
+address and \addtoindex{op\_index} registers as described below.
 
 \item  Append a row to the matrix using the current values
 of the state machine registers.
 
-\item  Set the basic\_block register to ``false.'' \addtoindexx{basic block}
-\item  Set the prologue\_end register to ``false.''
-\item  Set the epilogue\_begin register to ``false.''
+\item  Set the \addtoindex{basic\_block} register to ``false.'' \addtoindexx{basic block}
+\item  Set the \addtoindex{prologue\_end} register to ``false.''
+\item  Set the \addtoindex{epilogue\_begin} register to ``false.''
 \item  Set the \addtoindex{discriminator} register to 0.
 
 \end{enumerate}
@@ -865,7 +866,8 @@ use \livelink{chap:DWLNSfixedadvancepc}{DW\-\_LNS\-\_fixed\-\_advance\-\_pc} ins
 
 \item \textbf{DW\-\_LNS\-\_set\-\_prologue\-\_end} \\
 The \livetarg{chap:DWLNSsetprologueend}{DW\-\_LNS\-\_set\-\_prologue\-\_end}
-opcode takes no operands. It sets the prologue\_end register
+opcode takes no operands. It sets the 
+\addtoindex{prologue\_end} register
 to ``true''.
 
 \textit{When a breakpoint is set on entry to a function, it is
@@ -882,7 +884,8 @@ the location(s) to use.}
 location; for example, the code might test for a special case
 and make a fast exit prior to setting up the frame.}
 
-\textit{Note that the function to which the prologue end applies cannot
+\textit{Note that the function to which the 
+\addtoindex{prologue end} applies cannot
 be directly determined from the line number information alone;
 it must be determined in combination with the subroutine
 information entries of the compilation (including inlined
@@ -891,7 +894,7 @@ subroutines).}
 
 \item \textbf{DW\-\_LNS\-\_set\-\_epilogue\-\_begin} \\
 The \livetarg{chap:DWLNSsetepiloguebegin}{DW\-\_LNS\-\_set\-\_epilogue\-\_begin} opcode takes no operands. It
-sets the epilogue\_begin register to ``true''.
+sets the \addtoindex{epilogue\_begin} register to ``true''.
 
 \textit{When a breakpoint is set on the exit of a function or execution
 steps over the last executable statement of a function, it is
@@ -901,14 +904,16 @@ local variables can still be examined). Debuggers generally
 cannot properly determine where this point is. This command
 allows a compiler to communicate the location(s) to use.}
 
-\textit{Note that the function to which the epilogue end applies cannot
+\textit{Note that the function to which the 
+\addtoindex{epilogue end} applies cannot
 be directly determined from the line number information alone;
 it must be determined in combination with the subroutine
 information entries of the compilation (including inlined
 subroutines).}
 
-\textit{In the case of a trivial function, both prologue end and
-epilogue begin may occur at the same address.}
+\textit{In the case of a trivial function, both 
+\addtoindex{prologue end} and
+\addtoindex{epilogue begin} may occur at the same address.}
 
 \item \textbf{DW\-\_LNS\-\_set\-\_isa} \\
 The \livetarg{chap:DWLNSsetisa}{DW\-\_LNS\-\_set\-\_isa} opcode takes a single
@@ -925,7 +930,8 @@ The extended opcodes are as follows:
 
 \item \textbf{DW\-\_LNE\-\_end\-\_sequence} \\
 The \livetarg{chap:DWLNEendsequence}{DW\-\_LNE\-\_end\-\_sequence} opcode takes no operands. It sets the
-end\_sequence register of the state machine to “true” and
+\addtoindex{end\_sequence}
+register of the state machine to “true” and
 appends a row to the matrix using the current values of the
 state-machine registers. Then it resets the registers to the
 initial values specified above 
@@ -1203,10 +1209,12 @@ across a call. If a callee wishes to use such a register, it
 saves the value that the register had at entry time in its call
 frame and restores it on exit. The code that allocates space
 on the call frame stack and performs the save operation is
-called the subroutine’s prologue, and the code that performs
+called the subroutine’s \addtoindex{prologue}, and the code that performs
 the restore operation and deallocates the frame is called its
-epilogue. Typically, the prologue code is physically at the
-beginning of a subroutine and the epilogue code is at the end.}
+\addtoindex{epilogue}. Typically, the 
+\addtoindex{prologue} code is physically at the
+beginning of a subroutine and the 
+\addtoindex{epilogue} code is at the end.}
 
 \textit{To be able to view or modify an activation that is not
 on the top of the call frame stack, the debugger must
@@ -1229,10 +1237,14 @@ special things.}
 
 \begin{itemize} % bullet list
 
-\item \textit{Prologue and epilogue code is not always in 
+\item \textit{Prologue 
+\addtoindexx{prologue}
+and 
+\addtoindex{epilogue} code is not always in 
 distinct block
 at the beginning and end of a subroutine. It is common
-to duplicate the epilogue code at the site of each return
+to duplicate the \addtoindex{epilogue} code 
+at the site of each return
 from the code. Sometimes a compiler breaks up the register
 save/unsave operations and moves them into the body of the
 subroutine to just where they are needed.}
@@ -1243,7 +1255,9 @@ frame. Sometimes they use a frame pointer register, sometimes
 not.}
 
 \item \textit{The algorithm to compute CFA changes as you progress through
-the prologue and epilogue code. (By definition, the CFA value
+the \addtoindex{prologue} 
+and \addtoindex{epilogue code}. 
+(By definition, the CFA value
 does not change.)}
 
 \item \textit{Some subroutines have no call frame.}
@@ -1632,7 +1646,9 @@ is valid only if the current CFA rule is defined to use a
 register and offset.
 
 \item \textbf{DW\-\_CFA\-\_def\-\_cfa\-\_expression} \\
-The \livetarg{chap:DWCFAdefcfaexpression}{DW\-\_CFA\-\_def\-\_cfa\-\_expression} instruction takes a single
+The \livetarg{chap:DWCFAdefcfaexpression}{DW\-\_CFA\-\_def\-\_cfa\-\_expression} instruction takes a 
+\addtoindexx{exprloc class}
+single
 operand encoded as a \livelink{chap:DWFORMexprloc}{DW\-\_FORM\-\_exprloc} value representing a
 DWARF expression. The required action is to establish that
 expression as the means by which the current CFA is computed.
@@ -1758,7 +1774,8 @@ encoding and size of the register operand.
 
 \textit{The next two instructions provide the ability to stack and
 retrieve complete register states. They may be useful, for
-example, for a compiler that moves epilogue code into the
+example, for a compiler that moves \addtoindex{epilogue} code 
+into the
 body of a function.}
 
 
