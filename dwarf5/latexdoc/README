@@ -1,5 +1,20 @@
 
+On undefined references while building the document: In
+early latex passes forward references tend to be reported as
+'undefined'.   An example is:
 
+LaTeX Warning: Reference `chap:generaldescription' on page
+3 undefined on input line 59.
+
+Because the side-files latex generates help resolve those in
+later passes the simple existence of 'undefined' in a 'make'
+on a 'clean' directory should not be alarming as these will
+usually be from an early pass.  Run a second 'make' without
+doing a 'make clean' (thus using the side-files from the first
+'make') and if all is well the second 'make' will not generate
+any messages about 'undefined'.
+
+============================
 
 On Linux:
 On modern linux, here is the set of steps to build a pdf.
@@ -27,7 +42,7 @@ To Be added
 
 
 The DWARF5 latex document was first added here May 10, 2012.
-The tentative plan is to achieve a complete
-(insofar as is possible) identical-to-DWARF4 document.
-Mark that with a git tag.   Then proceed to change the document
-with DWARF5 changes.
+The plan is to achieve a complete (insofar as is possible)
+identical-to-DWARF4 document (which is referred to as DWARF
+4.1).  Mark that with a git tag.   Then proceed to change
+the document with DWARF5 changes.

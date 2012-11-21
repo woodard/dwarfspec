@@ -165,7 +165,7 @@ using DWARF.
 
 \subsection{Fortran 90 Example}
 \label{app:fortran90example}
-Consider the Fortran 90 source fragment in 
+Consider the \addtoindex{Fortran 90} source fragment in 
 \addtoindexx{array type entry!examples}
 Figure \refersec{fig:fortran90examplesourcefragment}.
 
@@ -185,7 +185,7 @@ end do
 \end{figure}
 
 For allocatable and pointer arrays, it is essentially required
-by the Fortran 90 semantics that each array consist of 
+by the \addtoindex{Fortran 90} semantics that each array consist of 
 \addtoindexx{descriptor!array}
 two
 \addtoindexx{array!descriptor for}
@@ -206,7 +206,9 @@ Note, however, that it is
 a property of the design that 1) a debugger needs no builtin
 knowledge of this structure and 2) there does not need to
 be an explicit representation of this structure in the DWARF
-input to the debugger.
+input to the 
+\addtoindexx{Fortran 90}
+debugger.
 
 \begin{figure}[here]
 \begin{lstlisting}
@@ -260,7 +262,7 @@ object will not have a
 a descriptor does have a \livelink{chap:DWATdatalocation}{DW\-\_AT\-\_data\-\_location} attribute. In
 that case the object doubles as its own descriptor.)
 
-The Fortran 90 derived type array\_ptr can now be redescribed
+The \addtoindex{Fortran 90} derived type array\_ptr can now be redescribed
 in C\dash like terms that expose some of the representation as in
 
 \begin{lstlisting}
@@ -288,7 +290,9 @@ within an entity of the given type
 \end{enumerate}
 
 
-The DWARF description is shown in 
+The DWARF description is shown 
+\addtoindexx{Fortran 90}
+in 
 Section \refersec{app:fortran90exampledwarfdescription}.
 
 \subsection{Fortran 90 example: DWARF description}
@@ -391,7 +395,9 @@ Section \refersec{app:fortran90exampledwarfdescription}.
 \subsection{Fortran 90 example continued: DWARF description}
 \label{app:fortran90examplecontinueddwarfdescription}
 
-Suppose the program is stopped immediately following completion
+Suppose 
+\addtoindexx{Fortran 90 example}
+the program is stopped immediately following completion
 of the do loop. Suppose further that the user enters the
 following debug command:
 
@@ -1616,9 +1622,18 @@ and not in OUTER’s concrete instance. In the abstract
 \addtoindexx{abstract instance!example}
 instance of OUTER, the description of INNER has the full
 complement of attributes that would be expected for a
-normal subprogram. While attributes such as \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc},
-\livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc}, \livelink{chap:DWATlocation}{DW\-\_AT\-\_location}, and so on, typically are omitted
-from an abstract instance because they are not invariant across
+normal subprogram. 
+While attributes such as 
+\livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc},
+\livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc}, 
+\livelink{chap:DWATlocation}{DW\-\_AT\-\_location},
+and so on, typically are omitted
+\addtoindexx{high PC attribute}
+from 
+\addtoindexx{low PC attribute}
+an 
+\addtoindexx{location attribute}
+abstract instance because they are not invariant across
 instances of the containing abstract instance, in this case
 those same attributes are included precisely because they are
 invariant -- there is only one subprogram INNER to be described

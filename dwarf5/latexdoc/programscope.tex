@@ -69,9 +69,16 @@ Compilation unit entries may have the following
 attributes:
 
 \begin{enumerate}[1]
-\item Either a \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} and \livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair of
-attributes or a 
+\item Either a \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} and 
+\livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair of
+\addtoindexx{high PC attribute}
+attributes 
+\addtoindexx{low PC attribute}
+or 
+\addtoindexx{ranges attribute}
+a 
 \livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} attribute
+\addtoindexx{ranges attribute}
 whose values encode 
 \addtoindexx{discontiguous address ranges|see{non-contiguous address ranges}}
 the
@@ -79,8 +86,14 @@ contiguous or
 non\dash contiguous address ranges, respectively,
 of the machine instructions generated for the compilation
 unit (see Section {chap:codeaddressesandranges}).  
-A \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} attribute may also
-be specified in combination with \livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} to specify the
+A \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} attribute 
+may also
+be specified 
+in combination 
+\addtoindexx{ranges attribute}
+with 
+\livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} to specify the
+\addtoindexx{ranges attribute}
 default base address for use in location lists (see Section
 \refersec{chap:locationlists}) and range lists 
 (see Section \refersec{chap:noncontiguousaddressranges}).
@@ -347,7 +360,9 @@ A Modula\dash 2 definition module may be represented by a module
 entry containing a 
 \addtoindex{declaration attribute}
 (\livelink{chap:DWATdeclaration}{DW\-\_AT\-\_declaration}). A
-\addtoindex{Fortran 90} module may also be represented by a module entry
+\addtoindex{Fortran 90} module 
+\addtoindexx{Fortran!module (Fortran 90)}
+may also be represented by a module entry
 (but no declaration attribute is warranted because \addtoindex{Fortran}
 has no concept of a corresponding module body).}
 
@@ -364,8 +379,13 @@ the module name as it appears in the source program.
 
 The module entry may have either a \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} and
 \livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} 
-pair of attributes or a 
+pair 
+\addtoindexx{high PC attribute}
+of 
+\addtoindexx{low PC attribute}
+attributes or a 
 \livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} attribute
+\addtoindexx{ranges attribute}
 whose values encode the contiguous or non\dash contiguous address
 ranges, respectively, of the machine instructions generated for
 the module initialization code 
@@ -391,7 +411,8 @@ represented as it would be on the target architecture.
 \label{chap:namespaceentries}
 \textit{\addtoindex{C++} has the notion of a namespace, which provides a way to
 implement name hiding, so that names of unrelated things
-do not accidentally clash in the global namespace when an
+do not accidentally clash in the 
+\addtoindex{global namespace} when an
 application is linked together.}
 
 A namespace is represented by a debugging information entry
@@ -428,15 +449,18 @@ function definitions.}
 If a type, variable, or function declared in a namespace is
 defined outside of the body of the namespace declaration,
 that type, variable, or function definition entry has a
-\livelink{chap:DWATspecification}{DW\-\_AT\-\_specification} attribute whose value is a reference to the
+\livelink{chap:DWATspecification}{DW\-\_AT\-\_specification} attribute 
+whose value is a reference to the
 debugging information entry representing the declaration of
 the type, variable or function. Type, variable, or function
 entries with a \livelink{chap:DWATspecification}{DW\-\_AT\-\_specification} attribute do not need
 to duplicate information provided by the declaration entry
 referenced by the specification attribute.
 
-\textit{The \addtoindex{C++} global namespace
-(the namespace referred to by
+\textit{The \addtoindex{C++} \addtoindex{global namespace}
+(the 
+\addtoindexx{global namespace|see{namespace (C++), global}}
+namespace referred to by
 ``::f'', for example) is not explicitly represented in
 DWARF with a namespace entry (thus mirroring the situation
 in \addtoindex{C++} source).  
@@ -535,7 +559,9 @@ provides no means to ``rename''
 an imported entity, other than a namespace).
 }
 
-\textit{A \addtoindex{Fortran} use statement with an ``only list'' may be
+\textit{A \addtoindex{Fortran} use statement 
+\addtoindexx{Fortran!use statement}
+with an ``only list'' may be
 represented by a series of imported declaration entries,
 one (or more) for each entity that is imported. An entity
 that is renamed in the importing context may be represented
@@ -577,7 +603,9 @@ entry of the appropriate extension of the namespace (which
 might be the original namespace entry) and no owned entries.
 }
 
-\textit{A \addtoindex{Fortran} use statement with a “rename list” may be
+\textit{A \addtoindex{Fortran} use statement 
+\addtoindexx{Fortran!use statement}
+with a “rename list” may be
 represented by an imported module entry with an import
 attribute referring to the module and owned entries
 corresponding to those entities that are renamed as part of
@@ -629,7 +657,11 @@ for an example.
 \label{chap:subroutineandentrypointentries}
 
 The following tags exist to describe 
-debugging information entries for subroutines and entry
+debugging information entries 
+\addtoindexx{function entry|see{subroutine entry}}
+for 
+\addtoindexx{subroutine entry}
+subroutines and entry
 % FIXME: is entry point entry the right index 'entry'?
 \addtoindexx{entry point entry}
 points:
@@ -718,7 +750,9 @@ then the debugging information entry for such a subroutine
 may have a calling convention attribute whose value is the
 constant \livetarg{chap:DWCCprogram}{DW\-\_CC\-\_program}.
 
-\textit{The \livelink{chap:DWCCprogram}{DW\-\_CC\-\_program} value is intended to support \addtoindex{Fortran} main
+\textit{The \livelink{chap:DWCCprogram}{DW\-\_CC\-\_program} 
+value is intended to support \addtoindex{Fortran} main
+\addtoindexx{Fortran!main program}
 programs which in some implementations may not be callable
 or which must be invoked in a special way. It is not intended
 as a way of finding the entry address for the program.
@@ -795,7 +829,12 @@ not have an attribute for the return type.  }
 
 A subroutine entry may have either a \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} and
 \livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair of attributes or a \livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} attribute
-whose values encode the contiguous or non\dash contiguous address
+\addtoindexx{ranges attribute}
+whose 
+\addtoindexx{high PC attribute}
+values 
+\addtoindexx{low PC attribute}
+encode the contiguous or non\dash contiguous address
 ranges, respectively, of the machine instructions generated
 for the subroutine (see 
 Section \refersec{chap:codeaddressesandranges}).
@@ -852,6 +891,7 @@ range attributes.
 The declarations enclosed by a subroutine or entry point are
 represented by debugging information entries that are owned
 by the subroutine or entry point entry. Entries representing
+\addtoindexx{formal parameter}
 the formal parameters of the subroutine or entry point appear
 in the same order as the corresponding declarations in the
 source program.
@@ -867,8 +907,10 @@ represented by a debugging information entry\addtoindexx{unspecified parameters 
 with the tag
 \livetarg{chap:DWTAGunspecifiedparameters}{DW\-\_TAG\-\_unspecified\-\_parameters}.
 
-The entry for a subroutine that includes a 
-\addtoindex{Fortran} 
+The entry for a subroutine that includes 
+\addtoindexx{Fortran!common block}
+a 
+\addtoindex{Fortran} common block
 \livelink{chap:fortrancommonblock}{common} 
 \livelink{chap:commonblockentry}{block}
 \addtoindexx{common block|see{Fortran common block}}
@@ -895,7 +937,9 @@ subroutine or entry point is stored.
 
 A 
 \hypertarget{chap:DWATframebasesubroutineframebaseaddress}
-subroutine or entry point entry may also have a
+subroutine or entry point entry may also have 
+\addtoindexx{frame base attribute}
+a
 \livelink{chap:DWATframebase}{DW\-\_AT\-\_frame\-\_base} attribute, whose value is a location
 description that computes the “frame base” for the
 subroutine or entry point. If the location description is
@@ -1014,6 +1058,7 @@ Each
 such entry has a \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute, whose value is a
 null\dash terminated string containing the name of the formal
 type parameter as it appears in the source program. The
+\addtoindexx{formal type parameter|see{template type parameter entry}}
 template type parameter entry also has a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute
 describing the actual type by which the formal is replaced
 for this instantiation.
@@ -1155,7 +1200,15 @@ the inlining occurs.
 
 Each inlined subroutine entry may have either a 
 \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc}
-and \livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair of attributes or a \livelink{chap:DWATranges}{DW\-\_AT\-\_ranges}
+and \livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair 
+of 
+\addtoindexx{high PC attribute}
+attributes 
+\addtoindexx{low PC attribute}
+or 
+\addtoindexx{ranges attribute}
+a 
+\livelink{chap:DWATranges}{DW\-\_AT\-\_ranges}
 attribute whose values encode the contiguous or non\dash contiguous
 address ranges, respectively, of the machine instructions
 generated for the inlined subroutine (see 
@@ -1507,7 +1560,13 @@ The lexical \livetargi{chap:lexicalblockentry}{block}{lexical block entry} entry
 may have 
 either a \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} and
 \livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair of 
-attributes or a \livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} attribute
+attributes 
+\addtoindexx{high PC attribute}
+or 
+\addtoindexx{low PC attribute}
+a 
+\livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} attribute
+\addtoindexx{ranges attribute}
 whose values encode the contiguous or non-contiguous address
 ranges, respectively, of the machine instructions generated
 for the lexical \livelink{chap:lexicalblock}{block} 
@@ -1572,8 +1631,14 @@ A with statement is represented by a
 \addtoindexi{debugging information entry}{with statement entry}
 with the tag \livetarg{chap:DWTAGwithstmt}{DW\-\_TAG\-\_with\-\_stmt}.
 
-A with statement entry may have either a \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} and
-\livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair of attributes or a \livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} attribute
+A with statement entry may have either a 
+\livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} and
+\livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair of attributes 
+\addtoindexx{high PC attribute}
+or 
+\addtoindexx{low PC attribute}
+a \livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} attribute
+\addtoindexx{ranges attribute}
 whose values encode the contiguous or non\dash contiguous address
 ranges, respectively, of the machine instructions generated
 for the with statement 
@@ -1608,8 +1673,15 @@ the tag \livetarg{chap:DWTAGcatchblock}{DW\-\_TAG\-\_catch\-\_block}.
 
 % nolink as we have links just above and do not have a combo link for both
 Both try and catch \nolink{block} entries may have either a
-\livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} and \livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair of attributes or a
-\livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} attribute whose values encode the contiguous
+\livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} and 
+\livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair of attributes 
+\addtoindexx{high PC attribute}
+or 
+\addtoindexx{low PC attribute}
+a
+\livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} attribute 
+\addtoindexx{ranges attribute}
+whose values encode the contiguous
 or non\dash contiguous address ranges, respectively, of the
 machine instructions generated for the \livelink{chap:lexicalblock}{block}
 (see Section
@@ -1620,7 +1692,9 @@ least one child entry, an
 entry representing the type of exception accepted by
 that catch \livelink{chap:catchblock}{block}. 
 
-This child entry has one of the 
+This child entry has one of 
+\addtoindexx{formal parameter entry!in catch block}
+the 
 \addtoindexx{unspecified parameters entry!in catch block}
 tags
 \livelink{chap:DWTAGformalparameter}{DW\-\_TAG\-\_formal\-\_parameter} or

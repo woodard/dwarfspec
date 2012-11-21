@@ -16,7 +16,9 @@ Section \refersec{chap:dataobjectentries}.
 \label{chap:basetypeentries}
 
 \textit{A base type is a data type that is not defined in terms of
-other data types. Each programming language has a set of base
+other data types. 
+\addtoindexx{fundamental type|see{base type entry}}
+Each programming language has a set of base
 types that are considered to be built into that language.}
 
 A base type is represented by a debugging information entry
@@ -905,14 +907,18 @@ entities.
 \subsection{Friends}
 \label{chap:friends}
 
-Each ``friend'' declared by a structure, union or class
+Each ``friend'' 
+\addtoindexx{friend entry}
+declared by a structure, union or class
 \hypertarget{chap:DWATfriendfriendrelationship}
 type may be represented by a debugging information entry
 that is a child of the structure, union or class type entry;
 the friend entry has the 
 tag \livetarg{chap:DWTAGfriend}{DW\-\_TAG\-\_friend}.
 
-A friend entry has a \livelink{chap:DWATfriend}{DW\-\_AT\-\_friend} attribute, whose value is
+A friend entry has 
+\addtoindexx{friend attribute}
+a \livelink{chap:DWATfriend}{DW\-\_AT\-\_friend} attribute, whose value is
 a reference to the debugging information entry describing
 the declaration of the friend.
 
@@ -1518,7 +1524,10 @@ giving the condition name as it appears in the source program.
 The condition entry's parent entry describes the conditional
 variable; normally this will be a \livelink{chap:DWTAGvariable}{DW\-\_TAG\-\_variable},
 \livelink{chap:DWTAGmember}{DW\-\_TAG\-\_member} or 
-\livelink{chap:DWTAGformalparameter}{DW\-\_TAG\-\_formal\-\_parameter} entry. If the parent
+\livelink{chap:DWTAGformalparameter}{DW\-\_TAG\-\_formal\-\_parameter} entry.
+If 
+\addtoindexx{formal parameter entry}
+the parent
 entry has an array type, the condition can test any individual
 element, but not the array as a whole. The condition entry
 implicitly specifies a “comparison type” that is the
@@ -1710,7 +1719,8 @@ tag \livelink{chap:DWTAGunspecifiedparameters}{DW\-\_TAG\-\_unspecified\-\_param
 
 A ``string'' is a sequence of characters that have specific
 semantics and operations that separate them from arrays of
-characters. Fortran is one of the languages that has a string
+characters. 
+\addtoindex{Fortran} is one of the languages that has a string
 type. Note that ``string'' in this context refers to a target
 machine concept, not the class string as used in this document
 (except for the name attribute).
@@ -1977,7 +1987,9 @@ given in the type of mbr\_ptr.}
 files.}
 
 A file type is represented by a debugging information entry
-with the 
+with 
+\addtoindexx{file type entry}
+the 
 \livetarg{chap:DWTAGfiletype}{DW\-\_TAG\-\_file\-\_type}. 
 If the file type has a name,
 the file type entry has a \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute, whose value
@@ -2009,7 +2021,10 @@ about the data that represents the value for that object.}
 \hypertarget{chap:DWATdatalocationindirectiontoactualdata}
 The \livelink{chap:DWATdatalocation}{DW\-\_AT\-\_data\-\_location} 
 attribute may be used with any
-type that provides one or more levels of hidden indirection
+\addtoindexx{data location attribute}
+type that provides one or more levels of 
+\addtoindexx{hidden indirection|see{data location attribute}}
+hidden indirection
 and/or run\dash time parameters in its representation. Its value
 is a location description. The result of evaluating this
 description yields the location of the data for an object.
@@ -2022,13 +2037,14 @@ which loads the address of the
 object which can then serve as a descriptor in subsequent
 calculation. For an example using 
 \livelink{chap:DWATdatalocation}{DW\-\_AT\-\_data\-\_location} 
-for a Fortran 90 array, see 
+for a \addtoindex{Fortran 90 array}, see 
 Appendix \refersec{app:fortran90example}.}
 
 \subsection{Allocation and Association Status}
 \label{chap:allocationandassociationstatus}
 
-\textit{Some languages, such as Fortran 90, provide types whose values
+\textit{Some languages, such as \addtoindex{Fortran 90},
+provide types whose values
 may be dynamically allocated or associated with a variable
 under explicit program control.}
 
@@ -2057,8 +2073,9 @@ indicates that objects of the type can be associated. The
 integer value of the attribute (see below) indicates whether
 an object of the type is currently associated or not.
 
-While these attributes are defined specifically with Fortran
-90 ALLOCATABLE and POINTER types in mind, usage is not limited
+While these attributes are defined specifically with 
+\addtoindex{Fortran 90} ALLOCATABLE and POINTER types
+in mind, usage is not limited
 to just that language.
 
 The value of these attributes is determined as described in
@@ -2067,7 +2084,7 @@ Section \refersec{chap:staticanddynamicvaluesofattributes}.
 A non\dash zero value is interpreted as allocated or associated,
 and zero is interpreted as not allocated or not associated.
 
-\textit{For \addtoindex{Fortran} 90, 
+\textit{For \addtoindex{Fortran 90}, 
 if the \livelink{chap:DWATassociated}{DW\-\_AT\-\_associated} 
 attribute is present,
 the type has the POINTER property where either the parent
@@ -2084,7 +2101,7 @@ pointer assignment.}
 
 \textit{For examples using 
 \livelink{chap:DWATallocated}{DW\-\_AT\-\_allocated} for \addtoindex{Ada} and 
-\addtoindex{Fortran} 90
+\addtoindex{Fortran 90}
 arrays, 
 see Appendix \refersec{app:aggregateexamples}.}
 

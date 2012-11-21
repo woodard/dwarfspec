@@ -330,7 +330,7 @@ a \addtoindex{C++} namespace declaration or a function, for example, is
 not a good candidate because the entities included are not
 necessarily file level entities.
 
-This also applies to Fortran INCLUDE lines when declarations
+This also applies to \addtoindex{Fortran} INCLUDE lines when declarations
 are included into a procedure or module context.
 
 Consequently a compiler must use \livelink{chap:DWTAGpartialunit}{DW\-\_TAG\-\_partial\-\_unit} (instead
@@ -512,7 +512,7 @@ globally visible (in accordance with
 \subsubsection{Fortran Example}
 
 
-For a Fortran 
+For a \addtoindex{Fortran}
 \addtoindexx{DWARF duplicate elimination!Fortran example}
 example, consider 
 Figure \refersec{app:duplicateeliminationexample2fortransource}.
@@ -522,6 +522,7 @@ Figure \refersec{app:duplicateeliminationexample2fortransource}.
 \label{app:duplicateeliminationexample2fortransource}
 
 File CommonStuff.fh
+\addtoindexx{Fortran}
 
 \begin{lstlisting}
 IMPLICIT INTEGER(A-Z)
@@ -542,7 +543,9 @@ END
 
 Section \refersec{app:duplicateeliminationexample2dwarfsectiongroup}
 shows the section group 
-corresponding to the included file CommonStuff.fh.
+corresponding to the included file 
+\addtoindexx{Fortran example}
+CommonStuff.fh.
 
 \paragraph{Duplicate elimination example 2: DWARF section group}
 \label{app:duplicateeliminationexample2dwarfsectiongroup}
@@ -1146,7 +1149,7 @@ how the bytes of the flattened type description are formed
 during the type signature computation algorithm of Section
 Section \refersec{datarep:typesignaturecomputation}. 
 
-
+%FIXME: The index entries here with \addtoindexx are ineffective.
 \begin{alltt}
 signature
     : opt-context debug-entry attributes children
@@ -1181,17 +1184,17 @@ tag-code
 at-code
     : <ULEB128>
 form-encoded-value
-    : \livelink{chap:DWFORMsdata}{DW\-\_FORM\-\_sdata} value
-    : \livelink{chap:DWFORMflag}{DW\-\_FORM\-\_flag} value
-    : \livelink{chap:DWFORMstring}{DW\-\_FORM\-\_string} string
-    : \livelink{chap:DWFORMblock}{DW\-\_FORM\-\_block} \nolink{block}
-\livelink{chap:DWFORMstring}{DW\-\_FORM\-\_string}
+    : \livelink{chap:DWFORMsdata}{DW\-\_FORM\-\_sdata} value \addtoindexx{constant class}
+    : \livelink{chap:DWFORMflag}{DW\-\_FORM\-\_flag} value \addtoindexx{flag class}
+    : \livelink{chap:DWFORMstring}{DW\-\_FORM\-\_string} string \addtoindexx{string class}
+    : \livelink{chap:DWFORMblock}{DW\-\_FORM\-\_block} \nolink{block} \addtoindexx{block class}
+\livelink{chap:DWFORMstring}{DW\-\_FORM\-\_string} \addtoindexx{string class}
     : '\\x08'
-\livelink{chap:DWFORMblock}{DW\-\_FORM\-\_block}
+\livelink{chap:DWFORMblock}{DW\-\_FORM\-\_block}  \addtoindexx{block class}
     : '\\x09'
-\livelink{chap:DWFORMflag}{DW\-\_FORM\-\_flag}
+\livelink{chap:DWFORMflag}{DW\-\_FORM\-\_flag} \addtoindexx{flag class}
     : '\\x0c'
-\livelink{chap:DWFORMsdata}{DW\-\_FORM\-\_sdata}
+\livelink{chap:DWFORMsdata}{DW\-\_FORM\-\_sdata} \addtoindexx{constant class}
     : '\\x0d'
 value
     : <SLEB128>
