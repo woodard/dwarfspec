@@ -410,6 +410,7 @@ Section \refersec{chap:typedefentries},
 respectively). As another
 example, in \addtoindex{Ada} such an unspecified type entry can be referred
 to by the type attribute of an access type where the denoted
+\addtoindexx{incomplete type (Ada)}
 type is incomplete (the name is declared as a type but the
 definition is deferred to a separate compilation unit).
 
@@ -534,8 +535,10 @@ it does not contain a type attribute.
 \textit{Depending on the language, a named type that is defined in
 terms of another type may be called a type alias, a subtype,
 a constrained type and other terms. A type name declared with
-no defining details may be termed an incomplete, forward
-or hidden type. While the DWARF \livelink{chap:DWTAGtypedef}{DW\-\_TAG\-\_typedef} entry was
+no defining details may be termed an 
+\addtoindexx{incomplete type}
+incomplete, forward or hidden type. 
+While the DWARF \livelink{chap:DWTAGtypedef}{DW\-\_TAG\-\_typedef} entry was
 originally inspired by the like named construct in 
 \addtoindex{C} and \addtoindex{C++},
 it is broadly suitable for similar constructs (by whatever
@@ -711,8 +714,12 @@ either a \livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size} or a
 (see Section \refersec{chap:byteandbitsizes}), 
 whose value is the amount of storage needed
 to hold an instance of the structure, union or class type,
-including any padding.  An incomplete structure, union or
-class type is represented by a structure, union or class
+including any padding.  
+An incomplete structure, union or class type 
+\addtoindexx{incomplete structure/union/class}
+is 
+\addtoindexx{incomplete type}
+represented by a structure, union or class
 entry that does not have a byte size attribute and that has
 \addtoindexx{declaration attribute}
 a \livelink{chap:DWATdeclaration}{DW\-\_AT\-\_declaration} attribute.
@@ -721,8 +728,9 @@ If the complete declaration of a type has been placed in
 \hypertarget{chap:DWATsignaturetypesignature}
 a separate type unit 
 (see Section \refersec{chap:separatetypeunitentries}), 
-an incomplete
-declaration of that type in the compilation unit may provide
+an incomplete declaration 
+\addtoindexx{incomplete type}
+of that type in the compilation unit may provide
 the unique 64\dash bit signature of the type using a \livelink{chap:DWATsignature}{DW\-\_AT\-\_signature}
 attribute.
 
@@ -786,11 +794,13 @@ facilitate DWARF space compression
 
 \textit{The \addtoindex{Java} language defines ``interface'' types. 
 An interface
-in Java is similar to a \addtoindex{C++} or 
+in \addtoindex{Java} is similar to a \addtoindex{C++} or 
 \addtoindex{Java} class with only abstract
 methods and constant data members.}
 
-Interface types are represented by debugging information
+Interface types 
+\addtoindexx{interface type entry}
+are represented by debugging information
 entries with the 
 tag \livetarg{chap:DWTAGinterfacetype}{DW\-\_TAG\-\_interface\-\_type}.
 
@@ -810,28 +820,40 @@ declarations in the source program.
 may 
 \addtoindexx{derived type (C++)|see{inheritance entry}}
 be ``derived from'' or be a
-``subclass of'' another class. In Java, an interface may ``extend''
+``subclass of'' another class. 
+In \addtoindex{Java}, an interface may ``extend''
 \addtoindexx{extended type (Java)|see{inheritance entry}}
-one or more other interfaces, and a class may ``extend'' another
+one 
+\addtoindexx{implementing type (Java)|see{inheritance entry}}
+or more other interfaces, and a class may ``extend'' another
 class and/or ``implement'' one or more interfaces. All of these
 relationships may be described using the following. Note that
-in Java, the distinction between extends and implements is
+in \addtoindex{Java}, 
+the distinction between extends and implements is
 implied by the entities at the two ends of the relationship.}
 
 A class type or interface type entry that describes a
 derived, extended or implementing class or interface owns
+addtoindexx{implementing type (Java)|see{inheritance entry}}
 debugging information entries describing each of the classes
 or interfaces it is derived from, extending or implementing,
 respectively, ordered as they were in the source program. Each
-such entry has the 
+such entry has 
+\addtoindexx{inheritance entry}
+the 
 tag \livetarg{chap:DWTAGinheritance}{DW\-\_TAG\-\_inheritance}.
 
-An inheritance entry has a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute whose value is
+An inheritance entry has 
+\addtoindexx{inheritance entry}
+a 
+\livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute whose value is
 a reference to the debugging information entry describing the
 class or interface from which the parent class or structure
 of the inheritance entry is derived, extended or implementing.
 
-An inheritance entry for a class that derives from or extends
+An inheritance entry 
+\addtoindexx{inheritance entry}
+for a class that derives from or extends
 \hypertarget{chap:DWATdatamemberlocationinheritedmemberlocation}
 another class or struct also has 
 \addtoindexx{data member location attribute}
@@ -852,20 +874,25 @@ inherited types is the same as the interpretation for data
 members 
 (see Section \refersec{chap:datamemberentries}).  }
 
-An inheritance entry 
+An 
+\addtoindexx{inheritance entry}
+inheritance entry 
 \hypertarget{chap:DWATaccessibilitycppinheritedmembers}
 may 
 \addtoindexx{accessibility attribute}
 have a
 \livelink{chap:DWATaccessibility}{DW\-\_AT\-\_accessibility}
-attribute. If no accessibility attribute
+attribute. 
+If no accessibility attribute
 is present, private access is assumed for an entry of a class
 and public access is assumed for an entry of an interface,
 struct or union.
 
 If 
 \hypertarget{chap:DWATvirtualityvirtualityofbaseclass}
-the class referenced by the inheritance entry serves
+the class referenced by the 
+\addtoindexx{inheritance entry}
+inheritance entry serves
 as a \addtoindex{C++} virtual base class, the inheritance entry has a
 \livelink{chap:DWATvirtuality}{DW\-\_AT\-\_virtuality} attribute.
 

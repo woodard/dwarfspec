@@ -93,7 +93,7 @@ not appear in DWARF debugging information.
 \label{datarep:initiallengthvalues}
 \addtoindexx{reserved values!initial length}
 
-An initial length field is one of the length fields that occur
+An \addtoindex{initial length field} is one of the length fields that occur
 at the beginning of those DWARF sections that have a header
 (\addtoindex{.debug\_aranges}, 
 \addtoindex{.debug\_info}, 
@@ -104,7 +104,7 @@ at the beginning of those DWARF sections that have a header
 that occurs at the beginning of the CIE and FDE structures
 in the \addtoindex{.debug\_frame} section.
 
-In an initial length field, the values 0xfffffff0 through
+In an \addtoindex{initial length field}, the values 0xfffffff0 through
 0xffffffff are reserved by DWARF to indicate some form of
 extension relative to \addtoindex{DWARF Version 2}; such values must not
 be interpreted as a length field. The use of one such value,
@@ -155,11 +155,15 @@ detailed in the following:
 
 \begin{enumerate}[1.]
 
-\item  In the 32\dash bit DWARF format, an initial length field
-(see Section \refersec{datarep:initiallengthvalues}) 
+\item  In the 32\dash bit DWARF format, an 
+\addtoindex{initial length field}
+(see 
+\addtoindex{initial length field!encoding}
+Section \refersec{datarep:initiallengthvalues}) 
 is an unsigned 32\dash bit integer (which
 must be less than 0xfffffff0); in the 64\dash bit DWARF format,
-an initial length field is 96 bits in size, and has two parts:
+an \addtoindex{initial length field} is 96 bits in size,
+and has two parts:
 \begin{itemize}
 \item The first 32\dash bits have the value 0xffffffff.
 
@@ -172,7 +176,10 @@ detect that a DWARF section contribution is using the 64\dash bit
 format and to adapt its processing accordingly.}
 
 \item Section offset and section length fields that occur
-in the headers of DWARF sections (other than initial length
+in the headers of DWARF sections (other 
+\addtoindex{initial length field}
+than 
+\addtoindex{initial length}
 fields) are listed following. In the 32\dash bit DWARF format these
 are 32\dash bit unsigned integer values; in the 64\dash bit DWARF format,
 they are 64\dash bit unsigned integer values.
@@ -303,7 +310,9 @@ units may share the same table.
 \begin{enumerate}[1.]
 
 \item unit\_length (initial length) \\
-A 4\dash byte or 12\dash byte unsigned integer representing the length
+A 4\dash byte or 12\dash byte 
+\addtoindexx{initial length}
+unsigned integer representing the length
 of the \addtoindex{.debug\_info}
 contribution for that compilation unit,
 not including the length field itself. In the 32\dash bit DWARF
@@ -353,7 +362,9 @@ consists of the following information:
 \begin{enumerate}[1.]
 
 \item unit\_length (initial length) \\
-A 4\dash byte or 12\dash byte unsigned integer representing the length
+A 4\dash byte or 12\dash byte unsigned integer 
+\addtoindexx{initial length}
+representing the length
 of the \addtoindex{.debug\_types} contribution for that compilation unit,
 not including the length field itself. In the 32\dash bit DWARF
 format, this is a 4\dash byte unsigned integer (which must be
@@ -945,7 +956,7 @@ Child determination name& Value\\ \hline
 \livelink{chap:DWATdefaultvalue}{DW\-\_AT\-\_default\-\_value}&0x1e&reference 
         \addtoindexx{default value attribute!encoding} \\
 \livelink{chap:DWATinline}{DW\-\_AT\-\_inline}&0x20&constant 
-        \addtoindexx{inlineibute!encoding}  \\
+        \addtoindexx{inline attribute!encoding}  \\
 \livelink{chap:DWATisoptional}{DW\-\_AT\-\_is\-\_optional}&0x21&\livelink{chap:flag}{flag} 
         \addtoindexx{is optional attribute!encoding} \\
 \livelink{chap:DWATlowerbound}{DW\-\_AT\-\_lower\-\_bound}&0x22&constant, 
@@ -1716,7 +1727,9 @@ Table \refersec{tab:callingconventionencodings}.
 \section{Inline Codes}
 \label{datarep:inlinecodes}
 
-The encodings of the constants used in the 
+The encodings of the constants used in 
+\addtoindexx{inline attribute!encoding}
+the 
 \livelink{chap:DWATinline}{DW\-\_AT\-\_inline} attribute are given in 
 Table \refersec{tab:inlineencodings}.
 
@@ -1813,7 +1826,9 @@ with a header consisting of:
 
 \begin{enumerate}[1.]
 \item unit\_length (initial length) \\
-A 4\dash byte or 12\dash byte unsigned integer representing the length
+A 4\dash byte or 12\dash byte unsigned integer 
+\addtoindexx{initial length}
+representing the length
 of the \addtoindex{.debug\_info}
 contribution for that compilation unit,
 not including the length field itself. In the 32\dash bit DWARF
@@ -1875,6 +1890,7 @@ section begins with a header containing:
 
 \item unit\_length (initial length) \\
 A 4-byte or 12-byte length containing the length of the
+\addtoindexx{initial length}
 set of entries for this compilation unit, not including the
 length field itself. In the 32-bit DWARF format, this is a
 4-byte unsigned integer (which must be less than 0xfffffff0);

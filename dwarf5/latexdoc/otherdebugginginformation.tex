@@ -394,11 +394,12 @@ column & 0 \\
 \addtoindex{end\_sequence} & ``false'' \\
 \addtoindex{prologue\_end} & ``false'' \\
 \addtoindex{epilogue\_begin} & ``false'' \\
-isa & 0 \\
+\addtoindex{isa} & 0 \\
 discriminator & 0 \\
 \end{tabular}
 
-\textit{The isa value 0 specifies that the instruction set is the
+\textit{The 
+\addtoindex{isa} value 0 specifies that the instruction set is the
 architecturally determined default instruction set. This may
 be fixed by the ABI, or it may be specified by other means,
 for example, by the object file description.}
@@ -480,13 +481,15 @@ architectures, this field is 1, the op\_index register is always
 
 \item default\_is\_stmt (ubyte) \\
 \addtoindexx{default\_is\_stmt}
-The initial value of the is\_stmt register.  
+The initial value of the \addtoindex{is\_stmt} register.  
 
 \textit{A simple approach
 to building line number information when machine instructions
 are emitted in an order corresponding to the source program
-is to set default\_is\_stmt to ``true'' and to not change the
-value of the is\_stmt register within the line number program.
+is to set \addtoindex{default\_is\_stmt} 
+to ``true'' and to not change the
+value of the \addtoindex{is\_stmt} register 
+within the line number program.
 One matrix entry is produced for each line that has code
 generated for it. The effect is that every entry in the
 matrix recommends the beginning of each represented line as
@@ -498,7 +501,8 @@ the matrix for a line number; in this case, at least one entry
 (often but not necessarily only one) specifies a recommended
 breakpoint location for the line number. \livelink{chap:DWLNSnegatestmt}{DW\-\_LNS\-\_negate\-\_stmt}
 opcodes in the line number program control which matrix entries
-constitute such a recommendation and default\_is\_stmt might
+constitute such a recommendation and 
+\addtoindex{default\_is\_stmt} might
 be either ``true'' or ``false''. This approach might be
 used as part of support for debugging optimized code.}
 
@@ -581,10 +585,12 @@ path name of a source file. If the entry contains a file
 name or relative path name, the file is located relative
 to either the compilation directory (as specified by the
 \livelink{chap:DWATcompdir}{DW\-\_AT\-\_comp\-\_dir} attribute given in the compilation unit) or one
-of the directories listed in the include\_directories section.
+of the directories listed in the 
+\addtoindex{include\_directories} section.
 
 \item An unsigned LEB128 number representing the directory
-index of a directory in the include\_directories section.
+index of a directory in the 
+\addtoindex{include\_directories} section.
 
 
 \item An unsigned LEB128 number representing the
@@ -599,9 +605,11 @@ bytes of the file, or 0 if not available.
 The last entry is followed by a single null byte.
 
 The directory index represents an entry in the
-include\_directories section. The index is 0 if the file was
+\addtoindex{include\_directories} section. 
+The index is 0 if the file was
 found in the current directory of the compilation, 1 if it
-was found in the first directory in the include\_directories
+was found in the first directory in the 
+\addtoindex{include\_directories}
 section, and so on. The directory index is ignored for file
 names that represent full path names.
 
@@ -832,7 +840,7 @@ register of the state machine.
 
 \item \textbf{DW\-\_LNS\-\_negate\-\_stmt} \\
 The \livetarg{chap:DWLNSnegatestmt}{DW\-\_LNS\-\_negate\-\_stmt} opcode takes no
-operands. It sets the is\_stmt register of the state machine
+operands. It sets the \addtoindex{is\_stmt} register of the state machine
 to the logical negation of its current value.
 
 \item \textbf{DW\-\_LNS\-\_set\-\_basic\-\_block} \\
@@ -928,7 +936,8 @@ subroutines).}
 
 \item \textbf{DW\-\_LNS\-\_set\-\_isa} \\
 The \livetarg{chap:DWLNSsetisa}{DW\-\_LNS\-\_set\-\_isa} opcode takes a single
-unsigned LEB128 operand and stores that value in the isa
+unsigned LEB128 operand and stores that value in the 
+\addtoindex{isa}
 register of the state machine.
 \end{enumerate}
 
@@ -975,7 +984,8 @@ path name of a source file. If the entry contains a file
 name or a relative path name, the file is located relative
 to either the compilation directory (as specified by the
 \livelink{chap:DWATcompdir}{DW\-\_AT\-\_comp\-\_dir} attribute given in the compilation unit)
-or one of the directories in the include\_directories section.
+or one of the directories in the 
+\addtoindex{include\_directories} section.
 
 \item An unsigned LEB128 number representing the directory index
 of the directory in which the file was found.  
@@ -990,10 +1000,11 @@ not available.
 \end{enumerate}
 
 The directory index represents an entry in the
-include\_directories section of the line number program
+\addtoindex{include\_directories} section of the line number program
 header. The index is 0 if the file was found in the current
 directory of the compilation, 1 if it was found in the first
-directory in the include\_directories section, and so on. The
+directory in the \addtoindex{include\_directories} section,
+and so on. The
 directory index is ignored for file names that represent full
 path names.
 

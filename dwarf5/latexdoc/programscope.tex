@@ -15,7 +15,8 @@ unit is related to one or more other compilation units that
 import it. A type unit represents a single complete type in a
 separate unit. Either a normal compilation unit or a partial
 compilation unit may be logically incorporated into another
-compilation unit using an imported unit entry.
+compilation unit using an 
+\addtoindex{imported unit entry}.
 
 \subsection[Normal and Partial CU Entries]{Normal and Partial Compilation Unit Entries}
 \label{chap:normalandpartialcompilationunitentries}
@@ -181,11 +182,14 @@ with other producer values.
 
 
 \item  A \livelink{chap:DWATidentifiercase}{DW\-\_AT\-\_identifier\-\_case} 
-attribute whose integer
+attribute 
+\addtoindexx{identifier case attribute}
+whose integer
 \hypertarget{chap:DWATidentifiercaseidentifiercaserule}
 constant value is a code describing the treatment
 of identifiers within this compilation unit. The
-set of identifier case codes is given in Figure
+set of identifier case codes 
+is given in Figure
 \refersec{fig:identifiercasecodes}.
 
 \begin{figure}[here]
@@ -284,9 +288,13 @@ The
 \hypertarget{chap:DWATimportimportedunit}
 place where a normal or partial unit is imported is
 represented by a debugging information entry with the 
+\addtoindexx{imported unit entry}
 tag \livetarg{chap:DWTAGimportedunit}{DW\-\_TAG\-\_imported\-\_unit}. 
-An imported unit entry contains a
-\livelink{chap:DWATimport}{DW\-\_AT\-\_import} attribute whose value is a reference to the
+An imported unit entry contains 
+\addtoindexx{import attribute}
+a
+\livelink{chap:DWATimport}{DW\-\_AT\-\_import} attribute 
+whose value is a reference to the
 normal or partial compilation unit whose declarations logically
 belong at the place of the imported unit entry.
 
@@ -516,8 +524,11 @@ When
 \hypertarget{chap:DWATimportimporteddeclaration}
 an overloaded entity
 is imported, there is one imported declaration entry for
-each overloading. Each imported declaration entry has a
-\livelink{chap:DWATimport}{DW\-\_AT\-\_import} attribute, whose value is a reference to the
+each overloading. 
+\addtoindexx{import attribute}
+Each imported declaration entry has a
+\livelink{chap:DWATimport}{DW\-\_AT\-\_import} attribute,
+whose value is a reference to the
 debugging information entry representing the declaration that
 is being imported.
 
@@ -578,10 +589,15 @@ within a separate module or namespace.
 }
 
 An imported module declaration is represented by a debugging
-information entry with the 
+information entry with 
+\addtoindexx{imported module attribute}
+the 
+\addtoindexx{imported module entry}
 tag \livetarg{chap:DWTAGimportedmodule}{DW\-\_TAG\-\_imported\-\_module}.
 An
-imported module entry contains a \livelink{chap:DWATimport}{DW\-\_AT\-\_import} attribute
+imported module entry contains a 
+\livelink{chap:DWATimport}{DW\-\_AT\-\_import} attribute
+\addtoindexx{import attribute}
 whose value is a reference to the module or namespace entry
 containing the definition and/or declaration entries for
 the entities that are to be imported into the context of the
@@ -669,7 +685,8 @@ points:
 \begin{tabular}{lp{9.0cm}}
 \livetarg{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram} & A subroutine or function. \\
 \livelink{chap:DWTAGinlinedsubroutine}{DW\-\_TAG\-\_inlined\-\_subroutine} & A particular inlined 
-  instance of a subroutine or function. \\
+\addtoindexx{inlined subprogram entry}
+instance of a subroutine or function. \\
 \livetarg{chap:DWTAGentrypoint}{DW\-\_TAG\-\_entry\-\_point} & An alternate entry point. \\
 \end{tabular}
 
@@ -1091,7 +1108,9 @@ tag
 The entry for a subroutine that is
 \hypertarget{chap:DWATinlineinlinedsubroutine}
 explicitly declared to be available for inline expansion or
-that was expanded inline implicitly by the compiler has a
+that was expanded inline implicitly by the compiler has 
+\addtoindexx{inline attribute}
+a
 \livelink{chap:DWATinline}{DW\-\_AT\-\_inline} attribute whose value is an integer constant. The
 set of values for the \livelink{chap:DWATinline}{DW\-\_AT\-\_inline} attribute is given in
 Figure \refersec{fig:inlinecodes}.
@@ -1129,7 +1148,9 @@ that contains the
 \addtoindexx{abstract instance!entry}
 as an ``abstract instance entry.'' 
 Any subroutine entry
-that contains a \livelink{chap:DWATinline}{DW\-\_AT\-\_inline} attribute whose value is other
+that contains 
+\addtoindexx{inline attribute}
+a \livelink{chap:DWATinline}{DW\-\_AT\-\_inline} attribute whose value is other
 than \livelink{chap:DWINLnotinlined}{DW\-\_INL\-\_not\-\_inlined}
 is known as 
 \addtoindexx{abstract instance!root}
@@ -1215,7 +1236,11 @@ generated for the inlined subroutine (see
 Section \refersec{chap:codeaddressesandranges}). 
 An
 \hypertarget{chap:DWATentrypcentryaddressofinlinedsubprogram}
-inlined subroutine entry may also contain 
+inlined subroutine entry may 
+\addtoindexx{inlined subprogram entry!in concrete instance}
+also 
+\addtoindexx{inlined subprogram entry}
+contain 
 \addtoindexx{entry pc attribute!for inlined subprogram}
 a 
 \livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc}
@@ -1270,8 +1295,10 @@ Any debugging information entry that is owned (either
 directly or indirectly) by a debugging information entry
 with the tag \livelink{chap:DWTAGinlinedsubroutine}{DW\-\_TAG\-\_inlined\-\_subroutine} is referred to as a
 ``concrete inlined instance entry.'' Any entry that has
-the tag \livelink{chap:DWTAGinlinedsubroutine}{DW\-\_TAG\-\_inlined\-\_subroutine} 
-is known as a ``concrete inlined instance root.'' Any set of concrete inlined instance
+the tag 
+\livelink{chap:DWTAGinlinedsubroutine}{DW\-\_TAG\-\_inlined\-\_subroutine} 
+is known as a ``concrete inlined instance root.'' 
+Any set of concrete inlined instance
 entries that are all children (either directly or indirectly)
 of some concrete inlined instance root, together with the root
 itself, is known as a ``concrete inlined instance tree.''
