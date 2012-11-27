@@ -947,11 +947,16 @@ respectively
 }
 
 These operations transfer
-control of DWARF expression evaluation to the 
+control of DWARF expression evaluation to 
+\addtoindexx{location attribute}
+the 
 \livelink{chap:DWATlocation}{DW\-\_AT\-\_location}
 attribute of the referenced debugging information entry. If
 there is no such attribute, then there is no effect. Execution
-of the DWARF expression of a \livelink{chap:DWATlocation}{DW\-\_AT\-\_location} attribute may add
+of the DWARF expression of 
+\addtoindexx{location attribute}
+a 
+\livelink{chap:DWATlocation}{DW\-\_AT\-\_location} attribute may add
 to and/or remove from values on the stack. Execution returns
 to the point following the call when the end of the attribute
 is reached. Values on the stack at the time of the call may be
@@ -1017,7 +1022,13 @@ examples illustrate their behavior graphically.
 
 \section{Location Descriptions}
 \label{chap:locationdescriptions}
-\textit{Debugging information must provide consumers a way to find
+\textit{Debugging information 
+\addtoindexx{location description}
+\addtoindexx{location description}
+must 
+%FIXME: should be 'see also' somehow.
+\addtoindexx{location description|see{DWARF expression}}
+provide consumers a way to find
 the location of program variables, determine the bounds
 of dynamic arrays and strings, and possibly to find the
 base address of a subroutine’s stack frame or the return
@@ -1030,7 +1041,10 @@ Information about the location of program objects is provided
 by location descriptions. Location descriptions can be either
 of two forms:
 \begin{enumerate}[1]
-\item \textit{Single location descriptions}, which are a language independent representation of
+\item \textit{Single location descriptions}, 
+which 
+\addtoindexx{location description!single}
+are a language independent representation of
 addressing rules of arbitrary complexity built from 
 DWARF expressions (See Section \refersec{chap:dwarfexpressions}) 
 and/or other
@@ -1043,18 +1057,23 @@ and it does not move during its lifetime.
 Single location descriptions are of two kinds:
 \begin{enumerate}[a]
 \item Simple location descriptions, which describe the location
+\addtoindexx{location description!simple}
 of one contiguous piece (usually all) of an object. A simple
 location description may describe a location in addressable
 memory, or in a register, or the lack of a location (with or
 without a known value).
 
 \item  Composite location descriptions, which describe an
+\addtoindexx{location description!composite}
 object in terms of pieces each of which may be contained in
 part of a register or stored in a memory location unrelated
 to other pieces.
 
 \end{enumerate}
-\item \textit{Location lists}, which are used to describe
+\item \textit{Location lists}, which are used to 
+\addtoindexx{location list}
+describe
+\addtoindexx{location description!use in location list}
 objects that have a limited lifetime or change their location
 during their lifetime. Location lists are more completely
 described below.
@@ -1067,8 +1086,13 @@ is encoded using
 \addtoindexx{exprloc class}
 class \livelink{chap:exprloc}{exprloc}  
 and a location list is encoded
-using class \livelink{chap:loclistptr}{loclistptr} (which serves as an offset into a
-separate location list table).
+using class \livelink{chap:loclistptr}{loclistptr}
+(which 
+\addtoindex{loclistptr}
+serves as an offset into a
+separate 
+\addtoindexx{location list}
+location list table).
 
 
 \subsection{Single Location Descriptions}
@@ -1076,8 +1100,10 @@ A single location description is either:
 
 \begin{enumerate}[1]
 \item A simple location description, representing an object
+\addtoindexx{location description!simple}
 which exists in one contiguous piece at the given location, or 
 \item A composite location description consisting of one or more
+\addtoindexx{location description!composite}
 simple location descriptions, each of which is followed by
 one composition operation. Each simple location description
 describes the location of one piece of the object; each
@@ -1091,13 +1117,17 @@ DWARF expression is evaluated independently of any others
 
 \subsubsection{Simple Location Descriptions}
 
-A simple location description consists of one 
+A 
+\addtoindexx{location description!simple}
+simple location description consists of one 
 contiguous piece or all of an object or value.
 
 
 \paragraph{Memory Location Descriptions}
 
-A memory location description consists of a non\dash empty DWARF
+A 
+\addtoindexx{location description!memory}
+memory location description consists of a non\dash empty DWARF
 expression (see 
 Section \refersec{chap:dwarfexpressions}
 ), whose value is the address of
@@ -1152,6 +1182,7 @@ one of the register based addressing operations, such as
 
 An \addtoindex{implicit location description}
 represents a piece or all
+\addtoindexx{location description!implicit}
 of an object which has no actual location but whose contents
 are nonetheless either known or known to be undefined.
 
@@ -1186,6 +1217,7 @@ actual value of the object, rather than its location. The
 
 An \addtoindex{empty location description}
 consists of a DWARF expression
+\addtoindexx{location description!empty}
 containing no operations. It represents a piece or all of an
 object that is present in the source but not in the object code
 (perhaps due to optimization).
@@ -1328,9 +1360,13 @@ contents of r3 and r4.
 
 \subsection{Location Lists}
 \label{chap:locationlists}
-Location lists are used in place of location expressions
+Location lists 
+\addtoindexx{location list}
+are used in place of location expressions
 whenever the object whose location is being described
-can change location during its lifetime. Location lists
+can change location during its lifetime. 
+Location lists
+\addtoindexx{location list}
 are contained in a separate object file section called
 \addtoindex{.debug\_loc}. A location list is indicated by a location
 attribute whose value is an offset from the beginning of
@@ -1342,11 +1378,15 @@ Each entry in a location list is either a location
 entry,
 a 
 \addtoindexi{base}{base address selection entry!in location list} 
-address selection entry, or an 
+address selection entry, 
+\addtoindexx{location list!base address selection entry}
+or an 
 \addtoindexx{end of list entry!in location list}
 end of list entry.
 
-A location list entry consists of:
+A 
+\addtoindexx{location list!entry}
+location list entry consists of:
 
 \begin{enumerate}[1]
 \item A beginning address offset. 
@@ -1375,7 +1415,9 @@ describing the location of the object over the range specified by
 the beginning and end addresses.
 \end{enumerate}
 
-The applicable base address of a location list entry is
+The applicable base address of a 
+location list entry is
+\addtoindexx{location list!base address selection entry}
 determined by the closest preceding base address selection
 entry (see below) in the same location list. If there is
 no such selection entry, then the applicable base address
@@ -1409,8 +1451,9 @@ and ending address offsets of subsequent entries of the location list.
 \textit{A base address selection entry 
 affects only the list in which it is contained.}
 
-The end of any given location list is marked by an end of
-list entry, which consists of a 0 for the beginning address
+The end of any given location list is marked by an 
+\addtoindexx{location list!enf of list entry}
+end of list entry, which consists of a 0 for the beginning address
 offset and a 0 for the ending address offset. A location list
 containing only an 
 \addtoindexx{end of list entry!in location list}
@@ -1714,6 +1757,7 @@ entry
 representing 
 \hypertarget{chap:DWATdeclcolumncolumnpositionofsourcedeclaration}
 the
+\addtoindexx{line number of declaration}
 declaration of an object, module, subprogram or
 \addtoindex{declaration column attribute}
 type 
@@ -1785,22 +1829,31 @@ Any debugging information entry describing a data object (which
 \hypertarget{chap:DWATlocationdataobjectlocation}
 includes variables and parameters) or 
 common \livelink{chap:commonblockentry}{block}
-may have a
-\livelink{chap:DWATlocation}{DW\-\_AT\-\_location} attribute, whose value is a location description
+may have 
+\addtoindexx{location attribute}
+a
+\livelink{chap:DWATlocation}{DW\-\_AT\-\_location} attribute
+\addtoindexx{location attribute}
+, whose value is a location description
 (see Section \refersec{chap:locationdescriptions}).
 
 A 
 \addtoindex{DWARF procedure}
 is represented by any
-kind of debugging information entry that has a 
+kind of debugging information entry that has 
+\addtoindexx{location attribute}
+a 
 \livelink{chap:DWATlocation}{DW\-\_AT\-\_location}
 attribute. 
+\addtoindexx{location attribute}
 If a suitable entry is not otherwise available,
 a DWARF procedure can be represented using a debugging
 \addtoindexx{DWARF procedure entry}
 information entry with the 
 tag \livetarg{chap:DWTAGdwarfprocedure}{DW\-\_TAG\-\_dwarf\-\_procedure}
-together with a \livelink{chap:DWATlocation}{DW\-\_AT\-\_location} attribute.  
+together with 
+\addtoindexx{location attribute}
+a \livelink{chap:DWATlocation}{DW\-\_AT\-\_location} attribute.  
 
 A DWARF procedure
 is called by a \livelink{chap:DWOPcall2}{DW\-\_OP\-\_call2}, 
@@ -2087,7 +2140,8 @@ attribute is interpreted in bits.
 \label{chap:linkagenames}
 \textit{Some language implementations, notably 
 \addtoindex{C++} and similar
-languages, make use of implementation defined names within
+languages, 
+make use of implementation defined names within
 object files that are different from the identifier names
 (see Section \refersec{chap:identifiernames}) of entities as they appear in the
 source. Such names, sometimes known as mangled names,
@@ -2104,7 +2158,9 @@ that is encoded in the linkage name itself.
 
 % Some trouble maybe with hbox full, so we try optional word breaks.
 A debugging
-information entry may have a 
+information entry may have 
+\addtoindexx{linkage name attribute}
+a 
 \livelink{chap:DWATlinkagename}{DW\-\_AT\-\_linkage\-\_name}
 attribute
 whose value is a null-terminated string describing the object

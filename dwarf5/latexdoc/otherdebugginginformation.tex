@@ -60,7 +60,9 @@ more condensed format.
 
 \subsection{Lookup by Name}
 
-For lookup by name, two tables are maintained in separate
+For lookup by name, 
+\addtoindexx{lookup!by name}
+two tables are maintained in separate
 \addtoindex{accelerated access!by name}
 object file sections named 
 \addtoindex{.debug\_pubnames} for objects and
@@ -127,7 +129,9 @@ the data or function member.
 
 \subsection{Lookup by Address}
 
-For lookup by address, a table is maintained in a separate
+For 
+\addtoindexx{lookup!by address}
+lookup by address, a table is maintained in a separate
 \addtoindex{accelerated access!by address}
 object file section called 
 \addtoindex{.debug\_aranges}. The table consists
@@ -195,6 +199,8 @@ multiple address range descriptors for that compilation unit.}
 \section{Line Number Information}
 \label{chap:linenumberinformation}
 \textit{A source\dash level debugger will need to know how to
+%FIXME: the see here is not 'see also'. Fix?
+\addtoindexx{line number information|see{statement list attribute}}
 associate locations in the source files with the corresponding
 machine instruction addresses in the executable object or
 the shared objects used by that executable object. Such an
@@ -507,9 +513,11 @@ be either ``true'' or ``false''. This approach might be
 used as part of support for debugging optimized code.}
 
 \item line\_base (sbyte) \\
+\addtoindexx{line\_base}
 This parameter affects the meaning of the special opcodes. See below.
 
 \item line\_range (ubyte) \\
+\addtoindexx{line\_range}
 This parameter affects the meaning of the special opcodes. See below.
 
 \item opcode\_base (ubyte) \\
@@ -536,6 +544,7 @@ that of the highest standard opcode and the first special
 opcode (not inclusive) are used for vendor specific extensions.}
 
 \item standard\_opcode\_lengths (array of ubyte) \\
+\addtoindexx{standard\_opcode\_lengths}
 This array specifies the number of LEB128 operands for each
 of the standard opcodes. The first element of the array
 corresponds to the opcode whose value is 1, and the last
@@ -684,7 +693,9 @@ the line register (a standard opcode provides an alternate
 way to decrease the line number) in return for the ability
 to add larger positive values to the address register. To
 permit this variety of strategies, the line number program
-header defines a line\_base field that specifies the minimum
+header defines a 
+\addtoindexx{line\_base}
+field that specifies the minimum
 value which a special opcode can add to the line register
 and a line\_range field that defines the range of values it
 can add to the line register.}
@@ -693,7 +704,9 @@ can add to the line register.}
 A special opcode value is chosen based on the amount that needs
 to be added to the line, address and op\_index registers. The
 maximum line increment for a special opcode is the value
-of the line\_base field in the header, plus the value of
+of the 
+\addtoindexx{line\_base}
+field in the header, plus the value of
 the line\_range field, minus 1 (line base + 
 line range - 1). 
 If the desired line increment is greater than the maximum
@@ -703,8 +716,8 @@ of operations to skip when advancing the operation pointer.
 
 The special opcode is then calculated using the following formula:
 
-  opcode = ( \textit{desired line increment} - line\_base) +
-(line\_range * \textit{operation advance} ) + opcode\_base
+  opcode = ( \textit{desired line increment} - \addtoindex{line\_base}) +
+(\addtoindex{line\_range} * \textit{operation advance} ) + \addtoindex{opcode\_base}
 
 If the resulting opcode is greater than 255, a standard opcode
 must be used instead.
@@ -746,17 +759,24 @@ op\_index is always 0 and these calculations simplify to those
 given for addresses in 
 \addtoindex{DWARF Version 3}.}
 
-The amount to increment the line register is the line\_base plus
-the result of the adjusted opcode modulo the line\_range. That
+The amount to increment the line register is the 
+\addtoindex{line\_base} plus
+the result of the 
+\addtoindex{adjusted opcode} modulo the 
+\addtoindex{line\_range}. That
 is,
 
 \begin{myindentpara}{1cm}
-line increment = line\_base + (adjusted opcode \% line\_range)
+line increment = \addtoindex{line\_base} + (adjusted opcode \% \addtoindex{line\_range})
 \end{myindentpara}
 
-\textit{As an example, suppose that the opcode\_base is 13, line\_base
-is -3, line\_range is 12, minimum\_instruction\_length is 1
-and maximum\_operations\_per\_instruction is 1. This means that
+\textit{As an example, suppose that the opcode\_base is 13, 
+\addtoindex{line\_base}
+is -3, \addtoindex{line\_range} is 12, 
+\addtoindex{minimum\_instruction\_length} is 1
+and 
+\addtoindex{maximum\_operations\_per\_instruction} is 1. 
+This means that
 we can use a special opcode whenever two successive rows in
 the matrix have source line numbers differing by any value
 within the range [-3, 8] and (because of the limited number
@@ -796,8 +816,8 @@ available for the maximum operation advance (see below).}
 
 
 \textit{There is no requirement that the expression 
-255 - line\_base + 1 be an integral multiple of
-line\_range. }
+255 - \addtoindex{line\_base} + 1 be an integral multiple of
+\addtoindex{line\_range}. }
 
 \subsubsection{Standard Opcodes}
 \label{chap:standardopcodes}

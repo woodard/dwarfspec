@@ -572,8 +572,11 @@ for the ordering attribute are listed in
 Figure \refersec{fig:arrayordering}. 
 If no
 ordering attribute is present, the default ordering for the
-source language (which is indicated by the \livelink{chap:DWATlanguage}{DW\-\_AT\-\_language}
-attribute of the enclosing compilation unit entry) is assumed.
+source language (which is indicated by the 
+\livelink{chap:DWATlanguage}{DW\-\_AT\-\_language}
+attribute 
+\addtoindexx{language attribute}
+of the enclosing compilation unit entry) is assumed.
 
 \begin{figure}[here]
 \autorows[0pt]{c}{1}{l}{
@@ -866,7 +869,8 @@ in bytes from the beginning of the class to the beginning of
 the inherited type. Otherwise, the value must be a location
 description. In this latter case, the beginning address of
 the derived class is pushed on the expression stack before
-the location description is evaluated and the result of the
+the \addtoindex{location description}
+is evaluated and the result of the
 evaluation is the location of the inherited type.
 
 \textit{The interpretation of the value of this attribute for
@@ -898,7 +902,8 @@ as a \addtoindex{C++} virtual base class, the inheritance entry has a
 
 \textit{For a \addtoindex{C++} virtual base, the 
 \addtoindex{data member location attribute}
-will usually consist of a non-trivial location description.}
+will usually consist of a non-trivial 
+\addtoindex{location description}.}
 
 \subsection{Access Declarations}
 \label{chap:accessdeclarations}
@@ -1011,7 +1016,6 @@ the beginning of the containing entity then neither attribute
 is required.
 
 For a \livelink{chap:DWATdatamemberlocation}{DW\-\_AT\-\_data\-\_member\-\_location} attribute
-
 \addtoindexx{data member location attribute}
 there are two cases:
 
@@ -1023,10 +1027,11 @@ the beginning of the containing entity has a non-zero bit
 offset then the beginning of the member entry has that same
 bit offset as well.
 
-\item Otherwise, the value must be a location description. In
+\item Otherwise, the value must be a \addtoindex{location description}.
+In
 this case, the beginning of the containing entity must be byte
 aligned. The beginning address is pushed on the DWARF stack
-before the location description is evaluated; the result of
+before the \addtoindex{location} description is evaluated; the result of
 the evaluation is the base address of the member entry.
 
 \textit{The push on the DWARF expression stack of the base address of
@@ -1035,7 +1040,8 @@ the containing construct is equivalent to execution of the
 (see Section \refersec{chap:stackoperations});
 \livelink{chap:DWOPpushobjectaddress}{DW\-\_OP\-\_push\-\_object\-\_address} therefore 
 is not needed at the
-beginning of a location description for a data member. The
+beginning of a \addtoindex{location description} for a data member. 
+The
 result of the evaluation is a location--either an address or
 the name of a register, not an offset to the member.}
 
@@ -1043,7 +1049,7 @@ the name of a register, not an offset to the member.}
 attribute 
 \addtoindexx{data member location attribute}
 that has the form of a
-location description is not valid for a data member contained
+\addtoindex{location description} is not valid for a data member contained
 in an entity that is not byte aligned because DWARF operations
 do not allow for manipulating or computing bit offsets.}
 
@@ -1233,7 +1239,8 @@ is the number of bits occupied by the bit field value.}
 
 \end{itemize}
 
-\textit{The location description for a bit field calculates the address
+\textit{The 
+\addtoindex{location description} for a bit field calculates the address
 of an anonymous object containing the bit field. The address
 is relative to the structure, union, or class that most closely
 encloses the bit field declaration. The number of bytes in this
@@ -1329,7 +1336,8 @@ An
 entry for a virtual function also has a
 \livelink{chap:DWATvtableelemlocation}{DW\-\_AT\-\_vtable\-\_elem\-\_location}
 \addtoindexi{attribute}{vtable element location attribute} whose value contains
-a location description yielding the address of the slot
+a \addtoindex{location description} 
+yielding the address of the slot
 for the function within the virtual function table for the
 enclosing class. The address of an object of the enclosing
 type is pushed onto the expression stack before the location
@@ -1532,7 +1540,9 @@ declarations in the source program.
 \section{Condition Entries}
 \label{chap:conditionentries}
 
-\textit{COBOL has the notion of a ``level\dash 88 condition'' that
+\textit{COBOL has the notion of 
+\addtoindexx{level-88 condition, COBOL}
+a ``level\dash 88 condition'' that
 associates a data item, called the conditional variable, with
 a set of one or more constant values and/or value ranges.
 Semantically, the condition is ‛true’ if the conditional
@@ -1764,7 +1774,8 @@ The
 \hypertarget{chap:DWATstringlengthstringlengthofstringtype}
 string type entry may have a 
 \livelink{chap:DWATstringlength}{DW\-\_AT\-\_string\-\_length} attribute
-whose value is a location description yielding the location
+whose value is a 
+\addtoindex{location description} yielding the location
 where the length of the string is stored in the program. The
 string type entry may also have a \livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size} attribute
 or \livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size} attribute, whose value 
@@ -1882,7 +1893,9 @@ these attributes is determined as described in
 Section \refersec{chap:staticanddynamicvaluesofattributes}.
 
 If the lower bound value is missing, the value is assumed to
-be a language\dash dependent default constant. The default lower
+be a language\dash dependent default constant. 
+\addtoindexx{lower bound attribute!default}
+The default lower
 bound is 0 for 
 \addtoindex{C}, \addtoindex{C++}, 
 \addtoindex{D}, 
@@ -1965,7 +1978,8 @@ The
 \hypertarget{chap:DWATuselocationmemberlocationforpointertomembertype}
 pointer to member entry has a 
 \livelink{chap:DWATuselocation}{DW\-\_AT\-\_use\-\_location} attribute
-whose value is a location description that computes the
+whose value is a 
+\addtoindex{location description} that computes the
 address of the member of the class to which the pointer to
 member entry points.
 
@@ -2053,7 +2067,8 @@ type that provides one or more levels of
 \addtoindexx{hidden indirection|see{data location attribute}}
 hidden indirection
 and/or run\dash time parameters in its representation. Its value
-is a location description. The result of evaluating this
+is a \addtoindex{location description}. 
+The result of evaluating this
 description yields the location of the data for an object.
 When this attribute is omitted, the address of the data is
 the same as the address of the object.

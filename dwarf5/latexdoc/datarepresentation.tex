@@ -519,17 +519,43 @@ class is a set of forms which have related representations
 and which are given a common interpretation according to the
 attribute in which the form is used.
 
-Form \livelink{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset} is a member of more than one class,
-namely \livelink{chap:lineptr}{lineptr}, \livelink{chap:loclistptr}{loclistptr}, \livelink{chap:macptr}{macptr} or \livelink{chap:rangelistptr}{rangelistptr}; the list
+Form \livelink{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset} 
+is a member of more 
+\addtoindexx{rangelistptr class}
+than 
+\addtoindexx{macptr class}
+one 
+\addtoindexx{loclistptr class}
+class,
+\addtoindexx{lineptr class}
+namely \livelink{chap:lineptr}{lineptr}, 
+\livelink{chap:loclistptr}{loclistptr}, 
+\livelink{chap:macptr}{macptr} or 
+\livelink{chap:rangelistptr}{rangelistptr}; the list
 of classes allowed by the applicable attribute in 
 Table \refersec{tab:attributeencodings}
 determines the class of the form.
 
 \textit{In DWARF V3 the forms \livelink{chap:DWFORMdata4}{DW\-\_FORM\-\_data4} and \livelink{chap:DWFORMdata8}{DW\-\_FORM\-\_data8} were
-members of either class constant or one of the classes \livelink{chap:lineptr}{lineptr},
-\livelink{chap:loclistptr}{loclistptr}, \livelink{chap:macptr}{macptr} or \livelink{chap:rangelistptr}{rangelistptr}, depending on context. In
-DWARF V4 \livelink{chap:DWFORMdata4}{DW\-\_FORM\-\_data4} and \livelink{chap:DWFORMdata8}{DW\-\_FORM\-\_data8} are members of class
-constant in all cases. The new \livelink{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset} replaces
+\addtoindexx{lineptr class}
+members 
+\addtoindexx{rangelistptr class}
+of 
+\addtoindexx{macptr class}
+either 
+\addtoindexx{loclistptr class}
+class constant \addtoindexx{constant class}
+or one of the classes 
+\livelink{chap:lineptr}{lineptr},
+\livelink{chap:loclistptr}{loclistptr}, 
+\livelink{chap:macptr}{macptr} or 
+\livelink{chap:rangelistptr}{rangelistptr}, depending on context. In
+DWARF V4 
+\livelink{chap:DWFORMdata4}{DW\-\_FORM\-\_data4} and 
+\livelink{chap:DWFORMdata8}{DW\-\_FORM\-\_data8} are members of class
+constant in all cases. 
+The new 
+\livelink{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset} replaces
 their usage for the other classes.}
 
 Each possible form belongs to one or more of the following classes:
@@ -656,7 +682,8 @@ section
 beginning of the 
 \addtoindex{.debug\_loc}
 section to the first byte of
-the data making up the location list for the compilation
+the data making up the 
+\addtoindex{location list} for the compilation
 unit. 
 It is relocatable in a relocatable object file, and
 relocated in an executable or shared object. In the 32\dash bit
@@ -1152,9 +1179,13 @@ Child determination name& Value\\ \hline
 \section{Variable Length Data}
 \label{datarep:variablelengthdata}
 \addtoindexx{variable length data|see {LEB128}}
-\addtoindexx{LEB128 encoding}
-Integers may be encoded using ``Little Endian Base 128''
-(LEB128) numbers. LEB128 is a scheme for encoding integers
+Integers may be 
+\addtoindexx{Little Endian Base 128|see{LEB128}}
+encoded using ``Little Endian Base 128''
+\addtoindexx{little-endian encoding|see{endian attribute}}
+(LEB128) numbers. 
+\addtoindexx{LEB128}
+LEB128 is a scheme for encoding integers
 densely that exploits the assumption that most integers are
 small in magnitude.
 
@@ -1166,6 +1197,7 @@ unsigned integer, when the big end is all zeroes or sign
 extension bits.
 
 Unsigned LEB128 (ULEB128) numbers are encoded as follows:
+\addtoindexx{LEB128!unsigned, encoding as}
 start at the low order end of an unsigned integer and chop
 it into 7\dash bit chunks. Place each chunk into the low order 7
 bits of a byte. Typically, several of the high order bytes
@@ -1185,6 +1217,7 @@ that an additional byte follows.
 
 
 The encoding for signed, two’s complement LEB128 (SLEB128)
+\addtoindexx{LEB128!signed, encoding as}
 numbers is similar, except that the criterion for discarding
 high order bytes is not whether they are zero, but whether
 they consist entirely of sign extension bits. Consider the
@@ -1198,9 +1231,11 @@ decoder must know what type of number to expect.
 Table \refersec{tab:examplesofunsignedleb128encodings}
 gives some examples of unsigned LEB128 numbers and 
 Table \refersec{tab:examplesofsignedleb128encodings}
-gives some examples of signed LEB128 numbers.
+gives some examples of signed LEB128 
+numbers.
 
 Appendix \refersec{app:variablelengthdataencodingdecodinginformative} 
+\addtoindexx{LEB128!examples}
 gives algorithms for encoding and decoding these forms.
 
 
@@ -1389,12 +1424,12 @@ location of a variable or other entity.
 \subsection{Location Lists}
 \label{datarep:locationlists}
 
-Each entry in a location list is either a location list entry,
+Each entry in a \addtoindex{location list} is either a location list entry,
 a base address selection entry, or an 
 \addtoindex{end of list entry!in location list}
 end of list entry.
 
-A location list entry consists of two address offsets followed
+A \addtoindex{location list} entry consists of two address offsets followed
 by a 2\dash byte length, followed by a block of contiguous bytes
 that contains a DWARF location description. The length
 specifies the number of bytes in that block. The two offsets
@@ -1406,7 +1441,7 @@ end of list entry each
 consist of two (constant or relocated) address offsets. The two
 offsets are the same size as an address on the target machine.
 
-For a location list to be specified, the base address of
+For a \addtoindex{location list} to be specified, the base address of
 \addtoindexx{base address selection entry!in location list}
 the corresponding compilation unit must be defined 
 (see Section  \refersec{chap:normalandpartialcompilationunitentries}).
@@ -1607,7 +1642,12 @@ attribute.
 \section{Source Languages}
 \label{datarep:sourcelanguages}
 
-The encodings of the constants used in the \livelink{chap:DWATlanguage}{DW\-\_AT\-\_language}
+The encodings of the constants used 
+\addtoindexx{language attribute, encoding}
+in 
+\addtoindexx{language name encoding}
+the 
+\livelink{chap:DWATlanguage}{DW\-\_AT\-\_language}
 attribute are given in 
 Table \refersec{tab:languageencodings}.
 Names marked with
@@ -1616,7 +1656,9 @@ Names marked with
 and their associated values are reserved, but the
 languages they represent are not well supported. 
 Table \refersec{tab:languageencodings}
-also shows the default lower bound, if any, assumed for
+also shows the 
+\addtoindexx{lower bound attribute!default}
+default lower bound, if any, assumed for
 an omitted \livelink{chap:DWATlowerbound}{DW\-\_AT\-\_lower\-\_bound} attribute in the context of a
 \livelink{chap:DWTAGsubrangetype}{DW\-\_TAG\-\_subrange\-\_type} debugging information entry for each
 defined language.
@@ -1956,6 +1998,7 @@ as a single byte containing the value 0
 for ``false,'' and a non-zero value for ``true.''
 
 The encodings for the standard opcodes are given in 
+\addtoindexx{line number opcodes!standard opcode encoding}
 Table \refersec{tab:linenumberstandardopcodeencodings}.
 
 % Odd that the 'Name' field captalized here, it is not caps elsewhere.
@@ -1990,6 +2033,7 @@ Table \refersec{tab:linenumberstandardopcodeencodings}.
 
 
 The encodings for the extended opcodes are given in 
+\addtoindexx{line number opcodes!extended opcode encoding}
 Table \refersec{tab:linenumberextendedopcodeencodings}.
 
 \begin{centering}
@@ -2446,7 +2490,7 @@ operator), as it is unlikely that the entry will remain
 identical across compilation units.}
 
 \item \textit{The entry has an attribute whose value refers
-to a code location or a location list.}
+to a code location or a \addtoindex{location list}.}
 
 \item \textit{The entry has an attribute whose value refers
 to another debugging information entry that does not represent
