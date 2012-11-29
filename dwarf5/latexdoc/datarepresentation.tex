@@ -829,7 +829,15 @@ not. However, the UTF\dash 8 representation is strongly recommended.
 
 \end{itemize}
 
-In no case does an attribute use one of the classes \livelink{chap:lineptr}{lineptr},
+In no case does an attribute use 
+\addtoindexx{rangelistptr class}
+one 
+\addtoindexx{loclistptr class}
+of 
+\addtoindexx{lineptr class}
+the 
+\addtoindexx{macptr class}
+classes \livelink{chap:lineptr}{lineptr},
 \livelink{chap:loclistptr}{loclistptr}, \livelink{chap:macptr}{macptr} or \livelink{chap:rangelistptr}{rangelistptr} to point into either the
 \addtoindex{.debug\_info} or \addtoindex{.debug\_str} section.
 
@@ -2069,7 +2077,9 @@ numbers as are the constants in a
 \livelink{chap:DWMACINFOvendorext}{DW\-\_MACINFO\-\_vendor\-\_ext} entry.
 
 The macinfo type is encoded as a single byte. 
-The encodings are given in 
+The encodings 
+\addtoindexx{macinfo types!encoding}
+are given in 
 Table \refersec{tab:macinfotypeencodings}.
 
 
@@ -2281,8 +2291,9 @@ A type signature is computed only by the DWARF producer;
 it is used by a DWARF consumer to resolve type references to
 the type definitions that are contained in type units.
 
-The type signature for a type T0 is formed from the MD5
-hash of a flattened description of the type. The flattened
+The type signature for a type T0 is formed from the 
+\addtoindex{MD5 hash}
+of a flattened description of the type. The flattened
 description of the type is a byte sequence derived from the
 DWARF encoding of the type as follows:
 
@@ -2298,7 +2309,10 @@ is nested inside another type or a namespace, append to S
 the type’s context as follows: For each surrounding type
 or namespace, beginning with the outermost such construct,
 append the letter 'C', the DWARF tag of the construct, and
-the name (taken from the \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute) of the type
+the name (taken from 
+\addtoindexx{name attribute}
+the \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute) of the type
+\addtoindexx{name attribute}
 or namespace (including its trailing null byte).
 
 \item  Append to S the letter 'D', followed by the DWARF tag of
@@ -2360,7 +2374,9 @@ code, and the attribute value.
 \item \livelink{chap:DWATvtableelemlocation}{DW\-\_AT\-\_vtable\-\_elem\-\_location}
 \end{itemize}
 
-Note that except for the initial \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute,
+Note that except for the initial 
+\livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute,
+\addtoindexx{name attribute}
 attributes are appended in order according to the alphabetical
 spelling of their identifier.
 
@@ -2418,7 +2434,9 @@ type entry.
 
 \item Visit each child C of the debugging information
 entry as follows: If C is a nested type entry or a member
-function entry, and has a \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute, append to
+function entry, and has 
+a \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute, append to
+\addtoindexx{name attribute}
 S the letter 'S', the tag of C, and its name; otherwise,
 process C recursively by performing Steps 3 through 7,
 appending the result to S. Following the last child (or if
@@ -2471,7 +2489,7 @@ example, a constant value should be preferred to a location
 expression when possible.)
 
 Once the string S has been formed from the DWARF encoding,
-an MD5 hash is computed for the string and the lower 64 bits
+an \addtoindex{MD5 hash} is computed for the string and the lower 64 bits
 are taken as the type signature.
 
 \textit{The string S is intended to be a flattened representation of
@@ -2514,6 +2532,7 @@ declaration of the type.}
 \livelink{chap:DWATdeclcolumn}{DW\-\_AT\-\_decl\-\_column} attributes are not included because they
 may vary from one source file to the next, and would prevent
 two otherwise identical type declarations from producing the
+\addtoindexx{MD5 hash}
 same hash.}
 
 \end{itemize}

@@ -222,8 +222,11 @@ in the \addtoindex{.debug\_info}
 section.
 
 \textit{Some computer architectures employ more than one instruction
-set (for example, the ARM and MIPS architectures support
+set (for example, the ARM 
 \addtoindexx{ARM instruction set architecture}
+and 
+MIPS architectures support
+\addtoindexx{MIPS instruction set architecture}
 a 32\dash bit as well as a 16\dash bit instruction set). Because the
 instruction set is a function of the program counter, it is
 convenient to encode the applicable instruction set in the
@@ -464,7 +467,7 @@ the line number information and is independent of the DWARF
 version number. 
 
 \item header\_length  \\
-The number of bytes following the header\_length field to the
+The number of bytes following the \addtoindex{header\_length} field to the
 beginning of the first byte of the line number program itself.
 In the 32\dash bit DWARF format, this is a 4\dash byte unsigned
 length; in the 64\dash bit DWARF format, this field is an
@@ -472,16 +475,23 @@ length; in the 64\dash bit DWARF format, this field is an
 (see Section \refersec{datarep:32bitand64bitdwarfformats}). 
 
 \item minimum\_instruction\_length (ubyte)  \\
+\addtoindexx{minimum\_instruction\_length}
 The size in bytes of the smallest target machine
 instruction. Line number program opcodes that alter
 the address and op\_index registers use this and
+\addtoindexx{maximum\_operations\_per\_instruction}
 maximum\-\_operations\-\_per\-\_instruction in their calculations. 
 
 \item maximum\_operations\_per\_instruction (ubyte) \\
-The maximum number of individual operations that may be
+The 
+\addtoindexx{maximum\_operations\_per\_instruction}
+maximum number of individual operations that may be
 encoded in an instruction. Line number program opcodes
-that alter the address and op\_index registers use this and
-minimum\_instruction\_length in their calculations.  For non-VLIW
+that alter the address and 
+\addtoindex{op\_index} registers use this and
+\addtoindex{minimum\_instruction\_length}
+in their calculations.
+For non-VLIW
 architectures, this field is 1, the op\_index register is always
 0, and the operation pointer is simply the address register.
 
@@ -722,9 +732,9 @@ The special opcode is then calculated using the following formula:
 If the resulting opcode is greater than 255, a standard opcode
 must be used instead.
 
-When maximum\_operations\_per\_instruction is 1, the operation
+When \addtoindex{maximum\_operations\_per\_instruction} is 1, the operation
 advance is simply the address increment divided by the
-minimum\_instruction\_length.
+\addtoindex{minimum\_instruction\_length}.
 
 To decode a special opcode, subtract the opcode\_base from
 the opcode itself to give the \textit{adjusted opcode}. 
@@ -742,19 +752,19 @@ new address =
 
 address +
 
-minimum\_instruction\_length *
-((op\_index + operation advance) / 
-maximum\_operations\_per\_instruction)
+\addtoindex{minimum\_instruction\_length} *
+((\addtoindex{op\_index} + operation advance) / 
+\addtoindex{maximum\_operations\_per\_instruction})
 \end{myindentpara}
 new op\_index =
 
 \begin{myindentpara}{1cm}
-(op\_index + operation advance) \% maximum\_operations\_per\_instruction
+(op\_index + operation advance) \% \addtoindex{maximum\_operations\_per\_instruction}
 \end{myindentpara}
 
 \end{myindentpara}
 
-\textit{When the maximum\_operations\_per\_instruction field is 1,
+\textit{When the \addtoindex{maximum\_operations\_per\_instruction} field is 1,
 op\_index is always 0 and these calculations simplify to those
 given for addresses in 
 \addtoindex{DWARF Version 3}.}
@@ -895,7 +905,7 @@ address register of the state machine and sets the op\_index
 register to 0. This is the only standard opcode whose operand
 is \textbf{not} a variable length number. It also does 
 \textbf{not} multiply the
-operand by the minimum\_instruction\_length field of the header.
+operand by the \addtoindex{minimum\_instruction\_length} field of the header.
 
 \textit{Existing assemblers cannot emit \livelink{chap:DWLNSadvancepc}{DW\-\_LNS\-\_advance\-\_pc} or special
 opcodes because they cannot encode LEB128 numbers or judge when
@@ -1054,6 +1064,7 @@ gives some sample line number programs.}
 \textit{Some languages, such as 
 \addtoindex{C} and 
 addtoindex{C++}, provide a way to replace
+\addtoindex{macro information}
 text in the source program with macros defined either in the
 source file itself, or in another file included by the source
 file.  Because these macros are not themselves defined in the
@@ -1079,7 +1090,7 @@ code of 0.
 \subsection{Macinfo Types}
 \label{chap:macinfotypes}
 
-The valid macinfo types are as follows:
+The valid \addtoindex{macinfo types} are as follows:
 
 \begin{tabular}{ll}
 \livelink{chap:DWMACINFOdefine}{DW\-\_MACINFO\-\_define} 
@@ -1112,8 +1123,9 @@ symbol that was undefined at the indicated source line.
 
 In the case of a \livelink{chap:DWMACINFOdefine}{DW\-\_MACINFO\-\_define} entry, the value of this
 string will be the name of the macro symbol that was defined
-at the indicated source line, followed immediately by the macro
-formal parameter list including the surrounding parentheses (in
+at the indicated source line, followed immediately by the 
+\addtoindex{macro formal parameter list}
+including the surrounding parentheses (in
 the case of a function-like macro) followed by the definition
 string for the macro. If there is no formal parameter list,
 then the name of the defined macro is followed directly by
