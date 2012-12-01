@@ -325,7 +325,8 @@ An unsigned integer representing the index of an operation within a VLIW
 instruction. The index of the first operation is 0. For non\dash VLIW
 architectures, this register will always be 0.
 
-The address and op\_index registers, taken together, form an operation
+The address and \addtoindex{op\_index} registers,
+taken together, form an operation
 pointer that can reference any individual operation with the instruction
 stream. \\
 
@@ -394,7 +395,7 @@ program, the state of the registers is:
 
 \begin{tabular}{lp{8cm}}
 address & 0 \\
-op\_index & 0 \\
+\addtoindex{op\_index} & 0 \\
 file & 1 \\
 line & 1 \\
 column & 0 \\
@@ -478,7 +479,7 @@ length; in the 64\dash bit DWARF format, this field is an
 \addtoindexx{minimum\_instruction\_length}
 The size in bytes of the smallest target machine
 instruction. Line number program opcodes that alter
-the address and op\_index registers use this and
+the address and \addtoindex{op\_index} registers use this and
 \addtoindexx{maximum\_operations\_per\_instruction}
 maximum\-\_operations\-\_per\-\_instruction in their calculations. 
 
@@ -492,7 +493,7 @@ that alter the address and
 \addtoindex{minimum\_instruction\_length}
 in their calculations.
 For non-VLIW
-architectures, this field is 1, the op\_index register is always
+architectures, this field is 1, the \addtoindex{op\_index register} is always
 0, and the operation pointer is simply the address register.
 
 \item default\_is\_stmt (ubyte) \\
@@ -653,7 +654,9 @@ names field and define file names using the extended opcode
 As stated before, the goal of a line number program is to build
 a matrix representing one compilation unit, which may have
 produced multiple sequences of target machine instructions.
-Within a sequence, addresses (operation pointers) may only
+Within a sequence, addresses 
+\addtoindexx{operation pointer}
+(operation pointers) may only
 increase. (Line numbers may decrease in cases of pipeline
 scheduling or other optimization.)
 
@@ -665,7 +668,7 @@ Each ubyte special opcode has the following effect on the state machine:
 
 \item  Add a signed integer to the line register.
 
-\item  Modify the operation pointer by incrementing the
+\item  Modify the \addtoindex{operation pointer} by incrementing the
 address and \addtoindex{op\_index} registers as described below.
 
 \item  Append a row to the matrix using the current values
@@ -680,7 +683,7 @@ of the state machine registers.
 
 All of the special opcodes do those same seven things; they
 differ from one another only in what values they add to the
-line, address and op\_index registers.
+line, address and \addtoindex{op\_index} registers.
 
 
 \textit{Instead of assigning a fixed meaning to each special opcode,
@@ -712,7 +715,8 @@ can add to the line register.}
 
 
 A special opcode value is chosen based on the amount that needs
-to be added to the line, address and op\_index registers. The
+to be added to the line, address and \addtoindex{op\_index} registers.
+The
 maximum line increment for a special opcode is the value
 of the 
 \addtoindexx{line\_base}
@@ -721,8 +725,8 @@ the line\_range field, minus 1 (line base +
 line range - 1). 
 If the desired line increment is greater than the maximum
 line increment, a standard opcode must be used instead of a
-special opcode. The operation advance represents the number
-of operations to skip when advancing the operation pointer.
+special opcode. The \addtoindex{operation advance} represents the number
+of operations to skip when advancing the \addtoindex{operation pointer}.
 
 The special opcode is then calculated using the following formula:
 
@@ -740,7 +744,8 @@ To decode a special opcode, subtract the opcode\_base from
 the opcode itself to give the \textit{adjusted opcode}. 
 The \textit{operation advance} 
 is the result of the adjusted opcode divided by the
-line\_range. The new address and op\_index values are given by
+line\_range. The new address and \addtoindex{op\_index} values
+are given by
 \begin{myindentpara}{1cm}
 
 \textit{adjusted opcode} = opcode – opcode\_base
@@ -753,13 +758,14 @@ new address =
 address +
 
 \addtoindex{minimum\_instruction\_length} *
-((\addtoindex{op\_index} + operation advance) / 
+((\addtoindex{op\_index} + \addtoindex{operation advance}) / 
 \addtoindex{maximum\_operations\_per\_instruction})
 \end{myindentpara}
 new op\_index =
 
 \begin{myindentpara}{1cm}
-(op\_index + operation advance) \% \addtoindex{maximum\_operations\_per\_instruction}
+(\addtoindex{op\_index} + \addtoindex{operation advance}) \% 
+\addtoindex{maximum\_operations\_per\_instruction}
 \end{myindentpara}
 
 \end{myindentpara}
@@ -792,7 +798,7 @@ the matrix have source line numbers differing by any value
 within the range [-3, 8] and (because of the limited number
 of opcodes available) when the difference between addresses
 is within the range [0, 20], but not all line advances are
-available for the maximum operation advance (see below).}
+available for the maximum \addtoindex{operation advance} (see below).}
 
 \textit{The opcode mapping would be:}
 % FIXME: This should be a tabular or the like, not a verbatim
@@ -849,7 +855,7 @@ registers to ``false.''
 
 \item \textbf{DW\-\_LNS\-\_advance\-\_pc} \\
 The \livetarg{chap:DWLNSadvancepc}{DW\-\_LNS\-\_advance\-\_pc} opcode takes a single unsigned LEB128
-operand as the operation advance and modifies the address
+operand as the \addtoindex{operation advance} and modifies the address
 and \addtoindex{op\_index} registers as specified in 
 Section \refersec{chap:specialopcodes}.
 

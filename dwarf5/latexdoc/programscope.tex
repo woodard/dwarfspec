@@ -9,22 +9,30 @@ as bounded by ranges of text addresses within the program.
 
 \section{Unit Entries}
 An object file may contain one or more compilation units,
-of which there are three kinds: normal compilation units,
-partial compilation units and type units. A partial compilation
-unit is related to one or more other compilation units that
-import it. A type unit represents a single complete type in a
-separate unit. Either a normal compilation unit or a partial
-compilation unit may be logically incorporated into another
+of which there are 
+\addtoindexx{compilation unit}
+three kinds: 
+\addtoindexx{normal compilation unit}
+normal compilation units,
+partial compilation units and type units. A 
+\addtoindex{partial compilation unit}
+is related to one or more other compilation units that
+import it. A 
+\addtoindex{type unit} represents 
+a single complete type in a
+separate unit. Either a normal compilation unit or a 
+\addtoindex{partial compilation unit}
+may be logically incorporated into another
 compilation unit using an 
 \addtoindex{imported unit entry}.
 
 \subsection[Normal and Partial CU Entries]{Normal and Partial Compilation Unit Entries}
 \label{chap:normalandpartialcompilationunitentries}
 
-A \addtoindex{normal compilation unit} is represented by a 
-debugging information entry with the 
-tag \livetarg{chap:DWTAGcompileunit}{DW\-\_TAG\-\_compile\-\_unit}. A partial
-compilation unit is represented by a debugging information
+A \addtoindex{normal compilation unit} is represented by a debugging
+information entry with the 
+tag \livetarg{chap:DWTAGcompileunit}{DW\-\_TAG\-\_compile\-\_unit}. 
+A \addtoindex{partial compilation unit} is represented by a debugging information
 entry with the 
 tag \livetarg{chap:DWTAGpartialunit}{DW\-\_TAG\-\_partial\-\_unit}.
 
@@ -46,8 +54,8 @@ used to represent portions of an object file.
 \textit{A normal compilation unit typically represents the text and
 data contributed to an executable by a single relocatable
 object file. It may be derived from several source files,
-including pre\dash processed ``include files.'' A partial
-compilation unit typically represents a part of the text
+including pre\dash processed ``include files.'' 
+A \addtoindex{partial compilation unit} typically represents a part of the text
 and data of a relocatable object file, in a manner that can
 potentially be shared with the results of other compilations
 to save space. It may be derived from an ``include file'',
@@ -99,6 +107,7 @@ default base address for use in
 \addtoindexx{location list}
 location lists (see Section
 \refersec{chap:locationlists}) and range lists 
+\addtoindexx{range list}
 (see Section \refersec{chap:noncontiguousaddressranges}).
 
 \item A \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute 
@@ -181,7 +190,9 @@ null\dash terminated string containing the current working directory
 of the compilation command that produced this compilation
 unit in whatever form makes sense for the host system.
 
-\item  A \livelink{chap:DWATproducer}{DW\-\_AT\-\_producer} attribute whose value is a null\dash
+\item  A \livelink{chap:DWATproducer}{DW\-\_AT\-\_producer} attribute 
+\addtoindexx{producer attribute}
+whose value is a null\dash
 terminated string containing information about the compiler
 \hypertarget{chap:DWATproducercompileridentification}
 that produced the compilation unit. The actual contents of
@@ -221,14 +232,16 @@ entries for the compilation unit reflect the names as they
 appear in the source program. The debugger should be sensitive
 to the case of identifier names when doing identifier lookups.
 
-\livetarg{chap:DWIDupcase}{DW\-\_ID\-\_up\-\_case} means that the producer of the debugging
+\livetarg{chap:DWIDupcase}{DW\-\_ID\-\_up\-\_case} means that the 
+producer of the debugging
 information for this compilation unit converted all source
 names to upper case. The values of the name attributes may not
 reflect the names as they appear in the source program. The
 debugger should convert all names to upper case when doing
 lookups.
 
-\livetarg{chap:DWIDdowncase}{DW\-\_ID\-\_down\-\_case} means that the producer of the debugging
+\livetarg{chap:DWIDdowncase}{DW\-\_ID\-\_down\-\_case} means that 
+the producer of the debugging
 information for this compilation unit converted all source
 names to lower case. The values of the name attributes may not
 reflect the names as they appear in the source program. The
@@ -278,7 +291,8 @@ subprogram that has been identified as the starting function
 of the program. If more than one compilation unit contains
 this \nolink{flag}, any one of them may contain the starting function.
 
-\textit{\addtoindex{Fortran} has a PROGRAM statement which is used
+\textit{\addtoindex{Fortran} has a \addtoindex{PROGRAM statement}
+which is used
 to specify and provide a user\dash specified name for the main
 subroutine of a program. 
 \addtoindex{C} uses the name “main” to identify
@@ -429,8 +443,11 @@ the first executable instruction of that initialization code
 
 If 
 \hypertarget{chap:DWATprioritymodulepriority}
-the module has been assigned a priority, it may have a
-\livelink{chap:DWATpriority}{DW\-\_AT\-\_priority} attribute. The value of this attribute is a
+the module has been assigned a priority, it may have 
+\addtoindexx{priority attribute}
+a
+\livelink{chap:DWATpriority}{DW\-\_AT\-\_priority} attribute. 
+The value of this attribute is a
 reference to another debugging information entry describing
 a variable with a constant value. The value of this variable
 is the actual constant value of the module’s priority,
@@ -612,6 +629,7 @@ an imported entity, other than a namespace).
 with an ``only list'' may be
 represented by a series of imported declaration entries,
 one (or more) for each entity that is imported. An entity
+\addtoindexx{renamed declaration|see{imported declaration entry}}
 that is renamed in the importing context may be represented
 by an imported declaration entry with a name attribute that
 specifies the new local name.
@@ -764,7 +782,8 @@ the program.  If more than one subprogram contains this
 \nolink{flag},
 any one of them may be the starting subroutine of the program.
 
-\textit{\addtoindex{Fortran} has a PROGRAM statement which is used to specify
+\textit{\addtoindex{Fortran} has a \addtoindex{PROGRAM statement} 
+which is used to specify
 and provide a user\dash supplied name for the main subroutine of
 a program.
 }
@@ -825,7 +844,9 @@ those declared using non\dash prototype declarations.
 }
 
 A subroutine entry declared with a function prototype style
-declaration may have a 
+declaration may have 
+\addtoindexx{prototyped attribute}
+a 
 \livelink{chap:DWATprototyped}{DW\-\_AT\-\_prototyped} attribute, which is
 a \livelink{chap:flag}{flag}.
 
@@ -853,7 +874,9 @@ or property.
 
 A 
 \hypertarget{chap:DWATpurepurepropertyofasubroutine}
-subprogram entry may have a 
+subprogram entry may have 
+\addtoindexx{pure attrubyte}
+a 
 \livelink{chap:DWATpure}{DW\-\_AT\-\_pure} attribute, which is
 a \livelink{chap:flag}{flag}. 
 The attribute indicates whether the subroutine was
@@ -875,7 +898,9 @@ or property.
 
 If 
 \hypertarget{chap:DWATtypetypeofsubroutinereturn}
-the subroutine or entry point is a function that returns a
+the subroutine or entry point 
+\addtoindexx{return type of subroutine}
+is a function that returns a
 value, then its debugging information entry has a \livelink{chap:DWATtype}{DW\-\_AT\-\_type}
 attribute to denote the type returned by that function.
 
@@ -989,7 +1014,9 @@ for the common \nolink{block} being included
 
 A 
 \hypertarget{chap:DWATreturnaddrsubroutinereturnaddresssavelocation}
-subroutine or entry point entry may have a 
+subroutine or entry point entry may have 
+\addtoindexx{return address attribute}
+a 
 \livelink{chap:DWATreturnaddr}{DW\-\_AT\-\_return\-\_addr}
 attribute, whose value is a location description. The location
 calculated is the place where the return address for the
@@ -1236,7 +1263,8 @@ the \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc},
 \livelink{chap:DWATranges}{DW\-\_AT\-\_ranges}, 
 \livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc}, 
 \livelink{chap:DWATlocation}{DW\-\_AT\-\_location},
-\livelink{chap:DWATreturnaddr}{DW\-\_AT\-\_return\-\_addr}, \livelink{chap:DWATstartscope}{DW\-\_AT\-\_start\-\_scope}, and 
+\livelink{chap:DWATreturnaddr}{DW\-\_AT\-\_return\-\_addr}, \livelink{chap:DWATstartscope}{DW\-\_AT\-\_start\-\_scope}, 
+and 
 \livelink{chap:DWATsegment}{DW\-\_AT\-\_segment!and abstract instance}
 attributes 
 \addtoindexx{location attribute!and abstract instance}
@@ -1554,7 +1582,10 @@ outer subroutine.
 always omitted within the abstract instance tree for an
 outer subroutine.
 
-\item The concrete instance tree for any inlined or out-of-line
+\item The concrete instance tree for any inlined or 
+\addtoindexx{out-of-line instance}
+out-of-line
+\addtoindexx{out-of-line-instance|see{concrete out-of-line-instance}}
 expansion of the nested subroutine is described within a
 concrete instance tree for the outer subroutine according
 to the rules in 

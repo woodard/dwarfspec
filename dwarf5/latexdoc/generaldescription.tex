@@ -1468,7 +1468,7 @@ entry includes a location description.
 \textit{A base address selection entry and an end of list
 entry for a location list are identical to a base address
 selection entry and end of list entry, respectively, for a
-range list 
+\addtoindex{range list}
 (see Section \refersec{chap:noncontiguousaddressranges}) 
 in interpretation
 and representation.}
@@ -1956,46 +1956,54 @@ cannot be described as a single contiguous range, the entry has
 a \livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} attribute 
 \addtoindexx{ranges attribute}
 whose value is of class \livelink{chap:rangelistptr}{rangelistptr}
-and indicates the beginning of a range list. Similarly,
+and indicates the beginning of a \addtoindex{range list}.
+Similarly,
 a \livelink{chap:DWATstartscope}{DW\-\_AT\-\_start\-\_scope} attribute may have a value of class
 \livelink{chap:rangelistptr}{rangelistptr} for the same reason.  
 
 Range lists are contained
 in a separate object file section called 
 \addtoindex{.debug\_ranges}. A
-range list is indicated by a 
+\addtoindex{range list} is indicated by a 
 \livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} attribute whose
 \addtoindexx{ranges attribute}
 value is represented as an offset from the beginning of the
-\addtoindex{.debug\_ranges} section to the beginning of the range list.
+\addtoindex{.debug\_ranges} section to the beginning of the 
+\addtoindex{range list}.
 
-Each entry in a range list is either a range list entry,
+Each entry in a \addtoindex{range list} is either a 
+\addtoindex{range list} entry,
 \addtoindexx{base address selection entry!in range list}
 a base address selection entry, or an 
 \addtoindexx{end of list entry!in range list}
 end of list entry.
 
-A range list entry consists of:
+A \addtoindex{range list} entry consists of:
 
 \begin{enumerate}[1]
 \item A beginning address offset. This address offset has the size of an address and is relative to
-the applicable base address of the compilation unit referencing this range list. It marks the
+the applicable base address of the compilation unit referencing this 
+\addtoindex{range list}. 
+It marks the
 beginning of an 
 \addtoindexi{address}{address range!in range list} 
 range.
 
 \item An ending address offset. This address offset again has the size of an address and is relative
-to the applicable base address of the compilation unit referencing this range list. It marks the
+to the applicable base address of the compilation unit referencing 
+this \addtoindex{range list}.
+It marks the
 first address past the end of the address range.
 The ending address must be greater than or
 equal to the beginning address.
 
-\textit{A range list entry (but not a base address selection or end of list entry) whose beginning and
+\textit{A \addtoindex{range list} entry (but not a base address selection or end of list entry) whose beginning and
 ending addresses are equal has no effect because the size of the range covered by such an
 entry is zero.}
 \end{enumerate}
 
-The applicable base address of a range list entry is determined
+The applicable base address of a \addtoindex{range list} entry
+is determined
 by the closest preceding base address selection entry (see
 below) in the same range list. If there is no such selection
 entry, then the applicable base address defaults to the base
@@ -2007,7 +2015,8 @@ code is contained in a single contiguous section, no base
 address selection entry is needed.}
 
 Address range entries in
-a range list may not overlap. There is no requirement that
+a \addtoindex{range list} may not overlap.
+There is no requirement that
 the entries be ordered in any particular way.
 
 A base address selection entry consists of:
@@ -2023,18 +2032,20 @@ and ending address offsets of subsequent entries of the location list.
 affects only the list in which it is contained.}
 
 
-The end of any given range list is marked by an 
+The end of any given \addtoindex{range list} is marked by an 
 \addtoindexx{end of list entry!in range list}
 end of list entry, 
 which consists of a 0 for the beginning address
-offset and a 0 for the ending address offset. A range list
+offset and a 0 for the ending address offset. 
+A \addtoindex{range list}
 containing only an end of list entry describes an empty scope
 (which contains no instructions).
 
 \textit{A base address selection entry and an 
 \addtoindexx{end of list entry!in range list}
 end of list entry for
-a range list are identical to a base address selection entry
+a \addtoindex{range list} 
+are identical to a base address selection entry
 and end of list entry, respectively, for a location list
 (see Section \refersec{chap:locationlists}) 
 in interpretation and representation.}

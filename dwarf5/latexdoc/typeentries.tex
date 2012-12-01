@@ -443,8 +443,10 @@ whose value is a reference to a debugging information entry
 describing a base type, a user-defined type or another type
 modifier.
 
-A modified type entry describing a pointer or reference
-type (using \livelink{chap:DWTAGpointertype}{DW\-\_TAG\-\_pointer\-\_type},
+A modified type entry describing a 
+\addtoindexx{pointer type entry}
+pointer or \addtoindex{reference type}
+(using \livelink{chap:DWTAGpointertype}{DW\-\_TAG\-\_pointer\-\_type},
 \livelink{chap:DWTAGreferencetype}{DW\-\_TAG\-\_reference\-\_type} or
 \livelink{chap:DWTAGrvaluereferencetype}{DW\-\_TAG\-\_rvalue\-\_reference\-\_type}) 
 % Another instance of no-good-place-to-put-index entry.
@@ -467,8 +469,27 @@ blocksize is assumed.
 
 When multiple type modifiers are chained together to modify
 a base or user-defined type, the tree ordering reflects the
-semantics of the applicable lanuage rather than the textual
-order in the source presentation.
+semantics of the 
+\addtoindexx{reference type entry, lvalue|see{reference type entry}}
+applicable lanuage 
+\addtoindexx{reference type entry, rvalue|see{rvalue reference type entry}}
+rather 
+\addtoindexx{parameter|see{macro formal parameter list}}
+than 
+\addtoindexx{parameter|see{\textit{this} parameter}}
+the 
+\addtoindexx{parameter|see{variable parameter attribute}}
+textual
+\addtoindexx{parameter|see{optional parameter attribute}}
+order 
+\addtoindexx{parameter|see{unspecified parameters entry}}
+in 
+\addtoindexx{parameter|see{template value parameter entry}}
+the 
+\addtoindexx{parameter|see{template type parameter entry}}
+source 
+\addtoindexx{parameter|see{formal parameter entry}}
+presentation.
 
 \begin{figure}[here]
 \centering
@@ -476,17 +497,25 @@ order in the source presentation.
 Name&Meaning\\ \hline
 \livetarg{chap:DWTAGconsttype}{DW\-\_TAG\-\_const\-\_type} &  C or C++ const qualified type
 \addtoindexx{const qualified type entry} \addtoindexx{C} \addtoindexx{C++} \\
-\livetarg{chap:DWTAGpackedtype}{DW\-\_TAG\-\_packed\-\_type}& Pascal or Ada packed type
+\livetarg{chap:DWTAGpackedtype}{DW\-\_TAG\-\_packed\-\_type}& \addtoindex{Pascal} or Ada packed type\addtoindexx{packed type entry}
 \addtoindexx{packed qualified type entry} \addtoindexx{Ada} \addtoindexx{Pascal} \\
 \livetarg{chap:DWTAGpointertype}{DW\-\_TAG\-\_pointer\-\_type} & Pointer to an object of
 the type being modified \addtoindexx{pointer qualified type entry} \\
-\livetarg{chap:DWTAGreferencetype}{DW\-\_TAG\-\_reference\-\_type}& C++ (lvalue) reference
+\livetarg{chap:DWTAGreferencetype}{DW\-\_TAG\-\_reference\-\_type}& C++ (lvalue) reference 
 to an object of the type 
-being modified \addtoindexx{reference qualified type entry} \\
-\livetarg{chap:DWTAGrestricttype}{DW\-\_TAG\-\_restrict\-\_type}&C restrict qualified type
-\addtoindexx{restricted qualified type entry} \\
+\addtoindexx{reference type entry} \\
+being modified 
+\addtoindexx{reference qualified type entry} \\
+\livetarg{chap:DWTAGrestricttype}{DW\-\_TAG\-\_restrict\-\_type}& \addtoindex{C} 
+restrict 
+\addtoindexx{restricted type entry} \\
+qualified type
+\addtoindexx{restrict qualified type} \\
 \livetarg{chap:DWTAGrvaluereferencetype}{DW\-\_TAG\-\_rvalue\-\_reference\-\_type} & C++
-rvalue reference to an object of the type being modified 
+\addtoindexx{rvalue reference type entry}
+rvalue 
+\addtoindexx{restricted type entry}
+reference to an object of the type being modified 
 \addtoindexx{rvalue reference qualified type entry} \\
 \livetarg{chap:DWTAGsharedtype}{DW\-\_TAG\-\_shared\-\_type}&UPC shared qualified type 
 \addtoindexx{shared qualified type entry} \\
@@ -1378,7 +1407,9 @@ description is evaluated.
 If 
 \hypertarget{chap:DWATobjectpointerobjectthisselfpointerofmemberfunction}
 the member function entry describes a non\dash static member
-function, then that entry has a \livelink{chap:DWATobjectpointer}{DW\-\_AT\-\_object\-\_pointer} 
+function, then that entry has 
+\addtoindexx{object pointer attribute}
+a \livelink{chap:DWATobjectpointer}{DW\-\_AT\-\_object\-\_pointer} 
 attribute
 whose value is a reference to the formal parameter entry
 that corresponds to the object for which the function is
@@ -1390,7 +1421,9 @@ and some other languages). That parameter
 also has a \livelink{chap:DWATartificial}{DW\-\_AT\-\_artificial} attribute whose value is true.
 
 Conversely, if the member function entry describes a static
-member function, the entry does not have a 
+member function, the entry does not have 
+\addtoindexx{object pointer attribute}
+a 
 \livelink{chap:DWATobjectpointer}{DW\-\_AT\-\_object\-\_pointer}
 attribute.
 
@@ -1769,7 +1802,9 @@ those declared using non\dash prototype declarations.
 A 
 \hypertarget{chap:DWATprototypedsubroutineprototype}
 subroutine entry declared with a function prototype style
-declaration may have a 
+declaration may have 
+\addtoindexx{prototyped attribute}
+a 
 \livelink{chap:DWATprototyped}{DW\-\_AT\-\_prototyped} attribute, which is
 a \livelink{chap:flag}{flag}.
 
@@ -1844,7 +1879,7 @@ storage needed to hold a value of the string type.
 \section{Set Type Entries}
 \label{chap:settypeentries}
 
-\textit{Pascal provides the concept of a “set,” which represents
+\textit{\addtoindex{Pascal} provides the concept of a “set,” which represents
 a group of values of ordinal type.}
 
 A set is represented by a debugging information entry with
@@ -2001,25 +2036,29 @@ Section \refersec{chap:byteandbitsizes}.
 \section{Pointer to Member Type Entries}
 \label{chap:pointertomembertypeentries}
 
-\textit{In \addtoindex{C++}, a pointer to a data or function member of a class or
+\textit{In \addtoindex{C++}, a 
+pointer to a data or function member of a class or
 structure is a unique type.}
 
 A debugging information entry representing the type of an
 object that is a pointer to a structure or class member has
 the tag \livetarg{chap:DWTAGptrtomembertype}{DW\-\_TAG\-\_ptr\-\_to\-\_member\-\_type}.
 
-If the pointer to member type has a name, the pointer to
-member entry has a \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute,
+If the \addtoindex{pointer to member type} has a name, the 
+\addtoindexx{pointer to member type entry}
+pointer to member entry has a
+\livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute, 
 \addtoindexx{name attribute}
 whose value is a
 null\dash terminated string containing the type name as it appears
 in the source program.
 
-The pointer to member entry has a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute to
+The \addtoindex{pointer to member} entry 
+has a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute to
 describe the type of the class or structure member to which
 objects of this type may point.
 
-The pointer to member entry also 
+The \addtoindex{pointer to member} entry also 
 \hypertarget{chap:DWATcontainingtypecontainingtypeofpointertomembertype}
 has a 
 \livelink{chap:DWATcontainingtype}{DW\-\_AT\-\_containing\-\_type}
@@ -2029,7 +2068,9 @@ objects of this type may point.
 
 The 
 \hypertarget{chap:DWATuselocationmemberlocationforpointertomembertype}
-pointer to member entry has a 
+has 
+\addtoindex{pointer to member entry} 
+a 
 \livelink{chap:DWATuselocation}{DW\-\_AT\-\_use\-\_location} attribute
 whose value is a 
 \addtoindex{location description} that computes the
@@ -2044,7 +2085,7 @@ rather than with each instance of the type.}
 
 The \livelink{chap:DWATuselocation}{DW\-\_AT\-\_use\-\_location} description is used in conjunction
 with the location descriptions for a particular object of the
-given pointer to member type and for a particular structure or
+given \addtoindex{pointer to member type} and for a particular structure or
 class instance. The \livelink{chap:DWATuselocation}{DW\-\_AT\-\_use\-\_location} 
 attribute expects two values to be 
 \addtoindexi{pushed}{address!implicit push for member operator}
@@ -2052,7 +2093,7 @@ onto the DWARF expression stack before
 the \livelink{chap:DWATuselocation}{DW\-\_AT\-\_use\-\_location} description is evaluated.
 The first value 
 \addtoindexi{pushed}{address!implicit push for member operator}
-is the value of the pointer to member object
+is the value of the \addtoindex{pointer to member} object
 itself. The second value 
 \addtoindexi{pushed}{address!implicit push for member operator} 
 is the base address of the
@@ -2065,7 +2106,7 @@ whose address is being calculated.
     object.*mbr_ptr
 \end{lstlisting}
 % FIXME: object and mbr\_ptr should be distinguished from italic. See DW4.
-\textit{where mbr\_ptr has some pointer to member type, a debugger should:}
+\textit{where mbr\_ptr has some \addtoindex{pointer to member type}, a debugger should:}
 
 \textit{1. Push the value of mbr\_ptr onto the DWARF expression stack.}
 
@@ -2077,7 +2118,8 @@ given in the type of mbr\_ptr.}
 \section{File Type Entries}
 \label{chap:filetypeentries}
 
-\textit{Some languages, such as Pascal, provide a data type to represent 
+\textit{Some languages, such as \addtoindex{Pascal}, 
+provide a data type to represent 
 files.}
 
 A file type is represented by a debugging information entry
