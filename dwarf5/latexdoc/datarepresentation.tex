@@ -94,7 +94,9 @@ not appear in DWARF debugging information.
 \addtoindexx{reserved values!initial length}
 
 An \addtoindex{initial length field} is one of the length fields that occur
-at the beginning of those DWARF sections that have a header
+at the beginning 
+of those DWARF sections that 
+have a header
 (\addtoindex{.debug\_aranges}, 
 \addtoindex{.debug\_info}, 
 \addtoindex{.debug\_types}, 
@@ -175,14 +177,23 @@ represented as an unsigned 64\dash bit integer.
 detect that a DWARF section contribution is using the 64\dash bit
 format and to adapt its processing accordingly.}
 
-\item Section offset and section length fields that occur
+\item Section offset and section length 
+\addtoindexx{section length!use in headers}
+fields that occur
+\addtoindexx{section offset!use in headers}
 in the headers of DWARF sections (other 
 \addtoindex{initial length field}
 than 
 \addtoindex{initial length}
 fields) are listed following. In the 32\dash bit DWARF format these
 are 32\dash bit unsigned integer values; in the 64\dash bit DWARF format,
-they are 64\dash bit unsigned integer values.
+they 
+\addtoindexx{section length!in .debug\_aranges header}
+are 
+\addtoindexx{section length!in .debug\_pubnames header}
+64\dash bit 
+\addtoindexx{section length!in .debug\_pubtypes header}
+unsigned integer values.
 
 \begin{center}
 \begin{tabular}{lll}
@@ -329,7 +340,9 @@ DWARF information for the compilation unit\addtoindexx{version number!compilatio
 The value in this field is 4.
 
 \item \addtoindex{debug\_abbrev\_offset} (section offset) \\
-A 4\dash byte or 8\dash byte unsigned offset into the 
+A 
+\addtoindexx{section offset!in .debug\_info header}
+4\dash byte or 8\dash byte unsigned offset into the 
 \addtoindex{.debug\_abbrev}
 section. This offset associates the compilation unit with a
 particular set of debugging information entry abbreviations. In
@@ -380,7 +393,9 @@ DWARF information for the compilation unit\addtoindexx{version number!type unit}
 The value in this field is 4.
 
 \item \addtoindex{debug\_abbrev\_offset} (section offset) \\
-A 4\dash byte or 8\dash byte unsigned offset into the 
+A 
+\addtoindexx{section offset!in .debug\_types header}
+4\dash byte or 8\dash byte unsigned offset into the 
 \addtoindex{.debug\_abbrev}
 section. This offset associates the compilation unit with a
 particular set of debugging information entry abbreviations. In
@@ -389,7 +404,9 @@ in the 64\dash bit DWARF format, this is an 8\dash byte unsigned length
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
 \item address\_size (ubyte) \\
-A 1\dash byte unsigned integer representing the size in bytes of
+A 1\dash byte unsigned integer representing the size 
+\addtoindexx{size of an address}
+in bytes of
 \addtoindexx{address\_size}
 an address on the target architecture. If the system uses
 \addtoindexx{address space!segmented}
@@ -406,7 +423,9 @@ the primary type contained in this type unit uses this value.}
 
 
 \item type\_offset (section offset) \\
-A 4\dash byte or 8\dash byte unsigned offset relative to the beginning
+A 4\dash byte or 8\dash byte unsigned offset 
+\addtoindexx{section offset!in .debug\_types header}
+relative to the beginning
 of the type unit header. This offset refers to the debugging
 information entry that describes the type. Because the type
 may be nested inside a namespace or other structures, and may
@@ -659,9 +678,12 @@ case, the attribute is implicitly indicated as present, and
 no value is encoded in the debugging information entry itself.
 
 \item \livelink{chap:lineptr}{lineptr} \\
-This is an offset into the 
+This is an offset into 
+\addtoindexx{section offset!in class lineptr value}
+the 
 \addtoindex{.debug\_line} section
-(\livelink{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset}). It consists of an offset from the
+(\livelink{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset}).
+It consists of an offset from the
 beginning of the 
 \addtoindex{.debug\_line}
 section to the first byte of
@@ -678,7 +700,9 @@ in the 64\dash bit DWARF format, it is an 8\dash byte unsigned value
 This is an offset into the 
 \addtoindex{.debug\_loc}
 section
-(\livelink{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset}). It consists of an offset from the
+(\livelink{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset}). 
+It consists of an offset from the
+\addtoindexx{section offset!in class loclistptr value}
 beginning of the 
 \addtoindex{.debug\_loc}
 section to the first byte of
@@ -693,7 +717,9 @@ in the 64\dash bit DWARF format, it is an 8\dash byte unsigned value
 
 
 \item \livelink{chap:macptr}{macptr} \\
-This is an offset into the 
+This is an 
+\addtoindexx{section offset!in class macptr value}
+offset into the 
 \addtoindex{.debug\_macinfo} section
 (\livelink{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset}). It consists of an offset from the
 beginning of the \addtoindex{.debug\_macinfo} 
@@ -707,7 +733,9 @@ in the 64\dash bit DWARF format, it is an 8\dash byte unsigned value
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
 \item \livelink{chap:rangelistptr}{rangelistptr} \\
-This is an offset into the \addtoindex{.debug\_ranges} section
+This is an 
+\addtoindexx{section offset!in class rangelistptr value}
+offset into the \addtoindex{.debug\_ranges} section
 (\livelink{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset}). 
 It consists of an
 offset from the beginning of the 
@@ -734,8 +762,11 @@ There are three types of reference.
 The 
 \addtoindexx{reference class}
 first type of reference can identify any debugging
-information entry within the containing unit. This type of
-reference is an offset from the first byte of the compilation
+information entry within the containing unit. 
+This type of
+reference is an 
+\addtoindexx{section offset!in class reference value}
+offset from the first byte of the compilation
 header for the compilation unit containing the reference. There
 are five forms for this type of reference. There are fixed
 length forms for one, two, four and eight byte offsets
@@ -802,10 +833,14 @@ header.
 
 \item string \\
 A string is a sequence of contiguous non\dash null bytes followed by
-one null byte. A string may be represented immediately in the
+one null byte. 
+\addtoindexx{string class}
+A string may be represented immediately in the
 debugging information entry itself 
 (\livetarg{chap:DWFORMstring}{DW\-\_FORM\-\_string}), or may
-be represented as an offset into a string table contained in
+be represented as an 
+\addtoindexx{section offset!in class string value}
+offset into a string table contained in
 the \addtoindex{.debug\_str} section of the object file 
 (\livetarg{chap:DWFORMstrp}{DW\-\_FORM\-\_strp}). In
 the 32\dash bit DWARF format, the representation of a 
@@ -1898,8 +1933,11 @@ DWARF information\addtoindexx{version number!compilation unit} for the compilati
 The value in this field is 4.
 
 % Some say unsigned offset this just says offset: FIXME
-\item debug\_info\_offset (section offset) \\
-A 4\dash byte or 8\dash byte offset into the 
+\item \addtoindex{debug\_info\_offset} (section offset) \\
+A 
+\addtoindexx{section offset!in name lookup table set of entries}
+4\dash byte or 8\dash byte 
+offset into the 
 \addtoindex{.debug\_info}
 section of the compilation unit header.
 In
@@ -1907,8 +1945,11 @@ the 32\dash bit DWARF format, this is a 4\dash byte unsigned offset;
 in the 64\dash bit DWARF format, this is an 8\dash byte unsigned offsets
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
-\item  debug\_info\_length (section length) \\
-A 4\dash byte or 8\dash byte length containing the size in bytes of the
+\item  \addtoindex{debug\_info\_length} (section length) \\
+\addtoindexx{section length!in .debug\_pubnames header}
+A 
+\addtoindexx{section length!in .debug\_pubtypes header}
+4\dash byte or 8\dash byte length containing the size in bytes of the
 contents of the \addtoindex{.debug\_info}
 section generated to represent
 this compilation unit. In the 32\dash bit DWARF format, this is
@@ -1957,7 +1998,9 @@ A 2\dash byte version identifier
 (see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
 
 \item debug\_info\_offset (section offset) \\
-A 4\dash byte or 8\dash byte offset into the 
+A 
+\addtoindexx{section offset!in .debug\_aranges header}
+4\dash byte or 8\dash byte offset into the 
 \addtoindex{.debug\_info} section of
 the compilation unit header. In the 32\dash bit DWARF format,
 this is a 4\dash byte unsigned offset; in the 64\dash bit DWARF format,
@@ -1967,12 +2010,16 @@ this is an 8\dash byte unsigned offset
 \item address\_size (ubyte) \\
 A 1\dash byte unsigned integer containing the size in bytes of an
 \addtoindexx{address\_size}
-address (or the offset portion of an address for segmented
+address 
+\addtoindexx{size of an address}
+(or the offset portion of an address for segmented
 \addtoindexx{address space!segmented}
 addressing) on the target system.
 
 \item segment\_size (ubyte) \\
-A 1\dash byte unsigned integer containing the size in bytes of a
+A 
+\addtoindexx{segment\_size}
+1\dash byte unsigned integer containing the size in bytes of a
 segment selector on the target system.
 
 \end{enumerate}
@@ -1980,17 +2027,17 @@ segment selector on the target system.
 This header is followed by a series of tuples. Each tuple
 consists of a segment, an address and a length. 
 The segment
-size is given by the segment\_size field of the header; the
+size is given by the \addtoindex{segment\_size} field of the header; the
 address and length size are each given by the address\_size
 field of the header. 
 The first tuple following the header in
 each set begins at an offset that is a multiple of the size
 of a single tuple (that is, the size of a segment selector
-plus twice the size of an address). 
+plus twice the \addtoindex{size of an address}). 
 The header is padded, if
 necessary, to that boundary. Each set of tuples is terminated
 by a 0 for the segment, a 0 for the address and 0 for the
-length. If the segment\_size field in the header is zero,
+length. If the \addtoindex{segment\_size} field in the header is zero,
 the segment selectors are omitted from all tuples, including
 the terminating tuple.
 
@@ -2229,21 +2276,27 @@ word\dash aligned. Consequently: •
 32\dash bit addresses, an assembler or compiler must provide a way
 to produce 2\dash byte and 4\dash byte quantities without alignment
 restrictions, and the linker must be able to relocate a
-4\dash byte address or section offset that occurs at an arbitrary
+4\dash byte address or 
+\addtoindexx{section offset!alignment of}
+section offset that occurs at an arbitrary
 alignment.
 
 \item For the 32\dash bit DWARF format and a target architecture with
 64\dash bit addresses, an assembler or compiler must provide a
 way to produce 2\dash byte, 4\dash byte and 8\dash byte quantities without
 alignment restrictions, and the linker must be able to relocate
-an 8\dash byte address or 4\dash byte section offset that occurs at an
+an 8\dash byte address or 4\dash byte 
+\addtoindexx{section offset!alignment of}
+section offset that occurs at an
 arbitrary alignment.
 
 \item For the 64\dash bit DWARF format and a target architecture with
 32\dash bit addresses, an assembler or compiler must provide a
 way to produce 2\dash byte, 4\dash byte and 8\dash byte quantities without
 alignment restrictions, and the linker must be able to relocate
-a 4\dash byte address or 8\dash byte section offset that occurs at an
+a 4\dash byte address or 8\dash byte 
+\addtoindexx{section offset!alignment of}
+section offset that occurs at an
 arbitrary alignment.
 
 \textit{It is expected that this will be required only for very large
@@ -2255,7 +2308,9 @@ executable object.}
 64\dash bit addresses, an assembler or compiler must provide a
 way to produce 2\dash byte, 4\dash byte and 8\dash byte quantities without
 alignment restrictions, and the linker must be able to
-relocate an 8\dash byte address or section offset that occurs at
+relocate an 8\dash byte address or 
+\addtoindexx{section offset!alignment of}
+section offset that occurs at
 an arbitrary alignment.
 \end{itemize}
 
@@ -2280,10 +2335,10 @@ Table 41 \refersec{tab:integerrepresentationnames}.
   \hline
 \endlastfoot
 
-sbyte&  signed, 1\dash byte integer \\
-ubyte&unsigned, 1\dash byte integer \\
-uhalf&unsigned, 2\dash byte integer \\
-uword&unsigned, 4\dash byte integer \\
+\addtoindex{sbyte}&  signed, 1\dash byte integer \\
+\addtoindex{ubyte}&unsigned, 1\dash byte integer \\
+\addtoindex{uhalf}&unsigned, 2\dash byte integer \\
+\addtoindex{uword}&unsigned, 4\dash byte integer \\
 
 \end{longtable}
 \end{centering}

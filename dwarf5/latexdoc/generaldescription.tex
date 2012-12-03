@@ -494,8 +494,11 @@ In cases where a producer of debugging information feels that
 \hypertarget{chap:DWATsiblingdebugginginformationentryrelationship}
 it will be important for consumers of that information to
 quickly scan chains of sibling entries, while ignoring the
-children of individual siblings, that producer may attach a
-\livelink{chap:DWATsibling}{DW\-\_AT\-\_sibling} attribute to any debugging information entry. 
+children of individual siblings, that producer may attach 
+\addtoindexx{sibling attribute}
+a
+\livelink{chap:DWATsibling}{DW\-\_AT\-\_sibling} attribute 
+to any debugging information entry. 
 The
 value of this attribute is a reference to the sibling entry
 of the entry to which the attribute is attached.
@@ -521,7 +524,9 @@ the DWARF information.
 For example, if a particular target architecture supports
 both 32\dash bit and 64\dash bit addresses, the compiler will generate
 an object file which specifies that it contains executable
-code generated for one or the other of these address sizes. In
+code generated for one or the other of these 
+\addtoindexx{size of an address}
+address sizes. In
 that case, the DWARF debugging information contained in this
 object file will use the same address size.
 }
@@ -553,7 +558,8 @@ Section \refersec{chap:locationdescriptions}.
 \label{chap:generaloperations}
 Each general operation represents a postfix operation on
 a simple stack machine. Each element of the stack is the
-size of an address on the target machine. The value on the
+\addtoindex{size of an address} on the target machine. 
+The value on the
 top of the stack after ``executing'' the 
 \addtoindex{DWARF expression}
 is 
@@ -581,7 +587,7 @@ from 0 through 31, inclusive.
 
 \item \livetarg{chap:DWOPaddr}{DW\-\_OP\-\_addr} \\
 The \livelink{chap:DWOPaddr}{DW\-\_OP\-\_addr} operation has a single operand that encodes
-a machine address and whose size is the size of an address
+a machine address and whose size is the \addtoindex{size of an address}
 on the target machine.
 
 \item \livetarg{chap:DWOPconst1u}{DW\-\_OP\-\_const1u}, \livetarg{chap:DWOPconst2u}{DW\-\_OP\-\_const2u}, \livetarg{chap:DWOPconst4u}{DW\-\_OP\-\_const4u}, \livetarg{chap:DWOPconst8u}{DW\-\_OP\-\_const8u} \\
@@ -682,7 +688,7 @@ treats it as an address. The value
 retrieved from that address is pushed. 
 The size of the data retrieved from the 
 \addtoindexi{dereferenced}{address!dereference operator}
-address is the size of an address on the target machine.
+address is the \addtoindex{size of an address} on the target machine.
 
 \item \livetarg{chap:DWOPderefsize}{DW\-\_OP\-\_deref\-\_size} \\
 The \livelink{chap:DWOPderefsize}{DW\-\_OP\-\_deref\-\_size} operation behaves like the \livelink{chap:DWOPderef}{DW\-\_OP\-\_deref}
@@ -692,7 +698,7 @@ the \livelink{chap:DWOPderefsize}{DW\-\_OP\-\_deref\-\_size} operation, however,
 of the data retrieved from the dereferenced address is
 specified by the single operand. This operand is a 1\dash byte
 unsigned integral constant whose value may not be larger
-than the size of an address on the target machine. The data
+than the \addtoindex{size of an address} on the target machine. The data
 retrieved is zero extended to the size of an address on the
 target machine before being pushed onto the expression stack.
 
@@ -708,7 +714,7 @@ address calculation and pushed as the new stack top. The size
 of the data retrieved from the 
 \addtoindexi{dereferenced}{address!dereference operator}
 address is the
-size of an address on the target machine.
+\addtoindex{size of an address} on the target machine.
 
 \item \livetarg{chap:DWOPxderefsize}{DW\-\_OP\-\_xderef\-\_size}\\
 The \livelink{chap:DWOPxderefsize}{DW\-\_OP\-\_xderef\-\_size} operation behaves like the
@@ -725,8 +731,8 @@ the size in bytes of the data retrieved from the
 \addtoindexi{dereferenced}{address!dereference operator}
 address is specified by the single operand. This operand is a
 1\dash byte unsigned integral constant whose value may not be larger
-than the size of an address on the target machine. The data
-retrieved is zero extended to the size of an address on the
+than the \addtoindex{size of an address} on the target machine. The data
+retrieved is zero extended to the \addtoindex{size of an address} on the
 target machine before being pushed onto the expression stack.
 
 \item \livetarg{chap:DWOPpushobjectaddress}{DW\-\_OP\-\_push\-\_object\-\_address}\\
@@ -794,8 +800,10 @@ provide arithmetic and logical operations. Except
 as otherwise specified, the arithmetic operations perfom
 addressing arithmetic, that is, unsigned arithmetic that is
 performed modulo one plus the largest representable address
-(for example, 0x100000000 when the size of an address is 32
-bits). Such operations do not cause an exception on overflow.
+(for example, 0x100000000 when the 
+\addtoindex{size of an address} is 32
+bits). 
+Such operations do not cause an exception on overflow.
 
 \begin{enumerate}[1]
 \item \livetarg{chap:DWOPabs}{DW\-\_OP\-\_abs}  \\
@@ -1044,7 +1052,9 @@ of two forms:
 \item \textit{Single location descriptions}, 
 which 
 \addtoindexx{location description!single}
-are a language independent representation of
+are 
+\addtoindexx{single location description}
+a language independent representation of
 addressing rules of arbitrary complexity built from 
 DWARF expressions (See Section \refersec{chap:dwarfexpressions}) 
 and/or other
@@ -1101,7 +1111,9 @@ A single location description is either:
 \begin{enumerate}[1]
 \item A simple location description, representing an object
 \addtoindexx{location description!simple}
-which exists in one contiguous piece at the given location, or 
+which 
+\addtoindexx{simple location description}
+exists in one contiguous piece at the given location, or 
 \item A composite location description consisting of one or more
 \addtoindexx{location description!composite}
 simple location descriptions, each of which is followed by
@@ -1240,7 +1252,8 @@ of the resultant value is contained.
 
 \begin{enumerate}[1]
 \item \livetarg{chap:DWOPpiece}{DW\-\_OP\-\_piece} \\
-The \livelink{chap:DWOPpiece}{DW\-\_OP\-\_piece} operation takes a single operand, which is an
+The \livelink{chap:DWOPpiece}{DW\-\_OP\-\_piece} operation takes a 
+single operand, which is an
 unsigned LEB128 number.  The number describes the size in bytes
 of the piece of the object referenced by the preceding simple
 location description. If the piece is located in a register,
@@ -1392,7 +1405,7 @@ location list entry consists of:
 
 \begin{enumerate}[1]
 \item A beginning address offset. 
-This address offset has the size of an address and is
+This address offset has the \addtoindex{size of an address} and is
 relative to the applicable base address of the compilation
 unit referencing this location list. It marks the beginning
 of the address 
@@ -1400,7 +1413,7 @@ of the address
 over which the location is valid.
 
 \item An ending address offset.  This address offset again
-has the size of an address and is relative to the applicable
+has the \addtoindex{size of an address} and is relative to the applicable
 base address of the compilation unit referencing this location
 list. It marks the first address past the end of the address
 range over which the location is valid. The ending address
@@ -1412,7 +1425,7 @@ and ending addresses are equal has no effect
 because the size of the range covered by such
 an entry is zero.}
 
-\item A single location description 
+\item A \addtoindex{single location description} 
 describing the location of the object over the range specified by
 the beginning and end addresses.
 \end{enumerate}
@@ -1602,7 +1615,9 @@ which is a \livelink{chap:flag}{flag}.
 \textit{In some systems, addresses are specified as offsets within a
 given 
 \addtoindexx{address space!segmented}
-segment rather than as locations within a single flat
+segment 
+\addtoindexx{segmented adddressing|see{address space}}
+rather than as locations within a single flat
 \addtoindexx{address space!flat}.
 address space.}
 
@@ -1610,8 +1625,9 @@ Any debugging information entry that contains a description
 \hypertarget{chap:DWATsegmentaddressinginformation}
 of the location of an object or subroutine may have
 a 
-\livelink{chap:DWATsegment}{DW\-\_AT\-\_segment}
-attribute, whose value is a location
+\livelink{chap:DWATsegment}{DW\-\_AT\-\_segment} attribute, 
+\addtoindexx{segment attribute}
+whose value is a location
 description. The description evaluates to the segment selector
 of the item being described. If the entry containing the
 \livelink{chap:DWATsegment}{DW\-\_AT\-\_segment} attribute has a 
@@ -1624,15 +1640,23 @@ or
 a location
 description that evaluates to an address, then those address
 values represent the offset portion of the address within
-the segment specified by \livelink{chap:DWATsegment}{DW\-\_AT\-\_segment}.
+the segment specified 
+\addtoindexx{segment attribute}
+by \livelink{chap:DWATsegment}{DW\-\_AT\-\_segment}.
 
-If an entry has no \livelink{chap:DWATsegment}{DW\-\_AT\-\_segment} attribute, it inherits
+If an entry has no 
+\livelink{chap:DWATsegment}{DW\-\_AT\-\_segment} attribute, it inherits
+\addtoindexx{segment attribute}
 the segment value from its parent entry.  If none of the
 entries in the chain of parents for this entry back to
-its containing compilation unit entry have \livelink{chap:DWATsegment}{DW\-\_AT\-\_segment}
-attributes, then the entry is assumed to exist within a flat
-address space. Similarly, if the entry has a \livelink{chap:DWATsegment}{DW\-\_AT\-\_segment}
-attribute containing an empty location description, that
+its containing compilation unit entry have 
+\livelink{chap:DWATsegment}{DW\-\_AT\-\_segment} attributes, 
+then the entry is assumed to exist within a flat
+address space. 
+Similarly, if the entry has a 
+\livelink{chap:DWATsegment}{DW\-\_AT\-\_segment} attribute 
+\addtoindexx{segment attribute}
+containing an empty location description, that
 entry is assumed to exist within a 
 \addtoindexi{flat}{address space!flat}.
 address space.
@@ -1739,7 +1763,10 @@ example,
 \livelink{chap:DWATsibling}{DW\-\_AT\-\_sibling} and 
 \livelink{chap:DWATdeclaration}{DW\-\_AT\-\_declaration} 
 \addtoindexx{declaration attribute}
-clearly cannot apply to a referring
+clearly cannot apply to a 
+\addtoindexx{declaration attribute}
+referring
+\addtoindexx{sibling attribute}
 entry.}
 
 
@@ -1906,6 +1933,7 @@ for a non-contiguous range of addresses.
 In addition, a non-contiguous range of 
 addresses may also be specified for the
 \livelink{chap:DWATstartscope}{DW\-\_AT\-\_start\-\_scope} attribute.
+\addtoindexx{start scope attribute}
 If an entity has no associated machine code, 
 none of these attributes are specified.
 
@@ -1958,7 +1986,9 @@ a \livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} attribute
 whose value is of class \livelink{chap:rangelistptr}{rangelistptr}
 and indicates the beginning of a \addtoindex{range list}.
 Similarly,
-a \livelink{chap:DWATstartscope}{DW\-\_AT\-\_start\-\_scope} attribute may have a value of class
+a \livelink{chap:DWATstartscope}{DW\-\_AT\-\_start\-\_scope} attribute 
+\addtoindexx{start scope attribute}
+may have a value of class
 \livelink{chap:rangelistptr}{rangelistptr} for the same reason.  
 
 Range lists are contained
@@ -1981,7 +2011,8 @@ end of list entry.
 A \addtoindex{range list} entry consists of:
 
 \begin{enumerate}[1]
-\item A beginning address offset. This address offset has the size of an address and is relative to
+\item A beginning address offset. This address offset has the 
+\addtoindex{size of an address} and is relative to
 the applicable base address of the compilation unit referencing this 
 \addtoindex{range list}. 
 It marks the
@@ -1989,7 +2020,8 @@ beginning of an
 \addtoindexi{address}{address range!in range list} 
 range.
 
-\item An ending address offset. This address offset again has the size of an address and is relative
+\item An ending address offset. This address offset again has the 
+\addtoindex{size of an address} and is relative
 to the applicable base address of the compilation unit referencing 
 this \addtoindex{range list}.
 It marks the

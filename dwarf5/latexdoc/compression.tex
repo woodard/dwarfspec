@@ -76,7 +76,9 @@ contain sections as in:
 \end{alltt}
 
 followed (or preceded, the order is not significant) 
-by a series of section groups:
+by a series of 
+\addtoindexx{section group}
+section groups:
 \begin{alltt}
 ==== Section group 1
     \addtoindex{.debug\_info}
@@ -89,10 +91,11 @@ by a series of section groups:
     \addtoindex{.debug\_line}
 \end{alltt}
 
-where each section group might or might not contain executable
+where each \addtoindex{section group} might or might not contain executable
 code (\textit{.text} sections) or data (\textit{.data} sections).
 
-A \textit{section group} is a named set of section contributions
+A \textit{\addtoindex{section group}} is a named set 
+of section contributions
 within an object file with the property that the entire set
 of section contributions must be retained or discarded as a
 whole; no partial elimination is allowed. Section groups can
@@ -100,30 +103,39 @@ generally be handled by a linker in two ways:
 
 \begin{enumerate}[1.]
 \item Given multiple identical (duplicate) section groups,
+\addtoindexx{section group}
 one of them is chosen to be kept and used, while the rest
 are discarded.
 
-\item Given a section group that is not referenced from any
-section outside of the section group, the section group
+\item Given a \addtoindex{section group} 
+that is not referenced from any
+section outside of the \addtoindex{section group}, 
+the section group
 is discarded.
 
 
 \end{enumerate}
 
 
-Which handling applies may be indicated by the section group
+Which handling applies may be indicated by the 
+\addtoindex{section group}
 itself and/or selection of certain linker options.
 
-For example, if a linker determines that section group 1
-from A.o and section group 3 from B.o are identical, it could
+For example, if a linker determines that 
+\addtoindex{section group} 1
+from A.o and 
+\addtoindex{section group} 3 from B.o are identical, it could
 discard one group and arrange that all references in A.o and
 B.o apply to the remaining one of the two identical section
 groups. This saves space.
 
 An important part of making it possible to “redirect”
-references to the surviving section group is the use of
+references to the surviving 
+\addtoindex{section group} is the use of
 consistently chosen linker global symbols for referring to
-locations within each section group. It follows that references
+locations within each 
+\addtoindex{section group}.
+It follows that references
 are simply to external names and the linker already knows
 how to match up references and definitions.
 
@@ -141,20 +153,22 @@ compilation unit to another
 \item A means of having multiple contributions to specific sections
 (for example, \addtoindex{.debug\_info}, and so on) in a single object file.
 
-\item  A means of identifying a section group (giving it a name).
+\item  A means of identifying a \addtoindex{section group} (giving it a name).
 
 \item A means of identifying which sections go together to make
-up a section group, so that the group can be treated as a unit
+up a \addtoindex{section group}, 
+so that the group can be treated as a unit
 (kept or discarded).
 
-\item  A means of indicating how each section group should be
+\item  A means of indicating how each \addtoindex{section group} should be
 processed by the linker.
 
 \end{enumerate}
 
 \textit{The notion of section and section contribution used here
 corresponds closely to the similarly named concepts in the
-ELF object file representation. The notion of section group is
+ELF object file representation. 
+The notion of \addtoindex{section group} is
 an abstraction of common extensions of the ELF representation
 widely known as ``COMDATs'' or ``COMDAT sections''. (Other
 object file representations provide COMDAT\dash style mechanisms as
@@ -185,7 +199,9 @@ Section \refersec{app:examples}.
 
 \textbf{Section Group Names}
 
-Section groups must have a section group name. For the subsequent 
+Section groups must have a \addtoindex{section group} name.
+\addtoindexx{section group!name}
+For the subsequent 
 \addtoindex{C++} example, a name like
 
 <producer-prefix>.<file-designator>.<gid-number>
@@ -229,9 +245,12 @@ generates a different
 \textless gid\dash number \textgreater
 as a kind
 of ``digital signature'' that allows a fast test for the
-equality of two section groups.}
+equality of two 
+\addtoindexx{section group}
+section groups.}
 
-So, for example, the section group corresponding to file wa.h
+So, for example, the \addtoindex{section group} 
+corresponding to file wa.h
 above is given the name \textit{my.compiler.company.cpp.wa.h.123456}.
 
 
@@ -241,7 +260,8 @@ above is given the name \textit{my.compiler.company.cpp.wa.h.123456}.
 Global labels for 
 \addtoindexx{debugging information entry!ownership relation}
 debugging information entries (need explained
-below) within a section group can be given names of the form
+below) within a \addtoindex{section group}
+can be given names of the form
 
 \begin{alltt}
     <prefix>.<file-designator>.<gid-number>.<die-number>
@@ -270,7 +290,9 @@ during compilation.
 
 \end{itemize}
 
-In general, every point in the section group 
+In general, every point in the 
+\addtoindexx{section group}
+section group 
 \addtoindex{.debug\_info} that
 could be referenced from outside by any compilation unit must
 normally have an external name generated for it in the linker
@@ -288,13 +310,15 @@ distinct
 \textless gid\dash number \textgreater
 is generated.
 
-Note that only section groups that are designated as
+Note that only 
+\addtoindexx{section group}
+section groups that are designated as
 duplicate\dash removal\dash applies actually require the
 \begin{alltt}
     <prefix>.<file-designator>.<gid-number>.<die-number>
 \end{alltt}
 external labels for debugging information entries as all other
-section group sections can use 'local' labels 
+\addtoindex{section group} sections can use 'local' labels 
 (section\dash relative
 relocations).
 
@@ -316,7 +340,7 @@ for a local label.)}
 \textbf{Use of \livelink{chap:DWTAGcompileunit}{DW\-\_TAG\-\_compile\-\_unit} versus 
 \livelink{chap:DWTAGpartialunit}{DW\-\_TAG\-\_partial\-\_unit}}
 
-A section group compilation unit that uses 
+A \addtoindex{section group} compilation unit that uses 
 \livelink{chap:DWTAGcompileunit}{DW\-\_TAG\-\_compile\-\_unit}
 is like any other compilation unit, in that its contents
 are evaluated by consumers as though it were an ordinary
@@ -334,8 +358,11 @@ This also applies to \addtoindex{Fortran} INCLUDE lines when declarations
 are included into a procedure or module context.
 
 Consequently a compiler must use \livelink{chap:DWTAGpartialunit}{DW\-\_TAG\-\_partial\-\_unit} (instead
-of \livelink{chap:DWTAGcompileunit}{DW\-\_TAG\-\_compile\-\_unit}) in a section group whenever the section
-group contents are not necessarily globally visible. This
+of \livelink{chap:DWTAGcompileunit}{DW\-\_TAG\-\_compile\-\_unit}) 
+in a \addtoindex{section group} 
+whenever the section group 
+contents are not necessarily globally visible. 
+This
 directs consumers to ignore that compilation unit when scanning
 top level declarations and definitions.
 
@@ -372,7 +399,7 @@ Use
 unit's debugging information entries to those of another
 compilation unit.
 
-When referencing into a removable section group 
+When referencing into a removable \addtoindex{section group}
 \addtoindex{.debug\_info}
 from another \addtoindex{.debug\_info} (from anywhere), the
 \begin{alltt}
@@ -381,7 +408,9 @@ from another \addtoindex{.debug\_info} (from anywhere), the
 name should be used for an external symbol and a relocation
 generated based on that name.
 
-When referencing into a non-section group 
+When referencing into a 
+\addtoindexx{section group}
+non-section group 
 \addtoindex{.debug\_info},
 from another \addtoindex{.debug\_info} (from anywhere) 
 \livelink{chap:DWFORMrefaddr}{DW\-\_FORM\-\_ref\-\_addr} is
@@ -402,7 +431,10 @@ In these examples, the focus is on the arrangement of DWARF
 information into sections (specifically the 
 \addtoindex{.debug\_info}
 section) and the naming conventions used to achieve references
-into section groups. In practice, all of the examples that
+into 
+\addtoindexx{section group}
+section groups. 
+In practice, all of the examples that
 follow involve DWARF sections other than just 
 \addtoindex{.debug\_info}
 (for example, \addtoindex{.debug\_line}, 
@@ -447,7 +479,7 @@ f(A &a)
 
 
 section \refersec{app:duplicateeliminationexample1dwarfsectiongroup}
-shows the section group corresponding to the included file 
+shows the \addtoindex{section group} corresponding to the included file 
 wa.h.
 
 
@@ -481,8 +513,9 @@ DW.cpp.wa.h.123456.4: ! linker global symbol
 
 Figure \refersec{app:duplicateeliminationexample1primarycompilationunit}
 shows the ``normal'' DWARF sections, which are not part of
-any section group, and how they make use of the information
-in the section group shown above.
+any \addtoindex{section group}, 
+and how they make use of the information
+in the \addtoindex{section group} shown above.
 
 \paragraph{Duplicate elimination example 1: primary compilation unit} 
 \label{app:duplicateeliminationexample1primarycompilationunit}
@@ -503,7 +536,7 @@ in the section group shown above.
         ...
 \end{alltt}
 
-This example uses \livelink{chap:DWTAGcompileunit}{DW\-\_TAG\-\_compile\-\_unit} for the section group,
+This example uses \livelink{chap:DWTAGcompileunit}{DW\-\_TAG\-\_compile\-\_unit} for the \addtoindex{section group},
 implying that the contents of the compilation unit are
 globally visible (in accordance with 
 \addtoindex{C++} language rules).
@@ -542,7 +575,7 @@ END
 
 
 Section \refersec{app:duplicateeliminationexample2dwarfsectiongroup}
-shows the section group 
+shows the \addtoindex{section group}
 corresponding to the included file 
 \addtoindexx{Fortran example}
 CommonStuff.fh.
@@ -636,7 +669,7 @@ END
 \end{lstlisting}
 
 That main program results in an object file that
-contained a duplicate of the section group named
+contained a duplicate of the \addtoindex{section group} named
 my.f90.company.f90.CommonStuff.fh.654321 
 corresponding to the
 included file as well as the remainder of the main subprogram
@@ -670,7 +703,7 @@ Section \refersec{app:duplicateeliminationexample2companiondwarf}.
 \end{alltt}
 
 
-This example uses \livelink{chap:DWTAGpartialunit}{DW\-\_TAG\-\_partial\-\_unit} for the section group
+This example uses \livelink{chap:DWTAGpartialunit}{DW\-\_TAG\-\_partial\-\_unit} for the \addtoindex{section group}
 because the included declarations are not independently
 visible as global entities.
 
@@ -685,12 +718,12 @@ a \livelink{chap:DWTAGimportedunit}{DW\-\_TAG\-\_imported\-\_unit}
 in the primary unit 
 (see Figure \refersec{app:duplicateeliminationexample1primarycompilationunit})
 with an \livelink{chap:DWATimport}{DW\-\_AT\-\_import} attribute that refers to the proper unit
-in the section group.
+in the \addtoindex{section group}.
 
 \textit{The \addtoindex{C} rules for consistency of global (file scope) symbols
 across compilations are less strict than for C++; inclusion
 of the import unit attribute assures that the declarations of
-the proper section group are considered before declarations
+the proper \addtoindex{section group} are considered before declarations
 from other compilations.}
 
 
@@ -731,8 +764,9 @@ many
 linkers today support the concept of a COMDAT group or
 linkonce section. The general idea is that a ``key'' can be
 attached to a section or a group of sections, and the linker
-will include only one copy of a section group (or individual
-section) for any given key. For 
+will include only one copy of a \addtoindex{section group}
+(or individual section) for any given key. 
+For 
 \addtoindex{.debug\_types} sections, the
 key is the type signature formed from the algorithm given in
 Section \refersec{datarep:typesignaturecomputation}.
@@ -1224,11 +1258,13 @@ there is substantial header file information
 duplication.
 
 A reasonable approach is to put each header file in its own
-section group, using the naming rules mentioned above. The
+\addtoindex{section group}, using the naming rules mentioned above. The
 section groups are marked to ensure duplicate removal.
 
 All data instances and code instances (even if they came
-from the header files above) are put into non-section group
+from the header files above) are put 
+\addtoindexx{section group}
+into non-section group
 sections such as the base object file 
 \addtoindex{.debug\_info} section.
 
@@ -1245,7 +1281,10 @@ this function, should be reduced to just a single copy.
 For each such code group (function template in this example)
 the compiler assigns a name for the group which will match
 all other instantiations of this function but match nothing
-else. The section groups are marked to ensure duplicate
+else. 
+The 
+\addtoindexx{section group}
+section groups are marked to ensure duplicate
 removal, so that the second and subsequent definitions seen
 by the static linker are simply discarded.
 
@@ -1271,7 +1310,9 @@ as a
 Section groups can help make it easy for a linker to completely
 remove unused functions.
 
-Such section groups are not marked for duplicate removal,
+Such 
+\addtoindexx{section group}
+section groups are not marked for duplicate removal,
 since the functions are not duplicates of anything.
 
 Each function is given a compilation unit and a section
@@ -1286,7 +1327,9 @@ file\dash level compilation unit using \livelink{chap:DWTAGimportedunit}{DW\-\_T
 
 Section groups can use \livelink{chap:DWFORMrefaddr}{DW\-\_FORM\-\_ref\-\_addr} and internal labels
 (section\dash relative relocations) to refer to the main object
-file sections, as the section groups here are either deleted
+file sections, as the 
+\addtoindexx{section group}
+section groups here are either deleted
 as unused or kept. There is no possibility (aside from error)
 of a group from some other compilation being used in place
 of one of these groups.
@@ -1299,7 +1342,10 @@ Abstract instances
 \addtoindexx{abstract instance}
 \addtoindexx{concrete out-of-line instance}
 and concrete-out-of-line instances may be
-put in distinct compilation units using section groups. This
+put in distinct compilation units using 
+\addtoindexx{section group}
+section groups. 
+This
 makes possible some useful duplicate DWARF elimination.
 
 \textit{No special provision for eliminating class duplication

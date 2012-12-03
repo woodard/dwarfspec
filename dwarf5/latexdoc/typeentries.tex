@@ -346,6 +346,7 @@ For
 a data type with a non\dash decimal and non\dash binary scale factor,
 the fixed binary type entry has a 
 \livelink{chap:DWATsmall}{DW\-\_AT\-\_small} attribute which
+\addtoindexx{small attribute}
 references a 
 \livelink{chap:DWTAGconstant}{DW\-\_TAG\-\_constant} entry. The scale factor value
 is interpreted in accordance with the value defined by the
@@ -563,7 +564,8 @@ The typedef entry has a \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute
 whose value is a null\dash terminated string containing
 the name of the typedef as it appears in the source program.
 
-The typedef entry may also contain a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute whose
+The typedef entry may also contain a 
+\livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute whose
 value is a reference to the type named by the typedef. If
 the debugging information entry for a typedef represents
 a declaration of the type that is not also a definition,
@@ -635,6 +637,7 @@ the type of each element of the array.
 
 If the amount of storage allocated to hold each element of an
 object of the given array type is different from the amount
+\addtoindexx{stride attribute|see{bit stride attribute or byte stride attribute}}
 of storage that is normally allocated to hold an individual
 \hypertarget{chap:DWATbitstridearrayelementstrideofarraytype}
 object of the 
@@ -665,7 +668,9 @@ the number of array elements by the size of each element.}
 
 
 Each array dimension is described by a debugging information
-entry with either the tag \livelink{chap:DWTAGsubrangetype}{DW\-\_TAG\-\_subrange\-\_type} or the 
+entry with either the 
+\addtoindexx{subrange type entry!as array dimension}
+tag \livelink{chap:DWTAGsubrangetype}{DW\-\_TAG\-\_subrange\-\_type} or the 
 \addtoindexx{enumeration type entry!as array dimension}
 tag
 \livelink{chap:DWTAGenumerationtype}{DW\-\_TAG\-\_enumeration\-\_type}. These entries are
@@ -697,8 +702,11 @@ Appendix \refersec{app:fortran90example}.
 \addtoindex{C++}, and 
 \addtoindex{Pascal}, among others, allow the
 programmer to define types that are collections of related
-components. In \addtoindex{C} and \addtoindex{C++}, these collections are called
-“structures.” In \addtoindex{Pascal}, they are called “records.”
+\addtoindexx{structure type entry}
+components. 
+In \addtoindex{C} and \addtoindex{C++}, these collections are called
+“structures.” 
+In \addtoindex{Pascal}, they are called “records.”
 The components may be of different types. The components are
 called “members” in \addtoindex{C} and 
 \addtoindex{C++}, and “fields” in \addtoindex{Pascal}.}
@@ -733,8 +741,13 @@ be understood to apply to \addtoindex{C++} structures as well.}
 
 
 Structure, union, and class types are represented by debugging
-information entries with 
-the tags \livetarg{chap:DWTAGstructuretype}{DW\-\_TAG\-\_structure\-\_type},
+\addtoindexx{structure type entry}
+information entries 
+\addtoindexx{union type entry}
+with 
+\addtoindexx{class type entry}
+the tags 
+\livetarg{chap:DWTAGstructuretype}{DW\-\_TAG\-\_structure\-\_type},
 \livetarg{chap:DWTAGuniontype}{DW\-\_TAG\-\_union\-\_type}, 
 and \livetarg{chap:DWTAGclasstype}{DW\-\_TAG\-\_class\-\_type},
 respectively. If a name has been given to the structure,
@@ -781,12 +794,16 @@ attribute.
 If a structure, union or class entry represents the definition
 of a structure, class or union member corresponding to a prior
 incomplete structure, class or union, the entry may have a
-\livelink{chap:DWATspecification}{DW\-\_AT\-\_specification} attribute whose value is a reference to
+\livelink{chap:DWATspecification}{DW\-\_AT\-\_specification} attribute 
+\addtoindexx{specification attribute}
+whose value is a reference to
 the debugging information entry representing that incomplete
 declaration.
 
 Structure, union and class entries containing the
-\livelink{chap:DWATspecification}{DW\-\_AT\-\_specification} attribute do not need to duplicate
+\livelink{chap:DWATspecification}{DW\-\_AT\-\_specification} attribute 
+\addtoindexx{specification attribute}
+do not need to duplicate
 information provided by the declaration entry referenced by the
 specification attribute.  In particular, such entries do not
 need to contain an attribute for the name of the structure,
@@ -809,8 +826,10 @@ within the type declaration.}
 If the definition for a given member of the structure, union
 or class does not appear within the body of the declaration,
 that member also has a debugging information entry describing
-its definition. That latter entry has a \livelink{chap:DWATspecification}{DW\-\_AT\-\_specification}
-attribute referencing the debugging information entry
+its definition. That latter entry has a 
+\livelink{chap:DWATspecification}{DW\-\_AT\-\_specification} attribute 
+\addtoindexx{specification attribute}
+referencing the debugging information entry
 owned by the body of the structure, union or class entry and
 representing a non\dash defining declaration of the data, function
 or type member. The referenced entry will not have information
@@ -838,6 +857,7 @@ facilitate DWARF space compression
 
 \textit{The \addtoindex{Java} language defines ``interface'' types. 
 An interface
+\addtoindex{interface type entry}
 in \addtoindex{Java} is similar to a \addtoindex{C++} or 
 \addtoindex{Java} class with only abstract
 methods and constant data members.}
@@ -1363,7 +1383,9 @@ as well as specify the size of the data member) }
 
 A member function is represented by a 
 \addtoindexx{member function entry}
-debugging information entry with the 
+debugging information entry 
+with the 
+\addtoindexx{subprogram entry!as member function}
 tag \livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram}.
 The member function entry
 may contain the same attributes and follows the same rules
@@ -1407,7 +1429,9 @@ description is evaluated.
 If 
 \hypertarget{chap:DWATobjectpointerobjectthisselfpointerofmemberfunction}
 the member function entry describes a non\dash static member
-function, then that entry has 
+function, then that entry 
+\addtoindexx{self pointer attribute|see{object pointer attribute}}
+has 
 \addtoindexx{object pointer attribute}
 a \livelink{chap:DWATobjectpointer}{DW\-\_AT\-\_object\-\_pointer} 
 attribute
@@ -1436,14 +1460,18 @@ const\dash volatile qualification.
 If a subroutine entry represents the defining declaration
 of a member function and that definition appears outside of
 the body of the enclosing class declaration, the subroutine
-entry has a \livelink{chap:DWATspecification}{DW\-\_AT\-\_specification} 
-attribute, whose value is
+entry has a 
+\livelink{chap:DWATspecification}{DW\-\_AT\-\_specification} attribute, 
+\addtoindexx{specification attribute}
+whose value is
 a reference to the debugging information entry representing
 the declaration of this function member. The referenced entry
 will be a child of some class (or structure) type entry.
 
-Subroutine entries containing the \livelink{chap:DWATspecification}{DW\-\_AT\-\_specification}
-attribute do not need to duplicate information provided
+Subroutine entries containing the
+\livelink{chap:DWATspecification}{DW\-\_AT\-\_specification} attribute 
+\addtoindexx{specification attribute}
+do not need to duplicate information provided
 by the declaration entry referenced by the specification
 attribute. In particular, such entries do not need to contain
 attributes for the name or return type of the function member
@@ -1478,7 +1506,8 @@ such entry may have a \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute,
 whose value is
 a null\dash terminated string containing the name of the formal
 type parameter as it appears in the source program. The
-template type parameter entry also has a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute
+template type parameter entry also has a 
+\livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute
 describing the actual type by which the formal is replaced
 for this instantiation.
 
@@ -1775,6 +1804,7 @@ user\dash defined type.
 
 A subroutine type is represented by a debugging information
 entry with the 
+\addtoindexx{subroutine type entry}
 tag \livetarg{chap:DWTAGsubroutinetype}{DW\-\_TAG\-\_subroutine\-\_type}. 
 If a name has
 been given to the subroutine type in the source program,
@@ -1835,6 +1865,7 @@ tag \livelink{chap:DWTAGunspecifiedparameters}{DW\-\_TAG\-\_unspecified\-\_param
 
 
 A ``string'' is a sequence of characters that have specific
+\addtoindexx{string type entry}
 semantics and operations that separate them from arrays of
 characters. 
 \addtoindex{Fortran} is one of the languages that has a string
@@ -1856,7 +1887,9 @@ The
 \hypertarget{chap:DWATstringlengthstringlengthofstringtype}
 string type entry may have a 
 \livelink{chap:DWATstringlength}{DW\-\_AT\-\_string\-\_length} attribute
-whose value is a 
+whose 
+\addtoindexx{string length attribute}
+value is a 
 \addtoindex{location description} yielding the location
 where the length of the string is stored in the program. The
 string type entry may also have a \livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size} attribute
@@ -1865,7 +1898,8 @@ or \livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size} attribute, whose value
 is the size of the data to be retrieved from the location
 referenced by the string length attribute. If no (byte or bit)
 size attribute is present, the size of the data to be retrieved
-is the same as the size of an address on the target machine.
+is the same as the 
+\addtoindex{size of an address} on the target machine.
 
 If no string length attribute is present, the string type
 entry may have a \livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size} attribute or 
@@ -1884,6 +1918,7 @@ a group of values of ordinal type.}
 
 A set is represented by a debugging information entry with
 the tag \livetarg{chap:DWTAGsettype}{DW\-\_TAG\-\_set\-\_type}. 
+\addtoindexx{set type entry}
 If a name has been given to the
 set type, then the set type entry has 
 a \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute
@@ -1910,11 +1945,13 @@ the amount of storage needed to hold a value of the set type.
 \textit{Several languages support the concept of a ``subrange''
 type object. These objects can represent a subset of the
 values that an object of the basis type for the subrange can
-represent. Subrange type entries may also be used to represent
+represent. 
+Subrange type entries may also be used to represent
 the bounds of array dimensions.}
 
 A subrange type is represented by a debugging information
 entry with the 
+\addtoindexx{subrange type entry}
 tag \livetarg{chap:DWTAGsubrangetype}{DW\-\_TAG\-\_subrange\-\_type}. 
 If a name has been
 given to the subrange type, then the subrange type entry
@@ -1932,7 +1969,8 @@ If the amount of storage allocated to hold each element of an
 object of the given subrange type is different from the amount
 of storage that is normally allocated to hold an individual
 object of the indicated element type, then the subrange
-type entry has a \livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size} attribute or 
+type entry has a 
+\livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size} attribute or 
 \livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size}
 attribute, whose value 
 (see Section \refersec{chap:staticanddynamicvaluesofattributes})

@@ -9,12 +9,19 @@ is not contained within a \addtoindex{.debug\_info} or
 In the descriptions that follow, these terms are used to
 specify the representation of DWARF sections:
 
-Initial length, section offset and section length, which are
+Initial length, section offset and 
+\addtoindex{section length}, which are
 defined in 
 Sections \refersec{datarep:locationdescriptions} and 
 \refersec{datarep:32bitand64bitdwarfformats}.
 
-Sbyte, ubyte, uhalf, and uword, which are defined in 
+Sbyte, 
+\addtoindex{ubyte}, 
+\addtoindex{uhalf}, and 
+\addtoindex{uword}, 
+which 
+\addtoindexx{sbyte}
+are defined in 
 Section \refersec{datarep:integerrepresentationnames}.
 
 \section{Accelerated Access}
@@ -90,19 +97,28 @@ not including the length field itself
 (see Section \refersec{datarep:locationdescriptions}).
 
 \item  version (uhalf) \\
-A version number\addtoindexx{version number!name lookup table}\addtoindexx{version number!type lookup table} 
+A version number
+\addtoindexx{version number!name lookup table}
+\addtoindexx{version number!type lookup table} 
 (see Section \refersec{datarep:namelookuptables}). 
 This number is specific
 to the name lookup table and is independent of the DWARF
 version number.
 
 \item debug\_info\_offset (section offset) \\
-The offset from the beginning of the 
+The 
+\addtoindexx{section offset!in .debug\_pubtypes header}
+offset 
+\addtoindexx{section offset!in .debug\_pubtypes header}
+from the beginning of the 
 \addtoindex{.debug\_info} section of
 the compilation unit header referenced by the set.
 
 \item debug\_info\_length (section length) \\
-The size in bytes of the contents of the 
+\addtoindexx{section length!in .debug\_pubnames header}
+The 
+\addtoindexx{section length!in .debug\_pubtypes header}
+size in bytes of the contents of the 
 \addtoindex{.debug\_info} section
 generated to represent that compilation unit.
 \end{enumerate}
@@ -156,12 +172,16 @@ independent of the DWARF version number.
 
 \item debug\_info\_offset (section offset) \\
 The offset from the
+\addtoindexx{section offset!in .debug\_pubnames header}
 beginning of the \addtoindex{.debug\_info} or 
 \addtoindex{.debug\_types} section of the
 compilation unit header referenced by the set.
 
 \item address\_size (ubyte) \\
-The size of an address in bytes on
+The \addtoindex{size of an address}
+in 
+\addtoindexx{ubyte}
+bytes on
 \addtoindexx{address\_size}
 the target architecture. For 
 \addtoindexx{address space!segmented}
@@ -169,7 +189,10 @@ segmented addressing, this is
 the size of the offset portion of the address.
 
 \item segment\_size (ubyte) \\
-The size of a segment selector in
+The size of a segment selector 
+\addtoindexx{ubyte}
+in
+\addtoindexx{segment\_size}
 bytes on the target architecture. If the target system uses
 a flat address space, this value is 0.
 
@@ -182,7 +205,9 @@ segment selector, the beginning address within that segment
 of a range of text or data covered by some entry owned by
 the corresponding compilation unit, followed by the non\dash zero
 length of that range. A particular set is terminated by an
-entry consisting of three zeroes. When the segment\_size value
+entry consisting of three zeroes. 
+When the 
+\addtoindex{segment\_size} value
 is zero in the header, the segment selector is omitted so that
 each descriptor is just a pair, including the terminating
 entry. By scanning the table, a debugger can quickly decide
@@ -523,18 +548,22 @@ constitute such a recommendation and
 be either ``true'' or ``false''. This approach might be
 used as part of support for debugging optimized code.}
 
-\item line\_base (sbyte) \\
+\item line\_base (\addtoindex{sbyte}) \\
 \addtoindexx{line\_base}
 This parameter affects the meaning of the special opcodes. See below.
 
 \item line\_range (ubyte) \\
 \addtoindexx{line\_range}
-This parameter affects the meaning of the special opcodes. See below.
+This 
+\addtoindexx{ubyte}
+parameter affects the meaning of the special opcodes. See below.
 
 \item opcode\_base (ubyte) \\
 The 
 \addtoindex{opcode\_base}
-number assigned to the first special opcode.
+number
+\addtoindexx{ubyte}
+ assigned to the first special opcode.
 
 \textit{Opcode base is typically one greater than the highest-numbered
 \addtoindex{opcode\_base}
@@ -1498,11 +1527,16 @@ UTF\dash 8 encoding.}
 The size of a target address
 \addtoindexx{address\_size}
 in this CIE and any FDEs that
+\addtoindexx{ubyte}
 use it, in bytes. If a compilation unit exists for this frame,
 its address size must match the address size here.
 
 \item  segment\_size (ubyte) \\
-The size of a segment selector in this CIE and any FDEs that
+The 
+\addtoindexx{segment\_size}
+size 
+\addtoindexx{ubyte}
+of a segment selector in this CIE and any FDEs that
 use it, in bytes.
 
 \item  \addtoindex{code\_alignment\_factor} (unsigned LEB128) \\
@@ -1555,24 +1589,37 @@ plus the value of length must be an integral multiple of the
 address size.
 
 \item   CIE\_pointer (4 or 8 bytes, see Section \refersec{datarep:32bitand64bitdwarfformats}) \\
-A constant offset into the \addtoindex{.debug\_frame}
+A constant 
+\addtoindexx{section offset!in FDE header}
+offset into the \addtoindex{.debug\_frame}
 section that denotes
 the CIE that is associated with this FDE.
 
 \item  initial\_location (segment selector and target address) \\
-The address of the first location associated with this table
-entry. If the segment\_size field of this FDE's CIE is non-zero,
+The 
+\addtoindexx{initial\_location}
+address of the first location associated with this table
+entry. 
+If the \addtoindex{segment\_size} field of this FDE's CIE is non-zero,
 the initial location is preceded by a segment selector of
 the given length.
 
 \item  address\_range (target address) \\
-The number of bytes of program instructions described by this entry.
+The 
+\addtoindexx{address\_range}
+number 
+\addtoindexx{target address}
+of bytes of program instructions described by this entry.
 
 \item instructions (array of ubyte) \\
-A sequence of table defining instructions that are described below.
+A 
+\addtoindexx{ubyte}
+sequence of table defining instructions that are described below.
 
 \item 6. padding (array of ubyte) \\
-Enough \livelink{chap:DWCFAnop}{DW\-\_CFA\-\_nop} instructions to make the size of this
+Enough \livelink{chap:DWCFAnop}{DW\-\_CFA\-\_nop} instructions 
+to make the size of this
+\addtoindexx{ubyte}
 entry match the length value above.
 \end{enumerate}
 
@@ -1619,12 +1666,15 @@ and \livelink{chap:DWCFAvalexpression}{DW\-\_CFA\-\_val\-\_expression}.}
 \begin{enumerate}[1.]
 
 \item \textbf{DW\-\_CFA\-\_set\-\_loc} \\
-The \livetarg{chap:DWCFAsetloc}{DW\-\_CFA\-\_set\-\_loc} instruction takes a single operand that
+The \livetarg{chap:DWCFAsetloc}{DW\-\_CFA\-\_set\-\_loc} instruction 
+takes a single operand that
 represents a target address. The required action is to create a
 new table row using the specified address as the location. All
 other values in the new row are initially identical to the
 current row. The new location value is always greater than
-the current one. If the segment\_size field of this FDE's CIE
+the current one. 
+If the \addtoindex{segment\_size} field of this FDE's 
+\addtoindex{CIE}
 is non- zero, the initial location is preceded by a segment
 selector of the given length.
 
