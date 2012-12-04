@@ -768,13 +768,16 @@ will include only one copy of a \addtoindex{section group}
 (or individual section) for any given key. 
 For 
 \addtoindex{.debug\_types} sections, the
-key is the type signature formed from the algorithm given in
+key is the \addtoindex{type signature}
+formed from the algorithm given in
 Section \refersec{datarep:typesignaturecomputation}.
 
 \subsection{Signature Computation Example}
 \label{app:signaturecomputationexample}
 
-As an example, consider a \addtoindex{C++} header file 
+As an example, 
+\addtoindexx{type signature!example computation}
+consider a \addtoindex{C++} header file 
 containing the type definitions shown
 in Section \refersec{app:typesignatureexamplescsource}.
 
@@ -844,6 +847,7 @@ L2:
 \end{alltt}
 
 In computing a signature for the type N::C, flatten the type
+\addtoindexx{type signature}
 description into a byte stream according to the procedure
 outlined in 
 Section \refersec{datarep:typesignaturecomputation}.
@@ -990,18 +994,24 @@ L5:
 \end{alltt}
 
 In this example, the structure types N::A and N::C have each
-been placed in separate type units.  For N::A, the actual
+been placed in separate 
+\addtoindexx{type unit}
+type units.  For N::A, the actual
 definition of the type begins at label L1. The definition
 involves references to the int base type and to two pointer
 types. The information for each of these referenced types is
-also included in this type unit, since base types and pointer
+also included in this \addtoindex{type unit}, 
+since base types and pointer
 types are trivial types that are not worth the overhead of a
-separate type unit. The last pointer type contains a reference
+separate \addtoindex{type unit}. 
+The last pointer type contains a reference
 to an incomplete type N::B, which is also included here as
 a declaration, since the complete type is unknown and its
 signature is therefore unavailable. There is also a reference
 to N::C, using 
-\livelink{chap:DWFORMrefsig8}{DW\-\_FORM\-\_ref\-\_sig8} to refer to the type signature
+\livelink{chap:DWFORMrefsig8}{DW\-\_FORM\-\_ref\-\_sig8} to 
+refer to the type signature
+\addtoindexx{type signature}
 for that type.
 
 In computing a signature for the type N::A, flatten the type
@@ -1178,6 +1188,7 @@ Section \refersec{app:typesignatureexampleusage}.
 \label{app:typesignaturecomputationgrammar}
 
 This section
+\addtoindexx{type signature!computation grammar}
 presents a semi-formal grammar that may aid in understanding
 how the bytes of the flattened type description are formed
 during the type signature computation algorithm of Section
@@ -1358,6 +1369,7 @@ groups.}
 \label{app:separatetypeunits}
 
 Each complete declaration of a globally-visible type can be
+\addtoindexx{type unit}
 placed in its own separate type section, with a group key
 derived from the type signature. The linker can then remove
 all duplicate type declarations based on the key.

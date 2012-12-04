@@ -292,7 +292,8 @@ information entry, together with its children.
 For each type defined in a compilation unit, a contribution may
 be made to the \addtoindex{.debug\_types} 
 section of the object file. Each
-such contribution consists of a type unit header 
+such contribution consists of a 
+\addtoindex{type unit} header 
 (see Section \refersec{datarep:typeunitheader}) 
 followed by a \livelink{chap:DWTAGtypeunit}{DW\-\_TAG\-\_type\-\_unit} entry, together with
 its children.
@@ -368,7 +369,7 @@ offset portion of an address.
 
 The header for the series of debugging information entries
 contributing to the description of a type that has been
-placed in its own type unit, within the 
+placed in its own \addtoindex{type unit}, within the 
 \addtoindex{.debug\_types} section,
 consists of the following information:
 
@@ -388,7 +389,8 @@ consists of the 4\dash byte value 0xffffffff followed by an
 
 \item  version (uhalf)
 A 2\dash byte unsigned integer representing the version of the
-DWARF information for the compilation unit\addtoindexx{version number!type unit} 
+DWARF information for the 
+compilation unit\addtoindexx{version number!type unit} 
 (see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
 The value in this field is 4.
 
@@ -415,18 +417,24 @@ offset portion of an address.
 
 
 \item type\_signature (8\dash byte unsigned integer) \\
-A 64\dash bit unique signature of the type described in this type
+\addtoindexx{type signature}
+A 
+\addtoindexx{type\_signature}
+64\dash bit unique signature of the type described in this type
 unit.  
 
 \textit{An attribute that refers(using \livelink{chap:DWFORMrefsig8}{DW\-\_FORM\-\_ref\-\_sig8}) to
-the primary type contained in this type unit uses this value.}
+the primary type contained in 
+this \addtoindex{type unit} uses this value.}
 
 
 \item type\_offset (section offset) \\
+\addtoindexx{type\_offset}
 A 4\dash byte or 8\dash byte unsigned offset 
 \addtoindexx{section offset!in .debug\_types header}
 relative to the beginning
-of the type unit header. This offset refers to the debugging
+of the \addtoindex{type unit} header.
+This offset refers to the debugging
 information entry that describes the type. Because the type
 may be nested inside a namespace or other structures, and may
 contain references to other types that have not been placed in
@@ -814,8 +822,9 @@ or when the reference is used.
 
 The third type of reference can identify any debugging
 information type entry that has been placed in its own
-type unit. This type of 
+\addtoindex{type unit}. This type of 
 reference (\livetarg{chap:DWFORMrefsig8}{DW\-\_FORM\-\_ref\-\_sig8}) is the
+\addtoindexx{type signature}
 64\dash bit type signature 
 (see Section \refersec{datarep:typesignaturecomputation}) 
 that was computed
@@ -2347,8 +2356,11 @@ Table 41 \refersec{tab:integerrepresentationnames}.
 \label{datarep:typesignaturecomputation}
 
 A type signature is computed only by the DWARF producer;
+\addtoindexx{type signature computation}
 it is used by a DWARF consumer to resolve type references to
-the type definitions that are contained in type units.
+the type definitions that are contained in 
+\addtoindexx{type unit}
+type units.
 
 The type signature for a type T0 is formed from the 
 \addtoindex{MD5 hash}
@@ -2530,16 +2542,18 @@ be recursively processed or replaced with the name of the
 referent (in Step 4, 5 or 6). If neither treatment applies to
 an attribute that references another type entry, the entry
 that contains that attribute should not be considered for a
-separate type unit.}
+separate \addtoindex{type unit}.}
 
 \textit{If a debugging information entry contains an attribute from
 the list above that would require an unsupported form, that
-entry should not be considered for a separate type unit.}
+entry should not be considered for a separate 
+\addtoindex{type unit}.}
 
-\textit{A type should be considered for a separate type unit only
+\textit{A type should be considered for a separate 
+\addtoindex{type unit} only
 if all of the type entries that it contains or refers to in
 Steps 6 and 7 can themselves each be considered for a separate
-type unit.}
+\addtoindex{type unit}.}
 
 Where the DWARF producer may reasonably choose two or more
 different forms for a given attribute, it should choose
@@ -2556,7 +2570,8 @@ the type that uniquely identifies that type (i.e., a different
 type is highly unlikely to produce the same string).}
 
 \textit{A debugging information entry should not be placed in a
-separate type unit if any of the following apply:}
+separate \addtoindex{type unit}
+if any of the following apply:}
 
 \begin{itemize}
 
@@ -2581,7 +2596,9 @@ a type.}
 \item \textit{The \livelink{chap:DWATdeclaration}{DW\-\_AT\-\_declaration} attribute is not included because it
 indicates that the debugging information entry represents an
 incomplete declaration, and incomplete declarations should
-not be placed in separate type units.}
+not be placed in 
+\addtoindexx{type unit}
+separate type units.}
 
 \item \textit{The \livelink{chap:DWATdescription}{DW\-\_AT\-\_description} attribute is not included because
 it does not provide any information unique to the defining

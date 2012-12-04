@@ -14,7 +14,9 @@ of which there are
 three kinds: 
 \addtoindexx{normal compilation unit}
 normal compilation units,
-partial compilation units and type units. A 
+partial compilation units and 
+\addtoindexx{type unit}
+type units. A 
 \addtoindex{partial compilation unit}
 is related to one or more other compilation units that
 import it. A 
@@ -342,14 +344,15 @@ compilation unit.
 \label{chap:separatetypeunitentries}
 An object file may contain any number of separate type
 unit entries, each representing a single complete type
-definition. Each type unit must be uniquely identified by
+definition. 
+Each \addtoindex{type unit} must be uniquely identified by
 a 64\dash bit signature, stored as part of the type unit, which
 can be used to reference the type definition from debugging
 information entries in other compilation units and type units.
 
 A type unit is represented by a debugging information entry
 with the tag \livetarg{chap:DWTAGtypeunit}{DW\-\_TAG\-\_type\-\_unit}. 
-A type unit entry owns debugging
+A \addtoindex{type unit entry} owns debugging
 information entries that represent the definition of a single
 type, plus additional debugging information entries that may
 be necessary to include as part of the definition of the type.
@@ -362,7 +365,7 @@ constant value is an integer code indicating the source
 language used to define the type. The set of language names
 and their meanings are given in Figure \refersec{fig:languagenames}.
 
-A type unit entry for a given type T owns a debugging
+A \addtoindex{type unit} entry for a given type T owns a debugging
 information entry that represents a defining declaration
 of type T. If the type is nested within enclosing types or
 namespaces, the debugging information entry for T is nested
@@ -915,8 +918,10 @@ If
 the subroutine or entry point 
 \addtoindexx{return type of subroutine}
 is a function that returns a
-value, then its debugging information entry has a \livelink{chap:DWATtype}{DW\-\_AT\-\_type}
-attribute to denote the type returned by that function.
+value, then its debugging information entry has 
+\addtoindexx{type attribute}
+a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute 
+to denote the type returned by that function.
 
 \textit{Debugging information entries for 
 \addtoindex{C} void functions should
@@ -1127,14 +1132,19 @@ it may validly throw.}
 
 If a subroutine explicitly declares that it may throw
 \addtoindexx{exception thrown|see{thrown type entry}}
-an exception for one or more types, each such type is
+an 
+\addtoindexx{thrown exception|see{thrown type entry}}
+exception for one or more types, each such type is
+
 represented by a debugging information entry with 
 \addtoindexx{thrown type entry}
 the tag
 \livetarg{chap:DWTAGthrowntype}{DW\-\_TAG\-\_thrown\-\_type}.  
 Each such entry is a child of the entry
 representing the subroutine that may throw this type. Each
-thrown type entry contains a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute, whose
+thrown type entry contains 
+\addtoindexx{type attribute}
+a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute, whose
 value is a reference to an entry describing the type of the
 exception that may be thrown.
 
@@ -1146,10 +1156,11 @@ a function that is instantiated differently when called with
 values of different types. DWARF does not represent the generic
 template definition, but does represent each instantiation.}
 
-A template instantiation is represented by a debugging
+A \addtoindex{template instantiation} is represented by a debugging
 information entry with the 
 \addtoindexx{subprogram entry!use for template instantiation}
-tag \livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram}. With four
+tag \livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram}. 
+With four
 exceptions, such an entry will contain the same attributes and
 will have the same types of child entries as would an entry
 for a subroutine defined explicitly using the instantiation
@@ -1159,6 +1170,7 @@ types. The exceptions are:
 \item Each formal parameterized type declaration appearing in the
 template definition is represented by a debugging information
 entry with the 
+\addtoindexx{template type parameter entry}
 tag \livetarg{chap:DWTAGtemplatetypeparameter}{DW\-\_TAG\-\_template\-\_type\-\_parameter}. 
 Each
 such entry has a \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute, 
@@ -1167,7 +1179,9 @@ whose value is a
 null\dash terminated string containing the name of the formal
 type parameter as it appears in the source program. The
 \addtoindexx{formal type parameter|see{template type parameter entry}}
-template type parameter entry also has a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute
+template type parameter entry also has 
+\addtoindexx{type attribute}
+a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute
 describing the actual type by which the formal is replaced
 for this instantiation.
 
@@ -1631,8 +1645,12 @@ adjust parameters and/or the result (if any) as appropriate
 to the combined calling and called execution contexts.}
 
 A trampoline is represented by a debugging information entry
+\addtoindexx{trampoline (subprogam) entry}
 with the tag \livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram} or \livelink{chap:DWTAGinlinedsubroutine}{DW\-\_TAG\-\_inlined\-\_subroutine}
-that has a \livelink{chap:DWATtrampoline}{DW\-\_AT\-\_trampoline} attribute. The value of that
+that has 
+\addtoindexx{trampoline attribute}
+a \livelink{chap:DWATtrampoline}{DW\-\_AT\-\_trampoline} attribute. 
+The value of that
 attribute indicates the target subroutine of the trampoline,
 that is, the subroutine to which the trampoline passes
 control. (A trampoline entry may but need not also have a
@@ -1667,8 +1685,10 @@ subprogram.)
 \textit{In \addtoindex{C++}, trampolines may be used 
 to implement derived virtual
 member functions; such trampolines typically adjust the
+\addtoindexx{this parameter}
 implicit this pointer parameter in the course of passing
-control.  Other languages and environments may use trampolines
+control.  
+Other languages and environments may use trampolines
 in a manner sometimes known as transfer functions or transfer
 vectors.}
 
@@ -1800,7 +1820,9 @@ ranges, respectively, of the machine instructions generated
 for the with statement 
 (see Section \refersec{chap:codeaddressesandranges}).
 
-The with statement entry has a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute, denoting
+The with statement entry has 
+\addtoindexx{type attribute}
+a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute, denoting
 the type of record whose fields may be referenced without full
 qualification within the body of the statement. It also has
 \addtoindexx{location attribute}
@@ -1823,9 +1845,11 @@ can handle.}
 
 A try \livetargi{chap:tryblock}{block}{try block} is represented 
 by a debugging information entry
+\addtoindexx{try block entry}
 with the tag \livetarg{chap:DWTAGtryblock}{DW\-\_TAG\-\_try\-\_block}.  
 A catch \livelink{chap:catchblock}{block} is represented by
 a debugging information entry with 
+\addtoindexx{catch block entry}
 the tag \livetarg{chap:DWTAGcatchblock}{DW\-\_TAG\-\_catch\-\_block}.
 
 % nolink as we have links just above and do not have a combo link for both

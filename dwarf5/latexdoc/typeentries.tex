@@ -425,7 +425,15 @@ definition is deferred to a separate compilation unit).
 \addtoindexx{type modifier entry}
 
 A base or user\dash defined type may be modified in different ways
-in different languages. A type modifier is represented in
+\addtoindexx{type modifier|see{constant type entry}}
+\addtoindexx{type modifier|see{reference type entry}}
+\addtoindexx{type modifier|see{restricted type entry}}
+\addtoindexx{type modifier|see{packed type entry}}
+\addtoindexx{type modifier|see{pointer type entry}}
+\addtoindexx{type modifier|see{shared type entry}}
+\addtoindexx{type modifier|see{volatile type entry}}
+in different languages. 
+A type modifier is represented in
 DWARF by a debugging information entry with one of the tags
 given in 
 Figure \refersec{fig:typemodifiertags}.
@@ -438,7 +446,9 @@ whose value is a null\dash terminated
 string containing the modified type name as it appears in
 the source program.
 
-Each of the type modifier entries has a 
+Each of the type modifier entries has 
+\addtoindexx{type attribute}
+a 
 \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute,
 whose value is a reference to a debugging information entry
 describing a base type, a user-defined type or another type
@@ -558,13 +568,16 @@ volatile unsigned char * const restrict p;
 \label{chap:typedefentries}
 A named type that is defined in terms of another type
 definition is represented by a debugging information entry with
+\addtoindexx{typedef entry}
 the tag \livetarg{chap:DWTAGtypedef}{DW\-\_TAG\-\_typedef}. 
 The typedef entry has a \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute 
 \addtoindexx{name attribute}
 whose value is a null\dash terminated string containing
 the name of the typedef as it appears in the source program.
 
-The typedef entry may also contain a 
+The typedef entry may also contain 
+\addtoindexx{type attribute}
+a 
 \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute whose
 value is a reference to the type named by the typedef. If
 the debugging information entry for a typedef represents
@@ -630,9 +643,11 @@ of the enclosing compilation unit entry) is assumed.
 The ordering attribute may optionally appear on one-dimensional
 arrays; it will be ignored.
 
-An array type entry has a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} 
+An array type entry has 
+\addtoindexx{type attribute}
+a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute
+describing
 \addtoindexx{array!element type}
-attribute describing
 the type of each element of the array.
 
 If the amount of storage allocated to hold each element of an
@@ -783,12 +798,14 @@ a \livelink{chap:DWATdeclaration}{DW\-\_AT\-\_declaration} attribute.
 
 If the complete declaration of a type has been placed in
 \hypertarget{chap:DWATsignaturetypesignature}
-a separate type unit 
+a separate \addtoindex{type unit}
 (see Section \refersec{chap:separatetypeunitentries}), 
 an incomplete declaration 
 \addtoindexx{incomplete type}
 of that type in the compilation unit may provide
-the unique 64\dash bit signature of the type using a \livelink{chap:DWATsignature}{DW\-\_AT\-\_signature}
+the unique 64\dash bit signature of the type using 
+\addtoindexx{type signature}
+a \livelink{chap:DWATsignature}{DW\-\_AT\-\_signature}
 attribute.
 
 If a structure, union or class entry represents the definition
@@ -910,7 +927,9 @@ such entry has
 the 
 tag \livetarg{chap:DWTAGinheritance}{DW\-\_TAG\-\_inheritance}.
 
-An inheritance entry has 
+An inheritance entry 
+\addtoindexx{type attribute}
+has 
 \addtoindexx{inheritance entry}
 a 
 \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute whose value is
@@ -1040,7 +1059,9 @@ program. If the member entry describes an
 the
 name attribute is omitted or consists of a single zero byte.
 
-The data member entry has a 
+The data member entry has 
+\addtoindexx{type attribute}
+a 
 \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute to denote
 \addtoindexx{member entry (data)}
 the type of that member.
@@ -1429,6 +1450,7 @@ description is evaluated.
 If 
 \hypertarget{chap:DWATobjectpointerobjectthisselfpointerofmemberfunction}
 the member function entry describes a non\dash static member
+\addtoindexx{this pointer attribute|see{object pointer attribute}}
 function, then that entry 
 \addtoindexx{self pointer attribute|see{object pointer attribute}}
 has 
@@ -1506,40 +1528,53 @@ such entry may have a \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute,
 whose value is
 a null\dash terminated string containing the name of the formal
 type parameter as it appears in the source program. The
-template type parameter entry also has a 
+template type parameter entry also has 
+\addtoindexx{type attribute}
+a 
 \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute
 describing the actual type by which the formal is replaced
 for this instantiation.
 
 \item Each formal parameterized value declaration appearing in the
-template definition is represented by a debugging information
-entry with the 
+template definition is represented by a 
+debugging information entry with the 
+\addtoindexx{template value parameter entry}
 tag \livetarg{chap:DWTAGtemplatevalueparameter}{DW\-\_TAG\-\_template\-\_value\-\_parameter}. 
 Each
-such entry may have a \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute,
+such entry may have a 
+\livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute,
 \addtoindexx{name attribute}
 whose value is
 a null\dash terminated string containing the name of the formal
 value parameter as it appears in the source program. 
 The
 \hypertarget{chap:DWATconstvaluetemplatevalueparameter}
-template value parameter entry also has a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute
+template value parameter entry 
+\addtoindexx{template value parameter entry}
+also has 
+\addtoindexx{type attribute}
+a 
+\livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute
 describing the type of the parameterized value. Finally,
-the template value parameter entry has a \livelink{chap:DWATconstvalue}{DW\-\_AT\-\_const\-\_value}
+the template value parameter entry has a 
+\livelink{chap:DWATconstvalue}{DW\-\_AT\-\_const\-\_value}
 attribute, whose value is the actual constant value of the
 value parameter for this instantiation as represented on the
 target architecture.
 
 \item The class type entry and each of its child entries references
-a template type parameter entry in any circumstance where the
+a \addtoindex{template type parameter entry} in any circumstance where the
 source template definition references a formal parameterized
-type. Similarly, the class type entry and each of its child
+type. 
+Similarly, the class type entry and each of its child
 entries references a template value parameter entry in any
 circumstance where the source template definition references
 a formal parameterized value.
 
 \item If the compiler has generated a special compilation unit to
-hold the template instantiation and that special compilation
+hold the 
+\addtoindexx{template instantiation!and special compilaton unit}
+template instantiation and that special compilation
 unit has a different name from the compilation unit containing
 the template definition, the name attribute for the debugging
 information entry representing the special compilation unit
@@ -1577,7 +1612,9 @@ whose value is a reference to
 the member entry for the discriminant.
 
 If the variant part does not have a discriminant (tag field),
-the variant part entry has a 
+the variant part entry has 
+\addtoindexx{type attribute}
+a 
 \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute to represent
 the tag type.
 
@@ -1675,8 +1712,11 @@ otherwise it is the type of the parent entry.
 
 The condition entry owns \livelink{chap:DWTAGconstant}{DW\-\_TAG\-\_constant} and/or
 \livelink{chap:DWTAGsubrangetype}{DW\-\_TAG\-\_subrange\-\_type} entries that describe the constant
-values associated with the condition. If any child entry has
-a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute, that attribute should describe a type
+values associated with the condition. If any child entry 
+\addtoindexx{type attribute}
+has
+a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute,
+that attribute should describe a type
 compatible with the comparison type (according to the source
 language); otherwise the child’s type is the same as the
 comparison type.
@@ -1712,11 +1752,14 @@ attribute whose integer constant value is the number of bytes
 required to hold an instance of the enumeration.
 
 The \addtoindex{enumeration type entry}
-may have a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute
+may have 
+\addtoindexx{type attribute}
+a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute
 which refers to the underlying data type used to implement
 the enumeration.
 
 If an enumeration type has type safe 
+\addtoindexx{type safe enumeration types}
 semantics such that
 
 \begin{enumerate}[1.]
@@ -1815,7 +1858,9 @@ whose value is a null\dash terminated string containing
 the subroutine type name as it appears in the source program.
 
 If the subroutine type describes a function that returns
-a value, then the subroutine type entry has a \livelink{chap:DWATtype}{DW\-\_AT\-\_type}
+a value, then the subroutine type entry has 
+\addtoindexx{type attribute}
+a \livelink{chap:DWATtype}{DW\-\_AT\-\_type}
 attribute to denote the type returned by the subroutine. If
 the types of the arguments are necessary to describe the
 subroutine type, then the corresponding subroutine type
@@ -1847,7 +1892,9 @@ interpretations:
 specific type) are represented by a debugging information entry
 with the tag \livelink{chap:DWTAGformalparameter}{DW\-\_TAG\-\_formal\-\_parameter}. 
 Each formal parameter
-entry has a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute that refers to the type of
+entry has 
+\addtoindexx{type attribute}
+a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute that refers to the type of
 the formal parameter.
 
 \item The unspecified parameters of a variable parameter list
@@ -1926,7 +1973,9 @@ a \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute
 whose value is a null\dash terminated string containing the
 set type name as it appears in the source program.
 
-The set type entry has a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute to denote the
+The set type entry has 
+\addtoindexx{type attribute}
+a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute to denote the
 type of an element of the set.
 
 If the amount of storage allocated to hold each element of an
@@ -1961,7 +2010,9 @@ whose value is a null\dash terminated
 string containing the subrange type name as it appears in
 the source program.
 
-The subrange entry may have a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute to describe
+The subrange entry may have 
+\addtoindexx{type attribute}
+a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute to describe
 the type of object, called the basis type, of whose values
 this subrange is a subset.
 
@@ -1979,7 +2030,10 @@ storage needed to hold a value of the subrange type.
 
 The 
 \hypertarget{chap:DWATthreadsscaledupcarrayboundthreadsscalfactor}
-subrange entry may have a \livelink{chap:DWATthreadsscaled}{DW\-\_AT\-\_threads\-\_scaled} attribute,
+subrange entry may have 
+\addtoindexx{threads scaled attribute}
+a 
+\livelink{chap:DWATthreadsscaled}{DW\-\_AT\-\_threads\-\_scaled} attribute,
 which is a \livelink{chap:flag}{flag}. 
 If present, this attribute indicates whether
 this subrange represents a UPC array bound which is scaled
@@ -2092,7 +2146,9 @@ null\dash terminated string containing the type name as it appears
 in the source program.
 
 The \addtoindex{pointer to member} entry 
-has a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute to
+has 
+\addtoindexx{type attribute}
+a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute to
 describe the type of the class or structure member to which
 objects of this type may point.
 
@@ -2172,7 +2228,9 @@ whose value
 is a null\dash terminated string containing the type name as it
 appears in the source program.
 
-The file type entry has a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute describing
+The file type entry has 
+\addtoindexx{type attribute}
+a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute describing
 the type of the objects contained in the file.
 
 The file type entry also 
@@ -2288,15 +2346,20 @@ see Appendix \refersec{app:aggregateexamples}.}
 \label{chap:templatealiasentries}
 
 A type named using a template alias is represented
-by a debugging information entry with the tag
+by a debugging information entry 
+\addtoindexx{template alias entry}
+with the tag
 \livetarg{chap:DWTAGtemplatealias}{DW\-\_TAG\-\_template\-\_alias}. 
 The template alias entry has a
 \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute 
 \addtoindexx{name attribute}
 whose value is a null\dash terminated string
 containing the name of the template alias as it appears in
-the source program. The template alias entry also contains a
-\livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute whose value is a reference to the type
+the source program. The template alias entry also contains 
+\addtoindexx{type attribute}
+a
+\livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute 
+whose value is a reference to the type
 named by the template alias. The template alias entry has
 the following child entries:
 
@@ -2311,7 +2374,10 @@ a \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute,
 whose value is a null\dash terminated
 string containing the name of the formal type parameter as it
 appears in the source program. The template type parameter
-entry also has a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute describing the actual
+entry also has 
+\addtoindexx{type attribute}
+a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute
+describing the actual
 type by which the formal is replaced for this instantiation.
 
 \item Each formal parameterized value declaration
@@ -2324,7 +2390,9 @@ a \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute,
 whose value is a null\dash terminated
 string containing the name of the formal value parameter
 as it appears in the source program. The template value
-parameter entry also has a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute describing
+parameter entry also has 
+\addtoindexx{type attribute}
+a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute describing
 the type of the parameterized value. Finally, the template
 value parameter entry has a \livelink{chap:DWATconstvalue}{DW\-\_AT\-\_const\-\_value} 
 attribute, whose value is the actual constant value of the value parameter for

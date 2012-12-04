@@ -10,7 +10,7 @@ a series of debugging information entries (DIEs) to
 define a low-level
 representation of a source program. 
 Each debugging information entry consists of an identifying
-tag and a series of 
+\addtoindex{tag} and a series of 
 \addtoindex{attributes}. 
 An entry, or group of entries together, provide a description of a
 corresponding 
@@ -18,7 +18,10 @@ corresponding
 The tag specifies the class to which an entry belongs
 and the attributes define the specific characteristics of the entry.
 
-The set of tag names is listed in Figure 1. 
+The set of 
+\addtoindexx{tag names|see{debugging information entry}}
+tag names 
+is listed in Figure 1. 
 The debugging information entries they identify are
 described in Sections 3, 4 and 5.
 
@@ -71,6 +74,7 @@ part of the information that guides the interpretation of a
 debugging information entry.  
 
 Attribute value forms belong
+\addtoindexx{tag names!list of}
 to one of the classes shown in Figure \refersec{tab:classesofattributevalue}.
 \addtoindex{attributes!list of}
 
@@ -421,8 +425,10 @@ refer to an entry within that same compilation unit. The second
 type of reference is the offset of a debugging information
 entry in any compilation unit, including one different from
 the unit containing the reference. The third type of reference
-is an indirect reference to a type definition using a 64\dash
-bit signature for that type.  \\
+is an indirect reference to a 
+\addtoindexx{type signature}
+type definition using a 64\dash bit signature 
+for that type.  \\
 
 \livetargi{chap:string}{string}{string class}
 & A null\dash terminated sequence of zero or more
@@ -755,14 +761,17 @@ Appendix \refersec{app:aggregateexamples}.
 \item \livetarg{chap:DWOPformtlsaddress}{DW\-\_OP\-\_form\-\_tls\-\_address} \\
 The \livelink{chap:DWOPformtlsaddress}{DW\-\_OP\-\_form\-\_tls\-\_address} operation pops a value from the
 stack, translates it into an address in the current thread's
+\addtoindexx{thread-local storage}
 thread\dash local storage \nolink{block}, and pushes the address. If the
 DWARF expression containing 
 the \livelink{chap:DWOPformtlsaddress}{DW\-\_OP\-\_form\-\_tls\-\_address}
 operation belongs to the main executable's DWARF info, the
 operation uses the main executable's thread\dash local storage
 \nolink{block}; if the expression belongs to a shared library's
-DWARF info, then it uses that shared library's thread\dash local
-storage \nolink{block}.  Some implementations of 
+DWARF info, then it uses that shared library's 
+\addtoindexx{thread-local storage}
+thread\dash local storage \nolink{block}.
+Some implementations of 
 \addtoindex{C} and \addtoindex{C++} support a
 \_\_thread storage class. Variables with this storage class
 have distinct values and addresses in distinct threads, much
@@ -1496,7 +1505,9 @@ and representation.}
 Any 
 \hypertarget{chap:DWATtypetypeofdeclaration}
 debugging information entry describing a declaration that
-has a type has a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute, whose value is a
+has a type has 
+\addtoindexx{type attribute}
+a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute, whose value is a
 reference to another debugging information entry. The entry
 referenced may describe a base type, that is, a type that is
 not defined in terms of other data types, or it may describe a
@@ -1504,7 +1515,9 @@ user-defined type, such as an array, structure or enumeration.
 Alternatively, the entry referenced may describe a type
 modifier, such as constant, packed, pointer, reference or
 volatile, which in turn will reference another entry describing
-a type or type modifier (using a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute of its
+a type or type modifier (using 
+\addtoindexx{type attribute}
+a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute of its
 own). See 
 Section  \refersec{chap:typeentries} 
 for descriptions of the entries describing
@@ -1597,7 +1610,11 @@ Figure \ref{fig:virtualitycodes}.
 \textit{A compiler may wish to generate debugging information entries
 for objects or types that were not actually declared in the
 source of the application. An example is a formal parameter
-entry to represent the hidden this parameter that most C++
+%FIXME: The word 'this' should be rendered like a variant italic,
+%FIXME: not as a quoted name.
+entry to represent the 
+\addtoindexx{this parameter}
+hidden ``this'' parameter that most C++
 implementations pass as the first argument to non-static member
 functions.}  
 
