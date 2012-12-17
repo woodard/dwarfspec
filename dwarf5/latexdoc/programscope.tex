@@ -9,10 +9,12 @@ as bounded by ranges of text addresses within the program.
 
 \section{Unit Entries}
 An object file may contain one or more compilation units,
-of which there are 
+of which there are
+\addtoindexx{unit|see {compilation unit, partial unit \textit{or} type unit}} 
 \addtoindexx{compilation unit}
 three kinds: 
 \addtoindexx{normal compilation unit}
+\addtoindexx{normal compilation unit|see {compilation unit}}
 normal compilation units,
 partial compilation units and 
 \addtoindexx{type unit}
@@ -156,7 +158,7 @@ Language name & Meaning\\ \hline
 \livetarg{chap:DWLANGPascal83}{DW\-\_LANG\-\_Pascal83} & ISO \addtoindex{Pascal}:1983\\
 \livetarg{chap:DWLANGPLI}{DW\-\_LANG\-\_PLI} \dag & ANSI \addtoindex{PL/I}:1976\\
 \livetarg{chap:DWLANGPython}{DW\-\_LANG\-\_Python} \dag & \addtoindex{Python}\\
-\livetarg{chap:DWLANGUPC}{DW\-\_LANG\-\_UPC} &\addtoindex{Unified Parallel C}\\ \hline
+\livetarg{chap:DWLANGUPC}{DW\-\_LANG\-\_UPC} &\addtoindex{Unified Parallel C}\addtoindexx{UPC}\\ \hline
 \dag \ \ Support for these languages is limited.& \\
 \end{tabular}
 \end{figure}
@@ -283,7 +285,8 @@ to interpret a type conversion to a base type
 \hypertarget{chap:DWATuseUTF8compilationunitusesutf8strings}
 correctly.
 
-\item A \livelink{chap:DWATuseUTF8}{DW\-\_AT\-\_use\-\_UTF8} attribute, 
+\item A \livelink{chap:DWATuseUTF8}{DW\-\_AT\-\_use\-\_UTF8} attribute,
+\addtoindexx{use UTF8 attribute}\addtoindexx{UTF-8} 
 which is a \livelink{chap:flag}{flag} whose
 presence indicates that all strings (such as the names of
 declared entities in the source program) are represented
@@ -537,6 +540,7 @@ reference to a namespace.}
 \textit{The \addtoindex{C++} 
 compilation unit specific ``unnamed namespace'' may
 \addtoindexx{namespace (C++)!unnamed}
+\addtoindexx{unnamed namespace|see {namespace (C++), unnamed}}
 be represented by a namespace entry with no name attribute in
 the original namespace declaration entry (and therefore no name
 attribute in any namespace extension entry of this namespace).
@@ -640,6 +644,7 @@ an imported entity, other than a namespace).
 
 \textit{A \addtoindex{Fortran} use statement 
 \addtoindexx{Fortran!use statement}
+\addtoindexx{use statement|see {Fortran, use statement}}
 with an ``only list'' may be
 represented by a series of imported declaration entries,
 one (or more) for each entity that is imported. An entity
@@ -680,10 +685,10 @@ name in that module. Any entity in the module that is not
 renamed in this way is known in the context of the imported
 module entry by the same name as it is declared in the module.
 
-\textit{A \addtoindex{C++} using directive 
-may be represented by an 
+\textit{A \addtoindex{C++} using directive
 \addtoindexx{namespace (C++)!using directive}
-imported module
+\addtoindexx{using directive|see {namespace (C++), using directive}} 
+may be represented by an imported module
 \hypertarget{chap:DWATimportnamespaceusingdirective}
 entry, with an import attribute referring to the namespace
 entry of the appropriate extension of the namespace (which
@@ -699,7 +704,8 @@ corresponding to those entities that are renamed as part of
 being imported.
 }
 
-\textit{A \addtoindex{Fortran} use statement 
+\textit{A \addtoindex{Fortran} use statement
+\addtoindexx{Fortran!use statement}
 with neither a “rename list” nor
 an “only list” may be represented by an imported module
 entry with an import attribute referring to the module and
@@ -712,6 +718,7 @@ in Section \refersec{chap:importedorrenameddeclarationentries}.
 }
 
 \textit{A \addtoindex{Fortran} use statement for an entity in a module that is
+\addtoindexx{Fortran!use statement}
 itself imported by a use statement without an explicit mention
 may be represented by an imported declaration entry that refers
 to the original debugging information entry. For example, given
@@ -734,8 +741,10 @@ the imported declaration entry for Q within module C refers
 directly to the variable declaration entry for A in module A
 because there is no explicit representation for X in module B.
 
-A similar situation arises for a \addtoindex{C++} using declaration that
-imports an entity in terms of a namespace alias. See 
+A similar situation arises for a \addtoindex{C++} using declaration
+\addtoindexx{namespace (C++)!using declaration}
+\addtoindexx{using declaration|see {namespace (C++), using declaration}}
+that imports an entity in terms of a namespace alias. See 
 Appendix  \refersec{app:namespaceexample}
 for an example.
 
@@ -1093,7 +1102,8 @@ debuggers to support this same kind of referencing.}
 If 
 \hypertarget{chap:DWATstaticlinklocationofuplevelframe}
 a 
-\addtoindexx{address!uplevel|see{static link attribute}}
+\addtoindexx{address!uplevel|see {static link attribute}}
+\addtoindexx{uplevel address|see {static link attribute}}
 subroutine or entry point is nested, it may have a
 \livelink{chap:DWATstaticlink}{DW\-\_AT\-\_static\-\_link}
 attribute, whose value is a location

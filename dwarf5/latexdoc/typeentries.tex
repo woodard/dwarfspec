@@ -199,7 +199,7 @@ floating\dash point number \\
 \livetarg{chap:DWATEsignedfixed}{DW\-\_ATE\-\_signed\-\_fixed} & signed fixed\dash point scaled integer \\
 \livetarg{chap:DWATEunsignedfixed}{DW\-\_ATE\-\_unsigned\-\_fixed}& unsigned fixed\dash point scaled integer \\
 \livetarg{chap:DWATEdecimalfloat}{DW\-\_ATE\-\_decimal\-\_float} & decimal floating\dash point number \\ 
-\livetarg{chap:DWATEUTF}{DW\-\_ATE\-\_UTF} & Unicode character \\
+\livetarg{chap:DWATEUTF}{DW\-\_ATE\-\_UTF} & \addtoindex{Unicode} character \\
 \end{tabular}
 \caption{Encoding attribute values}
 \label{fig:encodingattributevalues}
@@ -209,8 +209,8 @@ floating\dash point number \\
 floating\dash point representations that have a power\dash of\dash ten
 exponent, such as that specified in IEEE 754R.}
 
-\textit{The \livelink{chap:DWATEUTF}{DW\-\_ATE\-\_UTF} encoding is intended for Unicode string
-encodings (see the Universal Character Set standard,
+\textit{The \livelink{chap:DWATEUTF}{DW\-\_ATE\-\_UTF} encoding is intended for \addtoindex{Unicode}
+string encodings (see the Universal Character Set standard,
 ISO/IEC 10646\dash 1:1993). For example, the 
 \addtoindex{C++} type char16\_t is
 represented by a base type entry with a name attribute whose
@@ -528,7 +528,7 @@ rvalue
 \addtoindexx{restricted type entry}
 reference to an object of the type being modified 
 \addtoindexx{rvalue reference qualified type entry} \\
-\livetarg{chap:DWTAGsharedtype}{DW\-\_TAG\-\_shared\-\_type}&UPC shared qualified type 
+\livetarg{chap:DWTAGsharedtype}{DW\-\_TAG\-\_shared\-\_type}&\addtoindex{UPC} shared qualified type 
 \addtoindexx{shared qualified type entry} \\
 \livetarg{chap:DWTAGvolatiletype}{DW\-\_TAG\-\_volatile\-\_type}&C or C++ volatile qualified type 
 \addtoindex{volatile qualified type entry} \\
@@ -543,25 +543,30 @@ reference to an object of the type being modified
 declarations:}
 
 \begin{alltt}
-const unsigned char * volatile p;
-    which represents a volatile pointer to a constant
-    character. This is encoded in DWARF as:
+   const unsigned char * volatile p;
+\end{alltt}
+\textit{which represents a volatile pointer to a constant
+character. This is encoded in DWARF as:}
+\begin{alltt}
         \livelink{chap:DWTAGvariable}{DW\-\_TAG\-\_variable}(p) -->
             \livelink{chap:DWTAGvolatiletype}{DW\-\_TAG\-\_volatile\-\_type} -->
                 \livelink{chap:DWTAGpointertype}{DW\-\_TAG\-\_pointer\-\_type} -->
                     \livelink{chap:DWTAGconsttype}{DW\-\_TAG\-\_const\-\_type} -->
                         \livelink{chap:DWTAGbasetype}{DW\-\_TAG\-\_base\-\_type}(unsigned char)
-
-volatile unsigned char * const restrict p;
-    on the other hand, represents a restricted constant
-    pointer to a volatile character. This is encoded as:
+\end{alltt}
+\textit{On the other hand}
+\begin{alltt}                        
+   volatile unsigned char * const restrict p;
+\end{alltt}
+\textit{represents a restricted constant
+pointer to a volatile character. This is encoded as:}
+\begin{alltt}
         \livelink{chap:DWTAGvariable}{DW\-\_TAG\-\_variable}(p) -->
             \livelink{chap:DWTAGrestricttype}{DW\-\_TAG\-\_restrict\-\_type} -->
                 \livelink{chap:DWTAGconsttype}{DW\-\_TAG\-\_const\-\_type} -->
                     \livelink{chap:DWTAGpointertype}{DW\-\_TAG\-\_pointer\-\_type} -->
                         \livelink{chap:DWTAGvolatiletype}{DW\-\_TAG\-\_volatile\-\_type} -->
                             \livelink{chap:DWTAGbasetype}{DW\-\_TAG\-\_base\-\_type}(unsigned char)
-
 \end{alltt}
 
 \section{Typedef Entries}
@@ -705,9 +710,7 @@ Other attributes especially applicable to arrays are
 \livelink{chap:DWATdatalocation}{DW\-\_AT\-\_data\-\_location},
 which are described in 
 Section \refersec{chap:dynamictypeproperties}. 
-For relevant examples,
-see also 
-Appendix \refersec{app:fortran90example}.
+For relevant examples, see also Appendix \refersec{app:fortran90example}.
 
 \section{ Structure, Union, Class and Interface Type Entries}
 \label{chap:structureunionclassandinterfacetypeentries}
@@ -2036,11 +2039,11 @@ a
 \livelink{chap:DWATthreadsscaled}{DW\-\_AT\-\_threads\-\_scaled} attribute,
 which is a \livelink{chap:flag}{flag}. 
 If present, this attribute indicates whether
-this subrange represents a UPC array bound which is scaled
+this subrange represents a \addtoindex{UPC} array bound which is scaled
 by the runtime THREADS value (the number of UPC threads in
 this execution of the program).
 
-\textit{This allows the representation of a UPC shared array such as}
+\textit{This allows the representation of a \addtoindex{UPC} shared array such as}
 
 \begin{lstlisting}
 int shared foo[34*THREADS][10][20];
@@ -2052,7 +2055,9 @@ subrange
 \hypertarget{chap:DWATupperboundupperboundofsubrange}
 entry may have the attributes 
 \livelink{chap:DWATlowerbound}{DW\-\_AT\-\_lower\-\_bound}
-and \livelink{chap:DWATupperbound}{DW\-\_AT\-\_upper\-\_bound} to specify, respectively, the lower
+\addtoindexx{lower bound attribute}
+and \livelink{chap:DWATupperbound}{DW\-\_AT\-\_upper\-\_bound}
+\addtoindexx{upper bound attribute} to specify, respectively, the lower
 and upper bound values of the subrange. The 
 \livelink{chap:DWATupperbound}{DW\-\_AT\-\_upper\-\_bound}
 attribute 
@@ -2073,8 +2078,7 @@ Section \refersec{chap:staticanddynamicvaluesofattributes}.
 If the lower bound value is missing, the value is assumed to
 be a language\dash dependent default constant. 
 \addtoindexx{lower bound attribute!default}
-The default lower
-bound is 0 for 
+The default lower bound is 0 for 
 \addtoindex{C}, \addtoindex{C++}, 
 \addtoindex{D}, 
 \addtoindex{Java}, 
@@ -2092,7 +2096,7 @@ The default lower bound is 1 for
 \textit{No other default lower bound values are currently defined.}
 
 If the upper bound and count are missing, then the upper bound value is 
-\textit{unknown}.
+\textit{unknown}.\addtoindexx{upper bound attribute!default unknown}
 
 If the subrange entry has no type attribute describing the
 basis type, the basis type is assumed to be the same as
@@ -2166,6 +2170,7 @@ has
 \addtoindex{pointer to member entry} 
 a 
 \livelink{chap:DWATuselocation}{DW\-\_AT\-\_use\-\_location} attribute
+\addtoindexx{use location attribute}
 whose value is a 
 \addtoindex{location description} that computes the
 address of the member of the class to which the pointer to

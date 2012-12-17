@@ -92,11 +92,12 @@ Each set begins with a header containing four values:
 \begin{enumerate}[1.]
 
 \item unit\_length (initial length) \\
+\addtoindexx{unit\_length}
 The total length of the all of the entries for that set,
 not including the length field itself 
 (see Section \refersec{datarep:locationdescriptions}).
 
-\item  version (uhalf) \\
+\item  version (\addtoindex(uhalf)) \\
 A version number
 \addtoindexx{version number!name lookup table}
 \addtoindexx{version number!type lookup table} 
@@ -160,11 +161,12 @@ Each set begins with a header containing five values:
 \begin{enumerate}[1.]
 
 \item unit\_length (initial length) \\
+\addtoindexx{unit\_length}
 The total length of all of the
 entries for that set, not including the length field itself
 (see Section \refersec{datarep:initiallengthvalues}).
 
-\item version (uhalf) \\
+\item version (\addtoindex(uhalf)) \\
 A version number\addtoindexx{version number!address lookup table} 
 (see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
 This number is specific to the address lookup table and is
@@ -177,21 +179,17 @@ beginning of the \addtoindex{.debug\_info} or
 \addtoindex{.debug\_types} section of the
 compilation unit header referenced by the set.
 
-\item address\_size (ubyte) \\
+\item address\_size (\addtoindex{ubyte}) \\
 The \addtoindex{size of an address}
-in 
-\addtoindexx{ubyte}
-bytes on
+in bytes on
 \addtoindexx{address\_size}
 the target architecture. For 
 \addtoindexx{address space!segmented}
 segmented addressing, this is
 the size of the offset portion of the address.
 
-\item segment\_size (ubyte) \\
-The size of a segment selector 
-\addtoindexx{ubyte}
-in
+\item segment\_size (\addtoindex{ubyte}) \\
+The size of a segment selector in
 \addtoindexx{segment\_size}
 bytes on the target architecture. If the target system uses
 a flat address space, this value is 0.
@@ -224,8 +222,7 @@ multiple address range descriptors for that compilation unit.}
 \section{Line Number Information}
 \label{chap:linenumberinformation}
 \textit{A source\dash level debugger will need to know how to
-%FIXME: the see here is not 'see also'. Fix?
-\addtoindexx{line number information|see{statement list attribute}}
+\addtoindexx{line number information|see{\textit{also} statement list attribute}}
 associate locations in the source files with the corresponding
 machine instruction addresses in the executable object or
 the shared objects used by that executable object. Such an
@@ -445,13 +442,13 @@ The state machine instructions in a line number program belong to one of three c
 
 \begin{tabular}{lp{10cm}}
 special opcodes &
-These have a ubyte opcode field and no operands.
+These have a \addtoindex{ubyte} opcode field and no operands.
 
 \textit{Most of the instructions in a 
 line number program are special opcodes.} \\
 
 standard opcodes &
-These have a ubyte opcode field which may be followed by zero or more
+These have a \addtoindex{ubyte} opcode field which may be followed by zero or more
 LEB128 operands (except for 
 \livelink{chap:DWLNSfixedadvancepc}{DW\-\_LNS\-\_fixed\-\_advance\-\_pc}, see below).
 The opcode implies the number of operands and their meanings, but the
@@ -462,7 +459,7 @@ extended opcodes &
 These have a multiple byte format. The first byte is zero; the next bytes
 are an unsigned LEB128 integer giving the number of bytes in the
 instruction itself (does not include the first zero byte or the size). The
-remaining bytes are the instruction itself (which begins with a ubyte
+remaining bytes are the instruction itself (which begins with a \addtoindex{ubyte}
 extended opcode). \\
 \end{tabular}
 
@@ -481,11 +478,12 @@ a header containing the following fields in order:
 
 \begin{enumerate}[1.]
 \item unit\_length (initial length)  \\
+\addtoindexx{unit\_length}
 The size in bytes of the line number information for this
 compilation unit, not including the unit\_length field itself
 (see Section \refersec{datarep:initiallengthvalues}). 
 
-\item version (uhalf) 
+\item version (\addtoindex(uhalf)) 
 A version number\addtoindexx{version number!line number information} 
 (see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
 This number is specific to
@@ -500,7 +498,7 @@ length; in the 64\dash bit DWARF format, this field is an
 8\dash byte unsigned length 
 (see Section \refersec{datarep:32bitand64bitdwarfformats}). 
 
-\item minimum\_instruction\_length (ubyte)  \\
+\item minimum\_instruction\_length (\addtoindex{ubyte})  \\
 \addtoindexx{minimum\_instruction\_length}
 The size in bytes of the smallest target machine
 instruction. Line number program opcodes that alter
@@ -508,7 +506,7 @@ the address and \addtoindex{op\_index} registers use this and
 \addtoindexx{maximum\_operations\_per\_instruction}
 maximum\-\_operations\-\_per\-\_instruction in their calculations. 
 
-\item maximum\_operations\_per\_instruction (ubyte) \\
+\item maximum\_operations\_per\_instruction (\addtoindex{ubyte}) \\
 The 
 \addtoindexx{maximum\_operations\_per\_instruction}
 maximum number of individual operations that may be
@@ -521,7 +519,7 @@ For non-VLIW
 architectures, this field is 1, the \addtoindex{op\_index register} is always
 0, and the operation pointer is simply the address register.
 
-\item default\_is\_stmt (ubyte) \\
+\item default\_is\_stmt (\addtoindex{ubyte}) \\
 \addtoindexx{default\_is\_stmt}
 The initial value of the \addtoindex{is\_stmt} register.  
 
@@ -552,18 +550,14 @@ used as part of support for debugging optimized code.}
 \addtoindexx{line\_base}
 This parameter affects the meaning of the special opcodes. See below.
 
-\item line\_range (ubyte) \\
+\item line\_range (\addtoindex{ubyte}) \\
 \addtoindexx{line\_range}
-This 
-\addtoindexx{ubyte}
-parameter affects the meaning of the special opcodes. See below.
+This parameter affects the meaning of the special opcodes. See below.
 
-\item opcode\_base (ubyte) \\
+\item opcode\_base (\addtoindex{ubyte}) \\
 The 
 \addtoindex{opcode\_base}
-number
-\addtoindexx{ubyte}
- assigned to the first special opcode.
+number assigned to the first special opcode.
 
 \textit{Opcode base is typically one greater than the highest-numbered
 \addtoindex{opcode\_base}
@@ -583,7 +577,7 @@ is greater than the typical value, then the numbers between
 that of the highest standard opcode and the first special
 opcode (not inclusive) are used for vendor specific extensions.}
 
-\item standard\_opcode\_lengths (array of ubyte) \\
+\item standard\_opcode\_lengths (array of \addtoindex{ubyte}) \\
 \addtoindexx{standard\_opcode\_lengths}
 This array specifies the number of LEB128 operands for each
 of the standard opcodes. The first element of the array
@@ -691,7 +685,7 @@ scheduling or other optimization.)
 
 \subsubsection{Special Opcodes} 
 \label{chap:specialopcodes}
-Each ubyte special opcode has the following effect on the state machine:
+Each \addtoindex{ubyte} special opcode has the following effect on the state machine:
 
 \begin{enumerate}[1.]
 
@@ -935,7 +929,7 @@ or more bytes.}
 
 \item \textbf{DW\-\_LNS\-\_fixed\-\_advance\-\_pc} \\ 
 The \livetarg{chap:DWLNSfixedadvancepc}{DW\-\_LNS\-\_fixed\-\_advance\-\_pc} opcode
-takes a single uhalf (unencoded) operand and adds it to the
+takes a single \addtoindex(uhalf) (unencoded) operand and adds it to the
 address register of the state machine and sets the op\_index
 register to 0. This is the only standard opcode whose operand
 is \textbf{not} a variable length number. It also does 
@@ -1490,7 +1484,7 @@ integral multiple of the address size.
 \item  CIE\_id (4 or 8 bytes, see Section \refersec{datarep:32bitand64bitdwarfformats}) \\
 A constant that is used to distinguish CIEs from FDEs.
 
-\item  version (ubyte) \\
+\item  version (\addtoindex{ubyte}) \\
 A version number\addtoindexx{version number!call frame information} 
 (see Section \refersec{datarep:callframeinformation}). 
 This number is specific to the call frame information
@@ -1523,20 +1517,16 @@ needs to be freed on exit from the routine.}
 any \addtoindex{.debug\_info} section, the augmentation string always uses
 UTF\dash 8 encoding.}
 
-\item  address\_size (ubyte) \\
+\item  address\_size (\addtoindex{ubyte}) \\
 The size of a target address
 \addtoindexx{address\_size}
 in this CIE and any FDEs that
-\addtoindexx{ubyte}
 use it, in bytes. If a compilation unit exists for this frame,
 its address size must match the address size here.
 
-\item  segment\_size (ubyte) \\
-The 
-\addtoindexx{segment\_size}
-size 
-\addtoindexx{ubyte}
-of a segment selector in this CIE and any FDEs that
+\item  segment\_size (\addtoindex{ubyte}) \\
+The \addtoindexx{segment\_size}
+size of a segment selector in this CIE and any FDEs that
 use it, in bytes.
 
 \item  \addtoindex{code\_alignment\_factor} (unsigned LEB128) \\
@@ -1562,7 +1552,7 @@ rule table represents the return address of the function. Note
 that this column might not correspond to an actual machine
 register.
 
-\item initial\_instructions (array of ubyte) \\
+\item initial\_instructions (array of \addtoindex{ubyte}) \\
 A sequence of rules that are interpreted to create the initial
 setting of each column in the table.  The default rule for
 all columns before interpretation of the initial instructions
@@ -1570,7 +1560,7 @@ is the undefined rule. However, an ABI authoring body or a
 compilation system authoring body may specify an alternate
 default value for any or all columns.
 
-\item padding (array of ubyte) \\
+\item padding (array of \addtoindex{ubyte}) \\
 Enough \livelink{chap:DWCFAnop}{DW\-\_CFA\-\_nop} instructions to make the size of this entry
 match the length value above.
 \end{enumerate}
@@ -1611,16 +1601,12 @@ number
 \addtoindexx{target address}
 of bytes of program instructions described by this entry.
 
-\item instructions (array of ubyte) \\
-A 
-\addtoindexx{ubyte}
-sequence of table defining instructions that are described below.
+\item instructions (array of \addtoindex{ubyte}) \\
+A sequence of table defining instructions that are described below.
 
-\item 6. padding (array of ubyte) \\
+\item 6. padding (array of \addtoindex{ubyte}) \\
 Enough \livelink{chap:DWCFAnop}{DW\-\_CFA\-\_nop} instructions 
-to make the size of this
-\addtoindexx{ubyte}
-entry match the length value above.
+to make the size of this entry match the length value above.
 \end{enumerate}
 
 \subsection{Call Frame Instructions}
@@ -1691,19 +1677,21 @@ other values in the new row are initially identical to the
 current row
 
 \item \textbf{DW\-\_CFA\-\_advance\-\_loc1} \\
-The \livetarg{chap:DWCFAadvanceloc1}{DW\-\_CFA\-\_advance\-\_loc1} instruction takes a single ubyte
+The \livetarg{chap:DWCFAadvanceloc1}{DW\-\_CFA\-\_advance\-\_loc1} instruction takes a single \addtoindex{ubyte}
 operand that represents a constant delta. This instruction
 is identical to \livelink{chap:DWCFAadvanceloc}{DW\-\_CFA\-\_advance\-\_loc} except for the encoding
 and size of the delta operand.
 
 \item \textbf{DW\-\_CFA\-\_advance\-\_loc2} \\
-The \livetarg{chap:DWCFAadvanceloc2}{DW\-\_CFA\-\_advance\-\_loc2} instruction takes a single uhalf
+The \livetarg{chap:DWCFAadvanceloc2}{DW\-\_CFA\-\_advance\-\_loc2} instruction takes a single
+\addtoindex(uhalf)
 operand that represents a constant delta. This instruction
 is identical to \livelink{chap:DWCFAadvanceloc}{DW\-\_CFA\-\_advance\-\_loc} except for the encoding
 and size of the delta operand.
 
 \item \textbf{DW\-\_CFA\-\_advance\-\_loc4} \\
-The \livetarg{chap:DWCFAadvanceloc4}{DW\-\_CFA\-\_advance\-\_loc4} instruction takes a single uword
+The \livetarg{chap:DWCFAadvanceloc4}{DW\-\_CFA\-\_advance\-\_loc4} instruction takes a single
+\addtoindex{uword}
 operand that represents a constant delta. This instruction
 is identical to \livelink{chap:DWCFAadvanceloc}{DW\-\_CFA\-\_advance\-\_loc} except for the encoding
 and size of the delta operand.
