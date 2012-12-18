@@ -18,65 +18,11 @@ corresponding
 The tag specifies the class to which an entry belongs
 and the attributes define the specific characteristics of the entry.
 
-The set of 
+The set of tag names 
 \addtoindexx{tag names|see{debugging information entry}}
-tag names 
-is listed in Figure 1. 
+is listed in Figure \refersec{fig:tagnames}. 
 The debugging information entries they identify are
 described in Sections 3, 4 and 5.
-
-The debugging information entry descriptions 
-in Sections 3, 4 and 5 generally include mention of
-most, but not necessarily all, of the attributes 
-that are normally or possibly used with the entry.
-Some attributes, whose applicability tends to be 
-pervasive and invariant across many kinds of
-debugging information entries, are described in 
-this section and not necessarily mentioned in all
-contexts where they may be appropriate. 
-Examples include \livelink{chap:DWATartificial}{DW\-\_AT\-\_artificial}, the declaration
-coordinates, and 
-\livelink{chap:DWATdescription}{DW\-\_AT\-\_description}, among others.
-
-The debugging information entries are contained 
-in the \addtoindex{.debug\_info} and 
-\addtoindex{.debug\_types}
-sections of an object file.
-
-
-\section{Attribute Types}
-\label{chap:attributetypes}
-Each attribute value is characterized by an attribute name. 
-\addtoindexx{attribute duplication}
-No more than one attribute with a given name may appear in any
-debugging information entry. 
-There are no limitations on the
-\addtoindexx{attribute ordering}
-ordering of attributes within a debugging information entry.
-
-The attributes are listed in Figure 2.  
-
-The permissible values
-\addtoindexx{attribute value classes}
-for an attribute belong to one or more classes of attribute
-value forms.  
-Each form class may be represented in one or more ways. 
-For example, some attribute values consist
-of a single piece of constant data. 
-``Constant data''
-is the class of attribute value that those attributes may have. 
-There are several representations of constant data,
-however (one, two, ,four, or eight bytes, and variable length
-data). 
-The particular representation for any given instance
-of an attribute is encoded along with the attribute name as
-part of the information that guides the interpretation of a
-debugging information entry.  
-
-Attribute value forms belong
-\addtoindexx{tag names!list of}
-to one of the classes shown in Figure \refersec{tab:classesofattributevalue}.
-\addtoindex{attributes!list of}
 
 % These each need to link to definition page: FIXME
 \begin{figure}[here]
@@ -145,11 +91,64 @@ to one of the classes shown in Figure \refersec{tab:classesofattributevalue}.
 \caption{Tag names}\label{fig:tagnames}
 \end{figure}
 
-\label{tab:attributenames}
+
+The debugging information entry descriptions 
+in Sections 3, 4 and 5 generally include mention of
+most, but not necessarily all, of the attributes 
+that are normally or possibly used with the entry.
+Some attributes, whose applicability tends to be 
+pervasive and invariant across many kinds of
+debugging information entries, are described in 
+this section and not necessarily mentioned in all
+contexts where they may be appropriate. 
+Examples include \livelink{chap:DWATartificial}{DW\-\_AT\-\_artificial}, the declaration
+coordinates, and 
+\livelink{chap:DWATdescription}{DW\-\_AT\-\_description}, among others.
+
+The debugging information entries are contained 
+in the \addtoindex{.debug\_info} and 
+\addtoindex{.debug\_types}
+sections of an object file.
+
+
+\section{Attribute Types}
+\label{chap:attributetypes}
+Each attribute value is characterized by an attribute name. 
+\addtoindexx{attribute duplication}
+No more than one attribute with a given name may appear in any
+debugging information entry. 
+There are no limitations on the
+\addtoindexx{attribute ordering}
+ordering of attributes within a debugging information entry.
+
+The attributes are listed in Table \refersec{tab:attributenames}.  
+
+The permissible values
+\addtoindexx{attribute value classes}
+for an attribute belong to one or more classes of attribute
+value forms.  
+Each form class may be represented in one or more ways. 
+For example, some attribute values consist
+of a single piece of constant data. 
+``Constant data''
+is the class of attribute value that those attributes may have. 
+There are several representations of constant data,
+however (one, two, ,four, or eight bytes, and variable length
+data). 
+The particular representation for any given instance
+of an attribute is encoded along with the attribute name as
+part of the information that guides the interpretation of a
+debugging information entry.  
+
+Attribute value forms belong
+\addtoindexx{tag names!list of}
+to one of the classes shown in Figure \refersec{tab:classesofattributevalue}.
+
 \setlength{\extrarowheight}{0.1cm}
+\addtoindexx{attributes!list of}
 \begin{longtable}{l|p{9cm}}
-  \caption{Attribute names} \\
-  \hline \\ \bfseries Attribute&\bfseries Identifies or Specifies \\ \hline
+  \caption{Attribute names} \label{tab:attributenames} \\
+  \hline \bfseries Attribute&\bfseries Identifies or Specifies \\ \hline
 \endfirsthead
   \bfseries Attribute&\bfseries Identifies or Specifies \\ \hline
 \endhead
@@ -276,7 +275,7 @@ actually declared in the source}{objects or types that are not actually declared
 \livetarg{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc}
 &\livelinki{chap:DWAThighpccontiguousrangeofcodeaddresses}{Contiguous range of code addresses}{contiguous range of code addresses} \\
 \livetarg{chap:DWATidentifiercase}{DW\-\_AT\-\_identifier\-\_case}
-&\livelinki{chap:DWATidentifiercaseidentifiercaserule}{Identifier case rule}{identifier case rule} {identifier case rule}{identifier case rule}\\
+&\livelinki{chap:DWATidentifiercaseidentifiercaserule}{Identifier case rule}{identifier case rule} \\
 \livetarg{chap:DWATimport}{DW\-\_AT\-\_import}
 &\livelinki{chap:DWATimportimporteddeclaration}{Imported declaration}{imported declaration} \\
 &\livelinki{chap:DWATimportimportedunit}{Imported unit}{imported unit} \\
@@ -435,10 +434,12 @@ for that type.  \\
 (non\dash null) bytes. Data in this class are generally
 printable strings. Strings may be represented directly in
 the debugging information entry or as an offset in a separate
-string table.  
+string table.
+ 
 \end{tabular}
 \caption{Classes of Attribute value}
 \end{figure}
+
 % It is difficult to get the above table to appear before
 % the end of the chapter without a clearpage here.
 \clearpage
@@ -569,7 +570,7 @@ The value on the
 top of the stack after ``executing'' the 
 \addtoindex{DWARF expression}
 is 
-\addtoindex{DWARF expression|see{location description}}
+\addtoindexx{DWARF expression|see{location description}}
 taken to be the result (the address of the object, the
 value of the array bound, the length of a dynamic string,
 the desired value itself, and so on).
@@ -742,21 +743,24 @@ retrieved is zero extended to the \addtoindex{size of an address} on the
 target machine before being pushed onto the expression stack.
 
 \item \livetarg{chap:DWOPpushobjectaddress}{DW\-\_OP\-\_push\-\_object\-\_address}\\
-The \livelink{chap:DWOPpushobjectaddress}{DW\-\_OP\-\_push\-\_object\-\_address} operation pushes the address
+The \livelink{chap:DWOPpushobjectaddress}{DW\-\_OP\-\_push\-\_object\-\_address}
+operation pushes the address
 of the object currently being evaluated as part of evaluation
 of a user presented expression. This object may correspond
 to an independent variable described by its own debugging
 information entry or it may be a component of an array,
 structure, or class whose address has been dynamically
 determined by an earlier step during user expression
-evaluation.  This operator provides explicit functionality
+evaluation.
+
+\textit{This operator provides explicit functionality
 (especially for arrays involving descriptors) that is analogous
 to the implicit push of the base 
 \addtoindexi{address}{address!implicit push of base}
 of a structure prior
 to evaluation of a \livelink{chap:DWATdatamemberlocation}{DW\-\_AT\-\_data\-\_member\-\_location} to access a
 data member of a structure. For an example, see 
-Appendix \refersec{app:aggregateexamples}.
+Appendix \refersec{app:aggregateexamples}.}
 
 \item \livetarg{chap:DWOPformtlsaddress}{DW\-\_OP\-\_form\-\_tls\-\_address} \\
 The \livelink{chap:DWOPformtlsaddress}{DW\-\_OP\-\_form\-\_tls\-\_address} operation pops a value from the
@@ -771,7 +775,8 @@ operation uses the main executable's thread\dash local storage
 DWARF info, then it uses that shared library's 
 \addtoindexx{thread-local storage}
 thread\dash local storage \nolink{block}.
-Some implementations of 
+
+\textit{Some implementations of 
 \addtoindex{C} and \addtoindex{C++} support a
 \_\_thread storage class. Variables with this storage class
 have distinct values and addresses in distinct threads, much
@@ -784,20 +789,21 @@ the appropriate \nolink{block} can be complex (in some cases, the
 compiler emits a function call to do it), and difficult
 to describe using ordinary DWARF location descriptions.
 \livelink{chap:DWOPformtlsaddress}{DW\-\_OP\-\_form\-\_tls\-\_address} leaves the computation to the
-consumer.
+consumer.}
 
 \item \livetarg{chap:DWOPcallframecfa}{DW\-\_OP\-\_call\-\_frame\-\_cfa} \\
 The \livelink{chap:DWOPcallframecfa}{DW\-\_OP\-\_call\-\_frame\-\_cfa} operation pushes the value of the
 CFA, obtained from the Call Frame Information 
 (see Section \refersec{chap:callframeinformation}).
-Although the value of \livelink{chap:DWATframebase}{DW\-\_AT\-\_frame\-\_base}
+
+\textit{Although the value of \livelink{chap:DWATframebase}{DW\-\_AT\-\_frame\-\_base}
 can be computed using other DWARF expression operators,
 in some cases this would require an extensive location list
 because the values of the registers used in computing the
 CFA change during a subroutine. If the 
 Call Frame Information 
 is present, then it already encodes such changes, and it is
-space efficient to reference that.
+space efficient to reference that.}
 \end{enumerate}
 
 \subsubsection{Arithmetic and Logical Operations}
@@ -860,9 +866,11 @@ adds them together, and pushes the result.
 \item  \livetarg{chap:DWOPplusuconst}{DW\-\_OP\-\_plus\-\_uconst} \\
 The \livelink{chap:DWOPplusuconst}{DW\-\_OP\-\_plus\-\_uconst} operation pops the top stack entry,
 adds it to the unsigned LEB128 constant operand and pushes
-the result.  This operation is supplied specifically to be
+the result.
+
+\textit{This operation is supplied specifically to be
 able to encode more field offsets in two bytes than can be
-done with “\livelink{chap:DWOPlit}{DW\-\_OP\-\_lit\textit{n}} \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus}”.
+done with “\livelink{chap:DWOPlit}{DW\-\_OP\-\_lit\textit{n}} \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus}”.}
 
 \item \livetarg{chap:DWOPshl}{DW\-\_OP\-\_shl} \\
 The \livelink{chap:DWOPshl}{DW\-\_OP\-\_shl} operation pops the top two stack entries,
@@ -1142,7 +1150,7 @@ simple location description consists of one
 contiguous piece or all of an object or value.
 
 
-\paragraph{Memory Location Descriptions}
+\subsubsubsection{Memory Location Descriptions}
 
 A 
 \addtoindexx{location description!memory}
@@ -1154,7 +1162,7 @@ Section \refersec{chap:dwarfexpressions}
 ), whose value is the address of
 a piece or all of an object or other entity in memory.
 
-\paragraph{Register Location Descriptions}
+\subsubsubsection{Register Location Descriptions}
 
 A register location description consists of a register name
 operation, which represents a piece or all of an object
@@ -1371,7 +1379,7 @@ Add the contents of r1 and r2 to compute a value. This value is the
 “contents” of an otherwise anonymous location.
 \end{myindentpara}
 
-\livelink{chap:DWOPlit1}{DW\-\_OP\-\_lit1} \livelink{chap:DWOPstackvalue}{DW\-\_OP\-\_stack\-\_value} \livelink{chap:DWOPpiece}{DW\-\_OP\-\_piece} a \\
+\livelink{chap:DWOPlit1}{DW\-\_OP\-\_lit1} \livelink{chap:DWOPstackvalue}{DW\-\_OP\-\_stack\-\_value} \livelink{chap:DWOPpiece}{DW\-\_OP\-\_piece} 4 \\
 \livetarg{chap:DWOPbreg3}{DW\-\_OP\-\_breg3} 0 \livetarg{chap:DWOPbreg4}{DW\-\_OP\-\_breg4} 0 \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus} \livelink{chap:DWOPstackvalue}{DW\-\_OP\-\_stack\-\_value} \livelink{chap:DWOPpiece}{DW\-\_OP\-\_piece} 4
 \begin{myindentpara}{1cm}
 The object value is found in an anonymous (virtual) location whose
@@ -1410,7 +1418,6 @@ end of list entry.
 A 
 \addtoindexx{location list!entry}
 location list entry consists of:
-
 \begin{enumerate}[1]
 \item A beginning address offset. 
 This address offset has the \addtoindex{size of an address} and is
@@ -1446,9 +1453,10 @@ entry (see below) in the same location list. If there is
 no such selection entry, then the applicable base address
 defaults to the base address of the compilation unit (see
 Section \refersec{chap:normalandpartialcompilationunitentries}).  
-In the case of a compilation unit where all of
+
+\textit{In the case of a compilation unit where all of
 the machine code is contained in a single contiguous section,
-no base address selection entry is needed.
+no base address selection entry is needed.}
 
 Address ranges may overlap. When they do, they describe a
 situation in which an object exists simultaneously in more than
@@ -1460,7 +1468,8 @@ not available for the portion of the range that is not covered.
 A base 
 \addtoindexi{address}{address selection|see{base address selection}}
 selection 
-\addtoindexi{entry}{base address selection entry!in location list}:
+\addtoindexi{entry}{base address selection entry!in location list}
+consists of:
 \begin{enumerate}[1]
 \item The value of the largest representable 
 address offset (for example, 0xffffffff when the size of
@@ -1493,10 +1502,6 @@ selection entry and end of list entry, respectively, for a
 (see Section \refersec{chap:noncontiguousaddressranges}) 
 in interpretation
 and representation.}
-
-
-
-
 
 
 \section{Types of Program Entities}
@@ -1932,6 +1937,9 @@ and
 the like, may have
 
 \begin{itemize}
+\item A \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} attribute for
+a single address,
+
 \item A \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} and 
 \livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair of 
 attributes 
@@ -1957,12 +1965,14 @@ none of these attributes are specified.
 When there is a single address associated with an entity,
 such as a label or alternate entry point of a subprogram,
 the entry has a \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} attribute whose value is the
-relocated address for the entity.  While the \livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc}
+relocated address for the entity.
+
+\textit{While the \livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc}
 attribute might also seem appropriate for this purpose,
 historically the \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} attribute was used before the
 \livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc} was introduced 
 (in \addtoindex{DWARF Version 3}). There is
-insufficient reason to change this.
+insufficient reason to change this.}
 
 \subsection{Continuous Address Range}
 \label{chap:contiguousaddressranges}
@@ -1984,8 +1994,11 @@ address of the first location past the last instruction
 associated with the entity; if it is of class constant, the
 value is an unsigned integer offset which when added to the
 low PC gives the address of the first location past the last
-instruction associated with the entity.  The high PC value
-may be beyond the last valid instruction in the executable.
+instruction associated with the entity.
+
+\textit{The high PC value
+may be beyond the last valid instruction in the executable.}
+
 The presence of low and high PC attributes for an entity
 implies that the code generated for the entity is contiguous
 and exists totally within the boundaries specified by those
@@ -2127,7 +2140,9 @@ the entry address is unknown.
 Some attributes that apply to types specify a property (such
 as the lower bound of an array) that is an integer value,
 where the value may be known during compilation or may be
-computed dynamically during execution.  The value of these
+computed dynamically during execution.
+
+The value of these
 attributes is determined based on the class as follows:
 
 \begin{itemize}

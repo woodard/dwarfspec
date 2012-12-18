@@ -30,8 +30,9 @@ formal parameter or constant may have the following attributes:
 \addtoindexx{name attribute}
 whose value is a null-terminated
 string, containing the data object name as it appears in the
-source program.  If a variable entry describes 
-an 
+source program.
+
+If a variable entry describes an 
 \addtoindex{anonymous union},
 the name attribute is omitted or consists of a single
 zero byte.
@@ -42,10 +43,13 @@ which
 \addtoindexx{external attribute}
 is a \livelink{chap:flag}{flag}, if the name
 of a variable is visible outside of its enclosing compilation
-unit.  The definitions of C++ static data members of structures
+unit.  
+
+\textit{The definitions of C++ static data members of structures
 or classes are represented by variable entries \nolink{flagged} as
 external. Both file static and local variables in C and C++
 are represented by non-external variable entries.
+}
 
 \item A \livelink{chap:DWATdeclaration}{DW\-\_AT\-\_declaration} attribute, 
 \addtoindexx{declaration attribute}
@@ -56,6 +60,7 @@ declaration of an object.
 \item A \livelink{chap:DWATlocation}{DW\-\_AT\-\_location} attribute,
 \addtoindexx{location attribute}
 whose value describes the location of a variable or parameter at run-time.
+
 If no location attribute is present in a variable 
 entry representing the definition of a variable (that is,
 \addtoindexx{declaration attribute}
@@ -86,13 +91,17 @@ the entry has a \livelink{chap:DWATspecification}{DW\-\_AT\-\_specification} att
 reference to the debugging information entry representing the
 declaration of this data member. The referenced entry has the
 tag \livelink{chap:DWTAGmember}{DW\-\_TAG\-\_member} and will be a child of some class, structure
-or union type entry.  If the variable entry represents a
+or union type entry.
+
+If the variable entry represents a
 non-defining declaration, \livelink{chap:DWATspecification}{DW\-\_AT\-\_specification} may be used
 to reference the defining declaration of the variable. If
 no \livelink{chap:DWATspecification}{DW\-\_AT\-\_specification} attribute is present, the defining
 declaration may be found as a global definition either in the
 current compilation unit or in another compilation unit with
-the \livelink{chap:DWATexternal}{DW\-\_AT\-\_external} attribute.  Variable entries containing
+the \livelink{chap:DWATexternal}{DW\-\_AT\-\_external} attribute.  
+
+Variable entries containing
 the \livelink{chap:DWATspecification}{DW\-\_AT\-\_specification} attribute do not need to duplicate
 information provided by the declaration entry referenced by
 the specification attribute. In particular, such variable
@@ -150,10 +159,13 @@ or data \livelink{chap:block}{block} forms,
 as appropriate for the representation
 of the variable’s value. The value is the actual constant
 value of the variable, represented as it would be on the
-target architecture.  One way in which a formal parameter
+target architecture.  
+
+\textit{One way in which a formal parameter
 with a constant value and no location can arise is for a
 formal parameter of an inlined subprogram that corresponds
 to a constant actual parameter of a call that is inlined.
+}
 
 \item A \livelink{chap:DWATstartscope}{DW\-\_AT\-\_start\-\_scope} attribute if the scope of 
 \addtoindexx{start scope attribute}
@@ -227,9 +239,11 @@ the endianity of the object. The value of
 this attribute specifies an ABI\dash defined 
 byte ordering \addtoindexx{ordering attribute} for
 the value of the object. If omitted, the default endianity
-of data for the given type is assumed.  The set of values
+of data for the given type is assumed.  
+
+The set of values
 and their meaning for this attribute is given in 
-Figure \refersec{fig:endianityattributevalues}.
+Figure \ref{fig:endianityattributevalues}.
 
 \begin{figure}[here]
 \centering
@@ -247,7 +261,7 @@ Name&Meaning\\ \hline
 
 
 These represent the default encoding formats as defined by
-the target architecture’s ABI or processor definition. The
+the target architecture's ABI or processor definition. The
 exact definition of these formats may differ in subtle ways
 for different architectures.
 

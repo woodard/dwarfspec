@@ -80,7 +80,6 @@ Section \refersec{chap:importedunitentries}).
 
 Compilation unit entries may have the following 
 attributes:
-
 \begin{enumerate}[1]
 \item Either a \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} and 
 \livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair of
@@ -98,7 +97,8 @@ the
 contiguous or 
 non\dash contiguous address ranges, respectively,
 of the machine instructions generated for the compilation
-unit (see Section {chap:codeaddressesandranges}).  
+unit (see Section \refersec{chap:codeaddressesandranges}).
+  
 A \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} attribute 
 may also
 be specified 
@@ -163,15 +163,17 @@ Language name & Meaning\\ \hline
 \end{tabular}
 \end{figure}
 
-\item A \livelink{chap:DWATstmtlist}{DW\-\_AT\-\_stmt\-\_list} attribute whose value is 
+\item A \livelink{chap:DWATstmtlist}{DW\-\_AT\-\_stmt\-\_list}
+attribute whose value is 
 \addtoindexx{statement list attribute}
 a 
 \addtoindexx{section offset!in statement list attribute}
 section
 \hypertarget{chap:DWATstmtlistlinenumberinformationforunit}
-offset 
-to the line number information for this compilation
-unit.  This information is placed in a separate object file
+offset to the line number information for this compilation
+unit.
+
+This information is placed in a separate object file
 section from the debugging information entries themselves. The
 value of the statement list attribute is the offset in the
 \addtoindex{.debug\_line} section of the first byte of the line number
@@ -337,11 +339,11 @@ whose value is a reference to the
 normal or partial compilation unit whose declarations logically
 belong at the place of the imported unit entry.
 
-An imported unit entry does not necessarily correspond to
+\textit{An imported unit entry does not necessarily correspond to
 any entity or construct in the source program. It is merely
 “glue” used to relate a partial unit, or a compilation
 unit used as a partial unit, to a place in some other
-compilation unit.
+compilation unit.}
 
 \subsection{Separate Type Unit Entries}
 \label{chap:separatetypeunitentries}
@@ -389,14 +391,14 @@ U is a direct child of the type unit entry. The containing
 entries may be shared among the additional types and between
 T and the additional types.
 
-Types are not required to be placed in type units. In general,
+\textit{Types are not required to be placed in type units. In general,
 only large types such as structure, class, enumeration, and
 union types included from header files should be considered
 for separate type units. Base types and other small types
 are not usually worth the overhead of placement in separate
 type units. Types that are unlikely to be replicated, such
 as those defined in the main source file, are also better
-left in the main compilation unit.
+left in the main compilation unit.}
 
 \section{Module, Namespace and Importing Entries}
 \textit{Modules and namespaces provide a means to collect related
@@ -723,6 +725,7 @@ itself imported by a use statement without an explicit mention
 may be represented by an imported declaration entry that refers
 to the original debugging information entry. For example, given
 }
+
 \begin{lstlisting}
 module A
 integer X, Y, Z
@@ -737,17 +740,18 @@ use B, only Q => X
 end module
 \end{lstlisting}
 
-the imported declaration entry for Q within module C refers
+\textit{the imported declaration entry for Q within module C refers
 directly to the variable declaration entry for A in module A
 because there is no explicit representation for X in module B.
+}
 
-A similar situation arises for a \addtoindex{C++} using declaration
+\textit{A similar situation arises for a \addtoindex{C++} using declaration
 \addtoindexx{namespace (C++)!using declaration}
 \addtoindexx{using declaration|see {namespace (C++), using declaration}}
 that imports an entity in terms of a namespace alias. See 
 Appendix  \refersec{app:namespaceexample}
 for an example.
-
+}
 
 \section{Subroutine and Entry Point Entries}
 \label{chap:subroutineandentrypointentries}
@@ -1145,7 +1149,6 @@ If a subroutine explicitly declares that it may throw
 an 
 \addtoindexx{thrown exception|see{thrown type entry}}
 exception for one or more types, each such type is
-
 represented by a debugging information entry with 
 \addtoindexx{thrown type entry}
 the tag
@@ -1255,7 +1258,7 @@ entry with the tag \livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram}. Suc
 \livelink{chap:DWATinline}{DW\-\_AT\-\_inline} attribute whose value is \livelink{chap:DWINLinlined}{DW\-\_INL\-\_inlined}.}
 
 
-\paragraph{Abstract Instances}
+\subsubsection{Abstract Instances}
 \label{chap:abstractinstances}
 Any debugging information entry that is owned (either
 \hypertarget{chap:DWATinlineabstracttinstance}
@@ -1346,7 +1349,7 @@ entries. Also, the ordering rules for formal parameter entries,
 member entries, and so on, all apply regardless of whether
 or not a given entry is abstract.
 
-\paragraph{Concrete Inlined Instances}
+\subsubsection{Concrete Inlined Instances}
 \label{chap:concreteinlinedinstances}
 
 Each inline expansion of a subroutine is represented
@@ -1404,9 +1407,10 @@ the same way as the declaration file, declaration line, and
 declaration column attributes, respectively (see 
 Section \refersec{chap:declarationcoordinates}).
 
-The call file, call line and call column coordinates do not
+\textit{The call file, call line and call column coordinates do not
 describe the coordinates of the subroutine declaration that
 was inlined, rather they describe the coordinates of the call.
+}
 
 An inlined subroutine entry 
 \hypertarget{chap:DWATconstexprcompiletimeconstantfunction}
@@ -1543,7 +1547,7 @@ entries can be described in its concrete inlined instance tree.
 
 \end{enumerate}
 
-\paragraph{Out-of-Line Instances of Inlined Subroutines}
+\subsubsection{Out-of-Line Instances of Inlined Subroutines}
 \label{chap:outoflineinstancesofinlinedsubroutines}
 Under some conditions, compilers may need to generate concrete
 executable instances of inlined subroutines other than at
@@ -1592,7 +1596,7 @@ trees be owned by the same parent entry.
 
 \end{enumerate}
 
-\paragraph{Nested Inlined Subroutines}
+\subsubsection{Nested Inlined Subroutines}
 \label{nestedinlinedsubroutines}
 Some languages and compilers may permit the logical nesting of
 a subroutine within another subroutine, and may permit either
@@ -1738,8 +1742,7 @@ entry with the
 tag \livetarg{chap:DWTAGlexicalblock}{DW\-\_TAG\-\_lexical\-\_block}.
 
 The lexical \livetargi{chap:lexicalblockentry}{block}{lexical block entry} 
-entry
-may have 
+entry may have 
 either a \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} and
 \livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair of 
 attributes 
@@ -1778,10 +1781,10 @@ of an identifier or inner lexical \livelink{chap:lexicalblock}{block}.
 
 \section{Label Entries}
 \label{chap:labelentries}
-
-A label is a way of identifying a source statement. A labeled
+\textit{A label is a way of identifying a source statement. A labeled
 statement is usually the target of one or more ``go to''
 statements.
+}
 
 A label is represented by a debugging information entry with
 \addtoindexx{label entry}
@@ -1882,7 +1885,6 @@ Catch \livelink{chap:catchblock}{block} entries have at
 least one child entry, an
 entry representing the type of exception accepted by
 that catch \livelink{chap:catchblock}{block}. 
-
 This child entry has one of 
 \addtoindexx{formal parameter entry!in catch block}
 the 
