@@ -335,7 +335,7 @@ of the 4\dash byte value 0xffffffff followed by an 8\dash byte unsigned
 integer that gives the actual length 
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
-\item  version (\addtoindex(uhalf))
+\item  version (\addtoindex{uhalf})
 A 2\dash byte unsigned integer representing the version of the
 DWARF information for the compilation unit\addtoindexx{version number!compilation unit} 
 (see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
@@ -389,7 +389,7 @@ consists of the 4\dash byte value 0xffffffff followed by an
 8\dash byte unsigned integer that gives the actual length
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
-\item  version (\addtoindex(uhalf))
+\item  version (\addtoindex{uhalf})
 A 2\dash byte unsigned integer representing the version of the
 DWARF information for the 
 compilation unit\addtoindexx{version number!type unit} 
@@ -505,8 +505,7 @@ encodings for the child determination byte are given in
 Table \refersec{tab:childdeterminationencodings}
 (As mentioned in 
 Section \refersec{chap:relationshipofdebugginginformationentries}, 
-each chain of
-sibling entries is terminated by a null entry.)
+each chain of sibling entries is terminated by a null entry.)
 
 Finally, the child encoding is followed by a series of
 attribute specifications. Each attribute specification
@@ -531,10 +530,10 @@ without having to add a new entry to the abbreviations table.
 The abbreviations for a given compilation unit end with an
 entry consisting of a 0 byte for the abbreviation code.
 
-See 
+\textit{See 
 Appendix \refersec{app:compilationunitsandabbreviationstableexample} 
 for a depiction of the organization of the
-debugging information.
+debugging information.}
 
 \subsection{Attribute Encodings}
 \label{datarep:attributeencodings}
@@ -655,14 +654,15 @@ know how to interpret the bits, which if they are target
 machine data (such as an integer or floating point constant)
 will be in target machine byte\dash order.
 
-\textit{If one of the \livetarg{chap:DWFORMdata}{DW\-\_FORM\-\_data}<n> forms is used to represent a
+\textit{If one of the \livetarg{chap:DWFORMdata}{DW\-\_FORM\-\_data}\textless n\textgreater 
+forms is used to represent a
 signed or unsigned integer, it can be hard for a consumer
 to discover the context necessary to determine which
 interpretation is intended. Producers are therefore strongly
 encouraged to use \livelink{chap:DWFORMsdata}{DW\-\_FORM\-\_sdata} or 
 \livelink{chap:DWFORMudata}{DW\-\_FORM\-\_udata} for signed and
 unsigned integers respectively, rather than 
-\livelink{chap:DWFORMdata}{DW\-\_FORM\-\_data} \textless n \textgreater.}
+\livelink{chap:DWFORMdata}{DW\-\_FORM\-\_data}\textless n\textgreater.}
 
 
 \item \livelink{chap:exprloc}{exprloc} \\
@@ -760,7 +760,10 @@ format, it is an 8\dash byte unsigned value (see Section
 \refersec{datarep:32bitand64bitdwarfformats}).
 \end{itemize}
 
-\textit{Because classes \livelink{chap:lineptr}{lineptr}, \livelink{chap:loclistptr}{loclistptr}, \livelink{chap:macptr}{macptr} and \livelink{chap:rangelistptr}{rangelistptr}
+\textit{Because classes \livelink{chap:lineptr}{lineptr}, 
+\livelink{chap:loclistptr}{loclistptr}, 
+\livelink{chap:macptr}{macptr} and 
+\livelink{chap:rangelistptr}{rangelistptr}
 share a common representation, it is not possible for an
 attribute to allow more than one of these classes}
 
@@ -810,17 +813,17 @@ in the 64\dash bit DWARF format, it is an 8\dash byte
 unsigned value 
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
-A debugging information entry that may be referenced by
+\textit{A debugging information entry that may be referenced by
 another compilation unit using \livelink{chap:DWFORMrefaddr}{DW\-\_FORM\-\_ref\-\_addr} must have a
-global symbolic name.
+global symbolic name.}
 
-For a reference from one executable or shared object to
+\textit{For a reference from one executable or shared object to
 another, the reference is resolved by the debugger to identify
 the shared object or executable and the offset into that
 object’s \addtoindex{.debug\_info}
 section in the same fashion as the run
 time loader, either when the debug information is first read,
-or when the reference is used.
+or when the reference is used.}
 
 The third type of reference can identify any debugging
 information type entry that has been placed in its own
@@ -832,15 +835,15 @@ reference (\livetarg{chap:DWFORMrefsig8}{DW\-\_FORM\-\_ref\-\_sig8}) is the
 that was computed
 for the type.
 
-The use of compilation unit relative references will reduce the
+\textit{The use of compilation unit relative references will reduce the
 number of link\dash time relocations and so speed up linking. The
 use of the second and third type of reference allows for the
 sharing of information, such as types, across compilation
-units.
+units.}
 
-A reference to any kind of compilation unit identifies the
+\textit{A reference to any kind of compilation unit identifies the
 debugging information entry for that unit, not the preceding
-header.
+header.}
 
 \item string \\
 A string is a sequence of contiguous non\dash null bytes followed by
@@ -867,14 +870,14 @@ UTF\dash 8 (\addtoindex{Unicode} Transformation Format\dash 8) from the Universa
 Character Set standard (ISO/IEC 10646\dash 1:1993). Otherwise,
 the string representation is unspecified.
 
-The \addtoindex{Unicode} Standard Version 3 is fully compatible with
+\textit{The \addtoindex{Unicode} Standard Version 3 is fully compatible with
 ISO/IEC 10646\dash 1:1993. It contains all the same characters
 and encoding points as ISO/IEC 10646, as well as additional
-information about the characters and their use.
+information about the characters and their use.}
 
-Earlier versions of DWARF did not specify the representation
+\textit{Earlier versions of DWARF did not specify the representation
 of strings; for compatibility, this version also does
-not. However, the UTF\dash 8 representation is strongly recommended.
+not. However, the UTF\dash 8 representation is strongly recommended.}
 
 \end{itemize}
 
@@ -897,13 +900,14 @@ Table \refersec{tab:attributeformencodings}.
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|l}
   \caption{Tag encodings} \label{tab:tagencodings} \\
-  \hline \\ \bfseries Tag name&\bfseries Value\\ \hline
+  \hline \bfseries Tag name&\bfseries Value\\ \hline
 \endfirsthead
   \bfseries Tag name&\bfseries Value \\ \hline
 \endhead
   \hline \emph{Continued on next page}
 \endfoot
   \hline
+  \ddag New in \addtoindex{DWARF Version 4}
 \endlastfoot
 \livelink{chap:DWTAGarraytype}{DW\-\_TAG\-\_array\-\_type} &0x01 \\
 \livelink{chap:DWTAGclasstype}{DW\-\_TAG\-\_class\-\_type}&0x02 \\
@@ -968,34 +972,42 @@ Table \refersec{tab:attributeformencodings}.
 \livelink{chap:DWTAGlouser}{DW\-\_TAG\-\_lo\-\_user}&0x4080      \\
 \livelink{chap:DWTAGhiuser}{DW\-\_TAG\-\_hi\-\_user}&0xffff      \\
 \end{longtable}
-\ddag  TAG new in \addtoindex{DWARF Version 4}
 \end{centering}
-
-
-\begin{figure}[here]
-\centering
-\setlength{\extrarowheight}{0.1cm}
-\caption{Child determination encodings}
-\label{tab:childdeterminationencodings}
-\begin{tabular}{l|l} \hline
-Child determination name& Value\\ \hline
-\livelink{chap:DWCHILDRENno}{DW\-\_CHILDREN\-\_no}&0x00 \\ 
-\livelink{chap:DWCHILDRENyes}{DW\-\_CHILDREN\-\_yes}&0x01 \\ \hline
-\end{tabular}
-\end{figure}
 
 
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{l|l}
+  \caption{Child determination encodings}
+  \label{tab:childdeterminationencodings}
+  \addtoindexx{Child determination encodings} \\
+  \hline \bfseries Children determination name&\bfseries Value \\ \hline
+\endfirsthead
+  \bfseries Children determination name&\bfseries Value \\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+\livelink{chap:DWCHILDRENno}{DW\-\_CHILDREN\-\_no}&0x00 \\ 
+\livelink{chap:DWCHILDRENyes}{DW\-\_CHILDREN\-\_yes}&0x01 \\ \hline
+\end{longtable}
+\end{centering}
+
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|l|l}
-  \caption{Attribute encodings} \label{tab:attributeencodings} \addtoindexx{attribute encodings} \\
-  \hline \\ \bfseries Attribute name&\bfseries Value &\bfseries Classes \\ \hline
+  \caption{Attribute encodings} 
+  \label{tab:attributeencodings} 
+  \addtoindexx{attribute encodings} \\
+  \hline \bfseries Attribute name&\bfseries Value &\bfseries Classes \\ \hline
 \endfirsthead
   \bfseries Attribute name&\bfseries Value &\bfseries Classes\\ \hline
 \endhead
   \hline \emph{Continued on next page}
 \endfoot
   \hline
+  \ddag New in \addtoindex{DWARF Version 4}
 \endlastfoot
 \livelink{chap:DWATsibling}{DW\-\_AT\-\_sibling}&0x01&reference 
         \addtoindexx{sibling attribute!encoding} \\
@@ -1187,21 +1199,21 @@ Child determination name& Value\\ \hline
 \livetarg{chap:DWATlouser}{DW\-\_AT\-\_lo\-\_user}&0x2000 & --- \addtoindexx{low user attribute encoding}  \\
 \livetarg{chap:DWAThiuser}{DW\-\_AT\-\_hi\-\_user}&0x3fff& --- \addtoindexx{high user attribute encoding}  \\
 
-\end{longtable}
-\ddag  Attribute new in \addtoindex{DWARF Version 4} 
+\end{longtable} 
 \end{centering}
 
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|l|l}
   \caption{Attribute form encodings} \label{tab:attributeformencodings} \\
-  \hline \\ \bfseries Form name&\bfseries Value &\bfseries Classes \\ \hline
+  \hline \bfseries Form name&\bfseries Value &\bfseries Classes \\ \hline
 \endfirsthead
   \bfseries Form name&\bfseries Value &\bfseries Classes\\ \hline
 \endhead
   \hline \emph{Continued on next page}
 \endfoot
   \hline
+  \ddag New in \addtoindex{DWARF Version 4}
 \endlastfoot
 \livelink{chap:DWFORMaddr}{DW\-\_FORM\-\_addr}&0x01&address  \\
 \livelink{chap:DWFORMblock2}{DW\-\_FORM\-\_block2}&0x03&\livelink{chap:block}{block} \\
@@ -1230,7 +1242,6 @@ Child determination name& Value\\ \hline
 \livelink{chap:DWFORMrefsig8}{DW\-\_FORM\-\_ref\-\_sig8} \ddag &0x20&reference \\
  
 \end{longtable}
-\ddag  FORM new in \addtoindex{DWARF Version 4} 
 \end{centering}
 
 \section{Variable Length Data}
@@ -1246,12 +1257,12 @@ LEB128 is a scheme for encoding integers
 densely that exploits the assumption that most integers are
 small in magnitude.
 
-This encoding is equally suitable whether the target machine
-architecture represents data in big\dash\  endian or little\dash endian
+\textit{This encoding is equally suitable whether the target machine
+architecture represents data in big\dash\ endian or little\dash endian
 order. It is ``little\dash endian'' only in the sense that it
 avoids using space to represent the ``big'' end of an
 unsigned integer, when the big end is all zeroes or sign
-extension bits.
+extension bits.}
 
 Unsigned LEB128 (ULEB128) numbers are encoded as follows:
 \addtoindexx{LEB128!unsigned, encoding as}
@@ -1291,16 +1302,18 @@ Table \refersec{tab:examplesofsignedleb128encodings}
 gives some examples of signed LEB128 
 numbers.
 
-Appendix \refersec{app:variablelengthdataencodingdecodinginformative} 
+\textit{Appendix \refersec{app:variablelengthdataencodingdecodinginformative} 
 \addtoindexx{LEB128!examples}
-gives algorithms for encoding and decoding these forms.
+gives algorithms for encoding and decoding these forms.}
 
 
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|l|l}
-  \caption{Examples of unsigned LEB128 encodings} \label{tab:examplesofunsignedleb128encodings} \\
-  \hline \\ \bfseries Number&\bfseries First byte &\bfseries Second byte \\ \hline
+  \caption{Examples of unsigned LEB128 encodings}
+  \label{tab:examplesofunsignedleb128encodings} 
+  \addtoindexx{LEB128 encoding!examples} \\
+  \hline \bfseries Number&\bfseries First byte &\bfseries Second byte \\ \hline
 \endfirsthead
   \bfseries Number&\bfseries First Byte &\bfseries Second byte\\ \hline
 \endhead
@@ -1314,7 +1327,6 @@ gives algorithms for encoding and decoding these forms.
 129& 1 + 0x80 & 1 \\
 130& 2 + 0x80 & 1 \\
 12857& 57 + 0x80 & 100 \\
-\addtoindex{LEB128 encoding!examples}
 \end{longtable}
 \end{centering}
 
@@ -1324,7 +1336,7 @@ gives algorithms for encoding and decoding these forms.
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|l|l}
   \caption{Examples of signed LEB128 encodings} \label{tab:examplesofsignedleb128encodings} \\
-  \hline \\ \bfseries Number&\bfseries First byte &\bfseries Second byte \\ \hline
+  \hline \bfseries Number&\bfseries First byte &\bfseries Second byte \\ \hline
 \endfirsthead
   \bfseries Number&\bfseries First Byte &\bfseries Second byte\\ \hline
 \endhead
@@ -1364,7 +1376,7 @@ Table \refersec{tab:dwarfoperationencodings}.
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|l|l|l}
   \caption{DWARF operation encodings} \label{tab:dwarfoperationencodings} \\
-  \hline \\ & &\bfseries No. of  &\\ 
+  \hline & &\bfseries No. of  &\\ 
   \bfseries Operation&\bfseries Code &\bfseries Operands &\bfseries Notes\\ \hline
 \endfirsthead
    & &\bfseries No. of &\\ 
@@ -1373,6 +1385,7 @@ Table \refersec{tab:dwarfoperationencodings}.
   \hline \emph{Continued on next page}
 \endfoot
   \hline
+  \ddag New in \addtoindex{DWARF Version 4}
 \endlastfoot
 
 \livelink{chap:DWOPaddr}{DW\-\_OP\-\_addr}&0x03&1 & constant address  \\ 
@@ -1430,17 +1443,17 @@ Table \refersec{tab:dwarfoperationencodings}.
 \livelink{chap:DWOPlit0}{DW\-\_OP\-\_lit0}&0x30 & 0 & \\
 
 \livelink{chap:DWOPlit1}{DW\-\_OP\-\_lit1}&0x31 & 0& literals 0 .. 31 = \\
-\ldots & & & (\livelink{chap:DWOPlit0}{DW\-\_OP\-\_lit0} + literal) \\
+\ldots & & &\hspace{0.5cm}(\livelink{chap:DWOPlit0}{DW\-\_OP\-\_lit0} + literal) \\
 \livelink{chap:DWOPlit31}{DW\-\_OP\-\_lit31}&0x4f & 0 & \\ \hline
 
 \livelink{chap:DWOPreg0}{DW\-\_OP\-\_reg0} & 0x50 & 0 & \\
 \livelink{chap:DWOPreg1}{DW\-\_OP\-\_reg1} & 0x51 & 0&reg 0 .. 31 = \\
-\ldots & & & (\livelink{chap:DWOPreg0}{DW\-\_OP\-\_reg0} + regnum) \\
+\ldots & & &\hspace{0.5cm}(\livelink{chap:DWOPreg0}{DW\-\_OP\-\_reg0} + regnum) \\
 \livelink{chap:DWOPreg31}{DW\-\_OP\-\_reg31} & 0x6f & 0 & \\ \hline
 
 \livelink{chap:DWOPbreg0}{DW\-\_OP\-\_breg0} & 0x70 &1 & SLEB128 offset \\
 \livelink{chap:DWOPbreg1}{DW\-\_OP\-\_breg1} & 0x71 & 1 &base register 0 .. 31 = \\
-... & &              &(\livelink{chap:DWOPbreg0}{DW\-\_OP\-\_breg0} + regnum) \\
+... & &              &\hspace{0.5cm}(\livelink{chap:DWOPbreg0}{DW\-\_OP\-\_breg0} + regnum) \\
 \livelink{chap:DWOPbreg31}{DW\-\_OP\-\_breg31} & 0x8f & 1 & \\ \hline
 
 \livelink{chap:DWOPregx}{DW\-\_OP\-\_regx} & 0x90 &1&ULEB128 register \\
@@ -1462,9 +1475,9 @@ Table \refersec{tab:dwarfoperationencodings}.
 \livelink{chap:DWOPcallframecfa}{DW\-\_OP\-\_call\-\_frame\-\_cfa} &0x9c &0& \\
 \livelink{chap:DWOPbitpiece}{DW\-\_OP\-\_bit\-\_piece}&0x9d &2&ULEB128 size followed by \\
 &&&ULEB128 offset\\
-\livelink{chap:DWOPimplicitvalue}{DW\-\_OP\-\_implicit\-\_value}&0x9e &2&ULEB128 size followed by \\
+\livelink{chap:DWOPimplicitvalue}{DW\-\_OP\-\_implicit\-\_value} \ddag &0x9e &2&ULEB128 size followed by \\
 &&&\nolink{block} of that size\\
-\livelink{chap:DWOPstackvalue}{DW\-\_OP\-\_stack\-\_value} &0x9f &0& \\
+\livelink{chap:DWOPstackvalue}{DW\-\_OP\-\_stack\-\_value} \ddag &0x9f &0& \\
 \livetarg{chap:DWOPlouser}{DW\-\_OP\-\_lo\-\_user} &0xe0 && \\
 \livetarg{chap:DWOPhiuser}{DW\-\_OP\-\_hi\-\_user} &0xff && \\
 
@@ -1519,13 +1532,14 @@ Table \refersec{tab:basetypeencodingvalues}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c}
   \caption{Base type encoding values} \label{tab:basetypeencodingvalues} \\
-  \hline \\ \bfseries Base type encoding code name&\bfseries Value \\ \hline
+  \hline \bfseries Base type encoding code name&\bfseries Value \\ \hline
 \endfirsthead
   \bfseries Base type encoding code name&\bfseries Value\\ \hline
 \endhead
   \hline \emph{Continued on next page}
 \endfoot
   \hline
+  \ddag New in \addtoindex{DWARF Version 4}
 \endlastfoot
 
 \livelink{chap:DWATEaddress}{DW\-\_ATE\-\_address}&0x01 \\
@@ -1548,7 +1562,6 @@ Table \refersec{tab:basetypeencodingvalues}
 \livetarg{chap:DWATEhiuser}{DW\-\_ATE\-\_hi\-\_user} & 0xff \\
 
 \end{longtable}
-\ddag  Base type encoding new in \addtoindex{DWARF Version 4}
 \end{centering}
 
 
@@ -1562,7 +1575,7 @@ Table \refersec{tab:decimalsignencodings}.
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c}
   \caption{Decimal sign encodings} \label{tab:decimalsignencodings} \\
-  \hline \\ \bfseries Decimal sign code name&\bfseries Value \\ \hline
+  \hline \bfseries Decimal sign code name&\bfseries Value \\ \hline
 \endfirsthead
   \bfseries Decimal sign code name&\bfseries Value\\ \hline
 \endhead
@@ -1588,7 +1601,7 @@ Table \refersec{tab:endianityencodings}.
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c}
   \caption{Endianity encodings} \label{tab:endianityencodings}\\
-  \hline \\ \bfseries Endian code name&\bfseries Value \\ \hline
+  \hline \bfseries Endian code name&\bfseries Value \\ \hline
 \endfirsthead
   \bfseries Endian code name&\bfseries Value\\ \hline
 \endhead
@@ -1619,7 +1632,7 @@ Table \refersec{tab:accessibilityencodings}.
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c}
   \caption{Accessibility encodings} \label{tab:accessibilityencodings}\\
-  \hline \\ \bfseries Accessibility code name&\bfseries Value \\ \hline
+  \hline \bfseries Accessibility code name&\bfseries Value \\ \hline
 \endfirsthead
   \bfseries Accessibility code name&\bfseries Value\\ \hline
 \endhead
@@ -1646,7 +1659,7 @@ Table \refersec{tab:visibilityencodings}.
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c}
   \caption{Visibility encodings} \label{tab:visibilityencodings}\\
-  \hline \\ \bfseries Visiibility code name&\bfseries Value \\ \hline
+  \hline \bfseries Visiibility code name&\bfseries Value \\ \hline
 \endfirsthead
   \bfseries Visibility code name&\bfseries Value\\ \hline
 \endhead
@@ -1673,7 +1686,7 @@ Table \refersec{tab:virtualityencodings}.
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c}
   \caption{Virtuality encodings} \label{tab:virtualityencodings}\\
-  \hline \\ \bfseries Virtuality code name&\bfseries Value \\ \hline
+  \hline \bfseries Virtuality code name&\bfseries Value \\ \hline
 \endfirsthead
   \bfseries Virtuality code name&\bfseries Value\\ \hline
 \endhead
@@ -1724,13 +1737,14 @@ defined language.
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c|c}
   \caption{Language encodings} \label{tab:languageencodings}\\
-  \hline \\ \bfseries Language name&\bfseries Value &\bfseries Default Lower Bound \\ \hline
+  \hline \bfseries Language name&\bfseries Value &\bfseries Default Lower Bound \\ \hline
 \endfirsthead
   \bfseries Language name&\bfseries Value &\bfseries Default Lower Bound\\ \hline
 \endhead
   \hline \emph{Continued on next page}
 \endfoot
   \hline
+  \dag See text
 \endlastfoot
 
 \livelink{chap:DWLANGC89}{DW\-\_LANG\-\_C89}&0x0001&0       \\
@@ -1757,7 +1771,6 @@ defined language.
 \livetarg{chap:DWLANGhiuser}{DW\-\_LANG\-\_hi\-\_user}&0xffff & \\
 
 \end{longtable}
-\dag See text
 \end{centering}
 
 \section{Address Class Encodings}
@@ -1780,7 +1793,7 @@ Table \refersec{tab:identifiercaseencodings}.
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c}
   \caption{Identifier case encodings} \label{tab:identifiercaseencodings}\\
-  \hline \\ \bfseries Identifier case name&\bfseries Value \\ \hline
+  \hline \bfseries Identifier case name&\bfseries Value \\ \hline
 \endfirsthead
   \bfseries Identifier case name&\bfseries Value\\ \hline
 \endhead
@@ -1805,7 +1818,7 @@ Table \refersec{tab:callingconventionencodings}.
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c}
   \caption{Calling convention encodings} \label{tab:callingconventionencodings}\\
-  \hline \\ \bfseries Calling Convention name&\bfseries Value \\ \hline
+  \hline \bfseries Calling Convention name&\bfseries Value \\ \hline
 \endfirsthead
   \bfseries Calling Convention name&\bfseries Value\\ \hline
 \endhead
@@ -1836,7 +1849,7 @@ Table \refersec{tab:inlineencodings}.
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c}
   \caption{Inline encodings} \label{tab:inlineencodings}\\
-  \hline \\ \bfseries Iline Code name&\bfseries Value \\ \hline
+  \hline \bfseries Iline Code name&\bfseries Value \\ \hline
 \endfirsthead
   \bfseries Iline Code name&\bfseries Value\\ \hline
 \endhead
@@ -1867,7 +1880,7 @@ Table \refersec{tab:orderingencodings}.
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c}
   \caption{Ordering encodings} \label{tab:orderingencodings}\\
-  \hline \\ \bfseries Ordering name&\bfseries Value \\ \hline
+  \hline \bfseries Ordering name&\bfseries Value \\ \hline
 \endfirsthead
   \bfseries Ordering name&\bfseries Value\\ \hline
 \endhead
@@ -1899,7 +1912,7 @@ Table \refersec{tab:discriminantdescriptorencodings}.
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c}
   \caption{Discriminant descriptor encodings} \label{tab:discriminantdescriptorencodings}\\
-  \hline \\ \bfseries Descriptor Name&\bfseries Value \\ \hline
+  \hline \bfseries Descriptor Name&\bfseries Value \\ \hline
 \endfirsthead
   \bfseries Descriptor Name&\bfseries Value\\ \hline
 \endhead
@@ -1938,7 +1951,7 @@ of the 4\dash byte value 0xffffffff followed by an 8\dash byte unsigned
 integer that gives the actual length
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
-\item  version (\addtoindex(uhalf))
+\item  version (\addtoindex{uhalf})
 A 2\dash byte unsigned integer representing the version of the
 DWARF information\addtoindexx{version number!compilation unit} for the compilation unit
 \addtoindexx{version number!name lookup table}
@@ -2006,7 +2019,7 @@ in the 64-bit DWARF format, this consists of the 4-byte value
 the actual length 
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
-\item version (\addtoindex(uhalf)) \\
+\item version (\addtoindex{uhalf}) \\
 A 2\dash byte version identifier
 \addtoindexx{version number!address range table} containing the value 2 
 (see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
@@ -2077,7 +2090,7 @@ Table \refersec{tab:linenumberstandardopcodeencodings}.
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c}
   \caption{Line Number Standard Opcode encodings} \label{tab:linenumberstandardopcodeencodings}\\
-  \hline \\ \bfseries Opcode Name&\bfseries Value \\ \hline
+  \hline \bfseries Opcode Name&\bfseries Value \\ \hline
 \endfirsthead
   \bfseries Opcode Name&\bfseries Value\\ \hline
 \endhead
@@ -2111,13 +2124,14 @@ Table \refersec{tab:linenumberextendedopcodeencodings}.
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c}
   \caption{Line Number Extended Opcode encodings} \label{tab:linenumberextendedopcodeencodings}\\
-  \hline \\ \bfseries Opcode Name&\bfseries Value \\ \hline
+  \hline \bfseries Opcode Name&\bfseries Value \\ \hline
 \endfirsthead
   \bfseries Opcode Name&\bfseries Value\\ \hline
 \endhead
   \hline \emph{Continued on next page}
 \endfoot
   \hline
+  \ddag New in \addtoindex{DWARF Version 4}
 \endlastfoot
 
 \livelink{chap:DWLNEendsequence}{DW\-\_LNE\-\_end\-\_sequence}&0x01    \\
@@ -2128,7 +2142,6 @@ Table \refersec{tab:linenumberextendedopcodeencodings}.
 \livetarg{chap:DWLNEhiuser}{DW\-\_LNE\-\_hi\-\_user}&0xff   \\
 
 \end{longtable}
-\ddag Extended opcode new in \addtoindex{DWARF Version 4}.
 \end{centering}
 
 \section{Macro Information}
@@ -2150,7 +2163,7 @@ Table \refersec{tab:macinfotypeencodings}.
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c}
   \caption{Macinfo Type Encodings} \label{tab:macinfotypeencodings}\\
-  \hline \\ \bfseries Macinfo Type Name&\bfseries Value \\ \hline
+  \hline \bfseries Macinfo Type Name&\bfseries Value \\ \hline
 \endfirsthead
   \bfseries Macinfo Type Name&\bfseries Value\\ \hline
 \endhead
@@ -2190,7 +2203,7 @@ Table \refersec{tab:callframeinstructionencodings}.
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c|c|l|l}
   \caption{Call frame instruction encodings} \label{tab:callframeinstructionencodings} \\
-  \hline \\ &\bfseries High 2 &\bfseries Low 6 &  & \\
+  \hline &\bfseries High 2 &\bfseries Low 6 &  & \\
   \bfseries Instruction&\bfseries Bits &\bfseries Bits &\bfseries Operand 1 &\bfseries Operand 2\\ \hline
 \endfirsthead
    & \bfseries High 2 &\bfseries Low 6 &  &\\
@@ -2609,11 +2622,35 @@ separate type units.}
 it does not provide any information unique to the defining
 declaration of the type.}
 
-\item \textit{The \livelink{chap:DWATdeclfile}{DW\-\_AT\-\_decl\-\_file}, \livelink{chap:DWATdeclline}{DW\-\_AT\-\_decl\-\_line}, and
+\item \textit{The \livelink{chap:DWATdeclfile}{DW\-\_AT\-\_decl\-\_file}, 
+\livelink{chap:DWATdeclline}{DW\-\_AT\-\_decl\-\_line}, and
 \livelink{chap:DWATdeclcolumn}{DW\-\_AT\-\_decl\-\_column} attributes are not included because they
 may vary from one source file to the next, and would prevent
 two otherwise identical type declarations from producing the
 \addtoindexx{MD5 hash}
 same hash.}
 
+\item \textit{The \livelink{chap:DWATobjectpointer}{DW\-\_AT\-\_object\-\_pointer} attribute is not included 
+because the information it provides is not necessary for the 
+computation of a unique type signature.}
+
 \end{itemize}
+
+\textit{Nested types and some types referred to by a debugging 
+information entry are encoded by name rather than by recursively 
+encoding the type to allow for cases where a complete definition 
+of the type might not be available in all compilation units.}
+
+\textit{If a type definition contains the definition of a member function, 
+it cannot be moved as is into a type unit, because the member function 
+contains attributes that are unique to that compilation unit. 
+Such a type definition can be moved to a type unit by rewriting the DIE tree, 
+moving the member function declaration into a separate declaration tree, 
+and replacing the function definition in the type with a non-defining 
+declaration of the function (as if the function had been defined out of 
+line).}
+
+An example that illustrates the computation of an MD5 hash may be found in 
+Appendix \refersec{app:usingtypeunits}.
+
+

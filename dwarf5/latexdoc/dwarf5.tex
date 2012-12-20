@@ -44,7 +44,7 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \usepackage[plainpages=false,pdfpagelabels,pagebackref]{hyperref}  % Lets us generate colored active links inside a pdf.
 \makeindex  % This and the makeidx package allow \index to create index entries.
 
-\newcommand{\docdate}{18 December 2012}
+\newcommand{\docdate}{19 December 2012}
 
 \newcommand{\dwf}{DWARF Debugging Information Format}
 \newenvironment{myindentpara}[1]%
@@ -65,8 +65,9 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 
 % Generate a page ref.
 % use like   \refersec{chap:registerbasedaddressing}
-\newcommand{\refersec}[1]{\ref{#1} on page \pageref{#1}}
-%\newcommand{\refersec}[1]{\vref{#1}}  % beware possible rerun loop
+%\newcommand{\refersec}[1]{\ref{#1} on page \pageref{#1}}
+\newcommand{\refersec}[1]{\vref{#1}}  % beware possible rerun loop
+\newcommand{\referfol}[1]{\ref{#1} following}
 
 % Generate a live link in the document
 % use like \livelink{chap:DWOPdup}{DW\-\_OP\-\_dup}
@@ -90,12 +91,16 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \newcommand{\nolink}[1]{#1}
 \newcommand{\noindex}[1]{#1}
 
-%For index entries.
+% For index entries.
 \newcommand{\addtoindex}[1]{#1\index{#1}}
 \newcommand{\addtoindexi}[2]{#1\index{#2}}
 \newcommand{\addtoindexx}[1]{\index{#1}}
 
+% Better naming for the lowest level section header
 \newcommand{\subsubsubsection}[1]{\paragraph{#1}}
+
+% Reduce vertical space at beginning of a list
+\setlength{\topsep}{0in}
 
 \begin{document}
 \pagenumbering{roman}
