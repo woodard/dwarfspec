@@ -1,6 +1,13 @@
 \chapter{Debug Section Relationships (Informative)}
 \label{app:debugsectionrelationshipsinformative}
 %
+DWARF information is organized into multiple program sections, 
+each of which holds a particular kind of information. In some 
+cases, information in one section refers to information in one 
+or more of the others. These relationships are illustrated by 
+the diagram and associated notes on the following pages.
+\vspace{0.3in}
+
 \setlength\maxovaldiam{80pt}
 \thicklines
 \begin{picture}(0,0)
@@ -73,6 +80,9 @@
 \end{picture}
 
 \clearpage
+\begin{centering}
+   \textbf{Notes}
+\end{centering}
 \begin{enumerate}[(a)]  
 \item  \addtoindex{.debug\_aranges}  \\
 The debug\_info\_offset value in
@@ -98,27 +108,33 @@ section of the abbreviations for that compilation unit.
 
 %d
 \item  \addtoindex{.debug\_info} and \addtoindex{.debug\_types} \\
-Attribute values of class string may have form \livelink{chap:DWFORMstrp}{DW\-\_FORM\-\_strp}, whose
+Attribute values of class string may have form 
+\livelink{chap:DWFORMstrp}{DW\-\_FORM\-\_strp}, whose
 value is the offset in the \addtoindex{.debug\_str}
 section of the corresponding string.
 
 %e
 \item \addtoindex{.debug\_loc} \\
-The operand of the \livelink{chap:DWOPcallref}{DW\-\_OP\-\_call\-\_ref} DWARF expression operator is the
+The operand of the \livelink{chap:DWOPcallref}{DW\-\_OP\-\_call\-\_ref} 
+DWARF expression operator is the
 offset of a debugging information entry in the 
 \addtoindex{.debug\_info} section.
 
 %f
 \item \addtoindex{.debug\_info} \\
-An attribute value of class \livelink{chap:loclistptr}{loclistptr} (specifically form
-\livelink{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset}) is an offset within the \addtoindex{.debug\_loc} 
+An attribute value of class \livelink{chap:loclistptr}{loclistptr} 
+(specifically form
+\livelink{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset}) 
+is an offset within the \addtoindex{.debug\_loc} 
 section of a
 \addtoindex{location list}.
 
 %g
 \item \addtoindex{.debug\_info} \\
-An attribute value of class \livelink{chap:rangelistptr}{rangelistptr} (specifically form
-\livelink{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset}) is an offset within the \addtoindex{.debug\_ranges} section of
+An attribute value of class \livelink{chap:rangelistptr}{rangelistptr} 
+(specifically form
+\livelink{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset}) 
+is an offset within the \addtoindex{.debug\_ranges} section of
 a range list.
 
 %h

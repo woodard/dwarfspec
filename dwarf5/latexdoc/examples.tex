@@ -201,7 +201,7 @@ the ``variable'' is allocated or associated).
 
 For concreteness, suppose that a descriptor looks something
 like the C structure in 
-Figure \referfol{fig:fortran90exampledescriptorrepresentation}.
+Figure \refersec{fig:fortran90exampledescriptorrepresentation}.
 Note, however, that it is
 a property of the design that 1) a debugger needs no builtin
 knowledge of this structure and 2) there does not need to
@@ -217,7 +217,7 @@ struct desc {
     void * base; // Address of raw data
     int ptr_assoc : 1; // Pointer is associated flag
     int ptr_alloc : 1; // Pointer is allocated flag
-    int num_dims : 6; // Number of dimensions
+    int num_dims  : 6; // Number of dimensions
     struct dims_str { // For each dimension...  
         long low_bound;
         long upper_bound;
@@ -233,15 +233,15 @@ struct desc {
 In practice, of course, a “real” descriptor will have
 dimension substructures only for as many dimensions as are
 specified in the num\_dims component. Let us use the notation
-desc ,textless n \textgreater\   
+\texttt{desc\textless n\textgreater}   
 to indicate a specialization of the desc struct in
-which n is the bound for the dims component as well as the
+which \texttt{n} is the bound for the dims component as well as the
 contents of the num\_dims component.
 
 Because the arrays considered here come in two parts, it is
 necessary to distinguish the parts carefully. In particular,
 the “address of the variable” or equivalently, the “base
-address of the object” always refers to the descriptor. For
+address of the object” \emph{always} refers to the descriptor. For
 arrays that do not come in two parts, an implementation can
 provide a descriptor anyway, thereby giving it two parts. (This
 may be convenient for general runtime support unrelated to
@@ -254,13 +254,15 @@ that can be the object).
 
 If an object has a descriptor, then the DWARF type for that
 object will have a 
-\livelink{chap:DWATdatalocation}{DW\-\_AT\-\_data\-\_location} attribute. If an object
+\livelink{chap:DWATdatalocation}{DW\-\_AT\-\_data\-\_location} 
+attribute. If an object
 does not have a descriptor, then usually the DWARF type for the
 object will not have a 
 \livelink{chap:DWATdatalocation}{DW\-\_AT\-\_data\-\_location}. 
 (See the following
 \addtoindex{Ada} example for a case where the type for an object without
-a descriptor does have a \livelink{chap:DWATdatalocation}{DW\-\_AT\-\_data\-\_location} attribute. In
+a descriptor does have a 
+\livelink{chap:DWATdatalocation}{DW\-\_AT\-\_data\-\_location} attribute. In
 that case the object doubles as its own descriptor.)
 
 The \addtoindex{Fortran 90} derived type array\_ptr can now be redescribed
@@ -278,8 +280,8 @@ Similarly for variable arrays:
 desc<1> arrays;
 \end{lstlisting}
 
-(Recall that desc \textless 1 \textgreater 
-indicates the 1\dash dimensional version of desc.)
+(Recall that \texttt{desc\textless 1\textgreater} 
+indicates the 1\dash dimensional version of \texttt{desc}.)
 
 Finally, the following notation is useful:
 
@@ -415,10 +417,10 @@ whose type is given by the unnamed type at 6\$. Notice that
 the type is an array type.
 
 
-\item Find the 5 element of that array object. To do array
+\item Find the 5$^{th}$ element of that array object. To do array
 indexing requires several pieces of information:
 
-\begin{enumerate}[a]
+\begin{enumerate}[a)]
 
 \item  the address of the array data
 
@@ -471,7 +473,7 @@ symbol table.
 \item  Find the second element of the array object found in step 3. To do array indexing requires
 several pieces of information:
 
-\begin{enumerate}[a]
+\begin{enumerate}[a)]
 \item  the address of the array storage
 
 \item  the lower bounds of the array \\
@@ -636,16 +638,16 @@ is used to illustrate the representation of packed unaligned
 \begin{figure}[here]
 \begin{lstlisting}
 TYPE T : PACKED RECORD ! bit size is 2
-F5 : BOOLEAN; ! bit offset is 0
-F6 : BOOLEAN; ! bit offset is 1
-END;
-VAR V : PACKED RECORD
-F1 : BOOLEAN; ! bit offset is 0
-F2 : PACKED RECORD ! bit offset is 1
-F3 : INTEGER; ! bit offset is 0 in F2, 1 in V
-END;
-F4 : PACKED ARRAY [0..1] OF T; ! bit offset is 33
-F7 : T; ! bit offset is 37
+         F5 : BOOLEAN; ! bit offset is 0
+         F6 : BOOLEAN; ! bit offset is 1
+         END;
+VAR V  : PACKED RECORD
+         F1 : BOOLEAN; ! bit offset is 0
+         F2 : PACKED RECORD ! bit offset is 1
+              F3 : INTEGER; ! bit offset is 0 in F2, 1 in V
+              END;
+         F4 : PACKED ARRAY [0..1] OF T; ! bit offset is 33
+         F7 : T; ! bit offset is 37
 END;
 \end{lstlisting}
 \caption{Packed record example: source fragment}
@@ -994,11 +996,11 @@ shown):
 
 
 \begin{alltt}
-version                    4
-minimum_instruction_length 1
-opcode_base               10 ! Opcodes 10-12 not needed
-line_base                  1
-line_range                15
+version                       4
+minimum_instruction_length    1
+opcode_base                  10   ! Opcodes 10-12 not needed
+line_base                     1
+line_range                   15
 \end{alltt}
 
 
@@ -1014,7 +1016,7 @@ of n).
 \begin{longtable}{lll}
   \caption{Line number program example: one encoding}
   \label{tab:linenumberprogramexampleoneencoding} \\
-  \hline \\ \bfseries Opcode &\bfseries Operand &\bfseries Byte Stream \\ \hline
+  \hline \bfseries Opcode &\bfseries Operand &\bfseries Byte Stream \\ \hline
 \endfirsthead
   \bfseries Opcode &\bfseries Operand &\bfseries Byte Stream\\ \hline
 \endhead
@@ -1045,7 +1047,7 @@ this encoding occupies 22 bytes.
 \begin{longtable}{lll}
   \caption{Line number program example: alternate encoding} 
   \label{tab:linenumberprogramexamplealternateencoding} \\
-  \hline \\ \bfseries Opcode &\bfseries Operand &\bfseries Byte Stream \\ \hline
+  \hline \bfseries Opcode &\bfseries Operand &\bfseries Byte Stream \\ \hline
 \endfirsthead
   \bfseries Opcode &\bfseries Operand &\bfseries Byte Stream\\ \hline
 \endhead
@@ -1110,7 +1112,7 @@ shows two code fragments from a subroutine called
 foo that uses a frame pointer (in addition to the stack
 pointer). The first column values are byte addresses. 
 % The \space is so we get a space after >
-\textless~fs~\textgreater \  denotes the stack frame size in bytes, namely 12.
+\textless fs\textgreater\ denotes the stack frame size in bytes, namely 12.
 
 
 \begin{figure}[here]
@@ -1161,7 +1163,7 @@ Table \refersec{tab:callframeinformationexampleconceptualmatrix}:
 \begin{longtable}{lllllllllll}
   \caption{Call frame inforation example: conceptual matrix} 
   \label{tab:callframeinformationexampleconceptualmatrix} \\
-  \hline \\ \bfseries Location & \bfseries CFA & \bfseries R0 & \bfseries R1 & \bfseries R2 & \bfseries R3 & \bfseries R4 & \bfseries R5 & \bfseries R6 & \bfseries R7 & \bfseries R8 \\ \hline
+  \hline \bfseries Location & \bfseries CFA & \bfseries R0 & \bfseries R1 & \bfseries R2 & \bfseries R3 & \bfseries R4 & \bfseries R5 & \bfseries R6 & \bfseries R7 & \bfseries R8 \\ \hline
 \endfirsthead
   \bfseries Location &\bfseries CFA &\bfseries R0 & \bfseries R1 & \bfseries R2 &\bfseries R3 &\bfseries R4 &\bfseries R5 &\bfseries R6 &\bfseries R7 &\bfseries R8\\ \hline
 \endhead
@@ -1190,7 +1192,7 @@ foo+80&[R7]+0&s&u&u&u&s&s&s&a&r1 \\
 \begin{longtable}{lll}
   \caption{Call frame information example: common information entry encoding} 
   \label{tab:callframeinformationexamplecommoninformationentryencoding} \\
-  \hline \\ \bfseries Address &\bfseries Value &\bfseries Comment \\ \hline
+  \hline \bfseries Address &\bfseries Value &\bfseries Comment \\ \hline
 \endfirsthead
   \bfseries Address &\bfseries Value &\bfseries Comment \\ \hline
 \endhead
@@ -1217,8 +1219,8 @@ cie+28&\livelink{chap:DWCFAsamevalue}{DW\-\_CFA\-\_same\-\_value} (5)&R5 preserv
 cie+30&\livelink{chap:DWCFAsamevalue}{DW\-\_CFA\-\_same\-\_value} (6)&R6 preserve    \\
 cie+32&\livelink{chap:DWCFAsamevalue}{DW\-\_CFA\-\_same\-\_value} (7)&R7 preserve    \\
 cie+34&\livelink{chap:DWCFAregister}{DW\-\_CFA\-\_register} (8, 1)&R8 is in R1    \\
-cie+37&\livelink{chap:DWCFAnop}{DW\-\_CFA\-\_nop}&padding    \\
-cie+38&\livelink{chap:DWCFAnop}{DW\-\_CFA\-\_nop}& padding \\
+cie+37&\livelink{chap:DWCFAnop}{DW\-\_CFA\-\_nop} &padding    \\
+cie+38&\livelink{chap:DWCFAnop}{DW\-\_CFA\-\_nop} &padding \\
 cie+39& \livelink{chap:DWCFAnop}{DW\-\_CFA\-\_nop}&padding  \\
 cie+40 &&  \\
 \end{longtable}
@@ -1229,7 +1231,7 @@ The following notations apply in
 Table \refersec{tab:callframeinformationexampleframedescriptionentryencoding}:
 
 \begin{alltt}
-1. <fs> = frame size
+1. <fs>  = frame size
 2. <caf> = code alignment factor
 3. <daf> = data alignment factor
 \end{alltt}
@@ -1238,8 +1240,9 @@ Table \refersec{tab:callframeinformationexampleframedescriptionentryencoding}:
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{lll}
-  \caption{Call frame information example: frame description entry encoding} \label{tab:callframeinformationexampleframedescriptionentryencoding} \\
-  \hline \\ \bfseries Address &\bfseries Value &\bfseries Comment \\ \hline
+  \caption{Call frame information example: frame description entry encoding} 
+  \label{tab:callframeinformationexampleframedescriptionentryencoding} \\
+  \hline \bfseries Address &\bfseries Value &\bfseries Comment \\ \hline
 \endfirsthead
   \bfseries Address &\bfseries Value &\bfseries Comment \\ \hline
 \endhead
@@ -1252,16 +1255,16 @@ fde+4&cie&CIE\_ptr \\
 fde+8&foo&initial\_location \\
 fde+12&84&address\_range \\
 fde+16&\livelink{chap:DWCFAadvanceloc}{DW\-\_CFA\-\_advance\-\_loc}(1)&instructions \\
-fde+17&\livelink{chap:DWCFAdefcfaoffset}{DW\-\_CFA\-\_def\-\_cfa\-\_offset}(12)& \textless fs \textgreater \\
-fde+19&\livelink{chap:DWCFAadvanceloc}{DW\-\_CFA\-\_advance\-\_loc}(1)&4/ \textless caf \textgreater \\
-fde+20&\livelink{chap:DWCFAoffset}{DW\-\_CFA\-\_offset}(8,1)&-4/ \textless daf \textgreater (second parameter) \\
+fde+17&\livelink{chap:DWCFAdefcfaoffset}{DW\-\_CFA\-\_def\-\_cfa\-\_offset}(12)& \textless fs\textgreater \\
+fde+19&\livelink{chap:DWCFAadvanceloc}{DW\-\_CFA\-\_advance\-\_loc}(1)&4/ \textless caf\textgreater \\
+fde+20&\livelink{chap:DWCFAoffset}{DW\-\_CFA\-\_offset}(8,1)&-4/ \textless daf\textgreater (2nd parameter) \\
 fde+22&\livelink{chap:DWCFAadvanceloc}{DW\-\_CFA\-\_advance\-\_loc}(1)& \\
-fde+23&\livelink{chap:DWCFAoffset}{DW\-\_CFA\-\_offset}(6,2)&-8/ \textless daf> \textgreater (2nd parameter)  \\
+fde+23&\livelink{chap:DWCFAoffset}{DW\-\_CFA\-\_offset}(6,2)&-8/ \textless daf\textgreater (2nd parameter)  \\
 fde+25&\livelink{chap:DWCFAadvanceloc}{DW\-\_CFA\-\_advance\-\_loc}(1) & \\
 fde+26&\livelink{chap:DWCFAdefcfaregister}{DW\-\_CFA\-\_def\-\_cfa\-\_register}(6) & \\
 fde+28&\livelink{chap:DWCFAadvanceloc}{DW\-\_CFA\-\_advance\-\_loc}(1) & \\
-fde+29&\livelink{chap:DWCFAoffset}{DW\-\_CFA\-\_offset}(4,3)&-12/ \textless daf \textgreater (2nd parameter) \\
-fde+31&\livelink{chap:DWCFAadvanceloc}{DW\-\_CFA\-\_advance\-\_loc}(12)&44/ \textless caf \textgreater \\
+fde+29&\livelink{chap:DWCFAoffset}{DW\-\_CFA\-\_offset}(4,3)&-12/ \textless daf\textgreater (2nd parameter) \\
+fde+31&\livelink{chap:DWCFAadvanceloc}{DW\-\_CFA\-\_advance\-\_loc}(12)&44/ \textless caf\textgreater \\
 fde+32&\livelink{chap:DWCFArestore}{DW\-\_CFA\-\_restore}(4)& \\
 fde+33&\livelink{chap:DWCFAadvanceloc}{DW\-\_CFA\-\_advance\-\_loc}(1) & \\
 fde+34&\livelink{chap:DWCFArestore}{DW\-\_CFA\-\_restore}(6) & \\
@@ -1319,7 +1322,7 @@ approaches considered here.)
 
 The approaches are:
 
-\begin{itemize}[1.]
+\begin{enumerate}[1.]
 \item  Inline both OUTER and INNER in all cases
 
 \item Inline OUTER, multiple INNERs \\
@@ -1330,7 +1333,7 @@ inlining of OUTER.
 \item Inline OUTER, one INNER \\
 Compile INNER as a single normal subprogram which is called
 from every inlining of OUTER.
-\end{itemize}
+\end{enumerate}
 
 This discussion does not consider why a compiler might choose
 one of these approaches; it considers only how to describe
@@ -1339,23 +1342,25 @@ the result.
 In the examples that follow in this section, the debugging
 information entries are given mnemonic labels of the following
 form
-
-\begin{lstlisting}
-<io>.<ac>.<n>.<s>
-\end{lstlisting}
-
-where \begin{verbatim}<io>\end{verbatim}
+\begin{verbatim}
+    <io>.<ac>.<n>.<s>
+\end{verbatim}
+where
+\begin{description}
+\item[\textless io\textgreater]
 is either INNER or OUTER to indicate to which
 subprogram the debugging information entry applies, 
-\begin{verbatim}<ac>\end{verbatim}
+\item[\textless ac\textgreater]
 is either AI or CI to indicate ``abstract instance'' or
 ``concrete instance'' respectively, 
-\begin{verbatim}<n>\end{verbatim}
+\item[\textless n\textgreater]
 is the number of the
 alternative being considered, and 
-\begin{verbatim}<s>\end{verbatim}
+\item[\textless s\textgreater]
 is a sequence number that
-distinguishes the individual entries. There is no implication
+distinguishes the individual entries. 
+\end{description}
+There is no implication
 that symbolic labels, nor any particular naming convention,
 are required in actual use.
 
@@ -2006,45 +2011,27 @@ Section \refersec{app:ctemplateexample2}.
             \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to 11\$)
 \end{alltt}
 
-In the \livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram} entry for the instance of consume,
-U is described as 
-int. 
-The type of formal is 
-\begin{alltt}
-wrapper<U>
-\end{alltt}
- in
+In the \livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram} 
+entry for the instance of consume, U is described as int. 
+The type of formal is \texttt{wrapper\textless U\textgreater} in
 the source. DWARF only represents instantiations of templates;
-there is no entry which represents 
-\begin{alltt}
-wrapper<U>, 
-\end{alltt}
+there is no entry which represents \texttt{wrapper\textless U\textgreater} 
 which is neither
 a template parameter nor a template instantiation. The type
-of formal is described as 
-\begin{alltt}
-wrapper<int>, 
-\end{alltt}
-the instantiation of
-\begin{alltt}
-wrapper<U>, 
-\end{alltt}
+of formal is described as \texttt{wrapper\textless int\textgreater},
+the instantiation of \texttt{wrapper\textless U\textgreater},
 in the \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute at 
 23\$. 
 There is no
 description of the relationship between template type parameter
-T at 12\$ and U at 
-22\$ which was used to instantiate 
-\begin{alltt}
-wrapper<U>.
-\end{alltt}
+T at 12\$ and U at 22\$ which was used to instantiate
+\texttt{wrapper\textless U\textgreater}.
 
 A consequence of this is that the DWARF information would
 not distinguish between the existing example and one where
 the formal of consume were declared in the source to be
-\begin{alltt}
-wrapper<int>.
-\end{alltt}
+\texttt{wrapper\textless int\textgreater}.
+
 
 \section{Template Alias Examples}
 \label{app:templatealiasexample}

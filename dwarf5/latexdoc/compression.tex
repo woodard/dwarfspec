@@ -191,9 +191,9 @@ Implementations should clearly document their naming conventions.
 
 In the following, it will be helpful to refer to the examples
 in 
-Figure \refersec{app:duplicateeliminationexample1csource}
+Figure \ref{app:duplicateeliminationexample1csource}
 through 
-Figure \refersec{app:duplicateeliminationexample2companiondwarf}
+Figure \ref{app:duplicateeliminationexample2companiondwarf}
 of 
 Section \refersec{app:examples}.
 
@@ -203,14 +203,14 @@ Section groups must have a \addtoindex{section group} name.
 \addtoindexx{section group!name}
 For the subsequent 
 \addtoindex{C++} example, a name like
-
-<producer-prefix>.<file-designator>.<gid-number>
-
+\begin{alltt}
+    <producer-prefix>.<file-designator>.<gid-number>
+\end{alltt}
 will suffice, where
 
-\begin{itemize}
+\begin{description}
 
-\item  \textless producer\dash prefix \textgreater 
+\item  [\textless producer\dash prefix\textgreater] 
 is some string specific to the
 producer, which has a language\dash designation embedded in the
 name when appropriate. (Alternatively, the language name
@@ -218,12 +218,12 @@ could be embedded in the
 \textless gid\dash number \textgreater).
 
 
-\item  \textless file\dash designator \textgreater
+\item  [\textless file\dash designator\textgreater]
 names the file, such as wa.h in
 the example.
 
 
-\item  \textless gid\dash number \textgreater
+\item  [\textless gid\dash number\textgreater]
 is a string generated to identify the
 specific wa.h header file in such a way that
 
@@ -231,18 +231,18 @@ specific wa.h header file in such a way that
 
 \item  a 'matching' output from another compile generates
 the same 
-\textless gid\dash number \textgreater,
+\textless gid\dash number\textgreater,
 and
 
 \item  a non\dash matching output (say because of \#defines)
 generates a different 
-\textless gid\dash number \textgreater.
+\textless gid\dash number\textgreater.
 \end{itemize}
 
-\end{itemize}
+\end{description}
 
 \textit{It may be useful to think of a 
-\textless gid\dash number \textgreater
+\textless gid\dash number\textgreater
 as a kind
 of ``digital signature'' that allows a fast test for the
 equality of two 
@@ -274,21 +274,21 @@ such as
 \end{alltt}
 
 where
-\begin{itemize}
-\item \textless prefix \textgreater\  
+\begin{description}
+\item [\textless prefix\textgreater]  
 distinguishes this as a DWARF debug info name, and should identify the producer
 and, when appropriate, the language.
-\item \textless file\dash designator\textgreater\  
+\item [\textless file\dash designator\textgreater]  
 and 
-\textless gid\dash number \textgreater
+\texttt{\textless gid\dash number\textgreater} 
 are as above.
 
-\item  \textless die\dash number \textgreater
+\item  [\textless die\dash number\textgreater]
 could be a number sequentially assigned 
 to entities (tokens, perhaps) found
 during compilation.
 
-\end{itemize}
+\end{description}
 
 In general, every point in the 
 \addtoindexx{section group}
@@ -303,11 +303,10 @@ The completeness of the set of names generated is a
 quality\dash of\dash implementation issue.
 
 It is up to the producer to ensure that if 
-<die-numbers>
-\textless die\dash numbers \textgreater
+\textless die\dash numbers\textgreater\ 
 in separate compilations would not match properly then a
 distinct 
-\textless gid\dash number \textgreater
+\textless gid\dash number\textgreater\ 
 is generated.
 
 Note that only 
@@ -337,6 +336,7 @@ normally not usable and
 \livelink{chap:DWFORMrefaddr}{DW\-\_FORM\-\_ref\-\_addr} is not necessary
 for a local label.)}
 
+% This should be a subsubsubsection header but that does work...
 \textbf{Use of \livelink{chap:DWTAGcompileunit}{DW\-\_TAG\-\_compile\-\_unit} versus 
 \livelink{chap:DWTAGpartialunit}{DW\-\_TAG\-\_partial\-\_unit}}
 
@@ -402,9 +402,7 @@ compilation unit.
 When referencing into a removable \addtoindex{section group}
 \addtoindex{.debug\_info}
 from another \addtoindex{.debug\_info} (from anywhere), the
-\begin{alltt}
-<prefix>.<file-designator>.<gid-number>.<die-number>
-\end{alltt}
+\texttt{<prefix>.<file-designator>.<gid-number>.<die-number>}
 name should be used for an external symbol and a relocation
 generated based on that name.
 
@@ -1219,7 +1217,7 @@ attribute
     : 'T' at-code signature              // Recursive type
 children             //  Step 7
     : child children
-    : '\\0'
+    : '0'
 
 child
     : 'S' tag-code string
@@ -1234,13 +1232,13 @@ form-encoded-value
     : \livelink{chap:DWFORMstring}{DW\-\_FORM\-\_string} string \addtoindexx{string class}
     : \livelink{chap:DWFORMblock}{DW\-\_FORM\-\_block} \nolink{block} \addtoindexx{block class}
 \livelink{chap:DWFORMstring}{DW\-\_FORM\-\_string} \addtoindexx{string class}
-    : '\\x08'
+    : 'x08'
 \livelink{chap:DWFORMblock}{DW\-\_FORM\-\_block}  \addtoindexx{block class}
-    : '\\x09'
+    : 'x09'
 \livelink{chap:DWFORMflag}{DW\-\_FORM\-\_flag} \addtoindexx{flag class}
-    : '\\x0c'
+    : 'x0c'
 \livelink{chap:DWFORMsdata}{DW\-\_FORM\-\_sdata} \addtoindexx{constant class}
-    : '\\x0d'
+    : 'x0d'
 value
     : <SLEB128>
 \nolink{block}
