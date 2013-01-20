@@ -14,8 +14,10 @@ language=C++,              % choose the language of the code
 basicstyle=\footnotesize,  % the size of the fonts that are used for the code
 numbers=left,              % where to put the line-numbers
 numberstyle=\footnotesize, % the size of the fonts that are used for the line-numbers
-stepnumber=1,              % the step between two line-numbers. If it is 1 each line will be numbered
-numbersep=5pt,             % how far the line-numbers are from the code
+numberfirstline=true,
+firstnumber=1,             % first line number in each listing
+stepnumber=5,              % the step between two line-numbers. If it is 1 each line will be numbered
+numbersep=10pt,            % how far the line-numbers are from the code
 backgroundcolor=\color{white}, % choose the background color. You must add \usepackage{color}
 showspaces=false,          % show spaces adding particular underscores
 showstringspaces=false,    % underline spaces within strings
@@ -44,7 +46,7 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \usepackage[plainpages=false,pdfpagelabels,pagebackref]{hyperref}  % Lets us generate colored active links inside a pdf.
 \makeindex  % This and the makeidx package allow \index to create index entries.
 
-\newcommand{\docdate}{20 December 2012}
+\newcommand{\docdate}{20 January 2013}
 
 \newcommand{\dwf}{DWARF Debugging Information Format}
 \newenvironment{myindentpara}[1]%
@@ -63,6 +65,13 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
   pdftitle={\dwf\ Version 4.1}
 }
 
+% An environment to create a listing-like presentation for DWARF examples
+\newsavebox{\savedwf}
+\newenvironment{dwflisting}{\begin{lrbox}{\savedwf}
+  \begin{minipage}{\textwidth}\footnotesize}
+  {\end{minipage}\end{lrbox}\fbox{\usebox{\savedwf}}}
+% A helper to annotate the parts of a multipage figure
+\newcommand{\figurepart}[2]{\raggedleft{\textit{\tiny{part #1 of #2}}}}
 % Generate a page ref.
 % use like   \refersec{chap:registerbasedaddressing}
 %\newcommand{\refersec}[1]{\ref{#1} on page \pageref{#1}}

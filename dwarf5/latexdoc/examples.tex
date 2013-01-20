@@ -24,11 +24,11 @@ where possible.
 The figure corresponds to the following two trivial source files:
 
 File myfile.c
-\begin{lstlisting}
+\begin{lstlisting}[numbers=none]
 typedef char* POINTER;
 \end{lstlisting}
 File myfile2.c
-\begin{lstlisting}
+\begin{lstlisting}[numbers=none]
 typedef char* strp;
 \end{lstlisting}
 
@@ -268,7 +268,7 @@ that case the object doubles as its own descriptor.)
 The \addtoindex{Fortran 90} derived type array\_ptr can now be redescribed
 in C\dash like terms that expose some of the representation as in
 
-\begin{lstlisting}
+\begin{lstlisting}[numbers=none]
 struct array_ptr {
     float myvar;
     desc<1> ap;
@@ -276,34 +276,30 @@ struct array_ptr {
 \end{lstlisting}
 
 Similarly for variable arrays:
-\begin{lstlisting}
+\begin{lstlisting}[numbers=none]
 desc<1> arrays;
 \end{lstlisting}
 
 (Recall that \texttt{desc\textless 1\textgreater} 
 indicates the 1\dash dimensional version of \texttt{desc}.)
 
+\newpage
 Finally, the following notation is useful:
-
 \begin{enumerate}[1.]
 \item  sizeof(type): size in bytes of entities of the given type
-
 \item offset(type, comp): offset in bytes of the comp component
 within an entity of the given type
 \end{enumerate}
 
-
 The DWARF description is shown 
 \addtoindexx{Fortran 90}
-in 
-Section \refersec{app:fortran90exampledwarfdescription}.
+in Figure \refersec{fig:fortran90exampledwarfdescription}.
 
-\subsection{Fortran 90 example: DWARF description}
-\label{app:fortran90exampledwarfdescription}
-
+\begin{figure}[b]
+\begin{dwflisting}
 \begin{alltt}
 ! Description for type of 'ap'
-
+!
 1\$: \livelink{chap:DWTAGarraytype}{DW\-\_TAG\-\_array\-\_type}
         ! No name, default (Fortran) ordering, default stride
         \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to REAL)
@@ -319,11 +315,20 @@ Section \refersec{app:fortran90exampledwarfdescription}.
             \livelink{chap:DWOPlit}{DW\-\_OP\-\_lit}<n> ! where n == offset(base)
             \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus}
             \livelink{chap:DWOPderef}{DW\-\_OP\-\_deref}) ! Type of index of array 'ap'
-2\$:     \livelink{chap:DWTAGsubrangetype}{DW\-\_TAG\-\_subrange\-\_type}
+\end{alltt}
+\end{dwflisting}
+\caption{Fortran 90 example: DWARF description}
+\label{fig:fortran90exampledwarfdescription}
+\end{figure}
+
+\begin{figure}
+\begin{dwflisting}
+\begin{alltt}
+2\$: \livelink{chap:DWTAGsubrangetype}{DW\-\_TAG\-\_subrange\-\_type}
         ! No name, default stride
         \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to INTEGER)
         \livelink{chap:DWATlowerbound}{DW\-\_AT\-\_lower\-\_bound}(expression=
-        \livelink{chap:DWOPpushobjectaddress}{DW\-\_OP\-\_push\-\_object\-\_address}
+            \livelink{chap:DWOPpushobjectaddress}{DW\-\_OP\-\_push\-\_object\-\_address}
             \livelink{chap:DWOPlit}{DW\-\_OP\-\_lit}<n> ! where n ==
                          !  offset(desc, dims) +
                          !  offset(dims\_str, lower\_bound)
@@ -338,12 +343,11 @@ Section \refersec{app:fortran90exampledwarfdescription}.
             \livelink{chap:DWOPderef}{DW\-\_OP\-\_deref})
         !  Note: for the m'th dimension, the second operator becomes
         !  \livelink{chap:DWOPlit}{DW\-\_OP\-\_lit}<x> where
-        !  x == offset(desc, dims) +
-        !  (m-1)*sizeof(dims\_str) +
-        !  offset(dims\_str, [lower|upper]\_bound)
-        !  That is, the expression does not get longer for each
-        !  successive dimension (other than to express the larger
-        !  offsets involved).
+        !       x == offset(desc, dims)         +
+        !                (m-1)*sizeof(dims\_str) +
+        !                 offset(dims\_str, [lower|upper]\_bound)
+        !  That is, the expression does not get longer for each successive 
+        !  dimension (other than to express the larger offsets involved).
 3\$: \livelink{chap:DWTAGstructuretype}{DW\-\_TAG\-\_structure\-\_type}
         \livelink{chap:DWATname}{DW\-\_AT\-\_name}("array\_ptr")
         \livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size}(constant sizeof(REAL) + sizeof(desc<1>))
@@ -355,19 +359,28 @@ Section \refersec{app:fortran90exampledwarfdescription}.
             \livelink{chap:DWATname}{DW\-\_AT\-\_name}("ap");
             \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to 1\$)
             \livelink{chap:DWATdatamemberlocation}{DW\-\_AT\-\_data\-\_member\-\_location}(constant sizeof(REAL))
-
 6\$: \livelink{chap:DWTAGarraytype}{DW\-\_TAG\-\_array\-\_type}
         ! No name, default (Fortran) ordering, default stride
         \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to 3\$)
         \livelink{chap:DWATallocated}{DW\-\_AT\-\_allocated}(expression=
-             ! Test 'ptr\_alloc' \nolink{flag}
+            ! Test 'ptr\_alloc' \nolink{flag}
             \livelink{chap:DWOPpushobjectaddress}{DW\-\_OP\-\_push\-\_object\-\_address}
             \livelink{chap:DWOPlit}{DW\-\_OP\-\_lit}<n> ! where n == offset(ptr\_alloc)
             \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus}
             \livelink{chap:DWOPderef}{DW\-\_OP\-\_deref}
             \livetarg{chap:DWOPlit2}{DW\-\_OP\-\_lit2}
-             ! mask for 'ptr\_alloc' \nolink{flag}
+            ! Mask for 'ptr\_alloc' \nolink{flag}
             \livelink{chap:DWOPand}{DW\-\_OP\-\_and})
+\end{alltt}
+\end{dwflisting}
+\begin{center}
+Figure~\ref{fig:fortran90exampledwarfdescription} Fortran 90 example: DWARF description \textit{(continued)}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{dwflisting}
+\begin{alltt}
         \livelink{chap:DWATdatalocation}{DW\-\_AT\-\_data\-\_location}(expression= ! Get raw data address
             \livelink{chap:DWOPpushobjectaddress}{DW\-\_OP\-\_push\-\_object\-\_address}
             \livelink{chap:DWOPlit}{DW\-\_OP\-\_lit}<n> ! where n = offset(base)
@@ -394,9 +407,12 @@ Section \refersec{app:fortran90exampledwarfdescription}.
         \livelink{chap:DWATlocation}{DW\-\_AT\-\_location}(expression=
             ...as appropriate...) ! Assume static allocation
 \end{alltt}
+\end{dwflisting}
+\begin{center}
 
-\subsection{Fortran 90 example continued: DWARF description}
-\label{app:fortran90examplecontinueddwarfdescription}
+Figure~\ref{fig:fortran90exampledwarfdescription} Fortran 90 example: DWARF description \textit{(concluded)}
+\end{center}
+\end{figure}
 
 Suppose 
 \addtoindexx{Fortran 90 example}
@@ -404,7 +420,7 @@ the program is stopped immediately following completion
 of the do loop. Suppose further that the user enters the
 following debug command:
 
-\begin{lstlisting}
+\begin{lstlisting}[numbers=none]
 debug> print arrays(5)%ap(2)
 \end{lstlisting}
 
@@ -496,7 +512,7 @@ Note: we happen to be accessing a pointer array here instead
 of an allocatable array; but because there is a common
 underlying representation, the mechanics are the same. There
 could be completely different descriptor arrangements and the
-mechanics would still be the same — only the stack machines
+mechanics would still be the same---only the stack machines
 would be different.
 
 
@@ -546,7 +562,7 @@ because that value is potentially used in the specification
 of other components of the record.)
 
 The DWARF description is shown in 
-Section \refersec{app:adaexampledwarfdescription}
+Figure \refersec{fig:adaexampledwarfdescription}.
 
 
 Interesting aspects about this example are:
@@ -574,9 +590,8 @@ the unconstrained array ARR is not needed for the purposes
 of this example and therefore not shown.
 \end{enumerate}
 
-\subsubsection{Ada example: DWARF description}
-\label{app:adaexampledwarfdescription}
-
+\begin{figure}[p]
+\begin{dwflisting}
 \begin{alltt}
 11\$: \livelink{chap:DWTAGvariable}{DW\-\_TAG\-\_variable}
         \livelink{chap:DWATname}{DW\-\_AT\-\_name}("M")
@@ -601,7 +616,7 @@ of this example and therefore not shown.
       . . .
 26\$: \livelink{chap:DWTAGstructuretype}{DW\-\_TAG\-\_structure\-\_type}
         \livelink{chap:DWATname}{DW\-\_AT\-\_name}("REC2")
-27\$:   \livelink{chap:DWTAGmember}{DW\-\_TAG\-\_member}
+27\$:    \livelink{chap:DWTAGmember}{DW\-\_TAG\-\_member}
             \livelink{chap:DWATname}{DW\-\_AT\-\_name}("N")
             \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to subtype TEENY at 21\$)
             \livelink{chap:DWATdatamemberlocation}{DW\-\_AT\-\_data\-\_member\-\_location}(constant 0)
@@ -609,7 +624,7 @@ of this example and therefore not shown.
             ! No name, default (\addtoindex{Ada}) order, default stride
             ! Default data location
             \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to INTEGER)
-29\$:       \livelink{chap:DWTAGsubrangetype}{DW\-\_TAG\-\_subrange\-\_type}
+29\$:        \livelink{chap:DWTAGsubrangetype}{DW\-\_TAG\-\_subrange\-\_type}
                 \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to subrange TEENY at 21\$)
                 \livelink{chap:DWATlowerbound}{DW\-\_AT\-\_lower\-\_bound}(constant 1)
                 \livelink{chap:DWATupperbound}{DW\-\_AT\-\_upper\-\_bound}(reference to member N at 27\$)
@@ -624,8 +639,11 @@ of this example and therefore not shown.
         \livelink{chap:DWATname}{DW\-\_AT\-\_name}("OBJ2B")
         \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to REC2 at 26\$)
         \livelink{chap:DWATlocation}{DW\-\_AT\-\_location}(...as appropriate...)
-
 \end{alltt}
+\end{dwflisting}
+\caption{Ada 90 example: DWARF description}
+\label{fig:adaexampledwarfdescription}
+\end{figure}
 
 \subsection{Pascal Example}
 \label{app:pascalexample}
@@ -637,17 +655,17 @@ is used to illustrate the representation of packed unaligned
 
 \begin{figure}[here]
 \begin{lstlisting}
-TYPE T : PACKED RECORD ! bit size is 2
-         F5 : BOOLEAN; ! bit offset is 0
-         F6 : BOOLEAN; ! bit offset is 1
+TYPE T : PACKED RECORD                  ! bit size is 2
+         F5 : BOOLEAN;                  ! bit offset is 0
+         F6 : BOOLEAN;                  ! bit offset is 1
          END;
 VAR V  : PACKED RECORD
-         F1 : BOOLEAN; ! bit offset is 0
-         F2 : PACKED RECORD ! bit offset is 1
-              F3 : INTEGER; ! bit offset is 0 in F2, 1 in V
+         F1 : BOOLEAN;                  ! bit offset is 0
+         F2 : PACKED RECORD             ! bit offset is 1
+              F3 : INTEGER;             ! bit offset is 0 in F2, 1 in V
               END;
          F4 : PACKED ARRAY [0..1] OF T; ! bit offset is 33
-         F7 : T; ! bit offset is 37
+         F7 : T;                        ! bit offset is 37
 END;
 \end{lstlisting}
 \caption{Packed record example: source fragment}
@@ -655,9 +673,8 @@ END;
 \end{figure}
 
 The DWARF representation in 
-Section \refersec{app:packedrecordexampledwarfdescription} 
-is
-appropriate. 
+Figure \refersec{fig:packedrecordexampledwarfdescription} 
+is appropriate. 
 \livelink{chap:DWTAGpackedtype}{DW\-\_TAG\-\_packed\-\_type} entries could be added to
 better represent the source, but these do not otherwise affect
 the example and are omitted for clarity. Note that this same
@@ -667,8 +684,8 @@ architectures using the conventions described in
 Section \refersec{chap:datamemberentries}.
 
 
-\subsection{Packed record example: DWARF description}
-\label{app:packedrecordexampledwarfdescription}
+\begin{figure}[p]
+\begin{dwflisting}
 % DWARF4 had some entries here as \livelink{chap:DWATmember}{DW_AT_member} .
 % Those are fixed here to \livelink{chap:DWTAGmember}{DW_TAG_member}
 \begin{alltt}
@@ -713,18 +730,24 @@ Section \refersec{chap:datamemberentries}.
         \livelink{chap:DWATlocation}{DW\-\_AT\-\_location}(...)
         ...
 \end{alltt}
+\end{dwflisting}
+\caption{Packed record example: DWARF description}
+\label{fig:packedrecordexampledwarfdescription}
+\end{figure}
 
 \section{Namespace Example}
 \label{app:namespaceexample}
 
-
-The C++ example in 
-Figure \referfol{fig:namespaceexamplesourcefragment}
+The \addtoindex{C++} example in 
+Figure \refersec{fig:namespaceexamplesourcefragment}
 is used 
 \addtoindexx{namespace (C++)!example}
 to illustrate the representation of namespaces.
+The DWARF representation in 
+Figure \refersec{fig:namespaceexampledwarfdescription}
+is appropriate.
 
-\begin{figure}[here]
+\begin{figure}[p]
 \begin{lstlisting}
 namespace {
     int i;
@@ -765,12 +788,8 @@ int Foo::myfunc(int a)
 \end{figure}
 
 
-The DWARF representation in 
-Section \referfol{app:namespaceexampledwarfdescription}
-is appropriate.
-
-\subsection{Namespace example: DWARF description}
-\label{app:namespaceexampledwarfdescription}
+\begin{figure}[p]
+\begin{dwflisting}
 \begin{alltt}
 
 1\$:  \livelink{chap:DWTAGbasetype}{DW\-\_TAG\-\_base\-\_type}
@@ -810,7 +829,15 @@ is appropriate.
                 \livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} ...
                 \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to 1\$)
                 ...
+\end{alltt}
+\end{dwflisting}
+\caption{Namespace example: DWARF description}
+\label{fig:namespaceexampledwarfdescription}
+\end{figure}
 
+\begin{figure}
+\begin{dwflisting}
+\begin{alltt}
 40\$: \livelink{chap:DWTAGnamespace}{DW\-\_TAG\-\_namespace}
         \livelink{chap:DWATname}{DW\-\_AT\-\_name}("Y")
         \livelink{chap:DWTAGimporteddeclaration}{DW\-\_TAG\-\_imported\-\_declaration}    ! (1) using-declaration
@@ -848,14 +875,19 @@ is appropriate.
         \livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} ...
         ...
 \end{alltt}
+\end{dwflisting}
+\begin{center}
+Figure~\ref{fig:namespaceexampledwarfdescription}: Namespace example: DWARF description \textit{(concluded)}
+\end{center}
+\end{figure}
 
 \section{Member Function Example}
 \label{app:memberfunctionexample}
 
 Consider the member function example fragment in 
-Figure \referfol{fig:memberfunctionexamplesourcefragment}.
+Figure \refersec{fig:memberfunctionexamplesourcefragment}.
 
-\begin{figure}[here]
+\begin{figure}[Here]
 \begin{lstlisting}
 class A
 {
@@ -869,16 +901,12 @@ void A::func1(int x) {}
 \label{fig:memberfunctionexamplesourcefragment}
 \end{figure}
 
-
-
 The DWARF representation in 
-Section \refersec{app:memberfunctionexampledwarfdescription}
+Section \refersec{fig:memberfunctionexampledwarfdescription}
 is appropriate.
 
-\subsection{Member function example: DWARF description}
-\label{app:memberfunctionexampledwarfdescription}
-
-
+\begin{figure}[h]
+\begin{dwflisting}
 \begin{alltt}
 1\$: \livelink{chap:DWTAGunspecifiedtype}{DW\-\_TAG\-\_unspecified\-\_type}
         \livelink{chap:DWATname}{DW\-\_AT\-\_name}("void")
@@ -907,6 +935,15 @@ is appropriate.
                 ! References a formal parameter in this 
                 ! member function
             ...
+\end{alltt}
+\end{dwflisting}
+\caption{Member function example: DWARF description}
+\label{fig:memberfunctionexampledwarfdescription}
+\end{figure}
+
+\begin{figure}[p]
+\begin{dwflisting}
+\begin{alltt}
 8\$:        \livelink{chap:DWTAGformalparameter}{DW\-\_TAG\-\_formal\-\_parameter}
                 \livelink{chap:DWATartificial}{DW\-\_AT\-\_artificial}(true)
                 \livelink{chap:DWATname}{DW\-\_AT\-\_name}("this")
@@ -948,13 +985,19 @@ is appropriate.
                  \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to 2\$)
                  ...
 \end{alltt}
+\end{dwflisting}
+\begin{center}
+Figure~\ref{fig:memberfunctionexampledwarfdescription}: Member function example: DWARF description \textit{(concluded)}
+\end{center}
+\end{figure}
 
+\clearpage
 \section{Line Number Program Example}
 \label{app:linenumberprogramexample}
 
 Consider the simple source file and the resulting machine
 code for the Intel 8086 processor in 
-Figure \referfol{fig:linenumberprogramexamplemachinecode}.
+Figure \refersec{fig:linenumberprogramexamplemachinecode}.
 
 \begin{figure}[here]
 \begin{lstlisting}
@@ -983,8 +1026,7 @@ Figure \referfol{fig:linenumberprogramexamplemachinecode}.
 \end{figure}
 
 Suppose the line number program header includes the following
-(header fields not 
-needed 
+(header fields not needed 
 \addtoindexx{line\_base}
 below 
 \addtoindexx{line\_range}
@@ -993,24 +1035,22 @@ are
 not 
 \addtoindexx{minumum\_instruction\_length}
 shown):
-
-
 \begin{alltt}
-version                       4
-minimum_instruction_length    1
-opcode_base                  10   ! Opcodes 10-12 not needed
-line_base                     1
-line_range                   15
+    version                       4
+    minimum_instruction_length    1
+    opcode_base                  10   ! Opcodes 10-12 not needed
+    line_base                     1
+    line_range                   15
 \end{alltt}
 
 
-Table \referfol{tab:linenumberprogramexampleoneencoding}
+Table \refersec{tab:linenumberprogramexampleoneencoding}
 shows one encoding of the line number program, which occupies
 12 bytes (the opcode SPECIAL(m,n) indicates the special opcode
 generated for a line increment of m and an address increment
 of n).
 
-
+\newpage
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{lll}
@@ -1035,7 +1075,7 @@ SPECIAL(1, 7)&0x73 & \\
 \end{centering}
 
 
-Table \referfol{tab:linenumberprogramexamplealternateencoding}
+Table \refersec{tab:linenumberprogramexamplealternateencoding}
 shows an alternate 
 encoding of the same program using 
 standard opcodes to advance
@@ -1074,16 +1114,14 @@ SPECIAL(1, 0) && 0xa        \\
 
 The following example uses a hypothetical RISC machine in
 the style of the Motorola 88000.
-
 \begin{itemize}
 \item Memory is byte addressed.
 
 \item Instructions are all 4 bytes each and word aligned.
 
 \item Instruction operands are typically of the form:
-
 \begin{alltt}
-<destination.reg>, <source.reg>, <constant>
+    <destination.reg>, <source.reg>, <constant>
 \end{alltt}
 
 \item The address for the load and store instructions is computed
@@ -1091,13 +1129,12 @@ by adding the contents of the
 source register with the constant.
 
 \item There are 8 4\dash byte registers:
-
 \begin{alltt}
-R0 always 0
-R1 holds return address on call
-R2-R3 temp registers (not preserved on call)
-R4-R6 preserved on call
-R7 stack pointer.
+    R0 always 0
+    R1 holds return address on call
+    R2-R3 temp registers (not preserved on call)
+    R4-R6 preserved on call
+    R7 stack pointer.
 \end{alltt}
 
 \item  The stack grows in the negative direction.
@@ -1161,7 +1198,7 @@ Table \refersec{tab:callframeinformationexampleconceptualmatrix}:
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{lllllllllll}
-  \caption{Call frame inforation example: conceptual matrix} 
+  \caption{Call frame information example: conceptual matrix} 
   \label{tab:callframeinformationexampleconceptualmatrix} \\
   \hline \bfseries Location & \bfseries CFA & \bfseries R0 & \bfseries R1 & \bfseries R2 & \bfseries R3 & \bfseries R4 & \bfseries R5 & \bfseries R6 & \bfseries R7 & \bfseries R8 \\ \hline
 \endfirsthead
@@ -1371,10 +1408,10 @@ For conciseness, declaration coordinates and call coordinates are omitted.
 
 A suitable abstract instance for an alternative where both
 OUTER and INNER are always inlined is shown in 
-Figure \refersec{app:inliningexample1abstractinstance}
+Figure \refersec{fig:inliningexample1abstractinstance}.
 
 Notice in 
-Section \refersec{app:inliningexample1abstractinstance} 
+Figure \refersec{fig:inliningexample1abstractinstance} 
 that the debugging information entry for
 INNER (labelled INNER.AI.1.1) is nested in (is a child of)
 that for OUTER (labelled OUTER.AI.1.1). Nonetheless, the
@@ -1385,11 +1422,11 @@ The call of OUTER shown in
 Figure \refersec{fig:inliningexamplespseudosourcefragment}
 might be described as
 shown in 
-Section \refersec{app:inliningexample1concreteinstance}.
+Figure \refersec{fig:inliningexample1concreteinstance}.
 
 
-\subsubsection{Inlining example \#1: abstract instance}
-\label{app:inliningexample1abstractinstance}
+\begin{figure}[p]
+\begin{dwflisting}
 \begin{alltt}
     ! Abstract instance for OUTER
     ! \addtoindexx{abstract instance!example}
@@ -1433,10 +1470,13 @@ INNER.AI.1.3:
         ...
         0
 \end{alltt}
+\end{dwflisting}
+\caption{Inlining example \#1: abstract instance}
+\label{fig:inliningexample1abstractinstance}
+\end{figure}
 
-
-\subsubsection{Inlining example \#1: concrete instance}
-\label{app:inliningexample1concreteinstance}
+\begin{figure}[p]
+\begin{dwflisting}
 \begin{alltt}
 ! Concrete instance for call "OUTER(7)"
 ! \addtoindexx{concrete instance!example}
@@ -1485,6 +1525,10 @@ INNER.CI.1.3:
         ...
         0
 \end{alltt}
+\end{dwflisting}
+\caption{Inlining example \#1: concrete instance}
+\label{fig:inliningexample1concreteinstance}
+\end{figure}
 
 \subsection{Alternative 2: Inline OUTER, multiple INNERs}
 \label{app:inlineoutermultiipleinners}
@@ -1499,16 +1543,16 @@ own normal instance of INNER.
 The abstract instance for OUTER,
 \addtoindexx{abstract instance!example}
 which includes INNER, is shown in 
-Section \refersec{app:inliningexample2abstractinstance}.
+Figure \refersec{fig:inliningexample2abstractinstance}.
 
 Note that the debugging information in this Figure differs from
 that in 
-Section \refersec{app:inliningexample1abstractinstance}
+Figure \refersec{fig:inliningexample1abstractinstance}
 in that INNER lacks a 
 \livelink{chap:DWATinline}{DW\-\_AT\-\_inline} attribute
 and therefore is not a distinct abstract instance. INNER
 is merely an out\dash of\dash line routine that is part of OUTER’s
-abstract instance. This is reflected in the Figure 70 by
+abstract instance. This is reflected in the Figure by
 \addtoindexx{abstract instance!example}
 the fact that the labels for INNER use the substring OUTER
 instead of INNER.
@@ -1516,10 +1560,10 @@ instead of INNER.
 A resulting 
 \addtoindexx{concrete instance!example}
 concrete inlined instance of OUTER is shown in
-Section \referfol{app:inliningexample2concreteinstance}.
+Figure \refersec{fig:inliningexample2concreteinstance}.
 
 Notice in 
-Section \referfol{app:inliningexample2concreteinstance}.
+Figure \refersec{fig:inliningexample2concreteinstance}.
 that OUTER is expanded as a concrete
 \addtoindexx{concrete instance!example}
 inlined instance, and that INNER is nested within it as a
@@ -1537,9 +1581,8 @@ The several calls of INNER within OUTER are compiled as normal
 calls to the instance of INNER that is specific to the same
 instance of OUTER that contains the calls.
 
-
-\subsubsection{Inlining example 2: abstract instance}
-\label{app:inliningexample2abstractinstance}
+\begin{figure}[t]
+\begin{dwflisting}
 \begin{alltt}
     ! Abstract instance for OUTER
     ! \addtoindex{abstract instance}
@@ -1581,9 +1624,13 @@ OUTER.AI.2.6:
         ...
         0
 \end{alltt}
+\end{dwflisting}
+\caption{Inlining example \#2: abstract instance}
+\label{fig:inliningexample2abstractinstance}
+\end{figure}
 
-\subsubsection{Inlining example 2: concrete instance}
-\label{app:inliningexample2concreteinstance}
+\begin{figure}[t]
+\begin{dwflisting}
 \begin{alltt}
 
     ! Concrete instance for call "OUTER(7)"
@@ -1630,6 +1677,10 @@ OUTER.CI.2.6:
         ...
         0
 \end{alltt}
+\end{dwflisting}
+\caption{Inlining example \#2: concrete instance}
+\label{fig:inliningexample2concreteinstance}
+\end{figure}
 
 \subsection{Alternative 3: inline OUTER, one normal INNER}
 \label{app:inlineouteronenormalinner}
@@ -1639,7 +1690,7 @@ compiled which is called from all concrete inlined instances of
 \addtoindexx{concrete instance!example}
 \addtoindexx{abstract instance!example}
 OUTER. The abstract instance for OUTER is shown in 
-Section \refersec{app:inliningexample3abstractinstance}.
+Figure \refersec{fig:inliningexample3abstractinstance}.
 
 The most distinctive aspect of that Figure is that subprogram
 INNER exists only within the abstract instance of OUTER,
@@ -1666,10 +1717,10 @@ invariant -- there is only one subprogram INNER to be described
 and every description is the same.
 
 A concrete inlined instance of OUTER is illustrated in
-\refersec{app:inliningexample3concreteinstance}.
+Figure \refersec{fig:inliningexample3concreteinstance}.
 
 Notice in 
-\refersec{app:inliningexample3abstractinstance}
+Figure \refersec{fig:inliningexample3abstractinstance}
 that there is no DWARF representation for
 INNER at all; the representation of INNER does not vary across
 instances of OUTER and the abstract instance of OUTER includes
@@ -1705,8 +1756,8 @@ entities that would give rise to this problem. (Neither extern
 variables nor static members require any form of static link
 for accessing purposes.)
 
-\subsubsection{Inlining example 3: abstract instance}
-\label{app:inliningexample3abstractinstance}
+\begin{figure}[t]
+\begin{dwflisting}
 \begin{alltt}
     ! Abstract instance for OUTER
     ! \addtoindexx{abstract instance!example}
@@ -1750,10 +1801,13 @@ OUTER.AI.3.6:
         ...
         0
 \end{alltt}
+\end{dwflisting}
+\caption{Inlining example \#3: abstract instance}
+\label{fig:inliningexample3abstractinstance}
+\end{figure}
 
-
-\subsubsection{Inlining example 3: concrete instance}
-\label{app:inliningexample3concreteinstance}
+\begin{figure}[t]
+\begin{dwflisting}
 \begin{alltt}
     ! Concrete instance for call "OUTER(7)"
     ! \addtoindexx{concrete instance!example}
@@ -1780,14 +1834,23 @@ OUTER.CI.3.3:
         ...
         0
 \end{alltt}
+\end{dwflisting}
+\caption{Inlining example \#3: concrete instance}
+\label{fig:inliningexample3concreteinstance}
+\end{figure}
 
+\clearpage
 \section{Constant Expression Example}
 \label{app:constantexpressionexample}
 C++ generalizes the notion of constant expressions to include
 constant expression user-defined literals and functions.
+The constant declarations in Figure \refersec{fig:constantexpressionscsource}
+can be represented as illustrated in 
+Figure \refersec{fig:constantexpressionsdwarfdescription}.
+
 
 \begin{figure}[here]
-\begin{lstlisting}
+\begin{lstlisting}[numbers=none]
 constexpr double mass = 9.8;
 constexpr int square (int x) { return x * x; }
 float arr[square(9)]; // square() called and inlined
@@ -1795,72 +1858,76 @@ float arr[square(9)]; // square() called and inlined
 \caption{Constant expressions: C++ source} \label{fig:constantexpressionscsource}
 \end{figure}
 
-These declarations can be represented as illustrated in 
-Section \refersec{app:constantexpressionsdwarfdescription}.
-
-\subsection{Constant expressions: DWARF description}
-\label{app:constantexpressionsdwarfdescription}
+\begin{figure}[h]
+\begin{dwflisting}
 \begin{alltt}
-
-      ! For variable mass
-      !
-1\$:  \livelink{chap:DWTAGconsttype}{DW\-\_TAG\-\_const\-\_type}
-        \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to "double")
-2\$:  \livelink{chap:DWTAGvariable}{DW\-\_TAG\-\_variable}
-        \livelink{chap:DWATname}{DW\-\_AT\-\_name}("mass")
-        \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to 1\$)
-        \livelink{chap:DWATconstexpr}{DW\-\_AT\-\_const\-\_expr}(true)
-        \livelink{chap:DWATconstvalue}{DW\-\_AT\-\_const\-\_value}(9.8)
-      ! Abstract instance for square
-      !
-10\$: \livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram}
-        \livelink{chap:DWATname}{DW\-\_AT\-\_name}("square")
-        \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to "int")
-        \livelink{chap:DWATinline}{DW\-\_AT\-\_inline}(\livelink{chap:DWINLinlined}{DW\-\_INL\-\_inlined})
-11\$:   \livelink{chap:DWTAGformalparameter}{DW\-\_TAG\-\_formal\-\_parameter}
+        ! For variable mass
+        !
+1\$:     \livelink{chap:DWTAGconsttype}{DW\-\_TAG\-\_const\-\_type}
+            \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to "double")
+2\$:     \livelink{chap:DWTAGvariable}{DW\-\_TAG\-\_variable}
+            \livelink{chap:DWATname}{DW\-\_AT\-\_name}("mass")
+            \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to 1\$)
+            \livelink{chap:DWATconstexpr}{DW\-\_AT\-\_const\-\_expr}(true)
+            \livelink{chap:DWATconstvalue}{DW\-\_AT\-\_const\-\_value}(9.8)
+        ! Abstract instance for square
+        !
+10\$:    \livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram}
+            \livelink{chap:DWATname}{DW\-\_AT\-\_name}("square")
+            \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to "int")
+            \livelink{chap:DWATinline}{DW\-\_AT\-\_inline}(\livelink{chap:DWINLinlined}{DW\-\_INL\-\_inlined})
+11\$:    \livelink{chap:DWTAGformalparameter}{DW\-\_TAG\-\_formal\-\_parameter}
             \livelink{chap:DWATname}{DW\-\_AT\-\_name}("x")
             \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to "int")
-      ! Concrete instance for square(9)
-      ! \addtoindexx{concrete instance!example}
-20\$: \livelink{chap:DWTAGinlinedsubroutine}{DW\-\_TAG\-\_inlined\-\_subroutine}
-        \livelink{chap:DWATabstractorigin}{DW\-\_AT\-\_abstract\-\_origin}(reference to 10\$)
-        \livelink{chap:DWATconstexpr}{DW\-\_AT\-\_const\-\_expr}(present)
-        \livelink{chap:DWATconstvalue}{DW\-\_AT\-\_const\-\_value}(81)
+        ! Concrete instance for square(9)
+        ! \addtoindexx{concrete instance!example}
+20\$:    \livelink{chap:DWTAGinlinedsubroutine}{DW\-\_TAG\-\_inlined\-\_subroutine}
+            \livelink{chap:DWATabstractorigin}{DW\-\_AT\-\_abstract\-\_origin}(reference to 10\$)
+            \livelink{chap:DWATconstexpr}{DW\-\_AT\-\_const\-\_expr}(present)
+            \livelink{chap:DWATconstvalue}{DW\-\_AT\-\_const\-\_value}(81)
         \livelink{chap:DWTAGformalparameter}{DW\-\_TAG\-\_formal\-\_parameter}
             \livelink{chap:DWATabstractorigin}{DW\-\_AT\-\_abstract\-\_origin}(reference to 11\$)
             \livelink{chap:DWATconstvalue}{DW\-\_AT\-\_const\-\_value}(9)
-      ! Anonymous array type for arr
-      !
-30\$: \livelink{chap:DWTAGarraytype}{DW\-\_TAG\-\_array\-\_type}
+        ! Anonymous array type for arr
+        !
+30\$:    \livelink{chap:DWTAGarraytype}{DW\-\_TAG\-\_array\-\_type}
         \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to "float")
-        \livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size}(324) ! 81*4
+            \livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size}(324) ! 81*4
         \livelink{chap:DWTAGsubrangetype}{DW\-\_TAG\-\_subrange\-\_type}
             \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to "int")
             \livelink{chap:DWATupperbound}{DW\-\_AT\-\_upper\-\_bound}(reference to 20\$)
-      ! Variable arr
-      !
-40\$: \livelink{chap:DWTAGvariable}{DW\-\_TAG\-\_variable}
-        \livelink{chap:DWATname}{DW\-\_AT\-\_name}("arr")
-        \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to 30\$)
+        ! Variable arr
+        !
+40\$:    \livelink{chap:DWTAGvariable}{DW\-\_TAG\-\_variable}
+            \livelink{chap:DWATname}{DW\-\_AT\-\_name}("arr")
+            \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to 30\$)
 \end{alltt}
-
+\end{dwflisting}
+\caption{Constant expressions: DWARF description}
+\label{fig:constantexpressionsdwarfdescription}
+\end{figure}
 
 \section{Unicode Character Example}
 \label{app:unicodecharacterexample}
 \addtoindexx{Unicode|see {\textit{also} UTF-8}}
-\addtoindex{Unicode} character encodings can be described in DWARF as
-illustrated in 
-Section \refersec{app:unicodecharacterexamplesub}.
+The \addtoindex{Unicode} character encodings in
+Figure \refersec{fig:unicodecharacterexamplesource}
+can be described in DWARF as illustrated in 
+Figure \refersec{fig:unicodecharacterexampledwarfdescription}.
 
-\begin{lstlisting}
+\begin{figure}[h]
+\begin{lstlisting}[numbers=none]
 // C++ source
 //
 char16_t chr_a = u'h';
 char32_t chr_b = U'h';
 \end{lstlisting}
+\caption{Unicode character example: source}
+\label{fig:unicodecharacterexamplesource}
+\end{figure}
 
-\subsection{Unicode Character Example}
-\label{app:unicodecharacterexamplesub}
+\begin{figure}[h]
+\begin{dwflisting}
 \begin{alltt}
 
 ! DWARF description
@@ -1880,27 +1947,34 @@ char32_t chr_b = U'h';
         \livelink{chap:DWATname}{DW\-\_AT\-\_name}("chr\_b")
         \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to 2\$)
 \end{alltt}
-
+\end{dwflisting}
+\caption{Unicode character example: DWARF description}
+\label{fig:unicodecharacterexampledwarfdescription}
+\end{figure}
 
 
 \section{Type-Safe Enumeration Example}
 \label{app:typesafeenumerationexample}
 
-
-C++ type\dash safe enumerations 
+The \addtoindex{C++} type\dash safe enumerations in
 \addtoindexx{type-safe enumeration}
+Figure \refersec{fig:ctypesafeenumerationexamplesource}
 can be described in DWARF as illustrated in 
-Section \refersec{app:ctypesafeenumerationexample}.
+Figure \refersec{fig:ctypesafeenumerationexampledwarf}.
 
-\begin{lstlisting}
+\begin{figure}[H]
+\begin{lstlisting}[numbers=none]
 // C++ source
 //
 enum class E { E1, E2=100 };
 E e1;
 \end{lstlisting}
+\caption{Type-safe enumeration example: source}
+\label{fig:ctypesafeenumerationexamplesource}
+\end{figure}
 
-\subsection{C++ type-safe enumeration example}
-\label{app:ctypesafeenumerationexample}
+\begin{figure}[H]
+\begin{dwflisting}
 \begin{alltt}
 ! DWARF description
 !
@@ -1919,15 +1993,21 @@ E e1;
         \livelink{chap:DWATname}{DW\-\_AT\-\_name}("e1")
         \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to 11\$)
 \end{alltt}
+\end{dwflisting}
+\caption{Type-safe enumeration example: DWARF description}
+\label{fig:ctypesafeenumerationexampledwarf}
+\end{figure}
 
-\section{Template Example}
+
+\section{Template Examples}
 \label{app:templateexample}
 
-C++ templates can be described in DWARF as illustrated in 
-Section \refersec{app:ctemplateexample1}.
+The C++ template example in
+Figure \refersec{fig:ctemplateexample1source}
+can be described in DWARF as illustrated in 
+Figure \refersec{fig:ctemplateexample1dwarf}.
 
-
-
+\begin{figure}[h]
 \begin{lstlisting}
 // C++ source
 //
@@ -1937,9 +2017,12 @@ struct wrapper {
 };
 wrapper<int> obj;
 \end{lstlisting}
+\caption{C++ template example \#1: source}
+\label{fig:ctemplateexample1source}
+\end{figure}
 
-\subsection{C++ template example 1}
-\label{app:ctemplateexample1}
+\begin{figure}[h]
+\begin{dwflisting}
 \begin{alltt}
 ! DWARF description
 !
@@ -1955,20 +2038,26 @@ wrapper<int> obj;
         \livelink{chap:DWATname}{DW\-\_AT\-\_name}("obj")
         \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to 11\$)
 \end{alltt}
+\end{dwflisting}
+\caption{C++ template example \#1: DWARF description}
+\label{fig:ctemplateexample1dwarf}
+\end{figure}
 
 The actual type of the component comp is int, but in the DWARF
-the type references the \livelink{chap:DWTAGtemplatetypeparameter}{DW\-\_TAG\-\_template\-\_type\-\_parameter} for
-T, which in turn references int. This implies that in the
+the type references the
+\livelink{chap:DWTAGtemplatetypeparameter}{DW\-\_TAG\-\_template\-\_type\-\_parameter}
+for T, which in turn references int. This implies that in the
 original template comp was of type T and that was replaced
-with int in the instance.  There exist situations where it is
+with int in the instance. There exist situations where it is
 not possible for the DWARF to imply anything about the nature
 of the original template. 
 
-Consider following C++ source and DWARF 
-that can describe it in
-Section \refersec{app:ctemplateexample2}.
+Consider the C++ template source in
+Figure \refersec{fig:ctemplateexample2source}
+and the DWARF that can describe it in
+Figure \refersec{fig:ctemplateexample2dwarf}.
 
-
+\begin{figure}[h]
 \begin{lstlisting}
 // C++ source
 //
@@ -1984,9 +2073,12 @@ Section \refersec{app:ctemplateexample2}.
     wrapper<int> obj;
     consume(obj);
 \end{lstlisting}
+\caption{C++ template example \#2: source}
+\label{ctemplateexample2source}
+\end{figure}
 
-\subsection{C++ template example 2}
-\label{app:ctemplateexample2}
+\begin{figure}[h]
+\begin{dwflisting}
 \begin{alltt}
 ! DWARF description
 !
@@ -2010,6 +2102,10 @@ Section \refersec{app:ctemplateexample2}.
             \livelink{chap:DWATname}{DW\-\_AT\-\_name}("formal")
             \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to 11\$)
 \end{alltt}
+\end{dwflisting}
+\caption{C++ template example \#2: DWARF description}
+\label{fig:ctemplateexample2dwarf}
+\end{figure}
 
 In the \livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram} 
 entry for the instance of consume, U is described as int. 
@@ -2036,14 +2132,13 @@ the formal of consume were declared in the source to be
 \section{Template Alias Examples}
 \label{app:templatealiasexample}
 
-C++ template aliases can be described in DWARF as illustrated 
-\addtoindexx{template alias example}
-in 
-Section \refersec{app:templatealiasexample1}
-and 
-Section \refersec{app:templatealiasexample2}.
+The \addtoindex{C++} template alias shown in
+Figure \refersec{fig:ctemplatealiasexample1source}
+can be described in DWARF as illustrated 
+\addtoindexx{template alias example} in 
+Figure \refersec{fig:ctemplatealiasexample1dwarf}.
 
-
+\begin{figure}[h]
 \begin{lstlisting}
 // C++ source, template alias example 1
 //
@@ -2055,11 +2150,13 @@ struct Alpha {
 template<typename V> using Beta = Alpha<V,V>;
 Beta<long> b;
 \end{lstlisting}
+\caption{C++ template alias example \#1: source}
+\label{fig:ctemplatealiasexample1source}
+\end{figure}
 
-
-\subsection{template alias example 1}
+\begin{figure}[h]
 \addtoindexx{template alias example 1}
-\label{app:templatealiasexample1}
+\begin{dwflisting}
 \begin{alltt}
 ! DWARF representation for variable 'b'
 !
@@ -2087,8 +2184,18 @@ Beta<long> b;
         \livelink{chap:DWATname}{DW\-\_AT\-\_name}("b")
         \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to 25\$)
 \end{alltt}
+\end{dwflisting}
+\caption{C++ template alias example \#1: DWARF description}
+\label{fig:ctemplatealiasexample1dwarf}
+\end{figure}
 
+Similarly, the \addtoindex{C++} template alias shown in
+Figure \refersec{fig:ctemplatealiasexample2source}
+can be described in DWARF as illustrated 
+\addtoindexx{template alias example} in 
+Figure \refersec{fig:ctemplatealiasexample2dwarf}.
 
+\begin{figure}[h]
 \begin{lstlisting}
 // C++ source, template alias example 2
 //
@@ -2098,11 +2205,13 @@ template<class T> using Z = Y<T>;
 X<Y<int>> y;
 X<Z<int>> z;
 \end{lstlisting}
+\caption{C++ template alias example \#2: source}
+\label{fig:ctemplatealiasexample2source}
+\end{figure}
 
-
-\subsection{template alias example 2}
+\begin{figure}[h]
 \addtoindexx{template alias example 2}
-\label{app:templatealiasexample2}
+\begin{dwflisting}
 \begin{alltt}
 ! DWARF representation for X<Y<int>>
 !
@@ -2140,3 +2249,7 @@ using Z = Y<int>;
         \livelink{chap:DWATname}{DW\-\_AT\-\_name}("z")
         \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to \$42)
 \end{alltt}
+\end{dwflisting}
+\caption{C++ template alias example \#2: DWARF description}
+\label{fig:ctemplatealiasexample2dwarf}
+\end{figure}

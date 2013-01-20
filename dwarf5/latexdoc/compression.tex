@@ -113,7 +113,6 @@ section outside of the \addtoindex{section group},
 the section group
 is discarded.
 
-
 \end{enumerate}
 
 
@@ -449,24 +448,19 @@ the underlying object language is not (and varies from system to system).
 The \addtoindex{C++} source 
 \addtoindexx{DWARF duplicate elimination!C++ example}
 in 
-Section \refersec{app:duplicateeliminationexample1csource}
+Figure \refersec{fig:duplicateeliminationexample1csource}
 is used to illustrate the DWARF
 representation intended to allow duplicate elimination.
 
-\paragraph{Duplicate elimination example 1: C++ Source} 
-\label{app:duplicateeliminationexample1csource}
-
-File wa.h
-
-\begin{lstlisting}
+\begin{figure}[t]
+\textbf{File wa.h:}
+\begin{lstlisting}[numbers=none]
 struct A {
    int i;
 };
 \end{lstlisting}
-
-File wa.C
-
-\begin{lstlisting}
+\textbf{File wa.c:}
+\begin{lstlisting}[numbers=none]
 #include "wa.h";
 int
 f(A &a)
@@ -474,16 +468,16 @@ f(A &a)
     return a.i + 2;
 }
 \end{lstlisting}
+\caption{Duplicate elimination example \#1: C++ Source}
+\label{fig:duplicateeliminationexample1csource}
+\end{figure}
 
-
-section \refersec{app:duplicateeliminationexample1dwarfsectiongroup}
+Figure \refersec{fig:duplicateeliminationexample1dwarfsectiongroup}
 shows the \addtoindex{section group} corresponding to the included file 
 wa.h.
 
-
-\paragraph{Duplicate elimination example 1: DWARF section group} 
-
-\label{app:duplicateeliminationexample1dwarfsectiongroup}
+\begin{figure}
+\begin{dwflisting}
 % FIXME: the DWFORMrefn could use rethinking
 \begin{alltt}
 ==== Section group name:
@@ -507,16 +501,19 @@ DW.cpp.wa.h.123456.4: ! linker global symbol
             ! compact form \livetarg{chap:DWFORMrefn}{DW\-\_FORM\-\_refn} 
             ! for n 1,2,4, or 8 can be used)
 \end{alltt}
+\end{dwflisting}
+\caption{Duplicate elimination example 1: DWARF section group} 
+\label{fig:duplicateeliminationexample1dwarfsectiongroup}
+\end{figure}
 
-
-Figure \refersec{app:duplicateeliminationexample1primarycompilationunit}
+Figure \refersec{fig:duplicateeliminationexample1primarycompilationunit}
 shows the ``normal'' DWARF sections, which are not part of
 any \addtoindex{section group}, 
 and how they make use of the information
 in the \addtoindex{section group} shown above.
 
-\paragraph{Duplicate elimination example 1: primary compilation unit} 
-\label{app:duplicateeliminationexample1primarycompilationunit}
+\begin{figure}
+\begin{dwflisting}
 \begin{alltt}
 == section .text
     [generated code for function f]
@@ -533,6 +530,10 @@ in the \addtoindex{section group} shown above.
                 \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to .L1)
         ...
 \end{alltt}
+\end{dwflisting}
+\caption{Duplicate elimination example \#1: primary compilation unit} 
+\label{fig:duplicateeliminationexample1primarycompilationunit}
+\end{figure}
 
 This example uses \livelink{chap:DWTAGcompileunit}{DW\-\_TAG\-\_compile\-\_unit} for the \addtoindex{section group},
 implying that the contents of the compilation unit are
@@ -546,41 +547,38 @@ globally visible (in accordance with
 For a \addtoindex{Fortran}
 \addtoindexx{DWARF duplicate elimination!Fortran example}
 example, consider 
-Figure \refersec{app:duplicateeliminationexample2fortransource}.
+Figure \refersec{fig:duplicateeliminationexample2fortransource}.
 
-
-\paragraph{Duplicate elimination example 2: Fortran source} 
-\label{app:duplicateeliminationexample2fortransource}
-
-File CommonStuff.fh
+\begin{figure}
+\textbf{File CommonStuff.fh}
 \addtoindexx{Fortran}
-
-\begin{lstlisting}
+\begin{lstlisting}[numbers=none]
 IMPLICIT INTEGER(A-Z)
 COMMON /Common1/ C(100)
 PARAMETER(SEVEN = 7)
 \end{lstlisting}
 
-File Func.f
-\begin{lstlisting}
-
+\textbf{File Func.f}
+\begin{lstlisting}[numbers=none]
 FUNCTION FOO (N)
 INCLUDE 'CommonStuff.fh'
 FOO = C(N + SEVEN)
 RETURN
 END
 \end{lstlisting}
+\caption{Duplicate elimination example \#2: Fortran source} 
+\label{fig:duplicateeliminationexample2fortransource}
+\end{figure}
 
 
-Section \refersec{app:duplicateeliminationexample2dwarfsectiongroup}
+Figure \refersec{fig:duplicateeliminationexample2dwarfsectiongroup}
 shows the \addtoindex{section group}
 corresponding to the included file 
 \addtoindexx{Fortran example}
 CommonStuff.fh.
 
-\paragraph{Duplicate elimination example 2: DWARF section group}
-\label{app:duplicateeliminationexample2dwarfsectiongroup}
-
+\begin{figure}
+\begin{dwflisting}
 \begin{alltt}
 ==== Section group name:
 
@@ -621,14 +619,16 @@ DW.myf90.CommonStuff.fh.654321.4: ! linker global symbol
             ! base type INTEGER
         \livelink{chap:DWATconstvalue}{DW\-\_AT\-\_const\-\_value}(constant 7)
 \end{alltt}
+\end{dwflisting}
+\caption{Duplicate elimination example 2: DWARF section group}
+\label{fig:duplicateeliminationexample2dwarfsectiongroup}
+\end{figure}
 
-Section \refersec{app:duplicateeliminationexample2primaryunit}
+Figure \refersec{fig:duplicateeliminationexample2primaryunit}
 shows the sections for the primary compilation unit.
 
-
-
-\paragraph{Duplicate elimination example 2: primary unit }
-\label{app:duplicateeliminationexample2primaryunit}
+\begin{figure}
+\begin{dwflisting}
 \begin{alltt}
 == section .text
     [code for function Foo]
@@ -650,21 +650,25 @@ shows the sections for the primary compilation unit.
                     \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to DW.f90.F90\$main.f.2)
                         ! base type INTEGER
 \end{alltt}
+\end{dwflisting}
+\caption{Duplicate elimination example \#2: primary unit}
+\label{fig:duplicateeliminationexample2primaryunit}
+\end{figure}
 
 A companion main program is shown in 
-Section \refersec{app:duplicateeliminationexample2companionsource}
+Figure \refersec{fig:duplicateeliminationexample2companionsource}
 
-\paragraph{Duplicate elimination example 2: companion source }
-\label{app:duplicateeliminationexample2companionsource}
-
-File Main.f 
-
-\begin{lstlisting}
+\begin{figure}
+\textbf{File Main.f:} 
+\begin{lstlisting}[numbers=none]
 INCLUDE 'CommonStuff.fh'
 C(50) = 8
 PRINT *, 'Result = ', FOO(50 - SEVEN)
 END
 \end{lstlisting}
+\caption{Duplicate elimination example \#2: companion source }
+\label{fig:duplicateeliminationexample2companionsource}
+\end{figure}
 
 That main program results in an object file that
 contained a duplicate of the \addtoindex{section group} named
@@ -672,11 +676,10 @@ my.f90.company.f90.CommonStuff.fh.654321
 corresponding to the
 included file as well as the remainder of the main subprogram
 as shown in 
-Section \refersec{app:duplicateeliminationexample2companiondwarf}.
+Figure \refersec{fig:duplicateeliminationexample2companiondwarf}.
 
-\paragraph{Duplicate elimination example 2: companion DWARF }
-\label{app:duplicateeliminationexample2companiondwarf}
-
+\begin{figure}
+\begin{dwflisting}
 \begin{alltt}
 == section \addtoindex{.debug\_info}
     \livelink{chap:DWTAGcompileunit}{DW\-\_TAG\-\_compile\-\_unit}
@@ -699,7 +702,10 @@ Section \refersec{app:duplicateeliminationexample2companiondwarf}.
                     DW.myf90.CommonStuff.fh.654321.3)
             ...
 \end{alltt}
-
+\end{dwflisting}
+\caption{Duplicate elimination example 2: companion DWARF }
+\label{fig:duplicateeliminationexample2companiondwarf}
+\end{figure}
 
 This example uses \livelink{chap:DWTAGpartialunit}{DW\-\_TAG\-\_partial\-\_unit} for the \addtoindex{section group}
 because the included declarations are not independently
@@ -714,7 +720,7 @@ in this Section might appear to be equally
 valid as a \addtoindex{C} example. However, it is prudent to include
 a \livelink{chap:DWTAGimportedunit}{DW\-\_TAG\-\_imported\-\_unit}
 in the primary unit 
-(see Figure \refersec{app:duplicateeliminationexample1primarycompilationunit})
+(see Figure \refersec{fig:duplicateeliminationexample1primarycompilationunit})
 with an \livelink{chap:DWATimport}{DW\-\_AT\-\_import} attribute that refers to the proper unit
 in the \addtoindex{section group}.
 
@@ -777,41 +783,42 @@ As an example,
 \addtoindexx{type signature!example computation}
 consider a \addtoindex{C++} header file 
 containing the type definitions shown
-in Section \refersec{app:typesignatureexamplescsource}.
+in Figure \refersec{fig:typesignatureexamplescsource}.
 
-\subsubsection{ Type signature examples: C++ source}
-\label{app:typesignatureexamplescsource}
+\begin{figure}
 \begin{lstlisting}
 namespace N {
 
- struct B;
+    struct B;
 
- struct C {
-     int x;
-     int y;
- };
+    struct C {
+        int x;
+        int y;
+    };
 
- class A {
-   public:
-     A(int v);
-     int v();
-   private:
-     int v_;
-     struct A *next;
-     struct B *bp;
-     struct C c;
- };
-
- }
+    class A {
+    public:
+        A(int v);
+        int v();
+    private:
+        int v_;
+        struct A *next;
+        struct B *bp;
+        struct C c;
+    };
+}
 \end{lstlisting}
+\caption{Type signature examples: C++ source}
+\label{fig:typesignatureexamplescsource}
+\end{figure}
 
 Next, consider one possible representation of the DWARF
 information that describes the type “struct C” as shown
 in 
-\refersec{app:typesignaturecomputation1dwarfrepresentation}:
+\refersec{fig:typesignaturecomputation1dwarfrepresentation}:
 
-\subsubsection{Type signature  computation 1: DWARF representation}
-\label{app:typesignaturecomputation1dwarfrepresentation}
+\begin{figure}
+\begin{dwflisting}
 % We keep the : (colon) away from the attribute so tokenizing in the python tools
 % does not result in adding : into the attribute name.
 \begin{alltt}
@@ -843,6 +850,10 @@ L2:
          \livelink{chap:DWATencoding}{DW\-\_AT\-\_encoding} : \livelink{chap:DWATEsigned}{DW\-\_ATE\-\_signed}
          \livelink{chap:DWATname}{DW\-\_AT\-\_name} : "int"
 \end{alltt}
+\end{dwflisting}
+\caption{Type signature computation \#1: DWARF representation}
+\label{fig:typesignaturecomputation1dwarfrepresentation}
+\end{figure}
 
 In computing a signature for the type N::C, flatten the type
 \addtoindexx{type signature}
@@ -850,11 +861,10 @@ description into a byte stream according to the procedure
 outlined in 
 Section \refersec{datarep:typesignaturecomputation}.
 The result is shown in 
-Section \refersec{app:typesignaturecomputation1flattenedbytestream}.
+Figure \refersec{fig:typesignaturecomputation1flattenedbytestream}.
 
-\subsubsection{Type signature  computation 1: flattened byte stream}
-\label{app:typesignaturecomputation1flattenedbytestream}
-
+\begin{figure}
+\begin{dwflisting}
 \begin{alltt}
 // Step 2: 'C' \livelink{chap:DWTAGnamespace}{DW\-\_TAG\-\_namespace} "N"
 0x43 0x39 0x4e 0x00
@@ -899,6 +909,10 @@ Section \refersec{app:typesignaturecomputation1flattenedbytestream}.
 // Step 7: End of \livelink{chap:DWTAGstructuretype}{DW\-\_TAG\-\_structure\-\_type} "C"
 0x00
 \end{alltt}
+\end{dwflisting}
+\caption{Type signature computation \#1: flattened byte stream}
+\label{fig:typesignaturecomputation1flattenedbytestream}
+\end{figure}
 
 Running an \addtoindex{MD5 hash} over this byte stream, and taking the
 low\dash order 64 bits, yields the final signature: 
@@ -906,17 +920,16 @@ low\dash order 64 bits, yields the final signature:
 
 Next, consider a representation of the DWARF information that
 describes the type ``class A'' as shown in 
-Section \refersec{app:typesignaturecomputation2dwarfrepresentation}.
+Figure \refersec{fig:typesignaturecomputation2dwarfrepresentation}.
 
-
-\subsubsection{Type signature  computation 2: DWARF representation}
-\label{app:typesignaturecomputation2dwarfrepresentation}
-
+\begin{figure}
+\figurepart{1}{2}
+\begin{dwflisting}
 \begin{alltt}
   \livelink{chap:DWTAGtypeunit}{DW\-\_TAG\-\_type\-\_unit}
       \livelink{chap:DWATlanguage}{DW\-\_AT\-\_language} : \livelink{chap:DWLANGCplusplus}{DW\-\_LANG\-\_C\-\_plus\-\_plus} (4)
     \livelink{chap:DWTAGnamespace}{DW\-\_TAG\-\_namespace}
-          \livelink{chap:DWATname}{DW\-\_AT\-\_name} : "N"
+        \livelink{chap:DWATname}{DW\-\_AT\-\_name} : "N"
 L1:
         \livelink{chap:DWTAGclasstype}{DW\-\_TAG\-\_class\-\_type}
              \livelink{chap:DWATname}{DW\-\_AT\-\_name} : "A"
@@ -951,7 +964,17 @@ L1:
                \livelink{chap:DWATtype}{DW\-\_AT\-\_type} : 0xd28081e8 dcf5070a (signature for struct C)
                \livelink{chap:DWATdatamemberlocation}{DW\-\_AT\-\_data\-\_member\-\_location} : 12
                \livelink{chap:DWATaccessibility}{DW\-\_AT\-\_accessibility} : \livelink{chap:DWACCESSprivate}{DW\-\_ACCESS\-\_private}
-       \livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram}
+\end{alltt}
+\end{dwflisting}
+\caption{Type signature computation \#2: DWARF representation}
+\label{fig:typesignaturecomputation2dwarfrepresentation}
+\end{figure}
+
+\begin{figure}
+\figurepart{2}{2}
+\begin{dwflisting}
+\begin{alltt}
+      \livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram}
            \livelink{chap:DWATexternal}{DW\-\_AT\-\_external} : 1
            \livelink{chap:DWATname}{DW\-\_AT\-\_name} : "A"
            \livelink{chap:DWATdeclfile}{DW\-\_AT\-\_decl\-\_file} : 1
@@ -990,6 +1013,11 @@ L5:
            \livelink{chap:DWATname}{DW\-\_AT\-\_name} : "B"
            \livelink{chap:DWATdeclaration}{DW\-\_AT\-\_declaration} : 1
 \end{alltt}
+\end{dwflisting}
+\begin{center}
+Figure~\ref{fig:typesignaturecomputation2dwarfrepresentation} Type signature computation \#2: DWARF representation \textit{(concluded)}
+\end{center}
+\end{figure}
 
 In this example, the structure types N::A and N::C have each
 been placed in separate 
@@ -1017,10 +1045,11 @@ description into a byte stream according to the procedure
 outlined in 
 Section \refersec{datarep:typesignaturecomputation}.
 The result is shown in 
-Section \refersec{app:typesignatureexample2flattenedbytestream}.
+Figure \refersec{fig:typesignatureexample2flattenedbytestream}.
 
-\subsubsection{Type signature example 2: flattenedbytestream}
-\label{app:typesignatureexample2flattenedbytestream}
+\begin{figure}
+\figurepart{1}{3}
+\begin{dwflisting}
 % DWARF4 had a \livelink{chap:DWATnamespace}{DW_AT_namespace} below, 
 % but this error is fixed here to be \livelink{chap:DWTAGnamespace}{DW_TAG_namespace}.
 \begin{alltt}
@@ -1064,6 +1093,16 @@ Section \refersec{app:typesignatureexample2flattenedbytestream}.
     0x41 0x32 0x0d 0x03
     // Step 4: 'A' \livelink{chap:DWATdatamemberlocation}{DW\-\_AT\-\_data\-\_member\-\_location} \livelink{chap:DWFORMsdata}{DW\-\_FORM\-\_sdata} 4
     0x41 0x38 0x0d 0x04
+\end{alltt}
+\end{dwflisting}
+\caption{Type signature example \#2: flattened byte stream}
+\label{fig:typesignatureexample2flattenedbytestream}
+\end{figure}
+
+\begin{figure}
+\figurepart{2}{3}
+\begin{dwflisting}
+\begin{alltt}    
     // Step 6: 'T' \livelink{chap:DWATtype}{DW\-\_AT\-\_type} (type \#3)
     0x54 0x49
         // Step 3: 'D' \livelink{chap:DWTAGpointertype}{DW\-\_TAG\-\_pointer\-\_type}
@@ -1108,6 +1147,17 @@ Section \refersec{app:typesignatureexample2flattenedbytestream}.
     0x41 0x03 0x08 0x63 0x00
     // Step 4: 'A' \livelink{chap:DWATaccessibility}{DW\-\_AT\-\_accessibility} \livelink{chap:DWFORMsdata}{DW\-\_FORM\-\_sdata} \livelink{chap:DWACCESSprivate}{DW\-\_ACCESS\-\_private}
     0x41 0x32 0x0d 0x03
+\end{alltt}
+\end{dwflisting}
+\begin{center}
+Figure~\ref{fig:typesignatureexample2flattenedbytestream} Type signature example \#2: flattened byte stream \textit{(continued)}
+\end{center}
+\end{figure}
+    
+\begin{figure}
+\figurepart{3}{3}
+\begin{dwflisting}
+\begin{alltt}
     // Step 4: 'A' \livelink{chap:DWATdatamemberlocation}{DW\-\_AT\-\_data\-\_member\-\_location} \livelink{chap:DWFORMsdata}{DW\-\_FORM\-\_sdata} 12
     0x41 0x38 0x0d 0x0c
     // Step 6: 'T' \livelink{chap:DWATtype}{DW\-\_AT\-\_type} (type \#5)
@@ -1155,6 +1205,11 @@ Section \refersec{app:typesignatureexample2flattenedbytestream}.
 // Step 7: End of \livelink{chap:DWTAGstructuretype}{DW\-\_TAG\-\_structure\-\_type} "A"
 0x00
 \end{alltt}
+\end{dwflisting}
+\begin{center}
+Figure~\ref{fig:typesignatureexample2flattenedbytestream} Type signature example \#2: flattened byte stream \textit{(concluded)}
+\end{center}
+\end{figure}
 
 Running an \addtoindex{MD5 hash} over this byte stream, and taking the
 low-order 64 bits, yields the final signature: 0xd6d160f5
@@ -1163,13 +1218,11 @@ low-order 64 bits, yields the final signature: 0xd6d160f5
 
 A source file that includes this header file may declare a
 variable of type N::A, and its DWARF information may look
-that shown in 
-Section \refersec{app:typesignatureexampleusage}.
+like that shown in 
+Figure \refersec{fig:typesignatureexampleusage}.
 
-
-\subsubsection{Type signature example usage}
-\label{app:typesignatureexampleusage}
-
+\begin{figure}
+\begin{dwflisting}
 \begin{alltt}
   \livelink{chap:DWTAGcompileunit}{DW\-\_TAG\-\_compile\-\_unit}
   ...
@@ -1181,6 +1234,10 @@ Section \refersec{app:typesignatureexampleusage}.
       \livelink{chap:DWATlocation}{DW\-\_AT\-\_location} : ...
     ...
 \end{alltt}
+\end{dwflisting}
+\caption{Type signature example usage}
+\label{fig:typesignatureexampleusage}
+\end{figure}
 
 \subsection{Type Signature Computation Grammar}
 \label{app:typesignaturecomputationgrammar}
@@ -1215,6 +1272,7 @@ attribute
     : 'R' at-code back-ref               // Back-reference 
                                          // to visited type
     : 'T' at-code signature              // Recursive type
+    
 children             //  Step 7
     : child children
     : '0'
@@ -1222,10 +1280,13 @@ children             //  Step 7
 child
     : 'S' tag-code string
     : signature
+
 tag-code
     : <ULEB128>
+
 at-code
     : <ULEB128>
+    
 form-encoded-value
     : \livelink{chap:DWFORMsdata}{DW\-\_FORM\-\_sdata} value \addtoindexx{constant class}
     : \livelink{chap:DWFORMflag}{DW\-\_FORM\-\_flag} value \addtoindexx{flag class}
@@ -1239,15 +1300,19 @@ form-encoded-value
     : 'x0c'
 \livelink{chap:DWFORMsdata}{DW\-\_FORM\-\_sdata} \addtoindexx{constant class}
     : 'x0d'
+    
 value
     : <SLEB128>
+    
 \nolink{block}
     : <ULEB128> <fixed-length-block>
                       // The ULEB128 gives the length of the \nolink{block}
 back-ref
     : <ULEB128>
+    
 string
     : <null-terminated-string>
+    
 empty
     :
 \end{alltt}
