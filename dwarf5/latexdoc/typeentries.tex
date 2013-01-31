@@ -39,9 +39,10 @@ A base type entry has
 a \livelink{chap:DWATencoding}{DW\-\_AT\-\_encoding} attribute describing
 how the base type is encoded and is to be interpreted. The
 value of this attribute is an integer constant. The set of
-values and their meanings for the \livelink{chap:DWATencoding}{DW\-\_AT\-\_encoding} attribute
+values and their meanings for the
+\livelink{chap:DWATencoding}{DW\-\_AT\-\_encoding} attribute
 is given in 
-Figure \refersec{fig:encodingattributevalues}
+Table \refersec{tab:encodingattributevalues}
 and following text.  
 
 A base type entry
@@ -125,7 +126,6 @@ support its use for compatibility.}
 \textit{The 
 \addtoindex{DWARF Version 3}
 definition of these attributes is as follows.}
-
 \begin{myindentpara}{1cm}
 \textit{A base type entry has a \livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size}
 attribute, whose value
@@ -173,12 +173,15 @@ and optionally \livelink{chap:DWATdatabitoffset}{DW\-\_AT\-\_data\-\_bit\-\_offs
 \livelink{chap:DWATbitoffset}{DW\-\_AT\-\_bit\-\_offset}}
 \end{itemize}
 
-\begin{figure}[!here]
+\begin{table}[!here]
+\caption{Encoding attribute values}
+\label{tab:encodingattributevalues}
 \centering
-\begin{tabular}{lp{9cm}}
+\begin{tabular}{l|p{8cm}}
+\hline
 Name&Meaning\\ \hline
-\livetarg{chap:DWATEaddress}{DW\-\_ATE\-\_address} &  linear machine address (for
-  segmented addresses see
+\livetarg{chap:DWATEaddress}{DW\-\_ATE\-\_address} & linear machine address (for segmented\break
+  addresses see
   Section \refersec{chap:segmentedaddresses}) \\
 \livetarg{chap:DWATEboolean}{DW\-\_ATE\-\_boolean}& true or false \\
 
@@ -198,10 +201,9 @@ floating\dash point number \\
 \livetarg{chap:DWATEunsignedfixed}{DW\-\_ATE\-\_unsigned\-\_fixed}& unsigned fixed\dash point scaled integer \\
 \livetarg{chap:DWATEdecimalfloat}{DW\-\_ATE\-\_decimal\-\_float} & decimal floating\dash point number \\ 
 \livetarg{chap:DWATEUTF}{DW\-\_ATE\-\_UTF} & \addtoindex{Unicode} character \\
+\hline
 \end{tabular}
-\caption{Encoding attribute values}
-\label{fig:encodingattributevalues}
-\end{figure}
+\end{table}
 
 \textit{The \livelink{chap:DWATEdecimalfloat}{DW\-\_ATE\-\_decimal\-\_float} encoding is intended for
 floating\dash point representations that have a power\dash of\dash ten
@@ -242,11 +244,37 @@ A \livelink{chap:DWATdecimalsign}{DW\-\_AT\-\_decimal\-\_sign} attribute
 \addtoindexx{decimal sign attribute}
 is an integer constant that
 conveys the representation of the sign of the decimal type
-(see Figure \refersec{fig:decimalsignattributevalues}). 
+(see Figure \refersec{tab:decimalsignattributevalues}). 
 Its integer constant value is interpreted to
 mean that the type has a leading overpunch, trailing overpunch,
 leading separate or trailing separate sign representation or,
 alternatively, no sign at all.
+
+\begin{table}[here]
+\caption{Decimal sign attribute values}
+\label{tab:decimalsignattributevalues}
+\centering
+\begin{tabular}{l|p{9cm}}
+\hline
+ Name & Meaning \\
+\hline
+\livetarg{chap:DWDSunsigned}{DW\-\_DS\-\_unsigned} &  Unsigned \\
+\livetarg{chap:DWDSleadingoverpunch}{DW\-\_DS\-\_leading\-\_overpunch} & Sign
+is encoded in the most significant digit in a target\dash dependent  manner \\
+\livetarg{chap:DWDStrailingoverpunch}{DW\-\_DS\-\_trailing\-\_overpunch} & Sign
+is encoded in the least significant digit in a target\dash dependent manner \\
+\livetarg{chap:DWDSleadingseparate}{DW\-\_DS\-\_leading\-\_separate} 
+& Decimal type: Sign is a ``+'' or ``-'' character 
+to the left of the most significant digit. \\
+\livetarg{chap:DWDStrailingseparate}{DW\-\_DS\-\_trailing\-\_separate} 
+& Decimal type: Sign is a ``+'' or ``-'' character 
+to the right of the least significant digit. \\
+&Packed decimal type: Least significant nibble contains
+a target\dash dependent value
+indicating positive or negative. \\
+\hline
+\end{tabular}
+\end{table}
 
 The 
 \livelink{chap:DWATdigitcount}{DW\-\_AT\-\_digit\-\_count}
@@ -356,29 +384,6 @@ entry for the type.
 is defined with the \addtoindex{Ada} small
 attribute in mind.}
 
-\begin{figure}[here]
-\centering
-\begin{tabular}{lp{9cm}}
-Name&Meaning\\ \hline
-\livetarg{chap:DWDSunsigned}{DW\-\_DS\-\_unsigned} &  unsigned \\
-\livetarg{chap:DWDSleadingoverpunch}{DW\-\_DS\-\_leading\-\_overpunch} & Sign
-is encoded in the most significant digit in a target\dash dependent  manner \\
-\livetarg{chap:DWDStrailingoverpunch}{DW\-\_DS\-\_trailing\-\_overpunch} & Sign
-is encoded in the least significant digit in a target\dash dependent manner \\
-\livetarg{chap:DWDSleadingseparate}{DW\-\_DS\-\_leading\-\_separate} 
-& Decimal type: Sign is a ``+'' or ``-'' character 
-to the left of the most significant digit. \\
-\livetarg{chap:DWDStrailingseparate}{DW\-\_DS\-\_trailing\-\_separate} 
-& Decimal type: Sign is a ``+'' or ``-'' character 
-to the right of the least significant digit. \\
-&Packed decimal type: Least significant nibble contains
-a target\dash dependent value
-indicating positive or negative. \\
-\end{tabular}
-\caption{Decimal sign attribute values}
-\label{fig:decimalsignattributevalues}
-\end{figure}
-
 \section{Unspecified Type Entries}
 \label{chap:unspecifiedtypeentries}
 \addtoindexx{unspecified type entry}
@@ -425,7 +430,7 @@ definition is deferred to a separate compilation unit).
 A base or user\dash defined type may be modified in different ways
 in different languages. A type modifier is represented in
 DWARF by a debugging information entry with one of the tags
-given in Figure \refersec{fig:typemodifiertags}.
+given in Table \refersec{tab:typemodifiertags}.
 \addtoindexx{type modifier|see{constant type entry}}
 \addtoindexx{type modifier|see{reference type entry}}
 \addtoindexx{type modifier|see{restricted type entry}}
@@ -498,9 +503,12 @@ source
 \addtoindexx{parameter|see{formal parameter entry}}
 presentation.
 
-\begin{figure}[here]
+\begin{table}[here]
+\caption{Type modifier tags}
+\label{tab:typemodifiertags}
 \centering
-\begin{tabular}{lp{9cm}}
+\begin{tabular}{l|p{9cm}}
+\hline
 Name&Meaning\\ \hline
 \livetarg{chap:DWTAGconsttype}{DW\-\_TAG\-\_const\-\_type} &  C or C++ const qualified type
 \addtoindexx{const qualified type entry} \addtoindexx{C} \addtoindexx{C++} \\
@@ -528,21 +536,20 @@ reference to an object of the type being modified
 \addtoindexx{shared qualified type entry} \\
 \livetarg{chap:DWTAGvolatiletype}{DW\-\_TAG\-\_volatile\-\_type}&C or C++ volatile qualified type 
 \addtoindex{volatile qualified type entry} \\
+\hline
 \end{tabular}
-\caption{Type modifier tags}
-\label{fig:typemodifiertags}
-\end{figure}
+\end{table}
 
 %The following clearpage prevents splitting the example across pages.
-\clearpage
-\textit{As examples of how type modifiers are ordered, take the following C
-declarations:}
-
-\begin{alltt}
+\textit{As examples of how type modifiers are ordered, consider the following
+\addtoindex{C} declarations:}
+\begin{lstlisting}[numbers=none]
    const unsigned char * volatile p;
-\end{alltt}
+\end{lstlisting}
 \textit{which represents a volatile pointer to a constant
 character. This is encoded in DWARF as:}
+
+\begin{dwflisting}
 \begin{alltt}
         \livelink{chap:DWTAGvariable}{DW\-\_TAG\-\_variable}(p) -->
             \livelink{chap:DWTAGvolatiletype}{DW\-\_TAG\-\_volatile\-\_type} -->
@@ -550,12 +557,16 @@ character. This is encoded in DWARF as:}
                     \livelink{chap:DWTAGconsttype}{DW\-\_TAG\-\_const\-\_type} -->
                         \livelink{chap:DWTAGbasetype}{DW\-\_TAG\-\_base\-\_type}(unsigned char)
 \end{alltt}
+\end{dwflisting}
+
 \textit{On the other hand}
-\begin{alltt}                        
+\begin{lstlisting}[numbers=none]                        
    volatile unsigned char * const restrict p;
-\end{alltt}
+\end{lstlisting}
 \textit{represents a restricted constant
 pointer to a volatile character. This is encoded as:}
+
+\begin{dwflisting}
 \begin{alltt}
         \livelink{chap:DWTAGvariable}{DW\-\_TAG\-\_variable}(p) -->
             \livelink{chap:DWTAGrestricttype}{DW\-\_TAG\-\_restrict\-\_type} -->
@@ -564,6 +575,7 @@ pointer to a volatile character. This is encoded as:}
                         \livelink{chap:DWTAGvolatiletype}{DW\-\_TAG\-\_volatile\-\_type} -->
                             \livelink{chap:DWTAGbasetype}{DW\-\_TAG\-\_base\-\_type}(unsigned char)
 \end{alltt}
+\end{dwflisting}
 
 \section{Typedef Entries}
 \label{chap:typedefentries}
@@ -623,7 +635,7 @@ have a \livelink{chap:DWATordering}{DW\-\_AT\-\_ordering} attribute whose intege
 interpreted to mean either row-major or column-major ordering
 of array elements. The set of values and their meanings
 for the ordering attribute are listed in 
-Figure \refersec{fig:arrayordering}. 
+Table \refersec{tab:arrayordering}. 
 If no
 ordering attribute is present, the default ordering for the
 source language (which is indicated by the 
@@ -632,13 +644,10 @@ attribute
 \addtoindexx{language attribute}
 of the enclosing compilation unit entry) is assumed.
 
-\begin{figure}[here]
-\autorows[0pt]{c}{1}{l}{
-\livetarg{chap:DWORDcolmajor}{DW\-\_ORD\-\_col\-\_major},
-\livetarg{chap:DWORDrowmajor}{DW\-\_ORD\-\_row\-\_major}
-}
-\caption{Array ordering}\label{fig:arrayordering}
-\end{figure}
+\begin{simplenametable}[1.6in]{Array ordering}{tab:arrayordering}
+\livetarg{chap:DWORDcolmajor}{DW\-\_ORD\-\_col\-\_major} \\
+\livetarg{chap:DWORDrowmajor}{DW\-\_ORD\-\_row\-\_major} \\
+\end{simplenametable}
 
 The ordering attribute may optionally appear on one-dimensional
 arrays; it will be ignored.
@@ -856,7 +865,7 @@ and will have a \livelink{chap:DWATdeclaration}{DW\-\_AT\-\_declaration} attribu
 \textit{Consider a nested class whose 
 definition occurs outside of the containing class definition, as in:}
 
-\begin{lstlisting}
+\begin{lstlisting}[numbers=none]
 struct A {
     struct B;
 };
@@ -1220,15 +1229,16 @@ struct S {
 };
 \end{lstlisting}
 
-\textit{The following diagrams show the structure layout
+\textit{Figures \referfol{fig:bigendiandatabitoffsets} and
+\refersec{fig:littleendiandatabitoffsets}
+show the structure layout
 and data bit offsets for example big\dash\   and little\dash endian
 architectures, respectively. Both diagrams show a structure
 that begins at address A and whose size is four bytes. Also,
 high order bits are to the left and low order bits are to
 the right.}
 
-\textit{Big\dash Endian Data Bit Offsets:}
-
+\begin{figure}[h]
 \begin{verbatim}
     j:0
     k:5
@@ -1245,8 +1255,11 @@ the right.}
     |       |            |          |               |               | 
     +---------------------------------------------------------------+ 
 \end{verbatim}
+\caption{Big-endian data bit offsets}
+\label{fig:bigendiandatabitoffsets}
+\end{figure}
 
-\textit{Little\dash  Endian Data Bit Offsets:}
+\begin{figure}[h]
 \begin{verbatim}
     j:0
     k:5
@@ -1256,14 +1269,15 @@ the right.}
     |       A       |     A + 1     |    A + 2      |    A + 3      | 
 
                                         <-  Data bit offsets increase 
-
     +---------------+---------------+---------------+---------------+
     |31           24|23           16|15     11|10       5|4        0|
     |     <pad>     |        n      |    m    |    k     |     j    |
     |               |               |         |          |          |
     +---------------------------------------------------------------+
-
 \end{verbatim}
+\caption{Little-endian data bit offsets}
+\label{fig:littleendiandatabitoffsets}
+\end{figure}
 
 \textit{Note that data member bit offsets in this example are the
 same for both big\dash\ and little\dash endian architectures even
@@ -1305,7 +1319,6 @@ use for compatibility.}
 \addtoindex{DWARF Version 3} 
 definitions of these attributes are
 as follows.}
-
 \begin{myindentpara}{1cm}
 \textit{If the data member entry describes a bit field, then that
 entry has the following attributes:}
@@ -1653,15 +1666,12 @@ two LEB128 numbers, the low value of the range followed by the
 high value. Both values follow the rules for signedness just
 described. The discriminant value descriptor is an integer
 constant that may have one of the values given in 
-Figure \refersec{fig:discriminantdescriptorvalues}.
+Table \refersec{tab:discriminantdescriptorvalues}.
 
-\begin{figure}[here]
-\autorows[0pt]{c}{1}{l}{
-\addtoindex{DW\-\_DSC\-\_label},
-\addtoindex{DW\-\_DSC\-\_range}
-}
-\caption{Discriminant descriptor values}\label{fig:discriminantdescriptorvalues}
-\end{figure}
+\begin{simplenametable}[1.4in]{Discriminant descriptor values}{tab:discriminantdescriptorvalues}
+\addtoindex{DW\-\_DSC\-\_label} \\
+\addtoindex{DW\-\_DSC\-\_range} \\
+\end{simplenametable}
 
 If a variant entry has neither a \livelink{chap:DWATdiscrvalue}{DW\-\_AT\-\_discr\-\_value}
 attribute nor a \livelink{chap:DWATdiscrlist}{DW\-\_AT\-\_discr\-\_list} attribute, or if it has
@@ -2040,7 +2050,7 @@ this execution of the program).
 
 \textit{This allows the representation of a \addtoindex{UPC} shared array such as}
 
-\begin{lstlisting}
+\begin{lstlisting}[numbers=none]
 int shared foo[34*THREADS][10][20];
 \end{lstlisting}
 
@@ -2196,7 +2206,7 @@ whose address is being calculated.
 
 \textit{For an expression such as}
 
-\begin{lstlisting}
+\begin{lstlisting}[numbers=none]
     object.*mbr_ptr
 \end{lstlisting}
 % FIXME: object and mbr\_ptr should be distinguished from italic. See DW4.

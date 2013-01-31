@@ -224,10 +224,11 @@ of DWARF format as follows. For the 32\dash bit DWARF format,
 the value is a 32\dash bit unsigned integer; for the 64\dash bit DWARF
 format, the value is a 64\dash bit unsigned integer.
 \begin{center}
-\begin{tabular}{lll}
+\begin{tabular}{ll}
 Form & Role  \\ \hline
 \livelink{chap:DWFORMrefaddr}{DW\-\_FORM\-\_ref\-\_addr}& offset in \addtoindex{.debug\_info} \\
-\livetarg{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset}& offset in a section other than \addtoindex{.debug\_info} or \addtoindex{.debug\_str} \\
+\livetarg{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset}& 
+        \parbox{5.5cm}{offset in a section other than \addtoindex{.debug\_info} or \addtoindex{.debug\_str}} \\
 \livelink{chap:DWFORMstrp}{DW\-\_FORM\-\_strp}&offset in \addtoindex{.debug\_str} \\
 \livelink{chap:DWOPcallref}{DW\-\_OP\-\_call\-\_ref}&offset in \addtoindex{.debug\_info} \\
 \end{tabular}
@@ -283,7 +284,8 @@ the object file. Each such contribution consists of a
 compilation unit header 
 (see Section \refersec{datarep:compilationunitheader}) 
 followed by a
-single \livelink{chap:DWTAGcompileunit}{DW\-\_TAG\-\_compile\-\_unit} or \livelink{chap:DWTAGpartialunit}{DW\-\_TAG\-\_partial\-\_unit} debugging
+single \livelink{chap:DWTAGcompileunit}{DW\-\_TAG\-\_compile\-\_unit} or 
+\livelink{chap:DWTAGpartialunit}{DW\-\_TAG\-\_partial\-\_unit} debugging
 information entry, together with its children.
 
 For each type defined in a compilation unit, a contribution may
@@ -486,6 +488,85 @@ number that encodes the entry’s tag. The encodings for the
 tag names are given in 
 Table \refersec{tab:tagencodings}.
 
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{l|l}
+  \hline
+  \caption{Tag encodings} \label{tab:tagencodings} \\
+  \hline \bfseries Tag name&\bfseries Value\\ \hline
+\endfirsthead
+  \bfseries Tag name&\bfseries Value \\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+  \ddag \ \textit{New in \addtoindex{DWARF Version 4}}
+\endlastfoot
+\livelink{chap:DWTAGarraytype}{DW\-\_TAG\-\_array\-\_type} &0x01 \\
+\livelink{chap:DWTAGclasstype}{DW\-\_TAG\-\_class\-\_type}&0x02 \\
+\livelink{chap:DWTAGentrypoint}{DW\-\_TAG\-\_entry\-\_point}&0x03 \\
+\livelink{chap:DWTAGenumerationtype}{DW\-\_TAG\-\_enumeration\-\_type}&0x04 \\
+\livelink{chap:DWTAGformalparameter}{DW\-\_TAG\-\_formal\-\_parameter}&0x05 \\
+\livelink{chap:DWTAGimporteddeclaration}{DW\-\_TAG\-\_imported\-\_declaration}&0x08 \\
+\livelink{chap:DWTAGlabel}{DW\-\_TAG\-\_label}&0x0a \\
+\livelink{chap:DWTAGlexicalblock}{DW\-\_TAG\-\_lexical\-\_block}&0x0b \\
+\livelink{chap:DWTAGmember}{DW\-\_TAG\-\_member}&0x0d \\
+\livelink{chap:DWTAGpointertype}{DW\-\_TAG\-\_pointer\-\_type}&0x0f \\
+\livelink{chap:DWTAGreferencetype}{DW\-\_TAG\-\_reference\-\_type}&0x10 \\
+\livelink{chap:DWTAGcompileunit}{DW\-\_TAG\-\_compile\-\_unit}&0x11 \\
+\livelink{chap:DWTAGstringtype}{DW\-\_TAG\-\_string\-\_type}&0x12 \\
+\livelink{chap:DWTAGstructuretype}{DW\-\_TAG\-\_structure\-\_type}&0x13 \\
+\livelink{chap:DWTAGsubroutinetype}{DW\-\_TAG\-\_subroutine\-\_type}&0x15 \\
+\livelink{chap:DWTAGtypedef}{DW\-\_TAG\-\_typedef}&0x16 \\
+\livelink{chap:DWTAGuniontype}{DW\-\_TAG\-\_union\-\_type}&0x17 \\
+\livelink{chap:DWTAGunspecifiedparameters}{DW\-\_TAG\-\_unspecified\-\_parameters}&0x18  \\
+\livelink{chap:DWTAGvariant}{DW\-\_TAG\-\_variant}&0x19  \\
+\livelink{chap:DWTAGcommonblock}{DW\-\_TAG\-\_common\-\_block}&0x1a  \\
+\livelink{chap:DWTAGcommoninclusion}{DW\-\_TAG\-\_common\-\_inclusion}&0x1b  \\
+\livelink{chap:DWTAGinheritance}{DW\-\_TAG\-\_inheritance}&0x1c  \\
+\livelink{chap:DWTAGinlinedsubroutine}{DW\-\_TAG\-\_inlined\-\_subroutine}&0x1d  \\
+\livelink{chap:DWTAGmodule}{DW\-\_TAG\-\_module}&0x1e  \\
+\livelink{chap:DWTAGptrtomembertype}{DW\-\_TAG\-\_ptr\-\_to\-\_member\-\_type}&0x1f  \\
+\livelink{chap:DWTAGsettype}{DW\-\_TAG\-\_set\-\_type}&0x20  \\
+\livelink{chap:DWTAGsubrangetype}{DW\-\_TAG\-\_subrange\-\_type}&0x21  \\
+\livelink{chap:DWTAGwithstmt}{DW\-\_TAG\-\_with\-\_stmt}&0x22  \\
+\livelink{chap:DWTAGaccessdeclaration}{DW\-\_TAG\-\_access\-\_declaration}&0x23  \\
+\livelink{chap:DWTAGbasetype}{DW\-\_TAG\-\_base\-\_type}&0x24  \\
+\livelink{chap:DWTAGcatchblock}{DW\-\_TAG\-\_catch\-\_block}&0x25  \\
+\livelink{chap:DWTAGconsttype}{DW\-\_TAG\-\_const\-\_type}&0x26  \\
+\livelink{chap:DWTAGconstant}{DW\-\_TAG\-\_constant}&0x27  \\
+\livelink{chap:DWTAGenumerator}{DW\-\_TAG\-\_enumerator}&0x28  \\
+\livelink{chap:DWTAGfiletype}{DW\-\_TAG\-\_file\-\_type}&0x29  \\
+\livelink{chap:DWTAGfriend}{DW\-\_TAG\-\_friend}&0x2a  \\
+\livelink{chap:DWTAGnamelist}{DW\-\_TAG\-\_namelist}&0x2b    \\
+\livelink{chap:DWTAGnamelistitem}{DW\-\_TAG\-\_namelist\-\_item}&0x2c    \\
+\livelink{chap:DWTAGpackedtype}{DW\-\_TAG\-\_packed\-\_type}&0x2d    \\
+\livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram}&0x2e    \\
+\livelink{chap:DWTAGtemplatetypeparameter}{DW\-\_TAG\-\_template\-\_type\-\_parameter}&0x2f    \\
+\livelink{chap:DWTAGtemplatevalueparameter}{DW\-\_TAG\-\_template\-\_value\-\_parameter}&0x30    \\
+\livelink{chap:DWTAGthrowntype}{DW\-\_TAG\-\_thrown\-\_type}&0x31    \\
+\livelink{chap:DWTAGtryblock}{DW\-\_TAG\-\_try\-\_block}&0x32    \\
+\livelink{chap:DWTAGvariantpart}{DW\-\_TAG\-\_variant\-\_part}&0x33    \\
+\livelink{chap:DWTAGvariable}{DW\-\_TAG\-\_variable}&0x34    \\
+\livelink{chap:DWTAGvolatiletype}{DW\-\_TAG\-\_volatile\-\_type}&0x35    \\
+\livelink{chap:DWTAGdwarfprocedure}{DW\-\_TAG\-\_dwarf\-\_procedure}&0x36     \\
+\livelink{chap:DWTAGrestricttype}{DW\-\_TAG\-\_restrict\-\_type}&0x37      \\
+\livelink{chap:DWTAGinterfacetype}{DW\-\_TAG\-\_interface\-\_type}&0x38      \\
+\livelink{chap:DWTAGnamespace}{DW\-\_TAG\-\_namespace}&0x39      \\
+\livelink{chap:DWTAGimportedmodule}{DW\-\_TAG\-\_imported\-\_module}&0x3a      \\
+\livelink{chap:DWTAGunspecifiedtype}{DW\-\_TAG\-\_unspecified\-\_type}&0x3b      \\
+\livelink{chap:DWTAGpartialunit}{DW\-\_TAG\-\_partial\-\_unit}&0x3c      \\
+\livelink{chap:DWTAGimportedunit}{DW\-\_TAG\-\_imported\-\_unit}&0x3d      \\
+\livelink{chap:DWTAGcondition}{DW\-\_TAG\-\_condition}&0x3f      \\
+\livelink{chap:DWTAGsharedtype}{DW\-\_TAG\-\_shared\-\_type}&0x40      \\
+\livelink{chap:DWTAGtypeunit}{DW\-\_TAG\-\_type\-\_unit} \ddag &0x41      \\
+\livelink{chap:DWTAGrvaluereferencetype}{DW\-\_TAG\-\_rvalue\-\_reference\-\_type} \ddag &0x42      \\
+\livelink{chap:DWTAGtemplatealias}{DW\-\_TAG\-\_template\-\_alias} \ddag &0x43      \\
+\livelink{chap:DWTAGlouser}{DW\-\_TAG\-\_lo\-\_user}&0x4080      \\
+\livelink{chap:DWTAGhiuser}{DW\-\_TAG\-\_hi\-\_user}&0xffff      \\
+\end{longtable}
+\end{centering}
+
 Following the tag encoding is a 1\dash byte value that determines
 whether a debugging information entry using this abbreviation
 has child entries or not. If the value is 
@@ -503,6 +584,25 @@ Table \refersec{tab:childdeterminationencodings}
 (As mentioned in 
 Section \refersec{chap:relationshipofdebugginginformationentries}, 
 each chain of sibling entries is terminated by a null entry.)
+
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{l|l}
+  \caption{Child determination encodings}
+  \label{tab:childdeterminationencodings}
+  \addtoindexx{Child determination encodings} \\
+  \hline \bfseries Children determination name&\bfseries Value \\ \hline
+\endfirsthead
+  \bfseries Children determination name&\bfseries Value \\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+\livelink{chap:DWCHILDRENno}{DW\-\_CHILDREN\-\_no}&0x00 \\ 
+\livelink{chap:DWCHILDRENyes}{DW\-\_CHILDREN\-\_yes}&0x01 \\ \hline
+\end{longtable}
+\end{centering}
 
 Finally, the child encoding is followed by a series of
 attribute specifications. Each attribute specification
@@ -531,6 +631,7 @@ entry consisting of a 0 byte for the abbreviation code.
 Appendix \refersec{app:compilationunitsandabbreviationstableexample} 
 for a depiction of the organization of the
 debugging information.}
+
 
 \subsection{Attribute Encodings}
 \label{datarep:attributeencodings}
@@ -561,7 +662,8 @@ of classes allowed by the applicable attribute in
 Table \refersec{tab:attributeencodings}
 determines the class of the form.
 
-\textit{In DWARF V3 the forms \livelink{chap:DWFORMdata4}{DW\-\_FORM\-\_data4} and \livelink{chap:DWFORMdata8}{DW\-\_FORM\-\_data8} were
+\textit{In DWARF V3 the forms \livelink{chap:DWFORMdata4}{DW\-\_FORM\-\_data4} and 
+\livelink{chap:DWFORMdata8}{DW\-\_FORM\-\_data8} were
 \addtoindexx{lineptr class}
 members 
 \addtoindexx{rangelistptr class}
@@ -728,7 +830,8 @@ This is an
 \addtoindexx{section offset!in class macptr value}
 offset into the 
 \addtoindex{.debug\_macinfo} section
-(\livelink{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset}). It consists of an offset from the
+(\livelink{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset}). 
+It consists of an offset from the
 beginning of the \addtoindex{.debug\_macinfo} 
 section to the first byte of
 the data making up the macro information list for the compilation
@@ -797,7 +900,8 @@ information entry within a
 it may refer to an entry in a different compilation unit
 from the unit containing the reference, and may refer to an
 entry in a different shared object.  This type of reference
-(\livetarg{chap:DWFORMrefaddr}{DW\-\_FORM\-\_ref\-\_addr}) is an offset from the beginning of the
+(\livetarg{chap:DWFORMrefaddr}{DW\-\_FORM\-\_ref\-\_addr}) 
+is an offset from the beginning of the
 \addtoindex{.debug\_info} 
 section of the target executable or shared object;
 it is relocatable in a relocatable object file and frequently
@@ -811,7 +915,8 @@ unsigned value
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
 \textit{A debugging information entry that may be referenced by
-another compilation unit using \livelink{chap:DWFORMrefaddr}{DW\-\_FORM\-\_ref\-\_addr} must have a
+another compilation unit using 
+\livelink{chap:DWFORMrefaddr}{DW\-\_FORM\-\_ref\-\_addr} must have a
 global symbolic name.}
 
 \textit{For a reference from one executable or shared object to
@@ -887,109 +992,13 @@ of
 the 
 \addtoindexx{macptr class}
 classes \livelink{chap:lineptr}{lineptr},
-\livelink{chap:loclistptr}{loclistptr}, \livelink{chap:macptr}{macptr} or \livelink{chap:rangelistptr}{rangelistptr} to point into either the
+\livelink{chap:loclistptr}{loclistptr}, \livelink{chap:macptr}{macptr} or 
+\livelink{chap:rangelistptr}{rangelistptr} to point into either the
 \addtoindex{.debug\_info} or \addtoindex{.debug\_str} section.
 
 The form encodings are listed in 
 Table \refersec{tab:attributeformencodings}.
 
-\begin{centering}
-\setlength{\extrarowheight}{0.1cm}
-\begin{longtable}{l|l}
-  \caption{Tag encodings} \label{tab:tagencodings} \\
-  \hline \bfseries Tag name&\bfseries Value\\ \hline
-\endfirsthead
-  \bfseries Tag name&\bfseries Value \\ \hline
-\endhead
-  \hline \emph{Continued on next page}
-\endfoot
-  \hline
-  \ddag New in \addtoindex{DWARF Version 4}
-\endlastfoot
-\livelink{chap:DWTAGarraytype}{DW\-\_TAG\-\_array\-\_type} &0x01 \\
-\livelink{chap:DWTAGclasstype}{DW\-\_TAG\-\_class\-\_type}&0x02 \\
-\livelink{chap:DWTAGentrypoint}{DW\-\_TAG\-\_entry\-\_point}&0x03 \\
-\livelink{chap:DWTAGenumerationtype}{DW\-\_TAG\-\_enumeration\-\_type}&0x04 \\
-\livelink{chap:DWTAGformalparameter}{DW\-\_TAG\-\_formal\-\_parameter}&0x05 \\
-\livelink{chap:DWTAGimporteddeclaration}{DW\-\_TAG\-\_imported\-\_declaration}&0x08 \\
-\livelink{chap:DWTAGlabel}{DW\-\_TAG\-\_label}&0x0a \\
-\livelink{chap:DWTAGlexicalblock}{DW\-\_TAG\-\_lexical\-\_block}&0x0b \\
-\livelink{chap:DWTAGmember}{DW\-\_TAG\-\_member}&0x0d \\
-\livelink{chap:DWTAGpointertype}{DW\-\_TAG\-\_pointer\-\_type}&0x0f \\
-\livelink{chap:DWTAGreferencetype}{DW\-\_TAG\-\_reference\-\_type}&0x10 \\
-\livelink{chap:DWTAGcompileunit}{DW\-\_TAG\-\_compile\-\_unit}&0x11 \\
-\livelink{chap:DWTAGstringtype}{DW\-\_TAG\-\_string\-\_type}&0x12 \\
-\livelink{chap:DWTAGstructuretype}{DW\-\_TAG\-\_structure\-\_type}&0x13 \\
-\livelink{chap:DWTAGsubroutinetype}{DW\-\_TAG\-\_subroutine\-\_type}&0x15 \\
-\livelink{chap:DWTAGtypedef}{DW\-\_TAG\-\_typedef}&0x16 \\
-\livelink{chap:DWTAGuniontype}{DW\-\_TAG\-\_union\-\_type}&0x17 \\
-\livelink{chap:DWTAGunspecifiedparameters}{DW\-\_TAG\-\_unspecified\-\_parameters}&0x18  \\
-\livelink{chap:DWTAGvariant}{DW\-\_TAG\-\_variant}&0x19  \\
-\livelink{chap:DWTAGcommonblock}{DW\-\_TAG\-\_common\-\_block}&0x1a  \\
-\livelink{chap:DWTAGcommoninclusion}{DW\-\_TAG\-\_common\-\_inclusion}&0x1b  \\
-\livelink{chap:DWTAGinheritance}{DW\-\_TAG\-\_inheritance}&0x1c  \\
-\livelink{chap:DWTAGinlinedsubroutine}{DW\-\_TAG\-\_inlined\-\_subroutine}&0x1d  \\
-\livelink{chap:DWTAGmodule}{DW\-\_TAG\-\_module}&0x1e  \\
-\livelink{chap:DWTAGptrtomembertype}{DW\-\_TAG\-\_ptr\-\_to\-\_member\-\_type}&0x1f  \\
-\livelink{chap:DWTAGsettype}{DW\-\_TAG\-\_set\-\_type}&0x20  \\
-\livelink{chap:DWTAGsubrangetype}{DW\-\_TAG\-\_subrange\-\_type}&0x21  \\
-\livelink{chap:DWTAGwithstmt}{DW\-\_TAG\-\_with\-\_stmt}&0x22  \\
-\livelink{chap:DWTAGaccessdeclaration}{DW\-\_TAG\-\_access\-\_declaration}&0x23  \\
-\livelink{chap:DWTAGbasetype}{DW\-\_TAG\-\_base\-\_type}&0x24  \\
-\livelink{chap:DWTAGcatchblock}{DW\-\_TAG\-\_catch\-\_block}&0x25  \\
-\livelink{chap:DWTAGconsttype}{DW\-\_TAG\-\_const\-\_type}&0x26  \\
-\livelink{chap:DWTAGconstant}{DW\-\_TAG\-\_constant}&0x27  \\
-\livelink{chap:DWTAGenumerator}{DW\-\_TAG\-\_enumerator}&0x28  \\
-\livelink{chap:DWTAGfiletype}{DW\-\_TAG\-\_file\-\_type}&0x29  \\
-\livelink{chap:DWTAGfriend}{DW\-\_TAG\-\_friend}&0x2a  \\
-\livelink{chap:DWTAGnamelist}{DW\-\_TAG\-\_namelist}&0x2b    \\
-\livelink{chap:DWTAGnamelistitem}{DW\-\_TAG\-\_namelist\-\_item}&0x2c    \\
-\livelink{chap:DWTAGpackedtype}{DW\-\_TAG\-\_packed\-\_type}&0x2d    \\
-\livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram}&0x2e    \\
-\livelink{chap:DWTAGtemplatetypeparameter}{DW\-\_TAG\-\_template\-\_type\-\_parameter}&0x2f    \\
-\livelink{chap:DWTAGtemplatevalueparameter}{DW\-\_TAG\-\_template\-\_value\-\_parameter}&0x30    \\
-\livelink{chap:DWTAGthrowntype}{DW\-\_TAG\-\_thrown\-\_type}&0x31    \\
-\livelink{chap:DWTAGtryblock}{DW\-\_TAG\-\_try\-\_block}&0x32    \\
-\livelink{chap:DWTAGvariantpart}{DW\-\_TAG\-\_variant\-\_part}&0x33    \\
-\livelink{chap:DWTAGvariable}{DW\-\_TAG\-\_variable}&0x34    \\
-\livelink{chap:DWTAGvolatiletype}{DW\-\_TAG\-\_volatile\-\_type}&0x35    \\
-\livelink{chap:DWTAGdwarfprocedure}{DW\-\_TAG\-\_dwarf\-\_procedure}&0x36     \\
-\livelink{chap:DWTAGrestricttype}{DW\-\_TAG\-\_restrict\-\_type}&0x37      \\
-\livelink{chap:DWTAGinterfacetype}{DW\-\_TAG\-\_interface\-\_type}&0x38      \\
-\livelink{chap:DWTAGnamespace}{DW\-\_TAG\-\_namespace}&0x39      \\
-\livelink{chap:DWTAGimportedmodule}{DW\-\_TAG\-\_imported\-\_module}&0x3a      \\
-\livelink{chap:DWTAGunspecifiedtype}{DW\-\_TAG\-\_unspecified\-\_type}&0x3b      \\
-\livelink{chap:DWTAGpartialunit}{DW\-\_TAG\-\_partial\-\_unit}&0x3c      \\
-\livelink{chap:DWTAGimportedunit}{DW\-\_TAG\-\_imported\-\_unit}&0x3d      \\
-\livelink{chap:DWTAGcondition}{DW\-\_TAG\-\_condition}&0x3f      \\
-\livelink{chap:DWTAGsharedtype}{DW\-\_TAG\-\_shared\-\_type}&0x40      \\
-\livelink{chap:DWTAGtypeunit}{DW\-\_TAG\-\_type\-\_unit} \ddag &0x41      \\
-\livelink{chap:DWTAGrvaluereferencetype}{DW\-\_TAG\-\_rvalue\-\_reference\-\_type} \ddag &0x42      \\
-\livelink{chap:DWTAGtemplatealias}{DW\-\_TAG\-\_template\-\_alias} \ddag &0x43      \\
-\livelink{chap:DWTAGlouser}{DW\-\_TAG\-\_lo\-\_user}&0x4080      \\
-\livelink{chap:DWTAGhiuser}{DW\-\_TAG\-\_hi\-\_user}&0xffff      \\
-\end{longtable}
-\end{centering}
-
-
-\begin{centering}
-\setlength{\extrarowheight}{0.1cm}
-\begin{longtable}{l|l}
-  \caption{Child determination encodings}
-  \label{tab:childdeterminationencodings}
-  \addtoindexx{Child determination encodings} \\
-  \hline \bfseries Children determination name&\bfseries Value \\ \hline
-\endfirsthead
-  \bfseries Children determination name&\bfseries Value \\ \hline
-\endhead
-  \hline \emph{Continued on next page}
-\endfoot
-  \hline
-\endlastfoot
-\livelink{chap:DWCHILDRENno}{DW\-\_CHILDREN\-\_no}&0x00 \\ 
-\livelink{chap:DWCHILDRENyes}{DW\-\_CHILDREN\-\_yes}&0x01 \\ \hline
-\end{longtable}
-\end{centering}
 
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
@@ -1004,7 +1013,7 @@ Table \refersec{tab:attributeformencodings}.
   \hline \emph{Continued on next page}
 \endfoot
   \hline
-  \ddag New in \addtoindex{DWARF Version 4}
+  \ddag \ \textit{New in \addtoindex{DWARF Version 4}}
 \endlastfoot
 \livelink{chap:DWATsibling}{DW\-\_AT\-\_sibling}&0x01&reference 
         \addtoindexx{sibling attribute!encoding} \\
@@ -1210,7 +1219,7 @@ Table \refersec{tab:attributeformencodings}.
   \hline \emph{Continued on next page}
 \endfoot
   \hline
-  \ddag New in \addtoindex{DWARF Version 4}
+  \ddag \ \textit{New in \addtoindex{DWARF Version 4}}
 \endlastfoot
 \livelink{chap:DWFORMaddr}{DW\-\_FORM\-\_addr}&0x01&address  \\
 \livelink{chap:DWFORMblock2}{DW\-\_FORM\-\_block2}&0x03&\livelink{chap:block}{block} \\
@@ -1371,7 +1380,7 @@ Table \refersec{tab:dwarfoperationencodings}.
 
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
-\begin{longtable}{l|l|l|l}
+\begin{longtable}{l|l|c|l}
   \caption{DWARF operation encodings} \label{tab:dwarfoperationencodings} \\
   \hline & &\bfseries No. of  &\\ 
   \bfseries Operation&\bfseries Code &\bfseries Operands &\bfseries Notes\\ \hline
@@ -1382,7 +1391,7 @@ Table \refersec{tab:dwarfoperationencodings}.
   \hline \emph{Continued on next page}
 \endfoot
   \hline
-  \ddag New in \addtoindex{DWARF Version 4}
+  \ddag \ \textit{New in \addtoindex{DWARF Version 4}}
 \endlastfoot
 
 \livelink{chap:DWOPaddr}{DW\-\_OP\-\_addr}&0x03&1 & constant address  \\ 
@@ -1536,7 +1545,7 @@ Table \refersec{tab:basetypeencodingvalues}
   \hline \emph{Continued on next page}
 \endfoot
   \hline
-  \ddag New in \addtoindex{DWARF Version 4}
+  \ddag \ \textit{New in \addtoindex{DWARF Version 4}}
 \endlastfoot
 
 \livelink{chap:DWATEaddress}{DW\-\_ATE\-\_address}&0x01 \\
@@ -1741,7 +1750,7 @@ defined language.
   \hline \emph{Continued on next page}
 \endfoot
   \hline
-  \dag See text
+  \dag \ \textit{See text}
 \endlastfoot
 
 \livelink{chap:DWLANGC89}{DW\-\_LANG\-\_C89}&0x0001&0       \\
@@ -1846,9 +1855,9 @@ Table \refersec{tab:inlineencodings}.
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c}
   \caption{Inline encodings} \label{tab:inlineencodings}\\
-  \hline \bfseries Iline Code name&\bfseries Value \\ \hline
+  \hline \bfseries Inline Code name&\bfseries Value \\ \hline
 \endfirsthead
-  \bfseries Iline Code name&\bfseries Value\\ \hline
+  \bfseries Inline Code name&\bfseries Value\\ \hline
 \endhead
   \hline \emph{Continued on next page}
 \endfoot
@@ -2103,7 +2112,7 @@ Table \refersec{tab:linenumberstandardopcodeencodings}.
 \livelink{chap:DWLNSsetcolumn}{DW\-\_LNS\-\_set\-\_column}&0x05 \\
 \livelink{chap:DWLNSnegatestmt}{DW\-\_LNS\-\_negate\-\_stmt}&0x06 \\
 \livelink{chap:DWLNSsetbasicblock}{DW\-\_LNS\-\_set\-\_basic\-\_block}&0x07 \\
-\livelink{chap:DWLNSconstaddpc}{DW\-\_LNS\-\_const\-\_add\-\_pc}*0x08 \\
+\livelink{chap:DWLNSconstaddpc}{DW\-\_LNS\-\_const\-\_add\-\_pc}&0x08 \\
 \livelink{chap:DWLNSfixedadvancepc}{DW\-\_LNS\-\_fixed\-\_advance\-\_pc}&0x09 \\
 \livelink{chap:DWLNSsetprologueend}{DW\-\_LNS\-\_set\-\_prologue\-\_end}&0x0a \\
 \livelink{chap:DWLNSsetepiloguebegin}{DW\-\_LNS\-\_set\-\_epilogue\-\_begin}&0x0b \\
@@ -2128,7 +2137,7 @@ Table \refersec{tab:linenumberextendedopcodeencodings}.
   \hline \emph{Continued on next page}
 \endfoot
   \hline
-  \ddag New in \addtoindex{DWARF Version 4}
+  \ddag \ \textit{New in \addtoindex{DWARF Version 4}}
 \endlastfoot
 
 \livelink{chap:DWLNEendsequence}{DW\-\_LNE\-\_end\-\_sequence}&0x01    \\
@@ -2155,6 +2164,7 @@ The encodings
 are given in 
 Table \refersec{tab:macinfotypeencodings}.
 
+\clearpage
 
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
@@ -2408,57 +2418,58 @@ the debugging information entry.
 the debugging information entry, in the order listed below,
 append to S a marker letter (see below), the DWARF attribute
 code, and the attribute value.
-
-\begin{itemize}
-\item \livelink{chap:DWATname}{DW\-\_AT\-\_name}
-\item \livelink{chap:DWATaccessibility}{DW\-\_AT\-\_accessibility}
-\item \livelink{chap:DWATaddressclass}{DW\-\_AT\-\_address\-\_class}
-\item \livelink{chap:DWATallocated}{DW\-\_AT\-\_allocated}
-\item \livelink{chap:DWATartificial}{DW\-\_AT\-\_artificial}
-\item \livelink{chap:DWATassociated}{DW\-\_AT\-\_associated}
-\item \livelink{chap:DWATbinaryscale}{DW\-\_AT\-\_binary\-\_scale}
-\item \livelink{chap:DWATbitoffset}{DW\-\_AT\-\_bit\-\_offset}
-\item \livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size}
-\item \livelink{chap:DWATbitstride}{DW\-\_AT\-\_bit\-\_stride}
-\item \livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size}
-\item \livelink{chap:DWATbytestride}{DW\-\_AT\-\_byte\-\_stride}
-\item \livelink{chap:DWATconstexpr}{DW\-\_AT\-\_const\-\_expr}
-\item \livelink{chap:DWATconstvalue}{DW\-\_AT\-\_const\-\_value}
-\item \livelink{chap:DWATcontainingtype}{DW\-\_AT\-\_containing\-\_type}
-\item \livelink{chap:DWATcount}{DW\-\_AT\-\_count}
-\item \livelink{chap:DWATdatabitoffset}{DW\-\_AT\-\_data\-\_bit\-\_offset}
-\item \livelink{chap:DWATdatalocation}{DW\-\_AT\-\_data\-\_location}
-\item \livelink{chap:DWATdatamemberlocation}{DW\-\_AT\-\_data\-\_member\-\_location}
-\item \livelink{chap:DWATdecimalscale}{DW\-\_AT\-\_decimal\-\_scale}
-\item \livelink{chap:DWATdecimalsign}{DW\-\_AT\-\_decimal\-\_sign}
-\item \livelink{chap:DWATdefaultvalue}{DW\-\_AT\-\_default\-\_value}
-\item \livelink{chap:DWATdigitcount}{DW\-\_AT\-\_digit\-\_count}
-\item \livelink{chap:DWATdiscr}{DW\-\_AT\-\_discr}
-\item \livelink{chap:DWATdiscrlist}{DW\-\_AT\-\_discr\-\_list}
-\item \livelink{chap:DWATdiscrvalue}{DW\-\_AT\-\_discr\-\_value}
-\item \livelink{chap:DWATencoding}{DW\-\_AT\-\_encoding}
-\item \livelink{chap:DWATenumclass}{DW\-\_AT\-\_enum\-\_class}
-\item \livelink{chap:DWATendianity}{DW\-\_AT\-\_endianity}
-\item \livelink{chap:DWATexplicit}{DW\-\_AT\-\_explicit}
-\item \livelink{chap:DWATisoptional}{DW\-\_AT\-\_is\-\_optional}
-\item \livelink{chap:DWATlocation}{DW\-\_AT\-\_location}
-\item \livelink{chap:DWATlowerbound}{DW\-\_AT\-\_lower\-\_bound}
-\item \livelink{chap:DWATmutable}{DW\-\_AT\-\_mutable}
-\item \livelink{chap:DWATordering}{DW\-\_AT\-\_ordering}
-\item \livelink{chap:DWATpicturestring}{DW\-\_AT\-\_picture\-\_string}
-\item \livelink{chap:DWATprototyped}{DW\-\_AT\-\_prototyped}
-\item \livelink{chap:DWATsmall}{DW\-\_AT\-\_small}
-\item \livelink{chap:DWATsegment}{DW\-\_AT\-\_segment}
-\item \livelink{chap:DWATstringlength}{DW\-\_AT\-\_string\-\_length}
-\item \livelink{chap:DWATthreadsscaled}{DW\-\_AT\-\_threads\-\_scaled}
-\item \livelink{chap:DWATupperbound}{DW\-\_AT\-\_upper\-\_bound}
-\item \livelink{chap:DWATuselocation}{DW\-\_AT\-\_use\-\_location}
-\item \livelink{chap:DWATuseUTF8}{DW\-\_AT\-\_use\-\_UTF8}
-\item \livelink{chap:DWATvariableparameter}{DW\-\_AT\-\_variable\-\_parameter}
-\item \livelink{chap:DWATvirtuality}{DW\-\_AT\-\_virtuality}
-\item \livelink{chap:DWATvisibility}{DW\-\_AT\-\_visibility}
-\item \livelink{chap:DWATvtableelemlocation}{DW\-\_AT\-\_vtable\-\_elem\-\_location}
-\end{itemize}
+\begin{center}
+\autocols[0pt]{c}{2}{l}{
+\livelink{chap:DWATname}{DW\-\_AT\-\_name},
+\livelink{chap:DWATaccessibility}{DW\-\_AT\-\_accessibility},
+\livelink{chap:DWATaddressclass}{DW\-\_AT\-\_address\-\_class},
+\livelink{chap:DWATallocated}{DW\-\_AT\-\_allocated},
+\livelink{chap:DWATartificial}{DW\-\_AT\-\_artificial},
+\livelink{chap:DWATassociated}{DW\-\_AT\-\_associated},
+\livelink{chap:DWATbinaryscale}{DW\-\_AT\-\_binary\-\_scale},
+\livelink{chap:DWATbitoffset}{DW\-\_AT\-\_bit\-\_offset},
+\livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size},
+\livelink{chap:DWATbitstride}{DW\-\_AT\-\_bit\-\_stride},
+\livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size},
+\livelink{chap:DWATbytestride}{DW\-\_AT\-\_byte\-\_stride},
+\livelink{chap:DWATconstexpr}{DW\-\_AT\-\_const\-\_expr},
+\livelink{chap:DWATconstvalue}{DW\-\_AT\-\_const\-\_value},
+\livelink{chap:DWATcontainingtype}{DW\-\_AT\-\_containing\-\_type},
+\livelink{chap:DWATcount}{DW\-\_AT\-\_count},
+\livelink{chap:DWATdatabitoffset}{DW\-\_AT\-\_data\-\_bit\-\_offset},
+\livelink{chap:DWATdatalocation}{DW\-\_AT\-\_data\-\_location},
+\livelink{chap:DWATdatamemberlocation}{DW\-\_AT\-\_data\-\_member\-\_location},
+\livelink{chap:DWATdecimalscale}{DW\-\_AT\-\_decimal\-\_scale},
+\livelink{chap:DWATdecimalsign}{DW\-\_AT\-\_decimal\-\_sign},
+\livelink{chap:DWATdefaultvalue}{DW\-\_AT\-\_default\-\_value},
+\livelink{chap:DWATdigitcount}{DW\-\_AT\-\_digit\-\_count},
+\livelink{chap:DWATdiscr}{DW\-\_AT\-\_discr},
+\livelink{chap:DWATdiscrlist}{DW\-\_AT\-\_discr\-\_list},
+\livelink{chap:DWATdiscrvalue}{DW\-\_AT\-\_discr\-\_value},
+\livelink{chap:DWATencoding}{DW\-\_AT\-\_encoding},
+\livelink{chap:DWATenumclass}{DW\-\_AT\-\_enum\-\_class},
+\livelink{chap:DWATendianity}{DW\-\_AT\-\_endianity},
+\livelink{chap:DWATexplicit}{DW\-\_AT\-\_explicit},
+\livelink{chap:DWATisoptional}{DW\-\_AT\-\_is\-\_optional},
+\livelink{chap:DWATlocation}{DW\-\_AT\-\_location},
+\livelink{chap:DWATlowerbound}{DW\-\_AT\-\_lower\-\_bound},
+\livelink{chap:DWATmutable}{DW\-\_AT\-\_mutable},
+\livelink{chap:DWATordering}{DW\-\_AT\-\_ordering},
+\livelink{chap:DWATpicturestring}{DW\-\_AT\-\_picture\-\_string},
+\livelink{chap:DWATprototyped}{DW\-\_AT\-\_prototyped},
+\livelink{chap:DWATsmall}{DW\-\_AT\-\_small},
+\livelink{chap:DWATsegment}{DW\-\_AT\-\_segment},
+\livelink{chap:DWATstringlength}{DW\-\_AT\-\_string\-\_length},
+\livelink{chap:DWATthreadsscaled}{DW\-\_AT\-\_threads\-\_scaled},
+\livelink{chap:DWATupperbound}{DW\-\_AT\-\_upper\-\_bound},
+\livelink{chap:DWATuselocation}{DW\-\_AT\-\_use\-\_location},
+\livelink{chap:DWATuseUTF8}{DW\-\_AT\-\_use\-\_UTF8},
+\livelink{chap:DWATvariableparameter}{DW\-\_AT\-\_variable\-\_parameter},
+\livelink{chap:DWATvirtuality}{DW\-\_AT\-\_virtuality},
+\livelink{chap:DWATvisibility}{DW\-\_AT\-\_visibility},
+\livelink{chap:DWATvtableelemlocation}{DW\-\_AT\-\_vtable\-\_elem\-\_location}
+}
+\end{center}
 
 Note that except for the initial 
 \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute,

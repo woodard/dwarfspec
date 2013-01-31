@@ -48,15 +48,18 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \usepackage[plainpages=false,pdfpagelabels,pagebackref]{hyperref} % Lets us generate colored active links inside a pdf.
 \makeindex  % This and the makeidx package allow \index to create index entries.
 
-\newcommand{\docdate}{28 January 2013}
+\renewcommand{\familydefault}{phv}  % font family helvetica
+
+\newcommand{\docdate}{31 January 2013}
 
 \newcommand{\dwf}{DWARF Debugging Information Format}
+
 \newenvironment{myindentpara}[1]%
- {\begin{list}{}%
-   {\setlength{\leftmargin}{#1}}%
-   \item[]%
- }
- {\end{list}}
+  {\begin{list}{}%
+    {\setlength{\leftmargin}{#1}}%
+    \item[]%
+  }
+  {\end{list}}
 
 % broken somehow.
 %\newcommand{\myindent1}[1]{\begin{myindentpara}{1cm}#1\end{myindentpara}}
@@ -115,7 +118,7 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \newcommand{\singlequote}[1]{\textquoteleft #1\textquoteright}
 
 % Better naming for the lowest level section header
-\newcommand{\subsubsubsection}[1]{\paragraph{#1}}
+\newcommand{\subsubsubsection}[1]{\paragraph{#1.}}
 
 % Reduce vertical space at beginning of a list
 \setlength{\topsep}{0in}
@@ -127,19 +130,20 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
     }
 
 % A simple rule used in simple tables; default length is 2 inches
-\newcommand{\simplerule}[1][2in]{\rule[4pt]{#1}{1pt}}
+\newcommand{\simplerule}[1][2in]{\rule[4pt]{#1}{0.5pt}}
 
 % A simple one column table of names; default width is 2 inches
 \newcommand{\simplenametablerule}{\simplerule[2in]}
 \newenvironment{simplenametable}[3][2in]
-    {   \begin{table}[H] \caption{#2} \label{#3}
+    {   \begin{table}[here] \caption{#2} \label{#3}
         \begin{center}
         \renewcommand{\simplenametablerule}{\simplerule[#1]}
         \simplenametablerule \\
-        \textbf{Name} \\
-        \simplenametablerule \\
+        \begin{tabular*}{#1}{l}
         }
-    {   \simplenametablerule \\
+    {   \end{tabular*}
+        \vspace{4pt} \\
+        \simplenametablerule \\
         \end{center}
         \end{table}
         }
@@ -165,9 +169,10 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \includegraphics[keepaspectratio=true,scale=1.0]{DWlogo}
 
 \centering
-\vspace{1in}
+\vspace{3cm}
 \href{http://www.dwarfstd.org}{\dwf\ Committee}
- 
+
+\vspace{2cm} 
 \url{http://www.dwarfstd.org}
 
 \large
@@ -240,19 +245,19 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 % Define the levels of sectionality that are numbered.
 \setcounter{secnumdepth}{5}
 \include{introduction}
-\include{generaldescription}    \emptypage
-\include{programscope}
-\include{dataobject}            \emptypage
-\include{typeentries}           \emptypage
-\include{otherdebugginginformation}
-\include{datarepresentation}    \emptypage
+\include{generaldescription}            \emptypage
+\include{programscope}                  \emptypage
+\include{dataobject}                    \emptypage
+\include{typeentries}                   \emptypage
+\include{otherdebugginginformation}     \emptypage
+\include{datarepresentation}
 %  The \appendix toggles us into appendix chapters
 \appendix
 \include{attributesbytag}
-\include{debugsectionrelationships}
-\include{encodingdecoding}      \emptypage
-\include{examples}
-\include{compression}
+\include{debugsectionrelationships}     \emptypage
+\include{encodingdecoding}              \emptypage
+\include{examples}                      \emptypage
+\include{compression}                   \emptypage
 \include{sectionversionnumbers}
 \include{gnulicense}
 \printindex

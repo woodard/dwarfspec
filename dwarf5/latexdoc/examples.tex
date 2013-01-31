@@ -295,7 +295,8 @@ The DWARF description is shown
 \addtoindexx{Fortran 90}
 in Figure \refersec{fig:fortran90exampledwarfdescription}.
 
-\begin{figure}[b]
+\begin{figure}[h]
+\figurepart{1}{2}
 \begin{dwflisting}
 \begin{alltt}
 ! Description for type of 'ap'
@@ -315,15 +316,6 @@ in Figure \refersec{fig:fortran90exampledwarfdescription}.
             \livelink{chap:DWOPlit}{DW\-\_OP\-\_lit}<n> ! where n == offset(base)
             \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus}
             \livelink{chap:DWOPderef}{DW\-\_OP\-\_deref}) ! Type of index of array 'ap'
-\end{alltt}
-\end{dwflisting}
-\caption{Fortran 90 example: DWARF description}
-\label{fig:fortran90exampledwarfdescription}
-\end{figure}
-
-\begin{figure}
-\begin{dwflisting}
-\begin{alltt}
 2\$: \livelink{chap:DWTAGsubrangetype}{DW\-\_TAG\-\_subrange\-\_type}
         ! No name, default stride
         \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to INTEGER)
@@ -348,6 +340,16 @@ in Figure \refersec{fig:fortran90exampledwarfdescription}.
         !                 offset(dims\_str, [lower|upper]\_bound)
         !  That is, the expression does not get longer for each successive 
         !  dimension (other than to express the larger offsets involved).
+\end{alltt}
+\end{dwflisting}
+\caption{Fortran 90 example: DWARF description}
+\label{fig:fortran90exampledwarfdescription}
+\end{figure}
+
+\begin{figure}
+\figurepart{2}{2}
+\begin{dwflisting}
+\begin{alltt}
 3\$: \livelink{chap:DWTAGstructuretype}{DW\-\_TAG\-\_structure\-\_type}
         \livelink{chap:DWATname}{DW\-\_AT\-\_name}("array\_ptr")
         \livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size}(constant sizeof(REAL) + sizeof(desc<1>))
@@ -371,22 +373,11 @@ in Figure \refersec{fig:fortran90exampledwarfdescription}.
             \livetarg{chap:DWOPlit2}{DW\-\_OP\-\_lit2}
             ! Mask for 'ptr\_alloc' \nolink{flag}
             \livelink{chap:DWOPand}{DW\-\_OP\-\_and})
-\end{alltt}
-\end{dwflisting}
-\begin{center}
-Figure~\ref{fig:fortran90exampledwarfdescription} Fortran 90 example: DWARF description \textit{(continued)}
-\end{center}
-\end{figure}
-
-\begin{figure}
-\begin{dwflisting}
-\begin{alltt}
         \livelink{chap:DWATdatalocation}{DW\-\_AT\-\_data\-\_location}(expression= ! Get raw data address
             \livelink{chap:DWOPpushobjectaddress}{DW\-\_OP\-\_push\-\_object\-\_address}
             \livelink{chap:DWOPlit}{DW\-\_OP\-\_lit}<n> ! where n = offset(base)
             \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus}
             \livelink{chap:DWOPderef}{DW\-\_OP\-\_deref})
-
 7\$: \livelink{chap:DWTAGsubrangetype}{DW\-\_TAG\-\_subrange\-\_type}
         ! No name, default stride
         \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to INTEGER)
@@ -400,7 +391,6 @@ Figure~\ref{fig:fortran90exampledwarfdescription} Fortran 90 example: DWARF desc
             \livelink{chap:DWOPlit}{DW\-\_OP\-\_lit}<n> ! where n == ...
             \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus}
             \livelink{chap:DWOPderef}{DW\-\_OP\-\_deref})
-
 8\$: \livelink{chap:DWTAGvariable}{DW\-\_TAG\-\_variable}
         \livelink{chap:DWATname}{DW\-\_AT\-\_name}("arrays")
         \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to 6\$)
@@ -468,6 +458,8 @@ any indexing yet.
 For c), the default stride applies. Since there is no
 \livelink{chap:DWATbytestride}{DW\-\_AT\-\_byte\-\_stride} attribute, use the size of the array element
 type, which is the size of type array\_ptr (at 3\$).
+
+\clearpage
 
 Having acquired all the necessary data, perform the indexing
 operation in the usual manner -  which has nothing to do with
@@ -886,6 +878,9 @@ Figure~\ref{fig:namespaceexampledwarfdescription}: Namespace example: DWARF desc
 
 Consider the member function example fragment in 
 Figure \refersec{fig:memberfunctionexamplesourcefragment}.
+The DWARF representation in 
+Figure \refersec{fig:memberfunctionexampledwarfdescription}
+is appropriate.
 
 \begin{figure}[Here]
 \begin{lstlisting}
@@ -900,10 +895,6 @@ void A::func1(int x) {}
 \caption{Member function example: source fragment}
 \label{fig:memberfunctionexamplesourcefragment}
 \end{figure}
-
-The DWARF representation in 
-Section \refersec{fig:memberfunctionexampledwarfdescription}
-is appropriate.
 
 \begin{figure}[h]
 \begin{dwflisting}
@@ -1053,7 +1044,7 @@ of n).
 \newpage
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
-\begin{longtable}{lll}
+\begin{longtable}{l|l|l}
   \caption{Line number program example: one encoding}
   \label{tab:linenumberprogramexampleoneencoding} \\
   \hline \bfseries Opcode &\bfseries Operand &\bfseries Byte Stream \\ \hline
@@ -1084,7 +1075,7 @@ this encoding occupies 22 bytes.
 
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
-\begin{longtable}{lll}
+\begin{longtable}{l|l|l}
   \caption{Line number program example: alternate encoding} 
   \label{tab:linenumberprogramexamplealternateencoding} \\
   \hline \bfseries Opcode &\bfseries Operand &\bfseries Byte Stream \\ \hline
@@ -1197,7 +1188,7 @@ Table \refersec{tab:callframeinformationexampleconceptualmatrix}:
 
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
-\begin{longtable}{lllllllllll}
+\begin{longtable}{l|llllllllll}
   \caption{Call frame information example: conceptual matrix} 
   \label{tab:callframeinformationexampleconceptualmatrix} \\
   \hline \bfseries Location & \bfseries CFA & \bfseries R0 & \bfseries R1 & \bfseries R2 & \bfseries R3 & \bfseries R4 & \bfseries R5 & \bfseries R6 & \bfseries R7 & \bfseries R8 \\ \hline
@@ -1223,12 +1214,14 @@ foo+80&[R7]+0&s&u&u&u&s&s&s&a&r1 \\
 \end{longtable}
 \end{centering}
 
+\clearpage      % ?????
 
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
-\begin{longtable}{lll}
+\begin{longtable}{l|ll}
   \caption{Call frame information example: common information entry encoding} 
-  \label{tab:callframeinformationexamplecommoninformationentryencoding} \\
+  \label{tab:callframeinformationexamplecommoninformationentryencoding} 
+  \\
   \hline \bfseries Address &\bfseries Value &\bfseries Comment \\ \hline
 \endfirsthead
   \bfseries Address &\bfseries Value &\bfseries Comment \\ \hline
@@ -1276,7 +1269,7 @@ Table \refersec{tab:callframeinformationexampleframedescriptionentryencoding}:
 
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
-\begin{longtable}{lll}
+\begin{longtable}{l|ll}
   \caption{Call frame information example: frame description entry encoding} 
   \label{tab:callframeinformationexampleframedescriptionentryencoding} \\
   \hline \bfseries Address &\bfseries Value &\bfseries Comment \\ \hline
@@ -1293,15 +1286,15 @@ fde+8&foo&initial\_location \\
 fde+12&84&address\_range \\
 fde+16&\livelink{chap:DWCFAadvanceloc}{DW\-\_CFA\-\_advance\-\_loc}(1)&instructions \\
 fde+17&\livelink{chap:DWCFAdefcfaoffset}{DW\-\_CFA\-\_def\-\_cfa\-\_offset}(12)& \textless fs\textgreater \\
-fde+19&\livelink{chap:DWCFAadvanceloc}{DW\-\_CFA\-\_advance\-\_loc}(1)&4/ \textless caf\textgreater \\
-fde+20&\livelink{chap:DWCFAoffset}{DW\-\_CFA\-\_offset}(8,1)&-4/ \textless daf\textgreater (2nd parameter) \\
+fde+19&\livelink{chap:DWCFAadvanceloc}{DW\-\_CFA\-\_advance\-\_loc}(1)&4/\textless caf\textgreater \\
+fde+20&\livelink{chap:DWCFAoffset}{DW\-\_CFA\-\_offset}(8,1)&-4/\textless daf\textgreater (2nd parameter) \\
 fde+22&\livelink{chap:DWCFAadvanceloc}{DW\-\_CFA\-\_advance\-\_loc}(1)& \\
-fde+23&\livelink{chap:DWCFAoffset}{DW\-\_CFA\-\_offset}(6,2)&-8/ \textless daf\textgreater (2nd parameter)  \\
+fde+23&\livelink{chap:DWCFAoffset}{DW\-\_CFA\-\_offset}(6,2)&-8/\textless daf\textgreater (2nd parameter)  \\
 fde+25&\livelink{chap:DWCFAadvanceloc}{DW\-\_CFA\-\_advance\-\_loc}(1) & \\
 fde+26&\livelink{chap:DWCFAdefcfaregister}{DW\-\_CFA\-\_def\-\_cfa\-\_register}(6) & \\
 fde+28&\livelink{chap:DWCFAadvanceloc}{DW\-\_CFA\-\_advance\-\_loc}(1) & \\
-fde+29&\livelink{chap:DWCFAoffset}{DW\-\_CFA\-\_offset}(4,3)&-12/ \textless daf\textgreater (2nd parameter) \\
-fde+31&\livelink{chap:DWCFAadvanceloc}{DW\-\_CFA\-\_advance\-\_loc}(12)&44/ \textless caf\textgreater \\
+fde+29&\livelink{chap:DWCFAoffset}{DW\-\_CFA\-\_offset}(4,3)&-12/\textless daf\textgreater (2nd parameter) \\
+fde+31&\livelink{chap:DWCFAadvanceloc}{DW\-\_CFA\-\_advance\-\_loc}(12)&44/\textless caf\textgreater \\
 fde+32&\livelink{chap:DWCFArestore}{DW\-\_CFA\-\_restore}(4)& \\
 fde+33&\livelink{chap:DWCFAadvanceloc}{DW\-\_CFA\-\_advance\-\_loc}(1) & \\
 fde+34&\livelink{chap:DWCFArestore}{DW\-\_CFA\-\_restore}(6) & \\

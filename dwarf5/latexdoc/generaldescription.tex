@@ -20,21 +20,18 @@ and the attributes define the specific characteristics of the entry.
 
 The set of tag names 
 \addtoindexx{tag names|see{debugging information entry}}
-is listed in Figure \refersec{tab:tagnames}. 
+is listed in Table \refersec{tab:tagnames}. 
 The debugging information entries they identify are
 described in Sections 3, 4 and 5.
 
 % These each need to link to definition page: FIXME
 
-\begin{figure}
-%\begin{table}
-%\begin{tabular}{|}
-%\caption{Tag names}
-%\label{tab:tagnames}
-%\hline
-%\end{tabular)
-%\end{table}
-\autorows[0pt]{c}{2}{l}{
+
+\begin{table}[p]
+\caption{Tag names}
+\label{tab:tagnames}
+\simplerule[6in]
+\autocols[0pt]{c}{2}{l}{
 \livelink{chap:DWTAGaccessdeclaration}{DW\-\_TAG\-\_access\-\_declaration},
 \livelink{chap:DWTAGarraytype}{DW\-\_TAG\-\_array\-\_type},
 \livelink{chap:DWTAGbasetype}{DW\-\_TAG\-\_base\-\_type},
@@ -96,9 +93,8 @@ described in Sections 3, 4 and 5.
 \livelink{chap:DWTAGvolatiletype}{DW\-\_TAG\-\_volatile\-\_type},
 \livelink{chap:DWTAGwithstmt}{DW\-\_TAG\-\_with\-\_stmt},
 }
-\caption{Tag names}
-\label{tab:tagnames}
-\end{figure}
+\simplerule[6in]
+\end{table}
 
 
 \textit{The debugging information entry descriptions 
@@ -201,6 +197,7 @@ actually declared in the source}{objects or types that are not actually declared
 &\livelinki{chap:DWATbitstrideenumerationstridedimensionofarraytype}{Enumeration stride (dimension of array type)}{enumeration stride (dimension of array type)} \\
 \livetarg{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size} 
 &\livelinki{chap:DWATbytesizedataobjectordatatypesize}{Data object or data type size}{data object or data type size} \\
+\newpage
 \livetarg{chap:DWATbytestride}{DW\-\_AT\-\_byte\-\_stride} 
 &\livelinki{chap:DWATbytestridearrayelementstrideofarraytype}{Array element stride (of array type)}{array element stride (of array type)} \\
 &\livelinki{chap:DWATbytestridesubrangestridedimensionofarraytype}{Subrange stride (dimension of array type)}{subrange stride (dimension of array type)} \\
@@ -392,7 +389,7 @@ actually declared in the source}{objects or types that are not actually declared
 % Attribute Class entries need a ref to definition point.
 \setlength{\extrarowheight}{0.1cm}
 
-\begin{tabular}{l|p{10cm}} \hline
+\begin{tabular}{l|p{11cm}} \hline
 Attribute Class & General Use and Encoding \\ \hline
 \livetargi{chap:address}{address}{address class}
 &Refers to some location in the address space of the described program.
@@ -447,8 +444,8 @@ for that type.  \\
 (non\dash null) bytes. Data in this class are generally
 printable strings. Strings may be represented directly in
 the debugging information entry or as an offset in a separate
-string table.
- 
+string table. \\
+\hline
 \end{tabular}
 \end{table}
 
@@ -599,7 +596,7 @@ is larger than can be stored in a single stack element, the
 value is truncated to the element size and the low\dash order bits
 are pushed on the stack.
 
-\begin{enumerate}[1]
+\begin{enumerate}[1.]
 \item \livetarg{chap:DWOPlit0}{DW\-\_OP\-\_lit0}, \livetarg{chap:DWOPlit1}{DW\-\_OP\-\_lit1}, \dots, \livetarg{chap:DWOPlit31}{DW\-\_OP\-\_lit31} \\
 The \livetarg{chap:DWOPlit}{DW\-\_OP\-\_lit}n operations encode the unsigned literal values
 from 0 through 31, inclusive.
@@ -635,7 +632,7 @@ The following operations push a value onto the stack that is
 the result of adding the contents of a register to a given
 signed offset.
 
-\begin{enumerate}[1]
+\begin{enumerate}[1.]
 
 \item \livetarg{chap:DWOPfbreg}{DW\-\_OP\-\_fbreg} \\
 The \livelink{chap:DWOPfbreg}{DW\-\_OP\-\_fbreg} operation provides a signed LEB128 offset
@@ -668,7 +665,7 @@ operations manipulate the DWARF stack. Operations
 that index the stack assume that the top of the stack (most
 recently added entry) has index 0.
 
-\begin{enumerate}[1]
+\begin{enumerate}[1.]
 \item \livetarg{chap:DWOPdup}{DW\-\_OP\-\_dup} \\
 The \livelink{chap:DWOPdup}{DW\-\_OP\-\_dup} operation duplicates the value at the top of the stack.
 
@@ -724,11 +721,11 @@ target machine before being pushed onto the expression stack.
 \item \livetarg{chap:DWOPxderef}{DW\-\_OP\-\_xderef} \\
 The \livelink{chap:DWOPxderef}{DW\-\_OP\-\_xderef} operation provides an extended dereference
 mechanism. The entry at the top of the stack is treated as an
-address. The second stack entry is treated as an ``address
-space identifier'' for those architectures that support
+address. The second stack entry is treated as an \doublequote{address
+space identifier} for those architectures that support
 \addtoindexi{multiple}{address space!multiple}
 address spaces. The top two stack elements are popped,
-and a data item is retrieved through an implementation\dash defined
+and a data item is retrieved through an implementation-defined
 address calculation and pushed as the new stack top. The size
 of the data retrieved from the 
 \addtoindexi{dereferenced}{address!dereference operator}
@@ -832,7 +829,7 @@ performed modulo one plus the largest representable address
 bits). 
 Such operations do not cause an exception on overflow.
 
-\begin{enumerate}[1]
+\begin{enumerate}[1.]
 \item \livetarg{chap:DWOPabs}{DW\-\_OP\-\_abs}  \\
 The \livelink{chap:DWOPabs}{DW\-\_OP\-\_abs} operation pops the top stack entry, interprets
 it as a signed value and pushes its absolute value. If the
@@ -882,7 +879,8 @@ the result.
 
 \textit{This operation is supplied specifically to be
 able to encode more field offsets in two bytes than can be
-done with “\livelink{chap:DWOPlit}{DW\-\_OP\-\_lit\textit{n}} \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus}”.}
+done with
+\doublequote{\livelink{chap:DWOPlit}{DW\-\_OP\-\_lit\textit{n}} \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus}}.}
 
 \item \livetarg{chap:DWOPshl}{DW\-\_OP\-\_shl} \\
 The \livelink{chap:DWOPshl}{DW\-\_OP\-\_shl} operation pops the top two stack entries,
@@ -915,7 +913,7 @@ pushes the result.
 The 
 \addtoindexx{DWARF expression!control flow operations}
 following operations provide simple control of the flow of a DWARF expression.
-\begin{enumerate}[1]
+\begin{enumerate}[1.]
 \item  \livetarg{chap:DWOPle}{DW\-\_OP\-\_le}, \livetarg{chap:DWOPge}{DW\-\_OP\-\_ge}, \livetarg{chap:DWOPeq}{DW\-\_OP\-\_eq}, \livetarg{chap:DWOPlt}{DW\-\_OP\-\_lt}, \livetarg{chap:DWOPgt}{DW\-\_OP\-\_gt}, \livetarg{chap:DWOPne}{DW\-\_OP\-\_ne} \\
 The six relational operators each:
 \begin{itemize}
@@ -1007,20 +1005,19 @@ by prior agreement between the calling and called expressions.
 There 
 \addtoindexx{DWARF expression!special operations}
 is one special operation currently defined:
-\begin{enumerate}[1]
+\begin{enumerate}[1.]
 \item \livetarg{chap:DWOPnop}{DW\-\_OP\-\_nop} \\
 The \livelink{chap:DWOPnop}{DW\-\_OP\-\_nop} operation is a place holder. It has no effect
 on the location stack or any of its values.
-
 \end{enumerate}
+
 \subsection{Example Stack Operations}
 \textit {The 
 \addtoindexx{DWARF expression!examples}
 stack operations defined in 
 Section \refersec{chap:stackoperations}.
 are fairly conventional, but the following
-examples illustrate their behavior graphically.
-}
+examples illustrate their behavior graphically.}
 
 \begin{tabular}{rrcrr} 
  &Before & Operation&& After \\
@@ -1035,7 +1032,7 @@ examples illustrate their behavior graphically.
 2 &1000& & &          \\
 
 & & & & \\
-0 & 17 & \livelink{chap:DWOPpick}{DW\-\_OP\-\_pick} & 0 & 1000 \\
+0 & 17 & \livelink{chap:DWOPpick}{DW\-\_OP\-\_pick, 2} & 0 & 1000 \\
 1 & 29 & & 1&17 \\
 2 &1000& &2&29 \\
   &    & &3&1000 \\
@@ -1075,7 +1072,7 @@ an object whose location changes over the object’s lifetime.}
 Information about the location of program objects is provided
 by location descriptions. Location descriptions can be either
 of two forms:
-\begin{enumerate}[1]
+\begin{enumerate}[1.]
 \item \textit{Single location descriptions}, 
 which 
 \addtoindexx{location description!single}
@@ -1092,7 +1089,7 @@ as its lifetime is either static or the same as the lexical
 and it does not move during its lifetime.
 
 Single location descriptions are of two kinds:
-\begin{enumerate}[a]
+\begin{enumerate}[a)]
 \item Simple location descriptions, which describe the location
 \addtoindexx{location description!simple}
 of one contiguous piece (usually all) of an object. A simple
@@ -1135,7 +1132,7 @@ location list table).
 \subsection{Single Location Descriptions}
 A single location description is either:
 
-\begin{enumerate}[1]
+\begin{enumerate}[1.]
 \item A simple location description, representing an object
 \addtoindexx{location description!simple}
 which 
@@ -1163,7 +1160,6 @@ contiguous piece or all of an object or value.
 
 
 \subsubsubsection{Memory Location Descriptions}
-
 A 
 \addtoindexx{location description!memory}
 memory location description 
@@ -1175,7 +1171,6 @@ Section \refersec{chap:dwarfexpressions}
 a piece or all of an object or other entity in memory.
 
 \subsubsubsection{Register Location Descriptions}
-
 A register location description consists of a register name
 operation, which represents a piece or all of an object
 located in a given register.
@@ -1201,7 +1196,7 @@ density and should be shared by all users of a given
 architecture. It is recommended that this mapping be defined
 by the ABI authoring committee for each architecture.
 }
-\begin{enumerate}[1]
+\begin{enumerate}[1.]
 \item \livetarg{chap:DWOPreg0}{DW\-\_OP\-\_reg0}, \livetarg{chap:DWOPreg1}{DW\-\_OP\-\_reg1}, ..., \livetarg{chap:DWOPreg31}{DW\-\_OP\-\_reg31} \\
 The \livetarg{chap:DWOPreg}{DW\-\_OP\-\_reg}n operations encode the names of up to 32
 registers, numbered from 0 through 31, inclusive. The object
@@ -1219,8 +1214,7 @@ one of the register based addressing operations, such as
 (Section \refersec{chap:registerbasedaddressing})}.
 
 
-\paragraph{Implicit Location Descriptions}
-
+\subsubsubsection{Implicit Location Descriptions}
 An \addtoindex{implicit location description}
 represents a piece or all
 \addtoindexx{location description!implicit}
@@ -1235,7 +1229,7 @@ The following DWARF operations may be used to specify a value
 that has no location in the program but is a known constant
 or is computed from other locations and values in the program.
 
-\begin{enumerate}[1]
+\begin{enumerate}[1.]
 \item \livetarg{chap:DWOPimplicitvalue}{DW\-\_OP\-\_implicit\-\_value} \\
 The \livelink{chap:DWOPimplicitvalue}{DW\-\_OP\-\_implicit\-\_value} operation specifies an immediate value
 using two operands: an unsigned LEB128 length, followed by
@@ -1277,7 +1271,7 @@ Each composition operation is immediately preceded by a simple
 location description which describes the location where part
 of the resultant value is contained.
 
-\begin{enumerate}[1]
+\begin{enumerate}[1.]
 \item \livetarg{chap:DWOPpiece}{DW\-\_OP\-\_piece} \\
 The \livelink{chap:DWOPpiece}{DW\-\_OP\-\_piece} operation takes a 
 single operand, which is an
@@ -1317,7 +1311,8 @@ a sequence of bits using the least significant bits of that
 value.  
 \end{enumerate}
 
-\textit{\livelink{chap:DWOPbitpiece}{DW\-\_OP\-\_bit\-\_piece} is used instead of \livelink{chap:DWOPpiece}{DW\-\_OP\-\_piece} when
+\textit{\livelink{chap:DWOPbitpiece}{DW\-\_OP\-\_bit\-\_piece} is 
+used instead of \livelink{chap:DWOPpiece}{DW\-\_OP\-\_piece} when
 the piece to be assembled into a value or assigned to is not
 byte-sized or is not at the start of a register or addressable
 unit of memory.}
@@ -1430,7 +1425,7 @@ end of list entry.
 A 
 \addtoindexx{location list!entry}
 location list entry consists of:
-\begin{enumerate}[1]
+\begin{enumerate}[1.]
 \item A beginning address offset. 
 This address offset has the \addtoindex{size of an address} and is
 relative to the applicable base address of the compilation
@@ -1482,7 +1477,7 @@ A base
 selection 
 \addtoindexi{entry}{base address selection entry!in location list}
 consists of:
-\begin{enumerate}[1]
+\begin{enumerate}[1.]
 \item The value of the largest representable 
 address offset (for example, 0xffffffff when the size of
 an address is 32 bits).
@@ -1558,7 +1553,7 @@ attribute, whose
 value is a constant drawn from the set of codes listed in Table 
 \refersec{tab:accessibilitycodes}.
 
-\begin{simplenametable}{Accessibility codes}{tab:accessibilitycodes}
+\begin{simplenametable}[1.9in]{Accessibility codes}{tab:accessibilitycodes}
 \livetarg{chap:DWACCESSpublic}{DW\-\_ACCESS\-\_public}          \\
 \livetarg{chap:DWACCESSprivate}{DW\-\_ACCESS\-\_private}        \\
 \livetarg{chap:DWACCESSprotected}{DW\-\_ACCESS\-\_protected}    \\
@@ -1581,7 +1576,7 @@ attribute\addtoindexx{visibility attribute}, whose value is a
 constant drawn from the set of codes listed in 
 Table \refersec{tab:visibilitycodes}.
 
-\begin{simplenametable}{Visibility Codes}{tab:visibilitycodes}
+\begin{simplenametable}[1.5in]{Visibility Codes}{tab:visibilitycodes}
 \livetarg{chap:DWVISlocal}{DW\-\_VIS\-\_local}          \\
 \livetarg{chap:DWVISexported}{DW\-\_VIS\-\_exported}    \\
 \livetarg{chap:DWVISqualified}{DW\-\_VIS\-\_qualified}  \\
@@ -1600,7 +1595,7 @@ attribute\addtoindexx{virtuality attribute}, whose value is a constant drawn
 from the set of codes listed in 
 Table \refersec{tab:virtualitycodes}.
 
-\begin{simplenametable}[2.5in]{Virtuality codes}{tab:virtualitycodes}
+\begin{simplenametable}[2.4in]{Virtuality codes}{tab:virtualitycodes}
 \livetarg{chap:DWVIRTUALITYnone}{DW\-\_VIRTUALITY\-\_none}                      \\
 \livetarg{chap:DWVIRTUALITYvirtual}{DW\-\_VIRTUALITY\-\_virtual}                \\
 \livetarg{chap:DWVIRTUALITYpurevirtual}{DW\-\_VIRTUALITY\-\_pure\-\_virtual}    \\
@@ -1700,9 +1695,12 @@ has been specified.
 
 \textit {For example, the Intel386 ™ processor might use the following values:}
 
-\begin{figure}[here]
+\begin{table}[here]
+\caption{Example address class codes}
+\label{tab:inteladdressclasstable}
 \centering
-\begin{tabular}{lll} 
+\begin{tabular}{l|c|l}
+\hline
 Name&Value&Meaning  \\
 \hline
 \textit{DW\-\_ADDR\-\_none}&   0 & \textit{no class specified} \\
@@ -1710,11 +1708,10 @@ Name&Value&Meaning  \\
 \textit{DW\-\_ADDR\-\_far16}&  2 & \textit{16\dash bit offset, 16\dash bit segment} \\
 \textit{DW\-\_ADDR\-\_huge16}& 3 & \textit{16\dash bit offset, 16\dash bit segment} \\
 \textit{DW\-\_ADDR\-\_near32}& 4 & \textit{32\dash bit offset, no segment} \\
-\textit{DW\-\_ADDR\-\_far32}&  5 & \textit{32\dash bit offset, 16\dash bit segment}
+\textit{DW\-\_ADDR\-\_far32}&  5 & \textit{32\dash bit offset, 16\dash bit segment} \\
+\hline
 \end{tabular}
-\caption{Example address class codes}
-\label{fig:inteladdressclasstable}
-\end{figure}
+\end{table}
 
 \section{Non-Defining Declarations and Completions}
 \label{nondefiningdeclarationsandcompletions}
@@ -2037,7 +2034,7 @@ end of list entry.
 
 A \addtoindex{range list} entry consists of:
 
-\begin{enumerate}[1]
+\begin{enumerate}[1.]
 \item A beginning address offset. This address offset has the 
 \addtoindex{size of an address} and is relative to
 the applicable base address of the compilation unit referencing this 
@@ -2080,7 +2077,7 @@ the entries be ordered in any particular way.
 
 A base address selection entry consists of:
 
-\begin{enumerate}[1]
+\begin{enumerate}[1.]
 \item The value of the largest representable address offset (for example, 0xffffffff when the size of
 an address is 32 bits).
 
@@ -2228,7 +2225,7 @@ attribute is interpreted in bits.
 \textit{Some language implementations, notably 
 \addtoindex{C++} and similar
 languages, 
-make use of implementation defined names within
+make use of implementation-defined names within
 object files that are different from the identifier names
 (see Section \refersec{chap:identifiernames}) of entities as they appear in the
 source. Such names, sometimes known 

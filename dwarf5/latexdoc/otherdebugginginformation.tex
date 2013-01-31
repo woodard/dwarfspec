@@ -257,7 +257,6 @@ in the \addtoindex{.debug\_line}
 section could be represented as a large
 matrix, with one row for each instruction in the emitted
 object code. The matrix would have columns for:}
-
 \begin{itemize}
 \item \textit{the source file name}
 \item \textit{the source line number}
@@ -265,7 +264,6 @@ object code. The matrix would have columns for:}
 \item \textit{whether this instruction is the beginning of a \addtoindex{basic block}}
 \item \textit{and so on}
 \end{itemize}
-
 \textit{Such a matrix, however, would be impractically large. We
 shrink it with two techniques. First, we delete from
 the matrix each row whose file, line, source column and
@@ -328,7 +326,7 @@ The line number information state machine has the following
 registers:
 \begin{longtable}{l|p{9cm}}
   \caption{State Machine Registers } \\
-  \hline \\ \bfseries Register name&\bfseries Meaning\\ \hline
+  \hline \bfseries Register name&\bfseries Meaning\\ \hline
 \endfirsthead
   \bfseries Register name&\bfseries Meaning\\ \hline
 \endhead
@@ -410,21 +408,21 @@ exists for a given source position, the discriminator value
 should be zero. \\
 \end{longtable}
 
+\clearpage      % Keep this sentence with the following table
 At the beginning  of each sequence within a line number
 program, the state of the registers is:
 
-%\begin{tabular}{lp{8cm}}
-\begin{tabular}{lp{11cm}}
+\begin{tabular}{lp{9cm}}
 address & 0 \\
 \addtoindex{op\_index} & 0 \\
 file & 1 \\
 line & 1 \\
 column & 0 \\
 \addtoindex{is\_stmt} & determined by \addtoindex{default\_is\_stmt} in the line number program header \\
-\addtoindex{basic\_block} & ``false'' \addtoindexx{basic block} \\
-\addtoindex{end\_sequence} & ``false'' \\
-\addtoindex{prologue\_end} & ``false'' \\
-\addtoindex{epilogue\_begin} & ``false'' \\
+\addtoindex{basic\_block}    & \doublequote{false} \addtoindexx{basic block} \\
+\addtoindex{end\_sequence}   & \doublequote{false} \\
+\addtoindex{prologue\_end}   & \doublequote{false} \\
+\addtoindex{epilogue\_begin} & \doublequote{false} \\
 \addtoindex{isa} & 0 \\
 discriminator & 0 \\
 \end{tabular}
@@ -434,33 +432,34 @@ discriminator & 0 \\
 architecturally determined default instruction set. This may
 be fixed by the ABI, or it may be specified by other means,
 for example, by the object file description.}
-
 \subsection{Line Number Program Instructions}
-
 The state machine instructions in a line number program belong to one of three categories:
 
-\begin{tabular}{lp{10cm}}
-special opcodes &
-These have a \addtoindex{ubyte} opcode field and no operands.
+\begin{description}
+\item[special opcodes]
+
+These have a \addtoindex{ubyte} opcode field and no operands.\vspace{1ex}
 
 \textit{Most of the instructions in a 
 line number program are special opcodes.} \\
 
-standard opcodes &
+\item[standard opcodes]
+
 These have a \addtoindex{ubyte} opcode field which may be followed by zero or more
 \addtoindex{LEB128} operands (except for 
-\livelink{chap:DWLNSfixedadvancepc}{DW\-\_LNS\-\_fixed\-\_advance\-\_pc}, see below).
+\mbox{\livelink{chap:DWLNSfixedadvancepc}{DW\-\_LNS\-\_fixed\-\_advance\-\_pc},} see below).
 The opcode implies the number of operands and their meanings, but the
 line number program header also specifies the number of operands for
 each standard opcode. \\
 
-extended opcodes &
+\item[extended opcodes]
+
 These have a multiple byte format. The first byte is zero; the next bytes
 are an unsigned LEB128\addtoindexx{LEB128!unsigned} integer giving the number of bytes in the
 instruction itself (does not include the first zero byte or the size). The
 remaining bytes are the instruction itself (which begins with a \addtoindex{ubyte}
 extended opcode). \\
-\end{tabular}
+\end{description}
 
 
 \subsection{The Line Number Program Header}
@@ -774,7 +773,7 @@ is the result of the adjusted opcode divided by the
 line\_range. The new address and \addtoindex{op\_index} values
 are given by
 \begin{alltt}
-  \textit{adjusted opcode} = opcode – opcode\_base
+  \textit{adjusted opcode} = opcode \dash opcode\_base
   \textit{operation advance} = \textit{adjusted opcode} / line\_range
 
   new address = address +
@@ -814,7 +813,6 @@ within the range [-3, 8] and (because of the limited number
 of opcodes available) when the difference between addresses
 is within the range [0, 20], but not all line advances are
 available for the maximum \addtoindex{operation advance} (see below).}
-
 \textit{The opcode mapping would be:}
 \begin{alltt}\textit{
                         Line Advance
@@ -1121,15 +1119,15 @@ The valid \addtoindex{macinfo types} are as follows:
 
 \begin{tabular}{ll}
 \livelink{chap:DWMACINFOdefine}{DW\-\_MACINFO\-\_define} 
-&A macro definition.\\
+&A macro definition\\
 \livelink{chap:DWMACINFOundef}{DW\-\_MACINFO\-\_undef}
-&A macro undefinition.\\
+&A macro undefinition\\
 \livelink{chap:DWMACINFOstartfile}{DW\-\_MACINFO\-\_start\-\_file}
-&The start of a new source file inclusion.\\
+&The start of a new source file inclusion\\
 \livelink{chap:DWMACINFOendfile}{DW\-\_MACINFO\-\_end\-\_file}
-&The end of the current source file inclusion.\\
+&The end of the current source file inclusion\\
 \livelink{chap:DWMACINFOvendorext}{DW\-\_MACINFO\-\_vendor\-\_ext}
-& Vendor specific macro information directives.\\
+& Vendor specific macro information directives\\
 \end{tabular}
 
 \subsubsection{Define and Undefine Entries}
@@ -1405,8 +1403,8 @@ contain rules that describe whether a given register has been
 saved and the rule to find the value for the register in the
 previous frame.
 
+\clearpage
 The register rules are:
-
 
 \begin{tabular}{lp{8cm}}
 undefined 

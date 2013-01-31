@@ -8,8 +8,6 @@ encode and decode signed and unsigned numbers in LEB128
 representation.
 
 \begin{figure}[here]
-\caption{Algorithm to encode an unsigned integer}
-\addtoindexx{LEB128!unsigned, encoding as}
 \begin{lstlisting}
 do
 {
@@ -20,11 +18,11 @@ do
     emit byte;
 } while (value != 0);
 \end{lstlisting}
+\caption{Algorithm to encode an unsigned integer}
+\addtoindexx{LEB128!unsigned, encoding as}
 \end{figure}
 
 \begin{figure}[here]
-\caption{Algorithm to encode a signed integer}
-\addtoindexx{LEB128!signed, encoding as}
 \begin{lstlisting}
 more = 1;
 negative = (value < 0);
@@ -49,11 +47,11 @@ while(more)
     emit byte;
 }
 \end{lstlisting}
+\caption{Algorithm to encode a signed integer}
+\addtoindexx{LEB128!signed, encoding as}
 \end{figure}
 
 \begin{figure}[here]
-\caption{Algorithm to decode an unsigned LEB128 integer}
-\addtoindexx{LEB128!unsigned, decoding of}
 \begin{lstlisting}
 result = 0;
 shift = 0;
@@ -66,11 +64,11 @@ while(true)
     shift += 7;
 }
 \end{lstlisting}
+\caption{Algorithm to decode an unsigned LEB128 integer}
+\addtoindexx{LEB128!unsigned, decoding of}
 \end{figure}
 
 \begin{figure}[here]
-\caption{Algorithm to decode a signed LEB128 integer}
-\addtoindexx{LEB128!signed, decoding of}
 \begin{lstlisting}
 result = 0;
 shift = 0;
@@ -88,4 +86,6 @@ if ((shift <size) \&\& (sign bit of byte is set))
     /* sign extend */
     result |= - (1 << shift);
 \end{lstlisting}
+\caption{Algorithm to decode a signed LEB128 integer}
+\addtoindexx{LEB128!signed, decoding of}
 \end{figure}
