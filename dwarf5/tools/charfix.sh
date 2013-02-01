@@ -3,10 +3,9 @@ m() {
     python charfix.py  ../latexdoc/$1
     mv ../latexdoc/$1.out ../latexdoc/$1
 }
-#m attributesbytag.tex	       
-#m foreword4.1.tex 
+m attributesbytag.tex	       
+m foreword4.1.tex 
 m compression.tex		       
-exit 0
 m foreword.tex 
 m copyright.tex		       
 m generaldescription.tex dataobject.tex		       
