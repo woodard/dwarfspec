@@ -153,7 +153,7 @@ lookup by address, a table is maintained in a separate
 object file section called 
 \addtoindex{.debug\_aranges}. The table consists
 of sets of variable length entries, each set describing the
-portion of the program’s address space that is covered by
+portion of the program\textquoteright s address space that is covered by
 a single compilation unit.
 
 Each set begins with a header containing five values:
@@ -1004,7 +1004,7 @@ The extended opcodes are as follows:
 \item \textbf{DW\-\_LNE\-\_end\-\_sequence} \\
 The \livetarg{chap:DWLNEendsequence}{DW\-\_LNE\-\_end\-\_sequence} opcode takes no operands. It sets the
 \addtoindex{end\_sequence}
-register of the state machine to “true” and
+register of the state machine to \doublequote{true} and
 appends a row to the matrix using the current values of the
 state-machine registers. Then it resets the registers to the
 initial values specified above 
@@ -1106,8 +1106,8 @@ the macro information for a
 given compilation unit is represented in the 
 \addtoindex{.debug\_macinfo}
 section of an object file. The macro information for each
-compilation unit is represented as a series of “macinfo”
-entries. Each macinfo entry consists of a “type code” and
+compilation unit is represented as a series of \doublequote{macinfo}
+entries. Each macinfo entry consists of a \doublequote{type code} and
 up to two additional operands. The series of entries for a
 given compilation unit ends with an entry containing a type
 code of 0.
@@ -1288,7 +1288,7 @@ across a call. If a callee wishes to use such a register, it
 saves the value that the register had at entry time in its call
 frame and restores it on exit. The code that allocates space
 on the call frame stack and performs the save operation is
-called the subroutine’s \addtoindex{prologue}, and the code that performs
+called the subroutine\textquoteright s \addtoindex{prologue}, and the code that performs
 the restore operation and deallocates the frame is called its
 \addtoindex{epilogue}. Typically, the 
 \addtoindex{prologue} code is physically at the
@@ -1301,14 +1301,14 @@ on the top of the call frame stack, the debugger must
 it finds the activation of interest.  A debugger unwinds
 a stack in steps. Starting with the current activation it
 virtually restores any registers that were preserved by the
-current activation and computes the predecessor’s CFA and
+current activation and computes the predecessor\textquoteright s CFA and
 code location. This has the logical effect of returning from
 the current subroutine to its predecessor. We say that the
 debugger virtually unwinds the stack because the actual state
 of the target process is unchanged.}
 
 \textit{The unwinding operation needs to know where registers are
-saved and how to compute the predecessor’s CFA and code
+saved and how to compute the predecessor\textquoteright s CFA and code
 location. When considering an architecture-independent way
 of encoding this information one has to consider a number of
 special things.}
@@ -1667,7 +1667,7 @@ selector of the given length.
 The \livetarg{chap:DWCFAadvanceloc}{DW\-\_CFA\-\_advanceloc} instruction takes a single operand (encoded
 with the opcode) that represents a constant delta. The required
 action is to create a new table row with a location value that
-is computed by taking the current entry’s location value
+is computed by taking the current entry\textquoteright s location value
 and adding the value of 
 \textit{delta * \addtoindex{code\_alignment\_factor}}. 
 All
@@ -1930,7 +1930,7 @@ contained in the FDE. If so, then:}
 \item \textit{Initialize a register set by reading the
 initial\_instructions field of the associated CIE.}
 
-\item \textit{Read and process the FDE’s instruction
+\item \textit{Read and process the FDE\textquoteright s instruction
 sequence until a \livelink{chap:DWCFAadvanceloc}{DW\-\_CFA\-\_advance\-\_loc}, 
 \livelink{chap:DWCFAsetloc}{DW\-\_CFA\-\_set\-\_loc}, or the
 end of the instruction stream is encountered.}
