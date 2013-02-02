@@ -37,6 +37,7 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 % \textregistered is the trademark symbol
 \usepackage[headheight=16pt,paper=letterpaper]{geometry}
 \setlength{\headheight}{15pt}  % avoids warning from latex
+\usepackage{needspace}     % For assuring space remaining on a page
 \usepackage{ifthen}        % For conditional processing
 \usepackage{changepage}    % For odd/even page checks
 \usepackage{epic}          % For eepic package 
@@ -119,6 +120,9 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 
 % Better naming for the lowest level section header
 \newcommand{\subsubsubsection}[1]{\paragraph{#1.}}
+
+% Issue \clear space if less than n lines remain on page
+\newcommand{\needlines}[1]{\needspace{#1\baselineskip}}
 
 % Reduce vertical space at beginning of a list
 \setlength{\topsep}{0in}
@@ -228,6 +232,7 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \listoftables
 
 \flushleft
+\raggedbottom
 \chapterstyle{section}
 
 \setlength{\parindent}{0pt} 
@@ -245,12 +250,12 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 % Define the levels of sectionality that are numbered.
 \setcounter{secnumdepth}{5}
 \include{introduction}
-\include{generaldescription}            \emptypage
+\include{generaldescription}            %\emptypage
 \include{programscope}                  \emptypage
 \include{dataobject}                    \emptypage
 \include{typeentries}                   \emptypage
-\include{otherdebugginginformation}     \emptypage
-\include{datarepresentation}
+\include{otherdebugginginformation}
+\include{datarepresentation}            \emptypage
 %  The \appendix toggles us into appendix chapters
 \appendix
 \include{attributesbytag}
