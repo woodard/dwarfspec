@@ -308,6 +308,7 @@ interpretation of the information contained directly in the
 \addtoindex{.debug\_info} or 
 \addtoindex{.debug\_types} section.
 
+\needlines{4}
 Multiple debugging information entries may share the same
 abbreviation table entry. Each compilation unit is associated
 with a particular abbreviation table, but multiple compilation
@@ -763,7 +764,7 @@ encouraged to use \livelink{chap:DWFORMsdata}{DW\-\_FORM\-\_sdata} or
 unsigned integers respectively, rather than 
 \livelink{chap:DWFORMdata}{DW\-\_FORM\-\_data}\textless n\textgreater.}
 
-
+\needlines{4}
 \item \livelink{chap:exprloc}{exprloc} \\
 This is an unsigned LEB128 length followed by the
 number of information bytes specified by the length
@@ -842,6 +843,7 @@ DWARF format, this offset is a 4\dash byte unsigned value;
 in the 64\dash bit DWARF format, it is an 8\dash byte unsigned value
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
+\needlines{4}
 \item \livelink{chap:rangelistptr}{rangelistptr} \\
 This is an 
 \addtoindexx{section offset!in class rangelistptr value}
@@ -1250,6 +1252,8 @@ Table \refersec{tab:attributeformencodings}.
 \end{longtable}
 \end{centering}
 
+
+\needlines{6}
 \section{Variable Length Data}
 \label{datarep:variablelengthdata}
 \addtoindexx{variable length data|see {LEB128}}
@@ -1312,7 +1316,7 @@ numbers.
 \addtoindexx{LEB128!examples}
 gives algorithms for encoding and decoding these forms.}
 
-
+\needlines{8}
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|l|l}
@@ -1851,6 +1855,7 @@ the
 \livelink{chap:DWATinline}{DW\-\_AT\-\_inline} attribute are given in 
 Table \refersec{tab:inlineencodings}.
 
+\needlines{8}
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c}
@@ -1874,7 +1879,7 @@ Table \refersec{tab:inlineencodings}.
 
 % this clearpage is ugly, but the following table came
 % out oddly without it.
-\clearpage
+
 \section{Array Ordering}
 \label{datarep:arrayordering}
 
@@ -1933,6 +1938,7 @@ Table \refersec{tab:discriminantdescriptorencodings}.
 \end{longtable}
 \end{centering}
 
+\needlines{6}
 \section{Name Lookup Tables}
 \label{datarep:namelookuptables}
 
@@ -2002,6 +2008,7 @@ Each set is terminated by an
 offset containing the value 0.
 
 
+\needlines{6}
 \section{Address Range Table}
 \label{datarep:addrssrangetable}
 
@@ -2122,6 +2129,7 @@ Table \refersec{tab:linenumberstandardopcodeencodings}.
 \end{centering}
 
 
+\needspace{10cm}
 The encodings for the extended opcodes are given in 
 \addtoindexx{line number opcodes!extended opcode encoding}
 Table \refersec{tab:linenumberextendedopcodeencodings}.
@@ -2164,7 +2172,6 @@ The encodings
 are given in 
 Table \refersec{tab:macinfotypeencodings}.
 
-\clearpage
 
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
@@ -2188,6 +2195,7 @@ Table \refersec{tab:macinfotypeencodings}.
 \end{longtable}
 \end{centering}
 
+\needlines{7}
 \section{Call Frame Information}
 \label{datarep:callframeinformation}
 
@@ -2377,6 +2385,7 @@ Table 41 \refersec{tab:integerrepresentationnames}.
 \end{longtable}
 \end{centering}
 
+\needlines{6}
 \section{Type Signature Computation}
 \label{datarep:typesignaturecomputation}
 
@@ -2414,10 +2423,17 @@ or namespace (including its trailing null byte).
 \item  Append to S the letter 'D', followed by the DWARF tag of
 the debugging information entry.
 
-\item For each of the following attributes that are present in
-the debugging information entry, in the order listed below,
+\item For each of the attributes in
+Table \refersec{tab:attributesusedintypesignaturecomputation}
+that are present in
+the debugging information entry, in the order listed,
 append to S a marker letter (see below), the DWARF attribute
 code, and the attribute value.
+
+\begin{table}[ht]
+\caption{Attributes used in type signature computation}
+\label{tab:attributesusedintypesignaturecomputation}
+\simplerule[\textwidth]
 \begin{center}
 \autocols[0pt]{c}{2}{l}{
 \livelink{chap:DWATname}{DW\-\_AT\-\_name},
@@ -2470,6 +2486,8 @@ code, and the attribute value.
 \livelink{chap:DWATvtableelemlocation}{DW\-\_AT\-\_vtable\-\_elem\-\_location}
 }
 \end{center}
+\simplerule[\textwidth]
+\end{table}
 
 Note that except for the initial 
 \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute,
@@ -2616,6 +2634,7 @@ a type.}
 \end{itemize}
 
 
+\needlines{4}
 \textit{Certain attributes are not included in the type signature:}
 
 \begin{itemize}

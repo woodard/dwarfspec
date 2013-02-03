@@ -94,6 +94,7 @@ section groups:
 where each \addtoindex{section group} might or might not contain executable
 code (\textit{.text} sections) or data (\textit{.data} sections).
 
+\needlines{6}
 A \textit{\addtoindex{section group}} is a named set 
 of section contributions
 within an object file with the property that the entire set
@@ -550,7 +551,7 @@ example, consider
 Figure \refersec{fig:duplicateeliminationexample2fortransource}.
 
 \begin{figure}
-\textbf{File CommonStuff.fh}
+\textit{File CommonStuff.fh}
 \addtoindexx{Fortran}
 \begin{lstlisting}[numbers=none]
 IMPLICIT INTEGER(A-Z)
@@ -558,7 +559,7 @@ COMMON /Common1/ C(100)
 PARAMETER(SEVEN = 7)
 \end{lstlisting}
 
-\textbf{File Func.f}
+\textit{File Func.f}
 \begin{lstlisting}[numbers=none]
 FUNCTION FOO (N)
 INCLUDE 'CommonStuff.fh'
@@ -659,7 +660,7 @@ A companion main program is shown in
 Figure \refersec{fig:duplicateeliminationexample2companionsource}
 
 \begin{figure}
-\textbf{File Main.f:} 
+\textit{File Main.f} 
 \begin{lstlisting}[numbers=none]
 INCLUDE 'CommonStuff.fh'
 C(50) = 8
@@ -670,6 +671,7 @@ END
 \label{fig:duplicateeliminationexample2companionsource}
 \end{figure}
 
+\needlines{3}
 That main program results in an object file that
 contained a duplicate of the \addtoindex{section group} named
 my.f90.company.f90.CommonStuff.fh.654321 
@@ -712,6 +714,7 @@ because the included declarations are not independently
 visible as global entities.
 
 
+\needlines{6}
 \subsubsection{C Example}
 
 The \addtoindex{C} example 
@@ -855,6 +858,7 @@ L2:
 \label{fig:typesignaturecomputation1dwarfrepresentation}
 \end{figure}
 
+\needlines{3}
 In computing a signature for the type N::C, flatten the type
 \addtoindexx{type signature}
 description into a byte stream according to the procedure
