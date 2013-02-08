@@ -595,30 +595,29 @@ If the value of a constant in one of these operations
 is larger than can be stored in a single stack element, the
 value is truncated to the element size and the low\dash order bits
 are pushed on the stack.
-
-\begin{enumerate}[1.]
-\item \livetarg{chap:DWOPlit0}{DW\-\_OP\-\_lit0}, \livetarg{chap:DWOPlit1}{DW\-\_OP\-\_lit1}, \dots, \livetarg{chap:DWOPlit31}{DW\-\_OP\-\_lit31} \\
+\begin{enumerate}[1. ]
+\itembfnl{\livetarg{chap:DWOPlit0}{DW\-\_OP\-\_lit0}, \livetarg{chap:DWOPlit1}{DW\-\_OP\-\_lit1}, \dots, \livetarg{chap:DWOPlit31}{DW\-\_OP\-\_lit31}}
 The \livetarg{chap:DWOPlit}{DW\-\_OP\-\_lit}n operations encode the unsigned literal values
 from 0 through 31, inclusive.
 
-\item \livetarg{chap:DWOPaddr}{DW\-\_OP\-\_addr} \\
+\itembfnl{\livetarg{chap:DWOPaddr}{DW\-\_OP\-\_addr}}
 The \livelink{chap:DWOPaddr}{DW\-\_OP\-\_addr} operation has a single operand that encodes
 a machine address and whose size is the \addtoindex{size of an address}
 on the target machine.
 
-\item \livetarg{chap:DWOPconst1u}{DW\-\_OP\-\_const1u}, \livetarg{chap:DWOPconst2u}{DW\-\_OP\-\_const2u}, \livetarg{chap:DWOPconst4u}{DW\-\_OP\-\_const4u}, \livetarg{chap:DWOPconst8u}{DW\-\_OP\-\_const8u} \\
+\itembfnl{\livetarg{chap:DWOPconst1u}{DW\-\_OP\-\_const1u}, \livetarg{chap:DWOPconst2u}{DW\-\_OP\-\_const2u}, \livetarg{chap:DWOPconst4u}{DW\-\_OP\-\_const4u}, \livetarg{chap:DWOPconst8u}{DW\-\_OP\-\_const8u}}
 The single operand of a \livetarg{chap:DWOPconstnu}{DW\-\_OP\-\_constnu} operation provides a 1,
 2, 4, or 8\dash byte unsigned integer constant, respectively.
 
-\item \livetarg{chap:DWOPconst1s}{DW\-\_OP\-\_const1s} , \livetarg{chap:DWOPconst2s}{DW\-\_OP\-\_const2s}, \livetarg{chap:DWOPconst4s}{DW\-\_OP\-\_const4s}, \livetarg{chap:DWOPconst8s}{DW\-\_OP\-\_const8s} \\
+\itembfnl{\livetarg{chap:DWOPconst1s}{DW\-\_OP\-\_const1s} , \livetarg{chap:DWOPconst2s}{DW\-\_OP\-\_const2s}, \livetarg{chap:DWOPconst4s}{DW\-\_OP\-\_const4s}, \livetarg{chap:DWOPconst8s}{DW\-\_OP\-\_const8s}}
 The single operand of a \livetarg{chap:DWOPconstns}{DW\-\_OP\-\_constns} operation provides a 1,
 2, 4, or 8\dash byte signed integer constant, respectively.
 
-\item \livetarg{chap:DWOPconstu}{DW\-\_OP\-\_constu} \\
+\itembfnl{\livetarg{chap:DWOPconstu}{DW\-\_OP\-\_constu}}
 The single operand of the \livelink{chap:DWOPconstu}{DW\-\_OP\-\_constu} operation provides
 an unsigned LEB128 integer constant.
 
-\item \livetarg{chap:DWOPconsts}{DW\-\_OP\-\_consts} \\
+\itembfnl{\livetarg{chap:DWOPconsts}{DW\-\_OP\-\_consts}}
 The single operand of the \livelink{chap:DWOPconsts}{DW\-\_OP\-\_consts} operation provides
 a signed LEB128 integer constant.
 
@@ -631,10 +630,8 @@ The following operations push a value onto the stack that is
 \addtoindexx{DWARF expression!register based addressing}
 the result of adding the contents of a register to a given
 signed offset.
-
-\begin{enumerate}[1.]
-
-\item \livetarg{chap:DWOPfbreg}{DW\-\_OP\-\_fbreg} \\
+\begin{enumerate}[1. ]
+\itembfnl{\livetarg{chap:DWOPfbreg}{DW\-\_OP\-\_fbreg}}
 The \livelink{chap:DWOPfbreg}{DW\-\_OP\-\_fbreg} operation provides a signed LEB128 offset
 from the address specified by the location description in the
 \livelink{chap:DWATframebase}{DW\-\_AT\-\_frame\-\_base} attribute of the current function. (This
@@ -643,13 +640,13 @@ some offset. On more sophisticated systems it might be a
 location list that adjusts the offset according to changes
 in the stack pointer as the PC changes.)
 
-\item \livetarg{chap:DWOPbreg0}{DW\-\_OP\-\_breg0}, \livetarg{chap:DWOPbreg1}{DW\-\_OP\-\_breg1}, \dots, \livetarg{chap:DWOPbreg31}{DW\-\_OP\-\_breg31} \\
+\itembfnl{\livetarg{chap:DWOPbreg0}{DW\-\_OP\-\_breg0}, \livetarg{chap:DWOPbreg1}{DW\-\_OP\-\_breg1}, \dots, \livetarg{chap:DWOPbreg31}{DW\-\_OP\-\_breg31} }
 The single operand of the \livetarg{chap:DWOPbreg}{DW\-\_OP\-\_breg}n 
 operations provides
 a signed LEB128 offset from
 the specified register.
 
-\item \livetarg{chap:DWOPbregx}{DW\-\_OP\-\_bregx} \\
+\itembfnl{\livetarg{chap:DWOPbregx}{DW\-\_OP\-\_bregx} }
 The \livelink{chap:DWOPbregx}{DW\-\_OP\-\_bregx} operation has two operands: a register
 which is specified by an unsigned LEB128 number, followed by
 a signed LEB128 offset.
@@ -664,49 +661,46 @@ The following
 operations manipulate the DWARF stack. Operations
 that index the stack assume that the top of the stack (most
 recently added entry) has index 0.
-
-\begin{enumerate}[1.]
-\item \livetarg{chap:DWOPdup}{DW\-\_OP\-\_dup} \\
+\begin{enumerate}[1. ]
+\itembfnl{\livetarg{chap:DWOPdup}{DW\-\_OP\-\_dup}}
 The \livelink{chap:DWOPdup}{DW\-\_OP\-\_dup} operation duplicates the value at the top of the stack.
 
-\item \livetarg{chap:DWOPdrop}{DW\-\_OP\-\_drop} \\
+\itembfnl{\livetarg{chap:DWOPdrop}{DW\-\_OP\-\_drop}}
 The \livelink{chap:DWOPdrop}{DW\-\_OP\-\_drop} operation pops the value at the top of the stack.
 
-\item \livetarg{chap:DWOPpick}{DW\-\_OP\-\_pick} \\
+\itembfnl{\livetarg{chap:DWOPpick}{DW\-\_OP\-\_pick}}
 The single operand of the \livelink{chap:DWOPpick}{DW\-\_OP\-\_pick} operation provides a
 1\dash byte index. A copy of the stack entry with the specified
 index (0 through 255, inclusive) is pushed onto the stack.
 
-\item \livetarg{chap:DWOPover}{DW\-\_OP\-\_over} \\
+\itembfnl{\livetarg{chap:DWOPover}{DW\-\_OP\-\_over}}
 The \livelink{chap:DWOPover}{DW\-\_OP\-\_over} operation duplicates the entry currently second
 in the stack at the top of the stack. 
 This is equivalent to
 a \livelink{chap:DWOPpick}{DW\-\_OP\-\_pick} operation, with index 1.  
 
-\item \livetarg{chap:DWOPswap}{DW\-\_OP\-\_swap} \\
+\itembfnl{\livetarg{chap:DWOPswap}{DW\-\_OP\-\_swap}}
 The \livelink{chap:DWOPswap}{DW\-\_OP\-\_swap} operation swaps the top two stack entries. 
 The entry at the top of the
 stack becomes the second stack entry, 
 and the second entry becomes the top of the stack.
 
-\item \livetarg{chap:DWOProt}{DW\-\_OP\-\_rot} \\
+\itembfnl{\livetarg{chap:DWOProt}{DW\-\_OP\-\_rot}}
 The \livelink{chap:DWOProt}{DW\-\_OP\-\_rot} operation rotates the first three stack
 entries. The entry at the top of the stack becomes the third
 stack entry, the second entry becomes the top of the stack,
 and the third entry becomes the second entry.
 
-\item  \livetarg{chap:DWOPderef}{DW\-\_OP\-\_deref} \\
-The 
-\livelink{chap:DWOPderef}{DW\-\_OP\-\_deref} 
-operation 
-pops the top stack entry and 
+\itembfnl{\livetarg{chap:DWOPderef}{DW\-\_OP\-\_deref}}
+The \livelink{chap:DWOPderef}{DW\-\_OP\-\_deref} 
+operation  pops the top stack entry and 
 treats it as an address. The value
 retrieved from that address is pushed. 
 The size of the data retrieved from the 
 \addtoindexi{dereferenced}{address!dereference operator}
 address is the \addtoindex{size of an address} on the target machine.
 
-\item \livetarg{chap:DWOPderefsize}{DW\-\_OP\-\_deref\-\_size} \\
+\itembfnl{\livetarg{chap:DWOPderefsize}{DW\-\_OP\-\_deref\-\_size}}
 The \livelink{chap:DWOPderefsize}{DW\-\_OP\-\_deref\-\_size} operation behaves like the \livelink{chap:DWOPderef}{DW\-\_OP\-\_deref}
 operation: it pops the top stack entry and treats it as an
 address. The value retrieved from that address is pushed. In
@@ -718,7 +712,7 @@ than the \addtoindex{size of an address} on the target machine. The data
 retrieved is zero extended to the size of an address on the
 target machine before being pushed onto the expression stack.
 
-\item \livetarg{chap:DWOPxderef}{DW\-\_OP\-\_xderef} \\
+\itembfnl{\livetarg{chap:DWOPxderef}{DW\-\_OP\-\_xderef}}
 The \livelink{chap:DWOPxderef}{DW\-\_OP\-\_xderef} operation provides an extended dereference
 mechanism. The entry at the top of the stack is treated as an
 address. The second stack entry is treated as an \doublequote{address
@@ -732,11 +726,11 @@ of the data retrieved from the
 address is the
 \addtoindex{size of an address} on the target machine.
 
-\item \livetarg{chap:DWOPxderefsize}{DW\-\_OP\-\_xderef\-\_size}\\
+\itembfnl{\livetarg{chap:DWOPxderefsize}{DW\-\_OP\-\_xderef\-\_size}}
 The \livelink{chap:DWOPxderefsize}{DW\-\_OP\-\_xderef\-\_size} operation behaves like the
 \livelink{chap:DWOPxderef}{DW\-\_OP\-\_xderef} operation.The entry at the top of the stack is
 treated as an address. The second stack entry is treated as
-an ``address space identifier'' for those architectures
+an \doublequote{address space identifier} for those architectures
 that support 
 \addtoindexi{multiple}{address space!multiple}
 address spaces. The top two stack
@@ -751,7 +745,7 @@ than the \addtoindex{size of an address} on the target machine. The data
 retrieved is zero extended to the \addtoindex{size of an address} on the
 target machine before being pushed onto the expression stack.
 
-\item \livetarg{chap:DWOPpushobjectaddress}{DW\-\_OP\-\_push\-\_object\-\_address}\\
+\itembfnl{\livetarg{chap:DWOPpushobjectaddress}{DW\-\_OP\-\_push\-\_object\-\_address}}
 The \livelink{chap:DWOPpushobjectaddress}{DW\-\_OP\-\_push\-\_object\-\_address}
 operation pushes the address
 of the object currently being evaluated as part of evaluation
@@ -771,7 +765,8 @@ to evaluation of a \livelink{chap:DWATdatamemberlocation}{DW\-\_AT\-\_data\-\_me
 data member of a structure. For an example, see 
 Appendix \refersec{app:aggregateexamples}.}
 
-\item \livetarg{chap:DWOPformtlsaddress}{DW\-\_OP\-\_form\-\_tls\-\_address} \\
+\needlines{4}
+\itembfnl{\livetarg{chap:DWOPformtlsaddress}{DW\-\_OP\-\_form\-\_tls\-\_address}}
 The \livelink{chap:DWOPformtlsaddress}{DW\-\_OP\-\_form\-\_tls\-\_address} operation pops a value from the
 stack, translates it into an address in the current thread's
 \addtoindexx{thread-local storage}
@@ -800,7 +795,7 @@ to describe using ordinary DWARF location descriptions.
 \livelink{chap:DWOPformtlsaddress}{DW\-\_OP\-\_form\-\_tls\-\_address} leaves the computation to the
 consumer.}
 
-\item \livetarg{chap:DWOPcallframecfa}{DW\-\_OP\-\_call\-\_frame\-\_cfa} \\
+\itembfnl{\livetarg{chap:DWOPcallframecfa}{DW\-\_OP\-\_call\-\_frame\-\_cfa}}
 The \livelink{chap:DWOPcallframecfa}{DW\-\_OP\-\_call\-\_frame\-\_cfa} operation pushes the value of the
 CFA, obtained from the Call Frame Information 
 (see Section \refersec{chap:callframeinformation}).
@@ -828,51 +823,50 @@ performed modulo one plus the largest representable address
 \addtoindex{size of an address} is 32
 bits). 
 Such operations do not cause an exception on overflow.
-
-\begin{enumerate}[1.]
-\item \livetarg{chap:DWOPabs}{DW\-\_OP\-\_abs}  \\
+\begin{enumerate}[1. ]
+\itembfnl{\livetarg{chap:DWOPabs}{DW\-\_OP\-\_abs}}
 The \livelink{chap:DWOPabs}{DW\-\_OP\-\_abs} operation pops the top stack entry, interprets
 it as a signed value and pushes its absolute value. If the
 absolute value cannot be represented, the result is undefined.
 
-\item \livetarg{chap:DWOPand}{DW\-\_OP\-\_and} \\
+\itembfnl{\livetarg{chap:DWOPand}{DW\-\_OP\-\_and}}
 The \livelink{chap:DWOPand}{DW\-\_OP\-\_and} operation pops the top two stack values, performs
 a bitwise and operation on the two, and pushes the result.
 
-\item \livetarg{chap:DWOPdiv}{DW\-\_OP\-\_div} \\
+\itembfnl{\livetarg{chap:DWOPdiv}{DW\-\_OP\-\_div}}
 The \livelink{chap:DWOPdiv}{DW\-\_OP\-\_div} operation pops the top two stack values, divides the former second entry by
 the former top of the stack using signed division, and pushes the result.
 
-\item \livetarg{chap:DWOPminus}{DW\-\_OP\-\_minus} \\
+\itembfnl{\livetarg{chap:DWOPminus}{DW\-\_OP\-\_minus}}
 The \livelink{chap:DWOPminus}{DW\-\_OP\-\_minus} operation pops the top two stack values, subtracts the former top of the
 stack from the former second entry, and pushes the result.
 
-\item \livetarg{chap:DWOPmod}{DW\-\_OP\-\_mod}\\
+\itembfnl{\livetarg{chap:DWOPmod}{DW\-\_OP\-\_mod}}
 The \livelink{chap:DWOPmod}{DW\-\_OP\-\_mod} operation pops the top two stack values and pushes the result of the
 calculation: former second stack entry modulo the former top of the stack.
 
-\item \livetarg{chap:DWOPmul}{DW\-\_OP\-\_mul} \\
+\itembfnl{\livetarg{chap:DWOPmul}{DW\-\_OP\-\_mul}}
 The \livelink{chap:DWOPmul}{DW\-\_OP\-\_mul} operation pops the top two stack entries, multiplies them together, and
 pushes the result.
 
-\item  \livetarg{chap:DWOPneg}{DW\-\_OP\-\_neg} \\
+\itembfnl{\livetarg{chap:DWOPneg}{DW\-\_OP\-\_neg}}
 The \livelink{chap:DWOPneg}{DW\-\_OP\-\_neg} operation pops the top stack entry, interprets
 it as a signed value and pushes its negation. If the negation
 cannot be represented, the result is undefined.
 
-\item  \livetarg{chap:DWOPnot}{DW\-\_OP\-\_not} \\
+\itembfnl{\livetarg{chap:DWOPnot}{DW\-\_OP\-\_not}}
 The \livelink{chap:DWOPnot}{DW\-\_OP\-\_not} operation pops the top stack entry, and pushes
 its bitwise complement.
 
-\item  \livetarg{chap:DWOPor}{DW\-\_OP\-\_or} \\
+\itembfnl{\livetarg{chap:DWOPor}{DW\-\_OP\-\_or}}
 The \livelink{chap:DWOPor}{DW\-\_OP\-\_or} operation pops the top two stack entries, performs
 a bitwise or operation on the two, and pushes the result.
 
-\item  \livetarg{chap:DWOPplus}{DW\-\_OP\-\_plus} \\
+\itembfnl{\livetarg{chap:DWOPplus}{DW\-\_OP\-\_plus}}
 The \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus} operation pops the top two stack entries,
 adds them together, and pushes the result.
 
-\item  \livetarg{chap:DWOPplusuconst}{DW\-\_OP\-\_plus\-\_uconst} \\
+\itembfnl{\livetarg{chap:DWOPplusuconst}{DW\-\_OP\-\_plus\-\_uconst}}
 The \livelink{chap:DWOPplusuconst}{DW\-\_OP\-\_plus\-\_uconst} operation pops the top stack entry,
 adds it to the unsigned LEB128 constant operand and pushes
 the result.
@@ -882,27 +876,27 @@ able to encode more field offsets in two bytes than can be
 done with
 \doublequote{\livelink{chap:DWOPlit}{DW\-\_OP\-\_lit\textit{n}} \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus}}.}
 
-\needspace{3\baselineskip}
-\item \livetarg{chap:DWOPshl}{DW\-\_OP\-\_shl} \\
+\needlines{3}
+\itembfnl{\livetarg{chap:DWOPshl}{DW\-\_OP\-\_shl}}
 The \livelink{chap:DWOPshl}{DW\-\_OP\-\_shl} operation pops the top two stack entries,
 shifts the former second entry left (filling with zero bits)
 by the number of bits specified by the former top of the stack,
 and pushes the result.
 
-\item \livetarg{chap:DWOPshr}{DW\-\_OP\-\_shr} \\
+\itembfnl{\livetarg{chap:DWOPshr}{DW\-\_OP\-\_shr}}
 The \livelink{chap:DWOPshr}{DW\-\_OP\-\_shr} operation pops the top two stack entries,
 shifts the former second entry right logically (filling with
 zero bits) by the number of bits specified by the former top
 of the stack, and pushes the result.
 
-\item \livetarg{chap:DWOPshra}{DW\-\_OP\-\_shra} \\
+\itembfnl{\livetarg{chap:DWOPshra}{DW\-\_OP\-\_shra}}
 The \livelink{chap:DWOPshra}{DW\-\_OP\-\_shra} operation pops the top two stack entries,
 shifts the former second entry right arithmetically (divide
 the magnitude by 2, keep the same sign for the result) by
 the number of bits specified by the former top of the stack,
 and pushes the result.
 
-\item \livetarg{chap:DWOPxor}{DW\-\_OP\-\_xor} \\
+\itembfnl{\livetarg{chap:DWOPxor}{DW\-\_OP\-\_xor}}
 The \livelink{chap:DWOPxor}{DW\-\_OP\-\_xor} operation pops the top two stack entries,
 performs a bitwise exclusive\dash or operation on the two, and
 pushes the result.
@@ -914,8 +908,8 @@ pushes the result.
 The 
 \addtoindexx{DWARF expression!control flow operations}
 following operations provide simple control of the flow of a DWARF expression.
-\begin{enumerate}[1.]
-\item  \livetarg{chap:DWOPle}{DW\-\_OP\-\_le}, \livetarg{chap:DWOPge}{DW\-\_OP\-\_ge}, \livetarg{chap:DWOPeq}{DW\-\_OP\-\_eq}, \livetarg{chap:DWOPlt}{DW\-\_OP\-\_lt}, \livetarg{chap:DWOPgt}{DW\-\_OP\-\_gt}, \livetarg{chap:DWOPne}{DW\-\_OP\-\_ne} \\
+\begin{enumerate}[1. ]
+\itembfnl{\livetarg{chap:DWOPle}{DW\-\_OP\-\_le}, \livetarg{chap:DWOPge}{DW\-\_OP\-\_ge}, \livetarg{chap:DWOPeq}{DW\-\_OP\-\_eq}, \livetarg{chap:DWOPlt}{DW\-\_OP\-\_lt}, \livetarg{chap:DWOPgt}{DW\-\_OP\-\_gt}, \livetarg{chap:DWOPne}{DW\-\_OP\-\_ne}}
 The six relational operators each:
 \begin{itemize}
 \item pop the top two stack values,
@@ -933,14 +927,14 @@ operators are \livelink{chap:DWOPle}{DW\-\_OP\-\_le} (less than or equal to), \l
 (greater than or equal to), \livelink{chap:DWOPeq}{DW\-\_OP\-\_eq} (equal to), \livelink{chap:DWOPlt}{DW\-\_OP\-\_lt} (less
 than), \livelink{chap:DWOPgt}{DW\-\_OP\-\_gt} (greater than) and \livelink{chap:DWOPne}{DW\-\_OP\-\_ne} (not equal to).
 
-\item \livetarg{chap:DWOPskip}{DW\-\_OP\-\_skip} \\
+\itembfnl{\livetarg{chap:DWOPskip}{DW\-\_OP\-\_skip}}
 \livelink{chap:DWOPskip}{DW\-\_OP\-\_skip} is an unconditional branch. Its single operand
 is a 2\dash byte signed integer constant. The 2\dash byte constant is
 the number of bytes of the DWARF expression to skip forward
 or backward from the current operation, beginning after the
 2\dash byte constant.
 
-\item \livetarg{chap:DWOPbra}{DW\-\_OP\-\_bra} \\
+\itembfnl{\livetarg{chap:DWOPbra}{DW\-\_OP\-\_bra}}
 \livelink{chap:DWOPbra}{DW\-\_OP\-\_bra} is a conditional branch. Its single operand is a
 2\dash byte signed integer constant.  This operation pops the
 top of stack. If the value popped is not the constant 0,
@@ -951,8 +945,10 @@ operation, beginning after the 2\dash byte constant.
 % The following item does not correctly hyphenate leading
 % to an overfull hbox and a visible artifact. 
 % So we use \- to suggest hyphenation in this rare situation.
-\item \livetarg{chap:DWOPcall2}{DW\-\_OP\-\_call2}, \livetarg{chap:DWOPcall4}{DW\-\_OP\-\_call4}, \livetarg{chap:DWOPcallref}{DW\-\_OP\-\_call\-\_ref} \\
-\livelink{chap:DWOPcall2}{DW\-\_OP\-\_call2}, \livelink{chap:DWOPcall4}{DW\-\_OP\-\_call4}, and \livelink{chap:DWOPcallref}{DW\-\_OP\-\_call\-\_ref} perform
+\itembfnl{\livetarg{chap:DWOPcall2}{DW\-\_OP\-\_call2}, \livetarg{chap:DWOPcall4}{DW\-\_OP\-\_call4}, \livetarg{chap:DWOPcallref}{DW\-\_OP\-\_call\-\_ref}}
+\livelink{chap:DWOPcall2}{DW\-\_OP\-\_call2}, 
+\livelink{chap:DWOPcall4}{DW\-\_OP\-\_call4}, 
+and \livelink{chap:DWOPcallref}{DW\-\_OP\-\_call\-\_ref} perform
 subroutine calls during evaluation of a DWARF expression or
 location description. 
 For \livelink{chap:DWOPcall2}{DW\-\_OP\-\_call2} and 
@@ -1006,8 +1002,8 @@ by prior agreement between the calling and called expressions.
 There 
 \addtoindexx{DWARF expression!special operations}
 is one special operation currently defined:
-\begin{enumerate}[1.]
-\item \livetarg{chap:DWOPnop}{DW\-\_OP\-\_nop} \\
+\begin{enumerate}[1. ]
+\itembfnl{\livetarg{chap:DWOPnop}{DW\-\_OP\-\_nop}}
 The \livelink{chap:DWOPnop}{DW\-\_OP\-\_nop} operation is a place holder. It has no effect
 on the location stack or any of its values.
 \end{enumerate}
@@ -1076,7 +1072,7 @@ an object whose location changes over the object\textquoteright s lifetime.}
 Information about the location of program objects is provided
 by location descriptions. Location descriptions can be either
 of two forms:
-\begin{enumerate}[1.]
+\begin{enumerate}[1. ]
 \item \textit{Single location descriptions}, 
 which 
 \addtoindexx{location description!single}
@@ -1093,7 +1089,7 @@ as its lifetime is either static or the same as the lexical
 and it does not move during its lifetime.
 
 Single location descriptions are of two kinds:
-\begin{enumerate}[a)]
+\begin{enumerate}[a) ]
 \item Simple location descriptions, which describe the location
 \addtoindexx{location description!simple}
 of one contiguous piece (usually all) of an object. A simple
@@ -1135,8 +1131,7 @@ location list table).
 
 \subsection{Single Location Descriptions}
 A single location description is either:
-
-\begin{enumerate}[1.]
+\begin{enumerate}[1. ]
 \item A simple location description, representing an object
 \addtoindexx{location description!simple}
 which 
@@ -1200,15 +1195,16 @@ density and should be shared by all users of a given
 architecture. It is recommended that this mapping be defined
 by the ABI authoring committee for each architecture.
 }
-\begin{enumerate}[1.]
-\item \livetarg{chap:DWOPreg0}{DW\-\_OP\-\_reg0}, \livetarg{chap:DWOPreg1}{DW\-\_OP\-\_reg1}, ..., \livetarg{chap:DWOPreg31}{DW\-\_OP\-\_reg31} \\
+\begin{enumerate}[1. ]
+\itembfnl{\livetarg{chap:DWOPreg0}{DW\-\_OP\-\_reg0}, \livetarg{chap:DWOPreg1}{DW\-\_OP\-\_reg1}, ..., \livetarg{chap:DWOPreg31}{DW\-\_OP\-\_reg31}}
 The \livetarg{chap:DWOPreg}{DW\-\_OP\-\_reg}n operations encode the names of up to 32
 registers, numbered from 0 through 31, inclusive. The object
 addressed is in register n.
 
-\item \livetarg{chap:DWOPregx}{DW\-\_OP\-\_regx} \\
+\itembfnl{\livetarg{chap:DWOPregx}{DW\-\_OP\-\_regx}}
 The \livelink{chap:DWOPregx}{DW\-\_OP\-\_regx} operation has a single unsigned LEB128 literal
 operand that encodes the name of a register.  
+
 \end{enumerate}
 
 \textit{These operations name a register location. To
@@ -1216,7 +1212,6 @@ fetch the contents of a register, it is necessary to use
 one of the register based addressing operations, such as
 \livelink{chap:DWOPbregx}{DW\-\_OP\-\_bregx} 
 (Section \refersec{chap:registerbasedaddressing})}.
-
 
 \subsubsubsection{Implicit Location Descriptions}
 An \addtoindex{implicit location description}
@@ -1232,9 +1227,8 @@ or is computed from other locations and values in the program.
 The following DWARF operations may be used to specify a value
 that has no location in the program but is a known constant
 or is computed from other locations and values in the program.
-
-\begin{enumerate}[1.]
-\item \livetarg{chap:DWOPimplicitvalue}{DW\-\_OP\-\_implicit\-\_value} \\
+\begin{enumerate}[1. ]
+\itembfnl{\livetarg{chap:DWOPimplicitvalue}{DW\-\_OP\-\_implicit\-\_value}}
 The \livelink{chap:DWOPimplicitvalue}{DW\-\_OP\-\_implicit\-\_value} operation specifies an immediate value
 using two operands: an unsigned LEB128 length, followed by
 %FIXME: should this block be a reference? To what?
@@ -1242,7 +1236,7 @@ a \nolink{block} representing the value in the memory representation
 of the target machine. The length operand gives the length
 in bytes of the \nolink{block}.
 
-\item \livetarg{chap:DWOPstackvalue}{DW\-\_OP\-\_stack\-\_value} \\
+\itembfnl{\livetarg{chap:DWOPstackvalue}{DW\-\_OP\-\_stack\-\_value}}
 The \livelink{chap:DWOPstackvalue}{DW\-\_OP\-\_stack\-\_value} operation specifies that the object
 does not exist in memory but its value is nonetheless known
 and is at the top of the DWARF expression stack. In this form
@@ -1274,9 +1268,8 @@ of a value in memory address order.
 Each composition operation is immediately preceded by a simple
 location description which describes the location where part
 of the resultant value is contained.
-
-\begin{enumerate}[1.]
-\item \livetarg{chap:DWOPpiece}{DW\-\_OP\-\_piece} \\
+\begin{enumerate}[1. ]
+\itembfnl{\livetarg{chap:DWOPpiece}{DW\-\_OP\-\_piece}}
 The \livelink{chap:DWOPpiece}{DW\-\_OP\-\_piece} operation takes a 
 single operand, which is an
 unsigned LEB128 number.  The number describes the size in bytes
@@ -1291,7 +1284,7 @@ registers. \livelink{chap:DWOPpiece}{DW\-\_OP\-\_piece} provides a way of descri
 a part of a variable a particular DWARF location description
 refers to. }
 
-\item \livetarg{chap:DWOPbitpiece}{DW\-\_OP\-\_bit\-\_piece} \\
+\itembfnl{\livetarg{chap:DWOPbitpiece}{DW\-\_OP\-\_bit\-\_piece}}
 The \livelink{chap:DWOPbitpiece}{DW\-\_OP\-\_bit\-\_piece} operation takes two operands. The first
 is an unsigned LEB128 number that gives the size in bits
 of the piece. The second is an unsigned LEB128 number that
@@ -1327,78 +1320,58 @@ unit of memory.}
 \subsubsection{Example Single Location Descriptions}
 
 Here are some examples of how DWARF operations are used to form location descriptions:
-
-\livetarg{chap:DWOPreg3}{DW\-\_OP\-\_reg3}
-\begin{myindentpara}{1cm}
+% Probably the only place that this will be used, so not in dwarf.tex?
+\newcommand{\descriptionitemnl}[1]{\item[#1]\mbox{}\\}
+\begin{description}
+\descriptionitemnl{\livetarg{chap:DWOPreg3}{DW\-\_OP\-\_reg3}}
 The value is in register 3.
-\end{myindentpara}
 
-\livelink{chap:DWOPregx}{DW\-\_OP\-\_regx} 54
-\begin{myindentpara}{1cm}
+\descriptionitemnl{\livelink{chap:DWOPregx}{DW\-\_OP\-\_regx} 54}
 The value is in register 54.
-\end{myindentpara}
 
-\livelink{chap:DWOPaddr}{DW\-\_OP\-\_addr} 0x80d0045c
-\begin{myindentpara}{1cm}
+\descriptionitemnl{\livelink{chap:DWOPaddr}{DW\-\_OP\-\_addr} 0x80d0045c}
 The value of a static variable is at machine address 0x80d0045c.
-\end{myindentpara}
 
-\livetarg{chap:DWOPbreg11}{DW\-\_OP\-\_breg11} 44
-\begin{myindentpara}{1cm}
+\descriptionitemnl{\livetarg{chap:DWOPbreg11}{DW\-\_OP\-\_breg11} 44}
 Add 44 to the value in register 11 to get the address of an automatic
 variable instance.
-\end{myindentpara}
 
-\livelink{chap:DWOPfbreg}{DW\-\_OP\-\_fbreg} -50
-\begin{myindentpara}{1cm}
+\descriptionitemnl{\livelink{chap:DWOPfbreg}{DW\-\_OP\-\_fbreg} -50}
 Given a \livelink{chap:DWATframebase}{DW\-\_AT\-\_frame\-\_base} value of
-``\livelink{chap:DWOPbreg31}{DW\-\_OP\-\_breg31} 64,'' this example
+\doublequote{\livelink{chap:DWOPbreg31}{DW\-\_OP\-\_breg31} 64,} this example
 computes the address of a local variable that is -50 bytes from a
 logical frame pointer that is computed by adding 64 to the current
 stack pointer (register 31).
-\end{myindentpara}
 
-\needlines{3}
-\livelink{chap:DWOPbregx}{DW\-\_OP\-\_bregx} 54 32 \livelink{chap:DWOPderef}{DW\-\_OP\-\_deref}
-\begin{myindentpara}{1cm}
+\descriptionitemnl{\livelink{chap:DWOPbregx}{DW\-\_OP\-\_bregx} 54 32 \livelink{chap:DWOPderef}{DW\-\_OP\-\_deref}}
 A call-by-reference parameter whose address is in the word 32 bytes
 from where register 54 points.
-\end{myindentpara}
 
-\livelink{chap:DWOPplusuconst}{DW\-\_OP\-\_plus\-\_uconst} 4
-\begin{myindentpara}{1cm}
+\descriptionitemnl{\livelink{chap:DWOPplusuconst}{DW\-\_OP\-\_plus\-\_uconst} 4}
 A structure member is four bytes from the start of the structure
 instance. The base address is assumed to be already on the stack.
-\end{myindentpara}
 
-\livelink{chap:DWOPreg3}{DW\-\_OP\-\_reg3} \livelink{chap:DWOPpiece}{DW\-\_OP\-\_piece} 4 \livetarg{chap:DWOPreg10}{DW\-\_OP\-\_reg10} \livelink{chap:DWOPpiece}{DW\-\_OP\-\_piece} 2
-\begin{myindentpara}{1cm}
+\descriptionitemnl{\livelink{chap:DWOPreg3}{DW\-\_OP\-\_reg3} \livelink{chap:DWOPpiece}{DW\-\_OP\-\_piece} 4 \livetarg{chap:DWOPreg10}{DW\-\_OP\-\_reg10} \livelink{chap:DWOPpiece}{DW\-\_OP\-\_piece} 2}
 A variable whose first four bytes reside in register 3 and whose next
 two bytes reside in register 10.
-\end{myindentpara}
 
-\livelink{chap:DWOPreg0}{DW\-\_OP\-\_reg0} \livelink{chap:DWOPpiece}{DW\-\_OP\-\_piece} 4 \livelink{chap:DWOPpiece}{DW\-\_OP\-\_piece} 4 \livelink{chap:DWOPfbreg}{DW\-\_OP\-\_fbreg} -12 \livelink{chap:DWOPpiece}{DW\-\_OP\-\_piece} 4
-\begin{myindentpara}{1cm}
+\descriptionitemnl{\livelink{chap:DWOPreg0}{DW\-\_OP\-\_reg0} \livelink{chap:DWOPpiece}{DW\-\_OP\-\_piece} 4 \livelink{chap:DWOPpiece}{DW\-\_OP\-\_piece} 4 \livelink{chap:DWOPfbreg}{DW\-\_OP\-\_fbreg} -12 \livelink{chap:DWOPpiece}{DW\-\_OP\-\_piece} 4}
 A twelve byte value whose first four bytes reside in register zero,
 whose middle four bytes are unavailable (perhaps due to optimization),
 and whose last four bytes are in memory, 12 bytes before the frame
 base.
-\end{myindentpara}
 
-\livelink{chap:DWOPbreg1}{DW\-\_OP\-\_breg1} 0 \livetarg{chap:DWOPbreg2}{DW\-\_OP\-\_breg2} 0 \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus} \livelink{chap:DWOPstackvalue}{DW\-\_OP\-\_stack\-\_value}
-\begin{myindentpara}{1cm}
+\descriptionitemnl{\livelink{chap:DWOPbreg1}{DW\-\_OP\-\_breg1} 0 \livetarg{chap:DWOPbreg2}{DW\-\_OP\-\_breg2} 0 \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus} \livelink{chap:DWOPstackvalue}{DW\-\_OP\-\_stack\-\_value}}
 Add the contents of r1 and r2 to compute a value. This value is the
 \doublequote{contents} of an otherwise anonymous location.
-\end{myindentpara}
 
-\livelink{chap:DWOPlit1}{DW\-\_OP\-\_lit1} \livelink{chap:DWOPstackvalue}{DW\-\_OP\-\_stack\-\_value} \livelink{chap:DWOPpiece}{DW\-\_OP\-\_piece} 4 \\
-\livetarg{chap:DWOPbreg3}{DW\-\_OP\-\_breg3} 0 \livetarg{chap:DWOPbreg4}{DW\-\_OP\-\_breg4} 0 \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus} \livelink{chap:DWOPstackvalue}{DW\-\_OP\-\_stack\-\_value} \livelink{chap:DWOPpiece}{DW\-\_OP\-\_piece} 4
-\begin{myindentpara}{1cm}
+\descriptionitemnl{\livelink{chap:DWOPlit1}{DW\-\_OP\-\_lit1} \livelink{chap:DWOPstackvalue}{DW\-\_OP\-\_stack\-\_value} \livelink{chap:DWOPpiece}{DW\-\_OP\-\_piece} 4}
+\descriptionitemnl{\livetarg{chap:DWOPbreg3}{DW\-\_OP\-\_breg3} 0 \livetarg{chap:DWOPbreg4}{DW\-\_OP\-\_breg4} 0 \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus} \livelink{chap:DWOPstackvalue}{DW\-\_OP\-\_stack\-\_value} \livelink{chap:DWOPpiece}{DW\-\_OP\-\_piece} 4}
 The object value is found in an anonymous (virtual) location whose
 value consists of two parts, given in memory address order: the 4 byte
 value 1 followed by the four byte value computed from the sum of the
 contents of r3 and r4.
-\end{myindentpara}
+\end{description}
 
 
 \subsection{Location Lists}
@@ -1430,7 +1403,7 @@ end of list entry.
 A 
 \addtoindexx{location list!entry}
 location list entry consists of:
-\begin{enumerate}[1.]
+\begin{enumerate}[1. ]
 \item A beginning address offset. 
 This address offset has the \addtoindex{size of an address} and is
 relative to the applicable base address of the compilation
@@ -1482,7 +1455,7 @@ A base
 selection 
 \addtoindexi{entry}{base address selection entry!in location list}
 consists of:
-\begin{enumerate}[1.]
+\begin{enumerate}[1. ]
 \item The value of the largest representable 
 address offset (for example, 0xffffffff when the size of
 an address is 32 bits).
@@ -1718,6 +1691,7 @@ Name&Value&Meaning  \\
 \end{tabular}
 \end{table}
 
+\needlines{6}
 \section{Non-Defining Declarations and Completions}
 \label{nondefiningdeclarationsandcompletions}
 A debugging information entry representing a program entity
@@ -2038,8 +2012,7 @@ a base address selection entry, or an
 end of list entry.
 
 A \addtoindex{range list} entry consists of:
-
-\begin{enumerate}[1.]
+\begin{enumerate}[1. ]
 \item A beginning address offset. This address offset has the 
 \addtoindex{size of an address} and is relative to
 the applicable base address of the compilation unit referencing this 
@@ -2081,8 +2054,7 @@ There is no requirement that
 the entries be ordered in any particular way.
 
 A base address selection entry consists of:
-
-\begin{enumerate}[1.]
+\begin{enumerate}[1. ]
 \item The value of the largest representable address offset (for example, 0xffffffff when the size of
 an address is 32 bits).
 

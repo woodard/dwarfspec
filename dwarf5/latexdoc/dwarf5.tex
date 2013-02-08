@@ -51,7 +51,7 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 
 \renewcommand{\familydefault}{phv}  % font family helvetica
 
-\newcommand{\docdate}{3 February 2013}
+\newcommand{\docdate}{7 February 2013}
 
 \newcommand{\dwf}{DWARF Debugging Information Format}
 
@@ -121,8 +121,15 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 % Better naming for the lowest level section header
 \newcommand{\subsubsubsection}[1]{\paragraph{#1.}}
 
-% Issue \clear space if less than n lines remain on page
+% Issue \clearpage if less than n lines remain on page
 \newcommand{\needlines}[1]{\needspace{#1\baselineskip}}
+
+% Helper for item lists with bold subject markers
+\newcommand{\itembf}[1]{\item \textbf{#1}}
+\newcommand{\itembfnl}[1]{\itembf{#1} \\}
+
+% And description lists with normal (not bold) text
+\renewcommand{\descriptionlabel}[1]{\hspace{\labelsep}\textnormal{#1}}
 
 % Reduce vertical space at beginning of a list
 \setlength{\topsep}{0in}
@@ -250,7 +257,7 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 % Define the levels of sectionality that are numbered.
 \setcounter{secnumdepth}{5}
 \include{introduction}
-\include{generaldescription}            %\emptypage
+\include{generaldescription}            \emptypage
 \include{programscope}                  \emptypage
 \include{dataobject}                    \emptypage
 \include{typeentries}                   \emptypage
