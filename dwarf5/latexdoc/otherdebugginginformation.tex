@@ -89,7 +89,7 @@ instance there is no need to have a
 for the member function.}
 
 Each set begins with a header containing four values:
-\begin{enumerate}[1.]
+\begin{enumerate}[1. ]
 
 \item unit\_length (initial length) \\
 \addtoindexx{unit\_length}
@@ -157,7 +157,7 @@ portion of the program\textquoteright s address space that is covered by
 a single compilation unit.
 
 Each set begins with a header containing five values:
-\begin{enumerate}[1.]
+\begin{enumerate}[1. ]
 \item unit\_length (initial length) \\
 \addtoindexx{unit\_length}
 The total length of all of the
@@ -435,31 +435,28 @@ for example, by the object file description.}
 \subsection{Line Number Program Instructions}
 The state machine instructions in a line number program belong to one of three categories:
 
-\begin{description}
-\item[special opcodes]
-
+\begin{enumerate}[1. ]
+\item special opcodes \\
 These have a \addtoindex{ubyte} opcode field and no operands.\vspace{1ex}
 
 \textit{Most of the instructions in a 
-line number program are special opcodes.} \\
+line number program are special opcodes.}
 
-\item[standard opcodes]
-
+\item standard opcodes \\
 These have a \addtoindex{ubyte} opcode field which may be followed by zero or more
 \addtoindex{LEB128} operands (except for 
 \mbox{\livelink{chap:DWLNSfixedadvancepc}{DW\-\_LNS\-\_fixed\-\_advance\-\_pc},} see below).
 The opcode implies the number of operands and their meanings, but the
 line number program header also specifies the number of operands for
-each standard opcode. \\
+each standard opcode.
 
-\item[extended opcodes]
-
+\item extended opcodes \\
 These have a multiple byte format. The first byte is zero; the next bytes
 are an unsigned LEB128\addtoindexx{LEB128!unsigned} integer giving the number of bytes in the
 instruction itself (does not include the first zero byte or the size). The
 remaining bytes are the instruction itself (which begins with a \addtoindex{ubyte}
 extended opcode). \\
-\end{description}
+\end{enumerate}
 
 
 \subsection{The Line Number Program Header}
@@ -474,7 +471,7 @@ used throughout the rest of the line number program.
 The line number program for each compilation unit begins with
 a header containing the following fields in order:
 
-\begin{enumerate}[1.]
+\begin{enumerate}[1. ]
 \item unit\_length (initial length)  \\
 \addtoindexx{unit\_length}
 The size in bytes of the line number information for this
@@ -517,6 +514,7 @@ For non-VLIW
 architectures, this field is 1, the \addtoindex{op\_index register} is always
 0, and the operation pointer is simply the address register.
 
+\needlines{4}
 \item default\_is\_stmt (\addtoindex{ubyte}) \\
 \addtoindexx{default\_is\_stmt}
 The initial value of the \addtoindex{is\_stmt} register.  
@@ -690,7 +688,7 @@ scheduling or other optimization.)
 \label{chap:specialopcodes}
 Each \addtoindex{ubyte} special opcode has the following effect on the state machine:
 
-\begin{enumerate}[1.]
+\begin{enumerate}[1. ]
 
 \item  Add a signed integer to the line register.
 
@@ -814,7 +812,11 @@ within the range [-3, 8] and (because of the limited number
 of opcodes available) when the difference between addresses
 is within the range [0, 20], but not all line advances are
 available for the maximum \addtoindex{operation advance} (see below).}
-\textit{The opcode mapping would be:}
+
+\textit{The resulting opcode mapping is shown in
+Figure \refersec{fig:examplelinenumberspecialopcodemapping}.}
+
+\begin{figure}[ht]
 \begin{alltt}\textit{
                         Line Advance
    Operation  
@@ -842,7 +844,9 @@ available for the maximum \addtoindex{operation advance} (see below).}
           19   241 242 243 244 245 246 247 248 249 250 251 252
           20   253 254 255
 }\end{alltt}
-
+\caption{Example line number special opcode mapping}
+\label{fig:examplelinenumberspecialopcodemapping}
+\end{figure}
 
 \textit{There is no requirement that the expression 
 255 - \addtoindex{line\_base} + 1 be an integral multiple of
@@ -855,7 +859,7 @@ available for the maximum \addtoindex{operation advance} (see below).}
 The standard opcodes, their applicable operands and the
 actions performed by these opcodes are as follows:
 
-\begin{enumerate}[1.]
+\begin{enumerate}[1. ]
 
 \item \textbf{DW\-\_LNS\-\_copy} \\
 The \livetarg{chap:DWLNScopy}{DW\-\_LNS\-\_copy} 
@@ -892,11 +896,13 @@ The \livetarg{chap:DWLNSsetcolumn}{DW\-\_LNS\-\_set\-\_column} opcode takes a
 single unsigned LEB128\addtoindexx{LEB128!unsigned} operand and stores it in the column
 register of the state machine.
 
+\needlines{4}
 \item \textbf{DW\-\_LNS\-\_negate\-\_stmt} \\
 The \livetarg{chap:DWLNSnegatestmt}{DW\-\_LNS\-\_negate\-\_stmt} opcode takes no
 operands. It sets the \addtoindex{is\_stmt} register of the state machine
 to the logical negation of its current value.
 
+\needlines{4}
 \item \textbf{DW\-\_LNS\-\_set\-\_basic\-\_block} \\
 The \livetarg{chap:DWLNSsetbasicblock}{DW\-\_LNS\-\_set\-\_basic\-\_block}
 opcode
@@ -1001,7 +1007,7 @@ register of the state machine.
 
 The extended opcodes are as follows:
 
-\begin{enumerate}[1.]
+\begin{enumerate}[1. ]
 
 \item \textbf{DW\-\_LNE\-\_end\-\_sequence} \\
 The \livetarg{chap:DWLNEendsequence}{DW\-\_LNE\-\_end\-\_sequence} opcode takes no operands. It sets the
@@ -1016,6 +1022,7 @@ number program sequence must end with a \livelink{chap:DWLNEendsequence}{DW\-\_L
 instruction which creates a row whose address is that of the
 byte after the last target machine instruction of the sequence.
 
+\needlines{5}
 \item \textbf{DW\-\_LNE\-\_set\-\_address} \\
 The \livetarg{chap:DWLNEsetaddress}{DW\-\_LNE\-\_set\-\_address} opcode takes a single relocatable
 address as an operand. The size of the operand is the size
@@ -1031,8 +1038,7 @@ stores a relocatable value into it instead.}
 \item \textbf{DW\-\_LNE\-\_define\-\_file} \\
 
 The \livetarg{chap:DWLNEdefinefile}{DW\-\_LNE\-\_define\-\_file} opcode takes four operands:
-
-\begin{enumerate}[1.]
+\begin{enumerate}[1. ]
 
 \item A null\dash terminated string containing the full or relative
 path name of a source file. If the entry contains a file
@@ -1078,8 +1084,6 @@ opcode takes a single
 parameter, an unsigned LEB128\addtoindexx{LEB128!unsigned} 
 integer. It sets the
 \addtoindex{discriminator} register to the new value.
-
-
 
 \end{enumerate}
 
@@ -1254,12 +1258,9 @@ to any definitions or undefinitions given explicitly by the
 user on the command line.
 
 
-
+\needlines{6}
 \section{Call Frame Information}
 \label{chap:callframeinformation}
-
-
-
 
 \textit{Debuggers often need to be able to view and modify the state of any subroutine activation that is
 \addtoindexx{activation!call frame}
@@ -1469,8 +1470,7 @@ A Common Information Entry holds information that is shared
 among many Frame Description Entries. There is at least one
 CIE in every non-empty \addtoindex{.debug\_frame} section. A CIE contains
 the following fields, in order:
-
-\begin{enumerate}[1.]
+\begin{enumerate}[1. ]
 \item length (initial length)  \\
 A constant that gives the number of bytes of the CIE structure,
 not including the length field itself 
@@ -1528,8 +1528,8 @@ size of a segment selector in this CIE and any FDEs that
 use it, in bytes.
 
 \item  \addtoindex{code\_alignment\_factor} (unsigned LEB128) 
-\addtoindexx{LEB128!unsigned}\addtoindexx{unsigned LEB128|see{LEB128, unsigned}} \\
-\addtoindex{code alignment factor}
+\addtoindexx{LEB128!unsigned}\addtoindexx{unsigned LEB128|see{LEB128, unsigned}}
+\addtoindexx{code alignment factor} \\
 A 
 \addtoindexx{\textless caf\textgreater|see{code alignment factor}}
 constant that is factored out of all advance location
@@ -1566,8 +1566,7 @@ match the length value above.
 \end{enumerate}
 
 An FDE contains the following fields, in order:
-
-\begin{enumerate}[1.]
+\begin{enumerate}[1. ]
 \item length (initial length)  \\
 
 A constant that gives the number of bytes of the header and
@@ -1604,7 +1603,7 @@ of bytes of program instructions described by this entry.
 \item instructions (array of \addtoindex{ubyte}) \\
 A sequence of table defining instructions that are described below.
 
-\item 6. padding (array of \addtoindex{ubyte}) \\
+\item padding (array of \addtoindex{ubyte}) \\
 Enough \livelink{chap:DWCFAnop}{DW\-\_CFA\-\_nop} instructions 
 to make the size of this entry match the length value above.
 \end{enumerate}
@@ -1648,8 +1647,7 @@ and \livelink{chap:DWCFAvalexpression}{DW\-\_CFA\-\_val\-\_expression}.}
 
 \subsubsection{Row Creation Instructions}
 \label{chap:rowcreationinstructions}
-
-\begin{enumerate}[1.]
+\begin{enumerate}[1. ]
 
 \item \textbf{DW\-\_CFA\-\_set\-\_loc} \\
 The \livetarg{chap:DWCFAsetloc}{DW\-\_CFA\-\_set\-\_loc} instruction 
@@ -1700,8 +1698,8 @@ and size of the delta operand.
 
 \subsubsection{CFA Definition Instructions}
 \label{chap:cfadefinitioninstructions}
+\begin{enumerate}[1. ]
 
-\begin{enumerate}[1.]
 \item \textbf{DW\-\_CFA\-\_def\-\_cfa} \\
 The \livetarg{chap:DWCFAdefcfa}{DW\-\_CFA\-\_def\-\_cfa}
 instruction takes two unsigned LEB128\addtoindexx{LEB128!unsigned}
@@ -1766,8 +1764,8 @@ expression operators that can be used.}
 
 \subsubsection{Register Rule Instructions}
 \label{chap:registerruleinstructions}
+\begin{enumerate}[1. ]
 
-\begin{enumerate}[1.]
 \item \textbf{DW\-\_CFA\-\_undefined} \\
 The \livetarg{chap:DWCFAundefined}{DW\-\_CFA\-\_undefined} instruction takes a single unsigned
 LEB128\addtoindexx{LEB128!unsigned} operand that represents a register number. The required
@@ -1895,14 +1893,14 @@ into the
 body of a function.}
 
 
-\begin{enumerate}[1.]
+\begin{enumerate}[1. ]
 
 \item \textbf{DW\-\_CFA\-\_remember\-\_state} \\
 The \livetarg{chap:DWCFArememberstate}{DW\-\_CFA\-\_remember\-\_state} instruction takes no operands. The
 required action is to push the set of rules for every register
 onto an implicit stack.
 
-
+\needlines{4}
 \item \textbf{DW\-\_CFA\-\_restore\-\_state} \\
 The \livetarg{chap:DWCFArestorestate}{DW\-\_CFA\-\_restore\-\_state} instruction takes no operands. The
 required action is to pop the set of rules off the implicit
@@ -1912,7 +1910,7 @@ stack and place them in the current row.
 
 \subsubsection{Padding Instruction}
 \label{chap:paddinginstruction}
-\begin{enumerate}[1.]
+\begin{enumerate}[1. ]
 \item \textbf{DW\-\_CFA\-\_nop} \\
 The \livetarg{chap:DWCFAnop}{DW\-\_CFA\-\_nop} instruction has no operands and no required
 actions. It is used as padding to make a CIE or FDE an
@@ -1927,8 +1925,7 @@ appropriate size
 (L1), one searches through the FDE headers looking at the
 initial\_location and address\_range values to see if L1 is
 contained in the FDE. If so, then:}
-
-\begin{enumerate}[1.]
+\begin{enumerate}[1. ]
 
 \item \textit{Initialize a register set by reading the
 initial\_instructions field of the associated CIE.}
