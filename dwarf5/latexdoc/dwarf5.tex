@@ -3,12 +3,12 @@
 % If draft is in the document class list, pix are just suggested
 % by an outline, the pic does not appear as a picture.
 %
-\newcommand{\docdate}{10 February 2013 (***Draft***)}
+\newcommand{\docdate}{19 April 2013 (***Draft***)}
 %
-\usepackage{url} % For color in letters. Links instead?
-\usepackage{color} % For color in letters. Links instead?
-\usepackage{ellipsis} % Provides ... as \dots
-\usepackage{color}
+\usepackage{url} 		   % For color in letters. Links instead?
+\usepackage[usenames]{color} % For color in letters. Links instead?
+\usepackage{ellipsis} 	   % Provides ... as \dots
+%\usepackage{color}
 \usepackage{listings}
 \usepackage{alltt}
 \lstset{ %
@@ -44,11 +44,12 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \usepackage{changepage}    % For odd/even page checks
 \usepackage{epic}          % For eepic package 
 \usepackage{eepic}         % For the diagram of section relationships
+\usepackage{eepicemu}      % For the diagram of section relationships
 \usepackage{makeidx}       % For making an index
 % hyperref must be the last package listed.
 % The hyperref settings helps hypertext get right links in the 
 % pdf of the index.
-\usepackage[plainpages=false,pdfpagelabels,pagebackref]{hyperref} % Lets us generate colored active links inside a pdf.
+\usepackage[plainpages=false,pdfpagelabels,pagebackref,allcolors=blue]{hyperref} % Lets us generate colored active links inside a pdf.
 \makeindex  % This and the makeidx package allow \index to create index entries.
 
 \renewcommand{\familydefault}{phv}  % font family helvetica
@@ -160,6 +161,13 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
         \end{table}
         }
 
+\newcommand{\xffffffff}   		{\texttt{0xffffffff}}			% use with following punctutation
+\newcommand{\wffffffff}   		{\texttt{0xffffffff}\ }			% use as separate "word"
+\newcommand{\xfffffffzero}		{\texttt{0xfffffff0}}			% use with following punctutation
+\newcommand{\wfffffffzero}		{\texttt{0xfffffff0}\ }
+\newcommand{\xffffffffffffffff}	{\texttt{0xffffffffffffffff}}	% use with following punctutation
+\newcommand{\wffffffffffffffff}	{\texttt{0xffffffffffffffff}\ }
+
 %--- Begin the document pages
 %
 \begin{document}
@@ -178,33 +186,34 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \textbf{Version 4.1}
 
 \centering
-\includegraphics[keepaspectratio=true,scale=1.0]{DWlogo}
+\vspace{1cm}
+\includegraphics[keepaspectratio=true,scale=1.0]{dwarf-logo}
 
-\centering
-\vspace{3cm}
+%\centering
+\vspace{2cm}
 \href{http://www.dwarfstd.org}{\dwf\ Committee}
 
-\vspace{2cm} 
+\vspace{1cm} 
 \url{http://www.dwarfstd.org}
 
 \large
-\vspace{1in}
+\vspace{2cm}
 \textbf{\docdate}
 
 \end{centering}
 
 %\clearpage
-\openany
+%\openany
 
 \textmd
 \normalsize
 \setlength{\headheight}{15pt}  
 
 \pagestyle{plain}
-\makeevenhead{plain}{}{}{}
-\makeoddhead{plain}{}{}{}
-\makeevenfoot{plain}{}{}{}
-\makeoddfoot{plain}{}{}{}
+%\makeevenhead{plain}{}{}{}
+%\makeoddhead{plain}{}{}{}
+%\makeevenfoot{plain}{}{}{}
+%\makeoddfoot{plain}{}{}{}
 
 \nonzeroparskip
 \setlength{\parindent}{0pt} 
@@ -230,7 +239,7 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \include{foreword4.1}
 \emptypage
 
-\cleardoublepage
+\newpage
 \tableofcontents
 
 \cleardoublepage
@@ -267,7 +276,7 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 %  The \appendix toggles us into appendix chapters
 \appendix
 \include{attributesbytag}
-\include{debugsectionrelationships}     \emptypage
+\include{debugsectionrelationships}     %\emptypage
 \include{encodingdecoding}              \emptypage
 \include{examples}                      %\emptypage
 \include{compression}                   %\emptypage

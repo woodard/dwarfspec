@@ -106,11 +106,11 @@ have a header
 that occurs at the beginning of the CIE and FDE structures
 in the \addtoindex{.debug\_frame} section.
 
-In an \addtoindex{initial length field}, the values 0xfffffff0 through
-0xffffffff are reserved by DWARF to indicate some form of
+In an \addtoindex{initial length field}, the values \wfffffffzero through
+\wffffffff are reserved by DWARF to indicate some form of
 extension relative to \addtoindex{DWARF Version 2}; such values must not
 be interpreted as a length field. The use of one such value,
-0xffffffff, is defined below 
+\xffffffff, is defined below 
 (see Section \refersec{datarep:32bitand64bitdwarfformats}); 
 the use of
 the other values is reserved for possible future extensions.
@@ -158,14 +158,14 @@ detailed in the following:
 \item  In the 32\dash bit DWARF format, an 
 \addtoindex{initial length field}
 (see 
-\addtoindex{initial length field!encoding}
+\addtoindexx{initial length field!encoding}
 Section \refersec{datarep:initiallengthvalues}) 
 is an unsigned 32\dash bit integer (which
-must be less than 0xfffffff0); in the 64\dash bit DWARF format,
+must be less than \xfffffffzero); in the 64\dash bit DWARF format,
 an \addtoindex{initial length field} is 96 bits in size,
 and has two parts:
 \begin{itemize}
-\item The first 32\dash bits have the value 0xffffffff.
+\item The first 32\dash bits have the value \xffffffff.
 
 \item  The following 64\dash bits contain the actual length
 represented as an unsigned 64\dash bit integer.
@@ -180,7 +180,7 @@ format and to adapt its processing accordingly.}
 fields that occur
 \addtoindexx{section offset!use in headers}
 in the headers of DWARF sections (other 
-\addtoindex{initial length field}
+\addtoindexx{initial length field}
 than 
 \addtoindex{initial length}
 fields) are listed following. In the 32\dash bit DWARF format these
@@ -196,7 +196,7 @@ unsigned integer values.
 \begin{center}
 \begin{tabular}{lll}
 Section &Name & Role  \\ \hline
-\addtoindex{.debug\_ranges} & \addtoindex{debug\_info\_offset} & offset in \addtoindex{.debug\_info} \\
+\addtoindex{.debug\_aranges} & \addtoindex{debug\_info\_offset} & offset in \addtoindex{.debug\_info} \\
 \addtoindex{.debug\_frame}/CIE & \addtoindex{CIE\_id} & CIE distinguished value \\
 \addtoindex{.debug\_frame}/FDE & \addtoindex{CIE\_pointer} & offset in \addtoindex{.debug\_frame} \\
 \addtoindex{.debug\_info} & \addtoindex{debug\_abbrev\_offset} & offset in \addtoindex{.debug\_abbrev} \\
@@ -207,17 +207,17 @@ Section &Name & Role  \\ \hline
 \addtoindex{.debug\_pubtypes} & \addtoindex{debug\_info\_offset} & offset in \addtoindex{.debug\_info} \\
                 & \addtoindex{debug\_info\_length} & length of \addtoindex{.debug\_info} \\
                 &                   & contribution \\
-\addtoindex{.debug\_types} & \addtoindex{debug\_abbrev\_offset} & offset in \addtoindex{.debug\_info} \\
+\addtoindex{.debug\_types} & \addtoindex{debug\_abbrev\_offset} & offset in \addtoindex{.debug\_abbrev} \\
                 & \addtoindex{type\_offset} & offset in of \addtoindex{.debug\_types} \\
 
 \end{tabular}
 \end{center}
 
-\textit{The CIE\_id field in a CIE structure must be 64 bits because
+The CIE\_id field in a CIE structure must be 64 bits because
 it overlays the CIE\_pointer in a FDE structure; this implicit
 union must be accessed to distinguish whether a CIE or FDE is
 present, consequently, these two fields must exactly overlay
-each other (both offset and size).}
+each other (both offset and size).
 
 \item Within the body of the \addtoindex{.debug\_info} or \addtoindex{.debug\_types}
 section, certain forms of attribute value depend on the choice
@@ -228,8 +228,8 @@ format, the value is a 64\dash bit unsigned integer.
 \begin{tabular}{ll}
 Form & Role  \\ \hline
 \livelink{chap:DWFORMrefaddr}{DW\-\_FORM\-\_ref\-\_addr}& offset in \addtoindex{.debug\_info} \\
-\livetarg{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset}& 
-        \parbox{5.5cm}{offset in a section other than \addtoindex{.debug\_info} or \addtoindex{.debug\_str}} \\
+\livelink{chap:DWFORMsecoffset}{DW\-\_FORM\-\_sec\-\_offset}& offset in a section other than \\
+											&\addtoindex{.debug\_info} or \addtoindex{.debug\_str} \\
 \livelink{chap:DWFORMstrp}{DW\-\_FORM\-\_strp}&offset in \addtoindex{.debug\_str} \\
 \livelink{chap:DWOPcallref}{DW\-\_OP\-\_call\-\_ref}&offset in \addtoindex{.debug\_info} \\
 \end{tabular}
@@ -247,7 +247,7 @@ in the 64\dash bit DWARF format, it is a 64\dash bit unsigned integer.
 \end{enumerate}
 
 
-The 32\dash bit and 64\dash bit DWARF format conventions must not be
+The 32\dash bit and 64\dash bit DWARF format conventions must \emph{not} be
 intermixed within a single compilation unit.
 
 \textit{Attribute values and section header fields that represent
@@ -262,8 +262,8 @@ are no link\dash time errors due to truncation or overflow). (An
 implementation is not required to guarantee detection and
 reporting of all such errors.)
 
-\textit{It is expected that DWARF producing compilers will not use
-the 64\dash bit format by default. In most cases, the division of
+\textit{It is expected that DWARF producing compilers will \textbf{not} use
+the 64\dash bit format \textbf{by default}. In most cases, the division of
 even very large applications into a number of executable and
 shared objects will suffice to assure that the DWARF sections
 within each individual linked object are less than 4 GBytes
@@ -330,14 +330,14 @@ of the \addtoindex{.debug\_info}
 contribution for that compilation unit,
 not including the length field itself. In the 32\dash bit DWARF
 format, this is a 4\dash byte unsigned integer (which must be less
-than 0xfffffff0); in the 64\dash bit DWARF format, this consists
-of the 4\dash byte value 0xffffffff followed by an 8\dash byte unsigned
+than \xfffffffzero); in the 64\dash bit DWARF format, this consists
+of the 4\dash byte value \wffffffff followed by an 8\dash byte unsigned
 integer that gives the actual length 
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
-\item  version (\addtoindex{uhalf})
+\item  version (\addtoindex{uhalf}) \\
 A 2\dash byte unsigned integer representing the version of the
-DWARF information for the compilation unit\addtoindexx{version number!compilation unit} 
+DWARF information for the compilation unit \addtoindexx{version number!compilation unit} 
 (see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
 The value in this field is 4.
 
@@ -361,8 +361,6 @@ segmented addressing, this value represents the size of the
 offset portion of an address.
 
 
-
-
 \end{enumerate}
 
 \subsubsection{Type Unit Header}
@@ -383,12 +381,12 @@ representing the length
 of the \addtoindex{.debug\_types} contribution for that compilation unit,
 not including the length field itself. In the 32\dash bit DWARF
 format, this is a 4\dash byte unsigned integer (which must be
-less than 0xfffffff0); in the 64\dash bit DWARF format, this
-consists of the 4\dash byte value 0xffffffff followed by an 
+less than \xfffffffzero); in the 64\dash bit DWARF format, this
+consists of the 4\dash byte value \wffffffff followed by an 
 8\dash byte unsigned integer that gives the actual length
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
-\item  version (\addtoindex{uhalf})
+\item  version (\addtoindex{uhalf}) \\
 A 2\dash byte unsigned integer representing the version of the
 DWARF information for the 
 compilation unit\addtoindexx{version number!type unit} 
@@ -421,12 +419,15 @@ offset portion of an address.
 \addtoindexx{type signature}
 A 
 \addtoindexx{type\_signature}
-64\dash bit unique signature of the type described in this type
+64\dash bit unique signature (see Section 
+\refersec{datarep:typesignaturecomputation})
+of the type described in this type
 unit.  
 
-\textit{An attribute that refers(using \livelink{chap:DWFORMrefsig8}{DW\-\_FORM\-\_ref\-\_sig8}) to
-the primary type contained in 
-this \addtoindex{type unit} uses this value.}
+\textit{An attribute that refers (using 
+\livelink{chap:DWFORMrefsig8}{DW\-\_FORM\-\_ref\-\_sig8}) to
+the primary type contained in this 
+\addtoindex{type unit} uses this value.}
 
 
 \item type\_offset (section offset) \\
@@ -585,6 +586,7 @@ Table \refersec{tab:childdeterminationencodings}
 Section \refersec{chap:relationshipofdebugginginformationentries}, 
 each chain of sibling entries is terminated by a null entry.)
 
+\needlines{6}
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|l}
@@ -1019,7 +1021,7 @@ Table \refersec{tab:attributeformencodings}.
 \livelink{chap:DWATsibling}{DW\-\_AT\-\_sibling}&0x01&reference 
         \addtoindexx{sibling attribute!encoding} \\
 \livelink{chap:DWATlocation}{DW\-\_AT\-\_location}&0x02&\livelink{chap:exprloc}{exprloc}, 
-        \livelink{chap:loclistptr}{loclistptr}\addtoindex{location attribute!encoding}   \\
+        \livelink{chap:loclistptr}{loclistptr}\addtoindexx{location attribute!encoding}   \\
 \livelink{chap:DWATname}{DW\-\_AT\-\_name}&0x03&string 
         \addtoindexx{name attribute!encoding} \\
 \livelink{chap:DWATordering}{DW\-\_AT\-\_ordering}&0x09&constant 
@@ -1031,7 +1033,7 @@ Table \refersec{tab:attributeformencodings}.
 \livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size}&0x0d&constant, 
         \livelink{chap:exprloc}{exprloc}, reference \addtoindexx{bit size attribute!encoding} \\
 \livelink{chap:DWATstmtlist}{DW\-\_AT\-\_stmt\-\_list}&0x10&\livelink{chap:lineptr}{lineptr} 
-        \addtoindex{statement list attribute!encoding} \\
+        \addtoindexx{statement list attribute!encoding} \\
 \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc}&0x11&address 
         \addtoindexx{low PC attribute!encoding}  \\
 \livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc}&0x12&address, constant 
@@ -1070,7 +1072,7 @@ Table \refersec{tab:attributeformencodings}.
 \livelink{chap:DWATreturnaddr}{DW\-\_AT\-\_return\-\_addr}&0x2a&\livelink{chap:exprloc}{exprloc},
         \livelink{chap:loclistptr}{loclistptr} \addtoindexx{return address attribute!encoding}  \\
 % FIXME: lower case , not Constant
-\livelink{chap:DWATstartscope}{DW\-\_AT\-\_start\-\_scope}&0x2c&Constant, 
+\livelink{chap:DWATstartscope}{DW\-\_AT\-\_start\-\_scope}&0x2c&constant, 
         \livelink{chap:rangelistptr}{rangelistptr} \addtoindexx{start scope attribute!encoding}  \\
 \livelink{chap:DWATbitstride}{DW\-\_AT\-\_bit\-\_stride}&0x2e&constant,
         \livelink{chap:exprloc}{exprloc}, reference \addtoindexx{bit stride attribute!encoding}  \\
@@ -1147,7 +1149,7 @@ Table \refersec{tab:attributeformencodings}.
 \livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc}&0x52&address 
         \addtoindexx{entry pc attribute!encoding}  \\
 \livelink{chap:DWATuseUTF8}{DW\-\_AT\-\_use\-\_UTF8}&0x53&\livelink{chap:flag}{flag} 
-        \addtoindexx{use UTF8 attribute!encoding}\addtoindex{UTF-8}  \\
+        \addtoindexx{use UTF8 attribute!encoding}\addtoindexx{UTF-8}  \\
 \livelink{chap:DWATextension}{DW\-\_AT\-\_extension}&0x54&reference 
         \addtoindexx{extension attribute!encoding}  \\
 \livelink{chap:DWATranges}{DW\-\_AT\-\_ranges}&0x55&\livelink{chap:rangelistptr}{rangelistptr} 
@@ -1360,7 +1362,7 @@ gives algorithms for encoding and decoding these forms.}
 128& 0 + 0x80 & 1 \\
 -128& 0 + 0x80 & 0x7f \\
 129& 1 + 0x80 & 1 \\
--129& -x7f + 0x80 & 0xtc \\
+-129& 0x7f + 0x80 & 0x7e \\
 
 \end{longtable}
 \end{centering}
@@ -1438,19 +1440,17 @@ Table \refersec{tab:dwarfoperationencodings}.
 \livelink{chap:DWOPshr}{DW\-\_OP\-\_shr}&0x25&0 & \\
 \livelink{chap:DWOPshra}{DW\-\_OP\-\_shra}&0x26&0 & \\
 \livelink{chap:DWOPxor}{DW\-\_OP\-\_xor}&0x27&0 & \\
-\livelink{chap:DWOPskip}{DW\-\_OP\-\_skip}&0x2f&1&signed 2\dash byte constant \\
+
 \livelink{chap:DWOPbra}{DW\-\_OP\-\_bra}&0x28&1 & signed 2\dash byte constant \\
 \livelink{chap:DWOPeq}{DW\-\_OP\-\_eq}&0x29&0 & \\
 \livelink{chap:DWOPge}{DW\-\_OP\-\_ge}&0x2a&0 & \\
 \livelink{chap:DWOPgt}{DW\-\_OP\-\_gt}&0x2b&0 & \\
 \livelink{chap:DWOPle}{DW\-\_OP\-\_le}&0x2c&0 & \\
 \livelink{chap:DWOPlt}{DW\-\_OP\-\_lt}&0x2d&0  & \\
-\livelink{chap:DWOPne}{DW\-\_OP\-\_ne}&0x2e&0 & \\ \hline
-
-
+\livelink{chap:DWOPne}{DW\-\_OP\-\_ne}&0x2e&0 & \\
+\livelink{chap:DWOPskip}{DW\-\_OP\-\_skip}&0x2f&1&signed 2\dash byte constant \\ \hline
 
 \livelink{chap:DWOPlit0}{DW\-\_OP\-\_lit0}&0x30 & 0 & \\
-
 \livelink{chap:DWOPlit1}{DW\-\_OP\-\_lit1}&0x31 & 0& literals 0 .. 31 = \\
 \ldots & & &\hspace{0.5cm}(\livelink{chap:DWOPlit0}{DW\-\_OP\-\_lit0} + literal) \\
 \livelink{chap:DWOPlit31}{DW\-\_OP\-\_lit31}&0x4f & 0 & \\ \hline
@@ -1505,7 +1505,7 @@ location of a variable or other entity.
 
 Each entry in a \addtoindex{location list} is either a location list entry,
 a base address selection entry, or an 
-\addtoindex{end of list entry!in location list}
+\addtoindexx{end of list entry!in location list}
 end of list entry.
 
 A \addtoindex{location list} entry consists of two address offsets followed
@@ -1515,7 +1515,7 @@ specifies the number of bytes in that block. The two offsets
 are the same size as an address on the target machine.
 
 A base address selection entry and an 
-\addtoindex{end of list entry!in location list}
+\addtoindexx{end of list entry!in location list}
 end of list entry each
 consist of two (constant or relocated) address offsets. The two
 offsets are the same size as an address on the target machine.
@@ -1956,17 +1956,17 @@ of the \addtoindex{.debug\_info}
 contribution for that compilation unit,
 not including the length field itself. In the 32\dash bit DWARF
 format, this is a 4\dash byte unsigned integer (which must be less
-than 0xfffffff0); in the 64\dash bit DWARF format, this consists
-of the 4\dash byte value 0xffffffff followed by an 8\dash byte unsigned
+than \xfffffffzero); in the 64\dash bit DWARF format, this consists
+of the 4\dash byte value \wffffffff followed by an 8\dash byte unsigned
 integer that gives the actual length
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
-\item  version (\addtoindex{uhalf})
+\item  version (\addtoindex{uhalf}) \\
 A 2\dash byte unsigned integer representing the version of the
-DWARF information\addtoindexx{version number!compilation unit} for the compilation unit
+DWARF information for the name lookup table
 \addtoindexx{version number!name lookup table}
 (see Appendix \refersec{app:dwarfsectionversionnumbersinformative}).
-The value in this field is 4.
+The value in this field is 2.
 
 % Some say unsigned offset this just says offset: FIXME
 \item \addtoindex{debug\_info\_offset} (section offset) \\
@@ -2023,16 +2023,18 @@ A 4-byte or 12-byte length containing the length of the
 \addtoindexx{initial length}
 set of entries for this compilation unit, not including the
 length field itself. In the 32-bit DWARF format, this is a
-4-byte unsigned integer (which must be less than 0xfffffff0);
+4-byte unsigned integer (which must be less than \xfffffffzero);
 in the 64-bit DWARF format, this consists of the 4-byte value
-0xffffffff followed by an 8-byte unsigned integer that gives
+\wffffffff followed by an 8-byte unsigned integer that gives
 the actual length 
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
 \item version (\addtoindex{uhalf}) \\
-A 2\dash byte version identifier
-\addtoindexx{version number!address range table} containing the value 2 
-(see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
+A 2\dash byte version identifier representing the version of the
+DWARF information for the address range table
+(see Appendix \refersec{app:dwarfsectionversionnumbersinformative}).
+This value in this field \addtoindexx{version number!address range table} is 2. 
+ 
 
 \item debug\_info\_offset (section offset) \\
 A 
@@ -2197,15 +2199,15 @@ Table \refersec{tab:macinfotypeencodings}.
 \label{datarep:callframeinformation}
 
 In the 32\dash bit DWARF format, the value of the CIE id in the
-CIE header is 0xffffffff; in the 64\dash bit DWARF format, the
-value is 0xffffffffffffffff.
+CIE header is \xffffffff; in the 64\dash bit DWARF format, the
+value is \xffffffffffffffff.
 
 The value of the CIE \addtoindexi{version number}{version number!call frame information}
 is 4 (see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
 
 Call frame instructions are encoded in one or more bytes. The
 primary opcode is encoded in the high order two bits of
-the first byte (that is, opcode = byte >> 6). An operand
+the first byte (that is, opcode = byte $\gg$ 6). An operand
 or extended opcode may be encoded in the low order 6
 bits. Additional operands are encoded in subsequent bytes.
 The instructions and their encodings are presented in
@@ -2274,7 +2276,7 @@ A \addtoindex{range list} entry consists of two relative addresses. The
 addresses are the same size as addresses on the target machine.
 
 A base address selection entry and an 
-\addtoindex{end of list entry!in range list}
+\addtoindexx{end of list entry!in range list}
 end of list entry each
 \addtoindexx{base address selection entry!in range list}
 consist of two (constant or relocated) addresses. The two
@@ -2530,7 +2532,7 @@ name to be used is the ABI-specific name of the subprogram
 (e.g., the mangled linker name).
 
 
-\item 6.If the tag in Step 3 is not one of \livelink{chap:DWTAGpointertype}{DW\-\_TAG\-\_pointer\-\_type},
+\item If the tag in Step 3 is not one of \livelink{chap:DWTAGpointertype}{DW\-\_TAG\-\_pointer\-\_type},
 \livelink{chap:DWTAGreferencetype}{DW\-\_TAG\-\_reference\-\_type}, 
 \livelink{chap:DWTAGrvaluereferencetype}{DW\-\_TAG\-\_rvalue\-\_reference\-\_type},
 \livelink{chap:DWTAGptrtomembertype}{DW\-\_TAG\-\_ptr\-\_to\-\_member\-\_type}, or 

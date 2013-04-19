@@ -6,78 +6,88 @@ each of which holds a particular kind of information. In some
 cases, information in one section refers to information in one 
 or more of the others. These relationships are illustrated by 
 the diagram and associated notes on the following pages.
-\clearpage
 
-\setlength\maxovaldiam{80pt}
-\thicklines
-\begin{picture}(0,0)
+\begin{figure}[h]
+% picture gets width and height of the picture drawn
+% so latex knows how big it is (latex does not calculate
+% the space you need to make it fit, you do).
+\begin{picture}(320,300)
+% Footnotesize keeps the text small-size so it fits
+% in the boxes and ellipses
 \footnotesize
-  \put(10,0) { \addtoindex{.debug\_aranges} }
-  \put(40,0) { \circle{80}}
-  \put(180,0) { \addtoindex{.debug\_frame} }
-  \put(210,0) { \circle{80}}
-  \put(350,0) { \addtoindex{.debug\_abbrev} }
-  \put(380,0) { \circle{80}}
+% Thicklines makes the lines more visible.
+\Thicklines
+  \put(5,208) { \addtoindex{.debug\_aranges} }
+  \put(40,210) { \ellipse{80}{30}}
+  \put(180,208) { \addtoindex{.debug\_frame} }
+  \put(210,210) { \ellipse{80}{30}}
+  \put(347,208) { \addtoindex{.debug\_abbrev} }
+  \put(380,210) { \ellipse{80}{30}}
 
-  \put(40,-40){\line(0,-1){30}}
-  \put(-10,-90){\framebox(110,20){To compilation unit (a)} }
-  \put(40,-90){\vector(0,-1){35}}
+  \drawline[1](40,195)(40,181)
+  \put(-10,165){\framebox(110,15){To compilation unit (a)} }
+  \drawline[1](40,165)(40,151)(37,158) 
+  \put(352,168) { \addtoindex{.debug\_str} }
+  \put(380,170) {\ellipse{80}{30}}
 
-  \put(350,-90) { \addtoindex{.debug\_str} }
-  \put(380,-90) {\circle{80}}
-
-  \put(10,-180) { \addtoindex{.debug\_info} }
-  \put(40,-180) {\circle{100}}
-  \put(10,-195) { \addtoindex{.debug\_types} }
+  \put(10,133) { \addtoindex{.debug\_info} }
+  \put(10,123) { \addtoindex{.debug\_types} }
+  \put(40,130) {\ellipse{80}{40}}
 
 
-  \put(350,-180) { \addtoindex{.debug\_loc} }
-  \put(380,-180) {\circle{80}}
+  \put(350,128) { \addtoindex{.debug\_loc} }
+  \put(380,130) {\ellipse{80}{30}}
 
-  \put(350,-270) { \addtoindex{.debug\_ranges} }
-  \put(380,-270) {\circle{80}}
+  \put(345,88) { \addtoindex{.debug\_ranges} }
+  \put(380,90) {\ellipse{80}{30}}
 
-  \put(80,-140){\line(3, 2){90}}
-  \put(170,-90){\framebox(110,20){To abbreviations (c)} }
-  \put(280,-70){\vector( 2, 1){70}}
+  \drawline[1](75,141)(160,170)
+  \put(160,165){\framebox(110,15){To abbreviations (c)} }
+  \drawline[1](271,176)(345,205)(335,197)
 
-  \put(90,-150){\line(2, 1){100}}
-  \put(190,-120){\framebox(110,20){\livelink{chap:DWFORMstrp}{DW\-\_FORM\-\_strp} (d)} }
-  \put(300,-100){\vector( 4, 1){35}}
+  \put(76,138){\line(6, 1){83}}
+  \put(160,140){\framebox(110,15){\livelink{chap:DWFORMstrp}{DW\-\_FORM\-\_strp} (d)} }
+  \drawline[1](271,150)(341,168)(332,162)
 
-  \put(190,-140){\vector(-2, -1){100}}
-  \put(190,-150){\framebox(110,20){\livelink{chap:DWOPcallref}{DW\-\_OP\-\_call\-\_ref}(e)} }
-  \put(300,-150){\line(4,-1){40}}
+  \drawline[1](160,125)(80,130)(90,134)
+  \put(160,115){\framebox(110,15){\livelink{chap:DWOPcallref}{DW\-\_OP\-\_call\-\_ref}(e)} }
+  \drawline[1](271,125)(340,128) 
 
-  \put(90,-195){\line(7,2){95}}
-  \put(190,-180){\framebox(110,20){\livelink{chap:DWATlocation}{DW\-\_AT\-\_location}(f)} }
-  \put(300,-180){\vector(1,0){40}}
+  \drawline[1](79,128)(160,100)
+  \put(160,90){\framebox(110,15){\livelink{chap:DWATlocation}{DW\-\_AT\-\_location} etc (f)} }
+  \drawline[1](271,100)(341,125)(332,118)
 
-  \put(90,-195){\line(7,-2){95}}
-  \put(190,-230){\framebox(110,20){\livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} (g)} }
-  \put(300,-230){\vector(4,-3){40}}
+  \drawline(79,125)(160,75)
+  \put(160,65){\framebox(110,15){\livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} (g)} }
+  \drawline(271,75)(340,90)(332,85)
 
-  \put(85,-200){\line(3,-2){95}}
-  \put(180,-270){\framebox(110,20){\livelink{chap:DWATmacroinfo}{DW\-\_AT\-\_macro\-\_info} (h)} }
-  \put(230,-270){\vector(3,-2){110}}
+  \drawline[1](77,121)(160,46)
+  \put(160,40){\framebox(110,15){\livelink{chap:DWATmacroinfo}{DW\-\_AT\-\_macro\-\_info} (h)} }
+  \drawline[1](271,46)(343,53)(332,49)
 
-  \put(85,-200){\line(1,-1){80}}
-  \put(120,-300){\framebox(110,20){\livelink{chap:DWATstmtlist}{DW\-\_AT\-\_stmt\-\_list} (i)} }
-  \put(180,-300){\vector(1,-2){10}}
+  \drawline[1](71, 116)(160,20)
+  \put(160,15){\framebox(110,15){\livelink{chap:DWATstmtlist}{DW\-\_AT\-\_stmt\-\_list} (i)} }
+  \drawline[1](271,20)(343,10)(332,8)
 
-  \put(40,-250){\vector(0,1){15}}
-  \put(-10,-270){\framebox(110,20){To compilation unit (b)} }
-  \put(40,-320){\line(0,1){50}}
+  \drawline[1](40,70)(40,110)(37,103)
+  \put(-10,55){\framebox(110,15){To compilation unit (b)} }
+  \drawline[1](40,35)(40,54)
 
-  \put(0,-360) { \addtoindex{.debug\_pubnames} }
-  \put(0,-375) { \addtoindex{.debug\_pubtypes} } 
-  \put(40, -360) { \circle{80}}
-  \put(175,-360) { \addtoindex{.debug\_line} }
-  \put(210,-360) { \circle{80}}
-  \put(350,-360) { \addtoindex{.debug\_macinfo} }
-  \put(380,-360) { \circle{80}}
+  \put(0,16) { \addtoindex{.debug\_pubnames} }
+  \put(0,6) { \addtoindex{.debug\_pubtypes} } 
+  \put(40, 15) { \ellipse{100}{40}}
+
+
+  \put(345,48) { \addtoindex{.debug\_macinfo} }
+  \put(380,50) { \ellipse{80}{30}}
+
+  \put(350,8) { \addtoindex{.debug\_line} }
+  \put(380,10) { \ellipse{80}{30}}
 
 \end{picture}
+\caption{Debug section relationships}
+\label{fig:debugsectionrelationships}
+\end{figure}
 
 \clearpage
 \begin{center}

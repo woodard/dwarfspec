@@ -70,7 +70,7 @@ more condensed format.
 For lookup by name, 
 \addtoindexx{lookup!by name}
 two tables are maintained in separate
-\addtoindex{accelerated access!by name}
+\addtoindexx{accelerated access!by name}
 object file sections named 
 \addtoindex{.debug\_pubnames} for objects and
 functions, and 
@@ -95,7 +95,7 @@ Each set begins with a header containing four values:
 \addtoindexx{unit\_length}
 The total length of the all of the entries for that set,
 not including the length field itself 
-(see Section \refersec{datarep:locationdescriptions}).
+(see Section \refersec{datarep:initiallengthvalues}).
 
 \item  version (\addtoindex{uhalf}) \\
 A version number
@@ -149,7 +149,7 @@ the data or function member.
 For 
 \addtoindexx{lookup!by address}
 lookup by address, a table is maintained in a separate
-\addtoindex{accelerated access!by address}
+\addtoindexx{accelerated access!by address}
 object file section called 
 \addtoindex{.debug\_aranges}. The table consists
 of sets of variable length entries, each set describing the
@@ -237,7 +237,7 @@ represented in the
 \addtoindex{.debug\_line} section of an object file and
 is referenced by a corresponding compilation unit debugging
 information entry 
-(see Section \refersec{chap:generalsubroutineandentrypointinformation}) 
+(see Section \refersec{chap:normalandpartialcompilationunitentries}) 
 in the \addtoindex{.debug\_info}
 section.
 
@@ -261,6 +261,7 @@ object code. The matrix would have columns for:}
 \item \textit{the source file name}
 \item \textit{the source line number}
 \item \textit{the source column number}
+\item \textit{whether this instruction is the beginning of a source statement}
 \item \textit{whether this instruction is the beginning of a \addtoindex{basic block}}
 \item \textit{and so on}
 \end{itemize}
@@ -291,7 +292,7 @@ The following terms are used in the description of the line
 number information format:
 
 
-\begin{tabular} {lp{9cm}}
+\begin{longtable} {lp{9cm}}
 state machine &
 The hypothetical machine used by a consumer of the line number
 information to expand the byte\dash coded 
@@ -317,7 +318,7 @@ sequence &
 A series of contiguous target machine instructions. One compilation unit
 may emit multiple sequences (that is, not all instructions within a
 compilation unit are assumed to be contiguous). \\
-\end{tabular}
+\end{longtable}
 
 \subsection{State Machine Registers}
 \label{chap:statemachineregisters}
@@ -393,10 +394,11 @@ where execution should be suspended for an exit breakpoint of a function. \\
 \addtoindex{isa} &
 An unsigned integer whose value encodes the applicable
 instruction set architecture for the current instruction.
-The encoding of instruction sets should be shared by all
+
+\textit{The encoding of instruction sets should be shared by all
 users of a given architecture. It is recommended that this
 encoding be defined by the ABI authoring committee for each
-architecture. \\
+architecture.} \\
 
 \addtoindex{discriminator} &
 An unsigned integer identifying the block to which the
@@ -450,6 +452,7 @@ The opcode implies the number of operands and their meanings, but the
 line number program header also specifies the number of operands for
 each standard opcode.
 
+\needlines{6}
 \item extended opcodes \\
 These have a multiple byte format. The first byte is zero; the next bytes
 are an unsigned LEB128\addtoindexx{LEB128!unsigned} integer giving the number of bytes in the
@@ -478,9 +481,9 @@ The size in bytes of the line number information for this
 compilation unit, not including the unit\_length field itself
 (see Section \refersec{datarep:initiallengthvalues}). 
 
-\item version (\addtoindex{uhalf}) 
+\item version (\addtoindex{uhalf}) \\
 A version number\addtoindexx{version number!line number information} 
-(see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
+(see Appendix \refersec{datarep:linenumberinformation}). 
 This number is specific to
 the line number information and is independent of the DWARF
 version number. 
@@ -501,6 +504,7 @@ the address and \addtoindex{op\_index} registers use this and
 \addtoindexx{maximum\_operations\_per\_instruction}
 maximum\-\_operations\-\_per\-\_instruction in their calculations. 
 
+\needlines{9}
 \item maximum\_operations\_per\_instruction (\addtoindex{ubyte}) \\
 The 
 \addtoindexx{maximum\_operations\_per\_instruction}
@@ -510,8 +514,9 @@ that alter the address and
 \addtoindex{op\_index} registers use this and
 \addtoindex{minimum\_instruction\_length}
 in their calculations.
+
 For non-VLIW
-architectures, this field is 1, the \addtoindex{op\_index register} is always
+architectures, this field is 1, the \addtoindex{op\_index} register is always
 0, and the operation pointer is simply the address register.
 
 \needlines{4}
@@ -552,11 +557,11 @@ This parameter affects the meaning of the special opcodes. See below.
 
 \item opcode\_base (\addtoindex{ubyte}) \\
 The 
-\addtoindex{opcode\_base}
+\addtoindexx{opcode\_base}
 number assigned to the first special opcode.
 
 \textit{Opcode base is typically one greater than the highest-numbered
-\addtoindex{opcode\_base}
+\addtoindexx{opcode\_base}
 standard opcode defined for the specified version of the line
 number information (12 in 
 \addtoindex{DWARF Version 3} and 
@@ -565,7 +570,7 @@ Version 4, 9 in
 \addtoindexx{DWARF Version 2}
 Version 2).  
 If opcode\_base is less than the typical value,
-\addtoindex{opcode\_base}
+\addtoindexx{opcode\_base}
 then standard opcode numbers greater than or equal to the
 opcode base are not used in the line number table of this unit
 (and the codes are treated as special opcodes). If opcode\_base
@@ -581,13 +586,13 @@ corresponds to the opcode whose value is 1, and the last
 element corresponds to the opcode whose value 
 is opcode\_base - 1.
 
-By increasing opcode\_base, and adding elements to this array,
-\addtoindex{opcode\_base}
+\textit{By increasing opcode\_base, and adding elements to this array,
+\addtoindexx{opcode\_base}
 new standard opcodes can be added, while allowing consumers who
-do not know about these new opcodes to be able to skip them.
+do not know about these new opcodes to be able to skip them.}
 
-Codes for vendor specific extensions, if any, are described
-just like standard opcodes.
+\textit{Codes for vendor specific extensions, if any, are described
+just like standard opcodes.}
 
 \needlines{3}
 \item include\_directories (sequence of path names) \\
@@ -731,10 +736,12 @@ way to decrease the line number) in return for the ability
 to add larger positive values to the address register. To
 permit this variety of strategies, the line number program
 header defines a 
-\addtoindexx{line\_base}
+\addtoindex{line\_base}
 field that specifies the minimum
 value which a special opcode can add to the line register
-and a line\_range field that defines the range of values it
+and a 
+\addtoindex{line\_range}
+field that defines the range of values it
 can add to the line register.}
 
 
@@ -743,9 +750,9 @@ to be added to the line, address and \addtoindex{op\_index} registers.
 The
 maximum line increment for a special opcode is the value
 of the 
-\addtoindexx{line\_base}
-field in the header, plus the value of
-the line\_range field, minus 1 (line base + 
+\addtoindex{line\_base}
+field in the header, plus the value of the 
+\addtoindex{line\_range} field, minus 1 (line base + 
 line range - 1). 
 If the desired line increment is greater than the maximum
 line increment, a standard opcode must be used instead of a
@@ -761,10 +768,11 @@ The special opcode is then calculated using the following formula:
 If the resulting opcode is greater than 255, a standard opcode
 must be used instead.
 
-When \addtoindex{maximum\_operations\_per\_instruction} is 1, the operation
+\textit{When \addtoindex{maximum\_operations\_per\_instruction} is 1, the operation
 advance is simply the address increment divided by the
-\addtoindex{minimum\_instruction\_length}.
+\addtoindex{minimum\_instruction\_length}.}
 
+\needlines{6}
 To decode a special opcode, subtract the opcode\_base from
 the opcode itself to give the \textit{adjusted opcode}. 
 The \textit{operation advance} 
@@ -944,6 +952,7 @@ the computation of a special opcode overflows and requires
 the use of \livelink{chap:DWLNSadvancepc}{DW\-\_LNS\-\_advance\-\_pc}. Such assemblers, however, can
 use \livelink{chap:DWLNSfixedadvancepc}{DW\-\_LNS\-\_fixed\-\_advance\-\_pc} instead, sacrificing compression.}
 
+\needlines{6}
 \item \textbf{DW\-\_LNS\-\_set\-\_prologue\-\_end} \\
 The \livetarg{chap:DWLNSsetprologueend}{DW\-\_LNS\-\_set\-\_prologue\-\_end}
 opcode takes no operands. It sets the 
@@ -1095,7 +1104,7 @@ gives some sample line number programs.}
 \textit{Some languages, such as 
 \addtoindex{C} and 
 \addtoindex{C++}, provide a way to replace
-\addtoindex{macro information}
+\addtoindexx{macro information}
 text in the source program with macros defined either in the
 source file itself, or in another file included by the source
 file.  Because these macros are not themselves defined in the
@@ -1323,7 +1332,7 @@ special things.}
 \addtoindexx{prologue}
 and 
 \addtoindex{epilogue} code is not always in 
-distinct block
+distinct \nolink{blocks}
 at the beginning and end of a subroutine. It is common
 to duplicate the \addtoindex{epilogue} code 
 at the site of each return
@@ -1409,7 +1418,7 @@ previous frame.
 \needlines{4}
 The register rules are:
 
-\begin{tabular}{lp{8cm}}
+\begin{longtable}{lp{8cm}}
 undefined 
 &A register that has this rule has no recoverable value in the previous frame.
 (By convention, it is not preserved by a callee.) \\
@@ -1432,16 +1441,16 @@ in another register numbered R.\\
 
 expression(E)
 &The previous value of this register is located at the address produced by
-executing the DWARF expression E.\\
+executing the DWARF expression E (see Section \refersec{chap:dwarfexpressions}).\\
 
 val\_expression(E) 
 &The previous value of this register is the value produced by executing the
-DWARF expression E.\\
+DWARF expression E (see Section \refersec{chap:dwarfexpressions}).\\
 
 architectural
 &The rule is defined externally to this specification by the augmenter.\\
 
-\end{tabular}
+\end{longtable}
 
 \textit{This table would be extremely large if actually constructed
 as described. Most of the entries at any point in the table
@@ -1488,7 +1497,7 @@ A version number\addtoindexx{version number!call frame information}
 This number is specific to the call frame information
 and is independent of the DWARF version number.
 
-
+\needlines{8}
 \item  augmentation (\addtoindex{UTF\dash 8} string) \\
 A null\dash terminated UTF\dash 8 string that identifies the augmentation
 to this CIE or to the FDEs that use it. If a reader encounters
@@ -1554,7 +1563,9 @@ register.
 
 \item initial\_instructions (array of \addtoindex{ubyte}) \\
 A sequence of rules that are interpreted to create the initial
-setting of each column in the table.  The default rule for
+setting of each column in the table.  
+
+The default rule for
 all columns before interpretation of the initial instructions
 is the undefined rule. However, an ABI authoring body or a
 compilation system authoring body may specify an alternate
@@ -1568,11 +1579,10 @@ match the length value above.
 An FDE contains the following fields, in order:
 \begin{enumerate}[1. ]
 \item length (initial length)  \\
-
 A constant that gives the number of bytes of the header and
 instruction stream for this function, not including the length
 field itself 
-(see Section  \refersec{datarep:initiallengthvalues}). 
+(see Section \refersec{datarep:initiallengthvalues}). 
 The size of the length field
 plus the value of length must be an integral multiple of the
 address size.
@@ -1618,6 +1628,7 @@ opcode
 The instructions are defined in
 the following sections.
 
+\needlines{8}
 Some call frame instructions have operands that are encoded
 as DWARF expressions 
 (see Section \refersec{chap:generaloperations}). 
@@ -1664,7 +1675,7 @@ selector of the given length.
 
 
 \item \textbf{DW\-\_CFA\-\_advance\-\_loc} \\
-The \livetarg{chap:DWCFAadvanceloc}{DW\-\_CFA\-\_advanceloc} instruction takes a single operand (encoded
+The \livetarg{chap:DWCFAadvanceloc}{DW\-\_CFA\-\_advance\_loc} instruction takes a single operand (encoded
 with the opcode) that represents a constant delta. The required
 action is to create a new table row with a location value that
 is computed by taking the current entry\textquoteright s location value
@@ -1680,6 +1691,7 @@ operand that represents a constant delta. This instruction
 is identical to \livelink{chap:DWCFAadvanceloc}{DW\-\_CFA\-\_advance\-\_loc} except for the encoding
 and size of the delta operand.
 
+\needlines{6}
 \item \textbf{DW\-\_CFA\-\_advance\-\_loc2} \\
 The \livetarg{chap:DWCFAadvanceloc2}{DW\-\_CFA\-\_advance\-\_loc2} instruction takes a single
 \addtoindex{uhalf}
@@ -1707,6 +1719,7 @@ operands representing a register number and a (non\dash factored)
 offset. The required action is to define the current CFA rule
 to use the provided register and offset.
 
+\needlines{6}
 \item \textbf{ DW\-\_CFA\-\_def\-\_cfa\-\_sf} \\
 The \livetarg{chap:DWCFAdefcfasf}{DW\-\_CFA\-\_def\-\_cfa\-\_sf} instruction takes two operands:
 an unsigned LEB128 value\addtoindexx{LEB128!unsigned}
@@ -1867,6 +1880,7 @@ execution of the DWARF expression.
 regarding restrictions on the DWARF
 expression operators that can be used.}
 
+\needlines{6}
 \item \textbf{ DW\-\_CFA\-\_restore} \\
 The \livetarg{chap:DWCFArestore}{DW\-\_CFA\-\_restore} instruction takes a single operand (encoded
 with the opcode) that represents a register number. The
@@ -1937,7 +1951,7 @@ end of the instruction stream is encountered.}
 
 \item \textit{ If a \livelink{chap:DWCFAadvanceloc}{DW\-\_CFA\-\_advance\-\_loc} or \livelink{chap:DWCFAsetloc}{DW\-\_CFA\-\_set\-\_loc}
 instruction is encountered, then compute a new location value
-(L2). If L1 >= L2 then process the instruction and go back
+(L2). If L1 $\geq$ L2 then process the instruction and go back
 to step 2.}
 
 \item \textit{ The end of the instruction stream can be thought

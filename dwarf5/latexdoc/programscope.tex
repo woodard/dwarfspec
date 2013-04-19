@@ -58,11 +58,11 @@ used to represent portions of an object file.
 \textit{A normal compilation unit typically represents the text and
 data contributed to an executable by a single relocatable
 object file. It may be derived from several source files,
-including pre\dash processed ``include files.'' 
+including pre\dash processed \doublequote{include files}. 
 A \addtoindex{partial compilation unit} typically represents a part of the text
 and data of a relocatable object file, in a manner that can
 potentially be shared with the results of other compilations
-to save space. It may be derived from an ``include file'',
+to save space. It may be derived from an \doublequote{include file},
 template instantiation, or other implementation\dash dependent
 portion of a compilation. A normal compilation unit can also
 function in a manner similar to a partial compilation unit
@@ -181,12 +181,13 @@ information for this compilation unit
 (see Section \refersec{chap:linenumberinformation}).
 
 \item A \livelink{chap:DWATmacroinfo}{DW\-\_AT\-\_macro\-\_info} attribute 
-\addtoindex{macro information attribute}
+\addtoindexx{macro information attribute}
 whose value is a 
 \addtoindexx{section offset!in macro information attribute}
 section
 \hypertarget{chap:DWATmacroinfomacroinformation}
 offset to the macro information for this compilation unit.
+
 This information is placed in a separate object file section
 from the debugging information entries themselves. The
 value of the macro information attribute is the offset in
@@ -583,7 +584,7 @@ given another name.
 
 An 
 imported declaration is represented by one or
-\addtoindex{imported declaration entry}
+\addtoindexx{imported declaration entry}
 more debugging information entries with the 
 tag \livetarg{chap:DWTAGimporteddeclaration}{DW\-\_TAG\-\_imported\-\_declaration}. 
 When 
@@ -738,7 +739,7 @@ end module
 \end{lstlisting}
 
 \textit{the imported declaration entry for Q within module C refers
-directly to the variable declaration entry for A in module A
+directly to the variable declaration entry for X in module A
 because there is no explicit representation for X in module B.
 }
 
@@ -777,12 +778,12 @@ instance of a subroutine or function \\
 \label{chap:generalsubroutineandentrypointinformation}
 The subroutine or entry point entry has a \livelink{chap:DWATname}{DW\-\_AT\-\_name} 
 attribute whose value is a null-terminated string containing the 
-subroutine or entry point name as it appears in the source.
+subroutine or entry point name as it appears in the source program.
 It may also have a \livelink{chap:DWATlinkagename}{DW\-\_AT\-\_linkage\-\_name} attribute as
 described in Section \refersec{chap:linkagenames}.
 
 If the name of the subroutine described by an entry with the
-\addtoindex{subprogram entry}
+\addtoindexx{subprogram entry}
 tag \livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram}
 is visible outside of its containing
 \hypertarget{chap:DWATexternalexternalsubroutine}
@@ -1144,7 +1145,7 @@ If a subroutine explicitly declares that it may throw
 \addtoindexx{exception thrown|see{thrown type entry}}
 an 
 \addtoindexx{thrown exception|see{thrown type entry}}
-exception for one or more types, each such type is
+exception of one or more types, each such type is
 represented by a debugging information entry with 
 \addtoindexx{thrown type entry}
 the tag
@@ -1161,7 +1162,7 @@ exception that may be thrown.
 \label{chap:functiontemplateinstantiations}
 
 \textit{In \addtoindex{C++}, a function template is a generic definition of
-a function that is instantiated differently when called with
+a function that is instantiated differently for calls with
 values of different types. DWARF does not represent the generic
 template definition, but does represent each instantiation.}
 
@@ -1309,9 +1310,10 @@ the \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc},
 \livelink{chap:DWATranges}{DW\-\_AT\-\_ranges}, 
 \livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc}, 
 \livelink{chap:DWATlocation}{DW\-\_AT\-\_location},
-\livelink{chap:DWATreturnaddr}{DW\-\_AT\-\_return\-\_addr}, \livelink{chap:DWATstartscope}{DW\-\_AT\-\_start\-\_scope}, 
+\livelink{chap:DWATreturnaddr}{DW\-\_AT\-\_return\-\_addr}, 
+\livelink{chap:DWATstartscope}{DW\-\_AT\-\_start\-\_scope}, 
 and 
-\livelink{chap:DWATsegment}{DW\-\_AT\-\_segment!and abstract instance}
+\livelink{chap:DWATsegment}{DW\-\_AT\-\_segment}
 attributes 
 \addtoindexx{location attribute!and abstract instance}
 typically 
@@ -1321,7 +1323,7 @@ should
 be 
 \addtoindexx{low PC attribute!and abstract instance}
 omitted; 
-\addtoindex{segment attribute!and abstract instance}
+\addtoindexx{segment attribute!and abstract instance}
 however, 
 \addtoindexx{return address attribute!and abstract instance}
 this 
@@ -1668,6 +1670,7 @@ that is, the subroutine to which the trampoline passes
 control. (A trampoline entry may but need not also have a
 \livelink{chap:DWATartificial}{DW\-\_AT\-\_artificial} attribute.)
 
+\needlines{5}
 The value of the trampoline attribute may be represented
 using any of the following forms, which are listed in order
 of preference:
@@ -1752,30 +1755,30 @@ a
 \addtoindexx{ranges attribute}
 whose values encode the contiguous or non-contiguous address
 ranges, respectively, of the machine instructions generated
-for the lexical \livelink{chap:lexicalblock}{block} 
+for the lexical \nolink{block} 
 (see Section \refersec{chap:codeaddressesandranges}).
 
 If a name has been given to the 
-lexical \livelink{chap:lexicalblock}{block} 
+lexical \nolink{block} 
 in the source
 program, then the corresponding 
-lexical \livelink{chap:lexicalblockentry}{block} entry has a
+lexical \nolink{block} entry has a
 \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute whose 
 \addtoindexx{name attribute}
 value is a null\dash terminated string
-containing the name of the lexical \livelink{chap:lexicalblock}{block} 
+containing the name of the lexical \nolink{block} 
 as it appears in
 the source program.
 
 \textit{This is not the same as a \addtoindex{C} or 
 \addtoindex{C++} label (see below).}
 
-The lexical \livelink{chap:lexicalblockentry}{block} entry owns 
+The lexical \nolink{block} entry owns 
 debugging information entries that
-describe the declarations within that lexical \livelink{chap:lexicalblock}{block}. 
+describe the declarations within that lexical \nolink{block}. 
 There is
 one such debugging information entry for each local declaration
-of an identifier or inner lexical \livelink{chap:lexicalblock}{block}.
+of an identifier or inner lexical \nolink{block}.
 
 \section{Label Entries}
 \label{chap:labelentries}

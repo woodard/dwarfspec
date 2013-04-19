@@ -5,7 +5,6 @@ The following sections provide examples that illustrate
 various aspects of the DWARF debugging information format.
 
 
-
 \section{ Compilation Units and Abbreviations Table Example}
 \label{app:compilationunitsandabbreviationstableexample}
 
@@ -59,19 +58,21 @@ Compilation Unit \#1: \addtoindex{.debug\_info}
 0x0
 \vspace{0.01cm}
 \hrule
+\textit{e1:}
 2
-\doublequote{char}
+"char"
 \livelink{chap:DWATEunsignedchar}{DW\-\_ATE\-\_unsigned\-\_char}
 1
 \vspace{0.01cm}
 \hrule
+\textit{e2:}
 3
-e1
+\textit{e1  (debug info offset)}
 \vspace{0.01cm}
 \hrule
 4
-\doublequote{POINTER}
-e2
+"POINTER"
+\textit{e2  (debug info offset)}
 \vspace{0.01cm}
 \hrule
 0
@@ -93,8 +94,8 @@ Compilation Unit \#2: \addtoindex{.debug\_info}
 \vspace{0.01cm}
 \hrule
 4
-\doublequote{strp}
-e2
+"strp"
+\textit{e2  (debug info offset)}
 \vspace{0.01cm}
 \hrule
 ...
@@ -110,6 +111,8 @@ Abbreviation Table: \addtoindex{.debug\_abbrev}
 \begin{framed}
 \scriptsize
 \begin{alltt}
+\textit{a1:}
+1
 \livelink{chap:DWTAGcompileunit}{DW\-\_TAG\-\_compile\-\_unit}
 \livelink{chap:DWCHILDRENyes}{DW\-\_CHILDREN\-\_yes}
 \livelink{chap:DWATname}{DW\-\_AT\-\_name}       \livelink{chap:DWFORMstring}{DW\-\_FORM\-\_string}
@@ -119,7 +122,7 @@ Abbreviation Table: \addtoindex{.debug\_abbrev}
 \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc}     \livelink{chap:DWFORMaddr}{DW\-\_FORM\-\_addr}
 \livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc}    \livelink{chap:DWFORMdata1}{DW\-\_FORM\-\_data1}
 \livelink{chap:DWATstmtlist}{DW\-\_AT\-\_stmt\-\_list}  \livelink{chap:DWFORMindirect}{DW\-\_FORM\-\_indirect}
-0                  0
+0
 \vspace{0.01cm}
 \hrule
 2
@@ -232,11 +235,11 @@ struct desc {
 
 In practice, of course, a \doublequote{real} descriptor will have
 dimension substructures only for as many dimensions as are
-specified in the num\_dims component. Let us use the notation
+specified in the \texttt{num\_dims} component. Let us use the notation
 \texttt{desc\textless n\textgreater}   
-to indicate a specialization of the desc struct in
-which \texttt{n} is the bound for the dims component as well as the
-contents of the num\_dims component.
+to indicate a specialization of the \texttt{desc} struct in
+which \texttt{n} is the bound for the \texttt{dims} component as well as the
+contents of the \texttt{num\_dims} component.
 
 Because the arrays considered here come in two parts, it is
 necessary to distinguish the parts carefully. In particular,
@@ -306,40 +309,40 @@ in Figure \refersec{fig:fortran90exampledwarfdescription}.
         \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to REAL)
         \livelink{chap:DWATassociated}{DW\-\_AT\-\_associated}(expression= ! Test 'ptr\_assoc' \nolink{flag}
             \livelink{chap:DWOPpushobjectaddress}{DW\-\_OP\-\_push\-\_object\-\_address}
-            \livelink{chap:DWOPlit}{DW\-\_OP\-\_lit}<n> ! where n == offset(ptr\_assoc)
+            \livelink{chap:DWOPlit}{DW\-\_OP\-\_lit}<n>    ! where n == offset(ptr\_assoc)
             \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus}
             \livelink{chap:DWOPderef}{DW\-\_OP\-\_deref}
-            \livelink{chap:DWOPlit1}{DW\-\_OP\-\_lit1} ! mask for 'ptr\_assoc' \nolink{flag}
+            \livelink{chap:DWOPlit1}{DW\-\_OP\-\_lit1}      ! mask for 'ptr\_assoc' \nolink{flag}
             \livelink{chap:DWOPand}{DW\-\_OP\-\_and})
         \livelink{chap:DWATdatalocation}{DW\-\_AT\-\_data\-\_location}(expression= ! Get raw data address
             \livelink{chap:DWOPpushobjectaddress}{DW\-\_OP\-\_push\-\_object\-\_address}
-            \livelink{chap:DWOPlit}{DW\-\_OP\-\_lit}<n> ! where n == offset(base)
+            \livelink{chap:DWOPlit}{DW\-\_OP\-\_lit}<n>    ! where n == offset(base)
             \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus}
-            \livelink{chap:DWOPderef}{DW\-\_OP\-\_deref}) ! Type of index of array 'ap'
-2\$: \livelink{chap:DWTAGsubrangetype}{DW\-\_TAG\-\_subrange\-\_type}
-        ! No name, default stride
-        \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to INTEGER)
-        \livelink{chap:DWATlowerbound}{DW\-\_AT\-\_lower\-\_bound}(expression=
-            \livelink{chap:DWOPpushobjectaddress}{DW\-\_OP\-\_push\-\_object\-\_address}
-            \livelink{chap:DWOPlit}{DW\-\_OP\-\_lit}<n> ! where n ==
-                         !  offset(desc, dims) +
-                         !  offset(dims\_str, lower\_bound)
-            \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus}
-            \livelink{chap:DWOPderef}{DW\-\_OP\-\_deref})
-        \livelink{chap:DWATupperbound}{DW\-\_AT\-\_upper\-\_bound}(expression=
-            \livelink{chap:DWOPpushobjectaddress}{DW\-\_OP\-\_push\-\_object\-\_address}
-            \livelink{chap:DWOPlit}{DW\-\_OP\-\_lit}<n> ! where n ==
-                         !  offset(desc, dims) +
-                         !  offset(dims\_str, upper\_bound)
-            \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus}
-            \livelink{chap:DWOPderef}{DW\-\_OP\-\_deref})
-        !  Note: for the m'th dimension, the second operator becomes
-        !  \livelink{chap:DWOPlit}{DW\-\_OP\-\_lit}<x> where
-        !       x == offset(desc, dims)         +
-        !                (m-1)*sizeof(dims\_str) +
-        !                 offset(dims\_str, [lower|upper]\_bound)
-        !  That is, the expression does not get longer for each successive 
-        !  dimension (other than to express the larger offsets involved).
+            \livelink{chap:DWOPderef}{DW\-\_OP\-\_deref})    ! Type of index of array 'ap'
+2\$:     \livelink{chap:DWTAGsubrangetype}{DW\-\_TAG\-\_subrange\-\_type}
+            ! No name, default stride
+            \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to INTEGER)
+            \livelink{chap:DWATlowerbound}{DW\-\_AT\-\_lower\-\_bound}(expression=
+                \livelink{chap:DWOPpushobjectaddress}{DW\-\_OP\-\_push\-\_object\-\_address}
+                \livelink{chap:DWOPlit}{DW\-\_OP\-\_lit}<n> ! where n ==
+                             !  offset(desc, dims) +
+                             !  offset(dims\_str, lower\_bound)
+                \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus}
+                \livelink{chap:DWOPderef}{DW\-\_OP\-\_deref})
+            \livelink{chap:DWATupperbound}{DW\-\_AT\-\_upper\-\_bound}(expression=
+                \livelink{chap:DWOPpushobjectaddress}{DW\-\_OP\-\_push\-\_object\-\_address}
+                \livelink{chap:DWOPlit}{DW\-\_OP\-\_lit}<n> ! where n ==
+                             !  offset(desc, dims) +
+                             !  offset(dims\_str, upper\_bound)
+                \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus}
+                \livelink{chap:DWOPderef}{DW\-\_OP\-\_deref})
+            !  Note: for the m'th dimension, the second operator becomes
+            !  \livelink{chap:DWOPlit}{DW\-\_OP\-\_lit}<x> where
+            !       x == offset(desc, dims)          +
+            !                (m-1)*sizeof(dims\_str) +
+            !                 offset(dims\_str, [lower|upper]\_bound)
+            !  That is, the expression does not get longer for each successive 
+            !  dimension (other than to express the larger offsets involved).
 \end{alltt}
 \end{dwflisting}
 \caption{Fortran 90 example: DWARF description}
@@ -364,33 +367,31 @@ in Figure \refersec{fig:fortran90exampledwarfdescription}.
 6\$: \livelink{chap:DWTAGarraytype}{DW\-\_TAG\-\_array\-\_type}
         ! No name, default (Fortran) ordering, default stride
         \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to 3\$)
-        \livelink{chap:DWATallocated}{DW\-\_AT\-\_allocated}(expression=
-            ! Test 'ptr\_alloc' \nolink{flag}
+        \livelink{chap:DWATallocated}{DW\-\_AT\-\_allocated}(expression=     ! Test 'ptr\_alloc' \nolink{flag}
             \livelink{chap:DWOPpushobjectaddress}{DW\-\_OP\-\_push\-\_object\-\_address}
-            \livelink{chap:DWOPlit}{DW\-\_OP\-\_lit}<n> ! where n == offset(ptr\_alloc)
+            \livelink{chap:DWOPlit}{DW\-\_OP\-\_lit}<n>                ! where n == offset(ptr\_alloc)
             \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus}
             \livelink{chap:DWOPderef}{DW\-\_OP\-\_deref}
-            \livetarg{chap:DWOPlit2}{DW\-\_OP\-\_lit2}
-            ! Mask for 'ptr\_alloc' \nolink{flag}
+            \livelink{chap:DWOPlit}{DW\-\_OP\-\_lit2}                  ! Mask for 'ptr\_alloc' \nolink{flag}
             \livelink{chap:DWOPand}{DW\-\_OP\-\_and})
         \livelink{chap:DWATdatalocation}{DW\-\_AT\-\_data\-\_location}(expression= ! Get raw data address
             \livelink{chap:DWOPpushobjectaddress}{DW\-\_OP\-\_push\-\_object\-\_address}
-            \livelink{chap:DWOPlit}{DW\-\_OP\-\_lit}<n> ! where n = offset(base)
+            \livelink{chap:DWOPlit}{DW\-\_OP\-\_lit}<n>                ! where n = offset(base)
             \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus}
             \livelink{chap:DWOPderef}{DW\-\_OP\-\_deref})
-7\$: \livelink{chap:DWTAGsubrangetype}{DW\-\_TAG\-\_subrange\-\_type}
-        ! No name, default stride
-        \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to INTEGER)
-        \livelink{chap:DWATlowerbound}{DW\-\_AT\-\_lower\-\_bound}(expression=
-            \livelink{chap:DWOPpushobjectaddress}{DW\-\_OP\-\_push\-\_object\-\_address}
-            \livelink{chap:DWOPlit}{DW\-\_OP\-\_lit}<n> ! where n == ...
-            \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus}
-            \livelink{chap:DWOPderef}{DW\-\_OP\-\_deref})
-        \livelink{chap:DWATupperbound}{DW\-\_AT\-\_upper\-\_bound}(expression=
-            \livelink{chap:DWOPpushobjectaddress}{DW\-\_OP\-\_push\-\_object\-\_address}
-            \livelink{chap:DWOPlit}{DW\-\_OP\-\_lit}<n> ! where n == ...
-            \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus}
-            \livelink{chap:DWOPderef}{DW\-\_OP\-\_deref})
+7\$:     \livelink{chap:DWTAGsubrangetype}{DW\-\_TAG\-\_subrange\-\_type}
+            ! No name, default stride
+            \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to INTEGER)
+            \livelink{chap:DWATlowerbound}{DW\-\_AT\-\_lower\-\_bound}(expression=
+                \livelink{chap:DWOPpushobjectaddress}{DW\-\_OP\-\_push\-\_object\-\_address}
+                \livelink{chap:DWOPlit}{DW\-\_OP\-\_lit}<n>            ! where n == ...
+                \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus}
+                \livelink{chap:DWOPderef}{DW\-\_OP\-\_deref})
+            \livelink{chap:DWATupperbound}{DW\-\_AT\-\_upper\-\_bound}(expression=
+                \livelink{chap:DWOPpushobjectaddress}{DW\-\_OP\-\_push\-\_object\-\_address}
+                \livelink{chap:DWOPlit}{DW\-\_OP\-\_lit}<n>            ! where n == ...
+                \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus}
+                \livelink{chap:DWOPderef}{DW\-\_OP\-\_deref})
 8\$: \livelink{chap:DWTAGvariable}{DW\-\_TAG\-\_variable}
         \livelink{chap:DWATname}{DW\-\_AT\-\_name}("arrays")
         \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to 6\$)
@@ -441,7 +442,7 @@ For a), check for a \livelink{chap:DWATdatalocation}{DW\-\_AT\-\_data\-\_locatio
 there is one, go execute the expression, whose result is
 the address needed. The object address used in this case
 is the object we are working on, namely the variable named
-arrays , whose address was found in step 1. (Had there been
+arrays, whose address was found in step 1. (Had there been
 no \livelink{chap:DWATdatalocation}{DW\-\_AT\-\_data\-\_location} attribute, the desired address would
 be the same as the address from step 1.)
 
@@ -460,7 +461,7 @@ type, which is the size of type array\_ptr (at 3\$).
 \clearpage
 
 Having acquired all the necessary data, perform the indexing
-operation in the usual manner -  which has nothing to do with
+operation in the usual manner--which has nothing to do with
 any of the attributes involved up to now. Those just provide
 the actual values used in the indexing step.
 
@@ -509,7 +510,7 @@ would be different.
 \subsection{Ada Example}
 \label{app:adaexample}
 
-Figure \referfol{fig:adaexamplesourcefragment}
+Figure \refersec{fig:adaexamplesourcefragment}
 illustrates two kinds of \addtoindex{Ada} 
 parameterized array, one embedded in a record.
 
@@ -545,7 +546,7 @@ REC2 illustrates another array type (the unnamed type of
 component VEC2) where the upper bound of the first and only
 bound is also determined at runtime. In this case, the upper
 bound is contained in a discriminant of the containing record
-type. (A discriminant is a component of a record whose value
+type. (A \textit{discriminant} is a component of a record whose value
 cannot be changed independently of the rest of the record
 because that value is potentially used in the specification
 of other components of the record.)
@@ -566,7 +567,9 @@ the same containing record. It is described as a reference to
 a member, and the location of the upper bound is determined
 as for any member. That is, the location is determined using
 an address calculation relative to the base of the containing
-object.  A consumer must notice that the referenced bound is a
+object.  
+
+A consumer must notice that the referenced bound is a
 member of the same containing object and implicitly push the
 base address of the containing object just as for accessing
 a data member generally.
@@ -574,8 +577,8 @@ a data member generally.
 \item The lack of a subtype concept in DWARF means that DWARF types
 serve the role of subtypes and must replicate information from
 what should be the parent type. For this reason, DWARF for
-the unconstrained array ARR is not needed for the purposes
-of this example and therefore not shown.
+the unconstrained array type ARR is not needed for the purposes
+of this example and therefore is not shown.
 \end{enumerate}
 
 \begin{figure}[p]
@@ -594,21 +597,20 @@ of this example and therefore not shown.
 14\$: \livelink{chap:DWTAGvariable}{DW\-\_TAG\-\_variable}
         \livelink{chap:DWATname}{DW\-\_AT\-\_name}("VEC1")
         \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to array type at 12\$)
-    . . .
+     . . .
 21\$: \livelink{chap:DWTAGsubrangetype}{DW\-\_TAG\-\_subrange\-\_type}
         \livelink{chap:DWATname}{DW\-\_AT\-\_name}("TEENY")
         \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to INTEGER)
         \livelink{chap:DWATlowerbound}{DW\-\_AT\-\_lower\-\_bound}(constant 1)
         \livelink{chap:DWATupperbound}{DW\-\_AT\-\_upper\-\_bound}(constant 100)
-
-      . . .
+     . . .
 26\$: \livelink{chap:DWTAGstructuretype}{DW\-\_TAG\-\_structure\-\_type}
         \livelink{chap:DWATname}{DW\-\_AT\-\_name}("REC2")
 27\$:    \livelink{chap:DWTAGmember}{DW\-\_TAG\-\_member}
             \livelink{chap:DWATname}{DW\-\_AT\-\_name}("N")
             \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to subtype TEENY at 21\$)
             \livelink{chap:DWATdatamemberlocation}{DW\-\_AT\-\_data\-\_member\-\_location}(constant 0)
-28\$:   \livelink{chap:DWTAGarraytype}{DW\-\_TAG\-\_array\-\_type}
+28\$:    \livelink{chap:DWTAGarraytype}{DW\-\_TAG\-\_array\-\_type}
             ! No name, default (\addtoindex{Ada}) order, default stride
             ! Default data location
             \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to INTEGER)
@@ -616,13 +618,13 @@ of this example and therefore not shown.
                 \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to subrange TEENY at 21\$)
                 \livelink{chap:DWATlowerbound}{DW\-\_AT\-\_lower\-\_bound}(constant 1)
                 \livelink{chap:DWATupperbound}{DW\-\_AT\-\_upper\-\_bound}(reference to member N at 27\$)
-30\$:   \livelink{chap:DWTAGmember}{DW\-\_TAG\-\_member}
+30\$:    \livelink{chap:DWTAGmember}{DW\-\_TAG\-\_member}
             \livelink{chap:DWATname}{DW\-\_AT\-\_name}("VEC2")
-            \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to array \doublequote{subtype} at 28\$)
+            \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to array "subtype" at 28\$)
             \livelink{chap:DWATdatamemberlocation}{DW\-\_AT\-\_data\-\_member\-\_location}(machine=
                 \livelink{chap:DWOPlit}{DW\-\_OP\-\_lit}<n> ! where n == offset(REC2, VEC2)
                 \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus})
-      . . .
+     . . .
 41\$: \livelink{chap:DWTAGvariable}{DW\-\_TAG\-\_variable}
         \livelink{chap:DWATname}{DW\-\_AT\-\_name}("OBJ2B")
         \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to REC2 at 26\$)
@@ -633,9 +635,10 @@ of this example and therefore not shown.
 \label{fig:adaexampledwarfdescription}
 \end{figure}
 
+\clearpage
+
 \subsection{Pascal Example}
 \label{app:pascalexample}
-
 The Pascal \addtoindexx{Pascal example} source in 
 Figure \referfol{fig:packedrecordexamplesourcefragment}
 is used to illustrate the representation of packed unaligned
@@ -647,14 +650,14 @@ TYPE T : PACKED RECORD                  ! bit size is 2
          F5 : BOOLEAN;                  ! bit offset is 0
          F6 : BOOLEAN;                  ! bit offset is 1
          END;
-VAR V  : PACKED RECORD
+VAR V :  PACKED RECORD
          F1 : BOOLEAN;                  ! bit offset is 0
          F2 : PACKED RECORD             ! bit offset is 1
               F3 : INTEGER;             ! bit offset is 0 in F2, 1 in V
               END;
          F4 : PACKED ARRAY [0..1] OF T; ! bit offset is 33
          F7 : T;                        ! bit offset is 37
-END;
+         END;
 \end{lstlisting}
 \caption{Packed record example: source fragment}
 \label{fig:packedrecordexamplesourcefragment}
@@ -671,18 +674,36 @@ little\dash endian
 architectures using the conventions described in 
 Section \refersec{chap:datamemberentries}.
 
-
 \begin{figure}[p]
+\figurepart{1}{2}
 \begin{dwflisting}
 % DWARF4 had some entries here as \livelink{chap:DWATmember}{DW_AT_member} .
 % Those are fixed here to \livelink{chap:DWTAGmember}{DW_TAG_member}
 \begin{alltt}
-
-21\$: \livelink{chap:DWTAGstructuretype}{DW\-\_TAG\-\_structure\-\_type} ! anonymous type for F2
+10\$: \livelink{chap:DWTAGbasetype}{DW\_TAG\_base\_type}
+        \livelink{chap:DWATname}{DW\_AT\_name}("BOOLEAN")
+            ...
+11\$: \livelink{chap:DWTAGbasetype}{DW\_TAG\_base\_type}
+        \livelink{chap:DWATname}{DW\_AT\_name}("INTEGER")
+            ...
+20\$: \livelink{chap:DWTAGstructuretype}{DW\-\_TAG\-\_structure\-\_type}
+        \livelink{chap:DWATname}{DW\_AT\_name}("T")
+        \livelink{chap:DWATbitsize}{DW\_AT\_bit\_size}(2)
+        \livelink{chap:DWTAGmember}{DW\_TAG\_member}
+            \livelink{chap:DWATname}{DW\_AT\_name}("F5")
+            \livelink{chap:DWATtype}{DW\_AT\_type}(reference to 10$)
+            \livelink{chap:DWATdatabitoffset}{DW\_AT\_data\_bit\_offset}(0)        ! may be omitted
+            \livelink{chap:DWATbitsize}{DW\_AT\_bit\_size}(1)
+        \livelink{chap:DWTAGmember}{DW\_TAG\_member}
+            \livelink{chap:DWATname}{DW\_AT\_name}("F6")
+            \livelink{chap:DWATtype}{DW\_AT\_type}(reference to 10$)
+            \livelink{chap:DWATdatabitoffset}{DW\_AT\_data\_bit\_offset}(1)
+            \livelink{chap:DWATbitsize}{DW\_AT\_bit\_size}(1)
+21\$: \livelink{chap:DWTAGstructuretype}{DW\-\_TAG\-\_structure\-\_type}                  ! anonymous type for F2
         \livelink{chap:DWTAGmember}{DW\-\_TAG\-\_member}
             \livelink{chap:DWATname}{DW\-\_AT\-\_name}("F3")
             \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to 11\$)
-22\$: \livelink{chap:DWTAGarraytype}{DW\-\_TAG\-\_array\-\_type} ! anonymous type for F4
+22\$: \livelink{chap:DWTAGarraytype}{DW\-\_TAG\-\_array\-\_type}                      ! anonymous type for F4
         \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to 20\$)
         \livelink{chap:DWTAGsubrangetype}{DW\-\_TAG\-\_subrange\-\_type}
             \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to 11\$)
@@ -690,12 +711,12 @@ Section \refersec{chap:datamemberentries}.
             \livelink{chap:DWATupperbound}{DW\-\_AT\-\_upper\-\_bound}(1)
         \livelink{chap:DWATbitstride}{DW\-\_AT\-\_bit\-\_stride}(2)
         \livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size}(4) \addtoindexx{bit size attribute}
-23\$: \livelink{chap:DWTAGstructuretype}{DW\-\_TAG\-\_structure\-\_type} ! anonymous type for V
+23\$: \livelink{chap:DWTAGstructuretype}{DW\-\_TAG\-\_structure\-\_type}                  ! anonymous type for V
         \livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size}(39) \addtoindexx{bit size attribute}
         \livelink{chap:DWTAGmember}{DW\-\_TAG\-\_member}
             \livelink{chap:DWATname}{DW\-\_AT\-\_name}("F1")
             \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to 10\$)
-            \livelink{chap:DWATdatabitoffset}{DW\-\_AT\-\_data\-\_bit\-\_offset}(0)! may be omitted
+            \livelink{chap:DWATdatabitoffset}{DW\-\_AT\-\_data\-\_bit\-\_offset}(0)        ! may be omitted
             \livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size}(1) ! may be omitted
         \livelink{chap:DWTAGmember}{DW\-\_TAG\-\_member}
             \livelink{chap:DWATname}{DW\-\_AT\-\_name}("F2")
@@ -707,11 +728,21 @@ Section \refersec{chap:datamemberentries}.
             \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to 22\$)
             \livelink{chap:DWATdatabitoffset}{DW\-\_AT\-\_data\-\_bit\-\_offset}(33)
             \livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size}(4) ! may be omitted
+\end{alltt}
+\end{dwflisting}
+\caption{Packed record example: DWARF description}
+\label{fig:packedrecordexampledwarfdescription}
+\end{figure}
+
+\begin{figure}[p]
+\figurepart{2}{2}
+\begin{dwflisting}
+\begin{alltt}
         \livelink{chap:DWTAGmember}{DW\-\_TAG\-\_member}
             \livelink{chap:DWATname}{DW\-\_AT\-\_name}("F7")
-            \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to 20\$) ! type T
+            \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to 20\$)    ! type T
             \livelink{chap:DWATdatabitoffset}{DW\-\_AT\-\_data\-\_bit\-\_offset}(37)
-            \livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size}(2) \addtoindexx{bit size attribute}! may be omitted
+            \livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size}(2) \addtoindexx{bit size attribute}              ! may be omitted
      \livelink{chap:DWTAGvariable}{DW\-\_TAG\-\_variable}
         \livelink{chap:DWATname}{DW\-\_AT\-\_name}("V")
         \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to 23\$)
@@ -719,8 +750,9 @@ Section \refersec{chap:datamemberentries}.
         ...
 \end{alltt}
 \end{dwflisting}
-\caption{Packed record example: DWARF description}
-\label{fig:packedrecordexampledwarfdescription}
+\begin{center}
+Figure~\ref{fig:packedrecordexampledwarfdescription}: Packed record example: DWARF description \textit{(concluded)}
+\end{center}
 \end{figure}
 
 \section{Namespace Example}
@@ -740,20 +772,18 @@ is appropriate.
 namespace {
     int i;
 }
-
 namespace A {
     namespace B {
         int j;
-        int myfunc (int a);
-        float myfunc (float f) { return f \textendash 2.0; }
-        int myfunc2(int a) { return a + 2; }
+        int   myfunc (int a);
+        float myfunc (float f) { return f - 2.0; }
+        int   myfunc2(int a)   { return a + 2; }
     }
 }
 namespace Y {
     using A::B::j;         // (1) using declaration
     int foo;
 }
-
 using A::B::j;             // (2) using declaration
 namespace Foo = A::B;      // (3) namespace alias
 using Foo::myfunc;         // (4) using declaration
@@ -777,6 +807,7 @@ int Foo::myfunc(int a)
 
 
 \begin{figure}[p]
+\figurepart{1}{2}
 \begin{dwflisting}
 \begin{alltt}
 
@@ -824,33 +855,34 @@ int Foo::myfunc(int a)
 \end{figure}
 
 \begin{figure}
+\figurepart{2}{2}
 \begin{dwflisting}
 \begin{alltt}
 40\$: \livelink{chap:DWTAGnamespace}{DW\-\_TAG\-\_namespace}
         \livelink{chap:DWATname}{DW\-\_AT\-\_name}("Y")
-        \livelink{chap:DWTAGimporteddeclaration}{DW\-\_TAG\-\_imported\-\_declaration}    ! (1) using-declaration
+        \livelink{chap:DWTAGimporteddeclaration}{DW\-\_TAG\-\_imported\-\_declaration}            ! (1) using-declaration
             \livelink{chap:DWATimport}{DW\-\_AT\-\_import}(reference to 30\$)
         \livelink{chap:DWTAGvariable}{DW\-\_TAG\-\_variable}
             \livelink{chap:DWATname}{DW\-\_AT\-\_name}("foo")
             \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to 1\$)
             \livelink{chap:DWATlocation}{DW\-\_AT\-\_location} ...
             ...
-     \livelink{chap:DWTAGimporteddeclaration}{DW\-\_TAG\-\_imported\-\_declaration}       ! (2) using declaration
+     \livelink{chap:DWTAGimporteddeclaration}{DW\-\_TAG\-\_imported\-\_declaration}               ! (2) using declaration
         \livelink{chap:DWATimport}{DW\-\_AT\-\_import}(reference to 30\$)
-        \livelink{chap:DWTAGimporteddeclaration}{DW\-\_TAG\-\_imported\-\_declaration}    ! (3) namespace alias
+        \livelink{chap:DWTAGimporteddeclaration}{DW\-\_TAG\-\_imported\-\_declaration}            ! (3) namespace alias
             \livelink{chap:DWATname}{DW\-\_AT\-\_name}("Foo")
             \livelink{chap:DWATimport}{DW\-\_AT\-\_import}(reference to 20\$)
-        \livelink{chap:DWTAGimporteddeclaration}{DW\-\_TAG\-\_imported\-\_declaration}    ! (4) using declaration
-            \livelink{chap:DWATimport}{DW\-\_AT\-\_import}(reference to 34\$) ! - part 1
-        \livelink{chap:DWTAGimporteddeclaration}{DW\-\_TAG\-\_imported\-\_declaration}    ! (4) using declaration
-            \livelink{chap:DWATimport}{DW\-\_AT\-\_import}(reference to 36\$) !  - part 2
-        \livelink{chap:DWTAGimportedmodule}{DW\-\_TAG\-\_imported\-\_module}         ! (5) using directive
+        \livelink{chap:DWTAGimporteddeclaration}{DW\-\_TAG\-\_imported\-\_declaration}            ! (4) using declaration
+            \livelink{chap:DWATimport}{DW\-\_AT\-\_import}(reference to 34\$)     !     - part 1
+        \livelink{chap:DWTAGimporteddeclaration}{DW\-\_TAG\-\_imported\-\_declaration}            ! (4) using declaration
+            \livelink{chap:DWATimport}{DW\-\_AT\-\_import}(reference to 36\$)     !     - part 2
+        \livelink{chap:DWTAGimportedmodule}{DW\-\_TAG\-\_imported\-\_module}                 ! (5) using directive
             \livelink{chap:DWATimport}{DW\-\_AT\-\_import}(reference to 20\$)
         \livelink{chap:DWTAGnamespace}{DW\-\_TAG\-\_namespace}
             \livelink{chap:DWATextension}{DW\-\_AT\-\_extension}(reference to 10\$)
             \livelink{chap:DWTAGnamespace}{DW\-\_TAG\-\_namespace}
                 \livelink{chap:DWATextension}{DW\-\_AT\-\_extension}(reference to 20\$)
-                \livelink{chap:DWTAGimportedmodule}{DW\-\_TAG\-\_imported\-\_module} ! (6) using directive
+                \livelink{chap:DWTAGimportedmodule}{DW\-\_TAG\-\_imported\-\_module}         ! (6) using directive
                     \livelink{chap:DWATimport}{DW\-\_AT\-\_import}(reference to 40\$)
                 \livelink{chap:DWTAGvariable}{DW\-\_TAG\-\_variable}
                     \livelink{chap:DWATname}{DW\-\_AT\-\_name}("k")
@@ -893,12 +925,13 @@ void A::func1(int x) {}
 \end{figure}
 
 \begin{figure}[h]
+\figurepart{1}{2}
 \begin{dwflisting}
 \begin{alltt}
 1\$: \livelink{chap:DWTAGunspecifiedtype}{DW\-\_TAG\-\_unspecified\-\_type}
         \livelink{chap:DWATname}{DW\-\_AT\-\_name}("void")
                 ...
-2\$ \livelink{chap:DWTAGbasetype}{DW\-\_TAG\-\_base\-\_type}
+2\$: \livelink{chap:DWTAGbasetype}{DW\-\_TAG\-\_base\-\_type}
         \livelink{chap:DWATname}{DW\-\_AT\-\_name}("int")
         ...
 3\$: \livelink{chap:DWTAGclasstype}{DW\-\_TAG\-\_class\-\_type}
@@ -929,6 +962,7 @@ void A::func1(int x) {}
 \end{figure}
 
 \begin{figure}[p]
+\figurepart{2}{2}
 \begin{dwflisting}
 \begin{alltt}
 8\$:        \livelink{chap:DWTAGformalparameter}{DW\-\_TAG\-\_formal\-\_parameter}
@@ -956,7 +990,7 @@ void A::func1(int x) {}
                  \livelink{chap:DWATartificial}{DW\-\_AT\-\_artificial}(true)
                  \livelink{chap:DWATname}{DW\-\_AT\-\_name}("this")
                  \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to 6\$)
-                     ! Makes type of 'this' as 'A const*' =>
+                 ! Makes type of 'this' as 'A const*' =>
                  !     func2 marked as const
                  \livelink{chap:DWATlocation}{DW\-\_AT\-\_location} ...
                  ...
@@ -1033,15 +1067,15 @@ shown):
 
 Table \refersec{tab:linenumberprogramexampleoneencoding}
 shows one encoding of the line number program, which occupies
-12 bytes (the opcode SPECIAL(m,n) indicates the special opcode
-generated for a line increment of m and an address increment
-of n).
+12 bytes (the opcode SPECIAL(\textit{m},\textit{n}) indicates the special opcode
+generated for a line increment of \textit{m} and an address increment
+of \textit{n}).
 
 \newpage
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|l|l}
-  \caption{Line number program example: one encoding}
+  \caption{Line number program example: one \mbox{encoding}}
   \label{tab:linenumberprogramexampleoneencoding} \\
   \hline \bfseries Opcode &\bfseries Operand &\bfseries Byte Stream \\ \hline
 \endfirsthead
@@ -1052,10 +1086,10 @@ of n).
   \hline
 \endlastfoot
 \livelink{chap:DWLNSadvancepc}{DW\-\_LNS\-\_advance\-\_pc}&LEB128(0x239)&0x2, 0xb9, 0x04 \\
-SPECIAL(2, 0)&0xb  & \\
-SPECIAL(2, 3)&0x38 & \\
-SPECIAL(1, 8)&0x82 & \\
-SPECIAL(1, 7)&0x73 & \\
+SPECIAL(2, 0)& &0xb  \\
+SPECIAL(2, 3)& &0x38 \\
+SPECIAL(1, 8)& &0x82 \\
+SPECIAL(1, 7)& &0x73 \\
 \livelink{chap:DWLNSadvancepc}{DW\-\_LNS\-\_advance\-\_pc}&LEB128(2)&0x2, 0x2 \\
 \livelink{chap:DWLNEendsequence}{DW\-\_LNE\-\_end\-\_sequence} &&0x0, 0x1, 0x1 \\
 \end{longtable}
@@ -1227,7 +1261,7 @@ foo+80&[R7]+0&s&u&u&u&s&s&s&a&r1 \\
   \hline
 \endlastfoot
 cie&36&length    \\
-cie+4&0xffffffff&CIE\_id    \\
+cie+4&\xffffffff&CIE\_id    \\
 cie+8&4&version    \\
 cie+9&0&augmentation     \\
 cie+10&4&address size    \\

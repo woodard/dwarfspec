@@ -67,7 +67,7 @@ entry representing the definition of a variable (that is,
 with no 
 \livelink{chap:DWATdeclaration}{DW\-\_AT\-\_declaration} attribute),
 or if the location attribute is present but has
-an empty location description (as described in Section 2.6),
+an empty location description (as described in Section \refersec{chap:locationdescriptions}),
 \addtoindexx{unallocated variable}
 the variable is assumed to exist in the source code but not
 in the executable program (but see number 10, below).
@@ -117,7 +117,7 @@ represent.
 attribute\addtoindexx{variable parameter attribute}, 
 which is a \livelink{chap:flag}{flag},
 if a formal parameter entry represents a parameter whose
-value in the calling function may be modified by the callee..
+value in the calling function may be modified by the callee.
 The absence of this attribute implies that the parameter’s
 value in the calling function cannot be modified by the callee.
 
@@ -156,9 +156,9 @@ represented by an object in the address space of the program,
 or an entry describing a named constant. (Note that such
 an entry does not have a location attribute.) The value of
 this attribute may be a string or any of the constant data
-or data \livelink{chap:block}{block} forms, 
+or data block forms, 
 as appropriate for the representation
-of the variable’s value. The value is the actual constant
+of the variable's value. The value is the actual constant
 value of the variable, represented as it would be on the
 target architecture.  
 
@@ -168,7 +168,8 @@ formal parameter of an inlined subprogram that corresponds
 to a constant actual parameter of a call that is inlined.
 }
 
-\item A \livelink{chap:DWATstartscope}{DW\-\_AT\-\_start\-\_scope} attribute if the scope of 
+\item A \livelink{chap:DWATstartscope}{DW\-\_AT\-\_start\-\_scope} 
+attribute if the scope of 
 \addtoindexx{start scope attribute}
 an
 \hypertarget{chap:DWATstartscopeobjectdeclaration}
@@ -274,13 +275,13 @@ which
 \hypertarget{chap:DWATconstexprcompiletimeconstantobject}
 is a \livelink{chap:flag}{flag}, if a
 variable entry represents a C++ object declared with the
-\textit{constexpr} specifier. This attributes indicates that the
+\textit{constexpr} specifier. This attribute indicates that the
 variable can be evaluated as a compile\dash time constant.  
 
 \textit{In C++,
 a variable declared with constexpr is implicitly const. Such a
 variable has a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute whose value is a reference
-to a debugging information entry}
+to a debugging information entry describing a const qualified type.}
 
 \item A \livelink{chap:DWATlinkagename}{DW\-\_AT\-\_linkage\-\_name} attribute for a 
 variable or constant entry as described in 
@@ -296,8 +297,8 @@ may
 be described by a debugging
 information entry with the 
 tag \livetarg{chap:DWTAGcommonblock}{DW\-\_TAG\-\_common\-\_block}. 
-The
-common \nolink{block} 
+
+The common \nolink{block} 
 entry has a \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute 
 \addtoindexx{name attribute}
 whose value
@@ -310,7 +311,9 @@ It
 also has a \livelink{chap:DWATlocation}{DW\-\_AT\-\_location} attribute
 \addtoindexx{location attribute}
 whose value describes the
-location of the beginning of the common \nolink{block}. The common
+location of the beginning of the common \nolink{block}. 
+
+The common
 \nolink{block} entry owns debugging information entries describing
 the variables contained within the common \nolink{block}.
 

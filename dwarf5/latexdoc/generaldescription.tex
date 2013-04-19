@@ -1,6 +1,6 @@
 \chapter{General Description}
 \label{chap:generaldescription}
-\section{The Debugging Entry (DIE)}
+\section{The Debugging Information Entry (DIE)}
 \label{chap:thedebuggingentrydie}
 DWARF 
 \addtoindexx{debugging information entry}
@@ -224,7 +224,7 @@ actually declared in the source}{objects or types that are not actually declared
 \livetarg{chap:DWATcontainingtype}{DW\-\_AT\-\_containing\-\_type}
 &\livelinki{chap:DWATcontainingtypecontainingtypeofpointertomembertype}{Containing type of pointer to member type}{containing type of pointer to member type} \\
 \livetarg{chap:DWATcount}{DW\-\_AT\-\_count}
-&\livelinki{chap:DWATcountelementsofsubrangetype}{Elements of subrange type}{elements of subrange type} \\
+&\livelinki{chap:DWATcountelementsofsubrangetype}{Elements of subrange type}{elements ofbreg subrange type} \\
 \livetarg{chap:DWATdatabitoffset}{DW\-\_AT\-\_data\-\_bit\-\_offset}
 &\livelinki{chap:DWATdatabitoffsetbasetypebitlocation}{Base type bit location}{base type bit location} \\
 &\livelinki{chap:DWATdatabitoffsetdatamemberbitlocation}{Data member bit location}{data member bit location} \\
@@ -404,7 +404,9 @@ encoded in the variable length format known as LEB128
 
 \textit{Most constant values are integers of one kind or
 another (codes, offsets, counts, and so on); these are
-sometimes called ``integer constants'' for emphasis.} \\
+sometimes called ``integer constants'' for emphasis.}
+\addtoindexx{integer constant}
+\addtoindexx{constant class!integer} \\
 
 \livetargi{chap:exprloc}{exprloc}{exprloc class}
 &A DWARF expression or location description.
@@ -641,7 +643,7 @@ location list that adjusts the offset according to changes
 in the stack pointer as the PC changes.)
 
 \itembfnl{\livetarg{chap:DWOPbreg0}{DW\-\_OP\-\_breg0}, \livetarg{chap:DWOPbreg1}{DW\-\_OP\-\_breg1}, \dots, \livetarg{chap:DWOPbreg31}{DW\-\_OP\-\_breg31} }
-The single operand of the \livetarg{chap:DWOPbreg}{DW\-\_OP\-\_breg}n 
+The single operand of the \livetarg{chap:DWOPbreg}{DW\-\_OP\-\_breg}\textit{n} 
 operations provides
 a signed LEB128 offset from
 the specified register.
@@ -915,6 +917,7 @@ The six relational operators each:
 \item pop the top two stack values,
 
 \item compare the operands:
+\linebreak
 \textless~former second entry~\textgreater  \textless~relational operator~\textgreater \textless~former top entry~\textgreater
 
 \item push the constant value 1 onto the stack 
@@ -927,6 +930,7 @@ operators are \livelink{chap:DWOPle}{DW\-\_OP\-\_le} (less than or equal to), \l
 (greater than or equal to), \livelink{chap:DWOPeq}{DW\-\_OP\-\_eq} (equal to), \livelink{chap:DWOPlt}{DW\-\_OP\-\_lt} (less
 than), \livelink{chap:DWOPgt}{DW\-\_OP\-\_gt} (greater than) and \livelink{chap:DWOPne}{DW\-\_OP\-\_ne} (not equal to).
 
+\needlines{6}
 \itembfnl{\livetarg{chap:DWOPskip}{DW\-\_OP\-\_skip}}
 \livelink{chap:DWOPskip}{DW\-\_OP\-\_skip} is an unconditional branch. Its single operand
 is a 2\dash byte signed integer constant. The 2\dash byte constant is
@@ -1017,7 +1021,7 @@ are fairly conventional, but the following
 examples illustrate their behavior graphically.}
 
 \begin{longtable}[c]{rrcrr} 
- &Before & Operation&& After \\
+\multicolumn{2}{c}{Before} & Operation & \multicolumn{2}{c}{After} \\
 \hline
 \endhead
 \endfoot
@@ -1084,8 +1088,8 @@ DWARF expressions (See Section \refersec{chap:dwarfexpressions})
 and/or other
 DWARF operations specific to describing locations. They are
 sufficient for describing the location of any object as long
-as its lifetime is either static or the same as the lexical
-\livelink{chap:lexicalblock}{block} that owns it, 
+as its lifetime is either static or the same as the 
+\livelink{chap:lexicalblock}{lexical block} that owns it, 
 and it does not move during its lifetime.
 
 Single location descriptions are of two kinds:
@@ -1197,9 +1201,9 @@ by the ABI authoring committee for each architecture.
 }
 \begin{enumerate}[1. ]
 \itembfnl{\livetarg{chap:DWOPreg0}{DW\-\_OP\-\_reg0}, \livetarg{chap:DWOPreg1}{DW\-\_OP\-\_reg1}, ..., \livetarg{chap:DWOPreg31}{DW\-\_OP\-\_reg31}}
-The \livetarg{chap:DWOPreg}{DW\-\_OP\-\_reg}n operations encode the names of up to 32
+The \livetarg{chap:DWOPreg}{DW\-\_OP\-\_reg}\textit{n} operations encode the names of up to 32
 registers, numbered from 0 through 31, inclusive. The object
-addressed is in register n.
+addressed is in register \textit{n}.
 
 \itembfnl{\livetarg{chap:DWOPregx}{DW\-\_OP\-\_regx}}
 The \livelink{chap:DWOPregx}{DW\-\_OP\-\_regx} operation has a single unsigned LEB128 literal
@@ -1323,7 +1327,7 @@ Here are some examples of how DWARF operations are used to form location descrip
 % Probably the only place that this will be used, so not in dwarf.tex?
 \newcommand{\descriptionitemnl}[1]{\item[#1]\mbox{}\\}
 \begin{description}
-\descriptionitemnl{\livetarg{chap:DWOPreg3}{DW\-\_OP\-\_reg3}}
+\descriptionitemnl{\livelink{chap:DWOPreg}{DW\-\_OP\-\_reg3}}
 The value is in register 3.
 
 \descriptionitemnl{\livelink{chap:DWOPregx}{DW\-\_OP\-\_regx} 54}
@@ -1332,7 +1336,7 @@ The value is in register 54.
 \descriptionitemnl{\livelink{chap:DWOPaddr}{DW\-\_OP\-\_addr} 0x80d0045c}
 The value of a static variable is at machine address 0x80d0045c.
 
-\descriptionitemnl{\livetarg{chap:DWOPbreg11}{DW\-\_OP\-\_breg11} 44}
+\descriptionitemnl{\livelink{chap:DWOPbreg}{DW\-\_OP\-\_breg11} 44}
 Add 44 to the value in register 11 to get the address of an automatic
 variable instance.
 
@@ -1361,12 +1365,12 @@ whose middle four bytes are unavailable (perhaps due to optimization),
 and whose last four bytes are in memory, 12 bytes before the frame
 base.
 
-\descriptionitemnl{\livelink{chap:DWOPbreg1}{DW\-\_OP\-\_breg1} 0 \livetarg{chap:DWOPbreg2}{DW\-\_OP\-\_breg2} 0 \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus} \livelink{chap:DWOPstackvalue}{DW\-\_OP\-\_stack\-\_value}}
+\descriptionitemnl{\livelink{chap:DWOPbreg1}{DW\-\_OP\-\_breg1} 0 \livelink{chap:DWOPbreg}{DW\-\_OP\-\_breg2} 0 \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus} \livelink{chap:DWOPstackvalue}{DW\-\_OP\-\_stack\-\_value} }
 Add the contents of r1 and r2 to compute a value. This value is the
 \doublequote{contents} of an otherwise anonymous location.
 
-\descriptionitemnl{\livelink{chap:DWOPlit1}{DW\-\_OP\-\_lit1} \livelink{chap:DWOPstackvalue}{DW\-\_OP\-\_stack\-\_value} \livelink{chap:DWOPpiece}{DW\-\_OP\-\_piece} 4}
-\descriptionitemnl{\livetarg{chap:DWOPbreg3}{DW\-\_OP\-\_breg3} 0 \livetarg{chap:DWOPbreg4}{DW\-\_OP\-\_breg4} 0 \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus} \livelink{chap:DWOPstackvalue}{DW\-\_OP\-\_stack\-\_value} \livelink{chap:DWOPpiece}{DW\-\_OP\-\_piece} 4}
+\descriptionitemnl{\livelink{chap:DWOPlit1}{DW\-\_OP\-\_lit1} \livelink{chap:DWOPstackvalue}{DW\-\_OP\-\_stack\-\_value} \livelink{chap:DWOPpiece}{DW\-\_OP\-\_piece} 4 }
+\descriptionitemnl{\livelink{chap:DWOPbreg}{DW\-\_OP\-\_breg3} 0 \livelink{chap:DWOPbreg}{DW\-\_OP\-\_breg4} 0 \livelink{chap:DWOPplus}{DW\-\_OP\-\_plus} \livelink{chap:DWOPstackvalue}{DW\-\_OP\-\_stack\-\_value} \livelink{chap:DWOPpiece}{DW\-\_OP\-\_piece} 4}
 The object value is found in an anonymous (virtual) location whose
 value consists of two parts, given in memory address order: the 4 byte
 value 1 followed by the four byte value computed from the sum of the
@@ -1457,7 +1461,7 @@ selection
 consists of:
 \begin{enumerate}[1. ]
 \item The value of the largest representable 
-address offset (for example, 0xffffffff when the size of
+address offset (for example, \wffffffff when the size of
 an address is 32 bits).
 \item An address, which defines the 
 appropriate base address for use in interpreting the beginning
@@ -1861,13 +1865,13 @@ multiple whitespace characters may be compressed.}
 Any debugging information entry describing a data object (which
 \hypertarget{chap:DWATlocationdataobjectlocation}
 includes variables and parameters) or 
-common \livelink{chap:commonblockentry}{block}
+\livelink{chap:commonblockentry}{common blocks}
 may have 
 \addtoindexx{location attribute}
 a
-\livelink{chap:DWATlocation}{DW\-\_AT\-\_location} attribute
+\livelink{chap:DWATlocation}{DW\-\_AT\-\_location} attribute,
 \addtoindexx{location attribute}
-, whose value is a location description
+whose value is a location description
 (see Section \refersec{chap:locationdescriptions}).
 
 A 
@@ -1901,24 +1905,21 @@ Any debugging information entry describing an entity that has
 a machine code address or range of machine code addresses,
 which includes compilation units, module initialization,
 \hypertarget{chap:DWATrangesnoncontiguousrangeofcodeaddresses}
-subroutines, ordinary \livelink{chap:lexicalblock}{block}, 
+subroutines, ordinary \nolink{blocks}, 
 try/catch \nolink{blocks} (see Section\refersec{chap:tryandcatchblockentries}), 
-labels 
-\hypertarget{chap:DWATlowpccodeaddressorrangeofaddresses}
-and
-\hypertarget{chap:DWAThighpccontiguousrangeofcodeaddresses}
-the like, may have
-
+labels and the like, may have
 \begin{itemize}
 \item A \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} attribute for
+\hypertarget{chap:DWATlowpccodeaddressorrangeofaddresses}
 a single address,
 
-\item A \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} and 
-\livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair of 
-attributes 
-\addtoindexx{high PC attribute}
-for 
+\item A \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc}
 \addtoindexx{low PC attribute}
+and 
+\livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc}
+\addtoindexx{high PC attribute}
+\hypertarget{chap:DWAThighpccontiguousrangeofcodeaddresses}
+pair of attributes for 
 a single contiguous range of
 addresses, or
 
@@ -2055,7 +2056,7 @@ the entries be ordered in any particular way.
 
 A base address selection entry consists of:
 \begin{enumerate}[1. ]
-\item The value of the largest representable address offset (for example, 0xffffffff when the size of
+\item The value of the largest representable address offset (for example, \wffffffff when the size of
 an address is 32 bits).
 
 \item An address, which defines the appropriate base address for use in interpreting the beginning
@@ -2116,7 +2117,6 @@ computed dynamically during execution.
 
 The value of these
 attributes is determined based on the class as follows:
-
 \begin{itemize}
 \item For a \livelink{chap:constant}{constant}, the value of the constant is the value of
 the attribute.
