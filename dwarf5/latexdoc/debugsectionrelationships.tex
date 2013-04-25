@@ -8,83 +8,67 @@ or more of the others. These relationships are illustrated by
 the diagram and associated notes on the following pages.
 
 \begin{figure}[h]
-% picture gets width and height of the picture drawn
-% so latex knows how big it is (latex does not calculate
-% the space you need to make it fit, you do).
-\begin{picture}(320,300)
-% Footnotesize keeps the text small-size so it fits
-% in the boxes and ellipses
-\footnotesize
-% Thicklines makes the lines more visible.
-\Thicklines
-  \put(5,208) { \addtoindex{.debug\_aranges} }
-  \put(40,210) { \ellipse{80}{30}}
-  \put(180,208) { \addtoindex{.debug\_frame} }
-  \put(210,210) { \ellipse{80}{30}}
-  \put(347,208) { \addtoindex{.debug\_abbrev} }
-  \put(380,210) { \ellipse{80}{30}}
+\small
+\begin{tikzpicture}
+    [sect/.style={rectangle, rounded corners, draw, fill=blue!20, inner sep=.2cm, minimum width=4.5cm},
+	 link/.style={rectangle,                  draw,               inner sep=.2cm, minimum width=5.0cm}]
 
-  \drawline[1](40,195)(40,181)
-  \put(-10,165){\framebox(110,15){To compilation unit (a)} }
-  \drawline[1](40,165)(40,151)(37,158) 
-  \put(352,168) { \addtoindex{.debug\_str} }
-  \put(380,170) {\ellipse{80}{30}}
+% The left column, first sections, then links, from top to bottom
+%
+\node(zsectara) at ( 0, 10.) [sect] {\dotdebugaranges};
+\node(zlinka)   at ( 0, 8.0) [link] {To compilation unit (a)};
+\node(zsectinf) at ( 0, 5.0) [sect] {\begin{tabular}{c} \dotdebuginfo \\ \dotdebugtypes \end{tabular}};
+\node(zlinkb)   at ( 0, 2.0) [link] {To compilation unit (b)};
+\node(zsectpub) at ( 0, 0.0) [sect] {\begin{tabular}{c} \dotdebugpubnames \\ \dotdebugpubtypes \end{tabular}};
 
-  \put(10,133) { \addtoindex{.debug\_info} }
-  \put(10,123) { \addtoindex{.debug\_types} }
-  \put(40,130) {\ellipse{80}{40}}
+\draw[thick,-o]        (zlinka) -- (zsectara);
+\draw[thick,angle 90-] (zsectinf) -- (zlinka);
+\draw[thick,-angle 90] (zlinkb) -- (zsectinf);
+\draw[thick,o-]        (zsectpub) -- (zlinkb);
 
+% The middle column, similarly
+%
+\node(zsectfra) at (6, 10.) [sect] {\dotdebugframe};
+\node(zlinkc)   at (6,  8.) [link] {To abbreviations (c)};
+\node(zlinkd)   at (6,  7.) [link] {\DWFORMstrp{} (d)};
+\node(zlinke)   at (6,  6.) [link] {\DWOPcallref{} (e)};
+\node(zlinkf)   at (6,  5.) [link] {\DWATlocation{}, etc. (f)};
+\node(zlinkg)   at (6,  4.) [link] {\DWATranges{} (g)};
+\node(zlinkh)   at (6,  3.) [link] {\DWATmacroinfo{} (h)};
+\node(zlinki)   at (6,  2.) [link] {\DWATstmtlist{} (i)};
 
-  \put(350,128) { \addtoindex{.debug\_loc} }
-  \put(380,130) {\ellipse{80}{30}}
+% Links between left and center
+%
+\draw[thick,o-]			(zsectinf) -- (zlinkc.west);
+\draw[thick,o-]			(zsectinf) -- (zlinkd.west);
+\draw[thick,angle 90-]	(zsectinf) -- (zlinke.west);
+\draw[thick,o-]			(zsectinf) -- (zlinkf.west);
+\draw[thick,o-]			(zsectinf) -- (zlinkg.west);
+\draw[thick,o-]			(zsectinf) -- (zlinkh.west);
+\draw[thick,o-]			(zsectinf) -- (zlinki.west);
 
-  \put(345,88) { \addtoindex{.debug\_ranges} }
-  \put(380,90) {\ellipse{80}{30}}
+% The right column
+%
+\node(zsectabb)	at (12, 10) [sect] {\dotdebugabbrev};
+\node(zsectstr)	at (12,  8) [sect] {\dotdebugstr};
+\node(zsectloc)	at (12,  6) [sect] {\dotdebugloc};
+\node(zsectran)	at (12,  4) [sect] {\dotdebugranges};
+\node(zsectmac)	at (12,  2) [sect] {\dotdebugmacinfo};
+\node(zsectlin)	at (12,  0) [sect] {\dotdebugline};
 
-  \drawline[1](75,141)(160,170)
-  \put(160,165){\framebox(110,15){To abbreviations (c)} }
-  \drawline[1](271,176)(345,205)(335,197)
+% Links between center and right
+%
+\draw[thick,-angle 90]		(zlinkc.east) -- (zsectabb.west);
+\draw[thick,-angle 90]		(zlinkd.east) -- (zsectstr.west);
+\draw[thick,-o]				(zlinke.east) -- (zsectloc.west);
+\draw[thick,-angle 90]		(zlinkf.east) -- (zsectloc.south west);
+\draw[thick,-angle 90]		(zlinkg.east) -- (zsectran.west);
+\draw[thick,-angle 90]		(zlinkh.east) -- (zsectmac.west);
+\draw[thick,-angle 90]		(zlinki.east) -- (zsectlin.west);
 
-  \put(76,138){\line(6, 1){83}}
-  \put(160,140){\framebox(110,15){\livelink{chap:DWFORMstrp}{DW\-\_FORM\-\_strp} (d)} }
-  \drawline[1](271,150)(341,168)(332,162)
+\end{tikzpicture}
 
-  \drawline[1](160,125)(80,130)(90,134)
-  \put(160,115){\framebox(110,15){\livelink{chap:DWOPcallref}{DW\-\_OP\-\_call\-\_ref}(e)} }
-  \drawline[1](271,125)(340,128) 
-
-  \drawline[1](79,128)(160,100)
-  \put(160,90){\framebox(110,15){\livelink{chap:DWATlocation}{DW\-\_AT\-\_location} etc (f)} }
-  \drawline[1](271,100)(341,125)(332,118)
-
-  \drawline(79,125)(160,75)
-  \put(160,65){\framebox(110,15){\livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} (g)} }
-  \drawline(271,75)(340,90)(332,85)
-
-  \drawline[1](77,121)(160,46)
-  \put(160,40){\framebox(110,15){\livelink{chap:DWATmacroinfo}{DW\-\_AT\-\_macro\-\_info} (h)} }
-  \drawline[1](271,46)(343,53)(332,49)
-
-  \drawline[1](71, 116)(160,20)
-  \put(160,15){\framebox(110,15){\livelink{chap:DWATstmtlist}{DW\-\_AT\-\_stmt\-\_list} (i)} }
-  \drawline[1](271,20)(343,10)(332,8)
-
-  \drawline[1](40,70)(40,110)(37,103)
-  \put(-10,55){\framebox(110,15){To compilation unit (b)} }
-  \drawline[1](40,35)(40,54)
-
-  \put(0,16) { \addtoindex{.debug\_pubnames} }
-  \put(0,6) { \addtoindex{.debug\_pubtypes} } 
-  \put(40, 15) { \ellipse{100}{40}}
-
-
-  \put(345,48) { \addtoindex{.debug\_macinfo} }
-  \put(380,50) { \ellipse{80}{30}}
-
-  \put(350,8) { \addtoindex{.debug\_line} }
-  \put(380,10) { \ellipse{80}{30}}
-
-\end{picture}
+\vspace{1cm}
 \caption{Debug section relationships}
 \label{fig:debugsectionrelationships}
 \end{figure}

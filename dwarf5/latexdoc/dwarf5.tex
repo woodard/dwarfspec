@@ -1,9 +1,20 @@
-\documentclass[12pt,letterpaper,twoside]{memoir} 
+\documentclass[12pt,letterpaper,oneside]{memoir} 
 % for debugging, add 'draft' (without quotes) to the [] document class list.
 % If draft is in the document class list, pix are just suggested
 % by an outline, the pic does not appear as a picture.
 %
-\newcommand{\docdate}{19 April 2013 (***Draft***)}
+\newcommand{\docdate}{25 April 2013 (***Draft***)}
+%
+\usepackage[T1]{fontenc}
+\usepackage{bookman}
+\usepackage{cmtt}
+\renewcommand{\ttdefault}{cmtt}	% Use Computer Modern Typewriter instead of Courier
+%\usepackage{ascii}
+%\renewcommand{\ttdefault}{ascii}
+%\renewcommand{\ttfamily}{\asciifamily}
+%\usepackage{microtype}
+%\DisableLigatures[f]{encoding=T1}
+%\renewcommand{\familydefault}{phv}  % font family helvetica
 %
 \usepackage{url} 		   % For color in letters. Links instead?
 \usepackage[usenames]{color} % For color in letters. Links instead?
@@ -13,7 +24,7 @@
 \usepackage{alltt}
 \lstset{ %
 language={},               % choose the language of the code
-basicstyle=\footnotesize,  % the size of the fonts that are used for the code
+basicstyle=\footnotesize\ttfamily,  % the size of the fonts that are used for the code
 numbers=left,              % where to put the line-numbers
 numberstyle=\footnotesize, % the size of the fonts that are used for the line-numbers
 numberfirstline=true,
@@ -42,17 +53,18 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \usepackage{needspace}     % For assuring space remaining on a page
 \usepackage{ifthen}        % For conditional processing
 \usepackage{changepage}    % For odd/even page checks
-\usepackage{epic}          % For eepic package 
-\usepackage{eepic}         % For the diagram of section relationships
-\usepackage{eepicemu}      % For the diagram of section relationships
+%\usepackage{epic}          % For eepic package 
+%\usepackage{eepic}         % For the diagram of section relationships
+%\usepackage{eepicemu}      % For the diagram of section relationships
+\usepackage{tikz}			% graphics (Appendix B)
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{arrows}
 \usepackage{makeidx}       % For making an index
 % hyperref must be the last package listed.
 % The hyperref settings helps hypertext get right links in the 
 % pdf of the index.
 \usepackage[plainpages=false,pdfpagelabels,pagebackref,allcolors=blue]{hyperref} % Lets us generate colored active links inside a pdf.
 \makeindex  % This and the makeidx package allow \index to create index entries.
-
-\renewcommand{\familydefault}{phv}  % font family helvetica
 
 \newcommand{\dwf}{DWARF Debugging Information Format}
 
@@ -161,12 +173,25 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
         \end{table}
         }
 
+% Anti-ligature commands added because \/ and {} don't work for unknown reasons
+% nor does the microtext package DisableLigatures command...???
+%
+\newcommand{\xiiif}				{0x\hspace{1pt}3\hspace{2pt}f}
+\newcommand{\xiiifff}			{0x\hspace{1pt}3\hspace{2pt}f\hspace{2pt}f\hspace{2pt}f}
+\newcommand{\xff}				{0x\hspace{1pt}f\hspace{2pt}f}
+\newcommand{\xffff}				{0x\hspace{1pt}f\hspace{2pt}f\hspace{2pt}f\hspace{2pt}f}
+%
+% These are intended for use in running text...
+%
 \newcommand{\xffffffff}   		{\texttt{0xffffffff}}			% use with following punctutation
 \newcommand{\wffffffff}   		{\texttt{0xffffffff}\ }			% use as separate "word"
 \newcommand{\xfffffffzero}		{\texttt{0xfffffff0}}			% use with following punctutation
 \newcommand{\wfffffffzero}		{\texttt{0xfffffff0}\ }
 \newcommand{\xffffffffffffffff}	{\texttt{0xffffffffffffffff}}	% use with following punctutation
 \newcommand{\wffffffffffffffff}	{\texttt{0xffffffffffffffff}\ }
+
+% Define commands for all of the DWARF names (DW_*, .debug_*, a few others)
+\include{dwarfnamecmds}
 
 %--- Begin the document pages
 %
