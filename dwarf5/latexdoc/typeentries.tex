@@ -158,8 +158,8 @@ and
 defines the following combinations of attributes:}
 
 \begin{itemize}
-\item \textit{DW\-\_AT\-\_byte\-\_size}
-\item \textit{DW\-\_AT\-\_bit\-\_size}
+\item \textit{\livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size}}
+\item \textit{\livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size}}
 \item \textit{\livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size},
 \livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size} 
 and optionally \livelink{chap:DWATdatabitoffset}{DW\-\_AT\-\_data\-\_bit\-\_offset}}
@@ -169,7 +169,7 @@ and optionally \livelink{chap:DWATdatabitoffset}{DW\-\_AT\-\_data\-\_bit\-\_offs
 % FIXME: the figure below interferes with the following
 % bullet list, which looks horrible as a result.
 \begin{itemize}
-\item \textit{DW\-\_AT\-\_byte\-\_size}
+\item \textit{\livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size}}
 \item \textit{\livelink{chap:DWATbytesize}{DW\-\_AT\-\_byte\-\_size}, 
 \livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size} and 
 \livelink{chap:DWATbitoffset}{DW\-\_AT\-\_bit\-\_offset}}
@@ -477,8 +477,8 @@ A modified type entry describing a shared qualified type
 (using \livelink{chap:DWTAGsharedtype}{DW\-\_TAG\-\_shared\-\_type}) may have a
 \livelink{chap:DWATcount}{DW\-\_AT\-\_count} attribute
 \addtoindexx{count attribute}
-whose value is a constant expressing the blocksize of the
-type. If no count attribute is present, then the \doublequote{infinite}
+whose value is a constant expressing the (explicit or implied) blocksize specified for the
+type in the source. If no count attribute is present, then the \doublequote{infinite}
 blocksize is assumed.
 
 When multiple type modifiers are chained together to modify
@@ -865,6 +865,7 @@ about the location of that member (low and high pc attributes
 for function members, location descriptions for data members)
 and will have a \livelink{chap:DWATdeclaration}{DW\-\_AT\-\_declaration} attribute.
 
+\needlines{5}
 \textit{Consider a nested class whose 
 definition occurs outside of the containing class definition, as in:}
 
@@ -1003,7 +1004,7 @@ will usually consist of a non-trivial
 \label{chap:accessdeclarations}
 
 \textit{In \addtoindex{C++}, a derived class may contain access declarations that
-\addtoindex{access declaration entry}
+\addtoindexx{access declaration entry}
 change the accessibility of individual class members from the
 overall accessibility specified by the inheritance declaration.
 A single access declaration may refer to a set of overloaded
@@ -1033,6 +1034,7 @@ attribute describing the declared accessibility of the named
 entities.
 
 
+\needlines{6}
 \subsection{Friends}
 \label{chap:friends}
 
@@ -1067,8 +1069,8 @@ whose value is a null\dash terminated
 string containing the member name as it appears in the source
 program. If the member entry describes an 
 \addtoindex{anonymous union},
-the
-name attribute is omitted or consists of a single zero byte.
+the name attribute is omitted or the value of the attribute
+consists of a single zero byte.
 
 The data member entry has 
 \addtoindexx{type attribute}
@@ -1097,7 +1099,7 @@ This attribute indicates whether the data
 member was declared with the mutable storage class specifier.
 
 The beginning of a data member 
-\addtoindex{beginning of a data member} 
+\addtoindexx{beginning of a data member} 
 is described relative to
 \addtoindexx{beginning of an object}
 the beginning of the object in which it is immediately
@@ -1184,9 +1186,9 @@ integer constant value
 is the amount
 of storage needed to hold the value of the data member.
 
-\textit{\addtoindex{C} and \addtoindex{C++} 
+\textit{Bit fields in \addtoindex{C} and \addtoindex{C++} 
 typically 
-\addtoindex{bit fields} 
+\addtoindexx{bit fields} 
 require the use 
 \addtoindexx{data bit offset}
 of 
@@ -1195,12 +1197,11 @@ the
 \livelink{chap:DWATdatabitoffset}{DW\-\_AT\-\_data\-\_bit\-\_offset} and 
 \livelink{chap:DWATbitsize}{DW\-\_AT\-\_bit\-\_size} attributes.}
 
+\needlines{6}
 \textit{This Standard uses the following bit numbering and direction
 conventions in examples. These conventions are for illustrative
 purposes and other conventions may apply on particular
 architectures.}
-
-
 \begin{itemize}
 \item \textit{For big\dash endian architectures, bit offsets are
 counted from high-order to low\dash order bits within a byte (or
@@ -1576,6 +1577,7 @@ attribute, whose value is the actual constant value of the
 value parameter for this instantiation as represented on the
 target architecture.
 
+\needlines{5}
 \item The class type entry and each of its child entries references
 a \addtoindex{template type parameter entry} in any circumstance where the
 source template definition references a formal parameterized
@@ -1594,6 +1596,7 @@ the template definition, the name attribute for the debugging
 information entry representing the special compilation unit
 should be empty or omitted.
 
+\needlines{5}
 \item If the class type entry representing the template
 instantiation or any of its child entries contains declaration
 coordinate attributes, those attributes should refer to

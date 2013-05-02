@@ -335,9 +335,9 @@ normally not usable and
 \livelink{chap:DWFORMrefaddr}{DW\-\_FORM\-\_ref\-\_addr} is not necessary
 for a local label.)}
 
-% This should be a subsubsubsection header but that does work...
-\textbf{Use of \livelink{chap:DWTAGcompileunit}{DW\-\_TAG\-\_compile\-\_unit} versus 
-\livelink{chap:DWTAGpartialunit}{DW\-\_TAG\-\_partial\-\_unit}}
+
+\subsubsection{Use of DW\-\_TAG\-\_compile\-\_unit versus 
+DW\-\_TAG\-\_partial\-\_unit}
 
 A \addtoindex{section group} compilation unit that uses 
 \livelink{chap:DWTAGcompileunit}{DW\-\_TAG\-\_compile\-\_unit}
@@ -374,7 +374,7 @@ A \livelink{chap:DWTAGpartialunit}{DW\-\_TAG\-\_partial\-\_unit} entry may have,
 the attributes assigned to a \livelink{chap:DWTAGcompileunit}{DW\-\_TAG\-\_compile\-\_unit}.
 
 
-\textbf{Use of \livelink{chap:DWTAGimportedunit}{DW\-\_TAG\-\_imported\-\_unit}}
+\subsubsection{Use of DW\-\_TAG\-\_imported\-\_unit}
 
 A \livelink{chap:DWTAGimportedunit}{DW\-\_TAG\-\_imported\-\_unit} debugging information entry has an
 \livelink{chap:DWATimport}{DW\-\_AT\-\_import} attribute referencing a \livelink{chap:DWTAGcompileunit}{DW\-\_TAG\-\_compile\-\_unit} or
@@ -391,7 +391,7 @@ of the
 \livelink{chap:DWTAGimportedunit}{DW\-\_TAG\-\_imported\-\_unit} entry.
 
 
-\textbf{Use of \livelink{chap:DWFORMrefaddr}{DW\-\_FORM\-\_ref\-\_addr}}
+\subsubsection{Use of DW\-\_FORM\-\_ref\-\_addr}
 
 Use 
 \livelink{chap:DWFORMrefaddr}{DW\-\_FORM\-\_ref\-\_addr} to reference from one compilation
@@ -452,7 +452,7 @@ Figure \refersec{fig:duplicateeliminationexample1csource}
 is used to illustrate the DWARF
 representation intended to allow duplicate elimination.
 
-\begin{figure}[t]
+\begin{figure}[ht]
 \textit{File wa.h}
 \begin{lstlisting}[numbers=none]
 struct A {
@@ -483,17 +483,17 @@ wa.h.
 ==== Section group name:
     my.compiler.company.cpp.wa.h.123456
 == section \addtoindex{.debug\_info}
-DW.cpp.wa.h.123456.1: ! linker global symbol
+DW.cpp.wa.h.123456.1:     ! linker global symbol
     \livelink{chap:DWTAGcompileunit}{DW\-\_TAG\-\_compile\-\_unit}
         \livelink{chap:DWATlanguage}{DW\-\_AT\-\_language}(\livelink{chap:DWLANGCplusplus}{DW\-\_LANG\-\_C\-\_plus\-\_plus})
         ...  ! other unit attributes
-DW.cpp.wa.h.123456.2: ! linker global symbol
+DW.cpp.wa.h.123456.2:     ! linker global symbol
     \livelink{chap:DWTAGbasetype}{DW\-\_TAG\-\_base\-\_type}
         \livelink{chap:DWATname}{DW\-\_AT\-\_name}("int")
-DW.cpp.wa.h.123456.3: ! linker global symbol
+DW.cpp.wa.h.123456.3:     ! linker global symbol
     \livelink{chap:DWTAGstructuretype}{DW\-\_TAG\-\_structure\-\_type}
         \livelink{chap:DWATname}{DW\-\_AT\-\_name}("A")
-DW.cpp.wa.h.123456.4: ! linker global symbol
+DW.cpp.wa.h.123456.4:     ! linker global symbol
         \livelink{chap:DWTAGmember}{DW\-\_TAG\-\_member}
         \livelink{chap:DWATname}{DW\-\_AT\-\_name}("i")
         \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(\livelink{chap:DWFORMrefn}{DW\-\_FORM\-\_refn} to DW.cpp.wa.h.123456.2)
@@ -502,6 +502,7 @@ DW.cpp.wa.h.123456.4: ! linker global symbol
             ! for n 1,2,4, or 8 can be used)
 \end{alltt}
 \end{dwflisting}
+\vspace{2mm}
 \caption{Duplicate elimination example \#1: DWARF section group} 
 \label{fig:duplicateeliminationexample1dwarfsectiongroup}
 \end{figure}
@@ -519,7 +520,7 @@ in the \addtoindex{section group} shown above.
     [generated code for function f]
 == section \addtoindex{.debug\_info}
     \livelink{chap:DWTAGcompileunit}{DW\-\_TAG\-\_compile\-\_unit}
-.L1:                   ! local (non-linker) symbol
+.L1:                           ! local (non-linker) symbol
         \livelink{chap:DWTAGreferencetype}{DW\-\_TAG\-\_reference\-\_type}
             \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to DW.cpp.wa.h.123456.3)
         \livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram}
@@ -592,7 +593,7 @@ DW.myf90.CommonStuff.fh.654321.1:    ! linker global symbol
         \livelink{chap:DWATlanguage}{DW\-\_AT\-\_language}(\livelink{chap:DWLANGFortran90}{DW\-\_LANG\-\_Fortran90})
         \livelink{chap:DWATidentifiercase}{DW\-\_AT\-\_identifier\-\_case}(\livelink{chap:DWIDcaseinsensitive}{DW\-\_ID\-\_case\-\_insensitive})
 
-DW.myf90.CommonStuff.fh.654321.2: ! linker global symbol
+DW.myf90.CommonStuff.fh.654321.2:    ! linker global symbol
 3\$: \livelink{chap:DWTAGarraytype}{DW\-\_TAG\-\_array\-\_type}
         ! unnamed
         \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to DW.f90.F90\$main.f.2)
@@ -603,7 +604,7 @@ DW.myf90.CommonStuff.fh.654321.2: ! linker global symbol
             \livelink{chap:DWATlowerbound}{DW\-\_AT\-\_lower\-\_bound}(constant 1)
             \livelink{chap:DWATupperbound}{DW\-\_AT\-\_upper\-\_bound}(constant 100)
 
-DW.myf90.CommonStuff.fh.654321.3: ! linker global symbol
+DW.myf90.CommonStuff.fh.654321.3:    ! linker global symbol
     \livelink{chap:DWTAGcommonblock}{DW\-\_TAG\-\_common\-\_block}
         \livelink{chap:DWATname}{DW\-\_AT\-\_name}("Common1")
         \livelink{chap:DWATlocation}{DW\-\_AT\-\_location}(Address of common \nolink{block} Common1)
@@ -612,7 +613,7 @@ DW.myf90.CommonStuff.fh.654321.3: ! linker global symbol
             \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to 3\$)
             \livelink{chap:DWATlocation}{DW\-\_AT\-\_location}(address of C)
 
-DW.myf90.CommonStuff.fh.654321.4: ! linker global symbol
+DW.myf90.CommonStuff.fh.654321.4:    ! linker global symbol
     \livelink{chap:DWTAGconstant}{DW\-\_TAG\-\_constant}
         \livelink{chap:DWATname}{DW\-\_AT\-\_name}("SEVEN")
         \livelink{chap:DWATtype}{DW\-\_AT\-\_type}(reference to DW.f90.F90\$main.f.2)
@@ -787,7 +788,7 @@ consider a \addtoindex{C++} header file
 containing the type definitions shown
 in Figure \refersec{fig:typesignatureexamplescsource}.
 
-\begin{figure}
+\begin{figure}[h]
 \begin{lstlisting}
 namespace N {
 
@@ -917,6 +918,7 @@ Figure \refersec{fig:typesignaturecomputation1flattenedbytestream}.
 \label{fig:typesignaturecomputation1flattenedbytestream}
 \end{figure}
 
+\needlines{4}
 Running an \addtoindex{MD5 hash} over this byte stream, and taking the
 low\dash order 64 bits, yields the final signature: 
 0xd28081e8 dcf5070a.
@@ -1258,12 +1260,12 @@ Section \refersec{datarep:typesignaturecomputation}.
 \begin{alltt}
 signature
     : opt-context debug-entry attributes children
-opt-context           // Step 2
+opt-context               // Step 2
     : 'C' tag-code string opt-context
     : empty
-debug-entry           // Step 3
+debug-entry               // Step 3
     : 'D' tag-code
-attributes            // Steps 4, 5, 6
+attributes                // Steps 4, 5, 6
     : attribute attributes
     : empty
 attribute
@@ -1271,7 +1273,7 @@ attribute
     : 'N' at-code opt-context 'E' string // Reference to type by name
     : 'R' at-code back-ref               // Back-reference to visited type
     : 'T' at-code signature              // Recursive type
-children             //  Step 7
+children                 //  Step 7
     : child children
     : '0'
 child

@@ -1,17 +1,15 @@
 \chapter{Debug Section Relationships (Informative)}
 \label{app:debugsectionrelationshipsinformative}
-%
 DWARF information is organized into multiple program sections, 
 each of which holds a particular kind of information. In some 
 cases, information in one section refers to information in one 
 or more of the others. These relationships are illustrated by 
 the diagram and associated notes on the following pages.
 
-\begin{figure}[h]
-\small
+\begin{figure}[H]
 \begin{tikzpicture}
-    [sect/.style={rectangle, rounded corners, draw, fill=blue!20, inner sep=.2cm, minimum width=4.5cm},
-	 link/.style={rectangle,                  draw,               inner sep=.2cm, minimum width=5.0cm}]
+    [sect/.style={rectangle, rounded corners=10pt, draw, fill=blue!10, inner sep=.2cm, minimum width=4.5cm},
+	 link/.style={rectangle,                       draw,               inner sep=.2cm, minimum width=5.0cm}]
 
 % The left column, first sections, then links, from top to bottom
 %
@@ -21,10 +19,10 @@ the diagram and associated notes on the following pages.
 \node(zlinkb)   at ( 0, 2.0) [link] {To compilation unit (b)};
 \node(zsectpub) at ( 0, 0.0) [sect] {\begin{tabular}{c} \dotdebugpubnames \\ \dotdebugpubtypes \end{tabular}};
 
-\draw[thick,-o]        (zlinka) -- (zsectara);
-\draw[thick,angle 90-] (zsectinf) -- (zlinka);
-\draw[thick,-angle 90] (zlinkb) -- (zsectinf);
-\draw[thick,o-]        (zsectpub) -- (zlinkb);
+\draw[thick,-to reversed]		(zlinka) -- (zsectara);
+\draw[thick,angle 90-] 			(zsectinf) -- (zlinka);
+\draw[thick,-angle 90] 			(zlinkb) -- (zsectinf);
+\draw[thick,to reversed-]		(zsectpub) -- (zlinkb);
 
 % The middle column, similarly
 %
@@ -39,13 +37,13 @@ the diagram and associated notes on the following pages.
 
 % Links between left and center
 %
-\draw[thick,o-]			(zsectinf) -- (zlinkc.west);
-\draw[thick,o-]			(zsectinf) -- (zlinkd.west);
-\draw[thick,angle 90-]	(zsectinf) -- (zlinke.west);
-\draw[thick,o-]			(zsectinf) -- (zlinkf.west);
-\draw[thick,o-]			(zsectinf) -- (zlinkg.west);
-\draw[thick,o-]			(zsectinf) -- (zlinkh.west);
-\draw[thick,o-]			(zsectinf) -- (zlinki.west);
+\draw[thick,to reversed-]			(zsectinf) -- (zlinkc.west);
+\draw[thick,to reversed-]			(zsectinf) -- (zlinkd.west);
+\draw[thick,angle 90-]				(zsectinf) -- (zlinke.west);
+\draw[thick,to reversed-]			(zsectinf) -- (zlinkf.west);
+\draw[thick,to reversed-]			(zsectinf) -- (zlinkg.west);
+\draw[thick,to reversed-]			(zsectinf) -- (zlinkh.west);
+\draw[thick,to reversed-]			(zsectinf) -- (zlinki.west);
 
 % The right column
 %
@@ -60,15 +58,14 @@ the diagram and associated notes on the following pages.
 %
 \draw[thick,-angle 90]		(zlinkc.east) -- (zsectabb.west);
 \draw[thick,-angle 90]		(zlinkd.east) -- (zsectstr.west);
-\draw[thick,-o]				(zlinke.east) -- (zsectloc.west);
+\draw[thick,-to reversed]	(zlinke.east) -- (zsectloc.west);
 \draw[thick,-angle 90]		(zlinkf.east) -- (zsectloc.south west);
 \draw[thick,-angle 90]		(zlinkg.east) -- (zsectran.west);
 \draw[thick,-angle 90]		(zlinkh.east) -- (zsectmac.west);
 \draw[thick,-angle 90]		(zlinki.east) -- (zsectlin.west);
 
 \end{tikzpicture}
-
-\vspace{1cm}
+\vspace{5mm}
 \caption{Debug section relationships}
 \label{fig:debugsectionrelationships}
 \end{figure}
