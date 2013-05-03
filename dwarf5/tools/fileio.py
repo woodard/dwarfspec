@@ -66,6 +66,11 @@ def isIndivid(c):
     return "y"
   return "n"
 
+# self._tex        DW\-\_ATE and the like
+# self._underbar   DW\_ATE  and the like
+# self._std   the way a DW_ATE and the like looks in the standard
+# self._label With all _ and - removed.  Like DWATE
+
 class dwtoken:
   """ Token types: 
   id: identifier
