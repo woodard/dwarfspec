@@ -35,24 +35,24 @@ compilation unit using an
 
 A \addtoindex{normal compilation unit} is represented by a debugging
 information entry with the 
-tag \livetarg{chap:DWTAGcompileunit}{DW\-\_TAG\-\_compile\-\_unit}. 
+tag \livetarg{chap:DWTAGcompileunit}{DW\_TAG\_compile\_unit}. 
 A \addtoindex{partial compilation unit} is represented by a debugging information
 entry with the 
-tag \livetarg{chap:DWTAGpartialunit}{DW\-\_TAG\-\_partial\-\_unit}.
+tag \livetarg{chap:DWTAGpartialunit}{DW\_TAG\_partial\_unit}.
 
 In a simple normal compilation, a single compilation unit with
 the tag 
-\livelink{chap:DWTAGcompileunit}{DW\-\_TAG\-\_compile\-\_unit} represents a complete object file
+\livelink{chap:DWTAGcompileunit}{DW\_TAG\_compile\_unit} represents a complete object file
 and the tag 
-\livelink{chap:DWTAGpartialunit}{DW\-\_TAG\-\_partial\-\_unit} is not used. 
+\livelink{chap:DWTAGpartialunit}{DW\_TAG\_partial\_unit} is not used. 
 In a compilation
 employing the DWARF space compression and duplicate elimination
 techniques from 
 Appendix \refersec{app:usingcompilationunits}, 
 multiple compilation units using
 the tags 
-\livelink{chap:DWTAGcompileunit}{DW\-\_TAG\-\_compile\-\_unit} and/or 
-\livelink{chap:DWTAGpartialunit}{DW\-\_TAG\-\_partial\-\_unit} are
+\livelink{chap:DWTAGcompileunit}{DW\_TAG\_compile\_unit} and/or 
+\livelink{chap:DWTAGpartialunit}{DW\_TAG\_partial\_unit} are
 used to represent portions of an object file.
 
 \textit{A normal compilation unit typically represents the text and
@@ -81,15 +81,15 @@ Section \refersec{chap:importedunitentries}).
 Compilation unit entries may have the following 
 attributes:
 \begin{enumerate}[1. ]
-\item Either a \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} and 
-\livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair of
+\item Either a \livelink{chap:DWATlowpc}{DW\_AT\_low\_pc} and 
+\livelink{chap:DWAThighpc}{DW\_AT\_high\_pc} pair of
 \addtoindexx{high PC attribute}
 attributes 
 \addtoindexx{low PC attribute}
 or 
 \addtoindexx{ranges attribute}
 a 
-\livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} attribute
+\livelink{chap:DWATranges}{DW\_AT\_ranges} attribute
 \addtoindexx{ranges attribute}
 whose values encode 
 \addtoindexx{discontiguous address ranges|see{non-contiguous address ranges}}
@@ -99,13 +99,13 @@ non\dash contiguous address ranges, respectively,
 of the machine instructions generated for the compilation
 unit (see Section \refersec{chap:codeaddressesandranges}).
   
-A \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} attribute 
+A \livelink{chap:DWATlowpc}{DW\_AT\_low\_pc} attribute 
 may also
 be specified 
 in combination 
 \addtoindexx{ranges attribute}
 with 
-\livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} to specify the
+\livelink{chap:DWATranges}{DW\_AT\_ranges} to specify the
 \addtoindexx{ranges attribute}
 default base address for use in 
 \addtoindexx{location list}
@@ -114,7 +114,7 @@ location lists (see Section
 \addtoindexx{range list}
 (see Section \refersec{chap:noncontiguousaddressranges}).
 
-\item A \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute 
+\item A \livelink{chap:DWATname}{DW\_AT\_name} attribute 
 \addtoindexx{name attribute}
 whose value is a null\dash terminated
 string 
@@ -122,7 +122,7 @@ string
 containing the full or relative path name of the primary
 source file from which the compilation unit was derived.
 
-\item A \livelink{chap:DWATlanguage}{DW\-\_AT\-\_language} attribute 
+\item A \livelink{chap:DWATlanguage}{DW\_AT\_language} attribute 
 \addtoindexx{language attribute}
 whose constant value is an
 \hypertarget{chap:DWATlanguageprogramminglanguage}
@@ -139,31 +139,31 @@ in Table \refersec{tab:languagenames}.
 \begin{tabular}{l|l}
 \hline
 Language name & Meaning\\ \hline
-\livetarg{chap:DWLANGAda83}{DW\-\_LANG\-\_Ada83} \dag&ISO \addtoindex{Ada}:1983 \addtoindexx{Ada} \\
-\livetarg{chap:DWLANGAda95}{DW\-\_LANG\-\_Ada95} \dag&ISO Ada:1995 \addtoindexx{Ada} \\
-\livetarg{chap:DWLANGC}{DW\-\_LANG\-\_C}&Non-standardized C, such as K\&R \\
-\livetarg{chap:DWLANGC89}{DW\-\_LANG\-\_C89}&ISO C:1989 \\
-\livetarg{chap:DWLANGC99}{DW\-\_LANG\-\_C99} & ISO \addtoindex{C}:1999 \\
-\livetarg{chap:DWLANGCplusplus}{DW\-\_LANG\-\_C\-\_plus\-\_plus}&ISO \addtoindex{C++}:1998 \\
-\livetarg{chap:DWLANGCobol74}{DW\-\_LANG\-\_Cobol74}& ISO \addtoindex{Cobol}:1974 \\
-\livetarg{chap:DWLANGCobol85}{DW\-\_LANG\-\_Cobol85} & ISO \addtoindex{Cobol}:1985 \\
-\livetarg{chap:DWLANGD}{DW\-\_LANG\-\_D} \dag & D \addtoindexx{D language} \\
-\livetarg{chap:DWLANGFortran77}{DW\-\_LANG\-\_Fortran77} &ISO \addtoindex{FORTRAN} 77\\
-\livetarg{chap:DWLANGFortran90}{DW\-\_LANG\-\_Fortran90} & ISO \addtoindex{Fortran 90}\\
-\livetarg{chap:DWLANGFortran95}{DW\-\_LANG\-\_Fortran95} & ISO \addtoindex{Fortran 95}\\
-\livetarg{chap:DWLANGJava}{DW\-\_LANG\-\_Java} & \addtoindex{Java}\\
-\livetarg{chap:DWLANGModula2}{DW\-\_LANG\-\_Modula2} & ISO Modula\dash 2:1996 \addtoindexx{Modula-2}\\
-\livetarg{chap:DWLANGObjC}{DW\-\_LANG\-\_ObjC} & \addtoindex{Objective C}\\
-\livetarg{chap:DWLANGObjCplusplus}{DW\-\_LANG\-\_ObjC\-\_plus\-\_plus} & \addtoindex{Objective C++}\\
-\livetarg{chap:DWLANGPascal83}{DW\-\_LANG\-\_Pascal83} & ISO \addtoindex{Pascal}:1983\\
-\livetarg{chap:DWLANGPLI}{DW\-\_LANG\-\_PLI} \dag & ANSI \addtoindex{PL/I}:1976\\
-\livetarg{chap:DWLANGPython}{DW\-\_LANG\-\_Python} \dag & \addtoindex{Python}\\
-\livetarg{chap:DWLANGUPC}{DW\-\_LANG\-\_UPC} &\addtoindex{Unified Parallel C}\addtoindexx{UPC}\\ \hline
+\livetarg{chap:DWLANGAda83}{DW\_LANG\_Ada83} \dag&ISO \addtoindex{Ada}:1983 \addtoindexx{Ada} \\
+\livetarg{chap:DWLANGAda95}{DW\_LANG\_Ada95} \dag&ISO Ada:1995 \addtoindexx{Ada} \\
+\livetarg{chap:DWLANGC}{DW\_LANG\_C}&Non-standardized C, such as K\&R \\
+\livetarg{chap:DWLANGC89}{DW\_LANG\_C89}&ISO C:1989 \\
+\livetarg{chap:DWLANGC99}{DW\_LANG\_C99} & ISO \addtoindex{C}:1999 \\
+\livetarg{chap:DWLANGCplusplus}{DW\_LANG\_C\_plus\_plus}&ISO \addtoindex{C++}:1998 \\
+\livetarg{chap:DWLANGCobol74}{DW\_LANG\_Cobol74}& ISO \addtoindex{Cobol}:1974 \\
+\livetarg{chap:DWLANGCobol85}{DW\_LANG\_Cobol85} & ISO \addtoindex{Cobol}:1985 \\
+\livetarg{chap:DWLANGD}{DW\_LANG\_D} \dag & D \addtoindexx{D language} \\
+\livetarg{chap:DWLANGFortran77}{DW\_LANG\_Fortran77} &ISO \addtoindex{FORTRAN} 77\\
+\livetarg{chap:DWLANGFortran90}{DW\_LANG\_Fortran90} & ISO \addtoindex{Fortran 90}\\
+\livetarg{chap:DWLANGFortran95}{DW\_LANG\_Fortran95} & ISO \addtoindex{Fortran 95}\\
+\livetarg{chap:DWLANGJava}{DW\_LANG\_Java} & \addtoindex{Java}\\
+\livetarg{chap:DWLANGModula2}{DW\_LANG\_Modula2} & ISO Modula\dash 2:1996 \addtoindexx{Modula-2}\\
+\livetarg{chap:DWLANGObjC}{DW\_LANG\_ObjC} & \addtoindex{Objective C}\\
+\livetarg{chap:DWLANGObjCplusplus}{DW\_LANG\_ObjC\_plus\_plus} & \addtoindex{Objective C++}\\
+\livetarg{chap:DWLANGPascal83}{DW\_LANG\_Pascal83} & ISO \addtoindex{Pascal}:1983\\
+\livetarg{chap:DWLANGPLI}{DW\_LANG\_PLI} \dag & ANSI \addtoindex{PL/I}:1976\\
+\livetarg{chap:DWLANGPython}{DW\_LANG\_Python} \dag & \addtoindex{Python}\\
+\livetarg{chap:DWLANGUPC}{DW\_LANG\_UPC} &\addtoindex{Unified Parallel C}\addtoindexx{UPC}\\ \hline
 \dag \ \ \textit{Support for these languages is limited.}& \\
 \end{tabular}
 \end{table}
 
-\item A \livelink{chap:DWATstmtlist}{DW\-\_AT\-\_stmt\-\_list}
+\item A \livelink{chap:DWATstmtlist}{DW\_AT\_stmt\_list}
 attribute whose value is 
 \addtoindexx{statement list attribute}
 a 
@@ -180,7 +180,7 @@ value of the statement list attribute is the offset in the
 information for this compilation unit 
 (see Section \refersec{chap:linenumberinformation}).
 
-\item A \livelink{chap:DWATmacroinfo}{DW\-\_AT\-\_macro\-\_info} attribute 
+\item A \livelink{chap:DWATmacroinfo}{DW\_AT\_macro\_info} attribute 
 \addtoindexx{macro information attribute}
 whose value is a 
 \addtoindexx{section offset!in macro information attribute}
@@ -196,7 +196,7 @@ information for this compilation unit
 (see Section \refersec{chap:macroinformation}).
 
 \item  A 
-\livelink{chap:DWATcompdir}{DW\-\_AT\-\_comp\-\_dir} 
+\livelink{chap:DWATcompdir}{DW\_AT\_comp\_dir} 
 attribute 
 \hypertarget{chap:DWATcompdircompilationdirectory}
 whose value is a
@@ -204,7 +204,7 @@ null\dash terminated string containing the current working directory
 of the compilation command that produced this compilation
 unit in whatever form makes sense for the host system.
 
-\item  A \livelink{chap:DWATproducer}{DW\-\_AT\-\_producer} attribute 
+\item  A \livelink{chap:DWATproducer}{DW\_AT\_producer} attribute 
 \addtoindexx{producer attribute}
 whose value is a null\dash
 terminated string containing information about the compiler
@@ -216,7 +216,7 @@ identifying character sequence that should avoid confusion
 with other producer values.
 
 \needlines{4}
-\item  A \livelink{chap:DWATidentifiercase}{DW\-\_AT\-\_identifier\-\_case} 
+\item  A \livelink{chap:DWATidentifiercase}{DW\_AT\_identifier\_case} 
 attribute 
 \addtoindexx{identifier case attribute}
 whose integer
@@ -227,22 +227,22 @@ set of identifier case codes is given in
 Table \refersec{tab:identifiercasecodes}.
 
 \begin{simplenametable}{Identifier case codes}{tab:identifiercasecodes}
-\livelink{chap:DWIDcasesensitive}{DW\-\_ID\-\_case\-\_sensitive}        \\
-\livelink{chap:DWIDupcase}{DW\-\_ID\-\_up\-\_case}                      \\
-\livelink{chap:DWIDdowncase}{DW\-\_ID\-\_down\-\_case}                  \\
-\livelink{chap:DWIDcaseinsensitive}{DW\-\_ID\-\_case\-\_insensitive}    \\
+\livelink{chap:DWIDcasesensitive}{DW\_ID\_case\_sensitive}        \\
+\livelink{chap:DWIDupcase}{DW\_ID\_up\_case}                      \\
+\livelink{chap:DWIDdowncase}{DW\_ID\_down\_case}                  \\
+\livelink{chap:DWIDcaseinsensitive}{DW\_ID\_case\_insensitive}    \\
 \end{simplenametable}
 
-\livetarg{chap:DWIDcasesensitive}{DW\-\_ID\-\_case\-\_sensitive} is the default for all compilation units
+\livetarg{chap:DWIDcasesensitive}{DW\_ID\_case\_sensitive} is the default for all compilation units
 that do not have this attribute.  It indicates that names given
-as the values of \livelink{chap:DWATname}{DW\-\_AT\-\_name} attributes 
+as the values of \livelink{chap:DWATname}{DW\_AT\_name} attributes 
 \addtoindexx{name attribute}
 in debugging information
 entries for the compilation unit reflect the names as they
 appear in the source program. The debugger should be sensitive
 to the case of identifier names when doing identifier lookups.
 
-\livetarg{chap:DWIDupcase}{DW\-\_ID\-\_up\-\_case} means that the 
+\livetarg{chap:DWIDupcase}{DW\_ID\_up\_case} means that the 
 producer of the debugging
 information for this compilation unit converted all source
 names to upper case. The values of the name attributes may not
@@ -250,7 +250,7 @@ reflect the names as they appear in the source program. The
 debugger should convert all names to upper case when doing
 lookups.
 
-\livetarg{chap:DWIDdowncase}{DW\-\_ID\-\_down\-\_case} means that 
+\livetarg{chap:DWIDdowncase}{DW\_ID\_down\_case} means that 
 the producer of the debugging
 information for this compilation unit converted all source
 names to lower case. The values of the name attributes may not
@@ -258,12 +258,12 @@ reflect the names as they appear in the source program. The
 debugger should convert all names to lower case when doing
 lookups.
 
-\livetarg{chap:DWIDcaseinsensitive}{DW\-\_ID\-\_case\-\_insensitive} means that the values of the name
+\livetarg{chap:DWIDcaseinsensitive}{DW\_ID\_case\_insensitive} means that the values of the name
 attributes reflect the names as they appear in the source
 program but that a case insensitive lookup should be used to
 access those names.
 
-\item A \livelink{chap:DWATbasetypes}{DW\-\_AT\-\_base\-\_types} attribute whose value is a reference.
+\item A \livelink{chap:DWATbasetypes}{DW\_AT\_base\_types} attribute whose value is a reference.
 
 
 This 
@@ -285,7 +285,7 @@ to interpret a type conversion to a base type
 \hypertarget{chap:DWATuseUTF8compilationunitusesutf8strings}
 correctly.
 
-\item A \livelink{chap:DWATuseUTF8}{DW\-\_AT\-\_use\-\_UTF8} attribute,
+\item A \livelink{chap:DWATuseUTF8}{DW\_AT\_use\_UTF8} attribute,
 \addtoindexx{use UTF8 attribute}\addtoindexx{UTF-8} 
 which is a \livelink{chap:flag}{flag} whose
 presence indicates that all strings (such as the names of
@@ -294,7 +294,7 @@ using the UTF\dash 8 representation
 (see Section \refersec{datarep:attributeencodings}).
 
 
-\item A \livelink{chap:DWATmainsubprogram}{DW\-\_AT\-\_main\-\_subprogram} attribute, which is a \livelink{chap:flag}{flag}
+\item A \livelink{chap:DWATmainsubprogram}{DW\_AT\_main\_subprogram} attribute, which is a \livelink{chap:flag}{flag}
 \addtoindexx{main subprogram attribute}
 whose presence indicates 
 \hypertarget{chap:DWATmainsubprogramunitcontainingmainorstartingsubprogram}
@@ -315,7 +315,7 @@ a program.}
 \end{enumerate}
 
 The  base address of a compilation unit is defined as the
-value of the \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} attribute, if present; otherwise,
+value of the \livelink{chap:DWATlowpc}{DW\_AT\_low\_pc} attribute, if present; otherwise,
 it is undefined. If the base address is undefined, then any
 DWARF entry or structure defined in terms of the base address
 of that compilation unit is not valid.
@@ -328,11 +328,11 @@ The
 place where a normal or partial unit is imported is
 represented by a debugging information entry with the 
 \addtoindexx{imported unit entry}
-tag \livetarg{chap:DWTAGimportedunit}{DW\-\_TAG\-\_imported\-\_unit}. 
+tag \livetarg{chap:DWTAGimportedunit}{DW\_TAG\_imported\_unit}. 
 An imported unit entry contains 
 \addtoindexx{import attribute}
 a
-\livelink{chap:DWATimport}{DW\-\_AT\-\_import} attribute 
+\livelink{chap:DWATimport}{DW\_AT\_import} attribute 
 whose value is a reference to the
 normal or partial compilation unit whose declarations logically
 belong at the place of the imported unit entry.
@@ -354,14 +354,14 @@ can be used to reference the type definition from debugging
 information entries in other compilation units and type units.
 
 A type unit is represented by a debugging information entry
-with the tag \livetarg{chap:DWTAGtypeunit}{DW\-\_TAG\-\_type\-\_unit}. 
+with the tag \livetarg{chap:DWTAGtypeunit}{DW\_TAG\_type\_unit}. 
 A \addtoindex{type unit entry} owns debugging
 information entries that represent the definition of a single
 type, plus additional debugging information entries that may
 be necessary to include as part of the definition of the type.
 
 A type unit entry may have a 
-\livelink{chap:DWATlanguage}{DW\-\_AT\-\_language} attribute, 
+\livelink{chap:DWATlanguage}{DW\_AT\_language} attribute, 
 whose
 \addtoindexx{language attribute}
 constant value is an integer code indicating the source
@@ -412,7 +412,7 @@ A Modula\dash 2 definition module
 may be represented by a module
 entry containing a 
 \addtoindex{declaration attribute}
-(\livelink{chap:DWATdeclaration}{DW\-\_AT\-\_declaration}). A
+(\livelink{chap:DWATdeclaration}{DW\_AT\_declaration}). A
 \addtoindex{Fortran 90} module 
 \addtoindexx{Fortran!module (Fortran 90)}
 may also be represented by a module entry
@@ -421,26 +421,26 @@ has no concept of a corresponding module body).}
 
 A module is represented by a debugging information entry
 with the 
-tag \livetarg{chap:DWTAGmodule}{DW\-\_TAG\-\_module}.  
+tag \livetarg{chap:DWTAGmodule}{DW\_TAG\_module}.  
 Module entries may own other
 debugging information entries describing program entities
 whose declaration scopes end at the end of the module itself.
 
 If the module has a name, the module entry has a 
-\livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute 
+\livelink{chap:DWATname}{DW\_AT\_name} attribute 
 \addtoindexx{name attribute}
 whose value is a null\dash terminated string containing
 the module name as it appears in the source program.
 
 The \addtoindex{module entry} may have either a 
-\livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} and
-\livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} 
+\livelink{chap:DWATlowpc}{DW\_AT\_low\_pc} and
+\livelink{chap:DWAThighpc}{DW\_AT\_high\_pc} 
 pair 
 \addtoindexx{high PC attribute}
 of 
 \addtoindexx{low PC attribute}
 attributes or a 
-\livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} attribute
+\livelink{chap:DWATranges}{DW\_AT\_ranges} attribute
 \addtoindexx{ranges attribute}
 whose values encode the contiguous or non\dash contiguous address
 ranges, respectively, of the machine instructions generated for
@@ -450,7 +450,7 @@ the module initialization code
 It may also
 \addtoindexx{entry pc attribute!for module initialization}
 have a 
-\livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc} attribute whose value is the address of
+\livelink{chap:DWATentrypc}{DW\_AT\_entry\_pc} attribute whose value is the address of
 the first executable instruction of that initialization code
 (see Section \refersec{chap:entryaddress}).
 
@@ -459,7 +459,7 @@ If
 the module has been assigned a priority, it may have 
 \addtoindexx{priority attribute}
 a
-\livelink{chap:DWATpriority}{DW\-\_AT\-\_priority} attribute. 
+\livelink{chap:DWATpriority}{DW\_AT\_priority} attribute. 
 The value of this attribute is a
 reference to another debugging information entry describing
 a variable with a constant value. The value of this variable
@@ -477,26 +477,26 @@ application is linked together.}
 
 A namespace is represented by a debugging information entry
 with the 
-tag \livetarg{chap:DWTAGnamespace}{DW\-\_TAG\-\_namespace}. 
+tag \livetarg{chap:DWTAGnamespace}{DW\_TAG\_namespace}. 
 A namespace extension is
 \hypertarget{chap:DWATextensionpreviousnamespaceextensionororiginalnamespace}
 represented by a 
-\livelink{chap:DWTAGnamespace}{DW\-\_TAG\-\_namespace} entry 
+\livelink{chap:DWTAGnamespace}{DW\_TAG\_namespace} entry 
 with 
 \addtoindexx{extension attribute}
 a 
-\livelink{chap:DWATextension}{DW\-\_AT\-\_extension}
+\livelink{chap:DWATextension}{DW\_AT\_extension}
 attribute referring to the previous extension, or if there
 is no previous extension, to the original 
-\livelink{chap:DWTAGnamespace}{DW\-\_TAG\-\_namespace}
+\livelink{chap:DWTAGnamespace}{DW\_TAG\_namespace}
 entry. A namespace extension entry does not need to duplicate
 information in a previous extension entry of the namespace
 nor need it duplicate information in the original namespace
 entry. (Thus, for a namespace with a name, 
-a \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute 
+a \livelink{chap:DWATname}{DW\_AT\_name} attribute 
 \addtoindexx{name attribute}
 need only be attached directly to the original
-\livelink{chap:DWTAGnamespace}{DW\-\_TAG\-\_namespace} entry.)
+\livelink{chap:DWTAGnamespace}{DW\_TAG\_namespace} entry.)
 
 \needlines{4}
 Namespace and namespace extension entries may own 
@@ -514,13 +514,13 @@ function definitions.}
 If a type, variable, or function declared in a namespace is
 defined outside of the body of the namespace declaration,
 that type, variable, or function definition entry has a
-\livelink{chap:DWATspecification}{DW\-\_AT\-\_specification} attribute 
+\livelink{chap:DWATspecification}{DW\_AT\_specification} attribute 
 \addtoindexx{specification attribute}
 whose value is a reference to the
 debugging information entry representing the declaration of
 the type, variable or function. Type, variable, or function
 entries with a 
-\livelink{chap:DWATspecification}{DW\-\_AT\-\_specification} attribute 
+\livelink{chap:DWATspecification}{DW\_AT\_specification} attribute 
 \addtoindexx{specification attribute}
 do not need
 to duplicate information provided by the declaration entry
@@ -587,7 +587,7 @@ An
 imported declaration is represented by one or
 \addtoindexx{imported declaration entry}
 more debugging information entries with the 
-tag \livetarg{chap:DWTAGimporteddeclaration}{DW\-\_TAG\-\_imported\-\_declaration}. 
+tag \livetarg{chap:DWTAGimporteddeclaration}{DW\_TAG\_imported\_declaration}. 
 When 
 \hypertarget{chap:DWATimportimporteddeclaration}
 an overloaded entity
@@ -595,13 +595,13 @@ is imported, there is one imported declaration entry for
 each overloading. 
 \addtoindexx{import attribute}
 Each imported declaration entry has a
-\livelink{chap:DWATimport}{DW\-\_AT\-\_import} attribute,
+\livelink{chap:DWATimport}{DW\_AT\_import} attribute,
 whose value is a reference to the
 debugging information entry representing the declaration that
 is being imported.
 
 An imported declaration may also have a 
-\livelink{chap:DWATname}{DW\-\_AT\-\_name}
+\livelink{chap:DWATname}{DW\_AT\_name}
 attribute
 \addtoindexx{name attribute}
 whose value is a null\dash terminated string containing the
@@ -668,10 +668,10 @@ information entry with
 \addtoindexx{imported module attribute}
 the 
 \addtoindexx{imported module entry}
-tag \livetarg{chap:DWTAGimportedmodule}{DW\-\_TAG\-\_imported\-\_module}.
+tag \livetarg{chap:DWTAGimportedmodule}{DW\_TAG\_imported\_module}.
 An
 imported module entry contains a 
-\livelink{chap:DWATimport}{DW\-\_AT\-\_import} attribute
+\livelink{chap:DWATimport}{DW\_AT\_import} attribute
 \addtoindexx{import attribute}
 whose value is a reference to the module or namespace entry
 containing the definition and/or declaration entries for
@@ -768,30 +768,30 @@ and entry
 points:
 
 \begin{tabular}{lp{9.0cm}}
-\livetarg{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram} & A subroutine or function \\
-\livelink{chap:DWTAGinlinedsubroutine}{DW\-\_TAG\-\_inlined\-\_subroutine} & A particular inlined 
+\livetarg{chap:DWTAGsubprogram}{DW\_TAG\_subprogram} & A subroutine or function \\
+\livelink{chap:DWTAGinlinedsubroutine}{DW\_TAG\_inlined\_subroutine} & A particular inlined 
 \addtoindexx{inlined subprogram entry}
 instance of a subroutine or function \\
-\livetarg{chap:DWTAGentrypoint}{DW\-\_TAG\-\_entry\-\_point} & An alternate entry point \\
+\livetarg{chap:DWTAGentrypoint}{DW\_TAG\_entry\_point} & An alternate entry point \\
 \end{tabular}
 
 \subsection{General Subroutine and Entry Point Information}
 \label{chap:generalsubroutineandentrypointinformation}
-The subroutine or entry point entry has a \livelink{chap:DWATname}{DW\-\_AT\-\_name} 
+The subroutine or entry point entry has a \livelink{chap:DWATname}{DW\_AT\_name} 
 attribute whose value is a null-terminated string containing the 
 subroutine or entry point name as it appears in the source program.
-It may also have a \livelink{chap:DWATlinkagename}{DW\-\_AT\-\_linkage\-\_name} attribute as
+It may also have a \livelink{chap:DWATlinkagename}{DW\_AT\_linkage\_name} attribute as
 described in Section \refersec{chap:linkagenames}.
 
 If the name of the subroutine described by an entry with the
 \addtoindexx{subprogram entry}
-tag \livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram}
+tag \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}
 is visible outside of its containing
 \hypertarget{chap:DWATexternalexternalsubroutine}
 compilation unit, that entry has 
 \addtoindexx{external attribute}
 a 
-\livelink{chap:DWATexternal}{DW\-\_AT\-\_external} attribute,
+\livelink{chap:DWATexternal}{DW\_AT\_external} attribute,
 which is a \livelink{chap:flag}{flag}.
 
 \textit{Additional attributes for functions that are members of a
@@ -803,7 +803,7 @@ A
 \hypertarget{chap:DWATmainsubprogrammainorstartingsubprogram}
 subroutine entry 
 may contain a 
-\livelink{chap:DWATmainsubprogram}{DW\-\_AT\-\_main\-\_subprogram}
+\livelink{chap:DWATmainsubprogram}{DW\_AT\_main\_subprogram}
 attribute 
 \addtoindexx{main subprogram attribute}
 which is 
@@ -829,22 +829,22 @@ and will therefore not be safe to call from within a debugger.
 A subroutine entry may 
 \hypertarget{chap:DWATcallingconventionsubprogramcallingconvention}
 contain a 
-\livelink{chap:DWATcallingconvention}{DW\-\_AT\-\_calling\-\_convention}
+\livelink{chap:DWATcallingconvention}{DW\_AT\_calling\_convention}
 attribute, whose value is an integer constant. The set of
 calling convention codes is given in 
 Table \refersec{tab:callingconventioncodes}.
 
 \begin{simplenametable}[1.4in]{Calling convention codes}{tab:callingconventioncodes}
-\addtoindex{DW\-\_CC\-\_normal}        \\
-\addtoindex{DW\-\_CC\-\_program}       \\
-\addtoindex{DW\-\_CC\-\_nocall}        \\
+\addtoindex{DW\_CC\_normal}        \\
+\addtoindex{DW\_CC\_program}       \\
+\addtoindex{DW\_CC\_nocall}        \\
 \end{simplenametable}
 
 If this attribute is not present, or its value is the constant
-\livetarg{chap:DWCCnormal}{DW\-\_CC\-\_normal}, then the subroutine may be safely called by
+\livetarg{chap:DWCCnormal}{DW\_CC\_normal}, then the subroutine may be safely called by
 obeying the ``standard'' calling conventions of the target
 architecture. If the value of the calling convention attribute
-is the constant \livetarg{chap:DWCCnocall}{DW\-\_CC\-\_nocall}, the subroutine does not obey
+is the constant \livetarg{chap:DWCCnocall}{DW\_CC\_nocall}, the subroutine does not obey
 standard calling conventions, and it may not be safe for the
 debugger to call this subroutine.
 
@@ -855,9 +855,9 @@ program,'' that is, subroutines that cannot be called
 directly according to the ordinary calling conventions,
 then the debugging information entry for such a subroutine
 may have a calling convention attribute whose value is the
-constant \livetarg{chap:DWCCprogram}{DW\-\_CC\-\_program}.
+constant \livetarg{chap:DWCCprogram}{DW\_CC\_program}.
 
-\textit{The \livelink{chap:DWCCprogram}{DW\-\_CC\-\_program} 
+\textit{The \livelink{chap:DWCCprogram}{DW\_CC\_program} 
 value is intended to support \addtoindex{Fortran} main
 \addtoindexx{Fortran!main program}
 programs which in some implementations may not be callable
@@ -875,7 +875,7 @@ A subroutine entry declared with a function prototype style
 declaration may have 
 \addtoindexx{prototyped attribute}
 a 
-\livelink{chap:DWATprototyped}{DW\-\_AT\-\_prototyped} attribute, which is
+\livelink{chap:DWATprototyped}{DW\_AT\_prototyped} attribute, which is
 a \livelink{chap:flag}{flag}.
 
 \textit{The \addtoindex{Fortran} 
@@ -883,7 +883,7 @@ language allows the keywords elemental, pure
 and recursive to be included as part of the declaration of
 a subroutine; these attributes reflect that usage. These
 attributes are not relevant for languages that do not support
-similar keywords or syntax. In particular, the \livelink{chap:DWATrecursive}{DW\-\_AT\-\_recursive}
+similar keywords or syntax. In particular, the \livelink{chap:DWATrecursive}{DW\_AT\_recursive}
 attribute is neither needed nor appropriate in languages such
 as \addtoindex{C} 
 where functions support recursion by default.
@@ -894,7 +894,7 @@ A subprogram entry
 may have 
 \addtoindexx{elemental attribute}
 a 
-\livelink{chap:DWATelemental}{DW\-\_AT\-\_elemental} attribute, which
+\livelink{chap:DWATelemental}{DW\_AT\_elemental} attribute, which
 is a \livelink{chap:flag}{flag}. 
 The attribute indicates whether the subroutine
 or entry point was declared with the ``elemental'' keyword
@@ -905,7 +905,7 @@ A
 subprogram entry may have 
 \addtoindexx{pure attribute}
 a 
-\livelink{chap:DWATpure}{DW\-\_AT\-\_pure} attribute, which is
+\livelink{chap:DWATpure}{DW\_AT\_pure} attribute, which is
 a \livelink{chap:flag}{flag}. 
 The attribute indicates whether the subroutine was
 declared with the ``pure'' keyword or property.
@@ -913,7 +913,7 @@ declared with the ``pure'' keyword or property.
 A 
 \hypertarget{chap:DWATrecursiverecursivepropertyofasubroutine}
 subprogram entry may have a 
-\livelink{chap:DWATrecursive}{DW\-\_AT\-\_recursive} attribute, which
+\livelink{chap:DWATrecursive}{DW\_AT\_recursive} attribute, which
 is a \livelink{chap:flag}{flag}. 
 The attribute indicates whether the subroutine
 or entry point was declared with the ``recursive'' keyword
@@ -931,7 +931,7 @@ the subroutine or entry point
 is a function that returns a
 value, then its debugging information entry has 
 \addtoindexx{type attribute}
-a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute 
+a \livelink{chap:DWATtype}{DW\_AT\_type} attribute 
 to denote the type returned by that function.
 
 \textit{Debugging information entries for 
@@ -942,8 +942,8 @@ not have an attribute for the return type.  }
 \subsection{Subroutine and Entry Point Locations}
 \label{chap:subroutineandentrypointlocations}
 
-A subroutine entry may have either a \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} and
-\livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair of attributes or a \livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} attribute
+A subroutine entry may have either a \livelink{chap:DWATlowpc}{DW\_AT\_low\_pc} and
+\livelink{chap:DWAThighpc}{DW\_AT\_high\_pc} pair of attributes or a \livelink{chap:DWATranges}{DW\_AT\_ranges} attribute
 \addtoindexx{ranges attribute}
 whose 
 \addtoindexx{high PC attribute}
@@ -959,24 +959,24 @@ A
 subroutine entry may also have 
 \addtoindexx{entry pc attribute!for subroutine}
 a 
-\livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc} attribute
+\livelink{chap:DWATentrypc}{DW\_AT\_entry\_pc} attribute
 whose value is the address of the first executable instruction
 of the subroutine (see 
 Section \refersec{chap:entryaddress}).
 
-An entry point has a \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} attribute whose value is the
+An entry point has a \livelink{chap:DWATlowpc}{DW\_AT\_low\_pc} attribute whose value is the
 relocated address of the first machine instruction generated
 for the entry point.
 
 \textit{While the 
-\livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc} attribute 
+\livelink{chap:DWATentrypc}{DW\_AT\_entry\_pc} attribute 
 \addtoindexx{entry pc attribute!for subroutine}
 might 
 also seem appropriate
 for this purpose, historically the 
-\livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} attribute
+\livelink{chap:DWATlowpc}{DW\_AT\_low\_pc} attribute
 was used before the 
-\livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc} was introduced (in
+\livelink{chap:DWATentrypc}{DW\_AT\_entry\_pc} was introduced (in
 \addtoindex{DWARF Version 3}). 
 There is insufficient reason to change this.}
 
@@ -988,9 +988,9 @@ entry
 points 
 \hypertarget{chap:DWATaddressclasssubroutineorsubroutinetype}
 may also have 
-\livelink{chap:DWATsegment}{DW\-\_AT\-\_segment} 
+\livelink{chap:DWATsegment}{DW\_AT\_segment} 
 and
-\livelink{chap:DWATaddressclass}{DW\-\_AT\-\_address\-\_class} attributes,
+\livelink{chap:DWATaddressclass}{DW\_AT\_address\_class} attributes,
 as appropriate, to specify
 which segments the code for the subroutine resides in and
 the addressing mode to be used in calling that subroutine.
@@ -1021,7 +1021,7 @@ parameter entries, such as type entries.}
 The unspecified parameters of a variable parameter list are
 represented by a debugging information entry\addtoindexx{unspecified parameters entry}
 with the tag
-\livetarg{chap:DWTAGunspecifiedparameters}{DW\-\_TAG\-\_unspecified\-\_parameters}.
+\livetarg{chap:DWTAGunspecifiedparameters}{DW\_TAG\_unspecified\_parameters}.
 
 The entry for a subroutine that includes 
 \addtoindexx{Fortran!common block}
@@ -1031,11 +1031,11 @@ a
 \livelink{chap:commonblockentry}{block}
 \addtoindexx{common block|see{Fortran common block}}
 has a child entry with the 
-tag \livetarg{chap:DWTAGcommoninclusion}{DW\-\_TAG\-\_common\-\_inclusion}. 
+tag \livetarg{chap:DWTAGcommoninclusion}{DW\_TAG\_common\_inclusion}. 
 The
 \hypertarget{chap:commonreferencecommonblockusage}
 common inclusion entry has a 
-\livelink{chap:DWATcommonreference}{DW\-\_AT\-\_common\-\_reference} attribute
+\livelink{chap:DWATcommonreference}{DW\_AT\_common\_reference} attribute
 whose value is a reference to the debugging information entry
 for the common \nolink{block} being included 
 (see Section \refersec{chap:commonblockentries}).
@@ -1048,7 +1048,7 @@ A
 subroutine or entry point entry may have 
 \addtoindexx{return address attribute}
 a 
-\livelink{chap:DWATreturnaddr}{DW\-\_AT\-\_return\-\_addr}
+\livelink{chap:DWATreturnaddr}{DW\_AT\_return\_addr}
 attribute, whose value is a location description. The location
 calculated is the place where the return address for the
 subroutine or entry point is stored.
@@ -1058,7 +1058,7 @@ A
 subroutine or entry point entry may also have 
 \addtoindexx{frame base attribute}
 a
-\livelink{chap:DWATframebase}{DW\-\_AT\-\_frame\-\_base} attribute, whose value is a location
+\livelink{chap:DWATframebase}{DW\_AT\_frame\_base} attribute, whose value is a location
 description that computes the \doublequote{frame base} for the
 subroutine or entry point. If the location description is
 a simple register location description, the given register
@@ -1069,30 +1069,30 @@ is the frame base address. Finally, for a
 this interpretation applies to each location description
 contained in the list of \addtoindex{location list} entries.
 
-\textit{The use of one of the \livelink{chap:DWOPreg}{DW\-\_OP\-\_reg}~\textless~n~\textgreater 
+\textit{The use of one of the \livelink{chap:DWOPreg}{DW\_OP\_reg}~\textless~n~\textgreater 
 operations in this
 context is equivalent to using 
-\livelink{chap:DWOPbreg}{DW\-\_OP\-\_breg}~\textless~n~\textgreater(0) 
+\livelink{chap:DWOPbreg}{DW\_OP\_breg}~\textless~n~\textgreater(0) 
 but more
 compact. However, these are not equivalent in general.}
 
 \needlines{5}
 \textit{The frame base for a procedure is typically an address fixed
 relative to the first unit of storage allocated for the
-procedure\textquoteright s stack frame. The \livelink{chap:DWATframebase}{DW\-\_AT\-\_frame\-\_base} attribute
+procedure\textquoteright s stack frame. The \livelink{chap:DWATframebase}{DW\_AT\_frame\_base} attribute
 can be used in several ways:}
 \begin{enumerate}[1. ]
 \item \textit{In procedures that need 
 \addtoindexx{location list}
 location lists to locate local
-variables, the \livelink{chap:DWATframebase}{DW\-\_AT\-\_frame\-\_base} can hold the needed location
+variables, the \livelink{chap:DWATframebase}{DW\_AT\_frame\_base} can hold the needed location
 list, while all variables\textquoteright\  location descriptions can be
 simpler ones involving the frame base.}
 
 \item \textit{It can be used in resolving ``up\dash level'' addressing
 within nested routines. 
-(See also \livelink{chap:DWATstaticlink}{DW\-\_AT\-\_static\-\_link}, below)}
-%The -See also- here is ok, the DW\-\_AT should be
+(See also \livelink{chap:DWATstaticlink}{DW\_AT\_static\_link}, below)}
+%The -See also- here is ok, the DW\_AT should be
 %a hyperref to the def itself, which is earlier in this document.
 \end{enumerate}
 
@@ -1100,7 +1100,7 @@ within nested routines.
 \textit{Some languages support nested subroutines. In such languages,
 it is possible to reference the local variables of an
 outer subroutine from within an inner subroutine. The
-\livelink{chap:DWATstaticlink}{DW\-\_AT\-\_static\-\_link} and \livelink{chap:DWATframebase}{DW\-\_AT\-\_frame\-\_base} attributes allow
+\livelink{chap:DWATstaticlink}{DW\_AT\_static\_link} and \livelink{chap:DWATframebase}{DW\_AT\_frame\_base} attributes allow
 debuggers to support this same kind of referencing.}
 
 If 
@@ -1109,14 +1109,14 @@ a
 \addtoindexx{address!uplevel|see {static link attribute}}
 \addtoindexx{uplevel address|see {static link attribute}}
 subroutine or entry point is nested, it may have a
-\livelink{chap:DWATstaticlink}{DW\-\_AT\-\_static\-\_link}
+\livelink{chap:DWATstaticlink}{DW\_AT\_static\_link}
 attribute, whose value is a location
 description that computes the frame base of the relevant
 instance of the subroutine that immediately encloses the
 subroutine or entry point.
 
 In the context of supporting nested subroutines, the
-\livelink{chap:DWATframebase}{DW\-\_AT\-\_frame\-\_base} attribute value should obey the following
+\livelink{chap:DWATframebase}{DW\_AT\_frame\_base} attribute value should obey the following
 constraints:
 
 \begin{enumerate}[1. ]
@@ -1124,7 +1124,7 @@ constraints:
 life of the procedure, and
 
 \item The computed value should be unique among instances of
-the same subroutine. (For typical \livelink{chap:DWATframebase}{DW\-\_AT\-\_frame\-\_base} use, this
+the same subroutine. (For typical \livelink{chap:DWATframebase}{DW\_AT\_frame\_base} use, this
 means that a recursive subroutine\textquoteright s stack frame must have
 non\dash zero size.)
 \end{enumerate}
@@ -1132,7 +1132,7 @@ non\dash zero size.)
 \textit{If a debugger is attempting to resolve an up\dash level reference
 to a variable, it uses the nesting structure of DWARF to
 determine which subroutine is the lexical parent and the
-\livelink{chap:DWATstaticlink}{DW\-\_AT\-\_static\-\_link} value to identify the appropriate active
+\livelink{chap:DWATstaticlink}{DW\_AT\_static\_link} value to identify the appropriate active
 frame of the parent. It can then attempt to find the reference
 within the context of the parent.}
 
@@ -1152,12 +1152,12 @@ exception of one or more types, each such type is
 represented by a debugging information entry with 
 \addtoindexx{thrown type entry}
 the tag
-\livetarg{chap:DWTAGthrowntype}{DW\-\_TAG\-\_thrown\-\_type}.  
+\livetarg{chap:DWTAGthrowntype}{DW\_TAG\_thrown\_type}.  
 Each such entry is a child of the entry
 representing the subroutine that may throw this type. Each
 thrown type entry contains 
 \addtoindexx{type attribute}
-a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute, whose
+a \livelink{chap:DWATtype}{DW\_AT\_type} attribute, whose
 value is a reference to an entry describing the type of the
 exception that may be thrown.
 
@@ -1172,7 +1172,7 @@ template definition, but does represent each instantiation.}
 A \addtoindex{template instantiation} is represented by a debugging
 information entry with the 
 \addtoindexx{subprogram entry!use for template instantiation}
-tag \livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram}. 
+tag \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}. 
 With four
 exceptions, such an entry will contain the same attributes and
 will have the same types of child entries as would an entry
@@ -1184,9 +1184,9 @@ types. The exceptions are:
 template definition is represented by a debugging information
 entry with the 
 \addtoindexx{template type parameter entry}
-tag \livetarg{chap:DWTAGtemplatetypeparameter}{DW\-\_TAG\-\_template\-\_type\-\_parameter}. 
+tag \livetarg{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}. 
 Each
-such entry has a \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute, 
+such entry has a \livelink{chap:DWATname}{DW\_AT\_name} attribute, 
 \addtoindexx{name attribute}
 whose value is a
 null\dash terminated string containing the name of the formal
@@ -1194,7 +1194,7 @@ type parameter as it appears in the source program. The
 \addtoindexx{formal type parameter|see{template type parameter entry}}
 template type parameter entry also has 
 \addtoindexx{type attribute}
-a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute
+a \livelink{chap:DWATtype}{DW\_AT\_type} attribute
 describing the actual type by which the formal is replaced
 for this instantiation.
 
@@ -1222,7 +1222,7 @@ artificially by the compiler for this instantiation.
 A declaration or a definition of an inlinable subroutine
 is represented by a debugging information entry with the
 tag 
-\livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram}.
+\livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}.
 The entry for a 
 \addtoindexx{subprogram entry!use in inlined subprogram}
 subroutine that is
@@ -1231,8 +1231,8 @@ explicitly declared to be available for inline expansion or
 that was expanded inline implicitly by the compiler has 
 \addtoindexx{inline attribute}
 a
-\livelink{chap:DWATinline}{DW\-\_AT\-\_inline} attribute whose value is an integer constant. The
-set of values for the \livelink{chap:DWATinline}{DW\-\_AT\-\_inline} attribute is given in
+\livelink{chap:DWATinline}{DW\_AT\_inline} attribute whose value is an integer constant. The
+set of values for the \livelink{chap:DWATinline}{DW\_AT\_inline} attribute is given in
 Table \refersec{tab:inlinecodes}.
 
 \begin{table}[here]
@@ -1242,13 +1242,13 @@ Table \refersec{tab:inlinecodes}.
 \begin{tabular}{l|p{8cm}}
 \hline
 Name&Meaning\\ \hline
-\livetarg{chap:DWINLnotinlined}{DW\-\_INL\-\_not\-\_inlined} & Not declared inline nor inlined by the
+\livetarg{chap:DWINLnotinlined}{DW\_INL\_not\_inlined} & Not declared inline nor inlined by the
   \mbox{compiler} (equivalent to the absence of the
-  containing \livelink{chap:DWATinline}{DW\-\_AT\-\_inline} attribute) \\
-\livetarg{chap:DWINLinlined}{DW\-\_INL\-\_inlined} & Not declared inline but inlined by the \mbox{compiler} \\
-\livetarg{chap:DWINLdeclarednotinlined}{DW\-\_INL\-\_declared\-\_not\-\_inlined} & Declared inline but 
+  containing \livelink{chap:DWATinline}{DW\_AT\_inline} attribute) \\
+\livetarg{chap:DWINLinlined}{DW\_INL\_inlined} & Not declared inline but inlined by the \mbox{compiler} \\
+\livetarg{chap:DWINLdeclarednotinlined}{DW\_INL\_declared\_not\_inlined} & Declared inline but 
   not inlined by the \mbox{compiler} \\
-\livetarg{chap:DWINLdeclaredinlined}{DW\-\_INL\-\_declared\-\_inlined} & Declared inline and inlined by the 
+\livetarg{chap:DWINLdeclaredinlined}{DW\_INL\_declared\_inlined} & Declared inline and inlined by the 
   \mbox{compiler} \\
 \hline
 \end{tabular}
@@ -1257,8 +1257,8 @@ Name&Meaning\\ \hline
 \textit{In \addtoindex{C++}, a function or a constructor declared with
 constexpr is implicitly declared inline. The abstract inline
 instance (see below) is represented by a debugging information
-entry with the tag \livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram}. Such an entry has a
-\livelink{chap:DWATinline}{DW\-\_AT\-\_inline} attribute whose value is \livelink{chap:DWINLinlined}{DW\-\_INL\-\_inlined}.}
+entry with the tag \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}. Such an entry has a
+\livelink{chap:DWATinline}{DW\_AT\_inline} attribute whose value is \livelink{chap:DWINLinlined}{DW\_INL\_inlined}.}
 
 
 \subsubsection{Abstract Instances}
@@ -1267,14 +1267,14 @@ Any debugging information entry that is owned (either
 \hypertarget{chap:DWATinlineabstracttinstance}
 directly or indirectly) by a debugging information entry
 that contains the 
-\livelink{chap:DWATinline}{DW\-\_AT\-\_inline} attribute is referred to
+\livelink{chap:DWATinline}{DW\_AT\_inline} attribute is referred to
 \addtoindexx{abstract instance!entry}
 as an ``abstract instance entry.'' 
 Any subroutine entry
 that contains 
 \addtoindexx{inline attribute}
-a \livelink{chap:DWATinline}{DW\-\_AT\-\_inline} attribute whose value is other
-than \livelink{chap:DWINLnotinlined}{DW\-\_INL\-\_not\-\_inlined}
+a \livelink{chap:DWATinline}{DW\_AT\_inline} attribute whose value is other
+than \livelink{chap:DWINLnotinlined}{DW\_INL\_not\_inlined}
 is known as 
 \addtoindexx{abstract instance!root}
 an ``abstract instance root.'' 
@@ -1294,7 +1294,7 @@ Each abstract instance root is either part of a larger
 tree (which gives a context for the root) or 
 \addtoindexx{specification attribute}
 uses
-\livelink{chap:DWATspecification}{DW\-\_AT\-\_specification} 
+\livelink{chap:DWATspecification}{DW\_AT\_specification} 
 to refer to the declaration in context.
 
 \textit{For example, in \addtoindex{C++} the context might be a namespace
@@ -1309,15 +1309,15 @@ instance tree should not contain any attributes which describe
 aspects of the subroutine which vary between distinct inlined
 expansions or distinct out\dash of\dash line expansions. For example,
 \addtoindexx{entry pc attribute!and abstract instance}
-the \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc},
-\livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc}, 
-\livelink{chap:DWATranges}{DW\-\_AT\-\_ranges}, 
-\livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc}, 
-\livelink{chap:DWATlocation}{DW\-\_AT\-\_location},
-\livelink{chap:DWATreturnaddr}{DW\-\_AT\-\_return\-\_addr}, 
-\livelink{chap:DWATstartscope}{DW\-\_AT\-\_start\-\_scope}, 
+the \livelink{chap:DWATlowpc}{DW\_AT\_low\_pc},
+\livelink{chap:DWAThighpc}{DW\_AT\_high\_pc}, 
+\livelink{chap:DWATranges}{DW\_AT\_ranges}, 
+\livelink{chap:DWATentrypc}{DW\_AT\_entry\_pc}, 
+\livelink{chap:DWATlocation}{DW\_AT\_location},
+\livelink{chap:DWATreturnaddr}{DW\_AT\_return\_addr}, 
+\livelink{chap:DWATstartscope}{DW\_AT\_start\_scope}, 
 and 
-\livelink{chap:DWATsegment}{DW\-\_AT\-\_segment}
+\livelink{chap:DWATsegment}{DW\_AT\_segment}
 attributes 
 \addtoindexx{location attribute!and abstract instance}
 typically 
@@ -1359,14 +1359,14 @@ or not a given entry is abstract.
 
 Each inline expansion of a subroutine is represented
 by a debugging information entry with the 
-tag \livetarg{chap:DWTAGinlinedsubroutine}{DW\-\_TAG\-\_inlined\-\_subroutine}. 
+tag \livetarg{chap:DWTAGinlinedsubroutine}{DW\_TAG\_inlined\_subroutine}. 
 Each such entry should be a direct
 child of the entry that represents the scope within which
 the inlining occurs.
 
 Each inlined subroutine entry may have either a 
-\livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc}
-and \livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair 
+\livelink{chap:DWATlowpc}{DW\_AT\_low\_pc}
+and \livelink{chap:DWAThighpc}{DW\_AT\_high\_pc} pair 
 of 
 \addtoindexx{high PC attribute}
 attributes 
@@ -1374,7 +1374,7 @@ attributes
 or 
 \addtoindexx{ranges attribute}
 a 
-\livelink{chap:DWATranges}{DW\-\_AT\-\_ranges}
+\livelink{chap:DWATranges}{DW\_AT\_ranges}
 attribute whose values encode the contiguous or non\dash contiguous
 address ranges, respectively, of the machine instructions
 generated for the inlined subroutine (see 
@@ -1388,7 +1388,7 @@ also
 contain 
 \addtoindexx{entry pc attribute!for inlined subprogram}
 a 
-\livelink{chap:DWATentrypc}{DW\-\_AT\-\_entry\-\_pc}
+\livelink{chap:DWATentrypc}{DW\_AT\_entry\_pc}
 attribute, representing the first executable instruction of
 the inline expansion (see 
 Section \refersec{chap:entryaddress}).
@@ -1400,8 +1400,8 @@ subroutine
 \hypertarget{chap:DWATcallcolumncolumnpositionofinlinedsubroutinecall}
 entry 
 \hypertarget{chap:DWATcallfilefilecontaininginlinedsubroutinecall}
-may also have \livelink{chap:DWATcallfile}{DW\-\_AT\-\_call\-\_file},
-\livelink{chap:DWATcallline}{DW\-\_AT\-\_call\-\_line} and \livelink{chap:DWATcallcolumn}{DW\-\_AT\-\_call\-\_column} attributes, 
+may also have \livelink{chap:DWATcallfile}{DW\_AT\_call\_file},
+\livelink{chap:DWATcallline}{DW\_AT\_call\_line} and \livelink{chap:DWATcallcolumn}{DW\_AT\_call\_column} attributes, 
 each of whose
 value is an integer constant. These attributes represent the
 source file, source line number, and source column number,
@@ -1420,11 +1420,11 @@ was inlined, rather they describe the coordinates of the call.
 An inlined subroutine entry 
 \hypertarget{chap:DWATconstexprcompiletimeconstantfunction}
 may have a 
-\livelink{chap:DWATconstexpr}{DW\-\_AT\-\_const\-\_expr}
+\livelink{chap:DWATconstexpr}{DW\_AT\_const\_expr}
 attribute, which is a \livelink{chap:flag}{flag} 
 whose presence indicates that the
 subroutine has been evaluated as a compile\dash time constant. Such
-an entry may also have a \livelink{chap:DWATconstvalue}{DW\-\_AT\-\_const\-\_value} attribute,
+an entry may also have a \livelink{chap:DWATconstvalue}{DW\_AT\_const\_value} attribute,
 whose value may be of any form that is appropriate for the
 representation of the subroutine's return value. The value of
 this attribute is the actual return value of the subroutine,
@@ -1433,16 +1433,16 @@ represented as it would be on the target architecture.
 \textit{In \addtoindex{C++}, if a function or a constructor declared with constexpr
 is called with constant expressions, then the corresponding
 concrete inlined instance has a 
-\livelink{chap:DWATconstexpr}{DW\-\_AT\-\_const\-\_expr} attribute,
-as well as a \livelink{chap:DWATconstvalue}{DW\-\_AT\-\_const\-\_value} attribute whose value represents
+\livelink{chap:DWATconstexpr}{DW\_AT\_const\_expr} attribute,
+as well as a \livelink{chap:DWATconstvalue}{DW\_AT\_const\_value} attribute whose value represents
 the actual return value of the concrete inlined instance.}
 
 Any debugging information entry that is owned (either
 directly or indirectly) by a debugging information entry
-with the tag \livelink{chap:DWTAGinlinedsubroutine}{DW\-\_TAG\-\_inlined\-\_subroutine} is referred to as a
+with the tag \livelink{chap:DWTAGinlinedsubroutine}{DW\_TAG\_inlined\_subroutine} is referred to as a
 ``concrete inlined instance entry.'' Any entry that has
 the tag 
-\livelink{chap:DWTAGinlinedsubroutine}{DW\-\_TAG\-\_inlined\-\_subroutine} 
+\livelink{chap:DWTAGinlinedsubroutine}{DW\_TAG\_inlined\_subroutine} 
 is known as a ``concrete inlined instance root.'' 
 Any set of concrete inlined instance
 entries that are all children (either directly or indirectly)
@@ -1475,7 +1475,7 @@ abstract instance). In place of these omitted attributes, each
 concrete inlined instance entry 
 \addtoindexx{abstract origin attribute}
 has a 
-\livelink{chap:DWATabstractorigin}{DW\-\_AT\-\_abstract\-\_origin}
+\livelink{chap:DWATabstractorigin}{DW\_AT\_abstract\_origin}
 attribute that may be used to obtain the missing information
 (indirectly) from the associated abstract instance entry. The
 value of the abstract origin attribute is a reference to the
@@ -1494,14 +1494,14 @@ origin attribute.
 
 For each pair of entries that are associated via a
 \addtoindexx{abstract origin attribute}
-\livelink{chap:DWATabstractorigin}{DW\-\_AT\-\_abstract\-\_origin} attribute, both members of the pair
+\livelink{chap:DWATabstractorigin}{DW\_AT\_abstract\_origin} attribute, both members of the pair
 have the same tag. So, for example, an entry with the tag
-\livelink{chap:DWTAGvariable}{DW\-\_TAG\-\_variable} can only be associated with another entry
-that also has the tag \livelink{chap:DWTAGvariable}{DW\-\_TAG\-\_variable}. The only exception
+\livelink{chap:DWTAGvariable}{DW\_TAG\_variable} can only be associated with another entry
+that also has the tag \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}. The only exception
 to this rule is that the root of a concrete instance tree
-(which must always have the tag \livelink{chap:DWTAGinlinedsubroutine}{DW\-\_TAG\-\_inlined\-\_subroutine})
+(which must always have the tag \livelink{chap:DWTAGinlinedsubroutine}{DW\_TAG\_inlined\_subroutine})
 can only be associated with the root of its associated abstract
-instance tree (which must have the tag \livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram}).
+instance tree (which must have the tag \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}).
 
 In general, the structure and content of any given concrete
 inlined instance tree will be closely analogous to the
@@ -1512,7 +1512,7 @@ tree. There are a few exceptions:
 \item An entry in the concrete instance tree may be omitted if
 it contains only a 
 \addtoindexx{abstract origin attribute}
-\livelink{chap:DWATabstractorigin}{DW\-\_AT\-\_abstract\-\_origin} attribute and either
+\livelink{chap:DWATabstractorigin}{DW\_AT\_abstract\_origin} attribute and either
 has no children, or its children are omitted. Such entries
 would provide no useful information. In C\dash like languages,
 such entries frequently include types, including structure,
@@ -1524,7 +1524,7 @@ the reference should refer to the abstract instance entry.
 
 \item Entries in the concrete instance tree which are associated
 with entries in the abstract instance tree such that neither
-has a \livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute,
+has a \livelink{chap:DWATname}{DW\_AT\_name} attribute,
 \addtoindexx{name attribute}
 and neither is referenced by
 any other debugging information entry, may be omitted. This
@@ -1543,7 +1543,7 @@ to describe new entities that are specific to a particular
 inlined expansion. In that case, they will not have associated
 entries in the abstract instance tree, should not contain
 \addtoindexx{abstract origin attribute}
-\livelink{chap:DWATabstractorigin}{DW\-\_AT\-\_abstract\-\_origin} attributes, and must contain all their
+\livelink{chap:DWATabstractorigin}{DW\_AT\_abstract\_origin} attributes, and must contain all their
 own attributes directly. This allows an abstract instance tree
 to omit debugging information entries for anonymous entities
 that are unlikely to be needed in most inlined expansions. In
@@ -1576,7 +1576,7 @@ out\dash of\dash line
 instance 
 \hypertarget{chap:DWATabstractoriginoutoflineinstance}
 makes use of 
-\livelink{chap:DWATabstractorigin}{DW\-\_AT\-\_abstract\-\_origin}
+\livelink{chap:DWATabstractorigin}{DW\_AT\_abstract\_origin}
 attributes in exactly the same way as they are used for
 a concrete inlined instance (that is, as references to
 corresponding entries within the associated abstract instance
@@ -1591,7 +1591,7 @@ subroutine are as follows:
 \item  The root entry for a concrete out\dash of\dash line instance
 of a given inlined subroutine has the same tag as does its
 associated (abstract) inlined subroutine entry (that is, tag
-\livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram} rather than \livelink{chap:DWTAGinlinedsubroutine}{DW\-\_TAG\-\_inlined\-\_subroutine}).
+\livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram} rather than \livelink{chap:DWTAGinlinedsubroutine}{DW\_TAG\_inlined\_subroutine}).
 
 \item The root entry for a concrete out\dash of\dash line instance tree
 is normally owned by the same parent entry that also owns
@@ -1665,15 +1665,15 @@ to the combined calling and called execution contexts.}
 
 A trampoline is represented by a debugging information entry
 \addtoindexx{trampoline (subprogam) entry}
-with the tag \livelink{chap:DWTAGsubprogram}{DW\-\_TAG\-\_subprogram} or \livelink{chap:DWTAGinlinedsubroutine}{DW\-\_TAG\-\_inlined\-\_subroutine}
+with the tag \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram} or \livelink{chap:DWTAGinlinedsubroutine}{DW\_TAG\_inlined\_subroutine}
 that has 
 \addtoindexx{trampoline attribute}
-a \livelink{chap:DWATtrampoline}{DW\-\_AT\-\_trampoline} attribute. 
+a \livelink{chap:DWATtrampoline}{DW\_AT\_trampoline} attribute. 
 The value of that
 attribute indicates the target subroutine of the trampoline,
 that is, the subroutine to which the trampoline passes
 control. (A trampoline entry may but need not also have a
-\livelink{chap:DWATartificial}{DW\-\_AT\-\_artificial} attribute.)
+\livelink{chap:DWATartificial}{DW\_AT\_artificial} attribute.)
 
 \needlines{5}
 The value of the trampoline attribute may be represented
@@ -1745,18 +1745,18 @@ that may contain any number of declarations. In some languages
 % We do not need to link to the preceding paragraph.
 A lexical \nolink{block} is represented by a debugging information
 entry with the 
-tag \livetarg{chap:DWTAGlexicalblock}{DW\-\_TAG\-\_lexical\-\_block}.
+tag \livetarg{chap:DWTAGlexicalblock}{DW\_TAG\_lexical\_block}.
 
 The lexical \livetargi{chap:lexicalblockentry}{block}{lexical block entry} 
 entry may have 
-either a \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} and
-\livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair of 
+either a \livelink{chap:DWATlowpc}{DW\_AT\_low\_pc} and
+\livelink{chap:DWAThighpc}{DW\_AT\_high\_pc} pair of 
 attributes 
 \addtoindexx{high PC attribute}
 or 
 \addtoindexx{low PC attribute}
 a 
-\livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} attribute
+\livelink{chap:DWATranges}{DW\_AT\_ranges} attribute
 \addtoindexx{ranges attribute}
 whose values encode the contiguous or non-contiguous address
 ranges, respectively, of the machine instructions generated
@@ -1768,7 +1768,7 @@ lexical \nolink{block}
 in the source
 program, then the corresponding 
 lexical \nolink{block} entry has a
-\livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute whose 
+\livelink{chap:DWATname}{DW\_AT\_name} attribute whose 
 \addtoindexx{name attribute}
 value is a null\dash terminated string
 containing the name of the lexical \nolink{block} 
@@ -1795,17 +1795,17 @@ statements.
 A label is represented by a debugging information entry with
 \addtoindexx{label entry}
 the 
-tag \livetarg{chap:DWTAGlabel}{DW\-\_TAG\-\_label}. 
+tag \livetarg{chap:DWTAGlabel}{DW\_TAG\_label}. 
 The entry for a label should be owned by
 the debugging information entry representing the scope within
 which the name of the label could be legally referenced within
 the source program.
 
-The label entry has a \livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} attribute whose value
+The label entry has a \livelink{chap:DWATlowpc}{DW\_AT\_low\_pc} attribute whose value
 is the relocated address of the first machine instruction
 generated for the statement identified by the label in
 the source program.  The label entry also has a 
-\livelink{chap:DWATname}{DW\-\_AT\-\_name} attribute 
+\livelink{chap:DWATname}{DW\_AT\_name} attribute 
 \addtoindexx{name attribute}
 whose value is a null-terminated string containing
 the name of the label as it appears in the source program.
@@ -1824,15 +1824,15 @@ record variable.}
 
 A with statement is represented by a
 \addtoindexi{debugging information entry}{with statement entry}
-with the tag \livetarg{chap:DWTAGwithstmt}{DW\-\_TAG\-\_with\-\_stmt}.
+with the tag \livetarg{chap:DWTAGwithstmt}{DW\_TAG\_with\_stmt}.
 
 A with statement entry may have either a 
-\livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} and
-\livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair of attributes 
+\livelink{chap:DWATlowpc}{DW\_AT\_low\_pc} and
+\livelink{chap:DWAThighpc}{DW\_AT\_high\_pc} pair of attributes 
 \addtoindexx{high PC attribute}
 or 
 \addtoindexx{low PC attribute}
-a \livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} attribute
+a \livelink{chap:DWATranges}{DW\_AT\_ranges} attribute
 \addtoindexx{ranges attribute}
 whose values encode the contiguous or non\dash contiguous address
 ranges, respectively, of the machine instructions generated
@@ -1841,11 +1841,11 @@ for the with statement
 
 The with statement entry has 
 \addtoindexx{type attribute}
-a \livelink{chap:DWATtype}{DW\-\_AT\-\_type} attribute, denoting
+a \livelink{chap:DWATtype}{DW\_AT\_type} attribute, denoting
 the type of record whose fields may be referenced without full
 qualification within the body of the statement. It also has
 \addtoindexx{location attribute}
-a \livelink{chap:DWATlocation}{DW\-\_AT\-\_location} attribute, describing how to find the base
+a \livelink{chap:DWATlocation}{DW\_AT\_location} attribute, describing how to find the base
 address of the record object referenced within the body of
 the with statement.
 
@@ -1865,21 +1865,21 @@ can handle.}
 A try \livetargi{chap:tryblock}{block}{try block} is represented 
 by a debugging information entry
 \addtoindexx{try block entry}
-with the tag \livetarg{chap:DWTAGtryblock}{DW\-\_TAG\-\_try\-\_block}.  
+with the tag \livetarg{chap:DWTAGtryblock}{DW\_TAG\_try\_block}.  
 A catch \livelink{chap:catchblock}{block} is represented by
 a debugging information entry with 
 \addtoindexx{catch block entry}
-the tag \livetarg{chap:DWTAGcatchblock}{DW\-\_TAG\-\_catch\-\_block}.
+the tag \livetarg{chap:DWTAGcatchblock}{DW\_TAG\_catch\_block}.
 
 % nolink as we have links just above and do not have a combo link for both
 Both try and catch \nolink{block} entries may have either a
-\livelink{chap:DWATlowpc}{DW\-\_AT\-\_low\-\_pc} and 
-\livelink{chap:DWAThighpc}{DW\-\_AT\-\_high\-\_pc} pair of attributes 
+\livelink{chap:DWATlowpc}{DW\_AT\_low\_pc} and 
+\livelink{chap:DWAThighpc}{DW\_AT\_high\_pc} pair of attributes 
 \addtoindexx{high PC attribute}
 or 
 \addtoindexx{low PC attribute}
 a
-\livelink{chap:DWATranges}{DW\-\_AT\-\_ranges} attribute 
+\livelink{chap:DWATranges}{DW\_AT\_ranges} attribute 
 \addtoindexx{ranges attribute}
 whose values encode the contiguous
 or non\dash contiguous address ranges, respectively, of the
@@ -1896,8 +1896,8 @@ This child entry has one of
 the 
 \addtoindexx{unspecified parameters entry!in catch block}
 tags
-\livelink{chap:DWTAGformalparameter}{DW\-\_TAG\-\_formal\-\_parameter} or
-\livelink{chap:DWTAGunspecifiedparameters}{DW\-\_TAG\-\_unspecified\-\_parameters},
+\livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter} or
+\livelink{chap:DWTAGunspecifiedparameters}{DW\_TAG\_unspecified\_parameters},
 and will have the same form as other parameter entries.
 
 The siblings immediately following 
