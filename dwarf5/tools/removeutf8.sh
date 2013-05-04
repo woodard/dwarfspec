@@ -1,8 +1,9 @@
 
 m() {
-    python charfix.py  ../latexdoc/$1
+    python removeutf8.py  ../latexdoc/$1
     mv ../latexdoc/$1.out ../latexdoc/$1
 }
+m dataobject.tex	       
 m attributesbytag.tex	       
 m foreword4.1.tex 
 m compression.tex		       
