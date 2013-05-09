@@ -1898,12 +1898,12 @@ a
 a \livelink{chap:flag}{flag}.
 
 Each debugging information entry owned by a subroutine
-type entry has a tag whose value has one of two possible
-interpretations:
+type entry correspond to either a formal parameter or the sequence of
+unspecified parameters of the subprogram type:
 
 \begin{enumerate}[1. ]
-\item The formal parameters of a parameter list (that have a
-specific type) are represented by a debugging information entry
+\item A formal parameter of a parameter list (that has a
+specific type) is represented by a debugging information entry
 with the tag \livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter}. 
 Each formal parameter
 entry has 
@@ -1914,7 +1914,7 @@ the formal parameter.
 \item The unspecified parameters of a variable parameter list
 \addtoindexx{unspecified parameters entry}
 are 
-\addtoindexx{... parameters|see{unspecified parameters entry}}
+\addtoindexx{\texttt{...} parameters|see{unspecified parameters entry}}
 represented by a debugging information entry with the
 tag \livelink{chap:DWTAGunspecifiedparameters}{DW\_TAG\_unspecified\_parameters}.
 \end{enumerate}
@@ -2109,17 +2109,20 @@ If the upper bound and count are missing, then the upper bound value is
 \textit{unknown}.\addtoindexx{upper bound attribute!default unknown}
 
 If the subrange entry has no type attribute describing the
-basis type, the basis type is assumed to be the same as
-the object described by the lower bound attribute (if it
-references an object). If there is no lower bound attribute,
-or that attribute does not reference an object, the basis type
-is the type of the upper bound or \addtoindex{count attribute}
-(if either
-of them references an object). If there is no upper bound or
-count attribute, or neither references an object, the type is
+basis type, the basis type is determined as follows:
+\begin{enumerate}[1. ]
+\item
+If there is a lower bound attribute that references an object,
+the basis type is assumed to be the same as the type of that object.
+\item
+Otherwise, if there is an upper bound or count attribute that references
+an object, the basis type is assumed to be the same as the type of that object.
+\item
+Otherwise, the type is
 assumed to be the same type, in the source language of the
 compilation unit containing the subrange entry, as a signed
 integer with the same size as an address on the target machine.
+\end{enumerate}
 
 If the subrange type occurs as the description of a dimension
 of an array type, and the stride for that dimension is
@@ -2174,11 +2177,9 @@ attribute, whose value is a reference to a debugging
 information entry for the class or structure to whose members
 objects of this type may point.
 
-The 
+The \addtoindex{pointer to member entry} 
 \hypertarget{chap:DWATuselocationmemberlocationforpointertomembertype}
-has 
-\addtoindex{pointer to member entry} 
-a 
+has a 
 \livelink{chap:DWATuselocation}{DW\_AT\_use\_location} attribute
 \addtoindexx{use location attribute}
 whose value is a 
@@ -2209,6 +2210,7 @@ is the base address of the
 entire structure or union instance containing the member
 whose address is being calculated.
 
+\needlines{6}
 \textit{For an expression such as}
 
 \begin{lstlisting}[numbers=none]

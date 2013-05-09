@@ -23,12 +23,12 @@ The labels denoting the beginning and end of the reserved
 value range for vendor specific extensions consist of the
 appropriate prefix (DW\_TAG, DW\_AT, DW\_END, DW\_ATE, DW\_OP,
 DW\_LANG, DW\_LNE, DW\_CC or DW\_CFA respectively) followed by
+\livetarg{chap:DWXXXlohiuser}
 \_lo\_user or \_hi\_user. 
 \textit{For example, for entry tags, the special
-labels are \livetarg{chap:DWTAGlouser}{DW\_TAG\_lo\_user} and 
-\livetarg{chap:DWTAGhiuser}{DW\_TAG\_hi\_user}.}
-Values in the
-range between \textit{prefix}\_lo\_user and \textit{prefix}\_hi\_user inclusive,
+labels are DW\_TAG\_lo\_user and DW\_TAG\_hi\_user.}
+Values in the  range between \textit{prefix}\_lo\_user 
+and \textit{prefix}\_hi\_user inclusive,
 are reserved for vendor specific extensions. Vendors may
 use values in this range without conflicting with current or
 future system\dash defined values. All other values are reserved
@@ -93,18 +93,18 @@ not appear in DWARF debugging information.
 \label{datarep:initiallengthvalues}
 \addtoindexx{reserved values!initial length}
 
-An \addtoindex{initial length field} is one of the length fields that occur
+An \livetarg{datarep:initiallengthvalues}{initial length field} is one of the length fields that occur
 at the beginning 
 of those DWARF sections that 
 have a header
-(\addtoindex{.debug\_aranges}, 
-\addtoindex{.debug\_info}, 
-\addtoindex{.debug\_types}, 
-\addtoindex{.debug\_line},
-\addtoindex{.debug\_pubnames}, and 
-\addtoindex{.debug\_pubtypes}) or the length field
+(\dotdebugaranges{}, 
+\dotdebuginfo{}, 
+\dotdebugtypes{}, 
+\dotdebugline{},
+\dotdebugpubnames{}, and 
+\dotdebugpubtypes{}) or the length field
 that occurs at the beginning of the CIE and FDE structures
-in the \addtoindex{.debug\_frame} section.
+in the \dotdebugframe{} section.
 
 In an \addtoindex{initial length field}, the values \wfffffffzero through
 \wffffffff are reserved by DWARF to indicate some form of
@@ -136,7 +136,7 @@ is available in the run\dash time linker\textquoteright s data structures.}
 
 \section{32-Bit and 64-Bit DWARF Formats}
 \label{datarep:32bitand64bitdwarfformats}
-
+\hypertarget{datarep:xxbitdwffmt}{}
 \addtoindexx{32-bit DWARF format}
 \addtoindexx{64-bit DWARF format}
 There are two closely related file formats. In the 32\dash bit DWARF
@@ -175,7 +175,8 @@ represented as an unsigned 64\dash bit integer.
 detect that a DWARF section contribution is using the 64\dash bit
 format and to adapt its processing accordingly.}
 
-\item Section offset and section length 
+\item Section offset and section length
+\hypertarget{datarep:sectionoffsetlength}{} 
 \addtoindexx{section length!use in headers}
 fields that occur
 \addtoindexx{section offset!use in headers}
@@ -196,30 +197,30 @@ unsigned integer values.
 \begin{center}
 \begin{tabular}{lll}
 Section &Name & Role  \\ \hline
-\addtoindex{.debug\_aranges} & \addtoindex{debug\_info\_offset} & offset in \addtoindex{.debug\_info} \\
-\addtoindex{.debug\_frame}/CIE & \addtoindex{CIE\_id} & CIE distinguished value \\
-\addtoindex{.debug\_frame}/FDE & \addtoindex{CIE\_pointer} & offset in \addtoindex{.debug\_frame} \\
-\addtoindex{.debug\_info} & \addtoindex{debug\_abbrev\_offset} & offset in \addtoindex{.debug\_abbrev} \\
-\addtoindex{.debug\_line} & \addtoindex{header\_length} & length of header itself \\
-\addtoindex{.debug\_pubnames} & \addtoindex{debug\_info\_offset} & offset in \addtoindex{.debug\_info} \\
-                & \addtoindex{debug\_info\_length} & length of \addtoindex{.debug\_info} \\
+\dotdebugaranges{} & \addtoindex{debug\_info\_offset} & offset in \dotdebuginfo{} \\
+\dotdebugframe{}/CIE & \addtoindex{CIE\_id} & CIE distinguished value \\
+\dotdebugframe{}/FDE & \addtoindex{CIE\_pointer} & offset in \dotdebugframe{} \\
+\dotdebuginfo{} & \addtoindex{debug\_abbrev\_offset} & offset in \dotdebugabbrev{} \\
+\dotdebugline{} & \addtoindex{header\_length} & length of header itself \\
+\dotdebugpubnames{} & \addtoindex{debug\_info\_offset} & offset in \dotdebuginfo{} \\
+                & \addtoindex{debug\_info\_length} & length of \dotdebuginfo{} \\
                 &                   & contribution \\
-\addtoindex{.debug\_pubtypes} & \addtoindex{debug\_info\_offset} & offset in \addtoindex{.debug\_info} \\
-                & \addtoindex{debug\_info\_length} & length of \addtoindex{.debug\_info} \\
+\dotdebugpubtypes{} & \addtoindex{debug\_info\_offset} & offset in \dotdebuginfo{} \\
+                & \addtoindex{debug\_info\_length} & length of \dotdebuginfo{} \\
                 &                   & contribution \\
-\addtoindex{.debug\_types} & \addtoindex{debug\_abbrev\_offset} & offset in \addtoindex{.debug\_abbrev} \\
-                & \addtoindex{type\_offset} & offset in of \addtoindex{.debug\_types} \\
+\dotdebugtypes{} & \addtoindex{debug\_abbrev\_offset} & offset in \dotdebugabbrev{} \\
+                & \addtoindex{type\_offset} & offset in \dotdebugtypes{} \\
 
 \end{tabular}
 \end{center}
 
-The CIE\_id field in a CIE structure must be 64 bits because
-it overlays the CIE\_pointer in a FDE structure; this implicit
+The \texttt{CIE\_id} field in a CIE structure must be 64 bits because
+it overlays the \texttt{CIE\_pointer} in a FDE structure; this implicit
 union must be accessed to distinguish whether a CIE or FDE is
 present, consequently, these two fields must exactly overlay
 each other (both offset and size).
 
-\item Within the body of the \addtoindex{.debug\_info} or \addtoindex{.debug\_types}
+\item Within the body of the \dotdebuginfo{} or \dotdebugtypes{}
 section, certain forms of attribute value depend on the choice
 of DWARF format as follows. For the 32\dash bit DWARF format,
 the value is a 32\dash bit unsigned integer; for the 64\dash bit DWARF
@@ -227,19 +228,19 @@ format, the value is a 64\dash bit unsigned integer.
 \begin{center}
 \begin{tabular}{ll}
 Form & Role  \\ \hline
-\livelink{chap:DWFORMrefaddr}{DW\_FORM\_ref\_addr}& offset in \addtoindex{.debug\_info} \\
+\livelink{chap:DWFORMrefaddr}{DW\_FORM\_ref\_addr}& offset in \dotdebuginfo{} \\
 \livelink{chap:DWFORMsecoffset}{DW\_FORM\_sec\_offset}& offset in a section other than \\
-											&\addtoindex{.debug\_info} or \addtoindex{.debug\_str} \\
-\livelink{chap:DWFORMstrp}{DW\_FORM\_strp}&offset in \addtoindex{.debug\_str} \\
-\livelink{chap:DWOPcallref}{DW\_OP\_call\_ref}&offset in \addtoindex{.debug\_info} \\
+											&\dotdebuginfo{} or \dotdebugstr{} \\
+\livelink{chap:DWFORMstrp}{DW\_FORM\_strp}&offset in \dotdebugstr{} \\
+\livelink{chap:DWOPcallref}{DW\_OP\_call\_ref}&offset in \dotdebuginfo{} \\
 \end{tabular}
 \end{center}
 
-\item Within the body of the \addtoindex{.debug\_pubnames} and
-\addtoindex{.debug\_pubtypes} 
+\item Within the body of the \dotdebugpubnames{} and
+\dotdebugpubtypes{} 
 sections, the representation of the first field
 of each tuple (which represents an offset in the 
-\addtoindex{.debug\_info}
+\dotdebuginfo{}
 section) depends on the DWARF format as follows: in the
 32\dash bit DWARF format, this field is a 32\dash bit unsigned integer;
 in the 64\dash bit DWARF format, it is a 64\dash bit unsigned integer.
@@ -262,8 +263,8 @@ are no link\dash time errors due to truncation or overflow). (An
 implementation is not required to guarantee detection and
 reporting of all such errors.)
 
-\textit{It is expected that DWARF producing compilers will \textbf{not} use
-the 64\dash bit format \textbf{by default}. In most cases, the division of
+\textit{It is expected that DWARF producing compilers will \emph{not} use
+the 64\dash bit format \emph{by default}. In most cases, the division of
 even very large applications into a number of executable and
 shared objects will suffice to assure that the DWARF sections
 within each individual linked object are less than 4 GBytes
@@ -280,7 +281,7 @@ executable libraries can still be used.}
 \label{datarep:formatofdebugginginformation}
 
 For each compilation unit compiled with a DWARF producer,
-a contribution is made to the \addtoindex{.debug\_info} section of
+a contribution is made to the \dotdebuginfo{} section of
 the object file. Each such contribution consists of a
 compilation unit header 
 (see Section \refersec{datarep:compilationunitheader}) 
@@ -290,7 +291,7 @@ single \livelink{chap:DWTAGcompileunit}{DW\_TAG\_compile\_unit} or
 information entry, together with its children.
 
 For each type defined in a compilation unit, a contribution may
-be made to the \addtoindex{.debug\_types} 
+be made to the \dotdebugtypes{} 
 section of the object file. Each
 such contribution consists of a 
 \addtoindex{type unit} header 
@@ -306,8 +307,8 @@ code is followed directly by a series of attribute values.
 The appropriate entry in the 
 \addtoindex{abbreviations table} guides the
 interpretation of the information contained directly in the
-\addtoindex{.debug\_info} or 
-\addtoindex{.debug\_types} section.
+\dotdebuginfo{} or 
+\dotdebugtypes{} section.
 
 \needlines{4}
 Multiple debugging information entries may share the same
@@ -321,40 +322,40 @@ units may share the same table.
 \label{datarep:compilationunitheader}
 \begin{enumerate}[1. ]
 
-\item unit\_length (initial length) \\
-\addtoindexx{unit\_length}
+\item \texttt{unit\_length} (\livelink{datarep:initiallengthvalues}{initial length}) \\
+\addtoindexx{\texttt{unit\_length}}
 A 4\dash byte or 12\dash byte 
 \addtoindexx{initial length}
 unsigned integer representing the length
-of the \addtoindex{.debug\_info}
+of the \dotdebuginfo{}
 contribution for that compilation unit,
-not including the length field itself. In the 32\dash bit DWARF
-format, this is a 4\dash byte unsigned integer (which must be less
-than \xfffffffzero); in the 64\dash bit DWARF format, this consists
+not including the length field itself. In the \thirtytwobitdwarfformat,
+ this is a 4\dash byte unsigned integer (which must be less
+than \xfffffffzero); in the \sixtyfourbitdwarfformat, this consists
 of the 4\dash byte value \wffffffff followed by an 8\dash byte unsigned
 integer that gives the actual length 
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
-\item  version (\addtoindex{uhalf}) \\
+\item  \texttt{version} (\addtoindex{uhalf}) \\
 A 2\dash byte unsigned integer representing the version of the
 DWARF information for the compilation unit \addtoindexx{version number!compilation unit} 
 (see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
 The value in this field is 4.
 
-\item \addtoindex{debug\_abbrev\_offset} (section offset) \\
+\item \addtoindex{\texttt{debug\_abbrev\_offset}} (\livelink{datarep:sectionoffsetlength}{section offset}) \\
 A 
 \addtoindexx{section offset!in .debug\_info header}
 4\dash byte or 8\dash byte unsigned offset into the 
-\addtoindex{.debug\_abbrev}
+\dotdebugabbrev{}
 section. This offset associates the compilation unit with a
 particular set of debugging information entry abbreviations. In
-the 32\dash bit DWARF format, this is a 4\dash byte unsigned length;
-in the 64\dash bit DWARF format, this is an 8\dash byte unsigned length
+the \thirtytwobitdwarfformat, this is a 4\dash byte unsigned length;
+in the \sixtyfourbitdwarfformat, this is an 8\dash byte unsigned length
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
-\item address\_size (\addtoindex{ubyte}) \\
+\item \texttt{address\_size} (\addtoindex{ubyte}) \\
 A 1\dash byte unsigned integer representing the size in bytes of
-\addtoindexx{address\_size}
+\addtoindexx{\texttt{address\_size}}
 an address on the target architecture. If the system uses
 \addtoindexx{address space!segmented}
 segmented addressing, this value represents the size of the
@@ -369,56 +370,56 @@ offset portion of an address.
 The header for the series of debugging information entries
 contributing to the description of a type that has been
 placed in its own \addtoindex{type unit}, within the 
-\addtoindex{.debug\_types} section,
+\dotdebugtypes{} section,
 consists of the following information:
 \begin{enumerate}[1. ]
 
-\item unit\_length (initial length) \\
-\addtoindexx{unit\_length}
+\item \texttt{unit\_length} (\livelink{datarep:initiallengthvalues}{initial length}) \\
+\addtoindexx{\texttt{unit\_length}}
 A 4\dash byte or 12\dash byte unsigned integer 
 \addtoindexx{initial length}
 representing the length
-of the \addtoindex{.debug\_types} contribution for that compilation unit,
-not including the length field itself. In the 32\dash bit DWARF
-format, this is a 4\dash byte unsigned integer (which must be
-less than \xfffffffzero); in the 64\dash bit DWARF format, this
+of the \dotdebugtypes{} contribution for that compilation unit,
+not including the length field itself. In the \thirtytwobitdwarfformat, 
+this is a 4\dash byte unsigned integer (which must be
+less than \xfffffffzero); in the \sixtyfourbitdwarfformat, this
 consists of the 4\dash byte value \wffffffff followed by an 
 8\dash byte unsigned integer that gives the actual length
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
-\item  version (\addtoindex{uhalf}) \\
+\item  \texttt{version} (\addtoindex{uhalf}) \\
 A 2\dash byte unsigned integer representing the version of the
 DWARF information for the 
 compilation unit\addtoindexx{version number!type unit} 
 (see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
 The value in this field is 4.
 
-\item \addtoindex{debug\_abbrev\_offset} (section offset) \\
+\item \addtoindex{\texttt{debug\_abbrev\_offset}} (\livelink{datarep:sectionoffsetlength}{section offset}) \\
 A 
 \addtoindexx{section offset!in .debug\_types header}
 4\dash byte or 8\dash byte unsigned offset into the 
-\addtoindex{.debug\_abbrev}
+\dotdebugabbrev{}
 section. This offset associates the compilation unit with a
 particular set of debugging information entry abbreviations. In
-the 32\dash bit DWARF format, this is a 4\dash byte unsigned length;
-in the 64\dash bit DWARF format, this is an 8\dash byte unsigned length
+the \thirtytwobitdwarfformat, this is a 4\dash byte unsigned length;
+in the \sixtyfourbitdwarfformat, this is an 8\dash byte unsigned length
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
-\item address\_size (ubyte) \\
+\item \texttt{address\_size} (ubyte) \\
 A 1\dash byte unsigned integer representing the size 
 \addtoindexx{size of an address}
 in bytes of
-\addtoindexx{address\_size}
+\addtoindexx{\texttt{address\_size}}
 an address on the target architecture. If the system uses
 \addtoindexx{address space!segmented}
 segmented addressing, this value represents the size of the
 offset portion of an address.
 
 
-\item type\_signature (8\dash byte unsigned integer) \\
+\item \texttt{type\_signature} (8\dash byte unsigned integer) \\
 \addtoindexx{type signature}
 A 
-\addtoindexx{type\_signature}
+\addtoindexx{\texttt{type\_signature}}
 64\dash bit unique signature (see Section 
 \refersec{datarep:typesignaturecomputation})
 of the type described in this type
@@ -430,8 +431,8 @@ the primary type contained in this
 \addtoindex{type unit} uses this value.}
 
 
-\item type\_offset (section offset) \\
-\addtoindexx{type\_offset}
+\item \texttt{type\_offset} (\livelink{datarep:sectionoffsetlength}{section offset}) \\
+\addtoindexx{\texttt{type\_offset}}
 A 4\dash byte or 8\dash byte unsigned offset 
 \addtoindexx{section offset!in .debug\_types header}
 relative to the beginning
@@ -441,8 +442,8 @@ information entry that describes the type. Because the type
 may be nested inside a namespace or other structures, and may
 contain references to other types that have not been placed in
 separate type units, it is not necessarily either the first or
-the only entry in the type unit. In the 32\dash bit DWARF format,
-this is a 4\dash byte unsigned length; in the 64\dash bit DWARF format,
+the only entry in the type unit. In the \thirtytwobitdwarfformat,
+this is a 4\dash byte unsigned length; in the \sixtyfourbitdwarfformat,
 this is an 8\dash byte unsigned length
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
@@ -469,7 +470,7 @@ null entries.
 
 The abbreviations tables for all compilation units
 are contained in a separate object file section called
-\addtoindex{.debug\_abbrev}.
+\dotdebugabbrev{}.
 As mentioned before, multiple compilation
 units may share the same abbreviations table.
 
@@ -480,8 +481,8 @@ debugging information entry. Each declaration begins with
 an unsigned LEB128 number representing the abbreviation
 code itself. It is this code that appears at the beginning
 of a debugging information entry in the 
-\addtoindex{.debug\_info} or
-\addtoindex{.debug\_types}
+\dotdebuginfo{} or
+\dotdebugtypes{}
 section. As described above, the abbreviation
 code 0 is reserved for null debugging information entries. The
 abbreviation code is followed by another unsigned LEB128
@@ -563,8 +564,8 @@ Table \refersec{tab:tagencodings}.
 \livelink{chap:DWTAGtypeunit}{DW\_TAG\_type\_unit} \ddag &0x41      \\
 \livelink{chap:DWTAGrvaluereferencetype}{DW\_TAG\_rvalue\_reference\_type} \ddag &0x42      \\
 \livelink{chap:DWTAGtemplatealias}{DW\_TAG\_template\_alias} \ddag &0x43      \\
-\livelink{chap:DWTAGlouser}{DW\_TAG\_lo\_user}&0x4080      \\
-\livelink{chap:DWTAGhiuser}{DW\_TAG\_hi\_user}&\xffff      \\
+\livelink{chap:DWXXXlohiuser}{DW\_TAG\_lo\_user}&0x4080      \\
+\livelink{chap:DWXXXlohiuser}{DW\_TAG\_hi\_user}&\xffff      \\
 \end{longtable}
 \end{centering}
 
@@ -617,8 +618,8 @@ entry containing 0 for the name and 0 for the form.
 The attribute form 
 \livetarg{chap:DWFORMindirect}{DW\_FORM\_indirect} is a special case. For
 attributes with this form, the attribute value itself in the
-\addtoindex{.debug\_info} or 
-\addtoindex{.debug\_types}
+\dotdebuginfo{} or 
+\dotdebugtypes{}
 section begins with an unsigned
 LEB128 number that represents its form. This allows producers
 to choose forms for particular attributes 
@@ -792,38 +793,38 @@ no value is encoded in the debugging information entry itself.
 This is an offset into 
 \addtoindexx{section offset!in class lineptr value}
 the 
-\addtoindex{.debug\_line} section
+\dotdebugline{} section
 (\livelink{chap:DWFORMsecoffset}{DW\_FORM\_sec\_offset}).
 It consists of an offset from the
 beginning of the 
-\addtoindex{.debug\_line}
+\dotdebugline{}
 section to the first byte of
 the data making up the line number list for the compilation
 unit. 
 It is relocatable in a relocatable object file, and
-relocated in an executable or shared object. In the 32\dash bit
-DWARF format, this offset is a 4\dash byte unsigned value;
-in the 64\dash bit DWARF format, it is an 8\dash byte unsigned value
+relocated in an executable or shared object. In the 
+\thirtytwobitdwarfformat, this offset is a 4\dash byte unsigned value;
+in the \sixtyfourbitdwarfformat, it is an 8\dash byte unsigned value
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
 
 \item \livelink{chap:loclistptr}{loclistptr} \\
 This is an offset into the 
-\addtoindex{.debug\_loc}
+\dotdebugloc{}
 section
 (\livelink{chap:DWFORMsecoffset}{DW\_FORM\_sec\_offset}). 
 It consists of an offset from the
 \addtoindexx{section offset!in class loclistptr value}
 beginning of the 
-\addtoindex{.debug\_loc}
+\dotdebugloc{}
 section to the first byte of
 the data making up the 
 \addtoindex{location list} for the compilation
 unit. 
 It is relocatable in a relocatable object file, and
-relocated in an executable or shared object. In the 32\dash bit
-DWARF format, this offset is a 4\dash byte unsigned value;
-in the 64\dash bit DWARF format, it is an 8\dash byte unsigned value
+relocated in an executable or shared object. In the 
+\thirtytwobitdwarfformat, this offset is a 4\dash byte unsigned value;
+in the \sixtyfourbitdwarfformat, it is an 8\dash byte unsigned value
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
 
@@ -831,33 +832,33 @@ in the 64\dash bit DWARF format, it is an 8\dash byte unsigned value
 This is an 
 \addtoindexx{section offset!in class macptr value}
 offset into the 
-\addtoindex{.debug\_macinfo} section
+\dotdebugmacinfo{} section
 (\livelink{chap:DWFORMsecoffset}{DW\_FORM\_sec\_offset}). 
 It consists of an offset from the
-beginning of the \addtoindex{.debug\_macinfo} 
+beginning of the \dotdebugmacinfo{} 
 section to the first byte of
 the data making up the macro information list for the compilation
 unit. 
 It is relocatable in a relocatable object file, and
-relocated in an executable or shared object. In the 32\dash bit
-DWARF format, this offset is a 4\dash byte unsigned value;
-in the 64\dash bit DWARF format, it is an 8\dash byte unsigned value
+relocated in an executable or shared object. In the 
+\thirtytwobitdwarfformat, this offset is a 4\dash byte unsigned value;
+in the \sixtyfourbitdwarfformat, it is an 8\dash byte unsigned value
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
 \needlines{4}
 \item \livelink{chap:rangelistptr}{rangelistptr} \\
 This is an 
 \addtoindexx{section offset!in class rangelistptr value}
-offset into the \addtoindex{.debug\_ranges} section
+offset into the \dotdebugranges{} section
 (\livelink{chap:DWFORMsecoffset}{DW\_FORM\_sec\_offset}). 
 It consists of an
 offset from the beginning of the 
-\addtoindex{.debug\_ranges} section
+\dotdebugranges{} section
 to the beginning of the non\dash contiguous address ranges
 information for the referencing entity.  
 It is relocatable in
 a relocatable object file, and relocated in an executable or
-shared object. In the 32\dash bit DWARF format, this offset
+shared object. In the \thirtytwobitdwarfformat, this offset
 is a 4\dash byte unsigned value; in the 64\dash bit DWARF
 format, it is an 8\dash byte unsigned value (see Section
 \refersec{datarep:32bitand64bitdwarfformats}).
@@ -899,21 +900,21 @@ is required.
 
 The second type of reference can identify any debugging
 information entry within a 
-\addtoindex{.debug\_info} section; in particular,
+\dotdebuginfo{} section; in particular,
 it may refer to an entry in a different compilation unit
 from the unit containing the reference, and may refer to an
 entry in a different shared object.  This type of reference
 (\livetarg{chap:DWFORMrefaddr}{DW\_FORM\_ref\_addr}) 
 is an offset from the beginning of the
-\addtoindex{.debug\_info} 
+\dotdebuginfo{} 
 section of the target executable or shared object;
 it is relocatable in a relocatable object file and frequently
 relocated in an executable file or shared object. For
 references from one shared object or static executable file
 to another, the relocation and identification of the target
-object must be performed by the consumer. In the 32\dash bit DWARF
-format, this offset is a 4\dash byte unsigned value; 
-in the 64\dash bit DWARF format, it is an 8\dash byte
+object must be performed by the consumer. In the 
+\thirtytwobitdwarfformat, this offset is a 4\dash byte unsigned value; 
+in the \sixtyfourbitdwarfformat, it is an 8\dash byte
 unsigned value 
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
@@ -925,7 +926,7 @@ global symbolic name.}
 \textit{For a reference from one executable or shared object to
 another, the reference is resolved by the debugger to identify
 the shared object or executable and the offset into that
-object\textquoteright s \addtoindex{.debug\_info}
+object\textquoteright s \dotdebuginfo{}
 section in the same fashion as the run
 time loader, either when the debug information is first read,
 or when the reference is used.}
@@ -960,11 +961,11 @@ debugging information entry itself
 be represented as an 
 \addtoindexx{section offset!in class string value}
 offset into a string table contained in
-the \addtoindex{.debug\_str} section of the object file 
+the \dotdebugstr{} section of the object file 
 (\livetarg{chap:DWFORMstrp}{DW\_FORM\_strp}). In
-the 32\dash bit DWARF format, the representation of a 
+the \thirtytwobitdwarfformat, the representation of a 
 \livelink{chap:DWFORMstrp}{DW\_FORM\_strp}
-value is a 4\dash byte unsigned offset; in the 64\dash bit DWARF format,
+value is a 4\dash byte unsigned offset; in the \sixtyfourbitdwarfformat,
 it is an 8\dash byte unsigned offset 
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
@@ -997,7 +998,7 @@ the
 classes \livelink{chap:lineptr}{lineptr},
 \livelink{chap:loclistptr}{loclistptr}, \livelink{chap:macptr}{macptr} or 
 \livelink{chap:rangelistptr}{rangelistptr} to point into either the
-\addtoindex{.debug\_info} or \addtoindex{.debug\_str} section.
+\dotdebuginfo{} or \dotdebugstr{} section.
 
 The form encodings are listed in 
 Table \refersec{tab:attributeformencodings}.
@@ -1205,8 +1206,8 @@ Table \refersec{tab:attributeformencodings}.
         \addtoindexx{enumeration class attribute!encoding}  \\
 \livelink{chap:DWATlinkagename}{DW\_AT\_linkage\_name} \ddag &0x6e&string 
         \addtoindexx{linkage name attribute!encoding}  \\
-\livetarg{chap:DWATlouser}{DW\_AT\_lo\_user}&0x2000 & --- \addtoindexx{low user attribute encoding}  \\
-\livetarg{chap:DWAThiuser}{DW\_AT\_hi\_user}&\xiiifff& --- \addtoindexx{high user attribute encoding}  \\
+\livelink{chap:DWXXXlohiuser}{DW\_AT\_lo\_user}&0x2000 & --- \addtoindexx{low user attribute encoding}  \\
+\livelink{chap:DWXXXlohiuser}{DW\_AT\_hi\_user}&\xiiifff& --- \addtoindexx{high user attribute encoding}  \\
 
 \end{longtable} 
 \end{centering}
@@ -1487,8 +1488,8 @@ Table \refersec{tab:dwarfoperationencodings}.
 \livelink{chap:DWOPimplicitvalue}{DW\_OP\_implicit\_value} \ddag &0x9e &2&ULEB128 size followed by \\
 &&&\nolink{block} of that size\\
 \livelink{chap:DWOPstackvalue}{DW\_OP\_stack\_value} \ddag &0x9f &0& \\
-\livetarg{chap:DWOPlouser}{DW\_OP\_lo\_user} &0xe0 && \\
-\livetarg{chap:DWOPhiuser}{DW\_OP\_hi\_user} &\xff && \\
+\livelink{chap:DWXXXlohiuser}{DW\_OP\_lo\_user} &0xe0 && \\
+\livelink{chap:DWXXXlohiuser}{DW\_OP\_hi\_user} &\xff && \\
 
 \end{longtable}
 \end{centering}
@@ -1567,8 +1568,8 @@ Table \refersec{tab:basetypeencodingvalues}
 \livelink{chap:DWATEunsignedfixed}{DW\_ATE\_unsigned\_fixed}&0x0e \\
 \livelink{chap:DWATEdecimalfloat}{DW\_ATE\_decimal\_float} & 0x0f \\
 \livelink{chap:DWATEUTF}{DW\_ATE\_UTF} \ddag & 0x10 \\
-\livetarg{chap:DWATElouser}{DW\_ATE\_lo\_user} & 0x80 \\
-\livetarg{chap:DWATEhiuser}{DW\_ATE\_hi\_user} & \xff \\
+\livelink{chap:DWXXXlohiuser}{DW\_ATE\_lo\_user} & 0x80 \\
+\livelink{chap:DWXXXlohiuser}{DW\_ATE\_hi\_user} & \xff \\
 
 \end{longtable}
 \end{centering}
@@ -1622,8 +1623,8 @@ Table \refersec{tab:endianityencodings}.
 \livelink{chap:DWENDdefault}{DW\_END\_default}  & 0x00 \\
 \livelink{chap:DWENDbig}{DW\_END\_big} & 0x01 \\
 \livelink{chap:DWENDlittle}{DW\_END\_little} & 0x02 \\
-\livetarg{chap:DWENDlouser}{DW\_END\_lo\_user} & 0x40 \\
-\livetarg{chap:DWENDhiuser}{DW\_END\_hi\_user} & \xff \\
+\livelink{chap:DWXXXlohiuser}{DW\_END\_lo\_user} & 0x40 \\
+\livelink{chap:DWXXXlohiuser}{DW\_END\_hi\_user} & \xff \\
 
 \end{longtable}
 \end{centering}
@@ -1776,8 +1777,8 @@ defined language.
 \livelink{chap:DWLANGUPC}{DW\_LANG\_UPC}&0x0012&0 \\
 \livelink{chap:DWLANGD}{DW\_LANG\_D}&0x0013&0 \\
 \livelink{chap:DWLANGPython}{DW\_LANG\_Python} \dag &0x0014&0 \\
-\livetarg{chap:DWLANGlouser}{DW\_LANG\_lo\_user}&0x8000 & \\
-\livetarg{chap:DWLANGhiuser}{DW\_LANG\_hi\_user}&\xffff & \\
+\livelink{chap:DWXXXlohiuser}{DW\_LANG\_lo\_user}&0x8000 & \\
+\livelink{chap:DWXXXlohiuser}{DW\_LANG\_hi\_user}&\xffff & \\
 
 \end{longtable}
 \end{centering}
@@ -1839,8 +1840,8 @@ Table \refersec{tab:callingconventionencodings}.
 \livelink{chap:DWCCnormal}{DW\_CC\_normal}&0x01     \\
 \livelink{chap:DWCCprogram}{DW\_CC\_program}&0x02     \\
 \livelink{chap:DWCCnocall}{DW\_CC\_nocall}&0x03     \\
-\livetarg{chap:DWCClouser}{DW\_CC\_lo\_user}&0x40     \\
-\livetarg{chap:DWCChiuser}{DW\_CC\_hi\_user}&\xff     \\
+\livelink{chap:DWXXXlohiuser}{DW\_CC\_lo\_user}&0x40     \\
+\livelink{chap:DWXXXlohiuser}{DW\_CC\_hi\_user}&\xff     \\
 
 \end{longtable}
 \end{centering}
@@ -1942,21 +1943,21 @@ Table \refersec{tab:discriminantdescriptorencodings}.
 \label{datarep:namelookuptables}
 
 Each set of entries in the table of global names contained
-in the \addtoindex{.debug\_pubnames} and 
-\addtoindex{.debug\_pubtypes} sections begins
+in the \dotdebugpubnames{} and 
+\dotdebugpubtypes{} sections begins
 with a header consisting of:
 \begin{enumerate}[1. ]
 
-\item unit\_length (initial length) \\
-\addtoindexx{unit\_length}
+\item \texttt{unit\_length} (\livelink{datarep:initiallengthvalues}{initial length}) \\
+\addtoindexx{\texttt{unit\_length}}
 A 4\dash byte or 12\dash byte unsigned integer 
 \addtoindexx{initial length}
 representing the length
-of the \addtoindex{.debug\_info}
+of the \dotdebuginfo{}
 contribution for that compilation unit,
-not including the length field itself. In the 32\dash bit DWARF
-format, this is a 4\dash byte unsigned integer (which must be less
-than \xfffffffzero); in the 64\dash bit DWARF format, this consists
+not including the length field itself. In the 
+\thirtytwobitdwarfformat, this is a 4\dash byte unsigned integer (which must be less
+than \xfffffffzero); in the \sixtyfourbitdwarfformat, this consists
 of the 4\dash byte value \wffffffff followed by an 8\dash byte unsigned
 integer that gives the actual length
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
@@ -1974,22 +1975,21 @@ A
 \addtoindexx{section offset!in name lookup table set of entries}
 4\dash byte or 8\dash byte 
 offset into the 
-\addtoindex{.debug\_info}
+\dotdebuginfo{}
 section of the compilation unit header.
-In
-the 32\dash bit DWARF format, this is a 4\dash byte unsigned offset;
-in the 64\dash bit DWARF format, this is an 8\dash byte unsigned offsets
+In the \thirtytwobitdwarfformat, this is a 4\dash byte unsigned offset;
+in the \sixtyfourbitdwarfformat, this is an 8\dash byte unsigned offsets
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
-\item  \addtoindex{debug\_info\_length} (section length) \\
+\item  \addtoindex{debug\_info\_length} (\livelink{datarep:sectionoffsetlength}{section length}) \\
 \addtoindexx{section length!in .debug\_pubnames header}
 A 
 \addtoindexx{section length!in .debug\_pubtypes header}
 4\dash byte or 8\dash byte length containing the size in bytes of the
-contents of the \addtoindex{.debug\_info}
+contents of the \dotdebuginfo{}
 section generated to represent
-this compilation unit. In the 32\dash bit DWARF format, this is
-a 4\dash byte unsigned length; in the 64\dash bit DWARF format, this
+this compilation unit. In the \thirtytwobitdwarfformat, this is
+a 4\dash byte unsigned length; in the \sixtyfourbitdwarfformat, this
 is an 8-byte unsigned length 
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
@@ -2011,20 +2011,20 @@ offset containing the value 0.
 \label{datarep:addrssrangetable}
 
 Each set of entries in the table of address ranges contained
-in the \addtoindex{.debug\_aranges}
+in the \dotdebugaranges{}
 section begins with a header containing:
 \begin{enumerate}[1. ]
 % FIXME The unit length text is not fully consistent across
 % these tables.
 
-\item unit\_length (initial length) \\
-\addtoindexx{unit\_length}
+\item \texttt{unit\_length} (\livelink{datarep:initiallengthvalues}{initial length}) \\
+\addtoindexx{\texttt{unit\_length}}
 A 4-byte or 12-byte length containing the length of the
 \addtoindexx{initial length}
 set of entries for this compilation unit, not including the
-length field itself. In the 32-bit DWARF format, this is a
+length field itself. In the \thirtytwobitdwarfformat, this is a
 4-byte unsigned integer (which must be less than \xfffffffzero);
-in the 64-bit DWARF format, this consists of the 4-byte value
+in the \sixtyfourbitdwarfformat, this consists of the 4-byte value
 \wffffffff followed by an 8-byte unsigned integer that gives
 the actual length 
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
@@ -2036,13 +2036,13 @@ DWARF information for the address range table
 This value in this field \addtoindexx{version number!address range table} is 2. 
  
 
-\item debug\_info\_offset (section offset) \\
+\item debug\_info\_offset (\livelink{datarep:sectionoffsetlength}{section offset}) \\
 A 
 \addtoindexx{section offset!in .debug\_aranges header}
 4\dash byte or 8\dash byte offset into the 
-\addtoindex{.debug\_info} section of
-the compilation unit header. In the 32\dash bit DWARF format,
-this is a 4\dash byte unsigned offset; in the 64\dash bit DWARF format,
+\dotdebuginfo{} section of
+the compilation unit header. In the \thirtytwobitdwarfformat,
+this is a 4\dash byte unsigned offset; in the \sixtyfourbitdwarfformat,
 this is an 8\dash byte unsigned offset 
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
@@ -2151,8 +2151,8 @@ Table \refersec{tab:linenumberextendedopcodeencodings}.
 \livelink{chap:DWLNEsetaddress}{DW\_LNE\_set\_address}&0x02\\
 \livelink{chap:DWLNEdefinefile}{DW\_LNE\_define\_file}&0x03\\
 \livelink{chap:DWLNEsetdiscriminator}{DW\_LNE\_set\_discriminator} \ddag &0x04   \\
-\livetarg{chap:DWLNElouser}{DW\_LNE\_lo\_user}&0x80   \\
-\livetarg{chap:DWLNEhiuser}{DW\_LNE\_hi\_user}&\xff   \\
+\livelink{chap:DWXXXlohiuser}{DW\_LNE\_lo\_user}&0x80   \\
+\livelink{chap:DWXXXlohiuser}{DW\_LNE\_hi\_user}&\xff   \\
 
 \end{longtable}
 \end{centering}
@@ -2198,8 +2198,8 @@ Table \refersec{tab:macinfotypeencodings}.
 \section{Call Frame Information}
 \label{datarep:callframeinformation}
 
-In the 32\dash bit DWARF format, the value of the CIE id in the
-CIE header is \xffffffff; in the 64\dash bit DWARF format, the
+In the \thirtytwobitdwarfformat, the value of the CIE id in the
+CIE header is \xffffffff; in the \sixtyfourbitdwarfformat, the
 value is \xffffffffffffffff.
 
 The value of the CIE \addtoindexi{version number}{version number!call frame information}
@@ -2255,8 +2255,8 @@ Table \refersec{tab:callframeinstructionencodings}.
 \livelink{chap:DWCFAvaloffset}{DW\_CFA\_val\_offset}&0&0x14&ULEB128&ULEB128 \\
 \livelink{chap:DWCFAvaloffsetsf}{DW\_CFA\_val\_offset\_sf}&0&0x15&ULEB128&SLEB128 \\
 \livelink{chap:DWCFAvalexpression}{DW\_CFA\_val\_expression}&0&0x16&ULEB128&BLOCK  \\
-\livetarg{chap:DWCFAlouser}{DW\_CFA\_lo\_user}&0&0x1c   & & \\
-\livetarg{chap:DWCFAhiuser}{DW\_CFA\_hi\_user}&0&\xiiif & & \\
+\livelink{chap:DWXXXlohiuser}{DW\_CFA\_lo\_user}&0&0x1c   & & \\
+\livelink{chap:DWXXXlohiuser}{DW\_CFA\_hi\_user}&0&\xiiif & & \\
 \end{longtable}
 \end{centering}
 
@@ -2295,25 +2295,25 @@ The debugging information in this format is intended to
 exist 
 \addtoindexx{DWARF section names!list of}
 in 
-the \addtoindex{.debug\_abbrev}, 
-\addtoindex{.debug\_aranges}, 
-\addtoindex{.debug\_frame},
-\addtoindex{.debug\_info}, 
-\addtoindex{.debug\_line}, 
-\addtoindex{.debug\_loc}, 
-\addtoindex{.debug\_macinfo},
-\addtoindex{.debug\_pubnames}, 
-\addtoindex{.debug\_pubtypes}, 
-\addtoindex{.debug\_ranges}, 
-\addtoindex{.debug\_str}
+the \dotdebugabbrev{}, 
+\dotdebugaranges{}, 
+\dotdebugframe{},
+\dotdebuginfo{}, 
+\dotdebugline{}, 
+\dotdebugloc{}, 
+\dotdebugmacinfo{},
+\dotdebugpubnames{}, 
+\dotdebugpubtypes{}, 
+\dotdebugranges{}, 
+\dotdebugstr{}
 and 
-\addtoindex{.debug\_types}
+\dotdebugtypes{}
 sections of an object file, or equivalent
 separate file or database. The information is not 
 word\dash aligned. Consequently:
 
 \begin{itemize}
-\item For the 32\dash bit DWARF format and a target architecture with
+\item For the \thirtytwobitdwarfformat{} and a target architecture with
 32\dash bit addresses, an assembler or compiler must provide a way
 to produce 2\dash byte and 4\dash byte quantities without alignment
 restrictions, and the linker must be able to relocate a
@@ -2322,7 +2322,7 @@ restrictions, and the linker must be able to relocate a
 section offset that occurs at an arbitrary
 alignment.
 
-\item For the 32\dash bit DWARF format and a target architecture with
+\item For the \thirtytwobitdwarfformat{} and a target architecture with
 64\dash bit addresses, an assembler or compiler must provide a
 way to produce 2\dash byte, 4\dash byte and 8\dash byte quantities without
 alignment restrictions, and the linker must be able to relocate
@@ -2331,7 +2331,7 @@ an 8\dash byte address or 4\dash byte
 section offset that occurs at an
 arbitrary alignment.
 
-\item For the 64\dash bit DWARF format and a target architecture with
+\item For the \sixtyfourbitdwarfformat{} and a target architecture with
 32\dash bit addresses, an assembler or compiler must provide a
 way to produce 2\dash byte, 4\dash byte and 8\dash byte quantities without
 alignment restrictions, and the linker must be able to relocate
@@ -2345,7 +2345,7 @@ arbitrary alignment.
 a mix of 32\dash bit and 64\dash bit code and data within the same
 executable object.}
 
-\item For the 64\dash bit DWARF format and a target architecture with
+\item For the \sixtyfourbitdwarfformat{} and a target architecture with
 64\dash bit addresses, an assembler or compiler must provide a
 way to produce 2\dash byte, 4\dash byte and 8\dash byte quantities without
 alignment restrictions, and the linker must be able to
@@ -2678,5 +2678,4 @@ line).}
 
 An example that illustrates the computation of an MD5 hash may be found in 
 Appendix \refersec{app:usingtypeunits}.
-
 

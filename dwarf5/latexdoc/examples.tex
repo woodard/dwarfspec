@@ -12,11 +12,11 @@ various aspects of the DWARF debugging information format.
 Figure \refersec{fig:compilationunitsandabbreviationstable}
 depicts the relationship of the abbreviations tables contained
 \addtoindexx{abbreviations table!example}
-\addtoindexx{.debug\_abbrev example}
-\addtoindexx{.debug\_info example}
-in the \addtoindex{.debug\_abbrev}
+\addtoindexx{\texttt{.debug\_abbrev}!example}
+\addtoindexx{\texttt{.debug\_info}!example}
+in the \dotdebugabbrev{}
 section to the information contained in
-the \addtoindex{.debug\_info}
+the \dotdebuginfo{}
 section. Values are given in symbolic form,
 where possible.
 
@@ -72,7 +72,7 @@ typedef char* strp;
 %
 \begin{minipage}[t]{0.38\linewidth}
 \centering
-Compilation Unit \#1: \addtoindex{.debug\_info}
+Compilation Unit \#1: \dotdebuginfo{}
 \begin{framed}
 \scriptsize
 \begin{alltt}
@@ -113,7 +113,7 @@ Compilation Unit \#1: \addtoindex{.debug\_info}
 %
 %
 \end{framed}
-Compilation Unit \#2: \addtoindex{.debug\_info}
+Compilation Unit \#2: \dotdebuginfo{}
 \begin{framed}
 \scriptsize
 \begin{alltt}
@@ -155,7 +155,7 @@ Compilation Unit \#2: \addtoindex{.debug\_info}
 %
 \begin{minipage}[t]{0.41\linewidth}
 \centering
-Abbreviation Table: \addtoindex{.debug\_abbrev}
+Abbreviation Table: \dotdebugabbrev{}
 \begin{framed}
 \scriptsize
 \begin{alltt}\vspace{0.06cm}
@@ -227,10 +227,10 @@ type array_ptr
 real :: myvar
 real, dimension (:), pointer :: ap
 end type array_ptr
-type(array_ptr), allocatable, dimension(:) :: arrays
-allocate(arrays(20))
+type(array_ptr), allocatable, dimension(:) :: arrayvar
+allocate(arrayvar(20))
 do i = 1, 20
-allocate(arrays(i)%ap(i+10))
+allocate(arrayvar(i)%ap(i+10))
 end do
 \end{lstlisting}
 \caption{Fortran 90 example: source fragment} \label{fig:fortran90examplesourcefragment}
@@ -317,7 +317,7 @@ a descriptor does have a
 \livelink{chap:DWATdatalocation}{DW\_AT\_data\_location} attribute. In
 that case the object doubles as its own descriptor.)
 
-The \addtoindex{Fortran 90} derived type array\_ptr can now be redescribed
+The \addtoindex{Fortran 90} derived type \texttt{array\_ptr} can now be redescribed
 in C\dash like terms that expose some of the representation as in
 
 \begin{lstlisting}[numbers=none]
@@ -327,9 +327,9 @@ struct array_ptr {
 };
 \end{lstlisting}
 
-Similarly for variable arrays:
+Similarly for variable \texttt{arrayvar}:
 \begin{lstlisting}[numbers=none]
-desc<1> arrays;
+desc<1> arrayvar;
 \end{lstlisting}
 
 (Recall that \texttt{desc\textless 1\textgreater} 
@@ -442,7 +442,7 @@ in Figure \refersec{fig:fortran90exampledwarfdescription}.
                 \livelink{chap:DWOPplus}{DW\_OP\_plus}
                 \livelink{chap:DWOPderef}{DW\_OP\_deref})
 8\$: \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
-        \livelink{chap:DWATname}{DW\_AT\_name}("arrays")
+        \livelink{chap:DWATname}{DW\_AT\_name}("arrayvar")
         \livelink{chap:DWATtype}{DW\_AT\_type}(reference to 6\$)
         \livelink{chap:DWATlocation}{DW\_AT\_location}(expression=
             ...as appropriate...)       ! Assume static allocation
@@ -461,13 +461,13 @@ of the do loop. Suppose further that the user enters the
 following debug command:
 
 \begin{lstlisting}[numbers=none]
-debug> print arrays(5)%ap(2)
+debug> print arrayvar(5)%ap(2)
 \end{lstlisting}
 
 Interpretation of this expression proceeds as follows:
 \begin{enumerate}[1. ]
 
-\item Lookup name arrays. We find that it is a variable,
+\item Lookup name \texttt{arrayvar}. We find that it is a variable,
 whose type is given by the unnamed type at 6\$. Notice that
 the type is an array type.
 
@@ -487,11 +487,12 @@ bound too, but we will skip that for this example. \rbrack
 
 \end{enumerate}
 
-For a), check for a \livelink{chap:DWATdatalocation}{DW\_AT\_data\_location} attribute. Since
-there is one, go execute the expression, whose result is
+For a), check for a 
+\livelink{chap:DWATdatalocation}{DW\_AT\_data\_location} attribute. 
+Since there is one, go execute the expression, whose result is
 the address needed. The object address used in this case
 is the object we are working on, namely the variable named
-arrays, whose address was found in step 1. (Had there been
+\texttt{arrayvar}, whose address was found in step 1. (Had there been
 no \livelink{chap:DWATdatalocation}{DW\_AT\_data\_location} attribute, the desired address would
 be the same as the address from step 1.)
 
@@ -499,13 +500,13 @@ For b), for each dimension of the array (only one
 in this case), go interpret the usual lower bound
 attribute. Again this is an expression, which again begins
 with \livelink{chap:DWOPpushobjectaddress}{DW\_OP\_push\_object\_address}. This object is 
-\textbf{still} arrays,
+\textbf{still} \texttt{arrayvar},
 from step 1, because we have not begun to actually perform
 any indexing yet.
 
 For c), the default stride applies. Since there is no
 \livelink{chap:DWATbytestride}{DW\_AT\_byte\_stride} attribute, use the size of the array element
-type, which is the size of type array\_ptr (at 3\$).
+type, which is the size of type \texttt{array\_ptr} (at 3\$).
 
 \clearpage
 
@@ -515,15 +516,15 @@ any of the attributes involved up to now. Those just provide
 the actual values used in the indexing step.
 
 The result is an object within the memory that was dynamically
-allocated for arrays.
+allocated for \texttt{arrayvar}.
 
-\item  Find the ap component of the object just identified,
-whose type is array\_ptr.
+\item  Find the \texttt{ap} component of the object just identified,
+whose type is \texttt{array\_ptr}.
 
 This is a conventional record component lookup and
-interpretation. It happens that the ap component in this case
+interpretation. It happens that the \texttt{ap} component in this case
 begins at offset 4 from the beginning of the containing object.
-Component ap has the unnamed array type defined at 1\$ in the
+Component \texttt{ap} has the unnamed array type defined at 1\$ in the
 symbol table.
 
 \item  Find the second element of the array object found in step 3. To do array indexing requires
@@ -580,19 +581,19 @@ OBJ2B : REC2;
 \label{fig:adaexamplesourcefragment}
 \end{figure}
 
-VEC1 illustrates an (unnamed) array type where the upper bound
+\texttt{VEC1} illustrates an (unnamed) array type where the upper bound
 of the first and only dimension is determined at runtime. 
 \addtoindex{Ada}
 semantics require that the value of an array bound is fixed at
-the time the array type is elaborated (where elaboration refers
+the time the array type is elaborated (where \textit{elaboration} refers
 to the runtime executable aspects of type processing). For
 the purposes of this example, we assume that there are no
-other assignments to M so that it safe for the REC1 type
+other assignments to \texttt{M} so that it safe for the \texttt{REC1} type
 description to refer directly to that variable (rather than
-a compiler generated copy).
+a compiler-generated copy).
 
-REC2 illustrates another array type (the unnamed type of
-component VEC2) where the upper bound of the first and only
+\texttt{REC2} illustrates another array type (the unnamed type of
+component \texttt{VEC2}) where the upper bound of the first and only
 bound is also determined at runtime. In this case, the upper
 bound is contained in a discriminant of the containing record
 type. (A \textit{discriminant} is a component of a record whose value
@@ -606,12 +607,12 @@ Figure \refersec{fig:adaexampledwarfdescription}.
 
 Interesting aspects about this example are:
 \begin{enumerate}[1. ]
-\item The array VEC2 is ``immediately'' contained within structure
-REC2 (there is no intermediate descriptor or indirection),
+\item The array \texttt{VEC2} is \doublequote{immediately} contained within structure
+\texttt{REC2} (there is no intermediate descriptor or indirection),
 which is reflected in the absence of a \livelink{chap:DWATdatalocation}{DW\_AT\_data\_location}
 attribute on the array type at 28\$.
 
-\item One of the bounds of VEC2 is nonetheless dynamic and part of
+\item One of the bounds of \texttt{VEC2} is nonetheless dynamic and part of
 the same containing record. It is described as a reference to
 a member, and the location of the upper bound is determined
 as for any member. That is, the location is determined using
@@ -626,7 +627,7 @@ a data member generally.
 \item The lack of a subtype concept in DWARF means that DWARF types
 serve the role of subtypes and must replicate information from
 what should be the parent type. For this reason, DWARF for
-the unconstrained array type ARR is not needed for the purposes
+the unconstrained array type \texttt{ARR} is not needed for the purposes
 of this example and therefore is not shown.
 \end{enumerate}
 
@@ -1198,14 +1199,15 @@ the style of the Motorola 88000.
 by adding the contents of the
 source register with the constant.
 
-\item There are 8 4\dash byte registers:
-\begin{alltt}
-    R0 always 0
-    R1 holds return address on call
-    R2-R3 temp registers (not preserved on call)
-    R4-R6 preserved on call
-    R7 stack pointer.
-\end{alltt}
+\item There are eight 4\dash byte registers:
+\newline
+\begin{tabular}{p{5mm}l}
+   & R0 always 0 \\
+   & R1 holds return address on call \\
+   & R2-R3 temp registers (not preserved on call) \\
+   & R4-R6 preserved on call \\
+   & R7 stack pointer \\
+\end{tabular}
 
 \item  The stack grows in the negative direction.
 
@@ -1225,19 +1227,19 @@ pointer). The first column values are byte addresses.
 \begin{figure}[here]
 \begin{lstlisting}
        ;; start prologue
-foo    sub R7, R7, <fs>        ; Allocate frame
-foo+4  store R1, R7, (<fs>-4)  ; Save the return address
-foo+8  store R6, R7, (<fs>-8)  ; Save R6
-foo+12 add R6, R7, 0           ; R6 is now the Frame ptr
-foo+16 store R4, R6, (<fs>-12) ; Save a preserved reg
+foo    sub   R7, R7, <fs>        ; Allocate frame
+foo+4  store R1, R7, (<fs>-4)    ; Save the return address
+foo+8  store R6, R7, (<fs>-8)    ; Save R6
+foo+12 add   R6, R7, 0           ; R6 is now the Frame ptr
+foo+16 store R4, R6, (<fs>-12)   ; Save a preserved reg
        ;; This subroutine does not change R5
        ...
        ;; Start epilogue (R7 is returned to entry value)
-foo+64 load R4, R6, (<fs>-12)  ; Restore R4
-foo+68 load R6, R7, (<fs>-8)   ; Restore R6
-foo+72 load R1, R7, (<fs>-4)   ; Restore return address
-foo+76 add R7, R7, <fs>        ; Deallocate frame
-foo+80 jump R1 ; Return
+foo+64 load  R4, R6, (<fs>-12)   ; Restore R4
+foo+68 load  R6, R7, (<fs>-8)    ; Restore R6
+foo+72 load  R1, R7, (<fs>-4)    ; Restore return address
+foo+76 add   R7, R7, <fs>        ; Deallocate frame
+foo+80 jump  R1                  ; Return
 foo+84
 \end{lstlisting}
 \caption{Call frame information example: machine code fragments}
@@ -1250,20 +1252,20 @@ An abstract table
 for the foo subroutine is shown in 
 Table \referfol{tab:callframeinformationexampleconceptualmatrix}.
 Corresponding fragments from the
-\addtoindex{.debug\_frame} section are shown in 
+\dotdebugframe{} section are shown in 
 Table \refersec{tab:callframeinformationexamplecommoninformationentryencoding}.
 
 The following notations apply in 
 Table \refersec{tab:callframeinformationexampleconceptualmatrix}:
-
-\begin{alltt}
-1. R8 is the return address
-2. s = same\_value rule
-3. u = undefined rule
-4. rN = register(N) rule
-5. cN = offset(N) rule
-6. a = architectural rule
-\end{alltt}
+\newline
+\begin{tabular}{p{5mm}l}
+&1.  R8 is the return address \\
+&2.  s = same\_value rule \\
+&3.  u = undefined rule \\
+&4.  rN = register(N) rule \\
+&5.  cN = offset(N) rule \\
+&6.  a = architectural rule \\
+\end{tabular}
 
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
@@ -1338,12 +1340,12 @@ cie+40 &&  \\
 
 The following notations apply in 
 Table \refersec{tab:callframeinformationexampleframedescriptionentryencoding}:
-
-\begin{alltt}
-1. <fs>  = frame size
-2. <caf> = code alignment factor
-3. <daf> = data alignment factor
-\end{alltt}
+\newline
+\begin{tabular}{p{5mm}l}
+&\texttt{<fs>  =} frame size \\
+&\texttt{<caf> =} code alignment factor \\
+&\texttt{<daf> =} data alignment factor \\
+\end{tabular}
 
 
 \begin{centering}
@@ -1395,9 +1397,9 @@ Figure \referfol{fig:inliningexamplespseudosourcefragment}
 is used to illustrate the
 \addtoindexx{inlined subprogram call!examples}
 use of DWARF to describe inlined subroutine calls. This
-example involves a nested subprogram INNER that makes uplevel
+example involves a nested subprogram \texttt{INNER} that makes uplevel
 references to the formal parameter and local variable of the
-containing subprogram OUTER.
+containing subprogram \texttt{OUTER}.
 
 \begin{figure}[here]
 \begin{lstlisting}
@@ -1425,22 +1427,22 @@ OUTER(7);
 There are several approaches that a compiler might take to
 inlining for this sort of example. This presentation considers
 three such approaches, all of which involve inline expansion
-of subprogram OUTER. (If OUTER is not inlined, the inlining
+of subprogram \texttt{OUTER}. (If \texttt{OUTER} is not inlined, the inlining
 reduces to a simpler single level subset of the two level
 approaches considered here.)
 
 The approaches are:
 \begin{enumerate}[1. ]
-\item  Inline both OUTER and INNER in all cases
+\item  Inline both \texttt{OUTER} and \texttt{INNER} in all cases
 
-\item Inline OUTER, multiple INNERs \\
-Treat INNER as a non\dash inlinable part of OUTER, compile and
-call a distinct normal version of INNER defined within each
-inlining of OUTER.
+\item Inline \texttt{OUTER}, multiple \texttt{INNER}s \\
+Treat \texttt{INNER} as a non\dash inlinable part of \texttt{OUTER}, compile and
+call a distinct normal version of \texttt{INNER} defined within each
+inlining of \texttt{OUTER}.
 
-\item Inline OUTER, one INNER \\
-Compile INNER as a single normal subprogram which is called
-from every inlining of OUTER.
+\item Inline \texttt{OUTER}, one \texttt{INNER} \\
+Compile \texttt{INNER} as a single normal subprogram which is called
+from every inlining of \texttt{OUTER}.
 \end{enumerate}
 
 This discussion does not consider why a compiler might choose
@@ -1456,7 +1458,7 @@ form
 where
 \begin{description}
 \item[\textless io\textgreater]
-is either INNER or OUTER to indicate to which
+is either \texttt{INNER} or \texttt{OUTER} to indicate to which
 subprogram the debugging information entry applies, 
 \item[\textless ac\textgreater]
 is either AI or CI to indicate ``abstract instance'' or
@@ -1478,18 +1480,18 @@ For conciseness, declaration coordinates and call coordinates are omitted.
 \label{app:inlinebothouterandinner}
 
 A suitable abstract instance for an alternative where both
-OUTER and INNER are always inlined is shown in 
+\texttt{OUTER} and \texttt{INNER} are always inlined is shown in 
 Figure \refersec{fig:inliningexample1abstractinstance}.
 
 Notice in 
-Figure \refersec{fig:inliningexample1abstractinstance} 
+Figure \ref{fig:inliningexample1abstractinstance} 
 that the debugging information entry for
-INNER (labelled INNER.AI.1.1) is nested in (is a child of)
-that for OUTER (labelled OUTER.AI.1.1). Nonetheless, the
-abstract instance tree for INNER is considered to be separate
-and distinct from that for OUTER.
+\texttt{INNER} (labelled \texttt{INNER.AI.1.1}) is nested in (is a child of)
+that for \texttt{OUTER} (labelled \texttt{OUTER.AI.1.1}). Nonetheless, the
+abstract instance tree for \texttt{INNER} is considered to be separate
+and distinct from that for \texttt{OUTER}.
 
-The call of OUTER shown in 
+The call of \texttt{OUTER} shown in 
 Figure \refersec{fig:inliningexamplespseudosourcefragment}
 might be described as
 shown in 
@@ -1585,7 +1587,7 @@ INNER.CI.1.2:
                 \livelink{chap:DWATabstractorigin}{DW\_AT\_abstract\_origin}(reference to INNER.AI.1.2)
                 \livelink{chap:DWATlocation}{DW\_AT\_location}(...)
 INNER.CI.1.3:
-             \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
+            \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
                 ! No name
                 \livelink{chap:DWATabstractorigin}{DW\_AT\_abstract\_origin}(reference to INNER.AI.1.3)
                 \livelink{chap:DWATlocation}{DW\_AT\_location}(...)
@@ -1605,52 +1607,54 @@ INNER.CI.1.3:
 \label{app:inlineoutermultiipleinners}
 
 
-In the second alternative we assume that subprogram INNER
-is not inlinable for some reason, but subprogram OUTER is
+In the second alternative we assume that subprogram \texttt{INNER}
+is not inlinable for some reason, but subprogram \texttt{OUTER} is
 inlinable. 
 \addtoindexx{concrete instance!example}
-Each concrete inlined instance of OUTER has its
-own normal instance of INNER. 
-The abstract instance for OUTER,
+Each concrete inlined instance of \texttt{OUTER} has its
+own normal instance of \texttt{INNER}. 
+The abstract instance for \texttt{OUTER},
 \addtoindexx{abstract instance!example}
-which includes INNER, is shown in 
+which includes \texttt{INNER}, is shown in 
 Figure \refersec{fig:inliningexample2abstractinstance}.
 
-Note that the debugging information in this Figure differs from
-that in 
+Note that the debugging information in 
+Figure \ref{fig:inliningexample2abstractinstance}
+differs from that in 
 Figure \refersec{fig:inliningexample1abstractinstance}
-in that INNER lacks a 
+in that \texttt{INNER} lacks a 
 \livelink{chap:DWATinline}{DW\_AT\_inline} attribute
-and therefore is not a distinct abstract instance. INNER
-is merely an out\dash of\dash line routine that is part of OUTER\textquoteright s
+and therefore is not a distinct abstract instance. \texttt{INNER}
+is merely an out\dash of\dash line routine that is part of \texttt{OUTER}\textquoteright s
 abstract instance. This is reflected in the Figure by
 \addtoindexx{abstract instance!example}
-the fact that the labels for INNER use the substring OUTER
-instead of INNER.
+the fact that the labels for \texttt{INNER} use the substring \texttt{OUTER}
+instead of \texttt{INNER}.
 
 A resulting 
 \addtoindexx{concrete instance!example}
-concrete inlined instance of OUTER is shown in
+concrete inlined instance of \texttt{OUTER} is shown in
 Figure \refersec{fig:inliningexample2concreteinstance}.
 
 Notice in 
-Figure \refersec{fig:inliningexample2concreteinstance}.
-that OUTER is expanded as a concrete
+Figure \ref{fig:inliningexample2concreteinstance}
+that \texttt{OUTER} is expanded as a concrete
 \addtoindexx{concrete instance!example}
-inlined instance, and that INNER is nested within it as a
-concrete out\dash of\dash line subprogram. Because INNER is cloned
-for each inline expansion of OUTER, only the invariant
-attributes of INNER 
+inlined instance, and that \texttt{INNER} is nested within it as a
+concrete out\dash of\dash line subprogram. Because \texttt{INNER} is cloned
+for each inline expansion of \texttt{OUTER}, only the invariant
+attributes of \texttt{INNER} 
 (for example, \livelink{chap:DWATname}{DW\_AT\_name}) are specified
-in the abstract instance of OUTER, and the low\dash level,
+in the abstract instance of \texttt{OUTER}, and the low\dash level,
 \addtoindexx{abstract instance!example}
-instance\dash specific attributes of INNER (for example,
+instance\dash specific attributes of \texttt{INNER} (for example,
 \livelink{chap:DWATlowpc}{DW\_AT\_low\_pc}) are specified in 
-each concrete instance of OUTER.
+each concrete instance of \texttt{OUTER}.
 \addtoindexx{concrete instance!example}
-The several calls of INNER within OUTER are compiled as normal
-calls to the instance of INNER that is specific to the same
-instance of OUTER that contains the calls.
+
+The several calls of \texttt{INNER} within \texttt{OUTER} are compiled as normal
+calls to the instance of \texttt{INNER} that is specific to the same
+instance of \texttt{OUTER} that contains the calls.
 
 \begin{figure}[t]
 \begin{dwflisting}
@@ -1756,19 +1760,19 @@ OUTER.CI.2.6:
 \subsection{Alternative \#3: inline OUTER, one normal INNER}
 \label{app:inlineouteronenormalinner}
 
-In the third approach, one normal subprogram for INNER is
+In the third approach, one normal subprogram for \texttt{INNER} is
 compiled which is called from all concrete inlined instances of
 \addtoindexx{concrete instance!example}
 \addtoindexx{abstract instance!example}
-OUTER. The abstract instance for OUTER is shown in 
+\texttt{OUTER}. The abstract instance for \texttt{OUTER} is shown in 
 Figure \refersec{fig:inliningexample3abstractinstance}.
 
 The most distinctive aspect of that Figure is that subprogram
-INNER exists only within the abstract instance of OUTER,
-and not in OUTER\textquoteright s concrete instance. In the abstract
+\texttt{INNER} exists only within the abstract instance of \texttt{OUTER},
+and not in \texttt{OUTER}\textquoteright s concrete instance. In the abstract
 \addtoindexx{concrete instance!example}
 \addtoindexx{abstract instance!example}
-instance of OUTER, the description of INNER has the full
+instance of \texttt{OUTER}, the description of \texttt{INNER} has the full
 complement of attributes that would be expected for a
 normal subprogram. 
 While attributes such as 
@@ -1784,47 +1788,47 @@ an
 abstract instance because they are not invariant across
 instances of the containing abstract instance, in this case
 those same attributes are included precisely because they are
-invariant -- there is only one subprogram INNER to be described
+invariant -- there is only one subprogram \texttt{INNER} to be described
 and every description is the same.
 
-A concrete inlined instance of OUTER is illustrated in
+A concrete inlined instance of \texttt{OUTER} is illustrated in
 Figure \refersec{fig:inliningexample3concreteinstance}.
 
 Notice in 
-Figure \refersec{fig:inliningexample3abstractinstance}
+Figure \ref{fig:inliningexample3concreteinstance}
 that there is no DWARF representation for
-INNER at all; the representation of INNER does not vary across
-instances of OUTER and the abstract instance of OUTER includes
-the complete description of INNER, so that the description of
-INNER may be (and for reasons of space efficiency, should be)
+\texttt{INNER} at all; the representation of \texttt{INNER} does not vary across
+instances of \texttt{OUTER} and the abstract instance of \texttt{OUTER} includes
+the complete description of \texttt{INNER}, so that the description of
+\texttt{INNER} may be (and for reasons of space efficiency, should be)
 omitted from each 
 \addtoindexx{concrete instance!example}
-concrete instance of OUTER.
+concrete instance of \texttt{OUTER}.
 
 There is one aspect of this approach that is problematical from
-the DWARF perspective. The single compiled instance of INNER
-is assumed to access up\dash level variables of OUTER; however,
+the DWARF perspective. The single compiled instance of \texttt{INNER}
+is assumed to access up\dash level variables of \texttt{OUTER}; however,
 those variables may well occur at varying positions within
 the frames that contain the 
 \addtoindexx{concrete instance!example}
 concrete inlined instances. A
 compiler might implement this in several ways, including the
-use of additional compiler generated parameters that provide
-reference parameters for the up\dash level variables, or a compiler
-generated static link like parameter that points to the group
+use of additional compiler-generated parameters that provide
+reference parameters for the up\dash level variables, or a 
+compiler-generated static link like parameter that points to the group
 of up\dash level entities, among other possibilities. In either of
 these cases, the DWARF description for the location attribute
 of each uplevel variable needs to be different if accessed
-from within INNER compared to when accessed from within the
-instances of OUTER. An implementation is likely to require
+from within \texttt{INNER} compared to when accessed from within the
+instances of \texttt{OUTER}. An implementation is likely to require
 vendor\dash specific DWARF attributes and/or debugging information
 entries to describe such cases.
 
 Note that in C++, a member function of a class defined within
 a function definition does not require any vendor\dash specific
 extensions because the C++ language disallows access to
-entities that would give rise to this problem. (Neither extern
-variables nor static members require any form of static link
+entities that would give rise to this problem. (Neither \texttt{extern}
+variables nor \texttt{static} members require any form of static link
 for accessing purposes.)
 
 \begin{figure}[t]
@@ -1948,26 +1952,26 @@ float arr[square(9)]; // square() called and inlined
             \livelink{chap:DWATname}{DW\_AT\_name}("square")
             \livelink{chap:DWATtype}{DW\_AT\_type}(reference to "int")
             \livelink{chap:DWATinline}{DW\_AT\_inline}(\livelink{chap:DWINLinlined}{DW\_INL\_inlined})
-11\$:    \livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter}
-            \livelink{chap:DWATname}{DW\_AT\_name}("x")
-            \livelink{chap:DWATtype}{DW\_AT\_type}(reference to "int")
+11\$:        \livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter}
+                \livelink{chap:DWATname}{DW\_AT\_name}("x")
+                \livelink{chap:DWATtype}{DW\_AT\_type}(reference to "int")
         ! Concrete instance for square(9)
         ! \addtoindexx{concrete instance!example}
 20\$:    \livelink{chap:DWTAGinlinedsubroutine}{DW\_TAG\_inlined\_subroutine}
             \livelink{chap:DWATabstractorigin}{DW\_AT\_abstract\_origin}(reference to 10\$)
             \livelink{chap:DWATconstexpr}{DW\_AT\_const\_expr}(present)
             \livelink{chap:DWATconstvalue}{DW\_AT\_const\_value}(81)
-        \livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter}
-            \livelink{chap:DWATabstractorigin}{DW\_AT\_abstract\_origin}(reference to 11\$)
-            \livelink{chap:DWATconstvalue}{DW\_AT\_const\_value}(9)
+            \livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter}
+                \livelink{chap:DWATabstractorigin}{DW\_AT\_abstract\_origin}(reference to 11\$)
+                \livelink{chap:DWATconstvalue}{DW\_AT\_const\_value}(9)
         ! Anonymous array type for arr
         !
 30\$:    \livelink{chap:DWTAGarraytype}{DW\_TAG\_array\_type}
-        \livelink{chap:DWATtype}{DW\_AT\_type}(reference to "float")
+            \livelink{chap:DWATtype}{DW\_AT\_type}(reference to "float")
             \livelink{chap:DWATbytesize}{DW\_AT\_byte\_size}(324) ! 81*4
-        \livelink{chap:DWTAGsubrangetype}{DW\_TAG\_subrange\_type}
-            \livelink{chap:DWATtype}{DW\_AT\_type}(reference to "int")
-            \livelink{chap:DWATupperbound}{DW\_AT\_upper\_bound}(reference to 20\$)
+            \livelink{chap:DWTAGsubrangetype}{DW\_TAG\_subrange\_type}
+                \livelink{chap:DWATtype}{DW\_AT\_type}(reference to "int")
+                \livelink{chap:DWATupperbound}{DW\_AT\_upper\_bound}(reference to 20\$)
         ! Variable arr
         !
 40\$:    \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
@@ -2034,6 +2038,8 @@ Figure \refersec{fig:ctypesafeenumerationexamplesource}
 can be described in DWARF as illustrated in 
 Figure \refersec{fig:ctypesafeenumerationexampledwarf}.
 
+\clearpage	% Get following source and DWARF on same page
+
 \begin{figure}[H]
 \begin{lstlisting}[numbers=none]
 // C++ source
@@ -2050,20 +2056,19 @@ E e1;
 \begin{alltt}
 ! DWARF description
 !
-11\$: \livelink{chap:DWTAGenumerationtype}{DW\_TAG\_enumeration\_type}
-        \livelink{chap:DWATname}{DW\_AT\_name}("E")
-        \livelink{chap:DWATtype}{DW\_AT\_type}(reference to "int")
-        \livelink{chap:DWATenumclass}{DW\_AT\_enum\_class}(present)
-12\$:   \livelink{chap:DWTAGenumerator}{DW\_TAG\_enumerator}
-            \livelink{chap:DWATname}{DW\_AT\_name}("E1")
-            \livelink{chap:DWATconstvalue}{DW\_AT\_const\_value}(0)
-13\$:
-         \livelink{chap:DWTAGenumerator}{DW\_TAG\_enumerator}
-            \livelink{chap:DWATname}{DW\_AT\_name}("E2")
-            \livelink{chap:DWATconstvalue}{DW\_AT\_const\_value}(100)
-14\$: \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
-        \livelink{chap:DWATname}{DW\_AT\_name}("e1")
-        \livelink{chap:DWATtype}{DW\_AT\_type}(reference to 11\$)
+11\$:  \livelink{chap:DWTAGenumerationtype}{DW\_TAG\_enumeration\_type}
+          \livelink{chap:DWATname}{DW\_AT\_name}("E")
+          \livelink{chap:DWATtype}{DW\_AT\_type}(reference to "int")
+          \livelink{chap:DWATenumclass}{DW\_AT\_enum\_class}(present)
+12\$:      \livelink{chap:DWTAGenumerator}{DW\_TAG\_enumerator}
+              \livelink{chap:DWATname}{DW\_AT\_name}("E1")
+              \livelink{chap:DWATconstvalue}{DW\_AT\_const\_value}(0)
+13\$:      \livelink{chap:DWTAGenumerator}{DW\_TAG\_enumerator}
+              \livelink{chap:DWATname}{DW\_AT\_name}("E2")
+              \livelink{chap:DWATconstvalue}{DW\_AT\_const\_value}(100)
+14\$:  \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
+         \livelink{chap:DWATname}{DW\_AT\_name}("e1")
+         \livelink{chap:DWATtype}{DW\_AT\_type}(reference to 11\$)
 \end{alltt}
 \end{dwflisting}
 \caption{Type-safe enumeration example: DWARF description}
@@ -2101,12 +2106,12 @@ wrapper<int> obj;
 !
 11\$: \livelink{chap:DWTAGstructuretype}{DW\_TAG\_structure\_type}
         \livelink{chap:DWATname}{DW\_AT\_name}("wrapper")
-12\$: \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}
-        \livelink{chap:DWATname}{DW\_AT\_name}("T")
-        \livelink{chap:DWATtype}{DW\_AT\_type}(reference to "int")
-13\$ \livelink{chap:DWTAGmember}{DW\_TAG\_member}
-        \livelink{chap:DWATname}{DW\_AT\_name}("comp")
-        \livelink{chap:DWATtype}{DW\_AT\_type}(reference to 12\$)
+12\$:    \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}
+            \livelink{chap:DWATname}{DW\_AT\_name}("T")
+            \livelink{chap:DWATtype}{DW\_AT\_type}(reference to "int")
+13\$:    \livelink{chap:DWTAGmember}{DW\_TAG\_member}
+            \livelink{chap:DWATname}{DW\_AT\_name}("comp")
+            \livelink{chap:DWATtype}{DW\_AT\_type}(reference to 12\$)
 14\$: \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
         \livelink{chap:DWATname}{DW\_AT\_name}("obj")
         \livelink{chap:DWATtype}{DW\_AT\_type}(reference to 11\$)
@@ -2116,16 +2121,17 @@ wrapper<int> obj;
 \label{fig:ctemplateexample1dwarf}
 \end{figure}
 
-The actual type of the component comp is int, but in the DWARF
+The actual type of the component \texttt{comp} is \texttt{int}, but in the DWARF
 the type references the
 \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}
-for T, which in turn references int. This implies that in the
-original template comp was of type T and that was replaced
-with int in the instance. There exist situations where it is
-not possible for the DWARF to imply anything about the nature
-of the original template. 
+for \texttt{T}, which in turn references \texttt{int}. This implies that in the
+original template comp was of type \texttt{T} and that was replaced
+with \texttt{int} in the instance. 
 
 \needlines{10}
+There exist situations where it is
+not possible for the DWARF to imply anything about the nature
+of the original template. 
 Consider the C++ template source in
 Figure \refersec{fig:ctemplateexample2source}
 and the DWARF that can describe it in
@@ -2156,25 +2162,25 @@ Figure \refersec{fig:ctemplateexample2dwarf}.
 \begin{alltt}
 ! DWARF description
 !
-11\$: \livelink{chap:DWTAGstructuretype}{DW\_TAG\_structure\_type}
-        \livelink{chap:DWATname}{DW\_AT\_name}("wrapper")
-12\$:   \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}
-            \livelink{chap:DWATname}{DW\_AT\_name}("T")
-            \livelink{chap:DWATtype}{DW\_AT\_type}(reference to "int")
-13\$    \livelink{chap:DWTAGmember}{DW\_TAG\_member}
-            \livelink{chap:DWATname}{DW\_AT\_name}("comp")
-            \livelink{chap:DWATtype}{DW\_AT\_type}(reference to 12\$)
-14\$: \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
-        \livelink{chap:DWATname}{DW\_AT\_name}("obj")
-        \livelink{chap:DWATtype}{DW\_AT\_type}(reference to 11\$)
-21\$: \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}
-        \livelink{chap:DWATname}{DW\_AT\_name}("consume")
-22\$:   \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}
-            \livelink{chap:DWATname}{DW\_AT\_name}("U")
-            \livelink{chap:DWATtype}{DW\_AT\_type}(reference to "int")
-23\$:   \livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter}
-            \livelink{chap:DWATname}{DW\_AT\_name}("formal")
-            \livelink{chap:DWATtype}{DW\_AT\_type}(reference to 11\$)
+11\$:  \livelink{chap:DWTAGstructuretype}{DW\_TAG\_structure\_type}
+          \livelink{chap:DWATname}{DW\_AT\_name}("wrapper")
+12\$:      \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}
+              \livelink{chap:DWATname}{DW\_AT\_name}("T")
+              \livelink{chap:DWATtype}{DW\_AT\_type}(reference to "int")
+13\$:      \livelink{chap:DWTAGmember}{DW\_TAG\_member}
+              \livelink{chap:DWATname}{DW\_AT\_name}("comp")
+              \livelink{chap:DWATtype}{DW\_AT\_type}(reference to 12\$)
+14\$:  \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
+          \livelink{chap:DWATname}{DW\_AT\_name}("obj")
+          \livelink{chap:DWATtype}{DW\_AT\_type}(reference to 11\$)
+21\$:  \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}
+          \livelink{chap:DWATname}{DW\_AT\_name}("consume")
+22\$:      \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}
+              \livelink{chap:DWATname}{DW\_AT\_name}("U")
+              \livelink{chap:DWATtype}{DW\_AT\_type}(reference to "int")
+23\$:      \livelink{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter}
+              \livelink{chap:DWATname}{DW\_AT\_name}("formal")
+              \livelink{chap:DWATtype}{DW\_AT\_type}(reference to 11\$)
 \end{alltt}
 \end{dwflisting}
 \caption{C++ template example \#2: DWARF description}
@@ -2182,7 +2188,7 @@ Figure \refersec{fig:ctemplateexample2dwarf}.
 \end{figure}
 
 In the \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram} 
-entry for the instance of consume, U is described as int. 
+entry for the instance of consume, \texttt{U} is described as \texttt{int}. 
 The type of formal is \texttt{wrapper\textless U\textgreater} in
 the source. DWARF only represents instantiations of templates;
 there is no entry which represents \texttt{wrapper\textless U\textgreater} 
@@ -2194,12 +2200,12 @@ in the \livelink{chap:DWATtype}{DW\_AT\_type} attribute at
 23\$. 
 There is no
 description of the relationship between template type parameter
-T at 12\$ and U at 22\$ which was used to instantiate
+\texttt{T} at 12\$ and \texttt{U} at 22\$ which was used to instantiate
 \texttt{wrapper\textless U\textgreater}.
 
 A consequence of this is that the DWARF information would
 not distinguish between the existing example and one where
-the formal of consume were declared in the source to be
+the formal parameter of \texttt{consume} were declared in the source to be
 \texttt{wrapper\textless int\textgreater}.
 
 
@@ -2234,29 +2240,29 @@ Beta<long> b;
 \begin{alltt}
 ! DWARF representation for variable 'b'
 !
-20\$: \livelink{chap:DWTAGstructuretype}{DW\_TAG\_structure\_type}
-        \livelink{chap:DWATname}{DW\_AT\_name}("Alpha")
-21\$:   \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}
-            \livelink{chap:DWATname}{DW\_AT\_name}("T")
-            \livelink{chap:DWATtype}{DW\_AT\_type}(reference to "long")
-22\$:   \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}
-            \livelink{chap:DWATname}{DW\_AT\_name}("U")
-            \livelink{chap:DWATtype}{DW\_AT\_type}(reference to "long")
-23\$:   \livelink{chap:DWTAGmember}{DW\_TAG\_member}
-            \livelink{chap:DWATname}{DW\_AT\_name}("tango")
-            \livelink{chap:DWATtype}{DW\_AT\_type}(reference to 21\$)
-24\$:   \livelink{chap:DWTAGmember}{DW\_TAG\_member}
-            \livelink{chap:DWATname}{DW\_AT\_name}("uniform")
-            \livelink{chap:DWATtype}{DW\_AT\_type}(reference to 22\$)
-25\$: \livelink{chap:DWTAGtemplatealias}{DW\_TAG\_template\_alias}
-        \livelink{chap:DWATname}{DW\_AT\_name}("Beta")
-        \livelink{chap:DWATtype}{DW\_AT\_type}(reference to 20\$)
-26\$:   \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}
-            \livelink{chap:DWATname}{DW\_AT\_name}("V")
-            \livelink{chap:DWATtype}{DW\_AT\_type}(reference to "long")
-27\$: \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
-        \livelink{chap:DWATname}{DW\_AT\_name}("b")
-        \livelink{chap:DWATtype}{DW\_AT\_type}(reference to 25\$)
+20\$:  \livelink{chap:DWTAGstructuretype}{DW\_TAG\_structure\_type}
+          \livelink{chap:DWATname}{DW\_AT\_name}("Alpha")
+21\$:      \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}
+              \livelink{chap:DWATname}{DW\_AT\_name}("T")
+              \livelink{chap:DWATtype}{DW\_AT\_type}(reference to "long")
+22\$:      \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}
+              \livelink{chap:DWATname}{DW\_AT\_name}("U")
+              \livelink{chap:DWATtype}{DW\_AT\_type}(reference to "long")
+23\$:      \livelink{chap:DWTAGmember}{DW\_TAG\_member}
+              \livelink{chap:DWATname}{DW\_AT\_name}("tango")
+              \livelink{chap:DWATtype}{DW\_AT\_type}(reference to 21\$)
+24\$:      \livelink{chap:DWTAGmember}{DW\_TAG\_member}
+              \livelink{chap:DWATname}{DW\_AT\_name}("uniform")
+              \livelink{chap:DWATtype}{DW\_AT\_type}(reference to 22\$)
+25\$:  \livelink{chap:DWTAGtemplatealias}{DW\_TAG\_template\_alias}
+          \livelink{chap:DWATname}{DW\_AT\_name}("Beta")
+          \livelink{chap:DWATtype}{DW\_AT\_type}(reference to 20\$)
+26\$:      \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}
+              \livelink{chap:DWATname}{DW\_AT\_name}("V")
+              \livelink{chap:DWATtype}{DW\_AT\_type}(reference to "long")
+27\$:  \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
+          \livelink{chap:DWATname}{DW\_AT\_name}("b")
+          \livelink{chap:DWATtype}{DW\_AT\_type}(reference to 25\$)
 \end{alltt}
 \end{dwflisting}
 \caption{C++ template alias example \#1: DWARF description}
@@ -2289,39 +2295,39 @@ X<Z<int>> z;
 \begin{alltt}
 ! DWARF representation for X<Y<int>>
 !
-30\$: \livelink{chap:DWTAGstructuretype}{DW\_TAG\_structure\_type}
-        \livelink{chap:DWATname}{DW\_AT\_name}("Y")
-31\$:   \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}
-            \livelink{chap:DWATname}{DW\_AT\_name}("TY")
-            \livelink{chap:DWATtype}{DW\_AT\_type}(reference to "int")
-32\$: \livelink{chap:DWTAGstructuretype}{DW\_TAG\_structure\_type}
-        \livelink{chap:DWATname}{DW\_AT\_name}("X")
-33\$:   \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}
-            \livelink{chap:DWATname}{DW\_AT\_name}("TX")
-            \livelink{chap:DWATtype}{DW\_AT\_type}(reference to 30\$)
-
+30\$:  \livelink{chap:DWTAGstructuretype}{DW\_TAG\_structure\_type}
+          \livelink{chap:DWATname}{DW\_AT\_name}("Y")
+31\$:      \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}
+              \livelink{chap:DWATname}{DW\_AT\_name}("TY")
+              \livelink{chap:DWATtype}{DW\_AT\_type}(reference to "int")
+32\$:  \livelink{chap:DWTAGstructuretype}{DW\_TAG\_structure\_type}
+          \livelink{chap:DWATname}{DW\_AT\_name}("X")
+33\$:      \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}
+              \livelink{chap:DWATname}{DW\_AT\_name}("TX")
+              \livelink{chap:DWATtype}{DW\_AT\_type}(reference to 30\$)
+!
 ! DWARF representation for X<Z<int>>
 !
-40\$: \livelink{chap:DWTAGtemplatealias}{DW\_TAG\_template\_alias}
-using Z = Y<int>;
-        \livelink{chap:DWATname}{DW\_AT\_name}("Z")
-        \livelink{chap:DWATtype}{DW\_AT\_type}(reference to 30\$)
-41\$:   \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}
-            \livelink{chap:DWATname}{DW\_AT\_name}("T")
-            \livelink{chap:DWATtype}{DW\_AT\_type}(reference to "int")
-42\$: \livelink{chap:DWTAGstructuretype}{DW\_TAG\_structure\_type}
-        \livelink{chap:DWATname}{DW\_AT\_name}("X")
-43\$:   \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}
-            \livelink{chap:DWATname}{DW\_AT\_name}("TX")
-            \livelink{chap:DWATtype}{DW\_AT\_type}(reference to 40\$)
+40\$:  \livelink{chap:DWTAGtemplatealias}{DW\_TAG\_template\_alias}
+          \livelink{chap:DWATname}{DW\_AT\_name}("Z")
+          \livelink{chap:DWATtype}{DW\_AT\_type}(reference to 30\$)
+41\$:      \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}
+              \livelink{chap:DWATname}{DW\_AT\_name}("T")
+              \livelink{chap:DWATtype}{DW\_AT\_type}(reference to "int")
+42\$:  \livelink{chap:DWTAGstructuretype}{DW\_TAG\_structure\_type}
+          \livelink{chap:DWATname}{DW\_AT\_name}("X")
+43\$:      \livelink{chap:DWTAGtemplatetypeparameter}{DW\_TAG\_template\_type\_parameter}
+              \livelink{chap:DWATname}{DW\_AT\_name}("TX")
+              \livelink{chap:DWATtype}{DW\_AT\_type}(reference to 40\$)
+!
 ! Note that 32\$ and 42\$ are actually the same type
 !
-50\$: \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
-        \livelink{chap:DWATname}{DW\_AT\_name}("y")
-        \livelink{chap:DWATtype}{DW\_AT\_type}(reference to \$32)
-51\$: \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
-        \livelink{chap:DWATname}{DW\_AT\_name}("z")
-        \livelink{chap:DWATtype}{DW\_AT\_type}(reference to \$42)
+50\$:  \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
+          \livelink{chap:DWATname}{DW\_AT\_name}("y")
+          \livelink{chap:DWATtype}{DW\_AT\_type}(reference to \$32)
+51\$:  \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
+          \livelink{chap:DWATname}{DW\_AT\_name}("z")
+          \livelink{chap:DWATtype}{DW\_AT\_type}(reference to \$42)
 \end{alltt}
 \end{dwflisting}
 \caption{C++ template alias example \#2: DWARF description}
