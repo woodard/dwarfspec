@@ -263,7 +263,8 @@ attributes reflect the names as they appear in the source
 program but that a case insensitive lookup should be used to
 access those names.
 
-\item A \livelink{chap:DWATbasetypes}{DW\_AT\_base\_types} attribute whose value is a reference.
+\item A \livelink{chap:DWATbasetypes}{DW\_AT\_base\_types} attribute whose value is a 
+\livelink{chap:classreference}{reference}.
 
 
 This 
@@ -287,14 +288,14 @@ correctly.
 
 \item A \livelink{chap:DWATuseUTF8}{DW\_AT\_use\_UTF8} attribute,
 \addtoindexx{use UTF8 attribute}\addtoindexx{UTF-8} 
-which is a \livelink{chap:flag}{flag} whose
+which is a \livelink{chap:classflag}{flag} whose
 presence indicates that all strings (such as the names of
 declared entities in the source program) are represented
 using the UTF\dash 8 representation 
 (see Section \refersec{datarep:attributeencodings}).
 
 
-\item A \livelink{chap:DWATmainsubprogram}{DW\_AT\_main\_subprogram} attribute, which is a \livelink{chap:flag}{flag}
+\item A \livelink{chap:DWATmainsubprogram}{DW\_AT\_main\_subprogram} attribute, which is a \livelink{chap:classflag}{flag}
 \addtoindexx{main subprogram attribute}
 whose presence indicates 
 \hypertarget{chap:DWATmainsubprogramunitcontainingmainorstartingsubprogram}
@@ -333,7 +334,7 @@ An imported unit entry contains
 \addtoindexx{import attribute}
 a
 \livelink{chap:DWATimport}{DW\_AT\_import} attribute 
-whose value is a reference to the
+whose value is a \livelink{chap:classreference}{reference} to the
 normal or partial compilation unit whose declarations logically
 belong at the place of the imported unit entry.
 
@@ -516,7 +517,7 @@ defined outside of the body of the namespace declaration,
 that type, variable, or function definition entry has a
 \livelink{chap:DWATspecification}{DW\_AT\_specification} attribute 
 \addtoindexx{specification attribute}
-whose value is a reference to the
+whose value is a \livelink{chap:classreference}{reference} to the
 debugging information entry representing the declaration of
 the type, variable or function. Type, variable, or function
 entries with a 
@@ -596,7 +597,7 @@ each overloading.
 \addtoindexx{import attribute}
 Each imported declaration entry has a
 \livelink{chap:DWATimport}{DW\_AT\_import} attribute,
-whose value is a reference to the
+whose value is a \livelink{chap:classreference}{reference} to the
 debugging information entry representing the declaration that
 is being imported.
 
@@ -625,7 +626,7 @@ declaration entry
 with a name attribute whose value is
 a null\dash terminated string containing the alias name as it
 appears in the source program and an import attribute whose
-value is a reference to the applicable original namespace or
+value is a \livelink{chap:classreference}{reference} to the applicable original namespace or
 namespace extension entry.
 }
 
@@ -673,7 +674,8 @@ An
 imported module entry contains a 
 \livelink{chap:DWATimport}{DW\_AT\_import} attribute
 \addtoindexx{import attribute}
-whose value is a reference to the module or namespace entry
+whose value is a \livelink{chap:classreference}{reference} 
+to the module or namespace entry
 containing the definition and/or declaration entries for
 the entities that are to be imported into the context of the
 imported module entry.
@@ -792,7 +794,7 @@ compilation unit, that entry has
 \addtoindexx{external attribute}
 a 
 \livelink{chap:DWATexternal}{DW\_AT\_external} attribute,
-which is a \livelink{chap:flag}{flag}.
+which is a \livelink{chap:classflag}{flag}.
 
 \textit{Additional attributes for functions that are members of a
 class or structure are described in 
@@ -807,7 +809,7 @@ may contain a
 attribute 
 \addtoindexx{main subprogram attribute}
 which is 
-a \livelink{chap:flag}{flag} whose presence indicates that the
+a \livelink{chap:classflag}{flag} whose presence indicates that the
 subroutine has been identified as the starting function of
 the program.  If more than one subprogram contains this 
 \nolink{flag},
@@ -830,7 +832,8 @@ A subroutine entry may
 \hypertarget{chap:DWATcallingconventionsubprogramcallingconvention}
 contain a 
 \livelink{chap:DWATcallingconvention}{DW\_AT\_calling\_convention}
-attribute, whose value is an integer constant. The set of
+attribute, whose value is an 
+\livelink{chap:classconstant}{integer constant}. The set of
 calling convention codes is given in 
 Table \refersec{tab:callingconventioncodes}.
 
@@ -876,7 +879,7 @@ declaration may have
 \addtoindexx{prototyped attribute}
 a 
 \livelink{chap:DWATprototyped}{DW\_AT\_prototyped} attribute, which is
-a \livelink{chap:flag}{flag}.
+a \livelink{chap:classflag}{flag}.
 
 \textit{The \addtoindex{Fortran} 
 language allows the keywords \texttt{elemental}, \texttt{pure}
@@ -895,7 +898,7 @@ may have
 \addtoindexx{elemental attribute}
 a 
 \livelink{chap:DWATelemental}{DW\_AT\_elemental} attribute, which
-is a \livelink{chap:flag}{flag}. 
+is a \livelink{chap:classflag}{flag}. 
 The attribute indicates whether the subroutine
 or entry point was declared with the ``elemental'' keyword
 or property.
@@ -906,7 +909,7 @@ subprogram entry may have
 \addtoindexx{pure attribute}
 a 
 \livelink{chap:DWATpure}{DW\_AT\_pure} attribute, which is
-a \livelink{chap:flag}{flag}. 
+a \livelink{chap:classflag}{flag}. 
 The attribute indicates whether the subroutine was
 declared with the ``pure'' keyword or property.
 
@@ -914,7 +917,7 @@ A
 \hypertarget{chap:DWATrecursiverecursivepropertyofasubroutine}
 subprogram entry may have a 
 \livelink{chap:DWATrecursive}{DW\_AT\_recursive} attribute, which
-is a \livelink{chap:flag}{flag}. 
+is a \livelink{chap:classflag}{flag}. 
 The attribute indicates whether the subroutine
 or entry point was declared with the ``recursive'' keyword
 or property.
@@ -1023,10 +1026,9 @@ represented by a debugging information entry\addtoindexx{unspecified parameters 
 with the tag
 \livetarg{chap:DWTAGunspecifiedparameters}{DW\_TAG\_unspecified\_parameters}.
 
-The entry for a subroutine that includes 
+The entry for a subroutine that includes a
+\addtoindex{Fortran}
 \addtoindexx{Fortran!common block}
-a 
-\addtoindex{Fortran} common block
 \livelink{chap:fortrancommonblock}{common} 
 \livelink{chap:commonblockentry}{block}
 \addtoindexx{common block|see{Fortran common block}}
@@ -1036,7 +1038,8 @@ The
 \hypertarget{chap:commonreferencecommonblockusage}
 common inclusion entry has a 
 \livelink{chap:DWATcommonreference}{DW\_AT\_common\_reference} attribute
-whose value is a reference to the debugging information entry
+whose value is a \livelink{chap:classreference}{reference} 
+to the debugging information entry
 for the common \nolink{block} being included 
 (see Section \refersec{chap:commonblockentries}).
 
@@ -1158,7 +1161,8 @@ representing the subroutine that may throw this type. Each
 thrown type entry contains 
 \addtoindexx{type attribute}
 a \livelink{chap:DWATtype}{DW\_AT\_type} attribute, whose
-value is a reference to an entry describing the type of the
+value is a \livelink{chap:classreference}{reference} 
+to an entry describing the type of the
 exception that may be thrown.
 
 \subsection{Function Template Instantiations}
@@ -1231,7 +1235,8 @@ explicitly declared to be available for inline expansion or
 that was expanded inline implicitly by the compiler has 
 \addtoindexx{inline attribute}
 a
-\livelink{chap:DWATinline}{DW\_AT\_inline} attribute whose value is an integer constant. The
+\livelink{chap:DWATinline}{DW\_AT\_inline} attribute whose value is an 
+\livelink{chap:classconstant}{integer constant}. The
 set of values for the \livelink{chap:DWATinline}{DW\_AT\_inline} attribute is given in
 Table \refersec{tab:inlinecodes}.
 
@@ -1255,7 +1260,7 @@ Name&Meaning\\ \hline
 \end{table}
 
 \textit{In \addtoindex{C++}, a function or a constructor declared with
-\addtoindex{\texttt{constexpr}} is implicitly declared inline. The abstract inline
+\addttindex{constexpr} is implicitly declared inline. The abstract inline
 instance (see below) is represented by a debugging information
 entry with the tag \livelink{chap:DWTAGsubprogram}{DW\_TAG\_subprogram}. Such an entry has a
 \livelink{chap:DWATinline}{DW\_AT\_inline} attribute whose value is \livelink{chap:DWINLinlined}{DW\_INL\_inlined}.}
@@ -1403,7 +1408,8 @@ entry
 may also have \livelink{chap:DWATcallfile}{DW\_AT\_call\_file},
 \livelink{chap:DWATcallline}{DW\_AT\_call\_line} and \livelink{chap:DWATcallcolumn}{DW\_AT\_call\_column} attributes, 
 each of whose
-value is an integer constant. These attributes represent the
+value is an \livelink{chap:classconstant}{integer constant}. 
+These attributes represent the
 source file, source line number, and source column number,
 respectively, of the first character of the statement or
 expression that caused the inline expansion. The call file,
@@ -1421,7 +1427,7 @@ An inlined subroutine entry
 \hypertarget{chap:DWATconstexprcompiletimeconstantfunction}
 may have a 
 \livelink{chap:DWATconstexpr}{DW\_AT\_const\_expr}
-attribute, which is a \livelink{chap:flag}{flag} 
+attribute, which is a \livelink{chap:classflag}{flag} 
 whose presence indicates that the
 subroutine has been evaluated as a compile\dash time constant. Such
 an entry may also have a \livelink{chap:DWATconstvalue}{DW\_AT\_const\_value} attribute,
@@ -1431,7 +1437,7 @@ this attribute is the actual return value of the subroutine,
 represented as it would be on the target architecture.
 
 \textit{In \addtoindex{C++}, if a function or a constructor declared with 
-\addtoindex{\texttt{constexpr}}
+\addttindex{constexpr}
 is called with constant expressions, then the corresponding
 concrete inlined instance has a 
 \livelink{chap:DWATconstexpr}{DW\_AT\_const\_expr} attribute,
@@ -1485,14 +1491,14 @@ associated abstract instance entry.
 If an entry within a concrete inlined instance tree contains
 attributes describing the 
 \addtoindexx{declaration coordinates!in concrete instance}
-declaration coordinates 
-of that
-entry, then those attributes should refer to the file, line
+\livelink{chap:declarationcoordinates}{declaration coordinates} 
+of that entry, then those attributes should refer to the file, line
 and column of the original declaration of the subroutine,
 not to the point at which it was inlined. As a consequence,
 they may usually be omitted from any entry that has an abstract
 origin attribute.
 
+\needlines{4}
 For each pair of entries that are associated via a
 \addtoindexx{abstract origin attribute}
 \livelink{chap:DWATabstractorigin}{DW\_AT\_abstract\_origin} attribute, both members of the pair
@@ -1616,6 +1622,7 @@ and concrete instance trees for the outer subroutine apply
 also to the abstract and concrete instance entries for the
 nested subroutine.
 
+\needlines{5}
 For an inlined subroutine nested within another inlined
 subroutine, the following rules apply to their abstract and
 \addtoindexx{abstract instance!nested}
@@ -1693,7 +1700,7 @@ the relocated address of the target subprogram.
 (possibly mangled) \addtoindexx{mangled names}
 name of the target subprogram.
 
-\item If the value is of class \livelink{chap:flag}{flag}, then the value true
+\item If the value is of class \livelink{chap:classflag}{flag}, then the value true
 indicates that the containing subroutine is a trampoline but
 that the target subroutine is not known.
 \end{itemize}

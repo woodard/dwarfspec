@@ -91,7 +91,7 @@ described in Sections 3, 4 and 5.
 \livelink{chap:DWTAGvariant}{DW\_TAG\_variant},
 \livelink{chap:DWTAGvariantpart}{DW\_TAG\_variant\_part},
 \livelink{chap:DWTAGvolatiletype}{DW\_TAG\_volatile\_type},
-\livelink{chap:DWTAGwithstmt}{DW\_TAG\_with\_stmt},
+\livelink{chap:DWTAGwithstmt}{DW\_TAG\_with\_stmt}
 }
 \simplerule[6in]
 \end{table}
@@ -108,7 +108,7 @@ this section and not necessarily mentioned in all
 contexts where they may be appropriate. 
 Examples include 
 \livelink{chap:DWATartificial}{DW\_AT\_artificial}, 
-the \livelink{chap:DWATdeclfilefilecontainingsourcedeclaration}{declaration coordinates}, and 
+the \livelink{chap:declarationcoordinates}{declaration coordinates}, and 
 \livelink{chap:DWATdescription}{DW\_AT\_description}, 
 among others.}
 
@@ -382,52 +382,94 @@ actually declared in the source}{objects or types that are not actually declared
 &\livelinki{chap:DWATvtableelemlocationvirtualfunctiontablevtableslot}{Virtual function vtable slot}{virtual function vtable slot}\\
 \end{longtable}
 
+\addtoindexx{address|see {\textit{also} address class}}
+\addtoindexx{block|see {\textit{also} block class}}
+\addtoindexx{constant|see {\textit{also} constant class}}
+\addtoindexx{exprloc|see {\textit{also} exprloc class}}
+\addtoindexx{flag|see {\textit{also} flag class}}
+\addtoindexx{lineptr|see {\textit{also} lineptr class}}
+\addtoindexx{loclistptr|see {\textit{also} loclistptr class}}
+\addtoindexx{macptr|see {\textit{also} macptr class}}
+\addtoindexx{rangelistptr|see {\textit{also} rangelistptr class}}
+\addtoindexx{reference|see {\textit{also} reference class}}
+\addtoindexx{string|see {\textit{also} string class}}
+\addtoindexx{class of attribute value!address|see {address class}}
+\addtoindexx{class of attribute value!block|see {block class}}
+\addtoindexx{class of attribute value!constant|see {constant class}}
+\addtoindexx{class of attribute value!exprloc|see {exprloc class}}
+\addtoindexx{class of attribute value!flag|see {flag class}}
+\addtoindexx{class of attribute value!lineptr|see {lineptr class}}
+\addtoindexx{class of attribute value!loclistptr|see {loclistptr class}}
+\addtoindexx{class of attribute value!macptr|see {macptr class}}
+\addtoindexx{class of attribute value!rangelistptr|see {rangelistptr class}}
+\addtoindexx{class of attribute value!reference|see {reference class}}
+\addtoindexx{class of attribute value!string|see {string class}}
+
 \begin{table}[here]
-\caption{Classes of Attribute value}
+\caption{Classes of attribute value}
 \label{tab:classesofattributevalue}
 \centering
-% Attribute Class entries need a ref to definition point.
 \setlength{\extrarowheight}{0.1cm}
 
 \begin{tabular}{l|p{11cm}} \hline
 Attribute Class & General Use and Encoding \\ \hline
-\livetargi{chap:address}{address}{address class}
+\hypertarget{chap:classaddress}{}
+\livelinki{datarep:classaddress}{address}{address class}
 &Refers to some location in the address space of the described program.
- \\ 
-\livetargi{chap:block}{block}{block class}
+\\
+
+\hypertarget{chap:classblock}{}
+\livelinki{datarep:classblock}{block}{block class}
 & An arbitrary number of uninterpreted bytes of data.
- \\
-\livetargi{chap:constant}{constant}{constant class}
+\\
+ 
+\hypertarget{chap:classconstant}{}
+\livelinki{datarep:classconstant}{constant}{constant class}
 &One, two, four or eight bytes of uninterpreted data, or data
 encoded in the variable length format known as LEB128 
 (see Section \refersec{datarep:variablelengthdata}).
 
 \textit{Most constant values are integers of one kind or
 another (codes, offsets, counts, and so on); these are
-sometimes called ``integer constants'' for emphasis.}
+sometimes called \doublequote{integer constants} for emphasis.}
 \addtoindexx{integer constant}
-\addtoindexx{constant class!integer} \\
+\addtoindexx{constant class!integer}
+\\
 
-\livetargi{chap:exprloc}{exprloc}{exprloc class}
+\hypertarget{chap:classexprloc}{}
+\livelinki{datarep:classexprloc}{exprloc}{exprloc class}
 &A DWARF expression or location description.
 \\
-\livetargi{chap:flag}{flag}{flag class}
+
+\hypertarget{chap:classflag}{}
+\livelinki{datarep:classflag}{flag}{flag class}
 &A small constant that indicates the presence or absence of an attribute.
 \\
-\livetargi{chap:lineptr}{lineptr}{lineptr class}
+
+\hypertarget{chap:classlineptr}{}
+\livelinki{datarep:classlineptr}{lineptr}{lineptr class}
 &Refers to a location in the DWARF section that holds line number information.
 \\
-\livetargi{chap:loclistptr}{loclistptr}{loclistptr class}
+
+\hypertarget{chap:classloclistptr}{}
+\livelinki{datarep:classloclistptr}{loclistptr}{loclistptr class}
 &Refers to a location in the DWARF section that holds location lists, which
 describe objects whose location can change during their lifetime.
 \\
-\livetargi{chap:macptr}{macptr}{macptr class}
-& Refers to a location in the DWARF section that holds macro definition
- information.  \\
-\livetargi{chap:rangelistptr}{rangelistptr}{rangelistptr class}
-& Refers to a location in the DWARF section that holds non\dash contiguous address ranges.  \\
 
-\livetargi{chap:reference}{reference}{reference class}
+\hypertarget{chap:classmacptr}{}
+\livelinki{datarep:classmacptr}{macptr}{macptr class}
+& Refers to a location in the DWARF section that holds macro definition
+ information.
+\\
+
+\hypertarget{chap:classrangelistptr}{}
+\livelinki{datarep:classrangelistptr}{rangelistptr}{rangelistptr class}
+& Refers to a location in the DWARF section that holds non\dash contiguous address ranges.
+\\
+
+\hypertarget{chap:classreference}{}
+\livelinki{datarep:classreference}{reference}{reference class}
 & Refers to one of the debugging information
 entries that describe the program.  There are three types of
 reference. The first is an offset relative to the beginning
@@ -439,14 +481,17 @@ the unit containing the reference. The third type of reference
 is an indirect reference to a 
 \addtoindexx{type signature}
 type definition using a 64\dash bit signature 
-for that type.  \\
+for that type.
+\\
 
-\livetargi{chap:string}{string}{string class}
+\hypertarget{chap:classstring}{}
+\livelinki{datarep:classstring}{string}{string class}
 & A null\dash terminated sequence of zero or more
 (non\dash null) bytes. Data in this class are generally
 printable strings. Strings may be represented directly in
 the debugging information entry or as an offset in a separate
-string table. \\
+string table.
+\\
 \hline
 \end{tabular}
 \end{table}
@@ -603,7 +648,7 @@ The \livetarg{chap:DWOPlit}{DW\_OP\_lit}\textit{n} operations encode the unsigne
 from 0 through 31, inclusive.
 
 \itembfnl{\livetarg{chap:DWOPaddr}{DW\_OP\_addr}}
-The \livelink{chap:DWOPaddr}{DW\_OP\_addr} operation has a single operand that encodes
+The \livetarg{chap:DWOPaddr}{DW\_OP\_addr} operation has a single operand that encodes
 a machine address and whose size is the \addtoindex{size of an address}
 on the target machine.
 
@@ -1124,9 +1169,9 @@ The two forms are distinguished in a context sensitive
 manner. As the value of an attribute, a location description
 is encoded using 
 \addtoindexx{exprloc class}
-class \livelink{chap:exprloc}{exprloc}  
+class \livelink{chap:classexprloc}{exprloc}  
 and a location list is encoded
-using class \livelink{chap:loclistptr}{loclistptr}
+using class \livelink{chap:classloclistptr}{loclistptr}
 (which 
 \addtoindex{loclistptr}
 serves as an offset into a
@@ -1460,6 +1505,7 @@ list do not collectively cover the entire range over which the
 object in question is defined, it is assumed that the object is
 not available for the portion of the range that is not covered.
 
+\needlines{5}
 A base 
 \addtoindexi{address}{address selection|see{base address selection}}
 selection 
@@ -1597,7 +1643,7 @@ source of the application. An example is a formal parameter
 %FIXME: The word 'this' should be rendered like a variant italic,
 %FIXME: not as a quoted name. Changed to tt font--RB
 entry to represent the 
-\addtoindexx{\texttt{this} parameter}
+\texttt{this} parameter\index{this parameter@\texttt{this} parameter}
 hidden \texttt{this} parameter that most C++
 implementations pass as the first argument to non-static member
 functions.}  
@@ -1609,7 +1655,7 @@ a compiler and not explicitly declared by the source program
 \hypertarget{chap:DWATartificialobjectsortypesthat}
 may have a 
 \livelink{chap:DWATartificial}{DW\_AT\_artificial} attribute, 
-which is a \livelink{chap:flag}{flag}.
+which is a \livelink{chap:classflag}{flag}.
 
 \section{Segmented Addresses}
 \label{chap:segmentedaddresses}
@@ -1742,7 +1788,7 @@ of a program entity has
 a 
 \livelink{chap:DWATdeclaration}{DW\_AT\_declaration} 
 attribute, which is a 
-\livelink{chap:flag}{flag}.
+\livelink{chap:classflag}{flag}.
 
 \subsection{Declarations Completing Non-Defining Declarations}
 A debugging information entry that represents a 
@@ -1750,7 +1796,7 @@ A debugging information entry that represents a
 declaration that completes another (earlier) 
 non\dash defining declaration may have a 
 \livelink{chap:DWATspecification}{DW\_AT\_specification}
-attribute whose value is a reference to
+attribute whose value is a \livelink{chap:classreference}{reference} to
 the debugging information entry representing the non-defining declaration. A debugging
 information entry with a 
 \livelink{chap:DWATspecification}{DW\_AT\_specification} 
@@ -1777,9 +1823,8 @@ entry.}
 
 \section{Declaration Coordinates}
 \label{chap:declarationcoordinates}
-\textit{It is 
-\addtoindexx{declaration coordinates}
-sometimes useful in a debugger to be able to associate
+\livetargi{chap:declarationcoordinates}{}{declaration coordinates}
+\textit{It is sometimes useful in a debugger to be able to associate
 a declaration with its occurrence in the program source.}
 
 Any debugging information 
@@ -1800,10 +1845,11 @@ have
 \livelink{chap:DWATdeclfile}{DW\_AT\_decl\_file}, 
 \livelink{chap:DWATdeclline}{DW\_AT\_decl\_line} and 
 \livelink{chap:DWATdeclcolumn}{DW\_AT\_decl\_column}
-attributes each of whose value is an unsigned integer constant.
+attributes each of whose value is an unsigned
+\livelink{chap:classconstant}{integer constant}.
 
 The value of 
-\addtoindex{declaration file attribute}
+\addtoindexx{declaration file attribute}
 the 
 \livelink{chap:DWATdeclfile}{DW\_AT\_decl\_file}
 attribute 
@@ -1817,14 +1863,14 @@ The value 0 indicates that no source file
 has been specified.
 
 The value of 
-\addtoindex{declaration line attribute}
+\addtoindexx{declaration line attribute}
 the \livelink{chap:DWATdeclline}{DW\_AT\_decl\_line} attribute represents
 the source line number at which the first character of
 the identifier of the declared object appears. The value 0
 indicates that no source line has been specified.
 
 The value of 
-\addtoindex{declaration column attribute}
+\addtoindexx{declaration column attribute}
 the \livelink{chap:DWATdeclcolumn}{DW\_AT\_decl\_column} attribute represents
 the source column number at which the first character of
 the identifier of the declared object appears. The value 0
@@ -1843,7 +1889,8 @@ that has been given a name may have a
 \livelink{chap:DWATname}{DW\_AT\_name} attribute,
 whose 
 \addtoindexx{name attribute}
-value is a string representing the name as it appears in
+value is a \livelink{chap:classstring}{string} 
+representing the name as it appears in
 the source program. A debugging information entry containing
 no name attribute, or containing a name attribute whose value
 consists of a name containing a single null byte, represents
@@ -1904,6 +1951,7 @@ is called by a \livelink{chap:DWOPcall2}{DW\_OP\_call2},
 DWARF expression operator 
 (see Section \refersec{chap:controlflowoperations}).
 
+\needlines{5}
 \section{Code Addresses and Ranges}
 \label{chap:codeaddressesandranges}
 Any debugging information entry describing an entity that has
@@ -1992,13 +2040,13 @@ When the set of addresses of a debugging information entry
 cannot be described as a single contiguous range, the entry has
 a \livelink{chap:DWATranges}{DW\_AT\_ranges} attribute 
 \addtoindexx{ranges attribute}
-whose value is of class \livelink{chap:rangelistptr}{rangelistptr}
+whose value is of class \livelink{chap:classrangelistptr}{rangelistptr}
 and indicates the beginning of a \addtoindex{range list}.
 Similarly,
 a \livelink{chap:DWATstartscope}{DW\_AT\_start\_scope} attribute 
 \addtoindexx{start scope attribute}
 may have a value of class
-\livelink{chap:rangelistptr}{rangelistptr} for the same reason.  
+\livelink{chap:classrangelistptr}{rangelistptr} for the same reason.  
 
 Range lists are contained
 in a separate object file section called 
@@ -2059,6 +2107,7 @@ a \addtoindex{range list} may not overlap.
 There is no requirement that
 the entries be ordered in any particular way.
 
+\needlines{5}
 A base address selection entry consists of:
 \begin{enumerate}[1. ]
 \item The value of the largest representable address offset (for example, \wffffffff when the size of
@@ -2123,14 +2172,14 @@ computed dynamically during execution.
 The value of these
 attributes is determined based on the class as follows:
 \begin{itemize}
-\item For a \livelink{chap:constant}{constant}, the value of the constant is the value of
+\item For a \livelink{chap:classconstant}{constant}, the value of the constant is the value of
 the attribute.
 
-\item For a \livelink{chap:reference}{reference}, the
-value is a reference to another
+\item For a \livelink{chap:classreference}{reference}, the
+value is a \livelink{chap:classreference}{reference} to another
 entity which specifies the value of the attribute.
 
-\item For an \livelink{chap:exprloc}{exprloc}, the value is interpreted as a 
+\item For an \livelink{chap:classexprloc}{exprloc}, the value is interpreted as a 
 DWARF expression; 
 evaluation of the expression yields the value of
 the attribute.
@@ -2189,17 +2238,19 @@ assigned, or the like.}
 \label{chap:byteandbitsizes}
 % Some trouble here with hbox full, so we try optional word breaks.
 Many debugging information entries allow either a
-\livelink{chap:DWATbytesize}{DW\_AT\_byte\_size} attribute or a \livelink{chap:DWATbitsize}{DW\_AT\_bit\_size} attribute,
-whose integer constant value 
+\livelink{chap:DWATbytesize}{DW\_AT\_byte\_size} attribute or a 
+\livelink{chap:DWATbitsize}{DW\_AT\_bit\_size} attribute,
+whose \livelink{chap:classconstant}{integer constant} value 
 (see Section \refersec{chap:staticanddynamicvaluesofattributes}) 
 specifies an
 amount of storage. The value of the \livelink{chap:DWATbytesize}{DW\_AT\_byte\_size} attribute
 is interpreted in bytes and the value of the \livelink{chap:DWATbitsize}{DW\_AT\_bit\_size}
 attribute is interpreted in bits.  
 
-Similarly, the integer
-constant value of a \livelink{chap:DWATbytestride}{DW\_AT\_byte\_stride} attribute is interpreted
-in bytes and the integer constant value of a \livelink{chap:DWATbitstride}{DW\_AT\_bit\_stride}
+Similarly, the \livelink{chap:classconstant}{integer constant}
+value of a \livelink{chap:DWATbytestride}{DW\_AT\_byte\_stride} attribute is interpreted
+in bytes and the \livelink{chap:classconstant}{integer constant} value of a 
+\livelink{chap:DWATbitstride}{DW\_AT\_bit\_stride}
 attribute is interpreted in bits.
 
 \section{Linkage Names}

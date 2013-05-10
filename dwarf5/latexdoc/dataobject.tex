@@ -41,7 +41,7 @@ zero byte.
 \hypertarget{chap:DWATexternalexternalvariable}
 which 
 \addtoindexx{external attribute}
-is a \livelink{chap:flag}{flag}, if the name
+is a \livelink{chap:classflag}{flag}, if the name
 of a variable is visible outside of its enclosing compilation
 unit.  
 
@@ -53,7 +53,7 @@ are represented by non-external variable entries.
 
 \item A \livelink{chap:DWATdeclaration}{DW\_AT\_declaration} attribute, 
 \addtoindexx{declaration attribute}
-which is a \livelink{chap:flag}{flag} that
+which is a \livelink{chap:classflag}{flag} that
 indicates whether this entry represents a non-defining
 declaration of an object.
 
@@ -89,7 +89,7 @@ constant or formal parameter.
 \item If the variable entry represents the defining declaration
 for a C++ static data member of a structure, class or union,
 the entry has a \livelink{chap:DWATspecification}{DW\_AT\_specification} attribute, whose value is a
-reference to the debugging information entry representing the
+\livelink{chap:class:reference}{reference} to the debugging information entry representing the
 declaration of this data member. The referenced entry has the
 tag \livelink{chap:DWTAGmember}{DW\_TAG\_member} and will be a child of some class, structure
 or union type entry.
@@ -115,7 +115,7 @@ represent.
 
 \item A \livelink{chap:DWATvariableparameter}{DW\_AT\_variable\_parameter}
 attribute\addtoindexx{variable parameter attribute}, 
-which is a \livelink{chap:flag}{flag},
+which is a \livelink{chap:classflag}{flag},
 if a formal parameter entry represents a parameter whose
 value in the calling function may be modified by the callee.
 The absence of this attribute implies that the parameter\textquoteright s
@@ -125,7 +125,7 @@ value in the calling function cannot be modified by the callee.
 \hypertarget{chap:DWATisoptionaloptionalparameter}
 which 
 \addtoindexx{is optional attribute}
-is a \livelink{chap:flag}{flag}, if a
+is a \livelink{chap:classflag}{flag}, if a
 parameter entry represents an \addtoindex{optional parameter}.
 
 \item A \livelink{chap:DWATdefaultvalue}{DW\_AT\_default\_value} attribute 
@@ -193,7 +193,7 @@ for the object from the beginning of the first \addtoindex{range list} entry
 that is not a base selection entry or an end of list entry.
 
 \item Otherwise, the scope of the object is specified using
-a value of class \livelink{chap:rangelistptr}{rangelistptr}. 
+a value of class \livelink{chap:classrangelistptr}{rangelistptr}. 
 This value indicates the
 beginning of a \addtoindex{range list}
 (see \refersec{chap:noncontiguousaddressranges}).
@@ -273,14 +273,15 @@ for different architectures.
 \item A \livelink{chap:DWATconstexpr}{DW\_AT\_const\_expr} attribute, 
 which 
 \hypertarget{chap:DWATconstexprcompiletimeconstantobject}
-is a \livelink{chap:flag}{flag}, if a
+is a \livelink{chap:classflag}{flag}, if a
 variable entry represents a C++ object declared with the
 \texttt{constexpr} specifier. This attribute indicates that the
 variable can be evaluated as a compile\dash time constant.  
 
 \textit{In C++,
 a variable declared with \texttt{constexpr} is implicitly \texttt{const}. Such a
-variable has a \livelink{chap:DWATtype}{DW\_AT\_type} attribute whose value is a reference
+variable has a \livelink{chap:DWATtype}{DW\_AT\_type} attribute whose value is a 
+\livelink{chap:classreference}{reference}
 to a debugging information entry describing a const qualified type.}
 
 \item A \livelink{chap:DWATlinkagename}{DW\_AT\_linkage\_name} attribute for a 
@@ -352,7 +353,7 @@ Each namelist item entry contains a
 \addtoindexx{namelist item attribute}
 whose 
 \addtoindexx{namelist item entry}
-value is a reference to the debugging
+value is a \livelink{chap:classreference}{reference} to the debugging
 information entry representing the declaration of the item
 whose name appears in the namelist.
 
