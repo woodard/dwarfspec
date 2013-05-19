@@ -59,7 +59,7 @@ A base type entry has
 either a \livelink{chap:DWATbytesize}{DW\_AT\_byte\_size} attribute
 \hypertarget{chap:DWATbitsizebasetypebitsize}
 or a \livelink{chap:DWATbitsize}{DW\_AT\_bit\_size} attribute 
-\addtoindex{bit size attribute}
+\addtoindexx{bit size attribute}
 whose \livelink{chap:classconstant}{integer constant} value
 (see Section \refersec{chap:byteandbitsizes}) 
 is the amount of storage needed to hold
@@ -67,7 +67,7 @@ a value of the type.
 
 \needlines{5}
 \textit{For example, the 
-\addtoindex{C} type int on a machine that uses 32\dash bit
+\addtoindex{C} type \texttt{int} on a machine that uses 32\dash bit
 integers is represented by a base type entry with a name
 attribute whose value is \doublequote{int}, an encoding attribute
 whose value is \livelink{chap:DWATEsigned}{DW\_ATE\_signed}
@@ -247,7 +247,7 @@ A \livelink{chap:DWATdecimalsign}{DW\_AT\_decimal\_sign} attribute
 \addtoindexx{decimal sign attribute}
 is an \livelink{chap:classconstant}{integer constant} that
 conveys the representation of the sign of the decimal type
-(see Figure \refersec{tab:decimalsignattributevalues}). 
+(see Table \refersec{tab:decimalsignattributevalues}). 
 Its \livelink{chap:classconstant}{integer constant} value is interpreted to
 mean that the type has a leading overpunch, trailing overpunch,
 leading separate or trailing separate sign representation or,
@@ -267,10 +267,10 @@ is encoded in the most significant digit in a target\dash dependent  manner \\
 \livetarg{chap:DWDStrailingoverpunch}{DW\_DS\_trailing\_overpunch} & Sign
 is encoded in the least significant digit in a target\dash dependent manner \\
 \livetarg{chap:DWDSleadingseparate}{DW\_DS\_leading\_separate} 
-& Decimal type: Sign is a ``+'' or ``-'' character 
+& Decimal type: Sign is a \doublequote{+} or \doublequote{-} character 
 to the left of the most significant digit. \\
 \livetarg{chap:DWDStrailingseparate}{DW\_DS\_trailing\_separate} 
-& Decimal type: Sign is a ``+'' or ``-'' character 
+& Decimal type: Sign is a \doublequote{+} or \doublequote{-} character 
 to the right of the least significant digit. \\
 &Packed decimal type: Least significant nibble contains
 a target\dash dependent value
@@ -307,7 +307,7 @@ base
 \hypertarget{chap:DWATpicturestringpicturestringfornumericstringtype}
 type is used to represent an edited
 numeric or alphanumeric data type. It is used in combination
-with an \livelink{chap:DWATpicturestring}{DW\_AT\_picture\_string} attribute whose value is a 
+with a \livelink{chap:DWATpicturestring}{DW\_AT\_picture\_string} attribute whose value is a 
 null\dash terminated string containing the target\dash dependent picture
 string associated with the type.
 
@@ -384,7 +384,7 @@ of the integer value in memory and the associated constant
 entry for the type.
 
 \textit{The \livelink{chap:DWATsmall}{DW\_AT\_small} attribute 
-is defined with the \addtoindex{Ada} small
+is defined with the \addtoindex{Ada} \texttt{small}
 attribute in mind.}
 
 \section{Unspecified Type Entries}
@@ -414,9 +414,7 @@ the language implementation can provide an unspecified type
 entry with the name \doublequote{void} which can be referenced by the
 type attribute of pointer types and typedef declarations for
 'void' (see 
-% FIXME: the following reference was wrong in DW4 so DavidA guessed
-% the intent.
-Sections \refersec{chap:unspecifiedtypeentries} and 
+Sections \refersec{chap:typemodifierentries} and 
 %The following reference was valid, so the following is probably correct.
 Section \refersec{chap:typedefentries}, 
 respectively). As another
@@ -475,7 +473,7 @@ a
 attribute to describe how objects having the given pointer
 or reference type ought to be dereferenced.
 
-A modified type entry describing a shared qualified type
+A modified type entry describing a \addtoindex{UPC} shared qualified type
 (using \livelink{chap:DWTAGsharedtype}{DW\_TAG\_shared\_type}) may have a
 \livelink{chap:DWATcount}{DW\_AT\_count} attribute
 \addtoindexx{count attribute}
@@ -539,7 +537,7 @@ reference to an object of the type being modified
 \livetarg{chap:DWTAGsharedtype}{DW\_TAG\_shared\_type}&\addtoindex{UPC} shared qualified type 
 \addtoindexx{shared qualified type entry} \\
 \livetarg{chap:DWTAGvolatiletype}{DW\_TAG\_volatile\_type}&C or C++ volatile qualified type 
-\addtoindex{volatile qualified type entry} \\
+\addtoindexx{volatile qualified type entry} \\
 \hline
 \end{tabular}
 \end{table}
@@ -618,7 +616,7 @@ source syntax) in other languages.}
 \section{Array Type Entries}
 \label{chap:arraytypeentries}
 
-\textit{Many languages share the concept of an ``array,'' which is
+\textit{Many languages share the concept of an \doublequote{array,} which is
 \addtoindexx{array type entry}
 a table of components of identical type.}
 
@@ -710,8 +708,9 @@ array type entry and are ordered to reflect the appearance of
 the dimensions in the source program (i.e., leftmost dimension
 first, next to leftmost second, and so on).
 
-\textit{In languages, such as C, in which there is no concept of
-a \doublequote{multidimensional array}, an array of arrays may
+\textit{In languages that have no concept of a 
+\doublequote{multidimensional array} (for example, 
+\addtoindex{C}), an array of arrays may
 be represented by a debugging information entry for a
 multidimensional array.}
 
@@ -724,7 +723,7 @@ which are described in
 Section \refersec{chap:dynamictypeproperties}. 
 For relevant examples, see also Appendix \refersec{app:fortran90example}.
 
-\section{ Structure, Union, Class and Interface Type Entries}
+\section{Structure, Union, Class and Interface Type Entries}
 \label{chap:structureunionclassandinterfacetypeentries}
 
 \textit{The languages 
@@ -747,14 +746,14 @@ own space in computer memory. The components of a C or C++
 
 \textit{\addtoindex{Pascal} and 
 other languages have a \doublequote{discriminated union,}
-\addtoindex{discriminated union|see {variant entry}}
+\addtoindexx{discriminated union|see {variant entry}}
 also called a \doublequote{variant record.} Here, selection of a
 number of alternative substructures (\doublequote{variants}) is based
 on the value of a component that is not part of any of those
 substructures (the \doublequote{discriminant}).}
 
 \textit{\addtoindex{C++} and 
-\addtoindex{Java} have the notion of ``class'', which is in some
+\addtoindex{Java} have the notion of \doublequote{class,} which is in some
 ways similar to a structure. A class may have \doublequote{member
 functions} which are subroutines that are within the scope
 of a class or structure.}
@@ -825,8 +824,8 @@ a \livelink{chap:DWATsignature}{DW\_AT\_signature}
 attribute.
 
 If a structure, union or class entry represents the definition
-of a structure, class or union member corresponding to a prior
-incomplete structure, class or union, the entry may have a
+of a structure, union or class member corresponding to a prior
+incomplete structure, union or class, the entry may have a
 \livelink{chap:DWATspecification}{DW\_AT\_specification} attribute 
 \addtoindexx{specification attribute}
 whose value is a \livelink{chap:classreference}{reference} to
@@ -840,7 +839,7 @@ do not need to duplicate
 information provided by the declaration entry referenced by the
 specification attribute.  In particular, such entries do not
 need to contain an attribute for the name of the structure,
-class or union they represent if such information is already
+union or class they represent if such information is already
 provided in the declaration.
 
 \textit{For \addtoindex{C} and \addtoindex{C++}, 
@@ -889,9 +888,9 @@ facilitate DWARF space compression
 \subsection{Interface Type Entries}
 \label{chap:interfacetypeentries}
 
-\textit{The \addtoindex{Java} language defines ``interface'' types. 
+\textit{The \addtoindex{Java} language defines \doublequote{interface} types. 
 An interface
-\addtoindex{interface type entry}
+\addtoindexx{interface type entry}
 in \addtoindex{Java} is similar to a \addtoindex{C++} or 
 \addtoindex{Java} class with only abstract
 methods and constant data members.}
@@ -920,14 +919,14 @@ declarations in the source program.
 \textit{In \addtoindex{C++}, a class (or struct) 
 may 
 \addtoindexx{derived type (C++)|see{inheritance entry}}
-be ``derived from'' or be a
-``subclass of'' another class. 
-In \addtoindex{Java}, an interface may ``extend''
+be \doublequote{derived from} or be a
+\doublequote{subclass of} another class. 
+In \addtoindex{Java}, an interface may \doublequote{extend}
 \addtoindexx{extended type (Java)|see{inheritance entry}}
 one 
 \addtoindexx{implementing type (Java)|see{inheritance entry}}
-or more other interfaces, and a class may ``extend'' another
-class and/or ``implement'' one or more interfaces. All of these
+or more other interfaces, and a class may \doublequote{extend} another
+class and/or \doublequote{implement} one or more interfaces. All of these
 relationships may be described using the following. Note that
 in \addtoindex{Java}, 
 the distinction between extends and implements is
@@ -964,14 +963,14 @@ a
 \livelink{chap:DWATdatamemberlocation}{DW\_AT\_data\_member\_location}
 attribute, whose value describes the location of the beginning
 of the inherited type relative to the beginning address of the
-derived class. If that value is a constant, it is the offset
+instance of the derived class. If that value is a constant, it is the offset
 in bytes from the beginning of the class to the beginning of
-the inherited type. Otherwise, the value must be a location
+the instance of the inherited type. Otherwise, the value must be a location
 description. In this latter case, the beginning address of
-the derived class is pushed on the expression stack before
+the instance of the derived class is pushed on the expression stack before
 the \addtoindex{location description}
 is evaluated and the result of the
-evaluation is the location of the inherited type.
+evaluation is the location of the instance of the inherited type.
 
 \textit{The interpretation of the value of this attribute for
 inherited types is the same as the interpretation for data
@@ -1043,7 +1042,7 @@ entities.
 \subsection{Friends}
 \label{chap:friends}
 
-Each ``friend'' 
+Each \doublequote{friend} 
 \addtoindexx{friend entry}
 declared by a structure, union or class
 \hypertarget{chap:DWATfriendfriendrelationship}
@@ -1160,7 +1159,7 @@ the containing construct is equivalent to execution of the
 is not needed at the
 beginning of a \addtoindex{location description} for a data member. 
 The
-result of the evaluation is a location--either an address or
+result of the evaluation is a location---either an address or
 the name of a register, not an offset to the member.}
 
 \textit{A \livelink{chap:DWATdatamemberlocation}{DW\_AT\_data\_member\_location} 
@@ -1248,7 +1247,9 @@ high order bits are to the left and low order bits are to
 the right.}
 
 \begin{figure}[h]
+\begin{dwflisting}
 \begin{verbatim}
+
     j:0
     k:5
     m:11
@@ -1263,19 +1264,23 @@ the right.}
     |   j   |     k      | m        |        n      |       <pad>   |
     |       |            |          |               |               | 
     +---------------------------------------------------------------+ 
+
 \end{verbatim}
+\end{dwflisting}
 \caption{Big-endian data bit offsets}
 \label{fig:bigendiandatabitoffsets}
 \end{figure}
 
 \begin{figure}[h]
+\begin{dwflisting}
 \begin{verbatim}
+
     j:0
     k:5
     m:11
     n:16
                                                <- Addresses increase
-    |       A       |     A + 1     |    A + 2      |    A + 3      | 
+    |     A + 3     |     A + 2     |    A + 1      |       A       | 
 
                                         <-  Data bit offsets increase 
     +---------------+---------------+---------------+---------------+
@@ -1283,7 +1288,9 @@ the right.}
     |     <pad>     |        n      |    m    |    k     |     j    |
     |               |               |         |          |          |
     +---------------------------------------------------------------+
+
 \end{verbatim}
+\end{dwflisting}
 \caption{Little-endian data bit offsets}
 \label{fig:littleendiandatabitoffsets}
 \end{figure}
@@ -1380,39 +1387,32 @@ combination may be found in the
 \addtoindex{DWARF Version 3} Standard.}
 
 \textit{In comparing 
-DWARF Versions 3 
+DWARF Versions 3 and 4,
 \addtoindexx{DWARF Version 3}
-and 
 \addtoindexx{DWARF Version 4}
-4, note that DWARF V4
+note that DWARF V4
 defines the following combinations of attributes:}
-
 \begin{itemize}
 \item \textit{either \livelink{chap:DWATdatamemberlocation}{DW\_AT\_data\_member\_location} 
 or
 \livelink{chap:DWATdatabitoffset}{DW\_AT\_data\_bit\_offset} 
 (to specify the beginning of the data member)}
-
-% FIXME: the indentation of the following line is suspect.
+\end{itemize}
 \textit{optionally together with}
-
+\begin{itemize}
 \item  \textit{either \livelink{chap:DWATbytesize}{DW\_AT\_byte\_size} or 
 \livelink{chap:DWATbitsize}{DW\_AT\_bit\_size} (to
 specify the size of the data member)}
-
 \end{itemize}
-
-\textit{DWARF V3 defines the following combinations}
-
+\textit{DWARF V3 defines the following combinations:}
 \begin{itemize}
 \item \textit{\livelink{chap:DWATdatamemberlocation}{DW\_AT\_data\_member\_location} 
 (to specify the beginning
 of the data member, except this specification is only partial
 in the case of a bit field) }
-
-% FIXME: the indentation of the following line is suspect.
+\end{itemize}
 \textit{optionally together with}
-
+\begin{itemize}
 \item \textit{\livelink{chap:DWATbytesize}{DW\_AT\_byte\_size}, 
 \livelink{chap:DWATbitsize}{DW\_AT\_bit\_size} and 
 \livelink{chap:DWATbitoffset}{DW\_AT\_bit\_offset}
@@ -1483,7 +1483,7 @@ to the formal parameter entry
 that corresponds to the object for which the function is
 called. The name attribute of that formal parameter is defined
 by the current language (for example, 
-this for \addtoindex{C++} or self
+\texttt{this} for \addtoindex{C++} or \texttt{self}
 for \addtoindex{Objective C} 
 and some other languages). That parameter
 also has a \livelink{chap:DWATartificial}{DW\_AT\_artificial} attribute whose value is true.
@@ -1521,6 +1521,7 @@ attribute. In particular, such entries do not need to contain
 attributes for the name or return type of the function member
 whose definition they represent.
 
+\needlines{5}
 \subsection{Class Template Instantiations}
 \label{chap:classtemplateinstantiations}
 
@@ -1585,15 +1586,16 @@ value parameter for this instantiation as represented on the
 target architecture.
 
 \needlines{5}
-\item The class type entry and each of its child entries references
+\item The class type entry and each of its child entries reference
 a \addtoindex{template type parameter entry} in any circumstance where the
 source template definition references a formal parameterized
 type. 
 Similarly, the class type entry and each of its child
-entries references a template value parameter entry in any
+entries reference a template value parameter entry in any
 circumstance where the source template definition references
 a formal parameterized value.
 
+\needlines{4}
 \item If the compiler has generated a special compilation unit to
 hold the 
 \addtoindexx{template instantiation!and special compilation unit}
@@ -1701,12 +1703,14 @@ declarations in the source program.
 
 \textit{COBOL has the notion of 
 \addtoindexx{level-88 condition, COBOL}
-a ``level\dash 88 condition'' that
+a \doublequote{level\dash 88 condition} that
 associates a data item, called the conditional variable, with
 a set of one or more constant values and/or value ranges.
-Semantically, the condition is \textquoteleft true\textquoteright if the conditional
+% Note: the {} after \textquoteright (twice) is necessary to assure a following space separator
+Semantically, the condition is \textquoteleft true\textquoteright{}
+if the conditional
 variable's value matches any of the described constants,
-and the condition is \textquoteleft false\textquoteright otherwise.}
+and the condition is \textquoteleft false\textquoteright{} otherwise.}
 
 The \livetarg{chap:DWTAGcondition}{DW\_TAG\_condition}
 debugging information entry\addtoindexx{condition entry}
@@ -1732,6 +1736,7 @@ implicitly specifies a \doublequote{comparison type} that is the
 type of an array element if the parent has an array type;
 otherwise it is the type of the parent entry.
 
+\needlines{4}
 The condition entry owns \livelink{chap:DWTAGconstant}{DW\_TAG\_constant} and/or
 \livelink{chap:DWTAGsubrangetype}{DW\_TAG\_subrange\_type} entries that describe the constant
 values associated with the condition. If any child entry 
@@ -1845,7 +1850,7 @@ or \livelink{chap:DWATbitstride}{DW\_AT\_bit\_stride} attribute
 which specifies the separation
 between successive elements along the dimension as described
 in 
-Section \refersec{chap:visibilityofdeclarations}. 
+Section \refersec{chap:staticanddynamicvaluesofattributes}. 
 The value of the 
 \livelink{chap:DWATbitstride}{DW\_AT\_bit\_stride} attribute
 \addtoindexx{bit stride attribute}
@@ -1866,7 +1871,7 @@ that return a value of a specific type. In both
 it is possible to declare pointers to subroutines that not
 only return a value of a specific type, but accept only
 arguments of specific types. The type of such pointers would
-be described with a ``pointer to'' modifier applied to a
+be described with a \doublequote{pointer to} modifier applied to a
 user\dash defined type.}
 
 A subroutine type is represented by a debugging information
@@ -1908,7 +1913,7 @@ a
 a \livelink{chap:classflag}{flag}.
 
 Each debugging information entry owned by a subroutine
-type entry correspond to either a formal parameter or the sequence of
+type entry corresponds to either a formal parameter or the sequence of
 unspecified parameters of the subprogram type:
 
 \begin{enumerate}[1. ]
@@ -1934,12 +1939,12 @@ tag \livelink{chap:DWTAGunspecifiedparameters}{DW\_TAG\_unspecified\_parameters}
 \section{String Type Entries}
 \label{chap:classstringtypeentries}
 
-\textit{A ``string'' is a sequence of characters that have specific
+\textit{A \doublequote{string} is a sequence of characters that have specific
 \addtoindexx{string type entry}
 semantics and operations that separate them from arrays of
 characters. 
 \addtoindex{Fortran} is one of the languages that has a string
-type. Note that ``string'' in this context refers to a target
+type. Note that \doublequote{string} in this context refers to a target
 machine concept, not the class string as used in this document
 (except for the name attribute).}
 
@@ -1969,9 +1974,9 @@ is the size of the data to be retrieved from the location
 referenced by the string length attribute. If no (byte or bit)
 size attribute is present, the size of the data to be retrieved
 is the same as the 
-\addtoindex{size of an address} on the target machine.
+\addtoindex{size of an address} on the target machine.Fif the amount
 
-\needlines{5}
+\needlines{4}
 If no string length attribute is present, the string type
 entry may have a \livelink{chap:DWATbytesize}{DW\_AT\_byte\_size} attribute or 
 \livelink{chap:DWATbitsize}{DW\_AT\_bit\_size}
@@ -2002,6 +2007,7 @@ The set type entry has
 a \livelink{chap:DWATtype}{DW\_AT\_type} attribute to denote the
 type of an element of the set.
 
+\needlines{4}
 If the amount of storage allocated to hold each element of an
 object of the given set type is different from the amount of
 storage that is normally allocated to hold an individual object
@@ -2015,7 +2021,7 @@ the amount of storage needed to hold a value of the set type.
 \section{Subrange Type Entries}
 \label{chap:subrangetypeentries}
 
-\textit{Several languages support the concept of a ``subrange''
+\textit{Several languages support the concept of a \doublequote{subrange}
 type object. These objects can represent a subset of the
 values that an object of the basis type for the subrange can
 represent. 
@@ -2180,7 +2186,7 @@ a \livelink{chap:DWATtype}{DW\_AT\_type} attribute to
 describe the type of the class or structure member to which
 objects of this type may point.
 
-The \addtoindex{pointer to member} entry also 
+The \addtoindexx{pointer to member} entry also 
 \hypertarget{chap:DWATcontainingtypecontainingtypeofpointertomembertype}
 has a 
 \livelink{chap:DWATcontainingtype}{DW\_AT\_containing\_type}
@@ -2227,15 +2233,14 @@ whose address is being calculated.
 \begin{lstlisting}[numbers=none]
     object.*mbr_ptr
 \end{lstlisting}
-% FIXME: object and mbr\_ptr should be distinguished from italic. See DW4.
-\textit{where mbr\_ptr has some \addtoindex{pointer to member type}, a debugger should:}
+\textit{where \texttt{mbr\_ptr} has some \addtoindex{pointer to member type}, a debugger should:}
+\begin{enumerate}
+\item \textit{Push the value of \texttt{mbr\_ptr} onto the DWARF expression stack.}
+\item \textit{Push the base address of \texttt{object} onto the DWARF expression stack.}
+\item \textit{Evaluate the \livelink{chap:DWATuselocation}{DW\_AT\_use\_location} description 
+given in the type of \texttt{mbr\_ptr}.}
+\end{enumerate}
 
-\textit{1. Push the value of mbr\_ptr onto the DWARF expression stack.}
-
-\textit{2. Push the base address of object onto the DWARF expression stack.}
-
-\textit{3. Evaluate the \livelink{chap:DWATuselocation}{DW\_AT\_use\_location} description 
-given in the type of mbr\_ptr.}
 
 \section{File Type Entries}
 \label{chap:filetypeentries}
@@ -2247,7 +2252,7 @@ files.}
 A file type is represented by a debugging information entry
 with 
 \addtoindexx{file type entry}
-the 
+the tag
 \livetarg{chap:DWTAGfiletype}{DW\_TAG\_file\_type}. 
 If the file type has a name,
 the file type entry has a \livelink{chap:DWATname}{DW\_AT\_name} attribute,

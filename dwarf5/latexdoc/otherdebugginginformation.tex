@@ -277,7 +277,7 @@ a source statement. Second, we design a byte\dash coded language
 for a state machine and store a stream of bytes in the object
 file instead of the matrix. This language can be much more
 compact than the matrix. When a consumer of the line number
-information executes, it must ``run'' the state machine
+information executes, it must \doublequote{run} the state machine
 to generate the matrix for each compilation unit it is
 interested in.  The concept of an encoded matrix also leaves
 room for expansion. In the future, columns can be added to the
@@ -316,6 +316,7 @@ procedure invocation is defined to be an exit from a
 necessarily correspond to a specific source code
 construct.} \\
 
+
 sequence &
 A series of contiguous target machine instructions. One compilation unit
 may emit multiple sequences (that is, not all instructions within a
@@ -324,11 +325,10 @@ compilation unit are assumed to be contiguous). \\
 
 \subsection{State Machine Registers}
 \label{chap:statemachineregisters}
-
 The line number information state machine has the following 
 registers:
 \begin{longtable}{l|p{9cm}}
-  \caption{State Machine Registers } \\
+  \caption{State machine registers } \\
   \hline \bfseries Register name&\bfseries Meaning\\ \hline
 \endfirsthead
   \bfseries Register name&\bfseries Meaning\\ \hline
@@ -364,7 +364,7 @@ instruction cannot be attributed to any source line. \\
 \addttindex{column} &
 An unsigned integer indicating a column number within a source line.
 Columns are numbered beginning at 1. The value 0 is reserved to indicate
-that a statement begins at the ``left edge'' of the line. \\
+that a statement begins at the \doublequote{left edge} of the line. \\
 
 \addttindex{is\_stmt} &
 A boolean indicating that the current instruction is a recommended
@@ -533,7 +533,7 @@ The initial value of the \addttindex{is\_stmt} register.
 to building line number information when machine instructions
 are emitted in an order corresponding to the source program
 is to set \addttindex{default\_is\_stmt}
-to ``true'' and to not change the
+to \doublequote{true} and to not change the
 value of the \addttindex{is\_stmt} register 
 within the line number program.
 One matrix entry is produced for each line that has code
@@ -549,7 +549,7 @@ breakpoint location for the line number. \livelink{chap:DWLNSnegatestmt}{DW\_LNS
 opcodes in the line number program control which matrix entries
 constitute such a recommendation and 
 \addttindex{default\_is\_stmt} might
-be either ``true'' or ``false''. This approach might be
+be either \doublequote{true} or \doublequote{false.} This approach might be
 used as part of support for debugging optimized code.}
 
 \item \texttt{line\_base} (\addtoindex{sbyte}) \\
@@ -583,6 +583,7 @@ is greater than the typical value, then the numbers between
 that of the highest standard opcode and the first special
 opcode (not inclusive) are used for vendor specific extensions.}
 
+\needlines{4}
 \item \texttt{standard\_opcode\_lengths} (array of \addtoindex{ubyte}) \\
 \addttindexx{standard\_opcode\_lengths}
 This array specifies the number of \addtoindex{LEB128} operands for each
@@ -882,7 +883,7 @@ registers. Then it sets the \addttindex{discriminator} register to 0,
 and sets the \addttindex{basic\_block}, 
 \addttindex{prologue\_end} and 
 \addttindex{epilogue\_begin}
-registers to ``false.''
+registers to \doublequote{false.}
 
 \item \textbf{DW\_LNS\_advance\_pc} \\
 The \livetarg{chap:DWLNSadvancepc}{DW\_LNS\_advance\_pc} 
@@ -904,6 +905,7 @@ unsigned LEB128\addtoindexx{LEB128!unsigned}
 operand and stores it in the \texttt{file} register
 of the state machine.
 
+\needlines{4}
 \item \textbf{DW\_LNS\_set\_column} \\ 
 The \livetarg{chap:DWLNSsetcolumn}{DW\_LNS\_set\_column} opcode takes a
 single unsigned LEB128\addtoindexx{LEB128!unsigned} operand 
@@ -923,7 +925,7 @@ opcode
 \addtoindexx{basic block}
 takes no operands. 
 It sets the \addttindex{basic\_block} register of the
-state machine to ``true.''
+state machine to \doublequote{true.}
 
 
 
@@ -964,7 +966,7 @@ use \livelink{chap:DWLNSfixedadvancepc}{DW\_LNS\_fixed\_advance\_pc} instead, sa
 The \livetarg{chap:DWLNSsetprologueend}{DW\_LNS\_set\_prologue\_end}
 opcode takes no operands. It sets the 
 \addttindex{prologue\_end} register
-to \doublequote{true}.
+to \doublequote{true.}
 
 \textit{When a breakpoint is set on entry to a function, it is
 generally desirable for execution to be suspended, not on the
@@ -990,7 +992,7 @@ subroutines).}
 
 \item \textbf{DW\_LNS\_set\_epilogue\_begin} \\
 The \livetarg{chap:DWLNSsetepiloguebegin}{DW\_LNS\_set\_epilogue\_begin} opcode takes no operands. It
-sets the \addttindex{epilogue\_begin} register to \doublequote{true}.
+sets the \addttindex{epilogue\_begin} register to \doublequote{true.}
 
 \textit{When a breakpoint is set on the exit of a function or execution
 steps over the last executable statement of a function, it is
@@ -1188,7 +1190,7 @@ are, however, separated by commas.) Also, exactly one space
 character should separate the right parenthesis that terminates
 the formal parameter list and the following definition string.
 
-In the case of a ``normal'' (i.e. non-function-like) macro
+In the case of a \doublequote{normal} (i.e. non-function-like) macro
 definition, exactly one space character should separate the
 name of the defined macro from the following definition text.
 
@@ -1291,7 +1293,7 @@ is a place where a subroutine made a call or was interrupted
 by an asynchronous event (e.g. a signal).}
 
 \item \textit{An area of memory that is allocated on a stack called a
-``call frame.'' The call frame is identified by an address
+\doublequote{call frame.} The call frame is identified by an address
 on the stack. We refer to this address as the Canonical
 Frame Address or CFA. Typically, the CFA is defined to be the
 value of the stack pointer at the call site in the previous
@@ -1317,7 +1319,7 @@ beginning of a subroutine and the
 
 \textit{To be able to view or modify an activation that is not
 on the top of the call frame stack, the debugger must
-``virtually unwind'' the stack of activations until
+\doublequote{virtually unwind} the stack of activations until
 it finds the activation of interest.  A debugger unwinds
 a stack in steps. Starting with the current activation it
 virtually restores any registers that were preserved by the
@@ -1389,7 +1391,7 @@ registers during their lifetimes. This basis must be augmented
 on some machines with specific information that is defined by
 an architecture specific ABI authoring committee, a hardware
 vendor, or a compiler producer. The body defining a specific
-augmentation is referred to below as the ``augmenter.''
+augmentation is referred to below as the \doublequote{augmenter.}
 
 Abstractly, this mechanism describes a very large table that
 has the following structure:
@@ -1604,6 +1606,7 @@ offset into the \dotdebugframe{}
 section that denotes
 the CIE that is associated with this FDE.
 
+\needlines{4}
 \item  \texttt{initial\_location} (segment selector and target address) \\
 The 
 \addttindexx{initial\_location}

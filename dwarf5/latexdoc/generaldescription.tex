@@ -137,7 +137,7 @@ value forms.
 Each form class may be represented in one or more ways. 
 For example, some attribute values consist
 of a single piece of constant data. 
-``Constant data''
+\doublequote{Constant data}
 is the class of attribute value that those attributes may have. 
 There are several representations of constant data,
 however (one, two, ,four, or eight bytes, and variable length
@@ -306,7 +306,7 @@ actually declared in the source}{objects or types that are not actually declared
 \livetarg{chap:DWATlowerbound}{DW\_AT\_lower\_bound}
 &\livelinki{chap:DWATlowerboundlowerboundofsubrange}{Lower bound of subrange}{lower bound of subrange} \\
 \livetarg{chap:DWATmacroinfo}{DW\_AT\_macro\_info}
-&\livelinki{chap:DWATmacroinfomacroinformation}{Macro information} {macro information} (\#define, \#undef)\\
+&\livelinki{chap:DWATmacroinfomacroinformation}{Macro information} {macro information} (\texttt{\#define}, \texttt{\#undef})\\
 \livetarg{chap:DWATmainsubprogram}{DW\_AT\_main\_subprogram}
 &\livelinki{chap:DWATmainsubprogrammainorstartingsubprogram}{Main or starting subprogram}{main or starting subprogram} \\
 &\livelinki{chap:DWATmainsubprogramunitcontainingmainorstartingsubprogram}{Unit containing main or starting subprogram}{unit containing main or starting subprogram}\\
@@ -318,7 +318,7 @@ actually declared in the source}{objects or types that are not actually declared
 \livetarg{chap:DWATnamelistitem}{DW\_AT\_namelist\_item}
 &\livelinki{chap:DWATnamelistitemnamelistitem}{Namelist item}{namelist item}\\
 \livetarg{chap:DWATobjectpointer}{DW\_AT\_object\_pointer}
-&\livelinki{chap:DWATobjectpointerobjectthisselfpointerofmemberfunction}{Object (this, self) pointer of member function}{object (this, self) pointer of member function}\\
+&\livelinki{chap:DWATobjectpointerobjectthisselfpointerofmemberfunction}{Object (\texttt{this}, \texttt{self}) pointer of member function}{object (\texttt{this}, \texttt{self}) pointer of member function}\\
 \livetarg{chap:DWATordering}{DW\_AT\_ordering}
 &\livelinki{chap:DWATorderingarrayrowcolumnordering}{Array row/column ordering} {array row/column ordering}\\
 \livetarg{chap:DWATpicturestring}{DW\_AT\_picture\_string}
@@ -623,7 +623,7 @@ Each general operation represents a postfix operation on
 a simple stack machine. Each element of the stack is the
 \addtoindex{size of an address} on the target machine. 
 The value on the
-top of the stack after ``executing'' the 
+top of the stack after \doublequote{executing} the 
 \addtoindex{DWARF expression}
 is 
 \addtoindexx{DWARF expression|see{location description}}
@@ -760,6 +760,7 @@ than the \addtoindex{size of an address} on the target machine. The data
 retrieved is zero extended to the size of an address on the
 target machine before being pushed onto the expression stack.
 
+\needlines{7}
 \itembfnl{\livetarg{chap:DWOPxderef}{DW\_OP\_xderef}}
 The \livetarg{chap:DWOPxderef}{DW\_OP\_xderef} operation provides an extended dereference
 mechanism. The entry at the top of the stack is treated as an
@@ -879,6 +880,7 @@ The \livetarg{chap:DWOPabs}{DW\_OP\_abs} operation pops the top stack entry, int
 it as a signed value and pushes its absolute value. If the
 absolute value cannot be represented, the result is undefined.
 
+\needlines{4}
 \itembfnl{\livetarg{chap:DWOPand}{DW\_OP\_and}}
 The \livetarg{chap:DWOPand}{DW\_OP\_and} operation pops the top two stack values, performs
 a bitwise and operation on the two, and pushes the result.
@@ -1252,6 +1254,7 @@ The \livetarg{chap:DWOPreg}{DW\_OP\_reg}\textit{n} operations encode the names o
 registers, numbered from 0 through 31, inclusive. The object
 addressed is in register \textit{n}.
 
+\needlines{4}
 \itembfnl{\livetarg{chap:DWOPregx}{DW\_OP\_regx}}
 The \livetarg{chap:DWOPregx}{DW\_OP\_regx} operation has a single unsigned LEB128 literal
 operand that encodes the name of a register.  
@@ -1308,6 +1311,7 @@ containing no operations. It represents a piece or all of an
 object that is present in the source but not in the object code
 (perhaps due to optimization).
 
+\needlines{5}
 \subsubsection{Composite Location Descriptions}
 A composite location description describes an object or
 value which may be contained in part of a register or stored
@@ -1419,8 +1423,9 @@ base.
 Add the contents of r1 and r2 to compute a value. This value is the
 \doublequote{contents} of an otherwise anonymous location.
 
+\needlines{6}
 \descriptionitemnl{\livelink{chap:DWOPlit1}{DW\_OP\_lit1} \livelink{chap:DWOPstackvalue}{DW\_OP\_stack\_value} \livelink{chap:DWOPpiece}{DW\_OP\_piece} 4 }
-\vspace{-\parsep}
+\vspace{-0.1\parsep}
 \descriptionitemnl{\livelink{chap:DWOPbreg}{DW\_OP\_breg3} 0 \livelink{chap:DWOPbreg}{DW\_OP\_breg4} 0 \livelink{chap:DWOPplus}{DW\_OP\_plus} \livelink{chap:DWOPstackvalue}{DW\_OP\_stack\_value} \livelink{chap:DWOPpiece}{DW\_OP\_piece} 4}
 The object value is found in an anonymous (virtual) location whose
 value consists of two parts, given in memory address order: the 4 byte
@@ -1610,7 +1615,7 @@ attribute\addtoindexx{visibility attribute}, whose value is a
 constant drawn from the set of codes listed in 
 Table \refersec{tab:visibilitycodes}.
 
-\begin{simplenametable}[1.5in]{Visibility Codes}{tab:visibilitycodes}
+\begin{simplenametable}[1.5in]{Visibility codes}{tab:visibilitycodes}
 \livetarg{chap:DWVISlocal}{DW\_VIS\_local}          \\
 \livetarg{chap:DWVISexported}{DW\_VIS\_exported}    \\
 \livetarg{chap:DWVISqualified}{DW\_VIS\_qualified}  \\
@@ -2027,6 +2032,7 @@ instruction associated with the entity.
 \textit{The high PC value
 may be beyond the last valid instruction in the executable.}
 
+\needlines{5}
 The presence of low and high PC attributes for an entity
 implies that the code generated for the entity is contiguous
 and exists totally within the boundaries specified by those
@@ -2207,13 +2213,13 @@ possibly others).}
 \section{Entity Descriptions}
 \textit{Some debugging information entries may describe entities
 in the program that are artificial, or which otherwise are
-``named'' in ways which are not valid identifiers in the
+\doublequote{named} in ways which are not valid identifiers in the
 programming language. For example, several languages may
 capture or freeze the value of a variable at a particular
 point in the program. 
 \addtoindex{Ada} 95 has package elaboration routines,
 type descriptions of the form typename\textquoteright Class, and 
-``access typename'' parameters.  }
+\doublequote{access typename} parameters.  }
 
 Generally, any debugging information
 entry that 

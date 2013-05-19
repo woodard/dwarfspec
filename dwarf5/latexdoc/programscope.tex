@@ -58,11 +58,11 @@ used to represent portions of an object file.
 \textit{A normal compilation unit typically represents the text and
 data contributed to an executable by a single relocatable
 object file. It may be derived from several source files,
-including pre\dash processed \doublequote{include files}. 
+including pre\dash processed \doublequote{include files.} 
 A \addtoindex{partial compilation unit} typically represents a part of the text
 and data of a relocatable object file, in a manner that can
 potentially be shared with the results of other compilations
-to save space. It may be derived from an \doublequote{include file},
+to save space. It may be derived from an \doublequote{include file,}
 template instantiation, or other implementation\dash dependent
 portion of a compilation. A normal compilation unit can also
 function in a manner similar to a partial compilation unit
@@ -180,6 +180,7 @@ value of the statement list attribute is the offset in the
 information for this compilation unit 
 (see Section \refersec{chap:linenumberinformation}).
 
+\needlines{6}
 \item A \livelink{chap:DWATmacroinfo}{DW\_AT\_macro\_info} attribute 
 \addtoindexx{macro information attribute}
 whose value is a 
@@ -263,9 +264,9 @@ attributes reflect the names as they appear in the source
 program but that a case insensitive lookup should be used to
 access those names.
 
+\needlines{5}
 \item A \livelink{chap:DWATbasetypes}{DW\_AT\_base\_types} attribute whose value is a 
 \livelink{chap:classreference}{reference}.
-
 
 This 
 \hypertarget{chap:DWATbasetypesprimitivedatatypesofcompilationunit}
@@ -406,7 +407,7 @@ those entities.}
 
 \subsection{Module Entries}
 \label{chap:moduleentries}
-\textit{Several languages have the concept of a ``module.''
+\textit{Several languages have the concept of a \doublequote{module.}
 \addtoindexx{Modula-2}
 A Modula\dash 2 definition module 
 \addtoindexx{Modula-2!definition module}
@@ -533,14 +534,14 @@ referenced by the specification attribute.
 namespace 
 \addtoindexx{namespace (C++)!global}
 referred to by
-``::f'', for example) is not explicitly represented in
+\texttt{::f}, for example) is not explicitly represented in
 DWARF with a namespace entry (thus mirroring the situation
 in \addtoindex{C++} source).  
 Global items may be simply declared with no
 reference to a namespace.}
 
 \textit{The \addtoindex{C++} 
-compilation unit specific ``unnamed namespace'' may
+compilation unit specific \doublequote{unnamed namespace} may
 \addtoindexx{namespace (C++)!unnamed}
 \addtoindexx{unnamed namespace|see {namespace (C++), unnamed}}
 be represented by a namespace entry with no name attribute in
@@ -640,14 +641,14 @@ declaration entry corresponding to each overloading. Each
 imported declaration entry has no name attribute but it does
 have an import attribute that refers to the entry for the
 entity being imported. (\addtoindex{C++} 
-provides no means to ``rename''
+provides no means to \doublequote{rename}
 an imported entity, other than a namespace).
 }
 
 \textit{A \addtoindex{Fortran} use statement 
 \addtoindexx{Fortran!use statement}
 \addtoindexx{use statement|see {Fortran, use statement}}
-with an ``only list'' may be
+with an \doublequote{only list} may be
 represented by a series of imported declaration entries,
 one (or more) for each entity that is imported. An entity
 \addtoindexx{renamed declaration|see{imported declaration entry}}
@@ -845,7 +846,7 @@ Table \refersec{tab:callingconventioncodes}.
 
 If this attribute is not present, or its value is the constant
 \livetarg{chap:DWCCnormal}{DW\_CC\_normal}, then the subroutine may be safely called by
-obeying the ``standard'' calling conventions of the target
+obeying the \doublequote{standard} calling conventions of the target
 architecture. If the value of the calling convention attribute
 is the constant \livetarg{chap:DWCCnocall}{DW\_CC\_nocall}, the subroutine does not obey
 standard calling conventions, and it may not be safe for the
@@ -853,8 +854,8 @@ debugger to call this subroutine.
 
 If the semantics of the language of the compilation unit
 containing the subroutine entry distinguishes between ordinary
-subroutines and subroutines that can serve as the ``main
-program,'' that is, subroutines that cannot be called
+subroutines and subroutines that can serve as the \doublequote{main
+program,} that is, subroutines that cannot be called
 directly according to the ordinary calling conventions,
 then the debugging information entry for such a subroutine
 may have a calling convention attribute whose value is the
@@ -900,7 +901,7 @@ a
 \livelink{chap:DWATelemental}{DW\_AT\_elemental} attribute, which
 is a \livelink{chap:classflag}{flag}. 
 The attribute indicates whether the subroutine
-or entry point was declared with the ``elemental'' keyword
+or entry point was declared with the \doublequote{elemental} keyword
 or property.
 
 A 
@@ -911,7 +912,7 @@ a
 \livelink{chap:DWATpure}{DW\_AT\_pure} attribute, which is
 a \livelink{chap:classflag}{flag}. 
 The attribute indicates whether the subroutine was
-declared with the ``pure'' keyword or property.
+declared with the \doublequote{pure} keyword or property.
 
 A 
 \hypertarget{chap:DWATrecursiverecursivepropertyofasubroutine}
@@ -919,7 +920,7 @@ subprogram entry may have a
 \livelink{chap:DWATrecursive}{DW\_AT\_recursive} attribute, which
 is a \livelink{chap:classflag}{flag}. 
 The attribute indicates whether the subroutine
-or entry point was declared with the ``recursive'' keyword
+or entry point was declared with the \doublequote{recursive} keyword
 or property.
 
 
@@ -1092,7 +1093,7 @@ variables, the \livelink{chap:DWATframebase}{DW\_AT\_frame\_base} can hold the n
 list, while all variables\textquoteright\  location descriptions can be
 simpler ones involving the frame base.}
 
-\item \textit{It can be used in resolving ``up\dash level'' addressing
+\item \textit{It can be used in resolving \doublequote{up\dash level} addressing
 within nested routines. 
 (See also \livelink{chap:DWATstaticlink}{DW\_AT\_static\_link}, below)}
 %The -See also- here is ok, the DW\_AT should be
@@ -1274,7 +1275,7 @@ directly or indirectly) by a debugging information entry
 that contains the 
 \livelink{chap:DWATinline}{DW\_AT\_inline} attribute is referred to
 \addtoindexx{abstract instance!entry}
-as an ``abstract instance entry.'' 
+as an \doublequote{abstract instance entry.} 
 Any subroutine entry
 that contains 
 \addtoindexx{inline attribute}
@@ -1282,12 +1283,12 @@ a \livelink{chap:DWATinline}{DW\_AT\_inline} attribute whose value is other
 than \livelink{chap:DWINLnotinlined}{DW\_INL\_not\_inlined}
 is known as 
 \addtoindexx{abstract instance!root}
-an ``abstract instance root.'' 
+an \doublequote{abstract instance root.} 
 Any set of abstract instance entries that are all
 children (either directly or indirectly) of some abstract
 instance root, together with the root itself, is known as
 \addtoindexx{abstract instance!tree}
-an ``abstract instance tree.'' However, in the case where
+an \doublequote{abstract instance tree.} However, in the case where
 an abstract instance tree is nested within another abstract
 instance tree, the entries in the 
 \addtoindex{nested abstract instance}
@@ -1447,14 +1448,14 @@ the actual return value of the concrete inlined instance.}
 Any debugging information entry that is owned (either
 directly or indirectly) by a debugging information entry
 with the tag \livelink{chap:DWTAGinlinedsubroutine}{DW\_TAG\_inlined\_subroutine} is referred to as a
-``concrete inlined instance entry.'' Any entry that has
+\doublequote{concrete inlined instance entry.} Any entry that has
 the tag 
 \livelink{chap:DWTAGinlinedsubroutine}{DW\_TAG\_inlined\_subroutine} 
-is known as a ``concrete inlined instance root.'' 
+is known as a \doublequote{concrete inlined instance root.} 
 Any set of concrete inlined instance
 entries that are all children (either directly or indirectly)
 of some concrete inlined instance root, together with the root
-itself, is known as a ``concrete inlined instance tree.''
+itself, is known as a \doublequote{concrete inlined instance tree.}
 However, in the case where a concrete inlined instance tree
 is nested within another concrete instance tree, the entries
 in the \addtoindex{nested concrete inline instance} tree 
@@ -1565,7 +1566,7 @@ Under some conditions, compilers may need to generate concrete
 executable instances of inlined subroutines other than at
 points where those subroutines are actually called. Such
 concrete instances of inlined subroutines are referred to as
-``concrete out\dash of\dash line instances.''
+\doublequote{concrete out\dash of\dash line instances.}
 
 \textit{In \addtoindex{C++}, for example, 
 taking the address of a function declared
@@ -1796,7 +1797,7 @@ of an identifier or inner lexical \nolink{block}.
 \section{Label Entries}
 \label{chap:labelentries}
 \textit{A label is a way of identifying a source statement. A labeled
-statement is usually the target of one or more ``go to''
+statement is usually the target of one or more \doublequote{go to}
 statements.
 }
 
@@ -1824,7 +1825,7 @@ the name of the label as it appears in the source program.
 
 \textit{Both \addtoindex{Pascal} and 
 \addtoindexx{Modula-2}
-Modula\dash 2 support the concept of a ``with''
+Modula\dash 2 support the concept of a \doublequote{with}
 statement. The with statement specifies a sequence of
 executable statements within which the fields of a record
 variable may be referenced, unqualified by the name of the
@@ -1861,11 +1862,11 @@ the with statement.
 \label{chap:tryandcatchblockentries}
 
 \textit{In \addtoindex{C++} a lexical \livelink{chap:lexicalblock}{block} may be 
-designated as a ``catch \nolink{block}.'' 
+designated as a \doublequote{catch \nolink{block}.} 
 A catch \livetargi{chap:catchblock}{block}{catch block} is an 
 exception handler that handles
 exceptions thrown by an immediately 
-preceding ``try \livelink{chap:tryblock}{block}.''
+preceding \doublequote{try \livelink{chap:tryblock}{block}.}
 A catch \livelink{chap:catchblock}{block} 
 designates the type of the exception that it
 can handle.}
