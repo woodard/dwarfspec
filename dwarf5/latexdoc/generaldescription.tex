@@ -22,7 +22,7 @@ The set of tag names
 \addtoindexx{tag names|see{debugging information entry}}
 is listed in Table \refersec{tab:tagnames}. 
 The debugging information entries they identify are
-described in Sections 3, 4 and 5.
+described in Chapters 3, 4 and 5.
 
 % These each need to link to definition page: FIXME
 
@@ -37,6 +37,7 @@ described in Sections 3, 4 and 5.
 \livelink{chap:DWTAGbasetype}{DW\_TAG\_base\_type},
 \livelink{chap:DWTAGcatchblock}{DW\_TAG\_catch\_block},
 \livelink{chap:DWTAGclasstype}{DW\_TAG\_class\_type},
+\livelink{chap:DWTAGcoarraytype}{DW\_TAG\_coarray\_type},
 \livelink{chap:DWTAGcommonblock}{DW\_TAG\_common\_block},
 \livelink{chap:DWTAGcommoninclusion}{DW\_TAG\_common\_inclusion},
 \livelink{chap:DWTAGcompileunit}{DW\_TAG\_compile\_unit},
@@ -356,6 +357,12 @@ actually declared in the source}{objects or types that are not actually declared
 &\livelinki{chap:DWATstmtlistlinenumberinformationforunit}{Line number information for unit}{line number information for unit}\\
 \livetarg{chap:DWATstringlength}{DW\_AT\_string\_length}
 &\livelinki{chap:DWATstringlengthstringlengthofstringtype}{String length of string type}{string length of string type}
+ \\
+\livetarg{chap:DWATstringlengthbitsize}{DW\_AT\_string\_length\_bit\_size}
+&\livelinki{chap:DWATstringlengthstringlengthofstringtype}{Size of string length of string type}{string length of string type!size of}
+ \\
+\livetarg{chap:DWATstringlengthbytesize}{DW\_AT\_string\_length\_byte\_size}
+&\livelinki{chap:DWATstringlengthstringlengthofstringtype}{Size of string length of string type}{string length of string type!size of}
  \\
 \livetarg{chap:DWATthreadsscaled}{DW\_AT\_threads\_scaled}
 &\livelink{chap:DWATthreadsscaledupcarrayboundthreadsscalfactor}{UPC!array bound THREADS scale factor}\\
@@ -817,33 +824,38 @@ Appendix \refersec{app:aggregateexamples}.}
 \needlines{4}
 \itembfnl{\livetarg{chap:DWOPformtlsaddress}{DW\_OP\_form\_tls\_address}}
 The \livetarg{chap:DWOPformtlsaddress}{DW\_OP\_form\_tls\_address} 
-operation pops a value from the
-stack, translates it into an address in the current thread's
+operation pops a value from the stack, translates this
+value into an address in the 
 \addtoindexx{thread-local storage}
-thread\dash local storage \nolink{block}, and pushes the address. If the
-DWARF expression containing 
-the \addtoindex{DW\_OP\_form\_tls\_address}
-operation belongs to the main executable's DWARF info, the
-operation uses the main executable's thread\dash local storage
-\nolink{block}; if the expression belongs to a shared library's
-DWARF info, then it uses that shared library's 
-\addtoindexx{thread-local storage}
-thread\dash local storage \nolink{block}.
-
+thread\dash local storage for a thread, and pushes the address 
+onto the stack. 
+The meaning of the value on the top of the stack prior to this 
+operation is defined by the run-time environment.  If the run-time 
+environment supports multiple thread\dash local storage 
+\nolink{blocks} for a single thread, then the \nolink{block} 
+corresponding to the executable or shared 
+library containing this DWARF expression is used.
+   
 \textit{Some implementations of 
 \addtoindex{C} and \addtoindex{C++} support a
-\_\_thread storage class. Variables with this storage class
+thread\dash local storage class. Variables with this storage class
 have distinct values and addresses in distinct threads, much
 as automatic variables have distinct values and addresses in
 each function invocation. Typically, there is a single \nolink{block}
-of storage containing all \_\_thread variables declared in
+of storage containing all thread\dash local variables declared in
 the main executable, and a separate \nolink{block} for the variables
-declared in each shared library. Computing the address of
+declared in each shared library. 
+Each thread\dash local variable can then be accessed in its block using an
+identifier. This identifier is typically an offset into the block and pushed
+onto the DWARF stack by one of the \DWOPconst{} operations prior to the
+\DWOPformtlsaddress{} operation. 
+Computing the address of
 the appropriate \nolink{block} can be complex (in some cases, the
 compiler emits a function call to do it), and difficult
 to describe using ordinary DWARF location descriptions.
-\addtoindex{DW\_OP\_form\_tls\_address} leaves the computation to the
-consumer.}
+Instead of    forcing complex thread-local storage calculations into 
+the DWARF expressions, the \DWOPformtlsaddress{} allows the consumer 
+to perform the computation based on the run-time environment.}
 
 \itembfnl{\livetarg{chap:DWOPcallframecfa}{DW\_OP\_call\_frame\_cfa}}
 The \livetarg{chap:DWOPcallframecfa}{DW\_OP\_call\_frame\_cfa} 
@@ -871,9 +883,10 @@ as otherwise specified, the arithmetic operations perfom
 addressing arithmetic, that is, unsigned arithmetic that is
 performed modulo one plus the largest representable address
 (for example, 0x100000000 when the 
-\addtoindex{size of an address} is 32
-bits). 
+\addtoindex{size of an address} is 32 bits). 
 Such operations do not cause an exception on overflow.
+
+\needlines{4}
 \begin{enumerate}[1. ]
 \itembfnl{\livetarg{chap:DWOPabs}{DW\_OP\_abs}}
 The \livetarg{chap:DWOPabs}{DW\_OP\_abs} operation pops the top stack entry, interprets
@@ -1460,9 +1473,12 @@ or an
 \addtoindexx{end of list entry!in location list}
 end of list entry.
 
+A location list entry has two forms:
+a normal location list entry and a default location list entry.
+
 A 
-\addtoindexx{location list!entry}
-location list entry consists of:
+\addtoindexx{location list!normal entry}
+normal location list entry consists of:
 \begin{enumerate}[1. ]
 \item A beginning address offset. 
 This address offset has the \addtoindex{size of an address} and is
@@ -1485,12 +1501,16 @@ and ending addresses are equal has no effect
 because the size of the range covered by such
 an entry is zero.}
 
+\item A 2-byte length describing the length of the location 
+description that follows.
+
 \item A \addtoindex{single location description} 
 describing the location of the object over the range specified by
 the beginning and end addresses.
 \end{enumerate}
 
-The applicable base address of a 
+\needlines{5}
+The applicable base address of a normal
 location list entry is
 \addtoindexx{location list!base address selection entry}
 determined by the closest preceding base address selection
@@ -1503,16 +1523,43 @@ Section \refersec{chap:normalandpartialcompilationunitentries}).
 the machine code is contained in a single contiguous section,
 no base address selection entry is needed.}
 
-Address ranges may overlap. When they do, they describe a
+Address ranges defined by normal location list entries
+may overlap. When they do, they describe a
 situation in which an object exists simultaneously in more than
 one place. If all of the address ranges in a given location
 list do not collectively cover the entire range over which the
 object in question is defined, it is assumed that the object is
 not available for the portion of the range that is not covered.
 
+A default location list entry consists of:
+\addtoindexx{location list!default entry}
+\begin{enumerate}[1. ]
+\item The value 0.
+\item The value of the largest representable address offset (for
+      example, \wffffffff when the size of an address is 32 bits).
+\item A simple location description describing the location of the
+      object when there is no prior normal location list entry
+      that applies in the same location list.
+\end{enumerate}
+
+A default location list entry is independent of any applicable
+base address (except to the extent to which base addresses
+affect prior normal location list entries).
+
+A default location list entry must be the last location list
+entry of a location list except for the terminating end of list
+entry.
+
+A default location list entry describes an unlimited number
+(zero, one or more) of address ranges, none of which overlap
+any of the address ranges defined earlier in the same location
+list. Further, all such address ranges have the same simple
+location.
+
 \needlines{5}
 A base 
 \addtoindexi{address}{address selection|see{base address selection}}
+\addtoindexx{location list!base address selection entry}
 selection 
 \addtoindexi{entry}{base address selection entry!in location list}
 consists of:
@@ -1525,12 +1572,12 @@ appropriate base address for use in interpreting the beginning
 and ending address offsets of subsequent entries of the location list.
 \end{enumerate}
 
-
 \textit{A base address selection entry 
 affects only the list in which it is contained.}
 
+\needlines{5}
 The end of any given location list is marked by an 
-\addtoindexx{location list!enf of list entry}
+\addtoindexx{location list!end of list entry}
 end of list entry, which consists of a 0 for the beginning address
 offset and a 0 for the ending address offset. A location list
 containing only an 
@@ -1540,6 +1587,18 @@ exists in the source code but not in the executable program.
 
 Neither a base address selection entry nor an end of list
 entry includes a location description.
+
+\textit{When a DWARF consumer is parsing and decoding a location
+list, it must recognize the beginning and ending address
+offsets of (0, 0) for an end of list entry and (0, \doublequote{-1}) for
+a default location list entry prior to applying any base
+address. Any other pair of offsets beginning with 0 is a
+valid normal location list entry. Next, it must recognize the
+beginning address offset of \doublequote{-1} for a base address selection
+entry prior to applying any base address. The current base
+address is not applied to the subsequent value (although there
+may be an underlying object language relocation that affects
+that value).}
 
 \textit{A base address selection entry and an end of list
 entry for a location list are identical to a base address
@@ -2182,8 +2241,7 @@ attributes is determined based on the class as follows:
 the attribute.
 
 \item For a \livelink{chap:classreference}{reference}, the
-value is a \livelink{chap:classreference}{reference} to another
-entity which specifies the value of the attribute.
+value is a DWARF procedure that computes the value of the attribute.
 
 \item For an \livelink{chap:classexprloc}{exprloc}, the value is interpreted as a 
 DWARF expression; 
@@ -2209,7 +2267,7 @@ rules of the applicable programming language.
 \livelink{chap:DWATupperbound}{DW\_AT\_upper\_bound} (and
 possibly others).}
 
-
+\needlines{6}
 \section{Entity Descriptions}
 \textit{Some debugging information entries may describe entities
 in the program that are artificial, or which otherwise are
@@ -2247,13 +2305,18 @@ Many debugging information entries allow either a
 \livelink{chap:DWATbytesize}{DW\_AT\_byte\_size} attribute or a 
 \livelink{chap:DWATbitsize}{DW\_AT\_bit\_size} attribute,
 whose \livelink{chap:classconstant}{integer constant} value 
-(see Section \refersec{chap:staticanddynamicvaluesofattributes}) 
+(see Section \ref{chap:staticanddynamicvaluesofattributes}) 
 specifies an
-amount of storage. The value of the \livelink{chap:DWATbytesize}{DW\_AT\_byte\_size} attribute
-is interpreted in bytes and the value of the \livelink{chap:DWATbitsize}{DW\_AT\_bit\_size}
-attribute is interpreted in bits.  
+amount of storage. The value of the 
+\livelink{chap:DWATbytesize}{DW\_AT\_byte\_size} attribute
+is interpreted in bytes and the value of the 
+\livelink{chap:DWATbitsize}{DW\_AT\_bit\_size}
+attribute is interpreted in bits. The
+\livelink{chap:DWATstringlengthbytesize}{DW\_AT\_string\_length\_byte\_size} and 
+\livelink{chap:DWATstringlengthbitsize}{DW\_AT\_string\_length\_bit\_size} 
+attributes are similar.
 
-Similarly, the \livelink{chap:classconstant}{integer constant}
+In addition, the \livelink{chap:classconstant}{integer constant}
 value of a \livelink{chap:DWATbytestride}{DW\_AT\_byte\_stride} attribute is interpreted
 in bytes and the \livelink{chap:classconstant}{integer constant} value of a 
 \livelink{chap:DWATbitstride}{DW\_AT\_bit\_stride}

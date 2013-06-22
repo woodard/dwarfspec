@@ -215,11 +215,11 @@ The following examples illustrate how to represent some of
 the more complicated forms of array and record aggregates
 using DWARF.
 
-\subsection{Fortran 90 Example}
-\label{app:fortran90example}
-Consider the \addtoindex{Fortran 90} source fragment in 
+\subsection{Fortran Array Example}
+\label{app:fortranarrayexample}
+Consider the \addtoindex{Fortran array}\addtoindexx{Fortran 90} source fragment in 
 \addtoindexx{array type entry!examples}
-Figure \referfol{fig:fortran90examplesourcefragment}.
+Figure \referfol{fig:fortranarrayexamplesourcefragment}.
 
 \begin{figure}[here]
 \begin{lstlisting}
@@ -233,11 +233,11 @@ do i = 1, 20
 allocate(arrayvar(i)%ap(i+10))
 end do
 \end{lstlisting}
-\caption{Fortran 90 example: source fragment} \label{fig:fortran90examplesourcefragment}
+\caption{Fortran array example: source fragment} \label{fig:fortranarrayexamplesourcefragment}
 \end{figure}
 
 For allocatable and pointer arrays, it is essentially required
-by the \addtoindex{Fortran 90} semantics that each array consist of 
+by the \addtoindex{Fortran array} semantics that each array consist of 
 \addtoindexx{descriptor!array}
 two
 \addtoindexx{array!descriptor for}
@@ -253,14 +253,12 @@ the \doublequote{variable} is allocated or associated).
 
 For concreteness, suppose that a descriptor looks something
 like the C structure in 
-Figure \refersec{fig:fortran90exampledescriptorrepresentation}.
+Figure \refersec{fig:fortranarrayexampledescriptorrepresentation}.
 Note, however, that it is
 a property of the design that 1) a debugger needs no builtin
 knowledge of this structure and 2) there does not need to
 be an explicit representation of this structure in the DWARF
-input to the 
-\addtoindexx{Fortran 90}
-debugger.
+input to the debugger.
 
 \begin{figure}[here]
 \begin{lstlisting}
@@ -277,8 +275,8 @@ struct desc {
     } dims[63];
 };
 \end{lstlisting}
-\caption{Fortran 90 example: descriptor representation}
-\label{fig:fortran90exampledescriptorrepresentation}
+\caption{Fortran array example: descriptor representation}
+\label{fig:fortranarrayexampledescriptorrepresentation}
 \end{figure}
 
 
@@ -317,7 +315,7 @@ a descriptor does have a
 \livelink{chap:DWATdatalocation}{DW\_AT\_data\_location} attribute. In
 that case the object doubles as its own descriptor.)
 
-The \addtoindex{Fortran 90} derived type \texttt{array\_ptr} can now be redescribed
+The \addtoindex{Fortran} derived type \texttt{array\_ptr} can now be redescribed
 in C\dash like terms that expose some of the representation as in
 
 \begin{lstlisting}[numbers=none]
@@ -345,7 +343,7 @@ within an entity of the given type
 
 The DWARF description is shown 
 \addtoindexx{Fortran 90}
-in Figure \refersec{fig:fortran90exampledwarfdescription}.
+in Figure \refersec{fig:fortranarrayexampledwarfdescription}.
 
 \begin{figure}[h]
 \figurepart{1}{2}
@@ -394,8 +392,8 @@ in Figure \refersec{fig:fortran90exampledwarfdescription}.
             !  dimension (other than to express the larger offsets involved).
 \end{alltt}
 \end{dwflisting}
-\caption{Fortran 90 example: DWARF description}
-\label{fig:fortran90exampledwarfdescription}
+\caption{Fortran array example: DWARF description}
+\label{fig:fortranarrayexampledwarfdescription}
 \end{figure}
 
 \begin{figure}
@@ -450,12 +448,12 @@ in Figure \refersec{fig:fortran90exampledwarfdescription}.
 \end{dwflisting}
 \begin{center}
 
-Figure~\ref{fig:fortran90exampledwarfdescription} Fortran 90 example: DWARF description \textit{(concluded)}
+Figure~\ref{fig:fortranarrayexampledwarfdescription} Fortran array example: DWARF description \textit{(concluded)}
 \end{center}
 \end{figure}
 
 Suppose 
-\addtoindexx{Fortran 90 example}
+\addtoindexx{Fortran array example}
 the program is stopped immediately following completion
 of the do loop. Suppose further that the user enters the
 following debug command:
@@ -555,15 +553,135 @@ could be completely different descriptor arrangements and the
 mechanics would still be the same---only the stack machines
 would be different.
 
+%\needlines{8}
+\subsection{Fortran Coarray Examples}
+\label{app:Fortrancoarrayexamples}
 
+\subsubsection{Fortran Scalar Coarray Example}
+The \addtoindex{Fortran} scalar coarray example
+\addtoindexx{coarray!example}\addtoindexx{scalar coarray|see{coarray}}
+in Figure \refersec{fig:Fortranscalarcoarraysourcefragment} can be described as 
+illustrated in Figure \refersec{fig:FortranscalarcoarrayDWARFdescription}.
 
+\begin{figure}[!h]
+\begin{lstlisting}
+        INTEGER X[*]
+\end{lstlisting}
+\caption{Fortran scalar coarray: source fragment}
+\label{fig:Fortranscalarcoarraysourcefragment}
+\end{figure}
+
+\begin{figure}[!h]
+\begin{dwflisting}
+\begin{alltt}
+10\$:  \DWTAGcoarraytype
+        \DWATtype(reference to INTEGER)
+        \DWTAGsubrangetype                ! Note omitted upper bound			
+            \DWATlowerbound(constant 1)
+
+11\$:  \DWTAGvariable
+        \DWATname("X")
+        \DWATtype(reference to coarray type at 10\$)
+\end{alltt}
+\end{dwflisting}
+\caption{Fortran scalar coarray: DWARF description}
+\label{fig:FortranscalarcoarrayDWARFdescription}
+\end{figure}
+
+\subsubsection{Fortran Array Coarray Example}
+The \addtoindex{Fortran} (simple) array coarray example
+\addtoindexx{coarray!example}\addtoindexx{array coarray|see{coarray}}
+in Figure \refersec{fig:Fortranarraycoarraysourcefragment} can be described as 
+illustrated in Figure \refersec{fig:FortranarraycoarrayDWARFdescription}.
+
+\begin{figure}[here]
+\begin{lstlisting}
+        INTEGER X(10)[*]
+\end{lstlisting}
+\caption{Fortran array coarray: source fragment}
+\label{fig:Fortranarraycoarraysourcefragment}
+\end{figure}
+
+\begin{figure}[here]
+\begin{dwflisting}
+\begin{alltt}
+10\$: \DWTAGarraytype
+        \DWATordering(\DWORDcolmajor)
+        \DWATtype(reference to INTEGER)
+11\$:    \DWTAGsubrangetype
+            \DWATlowerbound(constant 1)
+            \DWATupperbound(constant 10)
+
+12\$: \DWTAGcoarraytype
+        \DWATtype(reference to array type at 10\$)
+13\$:    \DWTAGsubrangetype                ! Note omitted upper bound
+            \DWATlowerbound(constant 1)
+
+14$: \DWTAGvariable
+        \DWATname("X")
+        \DWATtype(reference to coarray type at 12\$)
+\end{alltt}
+\end{dwflisting}
+\caption{Fortran array coarray: DWARF description}
+\label{fig:FortranarraycoarrayDWARFdescription}
+\end{figure}
+
+\subsubsection{Fortran Multidimensional Coarray Example}
+The \addtoindex{Fortran} multidimensional coarray of a multidimensional array example
+\addtoindexx{coarray!example}\addtoindexx{array coarray|see{coarray}}
+in Figure \refersec{fig:Fortranmultidimensionalcoarraysourcefragment} can be described as 
+illustrated in Figure \refersec{fig:FortranmultidimensionalcoarrayDWARFdescription}.
+
+\begin{figure}[here]
+\begin{lstlisting}
+        INTEGER X(10,11,12)[2,3,*]
+\end{lstlisting}
+\caption{Fortran multidimentional coarray: source fragment}
+\label{fig:Fortranmultidimensionalcoarraysourcefragment}
+\end{figure}
+
+\begin{figure}[here]
+\begin{dwflisting}
+\begin{alltt}
+10\$: \DWTAGarraytype
+        \DWATordering(\DWORDcolmajor)
+        \DWATtype(reference to INTEGER)
+11\$:    \DWTAGsubrangetype
+            \DWATlowerbound(constant 1)
+            \DWATupperbound(constant 10)
+12\$:    \DWTAGsubrangetype
+            \DWATlowerbound(constant  1)
+            \DWATupperbound(constant 11)
+13\$:    \DWTAGsubrangetype
+            \DWATlowerbound(constant  1)
+            \DWATupperbound(constant 12)
+
+14\$: \DWTAGcoarraytype
+        \DWATtype(reference to array_type at 10\$)
+15\$:    \DWTAGsubrangetype
+            \DWATlowerbound(constant 1)
+            \DWATupperbound(constant 2)
+16\$:    \DWTAGsubrangetype
+            \DWATlowerbound(constant 1)
+            \DWATupperbound(constant 3)
+17\$:    \DWTAGsubrangetype                ! Note omitted upper bound
+            \DWATlowerbound(constant 1)
+
+18\$: \DWTAGvariable
+        \DWATname("X")
+        \DWATtype(reference to coarray type at 14\$)
+\end{alltt}
+\end{dwflisting}
+\caption{Fortran multidimensional coarray: DWARF description}
+\label{fig:FortranmultidimensionalcoarrayDWARFdescription}
+\end{figure}
+
+\clearpage
 \subsection{Ada Example}
 \label{app:adaexample}
-
 Figure \refersec{fig:adaexamplesourcefragment}
 illustrates two kinds of \addtoindex{Ada} 
 parameterized array, one embedded in a record.
-
 
 \begin{figure}[here]
 \begin{lstlisting}
@@ -577,7 +695,7 @@ end record;
 
 OBJ2B : REC2;
 \end{lstlisting}
-\caption{Ada 90 example: source fragment}
+\caption{Ada example: source fragment}
 \label{fig:adaexamplesourcefragment}
 \end{figure}
 
@@ -681,7 +799,7 @@ of this example and therefore is not shown.
         \livelink{chap:DWATlocation}{DW\_AT\_location}(...as appropriate...)
 \end{alltt}
 \end{dwflisting}
-\caption{Ada 90 example: DWARF description}
+\caption{Ada example: DWARF description}
 \label{fig:adaexampledwarfdescription}
 \end{figure}
 
@@ -727,8 +845,6 @@ Section \refersec{chap:datamemberentries}.
 \begin{figure}[p]
 \figurepart{1}{2}
 \begin{dwflisting}
-% DWARF4 had some entries here as \livelink{chap:DWATmember}{DW\_AT\_member} .
-% Those are fixed here to \livelink{chap:DWTAGmember}{DW\_TAG\_member}
 \begin{alltt}
 10\$: \livelink{chap:DWTAGbasetype}{DW\_TAG\_base\_type}
         \livelink{chap:DWATname}{DW\_AT\_name}("BOOLEAN")

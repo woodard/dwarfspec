@@ -380,7 +380,7 @@ consists of the following information:
 A 4\dash byte or 12\dash byte unsigned integer 
 \addtoindexx{initial length}
 representing the length
-of the \dotdebugtypes{} contribution for that compilation unit,
+of the \dotdebugtypes{} contribution for that type unit,
 not including the length field itself. In the \thirtytwobitdwarfformat, 
 this is a 4\dash byte unsigned integer (which must be
 less than \xfffffffzero); in the \sixtyfourbitdwarfformat, this
@@ -392,7 +392,7 @@ consists of the 4\dash byte value \wffffffff followed by an
 \item  \texttt{version} (\addtoindex{uhalf}) \\
 A 2\dash byte unsigned integer representing the version of the
 DWARF information for the 
-compilation unit\addtoindexx{version number!type unit} 
+type unit\addtoindexx{version number!type unit} 
 (see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
 The value in this field is 4.
 
@@ -401,7 +401,7 @@ A
 \addtoindexx{section offset!in .debug\_types header}
 4\dash byte or 8\dash byte unsigned offset into the 
 \dotdebugabbrev{}
-section. This offset associates the compilation unit with a
+section. This offset associates the type unit with a
 particular set of debugging information entry abbreviations. In
 the \thirtytwobitdwarfformat, this is a 4\dash byte unsigned length;
 in the \sixtyfourbitdwarfformat, this is an 8\dash byte unsigned length
@@ -417,7 +417,6 @@ an address on the target architecture. If the system uses
 segmented addressing, this value represents the size of the
 offset portion of an address.
 
-
 \item \texttt{type\_signature} (8\dash byte unsigned integer) \\
 \addtoindexx{type signature}
 A 
@@ -431,7 +430,6 @@ unit.
 \livelink{chap:DWFORMrefsig8}{DW\_FORM\_ref\_sig8}) to
 the primary type contained in this 
 \addtoindex{type unit} uses this value.}
-
 
 \item \texttt{type\_offset} (\livelink{datarep:sectionoffsetlength}{section offset}) \\
 \addttindexx{type\_offset}
@@ -504,7 +502,6 @@ Table \refersec{tab:tagencodings}.
   \hline \emph{Continued on next page}
 \endfoot
   \hline
-  \ddag \ \textit{New in \addtoindex{DWARF Version 4}}
 \endlastfoot
 \livelink{chap:DWTAGarraytype}{DW\_TAG\_array\_type} &0x01 \\
 \livelink{chap:DWTAGclasstype}{DW\_TAG\_class\_type}&0x02 \\
@@ -563,9 +560,10 @@ Table \refersec{tab:tagencodings}.
 \livelink{chap:DWTAGimportedunit}{DW\_TAG\_imported\_unit}&0x3d      \\
 \livelink{chap:DWTAGcondition}{DW\_TAG\_condition}&\xiiif      \\
 \livelink{chap:DWTAGsharedtype}{DW\_TAG\_shared\_type}&0x40      \\
-\livelink{chap:DWTAGtypeunit}{DW\_TAG\_type\_unit} \ddag &0x41      \\
-\livelink{chap:DWTAGrvaluereferencetype}{DW\_TAG\_rvalue\_reference\_type} \ddag &0x42      \\
-\livelink{chap:DWTAGtemplatealias}{DW\_TAG\_template\_alias} \ddag &0x43      \\
+\livelink{chap:DWTAGtypeunit}{DW\_TAG\_type\_unit} &0x41      \\
+\livelink{chap:DWTAGrvaluereferencetype}{DW\_TAG\_rvalue\_reference\_type} &0x42      \\
+\livelink{chap:DWTAGtemplatealias}{DW\_TAG\_template\_alias} &0x43      \\
+\livelink{chap:DWTAGcoarraytype}{DW\_TAG\_coarray\_type} &0x44 \\
 \livelink{chap:DWXXXlohiuser}{DW\_TAG\_lo\_user}&0x4080      \\
 \livelink{chap:DWXXXlohiuser}{DW\_TAG\_hi\_user}&\xffff      \\
 \end{longtable}
@@ -1026,8 +1024,7 @@ Table \refersec{tab:attributeformencodings}.
 \endhead
   \hline \emph{Continued on next page}
 \endfoot
-  \hline
-  \ddag \ \textit{New in \addtoindex{DWARF Version 4}}
+  \hline \ddag\ \textit{New in DWARF Version 5}
 \endlastfoot
 \livelink{chap:DWATsibling}{DW\_AT\_sibling}&0x01&\livelink{chap:classreference}{reference} 
         \addtoindexx{sibling attribute!encoding} \\
@@ -1202,23 +1199,28 @@ Table \refersec{tab:attributeformencodings}.
         \addtoindexx{pure attribute!encoding}  \\
 \livelink{chap:DWATrecursive}{DW\_AT\_recursive}&0x68&\livelink{chap:classflag}{flag} 
         \addtoindexx{recursive attribute!encoding}  \\
-\livelink{chap:DWATsignature}{DW\_AT\_signature} \ddag &0x69&\livelink{chap:classreference}{reference} 
+\livelink{chap:DWATsignature}{DW\_AT\_signature} &0x69&\livelink{chap:classreference}{reference} 
         \addtoindexx{signature attribute!encoding}  \\ 
-\livelink{chap:DWATmainsubprogram}{DW\_AT\_main\_subprogram} \ddag &0x6a&\livelink{chap:classflag}{flag} 
+\livelink{chap:DWATmainsubprogram}{DW\_AT\_main\_subprogram} &0x6a&\livelink{chap:classflag}{flag} 
         \addtoindexx{main subprogram attribute!encoding}  \\
-\livelink{chap:DWATdatabitoffset}{DW\_AT\_data\_bit\_offset} \ddag &0x6b&\livelink{chap:classconstant}{constant} 
+\livelink{chap:DWATdatabitoffset}{DW\_AT\_data\_bit\_offset} &0x6b&\livelink{chap:classconstant}{constant} 
         \addtoindexx{data bit offset attribute!encoding}  \\
-\livelink{chap:DWATconstexpr}{DW\_AT\_const\_expr} \ddag &0x6c&\livelink{chap:classflag}{flag} 
+\livelink{chap:DWATconstexpr}{DW\_AT\_const\_expr} &0x6c&\livelink{chap:classflag}{flag} 
         \addtoindexx{constant expression attribute!encoding}  \\
-\livelink{chap:DWATenumclass}{DW\_AT\_enum\_class} \ddag &0x6d&\livelink{chap:classflag}{flag} 
+\livelink{chap:DWATenumclass}{DW\_AT\_enum\_class} &0x6d&\livelink{chap:classflag}{flag} 
         \addtoindexx{enumeration class attribute!encoding}  \\
-\livelink{chap:DWATlinkagename}{DW\_AT\_linkage\_name} \ddag &0x6e&\livelink{chap:classstring}{string} 
+\livelink{chap:DWATlinkagename}{DW\_AT\_linkage\_name} &0x6e&\livelink{chap:classstring}{string} 
         \addtoindexx{linkage name attribute!encoding}  \\
+\livelink{chap:DWATstringlengthbitsize}{DW\_AT\_string\_length\_bit\_size} \ddag&0x6f&
+		\livelink{chap:classconstant}{constant}\addtoindexx{string length attribute!size of length}  \\
+\livelink{chap:DWATstringlengthbytesize}{DW\_AT\_string\_length\_byte\_size} \ddag&0x70&
+		\livelink{chap:classconstant}{constant}\addtoindexx{string length attribute!size of length}  \\
 \livelink{chap:DWXXXlohiuser}{DW\_AT\_lo\_user}&0x2000 & --- \addtoindexx{low user attribute encoding}  \\
 \livelink{chap:DWXXXlohiuser}{DW\_AT\_hi\_user}&\xiiifff& --- \addtoindexx{high user attribute encoding}  \\
 
 \end{longtable} 
 \end{centering}
+
 
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
@@ -1231,7 +1233,7 @@ Table \refersec{tab:attributeformencodings}.
   \hline \emph{Continued on next page}
 \endfoot
   \hline
-  \ddag \ \textit{New in \addtoindex{DWARF Version 4}}
+
 \endlastfoot
 \livelink{chap:DWFORMaddr}{DW\_FORM\_addr}&0x01&\livelink{chap:classaddress}{address}  \\
 \livelink{chap:DWFORMblock2}{DW\_FORM\_block2}&0x03&\livelink{chap:classblock}{block} \\
@@ -1254,10 +1256,10 @@ Table \refersec{tab:attributeformencodings}.
 \livelink{chap:DWFORMref8}{DW\_FORM\_ref8}&0x14&\livelink{chap:classreference}{reference} \\
 \livelink{chap:DWFORMrefudata}{DW\_FORM\_ref\_udata}&0x15&\livelink{chap:classreference}{reference}  \\
 \livelink{chap:DWFORMindirect}{DW\_FORM\_indirect}&0x16&(see Section \refersec{datarep:abbreviationstables}) \\
-\livelink{chap:DWFORMsecoffset}{DW\_FORM\_sec\_offset} \ddag &0x17&\livelink{chap:classlineptr}{lineptr}, \livelink{chap:classloclistptr}{loclistptr}, \livelink{chap:classmacptr}{macptr}, \livelink{chap:classrangelistptr}{rangelistptr} \\
-\livelink{chap:DWFORMexprloc}{DW\_FORM\_exprloc} \ddag &0x18&\livelink{chap:classexprloc}{exprloc} \\
-\livelink{chap:DWFORMflagpresent}{DW\_FORM\_flag\_present} \ddag &0x19&\livelink{chap:classflag}{flag} \\
-\livelink{chap:DWFORMrefsig8}{DW\_FORM\_ref\_sig8} \ddag &0x20&\livelink{chap:classreference}{reference} \\
+\livelink{chap:DWFORMsecoffset}{DW\_FORM\_sec\_offset} &0x17&\livelink{chap:classlineptr}{lineptr}, \livelink{chap:classloclistptr}{loclistptr}, \livelink{chap:classmacptr}{macptr}, \livelink{chap:classrangelistptr}{rangelistptr} \\
+\livelink{chap:DWFORMexprloc}{DW\_FORM\_exprloc} &0x18&\livelink{chap:classexprloc}{exprloc} \\
+\livelink{chap:DWFORMflagpresent}{DW\_FORM\_flag\_present} &0x19&\livelink{chap:classflag}{flag} \\
+\livelink{chap:DWFORMrefsig8}{DW\_FORM\_ref\_sig8} &0x20&\livelink{chap:classreference}{reference} \\
  
 \end{longtable}
 \end{centering}
@@ -1405,7 +1407,6 @@ Table \refersec{tab:dwarfoperationencodings}.
   \hline \emph{Continued on next page}
 \endfoot
   \hline
-  \ddag \ \textit{New in \addtoindex{DWARF Version 4}}
 \endlastfoot
 
 \livelink{chap:DWOPaddr}{DW\_OP\_addr}&0x03&1 & constant address  \\ 
@@ -1493,9 +1494,9 @@ Table \refersec{tab:dwarfoperationencodings}.
 \livelink{chap:DWOPcallframecfa}{DW\_OP\_call\_frame\_cfa} &0x9c &0& \\
 \livelink{chap:DWOPbitpiece}{DW\_OP\_bit\_piece}&0x9d &2&ULEB128 size followed by \\
 &&&ULEB128 offset\\
-\livelink{chap:DWOPimplicitvalue}{DW\_OP\_implicit\_value} \ddag &0x9e &2&ULEB128 size followed by \\
+\livelink{chap:DWOPimplicitvalue}{DW\_OP\_implicit\_value} &0x9e &2&ULEB128 size followed by \\
 &&&\nolink{block} of that size\\
-\livelink{chap:DWOPstackvalue}{DW\_OP\_stack\_value} \ddag &0x9f &0& \\
+\livelink{chap:DWOPstackvalue}{DW\_OP\_stack\_value} &0x9f &0& \\
 \livelink{chap:DWXXXlohiuser}{DW\_OP\_lo\_user} &0xe0 && \\
 \livelink{chap:DWXXXlohiuser}{DW\_OP\_hi\_user} &\xff && \\
 
@@ -1558,9 +1559,7 @@ Table \refersec{tab:basetypeencodingvalues}
   \hline \emph{Continued on next page}
 \endfoot
   \hline
-  \ddag \ \textit{New in \addtoindex{DWARF Version 4}}
 \endlastfoot
-
 \livelink{chap:DWATEaddress}{DW\_ATE\_address}&0x01 \\
 \livelink{chap:DWATEboolean}{DW\_ATE\_boolean}&0x02 \\
 \livelink{chap:DWATEcomplexfloat}{DW\_ATE\_complex\_float}&0x03 \\
@@ -1576,10 +1575,9 @@ Table \refersec{tab:basetypeencodingvalues}
 \livelink{chap:DWATEsignedfixed}{DW\_ATE\_signed\_fixed}&0x0d \\
 \livelink{chap:DWATEunsignedfixed}{DW\_ATE\_unsigned\_fixed}&0x0e \\
 \livelink{chap:DWATEdecimalfloat}{DW\_ATE\_decimal\_float} & 0x0f \\
-\livelink{chap:DWATEUTF}{DW\_ATE\_UTF} \ddag & 0x10 \\
+\livelink{chap:DWATEUTF}{DW\_ATE\_UTF} & 0x10 \\
 \livelink{chap:DWXXXlohiuser}{DW\_ATE\_lo\_user} & 0x80 \\
 \livelink{chap:DWXXXlohiuser}{DW\_ATE\_hi\_user} & \xff \\
-
 \end{longtable}
 \end{centering}
 
@@ -1588,7 +1586,6 @@ The encodings of the constants used in the
 \livelink{chap:DWATdecimalsign}{DW\_AT\_decimal\_sign} attribute 
 are given in 
 Table \refersec{tab:decimalsignencodings}.
-
 
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
@@ -1763,31 +1760,35 @@ defined language.
   \hline \emph{Continued on next page}
 \endfoot
   \hline
-  \dag \ \textit{See text}
+  \dag \ \textit{See text} \\ \ddag \ \textit{New in \addtoindex{DWARF Version 5}}
 \endlastfoot
 
-\livelink{chap:DWLANGC89}{DW\_LANG\_C89}&0x0001&0       \\
-\livelink{chap:DWLANGC}{DW\_LANG\_C}&0x0002&0  \\
-\livelink{chap:DWLANGAda83}{DW\_LANG\_Ada83} \dag &0x0003&1  \addtoindexx{Ada}     \\
-\livelink{chap:DWLANGCplusplus}{DW\_LANG\_C\_plus\_plus} &0x0004&0       \\
-\livelink{chap:DWLANGCobol74}{DW\_LANG\_Cobol74} \dag &0x0005&1       \\
-\livelink{chap:DWLANGCobol85}{DW\_LANG\_Cobol85} \dag &0x0006&1       \\
-\livelink{chap:DWLANGFortran77}{DW\_LANG\_Fortran77}&0x0007&1       \\
-\livelink{chap:DWLANGFortran90}{DW\_LANG\_Fortran90}&0x0008&1       \\
-\livelink{chap:DWLANGPascal83}{DW\_LANG\_Pascal83}&0x0009&1       \\
-\livelink{chap:DWLANGModula2}{DW\_LANG\_Modula2}&0x000a&1       \\
-\livelink{chap:DWLANGJava}{DW\_LANG\_Java}&0x000b&0       \\
-\livelink{chap:DWLANGC99}{DW\_LANG\_C99}&0x000c&0       \\
-\livelink{chap:DWLANGAda95}{DW\_LANG\_Ada95} \dag &0x000d&1 \addtoindexx{Ada}      \\
-\livelink{chap:DWLANGFortran95}{DW\_LANG\_Fortran95} &0x000e&1       \\
-\livelink{chap:DWLANGPLI}{DW\_LANG\_PLI} \dag &0x000f&1 \\
-\livelink{chap:DWLANGObjC}{DW\_LANG\_ObjC}&0x0010&0 \\
-\livelink{chap:DWLANGObjCplusplus}{DW\_LANG\_ObjC\_plus\_plus}&0x0011&0 \\
-\livelink{chap:DWLANGUPC}{DW\_LANG\_UPC}&0x0012&0 \\
-\livelink{chap:DWLANGD}{DW\_LANG\_D}&0x0013&0 \\
-\livelink{chap:DWLANGPython}{DW\_LANG\_Python} \dag &0x0014&0 \\
-\livelink{chap:DWXXXlohiuser}{DW\_LANG\_lo\_user}&0x8000 & \\
-\livelink{chap:DWXXXlohiuser}{DW\_LANG\_hi\_user}&\xffff & \\
+\livelink{chap:DWLANGC89}{DW\_LANG\_C89} &0x0001 &0       \\
+\livelink{chap:DWLANGC}{DW\_LANG\_C} &0x0002 &0  \\
+\livelink{chap:DWLANGAda83}{DW\_LANG\_Ada83} \dag &0x0003 &1  \addtoindexx{Ada}     \\
+\livelink{chap:DWLANGCplusplus}{DW\_LANG\_C\_plus\_plus} &0x0004 &0       \\
+\livelink{chap:DWLANGCobol74}{DW\_LANG\_Cobol74} \dag &0x0005 &1       \\
+\livelink{chap:DWLANGCobol85}{DW\_LANG\_Cobol85} \dag &0x0006 &1       \\
+\livelink{chap:DWLANGFortran77}{DW\_LANG\_Fortran77} &0x0007 &1       \\
+\livelink{chap:DWLANGFortran90}{DW\_LANG\_Fortran90} &0x0008 &1       \\
+\livelink{chap:DWLANGPascal83}{DW\_LANG\_Pascal83} &0x0009 &1       \\
+\livelink{chap:DWLANGModula2}{DW\_LANG\_Modula2} &0x000a &1       \\
+\livelink{chap:DWLANGJava}{DW\_LANG\_Java}&0x000b &0       \\
+\livelink{chap:DWLANGC99}{DW\_LANG\_C99}&0x000c &0       \\
+\livelink{chap:DWLANGAda95}{DW\_LANG\_Ada95} \dag &0x000d &1 \addtoindexx{Ada}      \\
+\livelink{chap:DWLANGFortran95}{DW\_LANG\_Fortran95} &0x000e &1       \\
+\livelink{chap:DWLANGPLI}{DW\_LANG\_PLI} \dag &0x000f &1 \\
+\livelink{chap:DWLANGObjC}{DW\_LANG\_ObjC} &0x0010 &0 \\
+\livelink{chap:DWLANGObjCplusplus}{DW\_LANG\_ObjC\_plus\_plus} &0x0011 &0 \\
+\livelink{chap:DWLANGUPC}{DW\_LANG\_UPC} &0x0012 &0 \\
+\livelink{chap:DWLANGD}{DW\_LANG\_D} &0x0013 &0 \\
+\livelink{chap:DWLANGPython}{DW\_LANG\_Python} \dag &0x0014 &0 \\
+\livelink{chap:DWLANGOpenCL}{DW\_LANG\_OpenCL} \dag \ddag &0x0015 &0 \\
+\livelink{chap:DWLANGGo}{DW\_LANG\_Go} \dag \ddag &0x0016 &0 \\
+\livelink{chap:DWLANGModula3}{DW\_LANG\_Modula3} \dag \ddag &0x0017 &1 \\
+\livelink{chap:DWLANGHaskell}{DW\_LANG\_Haskell} \dag \ddag &0x0018 &0 \\
+\livelink{chap:DWXXXlohiuser}{DW\_LANG\_lo\_user} &0x8000 & \\
+\livelink{chap:DWXXXlohiuser}{DW\_LANG\_hi\_user} &\xffff & \\
 
 \end{longtable}
 \end{centering}
@@ -2154,13 +2155,12 @@ Table \refersec{tab:linenumberextendedopcodeencodings}.
   \hline \emph{Continued on next page}
 \endfoot
   \hline
-  \ddag \ \textit{New in \addtoindex{DWARF Version 4}}
 \endlastfoot
 
 \livelink{chap:DWLNEendsequence}{DW\_LNE\_end\_sequence}&0x01    \\
 \livelink{chap:DWLNEsetaddress}{DW\_LNE\_set\_address}&0x02\\
 \livelink{chap:DWLNEdefinefile}{DW\_LNE\_define\_file}&0x03\\
-\livelink{chap:DWLNEsetdiscriminator}{DW\_LNE\_set\_discriminator} \ddag &0x04   \\
+\livelink{chap:DWLNEsetdiscriminator}{DW\_LNE\_set\_discriminator} &0x04   \\
 \livelink{chap:DWXXXlohiuser}{DW\_LNE\_lo\_user}&0x80   \\
 \livelink{chap:DWXXXlohiuser}{DW\_LNE\_hi\_user}&\xff   \\
 
@@ -2484,6 +2484,8 @@ code, and the attribute value.
 \livelink{chap:DWATsmall}{DW\_AT\_small},
 \livelink{chap:DWATsegment}{DW\_AT\_segment},
 \livelink{chap:DWATstringlength}{DW\_AT\_string\_length},
+\livelink{chap:DWATstringlengthbitsize}{DW\_AT\_string\_length\_bit\_size},
+\livelink{chap:DWATstringlengthbytesize}{DW\_AT\_string\_length\_byte\_size},
 \livelink{chap:DWATthreadsscaled}{DW\_AT\_threads\_scaled},
 \livelink{chap:DWATupperbound}{DW\_AT\_upper\_bound},
 \livelink{chap:DWATuselocation}{DW\_AT\_use\_location},

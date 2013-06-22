@@ -131,14 +131,30 @@ to read and process files generated according to a later
 version of this standard or which contain vendor extensions,
 albeit possibly in a degraded manner.
 
+\section{Changes from Version 4 to Version 5}
+\addtoindexx{DWARF Version 5}
+The following is a list of the major changes made to the DWARF Debugging Information
+Format since Version 4 was published. The list is not meant to be exhaustive.
+\begin{itemize}
+\item TBD...
+\end{itemize}
+
+DWARF Version 5 is compatible with DWARF Version 4 except as follows:
+\begin{itemize}
+\item A location list entry (see Section \refersec{chap:locationlists}) with 
+the address range (0, \doublequote{-1}) is defined as the new default location 
+list entry.
+\item In a string type (see Section \refersec{chap:stringtypeentries}, a \DWATbytesize{}
+attribute is defined to always describe the size of the string type. (Previously
+it described the size of the optional string length data field if the \DWATstringlength{}
+attribute was present.)
+\end{itemize}
 
 \section{Changes from Version 3 to Version 4}
+\addtoindexx{DWARF Version 4}
 The following is a list of the major changes made to the DWARF Debugging Information
 Format since Version 3 was published. The list is not meant to be exhaustive.
-
-
 \begin{itemize}
-
 \item Reformulate 
 Section 2.6 (Location Descriptions) 
 to better distinguish DWARF location descriptions, which
@@ -177,52 +193,42 @@ and interpretation of other data in the section.
 \end{itemize}
 
 \section{Changes from Version 2 to Version 3}
+\addtoindexx{DWARF Version 3}
 The following is a list of the major differences between
 Version 2 and Version 3 of the DWARF Debugging Information
 Format. The list is not meant to be exhaustive.
-
 \begin{itemize}
 \item
 Make provision for DWARF information files that are larger
 than 4 GBytes.
-
 \item
 Allow attributes to refer to debugging information entries
 in other shared libraries.
-
 \item
 Add support for \addtoindex{Fortran 90} modules as well as allocatable
 array and pointer types.
-
 \item
 Add additional base types for \addtoindex{C} (as revised for 1999).
-
 \item
 Add support for \addtoindex{Java} and \addtoindex{COBOL}.
-
 \item
 Add namespace support for \addtoindex{C++}.
-
 \item
 Add an optional section for global type names (similar to
 the global section for objects and functions).
-
 \item
 Adopt \addtoindex{UTF-8} as the preferred representation of program name strings.
 \item
 Add improved support for optimized code (discontiguous
 scopes, end of prologue determination, multiple section
 code generation).  
-
 \item Improve the ability to eliminate
 duplicate DWARF information during linking.  
-
 \end{itemize}
 
 \addtoindex{DWARF Version 3}
 is compatible with 
 \addtoindex{DWARF Version 2} except as follows:
-
 \begin{itemize}
 \item
 Certain very large values of the initial length fields that
@@ -230,7 +236,6 @@ begin DWARF sections as well as certain structures are reserved
 to act as escape codes for future extension; one such extension
 is defined to increase the possible size of DWARF descriptions
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
-
 \item
 References that use the attribute form 
 \livelink{chap:DWFORMrefaddr}{DW\_FORM\_ref\_addr}
@@ -241,15 +246,12 @@ specifies that such references have the same size as an
 address on the target system (see Sections 
 \refersec{datarep:32bitand64bitdwarfformats} and 
 \refersec{datarep:attributeencodings}).
-
 \item
 The return\_address\_register field in a Common Information
 Entry record for call frame information is changed to unsigned
 LEB representation (see Section 
 \refersec{chap:structureofcallframeinformation}).
-
 \end{itemize}
-
 
 \section{Changes from Version 1 to Version 2}
 \addtoindex{DWARF Version 2} 

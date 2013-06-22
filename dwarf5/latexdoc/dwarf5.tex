@@ -3,7 +3,12 @@
 % If draft is in the document class list, pix are just suggested
 % by an outline, the pic does not appear as a picture.
 %
-\newcommand{\docdate}{May 18, 2013 \hspace{1cm}(***\textbf{DRAFT}***)}
+\newcommand{\docdate}{June 22, 2013}
+%
+\usepackage{ifthen}
+\newboolean{isdraft}
+\setboolean{isdraft}{true}
+\newcommand{\draftmark}{\ifthenelse{\boolean{isdraft}}{*** DRAFT ***}{}}
 %
 \usepackage[T1]{fontenc}
 \usepackage{palatino}
@@ -79,7 +84,7 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \hypersetup{colorlinks=true,
   %bookmarks=true,
   pdfauthor={\dwf\ Committee},
-  pdftitle={\dwf\ Version 4.1}
+  pdftitle={\dwf\ Version 5}
 }
 
 % An environment to create a listing-like (boxed) presentation for DWARF examples
@@ -210,43 +215,39 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \setlength{\topsep}{0pt}
 \tightlists					% less spacing before/after lists
 
-\begin{centering}
+\begin{center}
 \LARGE
 \textbf{\dwf}
-
-\textbf{Version 4.1}
-
-\centering
+\\
+\textbf{Version 5}
+\\
 \vspace{1cm}
 \includegraphics[keepaspectratio=true,scale=1.0]{dwarf-logo}
-
-%\centering
-\vspace{2cm}
+\\
+\vspace{1cm}
 \href{http://www.dwarfstd.org}{\dwf}
 \href{http://www.dwarfstd.org}{Committee}
-
-\vspace{1cm} 
+\\
+\vspace{0.3cm} 
 \url{http://www.dwarfstd.org}
-
-\large
-\vspace{2cm}
+\\
+\vspace{3cm}
 \textbf{\docdate}
-
-\end{centering}
-
-%\clearpage
-%\openany
+\\
+\ifthenelse{\boolean{isdraft}}{
+	\vspace{1cm}
+	\draftmark}
+	{}
+\end{center}
 
 \textmd
 \normalsize
 \setlength{\headheight}{15pt}  
-
 \pagestyle{plain}
 %\makeevenhead{plain}{}{}{}
 %\makeoddhead{plain}{}{}{}
 %\makeevenfoot{plain}{}{}{}
 %\makeoddfoot{plain}{}{}{}
-
 \nonzeroparskip
 \setlength{\parindent}{0pt} 
 \settrims{0.5in}{0.5in}
@@ -257,19 +258,16 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \nouppercaseheads
 \makeevenhead{plain}{}{\rightmark}{}
 \makeoddhead{plain}{}{\rightmark}{}
-\makeevenfoot{plain}{\docdate}{}{Page \thepage}
-\makeoddfoot{plain}{\docdate}{}{Page \thepage}
+\makeevenfoot{plain}{\docdate}{\draftmark}{Page \thepage}
+\makeoddfoot{plain}{\docdate}{\draftmark}{Page \thepage}
 
 %\openany
 
 \nonzeroparskip
 \setlength{\parindent}{0pt} 
-
 \flushleft
 \include{copyright}
 \include{foreword}
-\include{foreword4.1}
-\emptypage
 
 \newpage
 \tableofcontents
@@ -280,6 +278,15 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \cleardoublepage
 \listoftables
 
+\ifthenelse{\boolean{isdraft}}
+	{	{% Environment to keep the following header change local
+		\cleardoublepage
+		\makeevenhead{plain}{}{Change Summary}{}
+		\makeoddhead{plain}{}{Change Summary}{}
+		\include{changesummary}
+		\cleardoublepage}
+	}{}
+
 \flushleft
 \raggedbottom
 \chapterstyle{default}
@@ -289,8 +296,8 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \makepagestyle{fragFirstChPage}
     \makeevenhead{fragFirstChPage}{}{}{}
     \makeoddhead{fragFirstChPage}{}{}{}
-    \makeoddfoot{fragFirstChPage}{\docdate}{}{Page \thepage}
-    \makeevenfoot{fragFirstChPage}{\docdate}{}{Page \thepage}
+    \makeoddfoot{fragFirstChPage}{\docdate}{\draftmark}{Page \thepage}
+    \makeevenfoot{fragFirstChPage}{\docdate}{\draftmark}{Page \thepage}
 \nouppercaseheads
 \aliaspagestyle{chapter}{fragFirstChPage}
 
@@ -298,11 +305,12 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \mainmatter
 % Define the levels of sectionality that are numbered.
 \setcounter{secnumdepth}{5}
+
 \include{introduction}
-\include{generaldescription}            \emptypage
+\include{generaldescription}            %\emptypage
 \include{programscope}                  \emptypage
 \include{dataobject}                    \emptypage
-\include{typeentries}                   \emptypage
+\include{typeentries}                   %\emptypage
 \include{otherdebugginginformation} 	\emptypage
 \include{datarepresentation}            \emptypage
 
@@ -312,7 +320,7 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \include{attributesbytag}				%\emptypage
 \include{debugsectionrelationships}     \emptypage
 \include{encodingdecoding}              \emptypage
-\include{examples}                      %\emptypage
+\include{examples}                      \emptypage
 \include{compression}                   %\emptypage
 \include{sectionversionnumbers}
 \include{gnulicense}

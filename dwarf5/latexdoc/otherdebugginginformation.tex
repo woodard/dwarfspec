@@ -175,8 +175,7 @@ independent of the DWARF version number.
 \item debug\_info\_offset (section offset) \\
 The offset from the
 \addtoindexx{section offset!in .debug\_pubnames header}
-beginning of the \dotdebuginfo{} or 
-\dotdebugtypes{} section of the
+beginning of the \dotdebuginfo{} section of the
 compilation unit header referenced by the set.
 
 \item address\_size (\addtoindex{ubyte}) \\
@@ -568,10 +567,11 @@ number assigned to the first special opcode.
 \textit{Opcode base is typically one greater than the highest-numbered
 \addttindexx{opcode\_base}
 standard opcode defined for the specified version of the line
-number information (12 in 
-\addtoindex{DWARF Version 3} and 
+number information (12 in DWARF Versions 3, 4 and 5,
+\addtoindexx{DWARF Version 3}
 \addtoindexx{DWARF Version 4}
-Version 4, 9 in
+\addtoindexx{DWARF Version 5}
+and 9 in
 \addtoindexx{DWARF Version 2}
 Version 2).  
 If opcode\_base is less than the typical value,
@@ -1652,10 +1652,8 @@ operators cannot be used in such operands:
 \begin{itemize}
 \item \livelink{chap:DWOPcall2}{DW\_OP\_call2}, \livelink{chap:DWOPcall4}{DW\_OP\_call4} 
 and \livelink{chap:DWOPcallref}{DW\_OP\_call\_ref} operators
-are not meaningful in an operand of these instructions
-because there is no mapping from call frame information to
-any corresponding debugging compilation unit information,
-thus there is no way to interpret the call offset.
+are allowed the call frame information must not depend on other
+debug sections.
 
 \needlines{5}
 \item \livelink{chap:DWOPpushobjectaddress}{DW\_OP\_push\_object\_address} is not meaningful in an operand
