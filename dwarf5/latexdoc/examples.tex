@@ -676,6 +676,164 @@ illustrated in Figure \refersec{fig:FortranmultidimensionalcoarrayDWARFdescripti
 \label{fig:FortranmultidimensionalcoarrayDWARFdescription}
 \end{figure}
 
+
+\clearpage
+\subsection{Fortran 2008 Assumed-rank Array Example}
+\label{app:assumedrankexample}
+Consider the example in Figure~\ref{fig:assumedrankdecl}, which shows
+an assumed-rank array in Fortran~2008 with
+supplement~29113:\footnote{Technical Specification ISO/IEC TS
+  29113:2012 \emph{Further Interoperability of Fortran with C}}
+
+\begin{figure}[!h]
+\begin{lstlisting}[language={[95]Fortran}]
+  subroutine foo(x)
+    real :: x(..)
+
+    ! x has n dimensions
+  
+  end subroutine
+\end{lstlisting}
+\caption{Declaration of a Fortran 2008 assumed-rank array}
+\label{fig:assumedrankdecl}
+\end{figure}
+
+Let's assume the Fortran compiler used an array descriptor that looks
+like the one shown in Figure~\ref{fig:arraydesc}.
+
+\begin{figure}[!h]
+\begin{lstlisting}[language=C]
+  struct array_descriptor {
+    void *base_addr;
+    int rank;
+    struct dim dims[]; 
+  }
+
+  struct dim {
+     int lower_bound;
+     int upper_bound;
+     int stride;
+     int flags;
+  }
+\end{lstlisting}
+\caption{One of many possible layouts for an array descriptor}
+\label{fig:arraydesc}
+\end{figure}
+
+The DWARF type for the array \emph{x} can be described as shown in
+Figure~\ref{fig:assumedrankdwarf}.
+
+\begin{figure}[!h]
+\begin{minipage}[t]{\linewidth}
+\centering
+Abbreviation Table: \dotdebugabbrev{}
+\begin{framed}
+\scriptsize
+\begin{alltt}
+10\$:  \DWTAGarraytype
+         \livelink{chap:DWATtype}{DW\_AT\_type}(reference to real)
+         \livelink{chap:DWATrank}{DW\_AT\_rank}(expression=
+             \livelink{chap:DWOPpushobjectaddress}{DW\_OP\_push\_object\_address}
+             \livelink{chap:DWOPlit}{DW\_OP\_lit}<offset of rank in descriptor>
+             \livelink{chap:DWOPplus}{DW\_OP\_plus}
+             \livelink{chap:DWOPderef}{DW\_OP\_deref})
+         \livelink{chap:DWATdatalocation}{DW\_AT\_data\_location}(expression=
+             \livelink{chap:DWOPpushobjectaddress}{DW\_OP\_push\_object\_address}
+             \livelink{chap:DWOPlit}{DW\_OP\_lit}<offset of data in descriptor>
+             \livelink{chap:DWOPplus}{DW\_OP\_plus}
+             \livelink{chap:DWOPderef}{DW\_OP\_deref})
+11\$:    \DWTAGgenericsubrange
+             \livelink{chap:DWATtype}{DW\_AT\_type}(reference to integer)
+             \livelink{chap:DWATlowerbound}{DW\_AT\_lower\_bound}(expression=
+             !   Looks up the lower bound of dimension i.
+      
+             !   Operation                              ! Stack effect
+             !   (implicit)                             ! i                                                                     
+                 \livelink{chap:DWOPlit}{DW\_OP\_lit}<byte size of struct dim>     ! i sizeof(dim)
+                 \livelink{chap:DWOPmult}{DW\_OP\_mult}                             ! dim[i]
+                 \livelink{chap:DWOPlit}{DW\_OP\_lit}<offset of dim in descriptor> ! dim[i] offset
+                 \livelink{chap:DWOPplus}{DW\_OP\_plus}                             ! dim[i]+offset
+                 \livelink{chap:DWOPpushobjectaddress}{DW\_OP\_push\_object\_address}              ! dim[i]+offset objptr
+                 \livelink{chap:DWOPplus}{DW\_OP\_plus}                             ! objptr.dim[i]
+                 \livelink{chap:DWOPlit}{DW\_OP\_lit}<offset of lowerbound in dim> ! objptr.dim[i] offset
+                 \livelink{chap:DWOPplus}{DW\_OP\_plus}                             ! objptr.dim[i].lowerbound
+                 \livelink{chap:DWOPderef}{DW\_OP\_deref})                           ! *objptr.dim[i].lowerbound
+             \livelink{chap:DWATupperbound}{DW\_AT\_upper\_bound}(expression=
+             !   Looks up the upper bound of dimension i.
+                 \livelink{chap:DWOPlit}{DW\_OP\_lit}<byte size of dim>
+                 \livelink{chap:DWOPmult}{DW\_OP\_mult}
+                 \livelink{chap:DWOPlit}{DW\_OP\_lit}<offset of dim in descriptor>
+                 \livelink{chap:DWOPplus}{DW\_OP\_plus}
+                 \livelink{chap:DWOPpushobjectaddress}{DW\_OP\_push\_object\_address}
+                 \livelink{chap:DWOPplus}{DW\_OP\_plus}
+                 \livelink{chap:DWOPlit}{DW\_OP\_lit}<offset of upperbound in dim>
+                 \livelink{chap:DWOPplus}{DW\_OP\_plus}
+                 \livelink{chap:DWOPderef}{DW\_OP\_deref})
+             \livelink{chap:DWATbytestride}{DW\_AT\_byte\_stride}(expression=
+             !   Looks up the byte stride of dimension i.
+                 ...
+             !   (analogous to DW\_AT\_upper\_bound)
+                 )
+\end{alltt}
+\end{framed}
+\end{minipage}
+\caption{Sample DWARF for the array descriptor in Figure~\ref{fig:arraydesc}}
+\label{fig:assumedrankdwarf}
+\end{figure}
+
+The layout of the array descriptor is not specified by the Fortran
+standard unless the array is explicitly marked as C-interoperable. To
+get the bounds of an assumed-rank array, the expressions in the
+\DWTAGgenericsubrange{} type need to be evaluated for each of the
+\DWATrank{} dimensions as shown the pseudocode in
+Figure~\ref{fig:assumedrankdwarfparser}.
+
+\begin{figure}[!h]
+\begin{lstlisting}[language=C]
+    typedef struct {
+        int lower, upper, stride;
+    } dims_t;
+
+    typedef struct {
+        int rank;
+    struct dims_t *dims;
+    } array_t;
+
+    array_t get_dynamic_array_dims(DW_TAG_array a) {
+      array_t result;
+
+      // Evaluate the DW_AT_rank expression to get the number of dimensions.
+      dwarf_stack_t stack;
+      dwarf_eval(stack, a.rank_expr);
+      result.rank = dwarf_pop(stack); 
+      result.dims = new dims_t[rank];
+
+      // Iterate over all dimensions and find their bounds.
+      for (int i = 0; i < result.rank; i++) {
+        // Evaluate the generic subrange's DW_AT_lower expression for dimension i.
+        dwarf_push(stack, i);
+        assert( stack.size == 1 );
+        dwarf_eval(stack, a.generic_subrange.lower_expr);
+        result.dims[i].lower = dwarf_pop(stack);
+        assert( stack.size == 0 );
+
+        dwarf_push(stack, i);
+        dwarf_eval(stack, a.generic_subrange.upper_expr);
+        result.dims[i].upper = dwarf_pop(stack);
+    
+        dwarf_push(stack, i);
+        dwarf_eval(stack, a.generic_subrange.byte_stride_expr);
+        result.dims[i].stride = dwarf_pop(stack);
+      }
+      return result;
+    }
+\end{lstlisting}
+\caption{How to interpret the DWARF from Figure~\ref{fig:assumedrankdwarf}}
+\label{fig:assumedrankdwarfparser}
+\end{figure}
+
+
+
 \clearpage
 \subsection{Ada Example}
 \label{app:adaexample}
