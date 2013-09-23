@@ -8,11 +8,11 @@
 # up to 4 times might be needed.
 # You need to do makeindex before the final latex!
 all:
-	latex dwarf5.tex
-	latex dwarf5.tex
+	latex -halt-on-error dwarf5.tex
+	latex -halt-on-error dwarf5.tex
 	makeindex dwarf5
-	latex dwarf5.tex
-	latex dwarf5.tex
+	latex -halt-on-error dwarf5.tex
+	latex -halt-on-error dwarf5.tex
 	dvips dwarf5.dvi -o dwarf5.ps
 	ps2pdf dwarf5.ps dwarf5.pdf
 clean:
@@ -30,7 +30,15 @@ clean:
 	-rm -f p2.txt
 archive:
 	sh bldtar.sh
-        
 
-	
+# this is only useful if you ran make all beforehand
+check:
+	@echo '**********************'
+	@echo '*** Cosmetic issues'
+	@echo '**********************'
+	@egrep '(Under)|(Over)' dwarf5.log || echo "None!"
+	@echo '**********************'
+	@echo '*** Missing references'
+	@echo '**********************'
+	@grep 'undef' dwarf5.log || echo "None!"
 
