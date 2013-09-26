@@ -561,6 +561,7 @@ source syntax) in other languages.}
 
 \section{Array Type Entries}
 \label{chap:arraytypeentries}
+\label{chap:DWTAGgenericsubrange}
 
 \textit{Many languages share the concept of an \doublequote{array,} which is
 \addtoindexx{array type entry}
@@ -659,6 +660,15 @@ first, next to leftmost second, and so on).
 \addtoindex{C}), an array of arrays may
 be represented by a debugging information entry for a
 multidimensional array.}
+
+\hypertarget{chap:DWTAGgenericsubrange}
+Alternatively, the array dimensions can also be described with the
+\DWTAGgenericsubrange, which contains only a single, generic
+expression describing each of the attributes. If \DWTAGgenericsubrange
+is used, the number dimensions must be stored in the
+\livelink{chap:DWATrank}{DW\_AT\_rank} attribute. See also Section
+\ref{chap:DWATrank}, Dynamic Type Properties: Array Rank.
+
 
 \needlines{5}
 Other attributes especially applicable to arrays are
@@ -1948,6 +1958,11 @@ whose value is a null\dash terminated
 string containing the subrange type name as it appears in
 the source program.
 
+The tag
+\livelink{chap:DWTAGgenericsubrange}{DW\_TAG\_generic\_subrange} is
+used to describe arrays with a dynamic rank. See Section
+\ref{chap:DWTAGgenericsubrange}.
+
 The subrange entry may have 
 \addtoindexx{type attribute}
 a \livelink{chap:DWATtype}{DW\_AT\_type} attribute to describe
@@ -2189,7 +2204,7 @@ a
 (see Section \refersec{chap:staticanddynamicvaluesofattributes})
 is the amount of storage need to hold a value of the file type.
 
-\section{Dynamic Type Properties}
+\subsection{Dynamic Type Properties}
 \label{chap:dynamictypeproperties}
 \subsection{Data Location}
 \label{chap:datalocation}
@@ -2287,6 +2302,42 @@ pointer assignment.}
 arrays, 
 see Appendix \refersec{app:aggregateexamples}.}
 
+\subsection{Array Rank}
+\label{chap:DWATrank}
+\textit{The Fortran language supports ``assumed-rank arrays''. The
+  rank (the number of dimensions) of an assumed-rank array is unknown
+  at compile time. The Fortran runtime stores the rank in the array
+  descriptor metadata.}
+
+The presence of \DWATrank{} indicates that an array's rank
+(dimensionality) is dynamic, and therefore unknown at compile
+time. \DWATrank{} contains an expression that can be evaluated to look
+up the dynamic rank from the array descriptor.
+
+The dimensions of an array with dynamic rank are described using the
+\DWTAGgenericsubrange{} tag. The \DWTAGgenericsubrange{} tag is the
+dynamic rank array equivalent of
+\livelink{chap:DWTAGsubrangetype}{DW\_TAG\_subrange\_type}. The
+difference is that a \DWTAGgenericsubrange{} contains generic
+lower/upper bound and stride expressions that need to be evaluated for
+each dimension: Before any expression contained in a
+\DWTAGgenericsubrange{} can be evaluated, the dimension for which the
+expression should be evaluated needs to be pushed onto the stack. The
+expression will use it to find the offset of the respective field in
+the array descriptor metadata.
+
+\textit{The Fortran compiler is free to choose any layout for the
+  array descriptor. In particular, the upper and lower bounds and
+  stride values do not need to be bundled into a structure or record,
+  but could be laid end to end in the containing descriptor, pointed
+  to by the descriptor, or even allocated independently of the
+  descriptor.}
+
+Dimensions are enumerated $0$ to $\mathit{rank}-1$ in a left-to-right
+fashion.
+
+\textit{For an example in Fortran 2008, see
+  Section~\ref{app:assumedrankexample}.}
 
 
 \section{Template Alias Entries}
