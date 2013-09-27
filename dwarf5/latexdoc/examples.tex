@@ -574,14 +574,14 @@ illustrated in Figure \refersec{fig:FortranscalarcoarrayDWARFdescription}.
 \begin{figure}[!h]
 \begin{dwflisting}
 \begin{alltt}
-10\$:  \DWTAGcoarraytype
-        \DWATtype(reference to INTEGER)
-        \DWTAGsubrangetype                ! Note omitted upper bound			
-            \DWATlowerbound(constant 1)
+10\$:  \DWTAGcoarraytypeLL
+        \DWATtypeLL(reference to INTEGER)
+        \DWTAGsubrangetypeLL                ! Note omitted upper bound			
+            \DWATlowerboundLL(constant 1)
 
-11\$:  \DWTAGvariable
-        \DWATname("X")
-        \DWATtype(reference to coarray type at 10\$)
+11\$:  \DWTAGvariableLL
+        \DWATnameLL("X")
+        \DWATtypeLL(reference to coarray type at 10\$)
 \end{alltt}
 \end{dwflisting}
 \caption{Fortran scalar coarray: DWARF description}
@@ -605,21 +605,21 @@ illustrated in Figure \refersec{fig:FortranarraycoarrayDWARFdescription}.
 \begin{figure}[here]
 \begin{dwflisting}
 \begin{alltt}
-10\$: \DWTAGarraytype
-        \DWATordering(\DWORDcolmajor)
-        \DWATtype(reference to INTEGER)
-11\$:    \DWTAGsubrangetype
-            \DWATlowerbound(constant 1)
-            \DWATupperbound(constant 10)
+10\$: \DWTAGarraytypeLL
+        \DWATorderingLL(\DWORDcolmajorLL)
+        \DWATtypeLL(reference to INTEGER)
+11\$:    \DWTAGsubrangetypeLL
+            \DWATlowerboundLL(constant 1)
+            \DWATupperboundLL(constant 10)
 
-12\$: \DWTAGcoarraytype
-        \DWATtype(reference to array type at 10\$)
-13\$:    \DWTAGsubrangetype                ! Note omitted upper bound
-            \DWATlowerbound(constant 1)
+12\$: \DWTAGcoarraytypeLL
+        \DWATtypeLL(reference to array type at 10\$)
+13\$:    \DWTAGsubrangetypeLL                ! Note omitted upper bound
+            \DWATlowerboundLL(constant 1)
 
-14$: \DWTAGvariable
-        \DWATname("X")
-        \DWATtype(reference to coarray type at 12\$)
+14$: \DWTAGvariableLL
+        \DWATnameLL("X")
+        \DWATtypeLL(reference to coarray type at 12\$)
 \end{alltt}
 \end{dwflisting}
 \caption{Fortran array coarray: DWARF description}
@@ -643,33 +643,33 @@ illustrated in Figure \refersec{fig:FortranmultidimensionalcoarrayDWARFdescripti
 \begin{figure}[here]
 \begin{dwflisting}
 \begin{alltt}
-10\$: \DWTAGarraytype
-        \DWATordering(\DWORDcolmajor)
-        \DWATtype(reference to INTEGER)
-11\$:    \DWTAGsubrangetype
-            \DWATlowerbound(constant 1)
-            \DWATupperbound(constant 10)
-12\$:    \DWTAGsubrangetype
-            \DWATlowerbound(constant  1)
-            \DWATupperbound(constant 11)
-13\$:    \DWTAGsubrangetype
-            \DWATlowerbound(constant  1)
-            \DWATupperbound(constant 12)
+10\$: \DWTAGarraytypeLL
+        \DWATorderingLL(\DWORDcolmajorLL)
+        \DWATtypeLL(reference to INTEGER)
+11\$:    \DWTAGsubrangetypeLL
+            \DWATlowerboundLL(constant 1)
+            \DWATupperboundLL(constant 10)
+12\$:    \DWTAGsubrangetypeLL
+            \DWATlowerboundLL(constant  1)
+            \DWATupperboundLL(constant 11)
+13\$:    \DWTAGsubrangetypeLL
+            \DWATlowerboundLL(constant  1)
+            \DWATupperboundLL(constant 12)
 
-14\$: \DWTAGcoarraytype
-        \DWATtype(reference to array_type at 10\$)
-15\$:    \DWTAGsubrangetype
-            \DWATlowerbound(constant 1)
-            \DWATupperbound(constant 2)
-16\$:    \DWTAGsubrangetype
-            \DWATlowerbound(constant 1)
-            \DWATupperbound(constant 3)
-17\$:    \DWTAGsubrangetype                ! Note omitted upper bound
-            \DWATlowerbound(constant 1)
+14\$: \DWTAGcoarraytypeLL
+        \DWATtypeLL(reference to array_type at 10\$)
+15\$:    \DWTAGsubrangetypeLL
+            \DWATlowerboundLL(constant 1)
+            \DWATupperboundLL(constant 2)
+16\$:    \DWTAGsubrangetypeLL
+            \DWATlowerboundLL(constant 1)
+            \DWATupperboundLL(constant 3)
+17\$:    \DWTAGsubrangetypeLL                ! Note omitted upper bound
+            \DWATlowerboundLL(constant 1)
 
-18\$: \DWTAGvariable
-        \DWATname("X")
-        \DWATtype(reference to coarray type at 14\$)
+18\$: \DWTAGvariableLL
+        \DWATnameLL("X")
+        \DWATtypeLL(reference to coarray type at 14\$)
 \end{alltt}
 \end{dwflisting}
 \caption{Fortran multidimensional coarray: DWARF description}
@@ -680,13 +680,14 @@ illustrated in Figure \refersec{fig:FortranmultidimensionalcoarrayDWARFdescripti
 \clearpage
 \subsection{Fortran 2008 Assumed-rank Array Example}
 \label{app:assumedrankexample}
+\addtoindexx{array!assumed-rank}
 Consider the example in Figure~\ref{fig:assumedrankdecl}, which shows
 an assumed-rank array in Fortran~2008 with
 supplement~29113:\footnote{Technical Specification ISO/IEC TS
   29113:2012 \emph{Further Interoperability of Fortran with C}}
 
 \begin{figure}[!h]
-\begin{lstlisting}[language={[95]Fortran}]
+\begin{lstlisting}
   subroutine foo(x)
     real :: x(..)
 
@@ -698,11 +699,12 @@ supplement~29113:\footnote{Technical Specification ISO/IEC TS
 \label{fig:assumedrankdecl}
 \end{figure}
 
-Let's assume the Fortran compiler used an array descriptor that looks
+Let's assume the Fortran compiler used an array descriptor that
+(in \addtoindex{C}) looks
 like the one shown in Figure~\ref{fig:arraydesc}.
 
 \begin{figure}[!h]
-\begin{lstlisting}[language=C]
+\begin{lstlisting}
   struct array_descriptor {
     void *base_addr;
     int rank;
@@ -721,75 +723,70 @@ like the one shown in Figure~\ref{fig:arraydesc}.
 \end{figure}
 
 The DWARF type for the array \emph{x} can be described as shown in
-Figure~\ref{fig:assumedrankdwarf}.
+Figure~\refersec{fig:assumedrankdwarf}.
 
 \begin{figure}[!h]
-\begin{minipage}[t]{\linewidth}
-\centering
-Abbreviation Table: \dotdebugabbrev{}
-\begin{framed}
-\scriptsize
+\begin{dwflisting}
 \begin{alltt}
-10\$:  \DWTAGarraytype
-         \livelink{chap:DWATtype}{DW\_AT\_type}(reference to real)
-         \livelink{chap:DWATrank}{DW\_AT\_rank}(expression=
-             \livelink{chap:DWOPpushobjectaddress}{DW\_OP\_push\_object\_address}
-             \livelink{chap:DWOPlit}{DW\_OP\_lit}<offset of rank in descriptor>
-             \livelink{chap:DWOPplus}{DW\_OP\_plus}
-             \livelink{chap:DWOPderef}{DW\_OP\_deref})
-         \livelink{chap:DWATdatalocation}{DW\_AT\_data\_location}(expression=
-             \livelink{chap:DWOPpushobjectaddress}{DW\_OP\_push\_object\_address}
-             \livelink{chap:DWOPlit}{DW\_OP\_lit}<offset of data in descriptor>
-             \livelink{chap:DWOPplus}{DW\_OP\_plus}
-             \livelink{chap:DWOPderef}{DW\_OP\_deref})
-11\$:    \DWTAGgenericsubrange
-             \livelink{chap:DWATtype}{DW\_AT\_type}(reference to integer)
-             \livelink{chap:DWATlowerbound}{DW\_AT\_lower\_bound}(expression=
+10\$:  \DWTAGarraytypeLL
+         \DWATtypeLL(reference to real)
+         \DWATrankLL(expression=
+             \DWOPpushobjectaddressLL
+             \DWOPlitLL<offset of rank in descriptor>
+             \DWOPplusLL
+             \DWOPderefLL)
+         \DWATdatalocationLL(expression=
+             \DWOPpushobjectaddressLL
+             \DWOPlitLL<offset of data in descriptor>
+             \DWOPplusLL
+             \DWOPderefLL)
+11\$:    \DWTAGgenericsubrangeLL
+             \DWATtypeLL(reference to integer)
+             \DWATlowerboundLL(expression=
              !   Looks up the lower bound of dimension i.
-      
              !   Operation                              ! Stack effect
              !   (implicit)                             ! i                                                                     
-                 \livelink{chap:DWOPlit}{DW\_OP\_lit}<byte size of struct dim>     ! i sizeof(dim)
-                 \livelink{chap:DWOPmult}{DW\_OP\_mult}                             ! dim[i]
-                 \livelink{chap:DWOPlit}{DW\_OP\_lit}<offset of dim in descriptor> ! dim[i] offset
-                 \livelink{chap:DWOPplus}{DW\_OP\_plus}                             ! dim[i]+offset
-                 \livelink{chap:DWOPpushobjectaddress}{DW\_OP\_push\_object\_address}              ! dim[i]+offset objptr
-                 \livelink{chap:DWOPplus}{DW\_OP\_plus}                             ! objptr.dim[i]
-                 \livelink{chap:DWOPlit}{DW\_OP\_lit}<offset of lowerbound in dim> ! objptr.dim[i] offset
-                 \livelink{chap:DWOPplus}{DW\_OP\_plus}                             ! objptr.dim[i].lowerbound
-                 \livelink{chap:DWOPderef}{DW\_OP\_deref})                           ! *objptr.dim[i].lowerbound
+                 \DWOPlitLL<byte size of struct dim>     ! i sizeof(dim)
+                 \DWOPmultLL                             ! dim[i]
+                 \DWOPlitLL<offset of dim in descriptor> ! dim[i] offset
+                 \DWOPplusLL                             ! dim[i]+offset
+                 \DWOPpushobjectaddressLL              ! dim[i]+offset objptr
+                 \DWOPplusLL                             ! objptr.dim[i]
+                 \DWOPlitLL<offset of lowerbound in dim> ! objptr.dim[i] offset
+                 \DWOPplusLL                             ! objptr.dim[i].lowerbound
+                 \DWOPderefLL)                           ! *objptr.dim[i].lowerbound
              \livelink{chap:DWATupperbound}{DW\_AT\_upper\_bound}(expression=
              !   Looks up the upper bound of dimension i.
-                 \livelink{chap:DWOPlit}{DW\_OP\_lit}<byte size of dim>
-                 \livelink{chap:DWOPmult}{DW\_OP\_mult}
-                 \livelink{chap:DWOPlit}{DW\_OP\_lit}<offset of dim in descriptor>
-                 \livelink{chap:DWOPplus}{DW\_OP\_plus}
-                 \livelink{chap:DWOPpushobjectaddress}{DW\_OP\_push\_object\_address}
-                 \livelink{chap:DWOPplus}{DW\_OP\_plus}
-                 \livelink{chap:DWOPlit}{DW\_OP\_lit}<offset of upperbound in dim>
-                 \livelink{chap:DWOPplus}{DW\_OP\_plus}
-                 \livelink{chap:DWOPderef}{DW\_OP\_deref})
-             \livelink{chap:DWATbytestride}{DW\_AT\_byte\_stride}(expression=
+                 \DWOPlitLL<byte size of dim>
+                 \DWOPmultLL
+                 \DWOPlitLL<offset of dim in descriptor>
+                 \DWOPplusLL
+                 \DWOPpushobjectaddressLL
+                 \DWOPplusLL
+                 \DWOPlitLL<offset of upperbound in dim>
+                 \DWOPplusLL
+                 \DWOPderefLL)
+             \DWATbytestrideLL(expression=
              !   Looks up the byte stride of dimension i.
                  ...
              !   (analogous to DW\_AT\_upper\_bound)
                  )
 \end{alltt}
-\end{framed}
-\end{minipage}
+\end{dwflisting}
 \caption{Sample DWARF for the array descriptor in Figure~\ref{fig:arraydesc}}
 \label{fig:assumedrankdwarf}
 \end{figure}
 
 The layout of the array descriptor is not specified by the Fortran
-standard unless the array is explicitly marked as C-interoperable. To
+standard unless the array is explicitly marked as \addtoindex{C-interoperable}. To
 get the bounds of an assumed-rank array, the expressions in the
-\DWTAGgenericsubrange{} type need to be evaluated for each of the
-\DWATrank{} dimensions as shown the pseudocode in
-Figure~\ref{fig:assumedrankdwarfparser}.
+\DWTAGgenericsubrangeLL
+entry need to be evaluated for each of the
+\DWATrankLL dimensions as shown by the pseudocode in
+Figure~\refersec{fig:assumedrankdwarfparser}.
 
 \begin{figure}[!h]
-\begin{lstlisting}[language=C]
+\begin{lstlisting}
     typedef struct {
         int lower, upper, stride;
     } dims_t;
@@ -802,7 +799,8 @@ Figure~\ref{fig:assumedrankdwarfparser}.
     array_t get_dynamic_array_dims(DW_TAG_array a) {
       array_t result;
 
-      // Evaluate the DW_AT_rank expression to get the number of dimensions.
+      // Evaluate the DW_AT_rank expression to get the 
+      //    number of dimensions.
       dwarf_stack_t stack;
       dwarf_eval(stack, a.rank_expr);
       result.rank = dwarf_pop(stack); 
@@ -810,7 +808,8 @@ Figure~\ref{fig:assumedrankdwarfparser}.
 
       // Iterate over all dimensions and find their bounds.
       for (int i = 0; i < result.rank; i++) {
-        // Evaluate the generic subrange's DW_AT_lower expression for dimension i.
+        // Evaluate the generic subrange's DW_AT_lower 
+        //    expression for dimension i.
         dwarf_push(stack, i);
         assert( stack.size == 1 );
         dwarf_eval(stack, a.generic_subrange.lower_expr);
