@@ -663,14 +663,14 @@ multidimensional array.}
 
 Alternatively, for an array with dynamic rank the array dimensions 
 are described by a debugging information entry with the tag
-\livetarg{chap:DWTAGgenericsubrange}{DW\_TAG\_generic\_subrange}.
+\DWTAGgenericsubrangeTARG.
 This entry has the same attributes as a
-\livelink{DWTAGsubrangetype}{DW\_TAG\_subrange\_type} entry; however,
-there is just one \DWTAGgenericsubrange{} entry and it describes all of the
+\DWTAGsubrangetype{} entry; however,
+there is just one \DWTAGgenericsubrangeNAME{} entry and it describes all of the
 dimensions of the array.
-If \DWTAGgenericsubrange{}
+If \DWTAGgenericsubrangeNAME{}
 is used, the number of dimensions must be specified using a
-\DWATrankLL{} attribute. See also Section
+\DWATrank{} attribute. See also Section
 \refersec{chap:DWATrank}.
 
 
@@ -697,21 +697,21 @@ indexed using a \doublequote{coindex} or multiple \doublequote{coindices}.
 }
 
 A coarray type is represented by a debugging information entry 
-with the tag \DWTAGcoarraytype.
+with the tag \DWTAGcoarraytypeTARG.
 If a name has been given to the 
 coarray type in the source, then the corresponding coarray type 
-entry has a \DWATnameLL{} attribute whose value is a null-terminated 
+entry has a \DWATname{} attribute whose value is a null-terminated 
 string containing the array type name as it appears in the source 
 program.
 
-A coarray entry has one or more \DWTAGsubrangetypeLL{} child entries,
-one for each codimension. It also has a \DWATtypeLL{} attribute 
+A coarray entry has one or more \DWTAGsubrangetype{} child entries,
+one for each codimension. It also has a \DWATtype{} attribute 
 describing the type of each element of the coarray.
 
 \textit{In a coarray application, the run-time number of processes in the application
 is part of the coindex calculation.  It is represented in the Fortran source by
 a coindex which is declared with a \doublequote{*} as the upper bound.  To express this
-concept in DWARF, the \DWTAGsubrangetypeLL{} child entry for that index has 
+concept in DWARF, the \DWTAGsubrangetype{} child entry for that index has 
 only a lower bound and no upper bound.}
 
 \textit{How coarray elements are located and how coindices are 
@@ -1962,7 +1962,7 @@ whose value is a null\dash terminated
 string containing the subrange type name as it appears in
 the source program.
 
-The tag \DWTAGgenericsubrangeLL is
+The tag \DWTAGgenericsubrange{} is
 used to describe arrays with a dynamic rank. See Section
 \refersec{chap:DWTAGgenericsubrange}.
 
@@ -2322,10 +2322,10 @@ time. The value of the \DWATrank{} attribute is either an integer constant
 or a location expression whose evaluation yields the dynamic rank.
 
 The bounds of an array with dynamic rank are described using the
-\DWTAGgenericsubrangeLL{} tag, which  
+\DWTAGgenericsubrangeTARG{} tag, which  
 is the dynamic rank array equivalent of
-\DWTAGsubrangetypeLL. The
-difference is that a \DWTAGgenericsubrangeLL{} contains generic
+\DWTAGsubrangetype. The
+difference is that a \DWTAGgenericsubrange{} contains generic
 lower/upper bound and stride expressions that need to be evaluated for
 each dimension: Before any expression contained in a
 \DWTAGgenericsubrange{} can be evaluated, the dimension for which the
