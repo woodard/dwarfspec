@@ -1,11 +1,11 @@
 \chapter{Examples (Informative)}
-\label{app:examplesinformative}
+\label{app:examplesinformative}F
 
 The following sections provide examples that illustrate
 various aspects of the DWARF debugging information format.
 
 
-\section{ Compilation Units and Abbreviations Table Example}
+\section{ Compilation Units and Abbreviations Table Example}F
 \label{app:compilationunitsandabbreviationstableexample}
 
 
@@ -356,37 +356,37 @@ in Figure \refersec{fig:fortranarrayexampledwarfdescription}.
         \livelink{chap:DWATtype}{DW\_AT\_type}(reference to REAL)
         \livelink{chap:DWATassociated}{DW\_AT\_associated}(expression= ! Test 'ptr\_assoc' \nolink{flag}
             \livelink{chap:DWOPpushobjectaddress}{DW\_OP\_push\_object\_address}
-            \livelink{chap:DWOPlit}{DW\_OP\_lit}<n>    ! where n == offset(ptr\_assoc)
+            \DWOPlitn              ! where n == offset(ptr\_assoc)
             \livelink{chap:DWOPplus}{DW\_OP\_plus}
             \livelink{chap:DWOPderef}{DW\_OP\_deref}
-            \livelink{chap:DWOPlit1}{DW\_OP\_lit1}      ! mask for 'ptr\_assoc' \nolink{flag}
+            \livelink{chap:DWOPlit1}{DW\_OP\_lit1}              ! mask for 'ptr\_assoc' \nolink{flag}
             \livelink{chap:DWOPand}{DW\_OP\_and})
         \livelink{chap:DWATdatalocation}{DW\_AT\_data\_location}(expression= ! Get raw data address
             \livelink{chap:DWOPpushobjectaddress}{DW\_OP\_push\_object\_address}
-            \livelink{chap:DWOPlit}{DW\_OP\_lit}<n>    ! where n == offset(base)
+            \DWOPlitn              ! where n == offset(base)
             \livelink{chap:DWOPplus}{DW\_OP\_plus}
-            \livelink{chap:DWOPderef}{DW\_OP\_deref})    ! Type of index of array 'ap'
+            \livelink{chap:DWOPderef}{DW\_OP\_deref})            ! Type of index of array 'ap'
 2\$:     \livelink{chap:DWTAGsubrangetype}{DW\_TAG\_subrange\_type}
             ! No name, default stride
             \livelink{chap:DWATtype}{DW\_AT\_type}(reference to INTEGER)
             \livelink{chap:DWATlowerbound}{DW\_AT\_lower\_bound}(expression=
                 \livelink{chap:DWOPpushobjectaddress}{DW\_OP\_push\_object\_address}
-                \livelink{chap:DWOPlit}{DW\_OP\_lit}<n> ! where n ==
-                             !  offset(desc, dims) +
-                             !  offset(dims\_str, lower\_bound)
+                \DWOPlitn          ! where n ==
+                                    !   offset(desc, dims) +
+                                    !   offset(dims\_str, lower\_bound)
                 \livelink{chap:DWOPplus}{DW\_OP\_plus}
                 \livelink{chap:DWOPderef}{DW\_OP\_deref})
             \livelink{chap:DWATupperbound}{DW\_AT\_upper\_bound}(expression=
                 \livelink{chap:DWOPpushobjectaddress}{DW\_OP\_push\_object\_address}
-                \livelink{chap:DWOPlit}{DW\_OP\_lit}<n> ! where n ==
-                             !  offset(desc, dims) +
-                             !  offset(dims\_str, upper\_bound)
+                \DWOPlitn          ! where n ==
+                                    !   offset(desc, dims) +
+                                    !   offset(dims\_str, upper\_bound)
                 \livelink{chap:DWOPplus}{DW\_OP\_plus}
                 \livelink{chap:DWOPderef}{DW\_OP\_deref})
             !  Note: for the m'th dimension, the second operator becomes
-            !  \livelink{chap:DWOPlit}{DW\_OP\_lit}<x> where
-            !       x == offset(desc, dims)          +
-            !                (m-1)*sizeof(dims\_str) +
+            !  \DWOPlitn where
+            !       n == offset(desc, dims)          +
+            !                (m-1)*sizeof(dims\_str)  +
             !                 offset(dims\_str, [lower|upper]\_bound)
             !  That is, the expression does not get longer for each successive 
             !  dimension (other than to express the larger offsets involved).
@@ -416,14 +416,14 @@ in Figure \refersec{fig:fortranarrayexampledwarfdescription}.
         \livelink{chap:DWATtype}{DW\_AT\_type}(reference to 3\$)
         \livelink{chap:DWATallocated}{DW\_AT\_allocated}(expression=     ! Test 'ptr\_alloc' \nolink{flag}
             \livelink{chap:DWOPpushobjectaddress}{DW\_OP\_push\_object\_address}
-            \livelink{chap:DWOPlit}{DW\_OP\_lit}<n>                ! where n == offset(ptr\_alloc)
+            \DWOPlitn                  ! where n == offset(ptr\_alloc)
             \livelink{chap:DWOPplus}{DW\_OP\_plus}
             \livelink{chap:DWOPderef}{DW\_OP\_deref}
-            \livelink{chap:DWOPlit}{DW\_OP\_lit2}                  ! Mask for 'ptr\_alloc' \nolink{flag}
+            \DWOPlittwo                  ! Mask for 'ptr\_alloc' \nolink{flag}
             \livelink{chap:DWOPand}{DW\_OP\_and})
         \livelink{chap:DWATdatalocation}{DW\_AT\_data\_location}(expression= ! Get raw data address
             \livelink{chap:DWOPpushobjectaddress}{DW\_OP\_push\_object\_address}
-            \livelink{chap:DWOPlit}{DW\_OP\_lit}<n>                ! where n = offset(base)
+            \DWOPlitn                  ! where n == offset(base)
             \livelink{chap:DWOPplus}{DW\_OP\_plus}
             \livelink{chap:DWOPderef}{DW\_OP\_deref})
 7\$:     \livelink{chap:DWTAGsubrangetype}{DW\_TAG\_subrange\_type}
@@ -431,12 +431,12 @@ in Figure \refersec{fig:fortranarrayexampledwarfdescription}.
             \livelink{chap:DWATtype}{DW\_AT\_type}(reference to INTEGER)
             \livelink{chap:DWATlowerbound}{DW\_AT\_lower\_bound}(expression=
                 \livelink{chap:DWOPpushobjectaddress}{DW\_OP\_push\_object\_address}
-                \livelink{chap:DWOPlit}{DW\_OP\_lit}<n>            ! where n == ...
+                \DWOPlitn              ! where n == ...
                 \livelink{chap:DWOPplus}{DW\_OP\_plus}
                 \livelink{chap:DWOPderef}{DW\_OP\_deref})
             \livelink{chap:DWATupperbound}{DW\_AT\_upper\_bound}(expression=
                 \livelink{chap:DWOPpushobjectaddress}{DW\_OP\_push\_object\_address}
-                \livelink{chap:DWOPlit}{DW\_OP\_lit}<n>            ! where n == ...
+                \DWOPlitn              ! where n == ...
                 \livelink{chap:DWOPplus}{DW\_OP\_plus}
                 \livelink{chap:DWOPderef}{DW\_OP\_deref})
 8\$: \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
@@ -732,38 +732,38 @@ Figure~\refersec{fig:assumedrankdwarf}.
          \DWATtype(reference to real)
          \DWATrank(expression=
              \DWOPpushobjectaddress
-             \DWOPlit<offset of rank in descriptor>
+             \DWOPlitn                ! offset of rank in descriptor>
              \DWOPplus
              \DWOPderef)
          \DWATdatalocation(expression=
              \DWOPpushobjectaddress
-             \DWOPlit<offset of data in descriptor>
+             \DWOPlitn                ! offset of data in descriptor>
              \DWOPplus
              \DWOPderef)
 11\$:    \DWTAGgenericsubrange
              \DWATtype(reference to integer)
              \DWATlowerbound(expression=
              !   Looks up the lower bound of dimension i.
-             !   Operation                              ! Stack effect
-             !   (implicit)                             ! i                                                                     
-                 \DWOPlit<byte size of struct dim>     ! i sizeof(dim)
-                 \DWOPmult                             ! dim[i]
-                 \DWOPlit<offset of dim in descriptor> ! dim[i] offset
-                 \DWOPplus                             ! dim[i]+offset
-                 \DWOPpushobjectaddress              ! dim[i]+offset objptr
-                 \DWOPplus                             ! objptr.dim[i]
-                 \DWOPlit<offset of lowerbound in dim> ! objptr.dim[i] offset
-                 \DWOPplus                             ! objptr.dim[i].lowerbound
-                 \DWOPderef)                           ! *objptr.dim[i].lowerbound
+             !   Operation                           ! Stack effect
+             !   (implicit)                          ! i                                                                     
+                 \DWOPlitn                          ! i sizeof(dim)
+                 \DWOPmul                           ! dim[i]
+                 \DWOPlitn                          ! dim[i] offsetof(dim)
+                 \DWOPplus                          ! dim[i]+offset
+                 \DWOPpushobjectaddress           ! dim[i]+offsetof(dim) objptr
+                 \DWOPplus                          ! objptr.dim[i]
+                 \DWOPlitn                          ! objptr.dim[i] offsetof(lb)
+                 \DWOPplus                          ! objptr.dim[i].lowerbound
+                 \DWOPderef)                        ! *objptr.dim[i].lowerbound
              \DWATupperbound(expression=
              !   Looks up the upper bound of dimension i.
-                 \DWOPlit<byte size of dim>
-                 \DWOPmult
-                 \DWOPlit<offset of dim in descriptor>
+                 \DWOPlitn                          ! sizeof(dim)
+                 \DWOPmul
+                 \DWOPlitn                          ! offsetof(dim)
                  \DWOPplus
                  \DWOPpushobjectaddress
                  \DWOPplus
-                 \DWOPlit<offset of upperbound in dim>
+                 \DWOPlitn                          ! offset of upperbound in dim
                  \DWOPplus
                  \DWOPderef)
              \DWATbytestride(expression=
@@ -947,7 +947,7 @@ of this example and therefore is not shown.
             \livelink{chap:DWATname}{DW\_AT\_name}("VEC2")
             \livelink{chap:DWATtype}{DW\_AT\_type}(reference to array "subtype" at 28\$)
             \livelink{chap:DWATdatamemberlocation}{DW\_AT\_data\_member\_location}(machine=
-                \livelink{chap:DWOPlit}{DW\_OP\_lit}<n> ! where n == offset(REC2, VEC2)
+                \DWOPlitn                  ! where n == offset(REC2, VEC2)
                 \livelink{chap:DWOPplus}{DW\_OP\_plus})
      . . .
 41\$: \livelink{chap:DWTAGvariable}{DW\_TAG\_variable}
