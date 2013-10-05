@@ -28,27 +28,19 @@ def append_to_out(out,addthese):
 
 def doreplace(toks,curtoknum,lasttoknum):
   if int(curtoknum) + 6 > int(lasttoknum):
-    print "n1"
     return "n"
   if toks[curtoknum+1]._class != "ind" or ''.join(toks[curtoknum+1]._label) != "{":
-    print "n2"
     return "n"
   if toks[curtoknum+2]._class != "id":
-    print "n3"
     return "n"
   if toks[curtoknum+3]._class != "ind" or ''.join(toks[curtoknum+3]._label) != "}":
-    print "n4"
     return "n"
   if toks[curtoknum+4]._class != "ind" or ''.join(toks[curtoknum+4]._label) != "{":
-    print "n5"
     return "n"
   if toks[curtoknum+5]._class != "id":
-    print "n6"
     return "n"
   if toks[curtoknum+6]._class != "ind" or ''.join(toks[curtoknum+6]._label) != "}":
-    print "n7"
     return "n"
-  print "Found something needing replacing"
   return "y"
 
 def newt(toks,curtoknum,finalchars,):
@@ -56,24 +48,20 @@ def newt(toks,curtoknum,finalchars,):
   s2 = "\\" + s + finalchars
   t = fileio.dwtoken()
   t.insertid(s2)
-  print " Final new token string '", s2, "'"
   return t
 
 def transfunc(linetoks,myfile,linenum):
   if len(linetoks) < 1:
     return linetoks
-  print " "
   tnumin = 0
   changes = 0
   lasttoknum = len(linetoks) -1
   outtoks = []
   for x in linetoks:
-    print tnumin
     if tnumin > lasttoknum:
       break
     t = linetoks[tnumin]
     rawtok = ''.join(t._tex)
-    t.dwprint()
     if  rawtok == "\\newcommand" and tnumin == 0:
         # Do not touch newcommand stuff
         return linetoks
@@ -107,10 +95,6 @@ def transfunc(linetoks,myfile,linenum):
       tnumin = tnumin+ 1
       outtoks += [t]
     # End of for loop.
-  print "output toks"
-  for y in outtoks:
-    y.dwprint()
-  print "end output toks"
   return outtoks
 
 def read_args():
