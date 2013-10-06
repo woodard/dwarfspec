@@ -11,6 +11,8 @@
 import sys
 import fileio
 
+insidealltt = "n"
+
 def ischar(tok,c):
    if tok._class != "ind":
       return "n"
@@ -25,32 +27,69 @@ def append_to_out(out,addthese):
   for a in addthese:
     out += [a]
 
+def myjoinlabel(tok):
+  s = ''.join(tok._label)
+  return s
 
 def doreplace(toks,curtoknum,lasttoknum):
   if int(curtoknum) + 6 > int(lasttoknum):
     return "n"
-  if toks[curtoknum+1]._class != "ind" or ''.join(toks[curtoknum+1]._label) != "{":
+  if toks[curtoknum+1]._class != "ind" or myjoinlabel(toks[curtoknum+1]) != "{":
     return "n"
   if toks[curtoknum+2]._class != "id":
     return "n"
-  if toks[curtoknum+3]._class != "ind" or ''.join(toks[curtoknum+3]._label) != "}":
+  if toks[curtoknum+3]._class != "ind" or myjoinlabel(toks[curtoknum+3]) != "}":
     return "n"
-  if toks[curtoknum+4]._class != "ind" or ''.join(toks[curtoknum+4]._label) != "{":
+  if toks[curtoknum+4]._class != "ind" or myjoinlabel(toks[curtoknum+4]) != "{":
     return "n"
   if toks[curtoknum+5]._class != "id":
     return "n"
-  if toks[curtoknum+6]._class != "ind" or ''.join(toks[curtoknum+6]._label) != "}":
+  if toks[curtoknum+6]._class != "ind" or myjoinlabel(toks[curtoknum+6]) != "}":
     return "n"
   return "y"
 
+
 def newt(toks,curtoknum,finalchars,):
-  s = ''.join(toks[curtoknum + 5]._label)
+  s = myjoinlabel(toks[curtoknum + 5])
   s2 = "\\" + s + finalchars
   t = fileio.dwtoken()
   t.insertid(s2)
   return t
 
+def checkalltt(linetoks,tnumin,lasttoknum,myfile,linenum):
+    global insidealltt
+    if int(tnumin) + 3 < int(lasttoknum):  
+      return "n"
+    t1 = linetoks[tnumin]
+    s1 = myjoinlabel(t1)
+    if  s1 != "\\begin" and s1 != "\\end":
+      return "n"
+    t2 = linetoks[tnumin+1]
+    s2 = myjoinlabel(t2)
+    if  s2 != "{":
+      return "n"
+
+    t3 = linetoks[tnumin+2]
+    s3 = myjoinlabel(t3)
+    if  s3 != "alltt":
+      return "n"
+
+    t4 = linetoks[tnumin+3]
+    s2 = myjoinlabel(t4)
+    if  s2 != "}":
+      return "n"
+
+    if  s1 == "\\begin":
+      if insidealltt =="y":
+        print "nested \\begin{alltt} is an error in",myfile._name, " at ",linenum
+      insidealltt = "y" 
+    if  s1 == "\\end":
+      if insidealltt =="n":
+        print "nested \\end{alltt} is an error in",myfile._name, " at ",linenum
+      insidealltt = "n" 
+
 def transfunc(linetoks,myfile,linenum):
+  global insidealltt
   if len(linetoks) < 1:
     return linetoks
   tnumin = 0
@@ -65,13 +104,14 @@ def transfunc(linetoks,myfile,linenum):
     if  rawtok == "\\newcommand" and tnumin == 0:
         # Do not touch newcommand stuff
         return linetoks
+    checkalltt(linetoks,tnumin,lasttoknum,myfile,linenum)
     if  rawtok == "\\livelink" and "y" == doreplace(linetoks,tnumin,lasttoknum):
         newtok = newt(linetoks,tnumin,"")
         outtoks += [newtok]
         tnumin += 7
         if int(tnumin)  <= int(lasttoknum):
           # not at end of line, Check to see if we want a {} or not.
-          if linetoks[tnumin]._class == "ind" and  ''.join(linetoks[tnumin]._label) == " ":
+          if  insidealltt == "n" and linetoks[tnumin]._class == "ind" and  myjoinlabel(linetoks[tnumin]) == " ":
             newtlb = fileio.dwtoken();
             newtlb.setIndivid("{")
             outtoks += [newtlb]
@@ -84,7 +124,7 @@ def transfunc(linetoks,myfile,linenum):
         tnumin += 7
         if int(tnumin) <= int(lasttoknum):
           # not at end of line. Check to see if we want a {} or not.
-          if linetoks[tnumin]._class == "ind" and  ''.join(linetoks[tnumin]._label) == " ":
+          if insidealltt == "n" and linetoks[tnumin]._class == "ind" and  myjoinlabel(linetoks[tnumin]) == " ":
             newtlb = fileio.dwtoken();
             newtlb.setIndivid("{")
             outtoks += [newtlb]
