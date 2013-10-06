@@ -44,6 +44,8 @@ def doreplace(toks,curtoknum,lasttoknum):
     return "n"
   if toks[curtoknum+5]._class != "id":
     return "n"
+  if myjoinlabel(toks[curtoknum+5]).startswith("DW") == 0:
+    return "n"
   if toks[curtoknum+6]._class != "ind" or myjoinlabel(toks[curtoknum+6]) != "}":
     return "n"
   return "y"
