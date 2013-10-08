@@ -22,6 +22,11 @@ def ischar(tok,c):
        return "n"
    return "y"
 
+def tokhasdigits(tok):
+  for c in tok._label:
+    if c >= '0' and c <= '9' and len(c) == 1:
+        return "y"
+  return "n"
 
 def append_to_out(out,addthese):
   for a in addthese:
@@ -47,6 +52,9 @@ def doreplace(toks,curtoknum,lasttoknum):
   if myjoinlabel(toks[curtoknum+5]).startswith("DW") == 0:
     return "n"
   if toks[curtoknum+6]._class != "ind" or myjoinlabel(toks[curtoknum+6]) != "}":
+    return "n"
+  if tokhasdigits(toks[curtoknum+5]) == "y":
+    print "There are digits in ", myjoinlabel(toks[curtoknum+5]),": it is not converted"
     return "n"
   return "y"
 
