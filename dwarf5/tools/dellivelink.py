@@ -68,7 +68,7 @@ def newt(toks,curtoknum,finalchars,):
 
 def checkalltt(linetoks,tnumin,lasttoknum,myfile,linenum):
     global insidealltt
-    if int(tnumin) + 3 < int(lasttoknum):  
+    if ( int(tnumin) + 3 ) > int(lasttoknum):  
       return "n"
     t1 = linetoks[tnumin]
     s1 = myjoinlabel(t1)
@@ -90,6 +90,7 @@ def checkalltt(linetoks,tnumin,lasttoknum,myfile,linenum):
       return "n"
 
     if  s1 == "\\begin":
+
       if insidealltt =="y":
         print "nested \\begin{alltt} is an error in",myfile._name, " at ",linenum
       insidealltt = "y" 
@@ -97,6 +98,7 @@ def checkalltt(linetoks,tnumin,lasttoknum,myfile,linenum):
       if insidealltt =="n":
         print "nested \\end{alltt} is an error in",myfile._name, " at ",linenum
       insidealltt = "n" 
+    return "y"
 
 def transfunc(linetoks,myfile,linenum):
   global insidealltt
@@ -107,7 +109,7 @@ def transfunc(linetoks,myfile,linenum):
   lasttoknum = len(linetoks) -1
   outtoks = []
   for x in linetoks:
-    if tnumin > lasttoknum:
+    if int(tnumin) > int(lasttoknum):
       break
     t = linetoks[tnumin]
     rawtok = ''.join(t._tex)
