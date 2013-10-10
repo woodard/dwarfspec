@@ -15,18 +15,18 @@ Program variables,
 \addtoindexx{formal parameter entry}
 formal parameters and constants are
 represented by debugging information entries with the tags
-\livetarg{chap:DWTAGvariable}{DW\_TAG\_variable}\addtoindexx{variable entry}, 
-\livetarg{chap:DWTAGformalparameter}{DW\_TAG\_formal\_parameter}\addtoindexx{formal parameter entry} and 
-\livetarg{chap:DWTAGconstant}{DW\_TAG\_constant}\addtoindexx{constant (data) entry},
+\DWTAGvariableTARG\addtoindexx{variable entry}, 
+\DWTAGformalparameterTARG\addtoindexx{formal parameter entry} and 
+\DWTAGconstantTARG\addtoindexx{constant (data) entry},
 respectively.
 
-\textit{The tag \livelink{chap:DWTAGconstant}{DW\_TAG\_constant} is used for languages that
+\textit{The tag \DWTAGconstant{} is used for languages that
 have true named constants.}
 
 The debugging information entry for a program variable,
 formal parameter or constant may have the following attributes:
 \begin{enumerate}[1. ]
-\item A \livelink{chap:DWATname}{DW\_AT\_name} attribute,
+\item A \DWATname{} attribute,
 \addtoindexx{name attribute}
 whose value is a null-terminated
 string, containing the data object name as it appears in the
@@ -37,7 +37,7 @@ If a variable entry describes an
 the name attribute is omitted or consists of a single
 zero byte.
 
-\item A \livelink{chap:DWATexternal}{DW\_AT\_external} attribute, 
+\item A \DWATexternal{} attribute, 
 \hypertarget{chap:DWATexternalexternalvariable}
 which 
 \addtoindexx{external attribute}
@@ -51,13 +51,13 @@ external. Both file static and local variables in C and C++
 are represented by non-external variable entries.
 }
 
-\item A \livelink{chap:DWATdeclaration}{DW\_AT\_declaration} attribute, 
+\item A \DWATdeclaration{} attribute, 
 \addtoindexx{declaration attribute}
 which is a \livelink{chap:classflag}{flag} that
 indicates whether this entry represents a non-defining
 declaration of an object.
 
-\item A \livelink{chap:DWATlocation}{DW\_AT\_location} attribute,
+\item A \DWATlocation{} attribute,
 \addtoindexx{location attribute}
 whose value describes the location of a variable or parameter at run-time.
 
@@ -65,7 +65,7 @@ If no location attribute is present in a variable
 entry representing the definition of a variable (that is,
 \addtoindexx{declaration attribute}
 with no 
-\livelink{chap:DWATdeclaration}{DW\_AT\_declaration} attribute),
+\DWATdeclaration{} attribute),
 or if the location attribute is present but has
 an empty location description (as described in Section \refersec{chap:locationdescriptions}),
 \addtoindexx{unallocated variable}
@@ -80,30 +80,30 @@ defining declaration applies.
 The location of a variable may be further specified with 
 \addtoindexx{segment attribute!and data segment}
 a 
-\livelink{chap:DWATsegment}{DW\_AT\_segment} attribute, if
+\DWATsegment{} attribute, if
 appropriate.
 
-\item A \livelink{chap:DWATtype}{DW\_AT\_type} attribute describing the type of the variable,
+\item A \DWATtype{} attribute describing the type of the variable,
 constant or formal parameter.
 
 \item If the variable entry represents the defining declaration
 for a C++ static data member of a structure, class or union,
-the entry has a \livelink{chap:DWATspecification}{DW\_AT\_specification} attribute, whose value is a
+the entry has a \DWATspecification{} attribute, whose value is a
 \livelink{chap:classreference}{reference} to the debugging information entry representing the
 declaration of this data member. The referenced entry has the
-tag \livelink{chap:DWTAGmember}{DW\_TAG\_member} and will be a child of some class, structure
+tag \DWTAGmember{} and will be a child of some class, structure
 or union type entry.
 
 If the variable entry represents a
-non-defining declaration, \livelink{chap:DWATspecification}{DW\_AT\_specification} may be used
+non-defining declaration, \DWATspecification{} may be used
 to reference the defining declaration of the variable. If
-no \livelink{chap:DWATspecification}{DW\_AT\_specification} attribute is present, the defining
+no \DWATspecification{} attribute is present, the defining
 declaration may be found as a global definition either in the
 current compilation unit or in another compilation unit with
-the \livelink{chap:DWATexternal}{DW\_AT\_external} attribute.  
+the \DWATexternal{} attribute.  
 
 Variable entries containing
-the \livelink{chap:DWATspecification}{DW\_AT\_specification} attribute do not need to duplicate
+the \DWATspecification{} attribute do not need to duplicate
 information provided by the declaration entry referenced by
 the specification attribute. In particular, such variable
 entries do not need to contain attributes for the name or
@@ -113,7 +113,7 @@ type of the data member whose definition they
 \hypertarget{chap:DWATvariableparameternonconstantparameterflag}
 represent.
 
-\item A \livelink{chap:DWATvariableparameter}{DW\_AT\_variable\_parameter}
+\item A \DWATvariableparameter{}
 attribute\addtoindexx{variable parameter attribute}, 
 which is a \livelink{chap:classflag}{flag},
 if a formal parameter entry represents a parameter whose
@@ -121,14 +121,14 @@ value in the calling function may be modified by the callee.
 The absence of this attribute implies that the parameter\textquoteright s
 value in the calling function cannot be modified by the callee.
 
-\item A \livelink{chap:DWATisoptional}{DW\_AT\_is\_optional} attribute, 
+\item A \DWATisoptional{} attribute, 
 \hypertarget{chap:DWATisoptionaloptionalparameter}
 which 
 \addtoindexx{is optional attribute}
 is a \livelink{chap:classflag}{flag}, if a
 parameter entry represents an \addtoindex{optional parameter}.
 
-\item A \livelink{chap:DWATdefaultvalue}{DW\_AT\_default\_value} attribute 
+\item A \DWATdefaultvalue{} attribute 
 \addtoindexx{default value attribute}
 for 
 \addtoindexx{formal parameter entry!with default value}
@@ -147,7 +147,7 @@ as a default value of the type of the formal parameter.
 \textit{For a constant form there is no way to 
 express the absence of a default value.}
 
-\item A \livelink{chap:DWATconstvalue}{DW\_AT\_const\_value} attribute 
+\item A \DWATconstvalue{} attribute 
 for 
 \hypertarget{chap:DWATconstvalueconstantobject}
 an entry describing a
@@ -168,7 +168,7 @@ formal parameter of an inlined subprogram that corresponds
 to a constant actual parameter of a call that is inlined.
 }
 
-\item A \livelink{chap:DWATstartscope}{DW\_AT\_start\_scope} 
+\item A \DWATstartscope{} 
 attribute if the scope of 
 \addtoindexx{start scope attribute}
 an
@@ -230,7 +230,7 @@ the containing scope is contiguous. Conversely, the scope of
 an object may not require its own \addtoindex{range list} even when the
 containing scope is non\dash contiguous.}
 
-\item A \livelink{chap:DWATendianity}{DW\_AT\_endianity} attribute, 
+\item A \DWATendianity{} attribute, 
 whose value 
 \hypertarget{chap:DWATendianityendianityofdata}
 is a constant
@@ -255,11 +255,11 @@ Table \ref{tab:endianityattributevalues}.
 \begin{tabular}{l|p{9cm}}
 \hline
 Name&Meaning\\ \hline
-\livetarg{chap:DWENDdefault}{DW\_END\_default} &  Default endian encoding
+\DWENDdefaultTARG{} &  Default endian encoding
   (equivalent to the \mbox{absence} of a 
-  \livelink{chap:DWATendianity}{DW\_AT\_endianity} attribute) \\
-\livetarg{chap:DWENDbig}{DW\_END\_big} & Big\dash endian encoding \\
-\livetarg{chap:DWENDlittle}{DW\_END\_little}& Little-endian encoding \\
+  \DWATendianity{} attribute) \\
+\DWENDbigTARG{} & Big\dash endian encoding \\
+\DWENDlittleTARG& Little-endian encoding \\
 \hline
 \end{tabular}
 \end{table}
@@ -271,7 +271,7 @@ exact definition of these formats may differ in subtle ways
 for different architectures.
 
 
-\item A \livelink{chap:DWATconstexpr}{DW\_AT\_const\_expr} attribute, 
+\item A \DWATconstexpr{} attribute, 
 which 
 \hypertarget{chap:DWATconstexprcompiletimeconstantobject}
 is a \livelink{chap:classflag}{flag}, if a
@@ -281,11 +281,11 @@ variable can be evaluated as a compile\dash time constant.
 
 \textit{In C++,
 a variable declared with \texttt{constexpr} is implicitly \texttt{const}. Such a
-variable has a \livelink{chap:DWATtype}{DW\_AT\_type} attribute whose value is a 
+variable has a \DWATtype{} attribute whose value is a 
 \livelink{chap:classreference}{reference}
 to a debugging information entry describing a const qualified type.}
 
-\item A \livelink{chap:DWATlinkagename}{DW\_AT\_linkage\_name} attribute for a 
+\item A \DWATlinkagename{} attribute for a 
 variable or constant entry as described in 
 Section \refersec{chap:linkagenames}.
 
@@ -298,19 +298,19 @@ may
 \addtoindexx{Fortran!common block}
 be described by a debugging
 information entry with the 
-tag \livetarg{chap:DWTAGcommonblock}{DW\_TAG\_common\_block}. 
+tag \DWTAGcommonblockTARG. 
 
 The common \nolink{block} 
-entry has a \livelink{chap:DWATname}{DW\_AT\_name} attribute 
+entry has a \DWATname{} attribute 
 \addtoindexx{name attribute}
 whose value
 is a null-terminated string containing the 
 \livetargi{chap:commonblockreferenceattribute}{common}{common block reference attribute} \nolink{block}
 name as it appears in the source program. It may also have a
-\livelink{chap:DWATlinkagename}{DW\_AT\_linkage\_name} attribute as described in 
+\DWATlinkagename{} attribute as described in 
 Section \refersec{chap:linkagenames}. 
 It
-also has a \livelink{chap:DWATlocation}{DW\_AT\_location} attribute
+also has a \DWATlocation{} attribute
 \addtoindexx{location attribute}
 whose value describes the
 location of the beginning of the common \nolink{block}. 
@@ -328,10 +328,10 @@ as a replacement for the list of names in various contexts.}
 
 A namelist is represented by a debugging information entry
 with the 
-tag \livetarg{chap:DWTAGnamelist}{DW\_TAG\_namelist}. 
+tag \DWTAGnamelistTARG. 
 \addtoindexx{namelist entry}
 If the namelist itself has a
-name, the namelist entry has a \livelink{chap:DWATname}{DW\_AT\_name} attribute,
+name, the namelist entry has a \DWATname{} attribute,
 \addtoindexx{name attribute}
 whose
 value is a null-terminated string containing the namelist\textquoteright s
@@ -341,7 +341,7 @@ Each
 \hypertarget{chap:DWATnamelistitemnamelistitem}
 name that is part of the namelist is represented
 by a debugging information entry with the tag
-\livetarg{chap:DWTAGnamelistitem}{DW\_TAG\_namelist\_item}. 
+\DWTAGnamelistitemTARG. 
 Each such entry is a child of the
 namelist entry, and all of the 
 namelist item entries for a
@@ -350,7 +350,7 @@ given namelist are ordered as were the list of names they
 correspond to in the source program.
 
 Each namelist item entry contains a 
-\livelink{chap:DWATnamelistitem}{DW\_AT\_namelist\_item} attribute
+\DWATnamelistitem{} attribute
 \addtoindexx{namelist item attribute}
 whose 
 \addtoindexx{namelist item entry}

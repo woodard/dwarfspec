@@ -131,7 +131,7 @@ pairs. Each pair consists of the section offset from the
 beginning of the compilation unit corresponding to the current
 set to the debugging information entry for the given object,
 followed by a null\dash terminated character string representing
-the name of the object as given by the \livelink{chap:DWATname}{DW\_AT\_name} attribute
+the name of the object as given by the \DWATname{} attribute
 of the referenced debugging information entry. Each set of
 names is terminated by an offset field containing zero (and
 no following string).
@@ -142,7 +142,7 @@ member of a C++ structure, class or union, the name presented
 in the 
 \dotdebugpubnames{} 
 section is not the simple name given
-by the \livelink{chap:DWATname}{DW\_AT\_name} attribute of the referenced debugging
+by the \DWATname{} attribute of the referenced debugging
 information entry, but rather the fully qualified name of
 the data or function member.
 
@@ -450,7 +450,7 @@ line number program are special opcodes.}
 \item standard opcodes \\
 These have a \addtoindex{ubyte} opcode field which may be followed by zero or more
 \addtoindex{LEB128} operands (except for 
-\mbox{\livelink{chap:DWLNSfixedadvancepc}{DW\_LNS\_fixed\_advance\_pc},} see below).
+\mbox{\DWLNSfixedadvancepc,} see below).
 The opcode implies the number of operands and their meanings, but the
 line number program header also specifies the number of operands for
 each standard opcode.
@@ -544,7 +544,7 @@ unoptimized code.}
 \textit{A more sophisticated approach might involve multiple entries in
 the matrix for a line number; in this case, at least one entry
 (often but not necessarily only one) specifies a recommended
-breakpoint location for the line number. \livelink{chap:DWLNSnegatestmt}{DW\_LNS\_negate\_stmt}
+breakpoint location for the line number. \DWLNSnegatestmt{}
 opcodes in the line number program control which matrix entries
 constitute such a recommendation and 
 \addttindex{default\_is\_stmt} might
@@ -636,7 +636,7 @@ values:
 path name of a source file. If the entry contains a file
 name or relative path name, the file is located relative
 to either the compilation directory (as specified by the
-\livelink{chap:DWATcompdir}{DW\_AT\_comp\_dir} 
+\DWATcompdir{} 
 attribute given in the compilation unit) or one
 of the directories listed in the 
 \addttindex{include\_directories} section.
@@ -670,7 +670,7 @@ section, and so on. The directory index is ignored for file
 names that represent full path names.
 
 The primary source file is described by an entry whose path
-name exactly matches that given in the \livelink{chap:DWATname}{DW\_AT\_name} attribute
+name exactly matches that given in the \DWATname{} attribute
 in the compilation unit, and whose directory is understood
 to be given by the implicit entry with index 0.
 
@@ -680,7 +680,7 @@ instead of file names in the file register.
 
 \textit{A compiler may generate a single null byte for the file
 names field and define file names using the extended opcode
-\livelink{chap:DWLNEdefinefile}{DW\_LNE\_define\_file}.}
+\DWLNEdefinefile.}
 
 
 \end{enumerate}
@@ -875,8 +875,8 @@ actions performed by these opcodes are as follows:
 
 \begin{enumerate}[1. ]
 
-\item \textbf{DW\_LNS\_copy} \\
-The \livetarg{chap:DWLNScopy}{DW\_LNS\_copy} 
+\item \textbf{\DWLNScopyTARG} \\
+The \DWLNScopyTARG{} 
 opcode takes no operands. It appends a row
 to the matrix using the current values of the state machine
 registers. Then it sets the \addttindex{discriminator} register to 0,
@@ -885,42 +885,42 @@ and sets the \addttindex{basic\_block},
 \addttindex{epilogue\_begin}
 registers to \doublequote{false.}
 
-\item \textbf{DW\_LNS\_advance\_pc} \\
-The \livetarg{chap:DWLNSadvancepc}{DW\_LNS\_advance\_pc} 
+\item \textbf{\DWLNSadvancepcTARG} \\
+The \DWLNSadvancepcTARG{} 
 opcode takes a single unsigned LEB128\addtoindexx{LEB128!unsigned}
 operand as the \addtoindex{operation advance} and modifies the \texttt{address}
 and \addttindex{op\_index} registers as specified in 
 Section \refersec{chap:specialopcodes}.
 
-\item \textbf{DW\_LNS\_advance\_line} \\
-The \livetarg{chap:DWLNSadvanceline}{DW\_LNS\_advance\_line} 
+\item \textbf{\DWLNSadvancelineTARG} \\
+The \DWLNSadvancelineTARG{} 
 opcode takes a single signed LEB128\addtoindexx{LEB128!signed}
 operand and adds that value to the \texttt{line} register of the
 state machine.
 
 \needlines{4}
-\item \textbf{DW\_LNS\_set\_file} \\ 
-The \livetarg{chap:DWLNSsetfile}{DW\_LNS\_set\_file} opcode takes a single
+\item \textbf{\DWLNSsetfileTARG} \\ 
+The \DWLNSsetfileTARG{} opcode takes a single
 unsigned LEB128\addtoindexx{LEB128!unsigned} 
 operand and stores it in the \texttt{file} register
 of the state machine.
 
 \needlines{4}
-\item \textbf{DW\_LNS\_set\_column} \\ 
-The \livetarg{chap:DWLNSsetcolumn}{DW\_LNS\_set\_column} opcode takes a
+\item \textbf{\DWLNSsetcolumnTARG} \\ 
+The \DWLNSsetcolumnTARG{} opcode takes a
 single unsigned LEB128\addtoindexx{LEB128!unsigned} operand 
 and stores it in the \texttt{column}
 register of the state machine.
 
 \needlines{4}
-\item \textbf{DW\_LNS\_negate\_stmt} \\
-The \livetarg{chap:DWLNSnegatestmt}{DW\_LNS\_negate\_stmt} opcode takes no
+\item \textbf{\DWLNSnegatestmtTARG} \\
+The \DWLNSnegatestmtTARG{} opcode takes no
 operands. It sets the \addttindex{is\_stmt} register of the state machine
 to the logical negation of its current value.
 
 \needlines{4}
-\item \textbf{DW\_LNS\_set\_basic\_block} \\
-The \livetarg{chap:DWLNSsetbasicblock}{DW\_LNS\_set\_basic\_block}
+\item \textbf{\DWLNSsetbasicblockTARG} \\
+The \DWLNSsetbasicblockTARG{}
 opcode
 \addtoindexx{basic block}
 takes no operands. 
@@ -929,8 +929,8 @@ state machine to \doublequote{true.}
 
 
 
-\item \textbf{DW\_LNS\_const\_add\_pc} \\
-The \livetarg{chap:DWLNSconstaddpc}{DW\_LNS\_const\_add\_pc} opcode takes
+\item \textbf{\DWLNSconstaddpcTARG} \\
+The \DWLNSconstaddpcTARG{} opcode takes
 no operands. It advances the \texttt{address} and \addttindex{op\_index} registers
 by the increments corresponding to special opcode 255.
 
@@ -938,14 +938,14 @@ by the increments corresponding to special opcode 255.
 by a small amount, it can use a single special opcode,
 which occupies a single byte. When it needs to advance the
 \texttt{address} by up to twice the range of the last special opcode,
-it can use \livelink{chap:DWLNSconstaddpc}{DW\_LNS\_const\_add\_pc} followed by a special opcode,
+it can use \DWLNSconstaddpc{} followed by a special opcode,
 for a total of two bytes. Only if it needs to advance the
 address by more than twice that range will it need to use
-both \livelink{chap:DWLNSadvancepc}{DW\_LNS\_advance\_pc} and a special opcode, requiring three
+both \DWLNSadvancepc{} and a special opcode, requiring three
 or more bytes.}
 
-\item \textbf{DW\_LNS\_fixed\_advance\_pc} \\ 
-The \livetarg{chap:DWLNSfixedadvancepc}{DW\_LNS\_fixed\_advance\_pc} opcode
+\item \textbf{\DWLNSfixedadvancepcTARG} \\ 
+The \DWLNSfixedadvancepcTARG{} opcode
 takes a single \addtoindex{uhalf} (unencoded) operand and adds it to the
 \texttt{address} register of the state machine and sets the \addttindex{op\_index}
 register to 0. This is the only standard opcode whose operand
@@ -955,15 +955,15 @@ operand by the \addttindex{minimum\_instruction\_length}
 field of the header.
 
 \textit{Existing assemblers cannot emit 
-\livelink{chap:DWLNSadvancepc}{DW\_LNS\_advance\_pc} or special
+\DWLNSadvancepc{} or special
 opcodes because they cannot encode \addtoindex{LEB128} numbers or judge when
 the computation of a special opcode overflows and requires
-the use of \livelink{chap:DWLNSadvancepc}{DW\_LNS\_advance\_pc}. Such assemblers, however, can
-use \livelink{chap:DWLNSfixedadvancepc}{DW\_LNS\_fixed\_advance\_pc} instead, sacrificing compression.}
+the use of \DWLNSadvancepc. Such assemblers, however, can
+use \DWLNSfixedadvancepc{} instead, sacrificing compression.}
 
 \needlines{6}
-\item \textbf{DW\_LNS\_set\_prologue\_end} \\
-The \livetarg{chap:DWLNSsetprologueend}{DW\_LNS\_set\_prologue\_end}
+\item \textbf{\DWLNSsetprologueendTARG} \\
+The \DWLNSsetprologueendTARG{}
 opcode takes no operands. It sets the 
 \addttindex{prologue\_end} register
 to \doublequote{true.}
@@ -990,8 +990,8 @@ information entries of the compilation (including inlined
 subroutines).}
 
 
-\item \textbf{DW\_LNS\_set\_epilogue\_begin} \\
-The \livetarg{chap:DWLNSsetepiloguebegin}{DW\_LNS\_set\_epilogue\_begin} opcode takes no operands. It
+\item \textbf{\DWLNSsetepiloguebeginTARG} \\
+The \DWLNSsetepiloguebeginTARG{} opcode takes no operands. It
 sets the \addttindex{epilogue\_begin} register to \doublequote{true.}
 
 \textit{When a breakpoint is set on the exit of a function or execution
@@ -1013,8 +1013,8 @@ subroutines).}
 \addtoindex{prologue end} and
 \addtoindex{epilogue begin} may occur at the same address.}
 
-\item \textbf{DW\_LNS\_set\_isa} \\
-The \livetarg{chap:DWLNSsetisa}{DW\_LNS\_set\_isa} opcode takes a single
+\item \textbf{\DWLNSsetisaTARG} \\
+The \DWLNSsetisaTARG{} opcode takes a single
 unsigned LEB128\addtoindexx{LEB128!unsigned} operand and stores that value in the 
 \addttindex{isa}
 register of the state machine.
@@ -1028,8 +1028,8 @@ The extended opcodes are as follows:
 
 \begin{enumerate}[1. ]
 
-\item \textbf{DW\_LNE\_end\_sequence} \\
-The \livetarg{chap:DWLNEendsequence}{DW\_LNE\_end\_sequence} opcode takes no operands. It sets the
+\item \textbf{\DWLNEendsequenceTARG} \\
+The \DWLNEendsequenceTARG{} opcode takes no operands. It sets the
 \addttindex{end\_sequence}
 register of the state machine to \doublequote{true} and
 appends a row to the matrix using the current values of the
@@ -1037,13 +1037,13 @@ state-machine registers. Then it resets the registers to the
 initial values specified above 
 (see Section \refersec{chap:statemachineregisters}). 
 Every line
-number program sequence must end with a \livelink{chap:DWLNEendsequence}{DW\_LNE\_end\_sequence}
+number program sequence must end with a \DWLNEendsequence{}
 instruction which creates a row whose address is that of the
 byte after the last target machine instruction of the sequence.
 
 \needlines{5}
-\item \textbf{DW\_LNE\_set\_address} \\
-The \livetarg{chap:DWLNEsetaddress}{DW\_LNE\_set\_address} opcode takes a single relocatable
+\item \textbf{\DWLNEsetaddressTARG} \\
+The \DWLNEsetaddressTARG{} opcode takes a single relocatable
 address as an operand. The size of the operand is the size
 of an address on the target machine. It sets the \texttt{address}
 register to the value given by the relocatable address and
@@ -1054,16 +1054,15 @@ affect the \texttt{address} register add a delta to it. This instruction
 stores a relocatable value into it instead.}
 
 \needlines{4}
-\item \textbf{DW\_LNE\_define\_file} \\
-
-The \livetarg{chap:DWLNEdefinefile}{DW\_LNE\_define\_file} opcode takes four operands:
+\item \textbf{\DWLNEdefinefileTARG} \\
+The \DWLNEdefinefileTARG{} opcode takes four operands:
 \begin{enumerate}[1. ]
 
 \item A null\dash terminated string containing the full or relative
 path name of a source file. If the entry contains a file
 name or a relative path name, the file is located relative
 to either the compilation directory (as specified by the
-\livelink{chap:DWATcompdir}{DW\_AT\_comp\_dir} attribute given in the compilation unit)
+\DWATcompdir{} attribute given in the compilation unit)
 or one of the directories in the 
 \addttindex{include\_directories} section.
 
@@ -1090,15 +1089,15 @@ directory index is ignored for file names that represent full
 path names.
 
 The primary source file is described by an entry whose path
-name exactly matches that given in the \livelink{chap:DWATname}{DW\_AT\_name} attribute
+name exactly matches that given in the \DWATname{} attribute
 in the compilation unit, and whose directory index is 0. The
 files are numbered, starting at 1, in the order in which they
 appear; the names in the header come before names defined by
-the \livelink{chap:DWLNEdefinefile}{DW\_LNE\_define\_file} instruction. These numbers are used
+the \DWLNEdefinefile{} instruction. These numbers are used
 in the file register of the state machine.
 
-\item \textbf{DW\_LNE\_set\_discriminator} \\
-The \livetarg{chap:DWLNEsetdiscriminator}{DW\_LNE\_set\_discriminator}
+\item \textbf{\DWLNEsetdiscriminatorTARG} \\
+The \DWLNEsetdiscriminatorTARG{}
 opcode takes a single
 parameter, an unsigned LEB128\addtoindexx{LEB128!unsigned} 
 integer. It sets the
@@ -1143,15 +1142,15 @@ code of 0.
 The valid \addtoindex{macinfo types} are as follows:
 
 \begin{tabular}{ll}
-\livelink{chap:DWMACINFOdefine}{DW\_MACINFO\_define} 
+\DWMACINFOdefine{} 
 &A macro definition\\
-\livelink{chap:DWMACINFOundef}{DW\_MACINFO\_undef}
+\DWMACINFOundef
 &A macro undefinition\\
-\livelink{chap:DWMACINFOstartfile}{DW\_MACINFO\_start\_file}
+\DWMACINFOstartfile
 &The start of a new source file inclusion\\
-\livelink{chap:DWMACINFOendfile}{DW\_MACINFO\_end\_file}
+\DWMACINFOendfile
 &The end of the current source file inclusion\\
-\livelink{chap:DWMACINFOvendorext}{DW\_MACINFO\_vendor\_ext}
+\DWMACINFOvendorext
 & Vendor specific macro information directives\\
 \end{tabular}
 
@@ -1159,19 +1158,19 @@ The valid \addtoindex{macinfo types} are as follows:
 \label{chap:defineandundefineentries}
 
 All 
-\livetarg{chap:DWMACINFOdefine}{DW\_MACINFO\_define} and 
-\livetarg{chap:DWMACINFOundef}{DW\_MACINFO\_undef} entries have two
+\DWMACINFOdefineTARG{} and 
+\DWMACINFOundefTARG{} entries have two
 operands. The first operand encodes the line number of the
 source line on which the relevant defining or undefining
 macro directives appeared.
 
 The second operand consists of a null-terminated character
 string. In the case of a 
-\livelink{chap:DWMACINFOundef}{DW\_MACINFO\_undef} entry, the value
+\DWMACINFOundef{} entry, the value
 of this string will be simply the name of the pre- processor
 symbol that was undefined at the indicated source line.
 
-In the case of a \livelink{chap:DWMACINFOdefine}{DW\_MACINFO\_define} entry, the value of this
+In the case of a \DWMACINFOdefine{} entry, the value of this
 string will be the name of the macro symbol that was defined
 at the indicated source line, followed immediately by the 
 \addtoindex{macro formal parameter list}
@@ -1198,7 +1197,7 @@ name of the defined macro from the following definition text.
 
 \subsubsection{Start File Entries}
 \label{chap:startfileentries}
-Each \livetarg{chap:DWMACINFOstartfile}{DW\_MACINFO\_start\_file} entry also has two operands. The
+Each \DWMACINFOstartfileTARG{} entry also has two operands. The
 first operand encodes the line number of the source line on
 which the inclusion macro directive occurred.
 
@@ -1210,27 +1209,27 @@ the inclusion directive on the indicated source line.
 
 \subsubsection{End File Entries}
 \label{chap:endfileentries}
-A \livetarg{chap:DWMACINFOendfile}{DW\_MACINFO\_end\_file} entry has no operands. The presence of
+A \DWMACINFOendfileTARG{} entry has no operands. The presence of
 the entry marks the end of the current source file inclusion.
 
 \subsubsection{Vendor Extension Entries}
 \label{chap:vendorextensionentries}
-A \livetarg{chap:DWMACINFOvendorext}{DW\_MACINFO\_vendor\_ext} entry has two operands. The first
+A \DWMACINFOvendorextTARG{} entry has two operands. The first
 is a constant. The second is a null-terminated character
 string. The meaning and/or significance of these operands is
 intentionally left undefined by this specification.
 
 \textit{A consumer must be able to totally ignore all
-\livelink{chap:DWMACINFOvendorext}{DW\_MACINFO\_vendor\_ext} entries that it does not understand
+\DWMACINFOvendorext{} entries that it does not understand
 (see Section \refersec{datarep:vendorextensibility}).}
 
 
 \subsection{Base Source Entries} 
 \label{chap:basesourceentries}
 
-A producer shall generate \livelink{chap:DWMACINFOstartfile}{DW\_MACINFO\_start\_file} and
-\livelink{chap:DWMACINFOendfile}{DW\_MACINFO\_end\_file} entries for the source file submitted to
-the compiler for compilation. This \livelink{chap:DWMACINFOstartfile}{DW\_MACINFO\_start\_file} entry
+A producer shall generate \DWMACINFOstartfile{} and
+\DWMACINFOendfile{} entries for the source file submitted to
+the compiler for compilation. This \DWMACINFOstartfile{} entry
 has the value 0 in its line number operand and references
 the file entry in the line number information table for the
 primary source file.
@@ -1239,21 +1238,21 @@ primary source file.
 \subsection{Macinfo Entries For Command Line Options}
 \label{chap:macinfoentriesforcommandlineoptions}
 
-In addition to producing \livelink{chap:DWMACINFOdefine}{DW\_MACINFO\_define} and \livelink{chap:DWMACINFOundef}{DW\_MACINFO\_undef}
+In addition to producing \DWMACINFOdefine{} and \DWMACINFOundef{}
 entries for each of the define and undefine directives
 processed during compilation, the DWARF producer should
-generate a \livelink{chap:DWMACINFOdefine}{DW\_MACINFO\_define} or \livelink{chap:DWMACINFOundef}{DW\_MACINFO\_undef} entry for
+generate a \DWMACINFOdefine{} or \DWMACINFOundef{} entry for
 each pre-processor symbol which is defined or undefined by
 some means other than via a define or undefine directive
 within the compiled source text. In particular, pre-processor
 symbol definitions and un- definitions which occur as a
 result of command line options (when invoking the compiler)
-should be represented by their own \livelink{chap:DWMACINFOdefine}{DW\_MACINFO\_define} and
-\livelink{chap:DWMACINFOundef}{DW\_MACINFO\_undef} entries.
+should be represented by their own \DWMACINFOdefine{} and
+\DWMACINFOundef{} entries.
 
-All such \livelink{chap:DWMACINFOdefine}{DW\_MACINFO\_define} and \livelink{chap:DWMACINFOundef}{DW\_MACINFO\_undef} entries
+All such \DWMACINFOdefine{} and \DWMACINFOundef{} entries
 representing compilation options should appear before the
-first \livelink{chap:DWMACINFOstartfile}{DW\_MACINFO\_start\_file} entry for that compilation unit
+first \DWMACINFOstartfile{} entry for that compilation unit
 and should encode the value 0 in their line number operands.
 
 
@@ -1583,7 +1582,7 @@ compilation system authoring body may specify an alternate
 default value for any or all columns.
 
 \item \texttt{padding} (array of \addtoindex{ubyte}) \\
-Enough \livelink{chap:DWCFAnop}{DW\_CFA\_nop} instructions to make the size of this entry
+Enough \DWCFAnop{} instructions to make the size of this entry
 match the length value above.
 \end{enumerate}
 
@@ -1627,7 +1626,7 @@ of bytes of program instructions described by this entry.
 A sequence of table defining instructions that are described below.
 
 \item \texttt{padding} (array of \addtoindex{ubyte}) \\
-Enough \livelink{chap:DWCFAnop}{DW\_CFA\_nop} instructions 
+Enough \DWCFAnop{} instructions 
 to make the size of this entry match the length value above.
 \end{enumerate}
 
@@ -1650,30 +1649,30 @@ operators cannot be used in such operands:
 
 
 \begin{itemize}
-\item \livelink{chap:DWOPcall2}{DW\_OP\_call2}, \livelink{chap:DWOPcall4}{DW\_OP\_call4} 
-and \livelink{chap:DWOPcallref}{DW\_OP\_call\_ref} operators
+\item \DWOPcalltwo, \DWOPcallfour{} 
+and \DWOPcallref{} operators
 are allowed the call frame information must not depend on other
 debug sections.
 
 \needlines{5}
-\item \livelink{chap:DWOPpushobjectaddress}{DW\_OP\_push\_object\_address} is not meaningful in an operand
+\item \DWOPpushobjectaddress{} is not meaningful in an operand
 of these instructions because there is no object context to
 provide a value to push.
 
-\item \livelink{chap:DWOPcallframecfa}{DW\_OP\_call\_frame\_cfa} is not meaningful in an operand of
+\item \DWOPcallframecfa{} is not meaningful in an operand of
 these instructions because its use would be circular.
 \end{itemize}
 
 \textit{Call frame instructions to which these restrictions apply
-include \livelink{chap:DWCFAdefcfaexpression}{DW\_CFA\_def\_cfa\_expression}, \livelink{chap:DWCFAexpression}{DW\_CFA\_expression}
-and \livelink{chap:DWCFAvalexpression}{DW\_CFA\_val\_expression}.}
+include \DWCFAdefcfaexpression, \DWCFAexpression{}
+and \DWCFAvalexpression.}
 
 \subsubsection{Row Creation Instructions}
 \label{chap:rowcreationinstructions}
 \begin{enumerate}[1. ]
 
-\item \textbf{DW\_CFA\_set\_loc} \\
-The \livetarg{chap:DWCFAsetloc}{DW\_CFA\_set\_loc} instruction 
+\item \textbf{\DWCFAsetlocTARG} \\
+The \DWCFAsetlocTARG{} instruction 
 takes a single operand that
 represents a target address. The required action is to create a
 new table row using the specified address as the location. All
@@ -1686,8 +1685,8 @@ is non\dash zero, the initial location is preceded by a segment
 selector of the given length.
 
 
-\item \textbf{DW\_CFA\_advance\_loc} \\
-The \livetarg{chap:DWCFAadvanceloc}{DW\_CFA\_advance\_loc} instruction takes a single operand (encoded
+\item \textbf{\DWCFAadvancelocTARG} \\
+The \DWCFAadvancelocTARG{} instruction takes a single operand (encoded
 with the opcode) that represents a constant delta. The required
 action is to create a new table row with a location value that
 is computed by taking the current entry\textquoteright s location value
@@ -1696,53 +1695,53 @@ and adding the value of
 All other values in the new row are initially identical to the
 current row
 
-\item \textbf{DW\_CFA\_advance\_loc1} \\
-The \livetarg{chap:DWCFAadvanceloc1}{DW\_CFA\_advance\_loc1} instruction takes a single \addtoindex{ubyte}
+\item \textbf{\DWCFAadvanceloconeTARG{}} \\
+The \DWCFAadvanceloconeTARG{} instruction takes a single \addtoindex{ubyte}
 operand that represents a constant delta. This instruction
-is identical to \livelink{chap:DWCFAadvanceloc}{DW\_CFA\_advance\_loc} except for the encoding
+is identical to \DWCFAadvanceloc{} except for the encoding
 and size of the delta operand.
 
 \needlines{6}
-\item \textbf{DW\_CFA\_advance\_loc2} \\
-The \livetarg{chap:DWCFAadvanceloc2}{DW\_CFA\_advance\_loc2} instruction takes a single
+\item \textbf{\DWCFAadvanceloctwoTARG} \\
+The \DWCFAadvanceloctwoTARG{} instruction takes a single
 \addtoindex{uhalf}
 operand that represents a constant delta. This instruction
-is identical to \livelink{chap:DWCFAadvanceloc}{DW\_CFA\_advance\_loc} except for the encoding
+is identical to \DWCFAadvanceloc{} except for the encoding
 and size of the delta operand.
 
-\item \textbf{DW\_CFA\_advance\_loc4} \\
-The \livetarg{chap:DWCFAadvanceloc4}{DW\_CFA\_advance\_loc4} instruction takes a single
+\item \textbf{\DWCFAadvancelocfourTARG} \\
+The \DWCFAadvancelocfourTARG{} instruction takes a single
 \addtoindex{uword}
 operand that represents a constant delta. This instruction
-is identical to \livelink{chap:DWCFAadvanceloc}{DW\_CFA\_advance\_loc} except for the encoding
+is identical to \DWCFAadvanceloc{} except for the encoding
 and size of the delta operand.
 
 \end{enumerate}
 
-\subsubsection{CFA Definition Instructions}
 \label{chap:cfadefinitioninstructions}
+\subsubsection{CFA Definition Instructions}
 \begin{enumerate}[1. ]
 
-\item \textbf{DW\_CFA\_def\_cfa} \\
-The \livetarg{chap:DWCFAdefcfa}{DW\_CFA\_def\_cfa}
+\item \textbf{\DWCFAdefcfaTARG} \\
+The \DWCFAdefcfaTARG{}
 instruction takes two unsigned LEB128\addtoindexx{LEB128!unsigned}
 operands representing a register number and a (non\dash factored)
 offset. The required action is to define the current CFA rule
 to use the provided register and offset.
 
 \needlines{6}
-\item \textbf{ DW\_CFA\_def\_cfa\_sf} \\
-The \livetarg{chap:DWCFAdefcfasf}{DW\_CFA\_def\_cfa\_sf} instruction takes two operands:
+\item \textbf{\DWCFAdefcfasfTARG} \\
+The \DWCFAdefcfasfTARG{} instruction takes two operands:
 an unsigned LEB128 value\addtoindexx{LEB128!unsigned}
 representing a register number and a
 signed LEB128\addtoindexx{LEB128!signed} factored offset. This instruction is identical
-to \livelink{chap:DWCFAdefcfa}{DW\_CFA\_def\_cfa} except that the second operand is signed
+to \DWCFAdefcfa{} except that the second operand is signed
 and factored. The resulting offset is \textit{factored\_offset} *
 \addttindex{data\_alignment\_factor}.
 
 
-\item \textbf{DW\_CFA\_def\_cfa\_register} \\
-The \livetarg{chap:DWCFAdefcfaregister}{DW\_CFA\_def\_cfa\_register} 
+\item \textbf{\DWCFAdefcfaregisterTARG} \\
+The \DWCFAdefcfaregisterTARG{} 
 instruction takes a single
 unsigned LEB128\addtoindexx{LEB128!unsigned} operand representing a register number. The
 required action is to define the current CFA rule to use
@@ -1751,9 +1750,9 @@ operation is valid only if the current CFA rule is defined
 to use a register and offset.
 
 
-
-\item \textbf{DW\_CFA\_def\_cfa\_offset} \\
-The \livetarg{chap:DWCFAdefcfaoffset}{DW\_CFA\_def\_cfa\_offset} instruction takes a single
+\needlines{5}
+\item \textbf{\DWCFAdefcfaoffsetTARG} \\
+The \DWCFAdefcfaoffsetTARG{} instruction takes a single
 unsigned LEB128\addtoindexx{LEB128!unsigned} operand representing a (non-factored)
 offset. The required action is to define the current CFA rule
 to use the provided offset (but to keep the old register). This
@@ -1761,22 +1760,21 @@ operation is valid only if the current CFA rule is defined
 to use a register and offset.
 
 
-\item \textbf{DW\_CFA\_def\_cfa\_offset\_sf} \\
-The \livetarg{chap:DWCFAdefcfaoffsetsf}{DW\_CFA\_def\_cfa\_offset\_sf} instruction takes a signed
+\item \textbf{\DWCFAdefcfaoffsetsfTARG} \\
+The \DWCFAdefcfaoffsetsfTARG{} instruction takes a signed
 LEB128\addtoindexx{LEB128!signed} operand representing a factored offset. This instruction
-is identical to \livelink{chap:DWCFAdefcfaoffset}{DW\_CFA\_def\_cfa\_offset} except that the
+is identical to \DWCFAdefcfaoffset{} except that the
 operand is signed and factored. The resulting offset is
 \textit{factored\_offset} * \addttindex{data\_alignment\_factor}.
 This operation
 is valid only if the current CFA rule is defined to use a
 register and offset.
 
-\item \textbf{DW\_CFA\_def\_cfa\_expression} \\
-The \livetarg{chap:DWCFAdefcfaexpression}{DW\_CFA\_def\_cfa\_expression} 
-instruction takes a 
+\item \textbf{\DWCFAdefcfaexpressionTARG} \\
+The \DWCFAdefcfaexpressionTARG{} instruction takes a 
 \addtoindexx{exprloc class}
 single operand encoded as a 
-\livelink{chap:DWFORMexprloc}{DW\_FORM\_exprloc} value representing a
+\DWFORMexprloc{} value representing a
 DWARF expression. The required action is to establish that
 expression as the means by which the current CFA is computed.
 
@@ -1790,20 +1788,20 @@ expression operators that can be used.}
 \label{chap:registerruleinstructions}
 \begin{enumerate}[1. ]
 
-\item \textbf{DW\_CFA\_undefined} \\
-The \livetarg{chap:DWCFAundefined}{DW\_CFA\_undefined} instruction takes a single unsigned
+\item \textbf{\DWCFAundefinedTARG} \\
+The \DWCFAundefinedTARG{} instruction takes a single unsigned
 LEB128\addtoindexx{LEB128!unsigned} operand that represents a register number. The required
 action is to set the rule for the specified register to
 \doublequote{undefined.}
 
-\item \textbf{DW\_CFA\_same\_value} \\
-The \livetarg{chap:DWCFAsamevalue}{DW\_CFA\_same\_value} instruction takes a single unsigned
+\item \textbf{\DWCFAsamevalueTARG} \\
+The \DWCFAsamevalueTARG{} instruction takes a single unsigned
 LEB128 operand\addtoindexx{LEB128!unsigned} that represents a register number. The required
 action is to set the rule for the specified register to
 \doublequote{same value.}
 
-\item \textbf{DW\_CFA\_offset} \\
-The \livetarg{chap:DWCFAoffset}{DW\_CFA\_offset} instruction takes two operands: a register
+\item \textbf{\DWCFAoffsetTARG} \\
+The \DWCFAoffsetTARG{} instruction takes two operands: a register
 number (encoded with the opcode) and an unsigned LEB128\addtoindexx{LEB128!unsigned}
 constant representing a factored offset. The required action
 is to change the rule for the register indicated by the
@@ -1811,27 +1809,27 @@ register number to be an offset(N) rule where the value of
 N is 
 \textit{factored offset} * \addttindex{data\_alignment\_factor}.
 
-\item \textbf{DW\_CFA\_offset\_extended} \\
-The \livetarg{chap:DWCFAoffsetextended}{DW\_CFA\_offset\_extended} 
+\item \textbf{\DWCFAoffsetextendedTARG} \\
+The \DWCFAoffsetextendedTARG{} 
 instruction takes two unsigned LEB128\addtoindexx{LEB128!unsigned} 
 operands representing a register number and a factored
 offset. This instruction is identical to
-\livelink{chap:DWCFAoffset}{DW\_CFA\_offset} 
+\DWCFAoffset{} 
 except for the encoding and size of the register operand.
 
-\item \textbf{ DW\_CFA\_offset\_extended\_sf} \\
-The \livetarg{chap:DWCFAoffsetextendedsf}{DW\_CFA\_offset\_extended\_sf} 
+\item \textbf{\DWCFAoffsetextendedsfTARG} \\
+The \DWCFAoffsetextendedsfTARG{} 
 instruction takes two operands:
 an unsigned LEB128\addtoindexx{LEB128!unsigned} 
 value representing a register number and a
 signed LEB128 factored offset. This instruction is identical
-to \livelink{chap:DWCFAoffsetextended}{DW\_CFA\_offset\_extended} 
+to \DWCFAoffsetextended{} 
 except that the second operand is
 signed and factored. The resulting offset is 
 \textit{factored\_offset} * \addttindex{data\_alignment\_factor}.
 
-\item \textbf{DW\_CFA\_val\_offset} \\
-The \livetarg{chap:DWCFAvaloffset}{DW\_CFA\_val\_offset} 
+\item \textbf{\DWCFAvaloffsetTARG} \\
+The \DWCFAvaloffsetTARG{} 
 instruction takes two unsigned
 LEB128 operands\addtoindexx{LEB128!unsigned} representing a register number and a
 factored offset. The required action is to change the rule
@@ -1840,27 +1838,26 @@ val\_offset(N) rule where the value of N is
 \textit{factored\_offset} * \addttindex{data\_alignment\_factor}.
 
 \needlines{6}
-\item \textbf{DW\_CFA\_val\_offset\_sf} \\
-The \livetarg{chap:DWCFAvaloffsetsf}{DW\_CFA\_val\_offset\_sf} instruction takes two operands: an
+\item \textbf{\DWCFAvaloffsetsfTARG} \\
+The \DWCFAvaloffsetsfTARG{} instruction takes two operands: an
 unsigned LEB128\addtoindexx{LEB128!unsigned} value representing a register number and a
 signed LEB128\addtoindexx{LEB128!signed} factored offset. This instruction is identical
-to \livelink{chap:DWCFAvaloffset}{DW\_CFA\_val\_offset} except that the second operand is signed
+to \DWCFAvaloffset{} except that the second operand is signed
 and factored. The resulting offset is 
 \textit{factored\_offset} * \addttindex{data\_alignment\_factor}.
 
-\item \textbf{DW\_CFA\_register} \\
-The \livetarg{chap:DWCFAregister}{DW\_CFA\_register} 
+\item \textbf{\DWCFAregisterTARG} \\
+The \DWCFAregisterTARG{} 
 instruction takes two unsigned LEB128\addtoindexx{LEB128!unsigned}
 operands representing register numbers. The required action
 is to set the rule for the first register to be register(R)
 where R is the second register.
 
-\item \textbf{DW\_CFA\_expression} \\
-The \livetarg{chap:DWCFAexpression}{DW\_CFA\_expression} 
-instruction takes two operands: an
+\item \textbf{\DWCFAexpressionTARG} \\
+The \DWCFAexpressionTARG{} instruction takes two operands: an
 unsigned LEB128\addtoindexx{LEB128!unsigned} 
 value representing a register number, and
-a \livelink{chap:DWFORMblock}{DW\_FORM\_block} 
+a \DWFORMblock{} 
 value representing a DWARF expression. 
 The
 required action is to change the rule for the register
@@ -1875,11 +1872,11 @@ regarding restrictions on the DWARF
 expression operators that can be used.}
 
 \needlines{7}
-\item \textbf{DW\_CFA\_val\_expression} \\
-The \livetarg{chap:DWCFAvalexpression}{DW\_CFA\_val\_expression} instruction takes two operands:
+\item \textbf{\DWCFAvalexpressionTARG} \\
+The \DWCFAvalexpressionTARG{} instruction takes two operands:
 an unsigned LEB128\addtoindexx{LEB128!unsigned} 
 value representing a register number, and
-a \livelink{chap:DWFORMblock}{DW\_FORM\_block} 
+a \DWFORMblock{} 
 value representing a DWARF expression. The
 required action is to change the rule for the register
 indicated by the register number to be a val\_expression(E)
@@ -1893,19 +1890,19 @@ regarding restrictions on the DWARF
 expression operators that can be used.}
 
 \needlines{6}
-\item \textbf{ DW\_CFA\_restore} \\
-The \livetarg{chap:DWCFArestore}{DW\_CFA\_restore} instruction takes a single operand (encoded
+\item \textbf{\DWCFArestoreTARG} \\
+The \DWCFArestoreTARG{} instruction takes a single operand (encoded
 with the opcode) that represents a register number. The
 required action is to change the rule for the indicated
 register to the rule assigned it by the \texttt{initial\_instructions}
 in the CIE.
 
 \needlines{5}
-\item \textbf{DW\_CFA\_restore\_extended} \\
-The \livetarg{chap:DWCFArestoreextended}{DW\_CFA\_restore\_extended}
+\item \textbf{\DWCFArestoreextendedTARG} \\
+The \DWCFArestoreextendedTARG{}
 instruction takes a single unsigned LEB128\addtoindexx{LEB128!unsigned} 
 operand that represents a register number. This
-instruction is identical to \livelink{chap:DWCFArestore}{DW\_CFA\_restore} except for the
+instruction is identical to \DWCFArestore{} except for the
 encoding and size of the register operand.
 
 \end{enumerate}
@@ -1922,14 +1919,14 @@ body of a function.}
 
 \begin{enumerate}[1. ]
 
-\item \textbf{DW\_CFA\_remember\_state} \\
-The \livetarg{chap:DWCFArememberstate}{DW\_CFA\_remember\_state} instruction takes no operands. The
+\item \textbf{\DWCFArememberstateTARG} \\
+The \DWCFArememberstateTARG{} instruction takes no operands. The
 required action is to push the set of rules for every register
 onto an implicit stack.
 
 \needlines{4}
-\item \textbf{DW\_CFA\_restore\_state} \\
-The \livetarg{chap:DWCFArestorestate}{DW\_CFA\_restore\_state} instruction takes no operands. The
+\item \textbf{\DWCFArestorestateTARG} \\
+The \DWCFArestorestateTARG{} instruction takes no operands. The
 required action is to pop the set of rules off the implicit
 stack and place them in the current row.
 
@@ -1938,10 +1935,10 @@ stack and place them in the current row.
 \subsubsection{Padding Instruction}
 \label{chap:paddinginstruction}
 \begin{enumerate}[1. ]
-\item \textbf{DW\_CFA\_nop} \\
-The \livetarg{chap:DWCFAnop}{DW\_CFA\_nop} instruction has no operands and no required
+\item \textbf{\DWCFAnopTARG} \\
+The \DWCFAnopTARG{} instruction has no operands and no required
 actions. It is used as padding to make a CIE or FDE an
-appropriate size
+appropriate size.
 
 \end{enumerate}
 
@@ -1958,18 +1955,17 @@ contained in the FDE. If so, then:}
 \texttt{initial\_instructions} field of the associated CIE.}
 
 \item \textit{Read and process the FDE\textquoteright s instruction
-sequence until a \livelink{chap:DWCFAadvanceloc}{DW\_CFA\_advance\_loc}, 
-\livelink{chap:DWCFAsetloc}{DW\_CFA\_set\_loc}, or the
+sequence until a \DWCFAadvanceloc, 
+\DWCFAsetloc, or the
 end of the instruction stream is encountered.}
 
-\item \textit{ If a \livelink{chap:DWCFAadvanceloc}{DW\_CFA\_advance\_loc} or 
-\livelink{chap:DWCFAsetloc}{DW\_CFA\_set\_loc}
+\item \textit{ If a \DWCFAadvanceloc{} or \DWCFAsetloc{}
 instruction is encountered, then compute a new location value
 (L2). If L1 $\geq$ L2 then process the instruction and go back
 to step 2.}
 
 \item \textit{ The end of the instruction stream can be thought
-of as a \livelink{chap:DWCFAsetloc}{DW\_CFA\_set\_loc} (\texttt{initial\_location + address\_range})
+of as a \DWCFAsetloc{} (\texttt{initial\_location + address\_range})
 instruction. Note that the FDE is ill-formed if L2 is less
 than L1.}
 
@@ -1993,7 +1989,7 @@ Return Address.}
 
 If a Return Address register is defined in the virtual
 unwind table, and its rule is undefined (for example, by
-\livelink{chap:DWCFAundefined}{DW\_CFA\_undefined}), then there is no return address and no
+\DWCFAundefined), then there is no return address and no
 call address, and the virtual unwind of stack activations
 is complete.
 
