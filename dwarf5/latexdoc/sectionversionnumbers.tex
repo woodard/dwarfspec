@@ -41,16 +41,18 @@ and \dotdebugtypes{} section version number.
   \hline
 \endlastfoot
 \dotdebugabbrev{}   & - & - & - & - \\
+\dotdebugaddr{}		& x & x & x & 5 \\
 \dotdebugaranges{}  & 2 & 2 & 2 & 2 \\
 \dotdebugframe{}    & 1 & 3 & 4 & 4 \\
 \dotdebuginfo{}     & 2 & 3 & 4 & 5 \\
 \dotdebugline{}     & 2 & 3 & 4 & 4 \\
-\dotdebugloc{}      & - & - & - & - \\
+\dotdebugloc{}      & - & - & - & 5 \\
 \dotdebugmacinfo{}  & - & - & - & - \\
 \dotdebugpubnames{} & 2 & 2 & 2 & 2 \\
 \dotdebugpubtypes{} & x & 2 & 2 & 2 \\
-\dotdebugranges{}   & x & - & - & - \\
+\dotdebugranges{}   & x & - & - & 5 \\
 \dotdebugstr{}      & - & - & - & - \\
+\dotdebugstroffsets	& x & x & x & 5 \\
 \dotdebugtypes{}    & x & x & 4 & 5 \\
 \end{longtable}
 \end{centering}
@@ -64,7 +66,7 @@ Notes:
 \item  \doublequote{V5} means \addtoindex{DWARF Version 5}, published 
 			\ifthenelse{\boolean{isdraft}}{\textit{<to be determined>}}{\docdate}.
 \item  \doublequote{-} means that a version number is not applicable
-(the section's header does not include a version).
+(the section does not include a header or the section's header does not include a version).
 
 \item  \doublequote{x} means that the section was not defined in that
 version of the DWARF standard.
@@ -72,9 +74,12 @@ version of the DWARF standard.
 \item  The version numbers for the \dotdebuginfo{} and \dotdebugtypes{}
 sections must be the same.
 
+\item  The version numbers for corresponding .debug\_<kind> and .debug\_<kind>.dwo 
+sections are the same.
+
 \end{itemize}
 
-\textit{For \dotdebugframe{}, section version 2 is unused.}
+\textit{For the \dotdebugframe{} section, version 2 is unused.}
 
 Higher numbers are reserved for future use.
 

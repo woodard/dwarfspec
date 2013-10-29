@@ -6,6 +6,10 @@ cases, information in one section refers to information in one
 or more of the others. These relationships are illustrated by 
 the diagram and associated notes on the following pages.
 
+\textit{This diagram does not distinguish between the normal
+and split object section pairs (for example, \dotdebuginfo{} 
+versus \dotdebuginfodwo).}
+
 \begin{figure}[H]
 \begin{tikzpicture}
     [sect/.style={rectangle, rounded corners=10pt, draw, fill=blue!10, inner sep=.2cm, minimum width=4.5cm},
@@ -13,11 +17,17 @@ the diagram and associated notes on the following pages.
 
 % The left column, first sections, then links, from top to bottom
 %
-\node(zsectara) at ( 0, 10.) [sect] {\dotdebugaranges};
-\node(zlinka)   at ( 0, 8.0) [link] {To compilation unit (a)};
-\node(zsectinf) at ( 0, 5.0) [sect] {\begin{tabular}{c} \dotdebuginfo \\ \dotdebugtypes \end{tabular}};
+\node(zsectara) at ( 0, 16.) [sect] {\dotdebugaranges};
+\node(zlinka)   at ( 0, 14.) [link] {To compilation unit (a)};
+\node(zsectinf) at ( 0, 8.0) [sect] {\begin{tabular}{c} 
+									 \dotdebuginfo \\ 
+									 \dotdebugtypes 
+									 \end{tabular}};
 \node(zlinkb)   at ( 0, 2.0) [link] {To compilation unit (b)};
-\node(zsectpub) at ( 0, 0.0) [sect] {\begin{tabular}{c} \dotdebugpubnames \\ \dotdebugpubtypes \end{tabular}};
+\node(zsectpub) at ( 0, 0.0) [sect] {\begin{tabular}{c} 
+									 \dotdebugpubnames \\ 
+									 \dotdebugpubtypes 
+									 \end{tabular}};
 
 \draw[thick,-to reversed]		(zlinka) -- (zsectara);
 \draw[thick,angle 90-] 			(zsectinf) -- (zlinka);
@@ -26,43 +36,65 @@ the diagram and associated notes on the following pages.
 
 % The middle column, similarly
 %
-\node(zsectfra) at (6, 10.) [sect] {\dotdebugframe};
-\node(zlinkc)   at (6,  8.) [link] {To abbreviations (c)};
-\node(zlinkd)   at (6,  7.) [link] {\DWFORMstrp{} (d)};
-\node(zlinke)   at (6,  6.) [link] {\DWOPcallref{} (e)};
-\node(zlinkf)   at (6,  5.) [link] {\DWATlocation{}, etc. (f)};
-\node(zlinkg)   at (6,  4.) [link] {\DWATranges{} (g)};
-\node(zlinkh)   at (6,  3.) [link] {\DWATmacroinfo{} (h)};
-\node(zlinki)   at (6,  2.) [link] {\DWATstmtlist{} (i)};
+\node(zsectfra) at (6, 16.)   [sect] {\dotdebugframe};
+\node(zlinkc)   at (6, 14.5)  [link] {To abbreviations (c)};
+\node(zlinkd)   at (6, 13.25) [link] {\DWFORMstrp{} (d)};
+\node(zlinke)	at (6, 11.5)  [link] {\begin{tabular}{c}
+									  \DWATstroffsetsbase, \\
+									  \DWFORMstrx{} (e)
+									  \end{tabular}};
+\node(zlinkf)   at (6, 9.5)   [link] {\begin{tabular}{c}
+									  \DWOPcallref{} (f) \\
+									  \DWFORMrefaddr
+									  \end{tabular}};
+\node(zlinkg)   at (6,  8.)   [link] {\DWATlocation{}, etc. (g)};
+\node(zlinkh)   at (6,  6.5) [link] {\DWATranges{} (h)};
+\node(zlinki)   at (6,  5.0)  [link] {\DWATmacroinfo{} (i)};
+\node(zlinkj)   at (6,  3.5)  [link] {\DWATstmtlist{} (j)};
+\node(zlinkk)	at (6,  1.)   [link] {\begin{tabular}(c)
+									  \DWATaddrbase,    \\
+									  \DWFORMaddrx, (k) \\
+									  \DWOPaddrx, \\
+									  \DWOPconstx
+									  \end{tabular}};
 
 % Links between left and center
 %
 \draw[thick,to reversed-]			(zsectinf) -- (zlinkc.west);
 \draw[thick,to reversed-]			(zsectinf) -- (zlinkd.west);
-\draw[thick,angle 90-]				(zsectinf) -- (zlinke.west);
-\draw[thick,to reversed-]			(zsectinf) -- (zlinkf.west);
+\draw[thick,to reversed-]			(zsectinf) -- (zlinke.west);
+\draw[<->,thick]					(zsectinf) -- (zlinkf.west);
 \draw[thick,to reversed-]			(zsectinf) -- (zlinkg.west);
 \draw[thick,to reversed-]			(zsectinf) -- (zlinkh.west);
 \draw[thick,to reversed-]			(zsectinf) -- (zlinki.west);
+\draw[thick,to reversed-]			(zsectinf) -- (zlinkj.west);
+\draw[thick,to reversed-]			(zsectinf) -- (zlinkk.north west);
 
 % The right column
 %
-\node(zsectabb)	at (12, 10) [sect] {\dotdebugabbrev};
-\node(zsectstr)	at (12,  8) [sect] {\dotdebugstr};
-\node(zsectloc)	at (12,  6) [sect] {\dotdebugloc};
-\node(zsectran)	at (12,  4) [sect] {\dotdebugranges};
-\node(zsectmac)	at (12,  2) [sect] {\dotdebugmacinfo};
-\node(zsectlin)	at (12,  0) [sect] {\dotdebugline};
+\node(zsectabb)	at (12, 16) [sect] {\dotdebugabbrev};
+\node(zsectstr)	at (12, 14) [sect] {\dotdebugstr};
+\node(zlinkl)   at (12, 12) [link] {To strings (k)};
+\node(zsectstx) at (12, 10) [sect] {\dotdebugstroffsets};
+\node(zsectloc)	at (12,  8) [sect] {\dotdebugloc};
+\node(zsectran)	at (12,  6) [sect] {\dotdebugranges};
+\node(zsectmac)	at (12,  4) [sect] {\dotdebugmacinfo};
+\node(zsectlin)	at (12,  2) [sect] {\dotdebugline};
+\node(zsectadx) at (12,  0) [sect] {\dotdebugaddr};
+
+\draw[thick,to reversed-]		(zsectstx) -- (zlinkl);
+\draw[thick,-angle 90]			(zlinkl) -- (zsectstr);
 
 % Links between center and right
 %
 \draw[thick,-angle 90]		(zlinkc.east) -- (zsectabb.west);
 \draw[thick,-angle 90]		(zlinkd.east) -- (zsectstr.west);
-\draw[thick,-to reversed]	(zlinke.east) -- (zsectloc.west);
-\draw[thick,-angle 90]		(zlinkf.east) -- (zsectloc.south west);
-\draw[thick,-angle 90]		(zlinkg.east) -- (zsectran.west);
-\draw[thick,-angle 90]		(zlinkh.east) -- (zsectmac.west);
-\draw[thick,-angle 90]		(zlinki.east) -- (zsectlin.west);
+\draw[thick,-angle 90]		(zlinke.east) -- (zsectstx.west);
+\draw[thick,-angle 90]		(zlinkg.east) -- (zsectloc.west);
+\draw[thick,-angle 90]		(zlinkh.east) -- (zsectran.west);
+\draw[thick,-angle 90]		(zlinki.east) -- (zsectmac.west);
+\draw[thick,-angle 90]		(zlinkj.east) -- (zsectlin.west);
+\draw[thick,-angle 90]		(zlinkk.east) -- (zsectadx.west);
 
 \end{tikzpicture}
 \vspace{5mm}
@@ -75,44 +107,57 @@ the diagram and associated notes on the following pages.
    \textbf{Notes}
 \end{center}
 \begin{enumerate}[(a)]  
-\item  \dotdebugaranges{}  \\
-The debug\_info\_offset value in
+\item  \dotdebugaranges{} to \dotdebuginfo \\
+The \texttt{debug\_info\_offset} value in
 the header is
 the offset in the \dotdebuginfo{} section of the
 corresponding compilation unit header (not the compilation
 unit entry).
 
 %b
-\item \dotdebugpubnames{} and \dotdebugpubtypes{} \\
-The debug\_info\_offset value in the header is the offset in the
+\item \dotdebugpubnames{} and \dotdebugpubtypes{} to \dotdebuginfo \\
+The \texttt{debug\_info\_offset} value in the header is the offset in the
 \dotdebuginfo{} section of the 
 corresponding compilation unit header (not
-the compilation unit entry). Each pubname/pubtype has the offset (within
+the compilation unit entry). Each pubname/pubtype unit has the offset (within
 the corresponding compilation unit) of the applicable debugging
 information entry.
 
 %c
-\item \dotdebuginfo{} and \dotdebugtypes{} \\
-The debug\_abbrev\_offset value in the header is the offset in the
+\item \dotdebuginfo{} and \dotdebugtypes{} to \dotdebugabbrev \\
+The \texttt{debug\_abbrev\_offset} value in the header is the offset in the
 \dotdebugabbrev{} 
 section of the abbreviations for that compilation unit.
 
 %d
-\item  \dotdebuginfo{} and \dotdebugtypes{} \\
+\item  \dotdebuginfo{} and \dotdebugtypes{} to \dotdebugstr \\
 Attribute values of class string may have form 
 \DWFORMstrp, whose
 value is the offset in the \dotdebugstr{}
 section of the corresponding string.
 
 %e
-\item \dotdebugloc{} \\
+\item \dotdebugstroffsets{} to \dotdebugstroffsets \\
+The value of the \DWATstroffsetsbase{} attribute in a
+compilation, partial or type unit DIE is the offset in the
+\dotdebugstroffsets{} section of the 
+\addtoindex{string offsets table}
+for that unit.
+In addition, attribute values of class string may have form 
+\DWFORMstrx, whose value is an index into the
+string offsets table.
+
+%f
+\item \dotdebuginfo{} to \dotdebuginfo \\
 The operand of the \DWOPcallref{} 
 DWARF expression operator is the
 offset of a debugging information entry in the 
-\dotdebuginfo{} section.
+\dotdebuginfo{} section of another compilation.
+Similarly for attribute operands that have use
+\DWFORMrefaddr.
 
-%f
-\item \dotdebuginfo{} \\
+%g
+\item \dotdebuginfo{} to \dotdebugloc \\
 An attribute value of class \livelink{chap:classloclistptr}{loclistptr} 
 (specifically form
 \DWFORMsecoffset) 
@@ -120,16 +165,17 @@ is an offset within the \dotdebugloc{}
 section of a
 \addtoindex{location list}.
 
-%g
-\item \dotdebuginfo{} \\
+%h
+\item \dotdebuginfo{} to \dotdebugranges \\
 An attribute value of class \livelink{chap:classrangelistptr}{rangelistptr} 
 (specifically form
 \DWFORMsecoffset) 
 is an offset within the \dotdebugranges{} section of
 a range list.
 
-%h
-\item \dotdebuginfo{} \\
+%i
+\needlines{5}
+\item \dotdebuginfo{} to \dotdebugmacinfo \\
 An attribute value of class 
 \livelink{chap:classmacptr}{macptr} (specifically form
 \DWFORMsecoffset) is an 
@@ -137,12 +183,28 @@ offset within the
 \dotdebugmacinfo{} section
 of the beginning of the macro information for the referencing unit.
 
-%i
-\item \dotdebuginfo{} \\
+%j
+\item \dotdebuginfo{} to \dotdebugline \\
 An attribute value of class 
 \livelink{chap:classlineptr}{lineptr} (specifically form
 \DWFORMsecoffset) 
 is an offset in the 
 \dotdebugline{} section of the
 beginning of the line number information for the referencing unit.
+
+%k
+\item \dotdebuginfo{} to \dotdebugaddr \\
+The value of the \DWATaddrbase{} attribute in the
+\DWTAGcompileunit{} or \DWTAGpartialunit{} DIE is the
+offset in the \dotdebugaddr{} section of the machine
+addresses for that compilation unit or type unit.
+\DWFORMaddrx, \DWOPaddrx, and \DWOPconstx{} contain
+indices relative to the beginning of that section.
+
+%l
+\item \dotdebugstroffsets{} to \dotdebugstr \\
+Entries in the string offsets table
+are offsets to the corresponding string in the 
+\dotdebugstr{} section.
+
 \end{enumerate}

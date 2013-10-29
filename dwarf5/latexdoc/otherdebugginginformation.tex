@@ -322,6 +322,7 @@ may emit multiple sequences (that is, not all instructions within a
 compilation unit are assumed to be contiguous). \\
 \end{longtable}
 
+\needlines{5}
 \subsection{State Machine Registers}
 \label{chap:statemachineregisters}
 The line number information state machine has the following 
@@ -600,6 +601,17 @@ do not know about these new opcodes to be able to skip them.}
 \textit{Codes for vendor specific extensions, if any, are described
 just like standard opcodes.}
 
+\item \texttt{file\_entry\_format} (\addtoindex{ubyte}) \\
+A format code indicating the format of certain data in the 
+entries of the file names field (see below). The format codes 
+and their meanings are as follows:
+\begin{itemize}
+\item \DWLNFtimestampsizeTARG \\
+Entries contain a modification timestamp and file size.
+\item \DWLNFMDfiveTARG \\
+Entries contain an \addtoindex{MD5} digest of the file contents.
+\end{itemize}
+
 \needlines{3}
 \item \texttt{include\_directories} (sequence of path names) \\
 Entries 
@@ -646,15 +658,21 @@ number representing the directory
 index of a directory in the 
 \addttindex{include\_directories} section.
 
+\item If \texttt{file\_entry\_format} (see above) is \DWLNFtimestampsize:
+\begin{itemize}
+    \item An unsigned LEB128\addtoindexx{LEB128!unsigned}
+    number representing the
+    (implementation-\linebreak[0]defined) time of last modification for
+    the file, or 0 if not available.
 
-\item An unsigned LEB128\addtoindexx{LEB128!unsigned}
-number representing the
-(implementation\dash defined) time of last modification for
-the file, or 0 if not available.
-
-\item An unsigned LEB128\addtoindexx{LEB128!unsigned} 
-number representing the length in
-bytes of the file, or 0 if not available.  
+    \item An unsigned LEB128\addtoindexx{LEB128!unsigned} 
+    number representing the length in
+    bytes of the file, or 0 if not available.  
+\end{itemize}
+If \texttt{file\_entry\_format} is \DWLNFMDfive:
+\begin{itemize}
+\item A 16-byte MD5 digest of the file contents.
+\end{itemize}
 
 \end{itemize}
 
@@ -680,7 +698,8 @@ instead of file names in the file register.
 
 \textit{A compiler may generate a single null byte for the file
 names field and define file names using the extended opcode
-\DWLNEdefinefile.}
+\DWLNEdefinefile{} (when \texttt{file\_entry\_format} is \DWLNFtimestampsize) or
+\DWLNEdefinefileMDfive{} (when \texttt{file\_entry\_format} is \DWLNFMDfive).}
 
 
 \end{enumerate}
@@ -885,6 +904,7 @@ and sets the \addttindex{basic\_block},
 \addttindex{epilogue\_begin}
 registers to \doublequote{false.}
 
+\needlines{5}
 \item \textbf{\DWLNSadvancepcTARG} \\
 The \DWLNSadvancepcTARG{} 
 opcode takes a single unsigned LEB128\addtoindexx{LEB128!unsigned}
@@ -1103,6 +1123,27 @@ parameter, an unsigned LEB128\addtoindexx{LEB128!unsigned}
 integer. It sets the
 \addttindex{discriminator} register to the new value.
 
+\needlines{4}
+\item \textbf{\DWLNEdefinefileMDfiveTARG} \\
+The \DWLNEdefinefileMDfiveTARG{} opcode takes three operands:
+\begin{enumerate}[1. ]
+
+\item A null\dash terminated string containing the full or relative
+path name of a source file. If the entry contains a file
+name or a relative path name, the file is located relative
+to either the compilation directory (as specified by the
+\DWATcompdir{} attribute given in the compilation unit)
+or one of the directories in the 
+\addttindex{include\_directories} section.
+
+\item An unsigned LEB128\addtoindexx{LEB128!unsigned} 
+number representing the directory index
+of the directory in which the file was found.  
+
+\item A 16-byte \addtoindex{MD5} digest of the file contents.
+\end{enumerate}
+The first two operands are interpreted in the same way as the 
+first two operands of \DWLNEdefinefile.
 \end{enumerate}
 
 \textit{Appendix \refersec{app:linenumberprogramexample} 
@@ -1828,6 +1869,7 @@ except that the second operand is
 signed and factored. The resulting offset is 
 \textit{factored\_offset} * \addttindex{data\_alignment\_factor}.
 
+\needlines{4}
 \item \textbf{\DWCFAvaloffsetTARG} \\
 The \DWCFAvaloffsetTARG{} 
 instruction takes two unsigned

@@ -3,7 +3,7 @@
 % If draft is in the document class list, pix are just suggested
 % by an outline, the pic does not appear as a picture.
 %
-\newcommand{\docdate}{October 11, 2013}
+\newcommand{\docdate}{October 27, 2013}
 %
 \usepackage{ifthen}
 \newboolean{isdraft}
@@ -279,12 +279,13 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \listoftables
 
 \ifthenelse{\boolean{isdraft}}
-	{	{% Environment to keep the following header change local
-		\cleardoublepage
+	{	%\emptypage
+		{% Environment to keep the following header change local
+		\clearpage
 		\makeevenhead{plain}{}{Change Summary}{}
 		\makeoddhead{plain}{}{Change Summary}{}
 		\include{changesummary}
-		\cleardoublepage}
+		}
 	}{}
 
 \flushleft
@@ -307,10 +308,10 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \setcounter{secnumdepth}{5}
 
 \include{introduction}
-\include{generaldescription}            %\emptypage
+\include{generaldescription}            \emptypage
 \include{programscope}                  \emptypage
 \include{dataobject}                    \emptypage
-\include{typeentries}                   \emptypage
+\include{typeentries}                   %\emptypage
 \include{otherdebugginginformation} 	\emptypage
 \include{datarepresentation}            \emptypage
 
@@ -318,10 +319,11 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \appendix
 
 \include{attributesbytag}				\emptypage
-\include{debugsectionrelationships}     \emptypage
+\include{debugsectionrelationships}     %\emptypage
 \include{encodingdecoding}              \emptypage
 \include{examples}                      %\emptypage
 \include{compression}                   %\emptypage
+\include{splitobjects}					%\emptypage
 \include{sectionversionnumbers}
 \include{gnulicense}
 
