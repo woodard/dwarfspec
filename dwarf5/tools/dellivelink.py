@@ -4,7 +4,7 @@
 
 # October 5, 2013. 
 # This replaces \livelink and \livetarg with 
-# a simpler \DWXXXyyy, per Rob Brender email of Oct 4, 2013
+# a simpler \DWXXXyyy, per Ron Brender email of Oct 4, 2013
 # It strives to be idempotent, so rerunning makes no 
 # further changes.
 
@@ -157,6 +157,24 @@ def read_args():
     filelist += [v]
     cur = int(cur) + 1
 
+  filelist = {"..\\latexdoc\\attributesbytag.tex",
+              "..\\latexdoc\\changesummary.tex",
+              "..\\latexdoc\\compression.tex",
+              "..\\latexdoc\\copyright.tex",
+              "..\\latexdoc\\dataobject.tex",
+              "..\\latexdoc\\datarepresentation.tex",
+              "..\\latexdoc\\debugsectionrelationships.tex",
+              "..\\latexdoc\\dwarfnamecmds.tex",
+              "..\\latexdoc\\encodingdecoding.tex",
+              "..\\latexdoc\\examples.tex",
+              "..\\latexdoc\\generaldescription.tex",
+              "..\\latexdoc\\gnulicense.tex",
+              "..\\latexdoc\\introduction.tex",
+              "..\\latexdoc\\otherdebugginginformation.tex",
+              "..\\latexdoc\\programscope.tex",
+              "..\\latexdoc\\sectionversionnumbers.tex",
+              "..\\latexdoc\\typeentries.tex"
+				}
   dwf = fileio.readFilelist(filelist)
   dwf.dwtransformline(transfunc)
   dwf.dwwrite()
