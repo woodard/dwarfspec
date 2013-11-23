@@ -2164,9 +2164,45 @@ a
 (see Section \refersec{chap:staticanddynamicvaluesofattributes})
 is the amount of storage need to hold a value of the file type.
 
+\section{Dynamic Type Entries and Properties}
+
+\subsection{Dynamic Type Entries}
+\textit{Some languages such as 
+\addtoindex{Fortran 90}, provide types whose values
+may be dynamically allocated or associated with a variable
+under explicit program control. However, unlike the related
+pointer type in \addtoindex{C} or 
+\addtoindex{C++}, the indirection involved in accessing
+the value of the variable is generally implicit, that is, not
+indicated as part of program source.}
+
+A dynamic type entry is used to declare a dynamic type that is 
+\doublequote{just like} another non-dynamic type without needing to
+replicate the full description of that other type.
+
+A dynamic type is represented by a debugging information entry
+with the tag \DWTAGdynamictypeTARG. If a name has been given to the
+dynamic type, then the dynamic type has a \DWATname{} attribute 
+whose value is a null-terminated string containing the dynamic
+type name as it appears in the source.
+	
+A dynamic type entry has a \DWATtype{} attribute whose value is a
+reference to the type of the entities that are dynamically allocated.
+	
+A dynamic type entry also has a \DWATdatalocation, and may also
+have \DWATallocated{} and/or \DWATassociated{} attributes as 
+described following (Section 5.15.1). The type referenced by the
+\DWATtype{} attribute must not have any of these attributes.
+
 \subsection{Dynamic Type Properties}
 \label{chap:dynamictypeproperties}
-\subsection{Data Location}
+\textit{
+The \DWATdatalocation, \DWATallocated{} and \DWATassociated{} 
+attributes described in this section can be used for any type, not
+just dynamic types.}
+
+\needlines{6}
+\subsubsection{Data Location}
 \label{chap:datalocation}
 
 \textit{Some languages may represent objects using descriptors to hold
@@ -2197,7 +2233,7 @@ calculation. For an example using
 for a \addtoindex{Fortran 90 array}, see 
 Appendix \refersec{app:fortranarrayexample}.}
 
-\subsection{Allocation and Association Status}
+\subsubsection{Allocation and Association Status}
 \label{chap:allocationandassociationstatus}
 
 \textit{Some languages, such as \addtoindex{Fortran 90},
@@ -2262,7 +2298,7 @@ pointer assignment.}
 arrays, 
 see Appendix \refersec{app:aggregateexamples}.}
 
-\subsection{Array Rank}
+\subsubsection{Array Rank}
 \label{chap:DWATrank}
 \addtoindexx{array!assumed-rank}
 \addtoindexx{assumed-rank array|see{array, assumed-rank}}
@@ -2308,7 +2344,7 @@ fashion.
 \label{chap:templatealiasentries}
 
 \textit{
-In addtoindex{C++}, a template alias is a form of typedef that has template
+In \addtoindex{C++}, a template alias is a form of typedef that has template
 parameters.  DWARF does not represent the template alias definition
 but does represent instantiations of the alias.
 }

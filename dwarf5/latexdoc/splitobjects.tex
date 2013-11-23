@@ -1,0 +1,275 @@
+\chapter[Split DWARF Objects (Informative)]{Split DWARF Objects (Informative)}
+\label{app:splitdwarfobjectsinformative}
+
+With the traditional DWARF format, debug information is designed
+with the expectation that it will be processed by the linker to
+produce an output binary with complete debug information, and
+with fully-resolved references to locations within the
+application. For very large applications, however, this approach
+can result in excessively large link times and excessively large
+output files. 
+
+Several vendors have independently developed
+proprietary approaches that allow the debug information to remain
+in the relocatable object files, so that the linker does not have
+to process the debug information or copy it to the output file.
+These approaches have all required that additional information be
+made available to the debug information consumer, and that the
+consumer perform some minimal amount of relocation in order to
+interpret the debug info correctly. The additional information
+required, in the form of load maps or symbol tables, and the
+details of the relocation are not covered by the DWARF
+specification, and vary with each vendor's implementation.
+
+These limitations are removed by the design described here.
+
+\section{Overview}
+\label{app:splitoverview}
+\DWARFVersionV{} introduces an optional set of debugging sections
+that allow the compiler to partition the debugging information
+into a set of (small) sections that require link-time relocation
+and a set of (large) sections that do not. The sections that
+require relocation are written to the relocatable object file as
+usual, and are linked into the final executable. The sections
+that do not require relocation, however, can be written to the
+relocatable object (.o) file but ignored by the linker, or they
+can be written to a separate DWARF object (dwo{}) file.
+
+\needlines{4}
+The optional set of debugging sections includes the following:
+\begin{itemize}
+\item
+\dotdebuginfodwo{} - Contains the \DWTAGcompileunit{} DIE and
+its descendants. This is the bulk of the debugging
+information for the compilation unit that is normally found
+in the \dotdebuginfo{} section.
+\item
+\dotdebugtypesdwo{} - Contains the \DWTAGtypeunit{} DIEs and
+their descendants. This is the bulk of the debugging
+information for the type units that is normally found in the
+\dotdebugtypes{} section.
+\item
+\dotdebugabbrevdwo{} - Contains the abbreviations tables used by
+the \dotdebuginfodwo{} and \dotdebugtypesdwo{} sections.
+\item
+\dotdebuglocdwo{} - Contains the location lists referenced by
+the debugging information entries in the \dotdebuginfodwo{}
+section. This contains the location lists normally found in 
+the \dotdebugloc{} section,
+with a slightly modified format to eliminate the need for
+relocations.
+\item
+\dotdebugstrdwo{} - Contains the string table for all indirect
+strings referenced by the debugging information in the
+\dotdebuginfodwo{} and \dotdebugtypesdwo{} sections.
+\item
+\dotdebugstroffsetsdwo{} - Contains the string offsets table
+for the strings in the \dotdebugstrdwo{}{} section.
+\item
+\dotdebugmacinfodwo{} - Contains macro definition information,
+normally found in the \dotdebugmacinfo{} section.
+\item
+\dotdebuglinedwo{} - Contains skeleton line tables for the type
+units in the \dotdebugtypesdwo{} section. These line tables
+contain only the directory and files lists needed to
+interpret \DWATdeclfile{} attributes in the debugging
+information entries. Actual line number tables remain in the
+\dotdebugline{} section, and remain in the relocatable object
+(.o) files.
+\end{itemize}
+
+In order for the consumer to locate and process the debug
+information, the compiler must produce a small amount of debug
+information that passes through the linker into the output
+binary. A skeleton \dotdebuginfo{} section for each compilation unit
+contains a reference to the corresponding ".o" or ".dwo"
+file, and the \dotdebugline{} section (which is typically small
+compared to the \dotdebuginfo{} and \dotdebugtypes{} sections) is
+linked into the output binary, as is the new \dotdebugaddr{}
+section.
+
+\needlines{6}
+The debug sections that continue to be linked into the
+output binary include the following:
+\begin{itemize}
+\item
+\dotdebugabbrev{} - Contains the abbreviation codes used by the
+skeleton \dotdebuginfo{} section.
+\item
+\dotdebuginfo{} - Contains a skeleton \DWTAGcompileunit{} DIE,
+but no children.
+\item
+\dotdebugstr{} - Contains any strings referenced by the skeleton
+\dotdebuginfo{} sections (via \DWFORMstrp{} or \DWFORMstrx{}).
+\item
+\dotdebugstroffsets{} - Contains the string offsets table for
+the strings in the \dotdebugstr{} section.
+\item
+\dotdebugaddr{} - Contains references to loadable sections,
+indexed by attributes of form \DWFORMaddrx{} or location
+expression \DWOPaddrx{} opcodes.
+\item
+\dotdebugline{} - Contains the line number tables, unaffected by
+this design. (These could be moved to the .dwo file, but in
+order to do so, each \DWLNEsetaddress{} opcode would need to
+be replaced by a new opcode that referenced an entry in the
+\dotdebugaddr{} section. Furthermore, leaving this section in the
+.o file allows many debug info consumers to remain unaware of
+.dwo files.)
+\item
+\dotdebugframe{} - Contains the frame tables, unaffected by this
+design.
+\item
+\dotdebugranges{} - Contains the range lists, unaffected by this
+design.
+\item
+\dotdebugpubnames{} - Contains the public names for use in
+building an index section. This section has the same
+format and use as always. The section header refers to a
+compilation unit offset, which is the offset of the
+skeleton compilation unit in the \dotdebuginfo{} section.
+\item
+\dotdebugpubtypes{} - Contains the public types for use in
+building an index section. This section has the same
+format and use as always. The section header refers to a
+compilation unit offset, which is the offset of the
+skeleton compilation unit in the \dotdebuginfo{} section.
+\item
+\dotdebugaranges{} - Contains the accelerated range lookup table
+for the compilation unit, unaffected by this design.
+\end{itemize}
+
+\needlines{6}
+The skeleton \DWTAGcompileunit{} DIE has the following attributes:
+\autocols[0pt]{c}{3}{l}{
+\DWATcompdir{},
+\DWATdwoname{} (new),
+\DWATdwoid{} (new),
+\DWATstmtlist{},
+\DWATlowpc{} \dag,
+\DWAThighpc{} \dag,
+\DWATranges{} \dag,
+\DWATrangesbase{},
+\DWATaddrbase{}
+}
+\dag{} If \DWATranges{} is present, \DWATlowpc{} and \DWAThighpc{} are
+not used, and vice versa.
+
+All other attributes of the compilation unit DIE are moved to
+the full DIE in the \dotdebuginfodwo{} section.
+
+Because of other improvements in \DWARFVersionV, most of the
+relocations that would normally be found in the \dotdebuginfodwo{}
+and \dotdebugtypesdwo{} sections is moved to the \dotdebugaddr{} and
+\dotdebugstroffsetsdwo{} sections. Those in the
+\dotdebugstroffsetsdwo{} sections are simply be omitted because the
+DWARF information in those sections is not combined at link
+time, so no relocation is necessary. Similarly,
+many of the remaining relocations referring to range lists are
+eliminated. 
+
+The relocations that remain fall into the following categories:
+\begin{itemize}
+\item
+References from compilation unit and type unit headers to the
+\dotdebugabbrevdwo{} section. Because the new sections are not
+combined at link time, these references need no relocations.
+\item
+References from \DWTAGcompileunit{} DIEs to the
+\dotdebuglinedwo{} section, via \DWATstmtlist{}. This attribute
+remains in the skeleton \dotdebuginfo{} section, so no
+relocation in the \dotdebuginfodwo{} section is necessary.
+\item
+References from \DWTAGtypeunit{} DIEs to the skeleton
+\dotdebuglinedwo{} section, via \DWATstmtlist{}. Because the new
+sections are not combined at link time, these references need
+no relocations.
+\item
+References from \DWTAGcompileunit{} and \DWTAGtypeunit{} DIEs
+to the \dotdebugstroffsetsdwo{} section, via
+\DWATstroffsetsbase{}. Because the new sections are not
+combined at link time, the \DWATstroffsetsbase{} attribute
+is not required in a \dotdebuginfodwo{} or \dotdebugtypesdwo{}
+section.
+\item
+References from \DWTAGcompileunit{} DIEs to the \dotdebugaddr{}
+section, via \DWATaddrbase{}. This attribute remains in
+the skeleton \dotdebuginfo{} section, so no relocation in the
+\dotdebuginfodwo{} section is necessary.
+\needlines{4}
+\item
+References from \DWTAGcompileunit{} DIEs to the \dotdebugranges{}
+section, via \DWATrangesbase{}. This attribute remains in
+the skeleton \dotdebuginfo{} section, so no relocation in the
+\dotdebuginfodwo{} section is necessary.
+\item
+References from the \dotdebuglocdwo{} section to machine addresses
+via a location list entry or a base address selection entry.
+With a minor change to the location list entry format,
+described below, these relocations are also eliminated.
+\end{itemize}
+
+Each location list entry contains beginning and ending address
+offsets, which normally may be relocated addresses. In the
+\dotdebuglocdwo{} section, these offsets are replaced by indices
+into the \dotdebugaddr{} section. Each location list entry begins
+with a single byte identifying the entry type:
+\begin{itemize}
+\item
+\DWLLEendoflistentry{} (0) indicates an end-of-list entry,
+\item
+\DWLLEbaseaddressselectionentry{} (1) indicates a base address
+selection entry, 
+\item
+\DWLLEstartendentry{} (2) indicates a normal
+location list entry providing start and end addresses,
+\item
+\DWLLEstartlengthentry{} (3) indicates a normal location list
+entry providing a start address and a length, and
+\item
+\DWLLEoffsetpairentry{} (4) indicates a normal location list
+entry providing start and end offsets relative to the base
+address. 
+\end{itemize}
+An end-of-list entry has no further data. A base address
+selection entry contains a single unsigned LEB128 number
+following the entry type byte, which is an index into the
+\dotdebugaddr{} section that selects the new base address for
+subsequent location list entries. A start/end entry contains two
+unsigned LEB128 numbers following the entry type byte, which are
+indices into the \dotdebugaddr{} section that select the beginning
+and ending addresses. A start/length entry contains one unsigned
+LEB128 number and a 4-byte unsigned value (as would be
+represented by the form code \DWFORMdatafour). The first number
+is an index into the \dotdebugaddr{} section that selects the
+beginning offset, and the second number is the length of the
+range. Addresses fetched from the \dotdebugaddr{} section are not
+relative to the base address. An offset pair entry contains two
+4-byte unsigned values (as would be represented by the form code
+\DWFORMdatafour){}, treated as the beginning and ending offsets,
+respectively, relative to the base address. As in the \dotdebugloc{}
+section, the base address is obtained either from the nearest
+preceding base address selection entry, or, if there is no such
+entry, from the compilation unit base address (as defined in
+Section 3.1.1). For the latter three types (start/end,
+start/length, and offset pair), the two operand values are
+followed by a location description as in a normal location list
+entry in the \dotdebugloc{} section.
+
+This design depends on having an index of debugging information
+available to the consumer. For name lookups, the consumer can use
+the \dotdebugpubnames{} and \dotdebugpubtypes{} sections (or an index
+built at link time based on the information in those sections),
+which will lead to a skeleton compilation unit. The
+\DWATcompdir{} and \DWATdwoname{} attributes in the skeleton
+compilation unit can then be used to locate the corresponding
+DWARF object file for the compilation unit. Similarly, for an
+address lookup, the consumer can use the \dotdebugaranges{} table,
+which will also lead to a skeleton compilation unit. For a file
+and line number lookup, the skeleton compilation units can be
+used to locate the line number tables.
+
+\section{Split DWARF Object Examples}
+\label{app:splitdwarfobjectexamples}
+
+TBD

@@ -215,7 +215,7 @@ The following examples illustrate how to represent some of
 the more complicated forms of array and record aggregates
 using DWARF.
 
-\subsection{Fortran Array Example}
+\subsection{Fortran Simple Array Example}
 \label{app:fortranarrayexample}
 Consider the \addtoindex{Fortran array}\addtoindexx{Fortran 90} source fragment in 
 \addtoindexx{array type entry!examples}
@@ -999,7 +999,7 @@ little\dash endian
 architectures using the conventions described in 
 Section \refersec{chap:datamemberentries}.
 
-\begin{figure}[p]
+\begin{figure}[h]
 \figurepart{1}{2}
 \begin{dwflisting}
 \begin{alltt}
@@ -1017,6 +1017,16 @@ Section \refersec{chap:datamemberentries}.
             \DWATtype(reference to 10$)
             \DWATdatabitoffset(0)        ! may be omitted
             \DWATbitsize(1)
+\end{alltt}
+\end{dwflisting}
+\caption{Packed record example: DWARF description}
+\label{fig:packedrecordexampledwarfdescription}
+\end{figure}
+
+\begin{figure}[h]
+\figurepart{2}{2}
+\begin{dwflisting}
+\begin{alltt}
         \DWTAGmember
             \DWATname("F6")
             \DWATtype(reference to 10$)
@@ -1051,16 +1061,6 @@ Section \refersec{chap:datamemberentries}.
             \DWATtype(reference to 22\$)
             \DWATdatabitoffset(33)
             \DWATbitsize(4) ! may be omitted
-\end{alltt}
-\end{dwflisting}
-\caption{Packed record example: DWARF description}
-\label{fig:packedrecordexampledwarfdescription}
-\end{figure}
-
-\begin{figure}[p]
-\figurepart{2}{2}
-\begin{dwflisting}
-\begin{alltt}
         \DWTAGmember
             \DWATname("F7")
             \DWATtype(reference to 20\$)    ! type T
@@ -1078,6 +1078,87 @@ Figure~\ref{fig:packedrecordexampledwarfdescription}: Packed record example: DWA
 \end{center}
 \end{figure}
 
+\clearpage
+\subsection{Fortran Dynamic Type Example}
+\label{app:fortrandynamictypeexample}
+Consider the \addtoindex{Fortran 90} example of dynamic properties in 
+Figure \refersec{fig:fortrandynamictypeexamplesource}.
+This can be represented in DWARF as illustrated in 
+Figure \refersec{fig:fortrandynamictypeexampledwarfdescription}.
+Note that unnamed dynamic types are used to avoid replicating
+the full description of the underlying type \texttt{dt} that is shared by
+several variables.
+
+\begin{figure}[h]
+\begin{lstlisting}
+	    program sample
+     
+        type :: dt (l)
+            integer, len :: l
+            integer :: arr(l)
+        end type
+
+        integer :: n = 4
+        contains
+
+        subroutine s()
+            type (dt(n))               :: t1
+            type (dt(n)), pointer      :: t2
+            type (dt(n)), allocatable  :: t3, t4
+        end subroutine
+     
+        end sample
+\end{lstlisting}
+\caption{Fortran dynamic type example: source}
+\label{fig:fortrandynamictypeexamplesource}
+\end{figure}
+
+\begin{figure}[h]
+\begin{dwflisting}
+\begin{alltt}
+11$:    \DWTAGstructuretype
+            \DWATname("dt")
+            \DWTAGmember
+                ...
+			...
+
+13$:    \DWTAGdynamictype             ! plain version
+            \DWATdatalocation (dwarf expression to locate raw data)
+            \DWATtype (11$)
+
+14$:    \DWTAGdynamictype             ! 'pointer' version
+            \DWATdatalocation (dwarf expression to locate raw data)
+            \DWATassociated (dwarf expression to test if associated)
+            \DWATtype (11$)
+
+15$:    \DWTAGdynamictype             ! 'allocatable' version
+            \DWATdatalocation (dwarf expression to locate raw data)
+            \DWATallocated (dwarf expression to test is allocated)
+            \DWATtype (11$)
+
+16$:    \DWTAGvariable
+            \DWATname ("t1")
+            \DWATtype (13$)
+            \DWATlocation (dwarf expression to locate descriptor)
+17$:    \DWTAGvariable
+            \DWATname ("t2")
+            \DWATtype (14$)
+            \DWATlocation (dwarf expression to locate descriptor)
+18$:    \DWTAGvariable
+            \DWATname ("t3")
+            \DWATtype (15$)
+            \DWATlocation (dwarf expression to locate descriptor)
+19$:    \DWTAGvariable
+            \DWATname ("t4")
+            \DWATtype (15$)
+            \DWATlocation (dwarf expression to locate descriptor)
+\end{alltt}
+\end{dwflisting}
+\caption{Fortran dynamic type example: DWARF description}
+\label{fig:fortrandynamictypeexampledwarfdescription}
+\end{figure}
+
+\clearpage
 \section{Namespace Example}
 \label{app:namespaceexample}
 
@@ -1090,7 +1171,7 @@ The DWARF representation in
 Figure \refersec{fig:namespaceexampledwarfdescription}
 is appropriate.
 
-\begin{figure}[p]
+\begin{figure}[h]
 \begin{lstlisting}
 namespace {
     int i;
@@ -1224,6 +1305,7 @@ Figure~\ref{fig:namespaceexampledwarfdescription}: Namespace example: DWARF desc
 \end{center}
 \end{figure}
 
+\clearpage
 \section{Member Function Example}
 \label{app:memberfunctionexample}
 
@@ -1233,7 +1315,7 @@ The DWARF representation in
 Figure \refersec{fig:memberfunctionexampledwarfdescription}
 is appropriate.
 
-\begin{figure}[Here]
+\begin{figure}[h]
 \begin{lstlisting}
 class A
 {
@@ -1452,7 +1534,7 @@ SPECIAL(1, 0) && 0xa        \\
 \end{longtable}
 \end{centering}
 
-
+\needlines{6}
 \section{Call Frame Information Example}
 \label{app:callframeinformationexample}
 

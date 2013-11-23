@@ -44,6 +44,7 @@ described in Chapters 3, 4 and 5.
 \DWTAGconsttype,
 \DWTAGconstant,
 \DWTAGdwarfprocedure,
+\DWTAGdynamictype,
 \DWTAGentrypoint,
 \DWTAGenumerationtype,
 \DWTAGenumerator,
@@ -2577,7 +2578,12 @@ A type or value parameter entry may have a \DWATname{} attribute,
 \addtoindexx{name attribute}
 whose value is a
 null\dash terminated string containing the name of the corresponding 
-formal parameter as it appears in the source program. 
+formal parameter as it appears in the source program.
+The entry may also have a 
+\DWATdefaultvalue{} attribute, which is a flag indicating 
+that the value corresponds to the default argument for the 
+template parameter.
+
 
 A
 \addtoindexx{formal type parameter|see{template type parameter entry}}
@@ -2586,16 +2592,15 @@ template type parameter entry has a
 \DWATtype{} attribute
 describing the actual type by which the formal is replaced.
 
-A value parameter entry has an attribute giving the 
+
+A template value parameter entry has a \DWATtype{} attribute 
+describing the type of the parameterized value.
+The entry also has an attribute giving the 
 actual compile-time or run-time constant value 
 of the value parameter for this instantiation.
 This can be a \DWATconstvalue{} attribute, whose
 value is the compile-time constant value as represented 
 on the target architecture. 
-Or, it can a \DWATlocation{} attribute, whose value is a 
+Or, the attribute can be a \DWATlocation{} attribute, whose value is a 
 single location description for the run-time constant address.
-The entry may also have a 
-\DWATdefaultvalue{} attribute, which is a flag indicating 
-that the value corresponds to the default argument for the 
-template parameter.
 

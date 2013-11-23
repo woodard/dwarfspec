@@ -126,28 +126,10 @@ the other values is reserved for possible future extensions.
 
 
 
-\section{Relocatable, Executable, Shared and Split Objects} 
+\section{Relocatable, Split, Executable and Shared Objects} 
 \label{datarep:executableobjectsandsharedobjects}
 
 \subsection{Relocatable Objects}
-
-\subsection{Executable Objects}
-\label{chap:executableobjects}
-The relocated addresses in the debugging information for an
-executable object are virtual addresses.
-
-\subsection{Shared Objects}
-\label{datarep:sharedobjects}
-The relocated
-addresses in the debugging information for a shared object
-are offsets relative to the start of the lowest region of
-memory loaded from that shared object.
-
-\textit{This requirement makes the debugging information for
-shared objects position independent.  Virtual addresses in a
-shared object may be calculated by adding the offset to the
-base address at which the object was attached. This offset
-is available in the run\dash time linker\textquoteright s data structures.}
 
 \subsection{Split DWARF Objects}
 \label{datarep:splitdwarfobjects}
@@ -233,6 +215,24 @@ Except where noted otherwise, all references in this document
 to a debugging information section (for example, \dotdebuginfo),
 applies also to the corresponding split DWARF section (for example,
 \dotdebuginfodwo).
+
+\subsection{Executable Objects}
+\label{chap:executableobjects}
+The relocated addresses in the debugging information for an
+executable object are virtual addresses.
+
+\subsection{Shared Objects}
+\label{datarep:sharedobjects}
+The relocated
+addresses in the debugging information for a shared object
+are offsets relative to the start of the lowest region of
+memory loaded from that shared object.
+
+\textit{This requirement makes the debugging information for
+shared objects position independent.  Virtual addresses in a
+shared object may be calculated by adding the offset to the
+base address at which the object was attached. This offset
+is available in the run\dash time linker\textquoteright s data structures.}
 
 
 \section{32-Bit and 64-Bit DWARF Formats}
@@ -346,6 +346,17 @@ section) depends on the DWARF format as follows: in the
 32\dash bit DWARF format, this field is a 32\dash bit unsigned integer;
 in the 64\dash bit DWARF format, it is a 64\dash bit unsigned integer.
 
+\needlines{4}
+\item In the body of the \dotdebugstroffsets{} and \dotdebugstroffsetsdwo{}
+sections, the size of entries in the body depend on the DWARF
+format as follows: in the 32-bit DWARF format, entries are 32-bit
+unsigned integer values; in the 64-bit DWARF format, they are
+64-bit unsigned integers.
+
+\item In the body of the \dotdebugaddr{}, \dotdebugloc{} and \dotdebugranges{}
+sections, the contents of the address size fields depends on the
+DWARF format as follows: in the 32-bit DWARF format, these fields
+contain 4; in the 64-bit DWARF format these fields contain 8.
 \end{enumerate}
 
 
@@ -602,7 +613,7 @@ Table \refersec{tab:tagencodings}.
 \endhead
   \hline \emph{Continued on next page}
 \endfoot
-  \hline
+  \hline \ddag\ \textit{New in DWARF Version 5}
 \endlastfoot
 \DWTAGarraytype{} &0x01 \\
 \DWTAGclasstype&0x02 \\
@@ -664,8 +675,9 @@ Table \refersec{tab:tagencodings}.
 \DWTAGtypeunit{} &0x41      \\
 \DWTAGrvaluereferencetype{} &0x42      \\
 \DWTAGtemplatealias{} &0x43      \\
-\DWTAGcoarraytype &0x44 \\
-\DWTAGgenericsubrange &0x45 \\
+\DWTAGcoarraytype~\ddag &0x44 \\
+\DWTAGgenericsubrange~\ddag &0x45 \\
+\DWTAGdynamictype~\ddag & 0x46 \\
 \DWTAGlouser&0x4080      \\
 \DWTAGhiuser&\xffff      \\
 \end{longtable}
@@ -791,6 +803,7 @@ The new
 \DWFORMsecoffset{} replaces
 their usage for the other classes.}
 
+\needlines{4}
 Each possible form belongs to one or more of the following classes:
 
 \begin{itemize}
@@ -806,7 +819,7 @@ The size is encoded in the compilation unit header
 This address is relocatable in a relocatable object file and
 is relocated in an executable file or shared object.
 
-\item As an indirect index into a table of addresses (as 
+\item An indirect index into a table of addresses (as 
 described in the previous bullet) in the
 \dotdebugaddr{} section (\DWFORMaddrxTARG). 
 The representation of a \DWFORMaddrxNAME{} value is an unsigned
@@ -859,6 +872,7 @@ signed (\DWFORMsdataTARG) and unsigned
 (\DWFORMudataTARG) variable
 length constants are available
 
+\needlines{4}
 The data in \DWFORMdataone, 
 \DWFORMdatatwo, 
 \DWFORMdatafour{} and
@@ -1357,7 +1371,7 @@ Table \refersec{tab:attributeformencodings}.
 \end{longtable} 
 \end{centering}
 
-
+\needlines{8}
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|l|l}
@@ -1655,6 +1669,8 @@ a base address selection entry, or an
 \addtoindexx{end of list entry!in location list}
 end of list entry.
 
+\needlines{6}
+\subsubsection{Location List Entries in Non-Split Objects}
 A \addtoindex{location list} entry consists of two address offsets followed
 by a 2\dash byte length, followed by a block of contiguous bytes
 that contains a DWARF location description. The length
@@ -1672,6 +1688,32 @@ For a \addtoindex{location list} to be specified, the base address of
 \addtoindexx{base address selection entry!in location list}
 the corresponding compilation unit must be defined 
 (see Section  \refersec{chap:normalandpartialcompilationunitentries}).
+
+\subsubsection{Location List Entries in Split Objects}
+An alternate form for location list entries is used in split objects. 
+Each entry begins with a one-byte code that indicates the kind of entry
+that follows. The encodings for these constants are given in
+Table \refersec{tab:locationlistentryencodingvalues}.
+
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{l|c}
+  \caption{Location list entry encoding values} \label{tab:locationlistentryencodingvalues} \\
+  \hline \bfseries Location list entry encoding name&\bfseries Value \\ \hline
+\endfirsthead
+  \bfseries Location list entry encoding name&\bfseries Value\\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+\DWLLEendoflistentry & 0x0 \\
+\DWLLEbaseaddressselectionentry & 0x01 \\
+\DWLLEstartendentry & 0x02 \\
+\DWLLEstartlengthentry & 0x03 \\
+\DWLLEoffsetpairentry & 0x04 \\
+\end{longtable}
+\end{centering}
 
 \section{Base Type Attribute Encodings}
 \label{datarep:basetypeattributeencodings}
