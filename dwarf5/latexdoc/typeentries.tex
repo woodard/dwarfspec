@@ -378,6 +378,7 @@ A base or user\dash defined type may be modified in different ways
 in different languages. A type modifier is represented in
 DWARF by a debugging information entry with one of the tags
 given in Table \refersec{tab:typemodifiertags}.
+\addtoindexx{type modifier|see{atomic type entry}}
 \addtoindexx{type modifier|see{constant type entry}}
 \addtoindexx{type modifier|see{reference type entry}}
 \addtoindexx{type modifier|see{restricted type entry}}
@@ -458,6 +459,7 @@ presentation.
 \begin{tabular}{l|p{9cm}}
 \hline
 Name&Meaning\\ \hline
+\DWTAGatomictypeTARG{} & C \addtoindex{\_Atomic} qualified type \\
 \DWTAGconsttypeTARG{} &  C or C++ const qualified type
 \addtoindexx{const qualified type entry} \addtoindexx{C} \addtoindexx{C++} \\
 \DWTAGpackedtypeTARG& \addtoindex{Pascal} or Ada packed type\addtoindexx{packed type entry}
@@ -467,7 +469,7 @@ the type being modified \addtoindexx{pointer qualified type entry} \\
 \DWTAGreferencetypeTARG& C++ (lvalue) reference 
 to an object of the type 
 \addtoindexx{reference type entry}
-being modified
+\mbox{being} modified
 \addtoindexx{reference qualified type entry} \\
 \DWTAGrestricttypeTARG& \addtoindex{C} 
 restrict 
@@ -478,7 +480,7 @@ qualified type
 \addtoindexx{rvalue reference type entry}
 rvalue 
 \addtoindexx{restricted type entry}
-reference to an object of the type being modified 
+reference to an object of the type \mbox{being} modified 
 \addtoindexx{rvalue reference qualified type entry} \\
 \DWTAGsharedtypeTARG&\addtoindex{UPC} shared qualified type 
 \addtoindexx{shared qualified type entry} \\
@@ -1399,11 +1401,27 @@ a
 \DWATobjectpointer{}
 attribute.
 
+\textit{In \addtoindex{C++}, non-static member functions can have const-volatile
+qualifiers, which affect the type of the first formal parameter (the
+\doublequote{\texttt{this}}-pointer).}
+ 
 If the member function entry describes a non\dash static member
 function that has a const\dash volatile qualification, then
 the entry describes a non\dash static member function whose
 object formal parameter has a type that has an equivalent
 const\dash volatile qualification.
+
+\textit{In \addtoindex{C++11}, non-static member functions can also have one of the
+ref-qualifiers, \& and \&\&. They do not change the type of the
+\doublequote{\texttt{this}}-pointer, but they affect the types of object values the
+function can be invoked on.}
+
+The member function entry may have an \DWATreferenceNAME{} attribute
+\livetarg{chap:DWATreferenceofnonstaticmember}{}
+to indicate a non-static member function that can only be called on
+l-value objects, or the \DWATrvaluereferenceNAME{} attribute 
+\livetarg{chap:DWATrvaluereferenceofnonstaticmember}{}
+to indicate that it can only be called on pr-values and x-values.
 
 If a subroutine entry represents the defining declaration
 of a member function and that definition appears outside of
@@ -1553,6 +1571,7 @@ by debugging information entries owned by the corresponding
 variant entry and appear in the same order as the corresponding
 declarations in the source program.
 
+\needlines{6}
 \section{Condition Entries}
 \label{chap:conditionentries}
 
@@ -1789,6 +1808,17 @@ represented by a debugging information entry with the
 tag \DWTAGunspecifiedparameters.
 \end{enumerate}
 
+\textit{\addtoindex{C++} const-volatile qualifiers are encoded as 
+part of the type of the
+\doublequote{\texttt{this}}-pointer. 
+\addtoindex{C++11} reference and rvalue-reference qualifiers are encoded using
+the \DWATreference{} and \DWATrvaluereference{} attributes, respectively. 
+See also Section \refersec{chap:memberfunctionentries}.}
+
+A subroutine type entry may have the \DWATreference{} or
+\DWATrvaluereference{} attribute to indicate that it describes the
+type of a member function with reference or rvalue-reference 
+semantics, respectively.
 
 
 \section{String Type Entries}
@@ -1822,7 +1852,6 @@ attribute, whose value
 (see Section \refersec{chap:byteandbitsizes}) 
 is the amount of
 storage needed to hold a value of the string type.
-
 
 The 
 \hypertarget{chap:DWATstringlengthstringlengthofstringtype}{}
@@ -1865,6 +1894,7 @@ is the same as the
 In DWARF Version 5, \DWATbytesize{} always specifies the amount of storage 
 allocated for objects of the string type.}
 
+\needlines{6}
 \section{Set Type Entries}
 \label{chap:settypeentries}
 

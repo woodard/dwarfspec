@@ -33,6 +33,7 @@ described in Chapters 3, 4 and 5.
 \autocols[0pt]{c}{2}{l}{
 \DWTAGaccessdeclaration,
 \DWTAGarraytype,
+\DWTAGatomictype,
 \DWTAGbasetype,
 \DWTAGcatchblock,
 \DWTAGclasstype,
@@ -356,8 +357,13 @@ actually declared in the source}{objects or types that are not actually declared
 &\livelinki{chap:DWATrankofdynamicarray}{Dynamic number of array dimensions}{dynamic number of array dimensions} \\
 \DWATrecursiveTARG
 &\livelinki{chap:DWATrecursiverecursivepropertyofasubroutine}{Recursive property of a subroutine}{recursive property of a subroutine} \\
+\DWATreferenceTARG
+&\livelink{chap:DWATreferenceofnonstaticmember}{\&-qualified non-static member function} \\
 \DWATreturnaddrTARG
 &\livelinki{chap:DWATreturnaddrsubroutinereturnaddresssavelocation}{Subroutine return address save location}{subroutine return address save location} \\
+\DWATrvaluereferenceTARG
+&\livelink{chap:DWATrvaluereferenceofnonstaticmember}{\&\&-qualified non-static member function} \\
+
 \DWATsegmentTARG
 &\livelinki{chap:DWATsegmentaddressinginformation}{Addressing information}{addressing information} \\
 \DWATsiblingTARG
@@ -387,7 +393,7 @@ actually declared in the source}{objects or types that are not actually declared
 \DWATstroffsetsbaseTARG
 &\livelinki{chap:DWATstroffsetbaseforindirectstringtable}{Base of string offsets table}{string offsets table} \\
 \DWATthreadsscaledTARG
-&\livelink{chap:DWATthreadsscaledupcarrayboundthreadsscalfactor}{UPC!array bound THREADS scale factor}\\
+&\livelink{chap:DWATthreadsscaledupcarrayboundthreadsscalfactor}{UPC array bound THREADS scale factor}\\
 \DWATtrampolineTARG
 &\livelinki{chap:DWATtrampolinetargetsubroutine}{Target subroutine}{target subroutine of trampoline} \\
 \DWATtypeTARG
@@ -703,12 +709,16 @@ The \DWOPaddrxNAME{} operation has a single operand that
 encodes an unsigned LEB128 value, which is a zero-based
 index into the \dotdebugaddr{} section, where a machine
 address is stored.
+This index is relative to the value of the 
+\DWATaddrbase{} attribute of the associated compilation unit.
 
 \itembfnl{\DWOPconstxTARG}
 The \DWOPconstxNAME{} operation has a single operand that
 encodes an unsigned LEB128 value, which is a zero-based
 index into the \dotdebugaddr{} section, where a constant, the
 size of a machine address, is stored.
+This index is relative to the value of the 
+\DWATaddrbase{} attribute of the associated compilation unit.
 
 \textit{The \DWOPconstxNAME{} operation is provided for constants that
 require link-time relocation but should not be
@@ -794,6 +804,7 @@ The size of the data retrieved from the
 \addtoindexi{dereferenced}{address!dereference operator}
 address is the \addtoindex{size of an address} on the target machine.
 
+\needlines{4}
 \itembfnl{\DWOPderefsizeTARG}
 The \DWOPderefsizeTARG{} operation behaves like the 
 \DWOPderef{}
@@ -1733,11 +1744,15 @@ following the type code. This value is the index of an
 address in the \dotdebugaddr{} section, which is then used as
 the base address when interpreting offsets in subsequent
 location list entries of type \DWLLEoffsetpairentry.
+This index is relative to the value of the 
+\DWATaddrbase{} attribute of the associated compilation unit.
 
 \itembfnl{\DWLLEstartendentryTARG}
 This entry contains two unsigned LEB128 values
 immediately following the type code. These values are the
-indexes of two addresses in the \dotdebugaddr{} section.
+indices of two addresses in the \dotdebugaddr{} section.
+These indices are relative to the value of the 
+\DWATaddrbase{} attribute of the associated compilation unit.
 These indicate the starting and ending addresses,
 respectively, that define the address range for which
 this location is valid. The starting and ending addresses
@@ -1746,14 +1761,17 @@ compilation unit base address. A single location
 description follows the fields that define the address range.
 
 \itembfnl{\DWLLEstartlengthentryTARG}
-This entry contains one LEB128 value and a 4-byte
+This entry contains one unsigned LEB128 value and a 4-byte
 unsigned value immediately following the type code. The
 first value is the index of an address in the \dotdebugaddr{}
 section, which marks the beginning of the address range
-over which the location is valid. The second value is the
-length of the range. The starting address given by this
+over which the location is valid.
+This index is relative to the value of the 
+\DWATaddrbase{} attribute of the associated compilation unit.
+The starting address given by this
 type of entry is not relative to the compilation unit
-base address. A single location
+base address. The second value is the
+length of the range. A single location
 description follows the fields that define the address range.
 
 \itembfnl{\DWLLEoffsetpairentryTARG}
@@ -2000,15 +2018,13 @@ global variable x rather than of the local version.}
 
 \subsection{Non-Defining Declarations}
 A debugging information entry that 
-represents a non-defining or 
-\addtoindex{non-defining declaration}
-otherwise 
+represents a non-defining 
+\addtoindexx{non-defining declaration}
+or otherwise 
 \addtoindex{incomplete declaration}
-of a program entity has 
+of a program entity has a
 \addtoindexx{declaration attribute}
-a 
-\DWATdeclaration{} 
-attribute, which is a 
+\DWATdeclaration{} attribute, which is a 
 \livelink{chap:classflag}{flag}.
 
 \subsection{Declarations Completing Non-Defining Declarations}
@@ -2446,7 +2462,7 @@ rules of the applicable programming language.
 \DWATupperbound,
 (and possibly others).}
 
-\needlines{6}
+\needlines{4}
 \section{Entity Descriptions}
 \textit{Some debugging information entries may describe entities
 in the program that are artificial, or which otherwise are

@@ -34,7 +34,7 @@ appropriate prefix
 \DWCFAlouserMARK\DWCFAhiuserMARK{}	DW\_CFA 
 respectively) followed by
 \_lo\_user or \_hi\_user. 
-\textit{For example, for entry tags, the special
+\textit{For example, for DIE tags, the special
 labels are \DWTAGlouserNAME{} and \DWTAGhiuserNAME.}
 Values in the  range between \textit{prefix}\_lo\_user 
 and \textit{prefix}\_hi\_user inclusive,
@@ -235,6 +235,7 @@ base address at which the object was attached. This offset
 is available in the run\dash time linker\textquoteright s data structures.}
 
 
+\needlines{6}
 \section{32-Bit and 64-Bit DWARF Formats}
 \label{datarep:32bitand64bitdwarfformats}
 \hypertarget{datarep:xxbitdwffmt}{}
@@ -678,6 +679,7 @@ Table \refersec{tab:tagencodings}.
 \DWTAGcoarraytype~\ddag &0x44 \\
 \DWTAGgenericsubrange~\ddag &0x45 \\
 \DWTAGdynamictype~\ddag & 0x46 \\
+\DWTAGatomictype~\ddag & 0x47 \\
 \DWTAGlouser&0x4080      \\
 \DWTAGhiuser&\xffff      \\
 \end{longtable}
@@ -825,6 +827,8 @@ described in the previous bullet) in the
 The representation of a \DWFORMaddrxNAME{} value is an unsigned
 \addtoindex{LEB128} value, which is interpreted as a zero-based 
 index into an array of addresses in the \dotdebugaddr{} section.
+The index is relative to the value of the \DWATaddrbase{} attribute 
+of the associated compilation unit.
 \end{itemize}
 
 \needlines{4}
@@ -923,7 +927,7 @@ no value is encoded in the debugging information entry itself.
 This is an offset into 
 \addtoindexx{section offset!in class lineptr value}
 the 
-\dotdebugline{} section
+\dotdebugline{} or \dotdebuglinedwo{} section
 (\DWFORMsecoffset).
 It consists of an offset from the beginning of the 
 \dotdebugline{}
@@ -962,7 +966,7 @@ in the \sixtyfourbitdwarfformat, it is an 8\dash byte unsigned value
 This is an 
 \addtoindexx{section offset!in class macptr value}
 offset into the 
-\dotdebugmacinfo{} section
+\dotdebugmacinfo{} or \dotdebugmacinfo{} section
 (\DWFORMsecoffset). 
 It consists of an offset from the
 beginning of the \dotdebugmacinfo{} 
@@ -1165,206 +1169,257 @@ Table \refersec{tab:attributeformencodings}.
   \hline \ddag\ \textit{New in DWARF Version 5}
 \endlastfoot
 \DWATsibling&0x01&\livelink{chap:classreference}{reference} 
-        \addtoindexx{sibling attribute!encoding} \\
+            \addtoindexx{sibling attribute!encoding} \\
 \DWATlocation&0x02&\livelink{chap:classexprloc}{exprloc}, 
-        \livelink{chap:classloclistptr}{loclistptr}\addtoindexx{location attribute!encoding}   \\
+        \livelink{chap:classloclistptr}{loclistptr}
+            \addtoindexx{location attribute!encoding}   \\
 \DWATname&0x03&\livelink{chap:classstring}{string} 
-        \addtoindexx{name attribute!encoding} \\
+            \addtoindexx{name attribute!encoding} \\
 \DWATordering&0x09&\livelink{chap:classconstant}{constant} 
-        \addtoindexx{ordering attribute!encoding}  \\
-\DWATbytesize&0x0b&\livelink{chap:classconstant}{constant}, \livelink{chap:classexprloc}{exprloc}, 
-        \livelink{chap:classreference}{reference} \addtoindexx{byte size attribute!encoding} \\
+            \addtoindexx{ordering attribute!encoding}  \\
+\DWATbytesize&0x0b&\livelink{chap:classconstant}{constant}, 
+        \livelink{chap:classexprloc}{exprloc}, 
+        \livelink{chap:classreference}{reference}
+            \addtoindexx{byte size attribute!encoding} \\
 \DWATbitoffset&0x0c&\livelink{chap:classconstant}{constant}, 
-        \livelink{chap:classexprloc}{exprloc}, \livelink{chap:classreference}{reference} \addtoindexx{bit offset attribute!encoding}  \\
+        \livelink{chap:classexprloc}{exprloc}, 
+        \livelink{chap:classreference}{reference}
+            \addtoindexx{bit offset attribute!encoding}  \\
 \DWATbitsize&0x0d&\livelink{chap:classconstant}{constant}, 
-        \livelink{chap:classexprloc}{exprloc}, \livelink{chap:classreference}{reference} \addtoindexx{bit size attribute!encoding} \\
+        \livelink{chap:classexprloc}{exprloc}, 
+        \livelink{chap:classreference}{reference}   
+            \addtoindexx{bit size attribute!encoding} \\
 \DWATstmtlist&0x10&\livelink{chap:classlineptr}{lineptr} 
-        \addtoindexx{statement list attribute!encoding} \\
+            \addtoindexx{statement list attribute!encoding} \\
 \DWATlowpc&0x11&\livelink{chap:classaddress}{address} 
-        \addtoindexx{low PC attribute!encoding}  \\
-\DWAThighpc&0x12&\livelink{chap:classaddress}{address}, \livelink{chap:classconstant}{constant} 
-        \addtoindexx{high PC attribute!encoding}  \\
+            \addtoindexx{low PC attribute!encoding}  \\
+\DWAThighpc&0x12&\livelink{chap:classaddress}{address}, 
+        \livelink{chap:classconstant}{constant}
+            \addtoindexx{high PC attribute!encoding}  \\
 \DWATlanguage&0x13&\livelink{chap:classconstant}{constant} 
-        \addtoindexx{language attribute!encoding}  \\
+            \addtoindexx{language attribute!encoding}  \\
 \DWATdiscr&0x15&\livelink{chap:classreference}{reference} 
-        \addtoindexx{discriminant attribute!encoding}  \\
+            \addtoindexx{discriminant attribute!encoding}  \\
 \DWATdiscrvalue&0x16&\livelink{chap:classconstant}{constant} 
-        \addtoindexx{discriminant value attribute!encoding}  \\
+            \addtoindexx{discriminant value attribute!encoding}  \\
 \DWATvisibility&0x17&\livelink{chap:classconstant}{constant} 
-        \addtoindexx{visibility attribute!encoding} \\
+            \addtoindexx{visibility attribute!encoding} \\
 \DWATimport&0x18&\livelink{chap:classreference}{reference} 
-        \addtoindexx{import attribute!encoding}  \\
+            \addtoindexx{import attribute!encoding}  \\
 \DWATstringlength&0x19&\livelink{chap:classexprloc}{exprloc}, 
-        \livelink{chap:classloclistptr}{loclistptr} \addtoindexx{string length attribute!encoding}  \\
+        \livelink{chap:classloclistptr}{loclistptr}
+            \addtoindexx{string length attribute!encoding}  \\
 \DWATcommonreference&0x1a&\livelink{chap:classreference}{reference} 
-        \addtoindexx{common reference attribute!encoding}  \\
+            \addtoindexx{common reference attribute!encoding}  \\
 \DWATcompdir&0x1b&\livelink{chap:classstring}{string} 
-        \addtoindexx{compilation directory attribute!encoding}  \\
-\DWATconstvalue&0x1c&\livelink{chap:classblock}{block}, \livelink{chap:classconstant}{constant}, \livelink{chap:classstring}{string} 
-        \addtoindexx{constant value attribute!encoding} \\
+            \addtoindexx{compilation directory attribute!encoding}  \\
+\DWATconstvalue&0x1c&\livelink{chap:classblock}{block}, 
+        \livelink{chap:classconstant}{constant}, 
+        \livelink{chap:classstring}{string}
+            \addtoindexx{constant value attribute!encoding} \\
 \DWATcontainingtype&0x1d&\livelink{chap:classreference}{reference} 
-        \addtoindexx{containing type attribute!encoding} \\
-\DWATdefaultvalue&0x1e&\livelink{chap:classreference}{reference}, \livelink{chap:classflag}{flag} 
-        \addtoindexx{default value attribute!encoding} \\
+            \addtoindexx{containing type attribute!encoding} \\
+\DWATdefaultvalue&0x1e&\livelink{chap:classconstant}{constant}, 
+        \livelink{chap:classreference}{reference}, 
+        \livelink{chap:classflag}{flag}
+            \addtoindexx{default value attribute!encoding} \\
 \DWATinline&0x20&\livelink{chap:classconstant}{constant} 
-        \addtoindexx{inline attribute!encoding}  \\
+            \addtoindexx{inline attribute!encoding}  \\
 \DWATisoptional&0x21&\livelink{chap:classflag}{flag} 
-        \addtoindexx{is optional attribute!encoding} \\
+            \addtoindexx{is optional attribute!encoding} \\
 \DWATlowerbound&0x22&\livelink{chap:classconstant}{constant}, 
-        \livelink{chap:classexprloc}{exprloc}, \livelink{chap:classreference}{reference} \addtoindexx{lower bound attribute!encoding}  \\
-\DWATproducer&0x25&\livelink{chap:classstring}{string} \addtoindexx{producer attribute!encoding}  \\
-\DWATprototyped&0x27&\livelink{chap:classflag}{flag} 
-        \addtoindexx{prototyped attribute!encoding}  \\
+        \livelink{chap:classexprloc}{exprloc}, 
+        \livelink{chap:classreference}{reference}
+            \addtoindexx{lower bound attribute!encoding}  \\
+\DWATproducer&0x25&\livelink{chap:classstring}{string}
+            \addtoindexx{producer attribute!encoding}  \\
+\DWATprototyped&0x27&\livelink{chap:classflag}{flag}
+            \addtoindexx{prototyped attribute!encoding}  \\
 \DWATreturnaddr&0x2a&\livelink{chap:classexprloc}{exprloc},
-        \livelink{chap:classloclistptr}{loclistptr} \addtoindexx{return address attribute!encoding}  \\
-% FIXME: lower case , not Constant
+        \livelink{chap:classloclistptr}{loclistptr}
+            \addtoindexx{return address attribute!encoding}  \\
 \DWATstartscope&0x2c&\livelink{chap:classconstant}{constant}, 
-        \livelink{chap:classrangelistptr}{rangelistptr} \addtoindexx{start scope attribute!encoding}  \\
+        \livelink{chap:classrangelistptr}{rangelistptr}
+            \addtoindexx{start scope attribute!encoding}  \\
 \DWATbitstride&0x2e&\livelink{chap:classconstant}{constant},
-        \livelink{chap:classexprloc}{exprloc}, \livelink{chap:classreference}{reference} \addtoindexx{bit stride attribute!encoding}  \\
+        \livelink{chap:classexprloc}{exprloc}, 
+        \livelink{chap:classreference}{reference}
+            \addtoindexx{bit stride attribute!encoding}  \\
 \DWATupperbound&0x2f&\livelink{chap:classconstant}{constant},
-        \livelink{chap:classexprloc}{exprloc}, \livelink{chap:classreference}{reference} \addtoindexx{upper bound attribute!encoding}  \\
+        \livelink{chap:classexprloc}{exprloc}, 
+        \livelink{chap:classreference}{reference}
+            \addtoindexx{upper bound attribute!encoding}  \\
 \DWATabstractorigin&0x31&\livelink{chap:classreference}{reference} 
-        \addtoindexx{abstract origin attribute!encoding}  \\
+            \addtoindexx{abstract origin attribute!encoding}  \\
 \DWATaccessibility&0x32&\livelink{chap:classconstant}{constant} 
-        \addtoindexx{accessibility attribute!encoding}  \\
+            \addtoindexx{accessibility attribute!encoding}  \\
 \DWATaddressclass&0x33&\livelink{chap:classconstant}{constant} 
-        \addtoindexx{address class attribute!encoding}  \\
+            \addtoindexx{address class attribute!encoding}  \\
 \DWATartificial&0x34&\livelink{chap:classflag}{flag} 
-        \addtoindexx{artificial attribute!encoding}  \\
+            \addtoindexx{artificial attribute!encoding}  \\
 \DWATbasetypes&0x35&\livelink{chap:classreference}{reference} 
-        \addtoindexx{base types attribute!encoding}  \\
+            \addtoindexx{base types attribute!encoding}  \\
 \DWATcallingconvention&0x36&\livelink{chap:classconstant}{constant} 
         \addtoindexx{calling convention attribute!encoding} \\
-\DWATcount&0x37&\livelink{chap:classconstant}{constant}, \livelink{chap:classexprloc}{exprloc}, \livelink{chap:classreference}{reference} 
-        \addtoindexx{count attribute!encoding}  \\
+\DWATcount&0x37&\livelink{chap:classconstant}{constant}, 
+        \livelink{chap:classexprloc}{exprloc}, 
+        \livelink{chap:classreference}{reference} 
+            \addtoindexx{count attribute!encoding}  \\
 \DWATdatamemberlocation&0x38&\livelink{chap:classconstant}{constant}, 
-        \livelink{chap:classexprloc}{exprloc}, \livelink{chap:classloclistptr}{loclistptr} 
-        \addtoindexx{data member attribute!encoding}  \\
+        \livelink{chap:classexprloc}{exprloc}, 
+        \livelink{chap:classloclistptr}{loclistptr} 
+            \addtoindexx{data member attribute!encoding}  \\
 \DWATdeclcolumn&0x39&\livelink{chap:classconstant}{constant} 
-        \addtoindexx{declaration column attribute!encoding}  \\
+            \addtoindexx{declaration column attribute!encoding}  \\
 \DWATdeclfile&0x3a&\livelink{chap:classconstant}{constant} 
-        \addtoindexx{declaration file attribute!encoding}  \\
+            \addtoindexx{declaration file attribute!encoding}  \\
 \DWATdeclline&0x3b&\livelink{chap:classconstant}{constant} 
-        \addtoindexx{declaration line attribute!encoding}  \\
+            \addtoindexx{declaration line attribute!encoding}  \\
 \DWATdeclaration&0x3c&\livelink{chap:classflag}{flag} 
-        \addtoindexx{declaration attribute!encoding}  \\
+            \addtoindexx{declaration attribute!encoding}  \\
 \DWATdiscrlist&0x3d&\livelink{chap:classblock}{block} 
-        \addtoindexx{discriminant list attribute!encoding}  \\
+            \addtoindexx{discriminant list attribute!encoding}  \\
 \DWATencoding&0x3e&\livelink{chap:classconstant}{constant} 
-        \addtoindexx{encoding attribute!encoding}  \\
+            \addtoindexx{encoding attribute!encoding}  \\
 \DWATexternal&\xiiif&\livelink{chap:classflag}{flag} 
-        \addtoindexx{external attribute!encoding}  \\
+            \addtoindexx{external attribute!encoding}  \\
 \DWATframebase&0x40&\livelink{chap:classexprloc}{exprloc}, 
-        \livelink{chap:classloclistptr}{loclistptr} \addtoindexx{frame base attribute!encoding}  \\
+        \livelink{chap:classloclistptr}{loclistptr} 
+            \addtoindexx{frame base attribute!encoding}  \\
 \DWATfriend&0x41&\livelink{chap:classreference}{reference} 
-        \addtoindexx{friend attribute!encoding}  \\
+            \addtoindexx{friend attribute!encoding}  \\
 \DWATidentifiercase&0x42&\livelink{chap:classconstant}{constant} 
-        \addtoindexx{identifier case attribute!encoding}  \\
+            \addtoindexx{identifier case attribute!encoding}  \\
 \DWATmacroinfo&0x43&\livelink{chap:classmacptr}{macptr} 
-        \addtoindexx{macro information attribute!encoding}  \\
+            \addtoindexx{macro information attribute!encoding}  \\
 \DWATnamelistitem&0x44&\livelink{chap:classreference}{reference} 
-        \addtoindexx{name list item attribute!encoding}  \\
+            \addtoindexx{name list item attribute!encoding}  \\
 \DWATpriority&0x45&\livelink{chap:classreference}{reference} 
-        \addtoindexx{priority attribute!encoding}  \\
+            \addtoindexx{priority attribute!encoding}  \\
 \DWATsegment&0x46&\livelink{chap:classexprloc}{exprloc}, 
-        \livelink{chap:classloclistptr}{loclistptr} \addtoindexx{segment attribute!encoding}  \\
+        \livelink{chap:classloclistptr}{loclistptr} 
+            \addtoindexx{segment attribute!encoding}  \\
 \DWATspecification&0x47&\livelink{chap:classreference}{reference} 
         \addtoindexx{specification attribute!encoding}  \\
 \DWATstaticlink&0x48&\livelink{chap:classexprloc}{exprloc}, 
-        \livelink{chap:classloclistptr}{loclistptr} \addtoindexx{static link attribute!encoding}  \\
+        \livelink{chap:classloclistptr}{loclistptr} 
+            \addtoindexx{static link attribute!encoding}  \\
 \DWATtype&0x49&\livelink{chap:classreference}{reference} 
-        \addtoindexx{type attribute!encoding}  \\
+            \addtoindexx{type attribute!encoding}  \\
 \DWATuselocation&0x4a&\livelink{chap:classexprloc}{exprloc}, 
-        \livelink{chap:classloclistptr}{loclistptr} \addtoindexx{location list attribute!encoding}  \\
+        \livelink{chap:classloclistptr}{loclistptr} 
+            \addtoindexx{location list attribute!encoding}  \\
 \DWATvariableparameter&0x4b&\livelink{chap:classflag}{flag} 
-        \addtoindexx{variable parameter attribute!encoding}  \\
+            \addtoindexx{variable parameter attribute!encoding}  \\
 \DWATvirtuality&0x4c&\livelink{chap:classconstant}{constant} 
-        \addtoindexx{virtuality attribute!encoding}  \\
+            \addtoindexx{virtuality attribute!encoding}  \\
 \DWATvtableelemlocation&0x4d&\livelink{chap:classexprloc}{exprloc}, 
-        \livelink{chap:classloclistptr}{loclistptr} \addtoindexx{vtable element location attribute!encoding}  \\
-\DWATallocated&0x4e&\livelink{chap:classconstant}{constant}, \livelink{chap:classexprloc}{exprloc}, 
-        \livelink{chap:classreference}{reference} \addtoindexx{allocated attribute!encoding}  \\
-\DWATassociated&0x4f&\livelink{chap:classconstant}{constant}, \livelink{chap:classexprloc}{exprloc}, 
-        \livelink{chap:classreference}{reference} \addtoindexx{associated attribute!encoding}  \\
+        \livelink{chap:classloclistptr}{loclistptr} 
+            \addtoindexx{vtable element location attribute!encoding}  \\
+\DWATallocated&0x4e&\livelink{chap:classconstant}{constant}, 
+        \livelink{chap:classexprloc}{exprloc}, 
+        \livelink{chap:classreference}{reference} 
+            \addtoindexx{allocated attribute!encoding}  \\
+\DWATassociated&0x4f&\livelink{chap:classconstant}{constant}, 
+        \livelink{chap:classexprloc}{exprloc}, 
+        \livelink{chap:classreference}{reference} 
+            \addtoindexx{associated attribute!encoding}  \\
 \DWATdatalocation&0x50&\livelink{chap:classexprloc}{exprloc} 
         \addtoindexx{data location attribute!encoding}  \\
-\DWATbytestride&0x51&\livelink{chap:classconstant}{constant}, \livelink{chap:classexprloc}{exprloc}, 
-        \livelink{chap:classreference}{reference} \addtoindexx{byte stride attribute!encoding}  \\
-\DWATentrypc&0x52&\livelink{chap:classaddress}{address}, \livelink{chap:classconstant}{constant} 
-        \addtoindexx{entry pc attribute!encoding}  \\
+\DWATbytestride&0x51&\livelink{chap:classconstant}{constant}, 
+        \livelink{chap:classexprloc}{exprloc}, 
+        \livelink{chap:classreference}{reference} 
+            \addtoindexx{byte stride attribute!encoding}  \\
+\DWATentrypc&0x52&\livelink{chap:classaddress}{address}, 
+        \livelink{chap:classconstant}{constant} 
+            \addtoindexx{entry pc attribute!encoding}  \\
 \DWATuseUTFeight&0x53&\livelink{chap:classflag}{flag} 
-        \addtoindexx{use UTF8 attribute!encoding}\addtoindexx{UTF-8}  \\
+            \addtoindexx{use UTF8 attribute!encoding}\addtoindexx{UTF-8}  \\
 \DWATextension&0x54&\livelink{chap:classreference}{reference} 
-        \addtoindexx{extension attribute!encoding}  \\
+            \addtoindexx{extension attribute!encoding}  \\
 \DWATranges&0x55&\livelink{chap:classrangelistptr}{rangelistptr} 
-        \addtoindexx{ranges attribute!encoding}  \\
-\DWATtrampoline&0x56&\livelink{chap:classaddress}{address}, \livelink{chap:classflag}{flag}, 
-        \livelink{chap:classreference}{reference}, \livelink{chap:classstring}{string} \addtoindexx{trampoline attribute!encoding}  \\
+            \addtoindexx{ranges attribute!encoding}  \\
+\DWATtrampoline&0x56&\livelink{chap:classaddress}{address}, 
+        \livelink{chap:classflag}{flag}, 
+        \livelink{chap:classreference}{reference}, 
+        \livelink{chap:classstring}{string} 
+            \addtoindexx{trampoline attribute!encoding}  \\
 \DWATcallcolumn&0x57&\livelink{chap:classconstant}{constant} 
-        \addtoindexx{call column attribute!encoding}  \\
+            \addtoindexx{call column attribute!encoding}  \\
 \DWATcallfile&0x58&\livelink{chap:classconstant}{constant} 
-        \addtoindexx{call file attribute!encoding}  \\
+            \addtoindexx{call file attribute!encoding}  \\
 \DWATcallline&0x59&\livelink{chap:classconstant}{constant} 
-        \addtoindexx{call line attribute!encoding}  \\
+            \addtoindexx{call line attribute!encoding}  \\
 \DWATdescription&0x5a&\livelink{chap:classstring}{string} 
-        \addtoindexx{description attribute!encoding}  \\
+            \addtoindexx{description attribute!encoding}  \\
 \DWATbinaryscale&0x5b&\livelink{chap:classconstant}{constant} 
-        \addtoindexx{binary scale attribute!encoding}  \\
+            \addtoindexx{binary scale attribute!encoding}  \\
 \DWATdecimalscale&0x5c&\livelink{chap:classconstant}{constant} 
-        \addtoindexx{decimal scale attribute!encoding}  \\
+            \addtoindexx{decimal scale attribute!encoding}  \\
 \DWATsmall{} &0x5d&\livelink{chap:classreference}{reference} 
-        \addtoindexx{small attribute!encoding}  \\
+            \addtoindexx{small attribute!encoding}  \\
 \DWATdecimalsign&0x5e&\livelink{chap:classconstant}{constant} 
-        \addtoindexx{decimal scale attribute!encoding}  \\
+            \addtoindexx{decimal scale attribute!encoding}  \\
 \DWATdigitcount&0x5f&\livelink{chap:classconstant}{constant} 
-        \addtoindexx{digit count attribute!encoding}  \\
+            \addtoindexx{digit count attribute!encoding}  \\
 \DWATpicturestring&0x60&\livelink{chap:classstring}{string} 
-        \addtoindexx{picture string attribute!encoding}  \\
+            \addtoindexx{picture string attribute!encoding}  \\
 \DWATmutable&0x61&\livelink{chap:classflag}{flag} 
-        \addtoindexx{mutable attribute!encoding}  \\
+            \addtoindexx{mutable attribute!encoding}  \\
 \DWATthreadsscaled&0x62&\livelink{chap:classflag}{flag} 
-        \addtoindexx{thread scaled attribute!encoding}  \\
+            \addtoindexx{thread scaled attribute!encoding}  \\
 \DWATexplicit&0x63&\livelink{chap:classflag}{flag} 
-        \addtoindexx{explicit attribute!encoding}  \\
+            \addtoindexx{explicit attribute!encoding}  \\
 \DWATobjectpointer&0x64&\livelink{chap:classreference}{reference} 
-        \addtoindexx{object pointer attribute!encoding}  \\
+            \addtoindexx{object pointer attribute!encoding}  \\
 \DWATendianity&0x65&\livelink{chap:classconstant}{constant} 
-        \addtoindexx{endianity attribute!encoding}  \\
+            \addtoindexx{endianity attribute!encoding}  \\
 \DWATelemental&0x66&\livelink{chap:classflag}{flag} 
-        \addtoindexx{elemental attribute!encoding}  \\
+            \addtoindexx{elemental attribute!encoding}  \\
 \DWATpure&0x67&\livelink{chap:classflag}{flag} 
-        \addtoindexx{pure attribute!encoding}  \\
+            \addtoindexx{pure attribute!encoding}  \\
 \DWATrecursive&0x68&\livelink{chap:classflag}{flag} 
-        \addtoindexx{recursive attribute!encoding}  \\
+            \addtoindexx{recursive attribute!encoding}  \\
 \DWATsignature{} &0x69&\livelink{chap:classreference}{reference} 
-        \addtoindexx{signature attribute!encoding}  \\ 
+            \addtoindexx{signature attribute!encoding}  \\ 
 \DWATmainsubprogram{} &0x6a&\livelink{chap:classflag}{flag} 
-        \addtoindexx{main subprogram attribute!encoding}  \\
+            \addtoindexx{main subprogram attribute!encoding}  \\
 \DWATdatabitoffset{} &0x6b&\livelink{chap:classconstant}{constant} 
-        \addtoindexx{data bit offset attribute!encoding}  \\
+            \addtoindexx{data bit offset attribute!encoding}  \\
 \DWATconstexpr{} &0x6c&\livelink{chap:classflag}{flag} 
-        \addtoindexx{constant expression attribute!encoding}  \\
+            \addtoindexx{constant expression attribute!encoding}  \\
 \DWATenumclass{} &0x6d&\livelink{chap:classflag}{flag} 
-        \addtoindexx{enumeration class attribute!encoding}  \\
+            \addtoindexx{enumeration class attribute!encoding}  \\
 \DWATlinkagename{} &0x6e&\livelink{chap:classstring}{string} 
-        \addtoindexx{linkage name attribute!encoding}  \\
+            \addtoindexx{linkage name attribute!encoding}  \\
 \DWATstringlengthbitsize{} \ddag&0x6f&
-		\livelink{chap:classconstant}{constant}\addtoindexx{string length attribute!size of length}  \\
+		\livelink{chap:classconstant}{constant}
+            \addtoindexx{string length attribute!size of length}  \\
 \DWATstringlengthbytesize{} \ddag&0x70&
-		\livelink{chap:classconstant}{constant}\addtoindexx{string length attribute!size of length}  \\
+		\livelink{chap:classconstant}{constant}
+            \addtoindexx{string length attribute!size of length}  \\
 \DWATrank~\ddag&0x71&
-		\livelink{chap:DWATrank}{constant, exprloc}\addtoindexx{rank attribute!encoding}  \\
+		\livelink{chap:DWATrank}{constant, exprloc}
+            \addtoindexx{rank attribute!encoding}  \\
 \DWATstroffsetsbase~\ddag&0x72&
-		\livelink{chap:classstring}{reference}\addtoindexx{string offsets base!encoding}	\\
+		\livelink{chap:classstring}{reference}
+            \addtoindexx{string offsets base!encoding}	\\
 \DWATaddrbase~\ddag &0x73&
-		\livelink{chap:DWATaddrbase}{reference}\addtoindexx{address table base!encoding} \\
+		\livelink{chap:DWATaddrbase}{reference}
+            \addtoindexx{address table base!encoding} \\
 \DWATrangesbase~\ddag&0x74&
-		\livelink{chap:DWATrangesbase}{reference}\addtoindexx{ranges base!encoding} \\
+		\livelink{chap:DWATrangesbase}{reference}
+            \addtoindexx{ranges base!encoding} \\
 \DWATdwoid~\ddag &0x75&
-		\livelink{chap:DWATdwoid}{constant}\addtoindexx{split DWARF object id!encoding} \\
+		\livelink{chap:DWATdwoid}{constant}
+            \addtoindexx{split DWARF object id!encoding} \\
 \DWATdwoname~\ddag &0x76&
-		\livelink{chap:DWATdwname}{string}\addtoindexx{split DWARF object file name!encooding} \\
+		\livelink{chap:DWATdwname}{string}
+            \addtoindexx{split DWARF object file name!encoding} \\
+\DWATreference~\ddag &0x77&
+        \livelink{chap:DWATreference}{flag} \\
+\DWATrvaluereference~\ddag &0x78&
+        \livelink{chap:DWATrvaluereference}{flag} \\
 \DWATlouser&0x2000 & --- \addtoindexx{low user attribute encoding}  \\
 \DWAThiuser&\xiiifff& --- \addtoindexx{high user attribute encoding}  \\
 
@@ -1559,7 +1614,7 @@ Table \refersec{tab:dwarfoperationencodings}.
 \endhead
   \hline \emph{Continued on next page}
 \endfoot
-  \hline
+  \hline \ddag\ \textit{New in DWARF Version 5}
 \endlastfoot
 
 \DWOPaddr&0x03&1 & constant address  \\ 
@@ -1644,10 +1699,10 @@ Table \refersec{tab:dwarfoperationencodings}.
 \DWOPimplicitvalue{} &0x9e &2&ULEB128 size, \\*
                    &&&\nolink{block} of that size\\
 \DWOPstackvalue{} &0x9f &0& \\
-\DWOPimplicitpointer{} &0xa0& 2 &4- or 8-byte offset of DIE, \\*
+\DWOPimplicitpointer{}~\ddag &0xa0& 2 &4- or 8-byte offset of DIE, \\*
                               &&&SLEB128 constant offset \\
-\DWOPaddrx&0xa1&1&ULEB128 indirect address \\
-\DWOPconstx&0xa2&1&ULEB128 indirect constant   \\
+\DWOPaddrx~\ddag&0xa1&1&ULEB128 indirect address \\
+\DWOPconstx~\ddag&0xa2&1&ULEB128 indirect constant   \\
 \DWOPlouser{} &0xe0 && \\
 \DWOPhiuser{} &\xff && \\
 
@@ -2169,7 +2224,7 @@ A
 \addtoindexx{section offset!in name lookup table set of entries}
 4\dash byte or 8\dash byte 
 offset into the 
-\dotdebuginfo{}
+\dotdebuginfo{} or \dotdebuginfodwo{}
 section of the compilation unit header.
 In the \thirtytwobitdwarfformat, this is a 4\dash byte unsigned offset;
 in the \sixtyfourbitdwarfformat, this is an 8\dash byte unsigned offsets
@@ -2337,14 +2392,14 @@ Table \refersec{tab:linenumberextendedopcodeencodings}.
 \endhead
   \hline \emph{Continued on next page}
 \endfoot
-  \hline
+  \hline \ddag~\textit{New in DWARF Version 5}
 \endlastfoot
 
 \DWLNEendsequence	&0x01 \\
 \DWLNEsetaddress	&0x02 \\
 \DWLNEdefinefile	&0x03 \\
 \DWLNEsetdiscriminator &0x04 \\
-\DWLNEdefinefileMDfive &0c05 \\
+\DWLNEdefinefileMDfive~\ddag &0x05 \\
 \DWLNElouser		&0x80 \\
 \DWLNEhiuser		&\xff \\
 
@@ -2508,7 +2563,8 @@ corresponding compilation unit must be defined
 \section{String Offsets Table}
 \label{chap:stringoffsetstable}
 Each set of entries in the string offsets table contained in the
-\dotdebugstroffsets{} section begins with a header containing:
+\dotdebugstroffsets{} or \dotdebugstroffsetsdwo{}
+section begins with a header containing:
 \begin{enumerate}[1. ]
 \item \texttt{unit\_length} (\livelink{datarep:initiallengthvalues}{initial length}) \\
 A 4-byte or 12-byte length containing the length of
@@ -2528,7 +2584,8 @@ A 2-byte version identifier containing the value
 \item \texttt{padding} (\addtoindex{uhalf}) \\
 \end{enumerate}
 
-This header is followed by a series of string table offsets.
+This header is followed by a series of string table offsets
+that have the same representation as \DWFORMstrp.
 For the 32-bit DWARF format, each offset is 4 bytes long; for
 the 64-bit DWARF format, each offset is 8 bytes long.
 
@@ -2632,7 +2689,7 @@ offset relative to this base address.
 \section{Location List Table}
 \label{datarep:locationlisttable}
 Each set of entries in the location list table contained in the
-\dotdebugloc{} or \dotdebuglocdwo{}sections begins with a header containing:
+\dotdebugloc{} or \dotdebuglocdwo{} sections begins with a header containing:
 \begin{enumerate}[1. ]
 \item \texttt{unit\_length} (\livelink{datarep:initiallengthvalues}{initial length}) \\
 A 4-byte or 12-byte length containing the length of
@@ -2787,8 +2844,9 @@ the type definitions that are contained in
 type units.
 
 The type signature for a type T0 is formed from the 
-\addtoindex{MD5 hash}
-of a flattened description of the type. The flattened
+\MDfive{}\footnote{\livetarg{def:MDfive}{MD5} Message Digest Algorithm, 
+R.L. Rivest, RFC 1321, April 1992}
+hash of a flattened description of the type. The flattened
 description of the type is a byte sequence derived from the
 DWARF encoding of the type as follows:
 \begin{enumerate}[1. ]
@@ -2862,6 +2920,9 @@ code, and the attribute value.
 \DWATordering,
 \DWATpicturestring,
 \DWATprototyped,
+\DWATrank,
+\DWATreference,
+\DWATrvaluereference,
 \DWATsmall,
 \DWATsegment,
 \DWATstringlength,
@@ -2998,7 +3059,7 @@ example, a constant value should be preferred to a location
 expression when possible.)
 
 Once the string S has been formed from the DWARF encoding,
-an \addtoindex{MD5 hash} is computed for the string and the 
+an \MDfive{} hash is computed for the string and the 
 least significant 64 bits are taken as the type signature.
 
 \textit{The string S is intended to be a flattened representation of
@@ -3046,8 +3107,7 @@ declaration of the type.}
 \DWATdeclcolumn{} attributes are not included because they
 may vary from one source file to the next, and would prevent
 two otherwise identical type declarations from producing the
-\addtoindexx{MD5 hash}
-same hash.}
+same \MDfive{} hash.}
 
 \item \textit{The \DWATobjectpointer{} attribute is not included 
 because the information it provides is not necessary for the 
@@ -3069,6 +3129,6 @@ and replacing the function definition in the type with a non-defining
 declaration of the function (as if the function had been defined out of 
 line).}
 
-An example that illustrates the computation of an MD5 hash may be found in 
+An example that illustrates the computation of an \MDfive{} hash may be found in 
 Appendix \refersec{app:usingtypeunits}.
 

@@ -335,7 +335,8 @@ Section \refersec{chap:entryaddress}).
 attribute, whose value is a reference. 
 This attribute points to the first string
 offset of the compilation unit's contribution to the
-\dotdebugstroffsets{} section. Indirect string references
+\dotdebugstroffsets{} (or \dotdebugstroffsetsdwo{}) section. 
+Indirect string references
 (using \DWFORMstrx) within the compilation unit are
 interpreted as indices relative to this base.
 
@@ -344,13 +345,14 @@ interpreted as indices relative to this base.
 attribute, whose value is a reference.
 This attribute points to the beginning of the compilation
 unit's contribution to the \dotdebugaddr{} section.
-Indirect references (using \DWFORMaddrx, \DWOPaddrx, or
-\DWOPconstx) within the compilation unit are
+Indirect references (using \DWFORMaddrx, \DWOPaddrx, 
+\DWOPconstx, \DWLLEbaseaddressselectionentry{}, 
+\DWLLEstartendentry, or \DWLLEstartlengthentry) within the compilation unit are
 interpreted as indices relative to this base.
 
 \needlines{5}
 \item A \DWATrangesbaseNAME\addtoindexx{ranges table base attribute}
-\hypertarget{chap:DWATrangesbaseforrangestable}{}
+\hypertarget{chap:DWATrangesbaseforrangelists}{}
 attribute, whose value is a reference.
 This attribute points to the beginning of the compilation
 unit's contribution to the \dotdebugranges{} section.
@@ -397,13 +399,15 @@ A \DWATcompdir{} attribute (the same as for regular
 compilation unit entries).
 
 \item
-A \DWATdwoname{} attribute whose value is a
+\livetarg{chap:DWATdwoidforunit}{}
+A \DWATdwonameNAME{} attribute whose value is a
 null-terminated string containing the full or relative
 path name of the DWARF object file that contains the full
 compilation unit.
 
 \item
-A \DWATdwoid{} attribute whose value is an 8-byte
+\livetarg{chap:DWATdwoidforunit}{}
+A \DWATdwoidNAME{} attribute whose value is an 8-byte
 unsigned hash of the full compilation unit.  This hash
 value is computed by the method described in 
 Section \refersec{datarep:typesignaturecomputation}.

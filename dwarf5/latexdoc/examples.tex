@@ -1306,7 +1306,7 @@ Figure~\ref{fig:namespaceexampledwarfdescription}: Namespace example: DWARF desc
 \end{figure}
 
 \clearpage
-\section{Member Function Example}
+\section{Member Function Examples}
 \label{app:memberfunctionexample}
 
 Consider the member function example fragment in 
@@ -1416,6 +1416,44 @@ void A::func1(int x) {}
 Figure~\ref{fig:memberfunctionexampledwarfdescription}: Member function example: DWARF description \textit{(concluded)}
 \end{center}
 \end{figure}
+
+As a further example illustrating \&- and \&\&-qualification, 
+consider the member function example fragment in 
+Figure \refersec{fig:memberfunctionrefqualexamplesourcefragment}.
+The DWARF representation in 
+Figure \refersec{fig:memberfunctionrefqualexampledwarfdescription}
+is appropriate.
+
+\begin{figure}[h]
+\begin{lstlisting}
+class A {
+public:
+    void f() const &&;
+};
+   
+void g() {
+    A a;
+    // The type of pointer is "void (A::*)() const &&".
+    auto pointer = &A::f;
+}
+\end{lstlisting}
+\caption{Member function with reference-qualification example: source \mbox{fragment}}
+\label{fig:memberfunctionrefqualexamplesourcefragment}
+\end{figure}
+
+\begin{figure}[h]
+%\figurepart{1}{2}
+\begin{dwflisting}
+\begin{alltt}
+
+... to be provided...
+
+\end{alltt}
+\end{dwflisting}
+\caption{Member function with reference-qualification example: DWARF \mbox{description}}
+\label{fig:memberfunctionrefqualexampledwarfdescription}
+\end{figure}
+
 
 \clearpage
 \section{Line Number Program Example}

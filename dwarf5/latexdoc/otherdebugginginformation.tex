@@ -609,7 +609,7 @@ and their meanings are as follows:
 \item \DWLNFtimestampsizeTARG \\
 Entries contain a modification timestamp and file size.
 \item \DWLNFMDfiveTARG \\
-Entries contain an \addtoindex{MD5} digest of the file contents.
+Entries contain an \MDfive{} digest of the file contents.
 \end{itemize}
 
 \needlines{3}
@@ -671,7 +671,7 @@ index of a directory in the
 \end{itemize}
 If \texttt{file\_entry\_format} is \DWLNFMDfive:
 \begin{itemize}
-\item A 16-byte MD5 digest of the file contents.
+\item A 16-byte \MDfive{} digest of the file contents.
 \end{itemize}
 
 \end{itemize}
@@ -784,6 +784,7 @@ line increment, a standard opcode must be used instead of a
 special opcode. The \addtoindex{operation advance} represents the number
 of operations to skip when advancing the \addtoindex{operation pointer}.
 
+\needlines{6}
 The special opcode is then calculated using the following formula:
 \begin{alltt}
   opcode = 
@@ -1140,7 +1141,7 @@ or one of the directories in the
 number representing the directory index
 of the directory in which the file was found.  
 
-\item A 16-byte \addtoindex{MD5} digest of the file contents.
+\item A 16-byte \MDfive{} digest of the file contents.
 \end{enumerate}
 The first two operands are interpreted in the same way as the 
 first two operands of \DWLNEdefinefile.
@@ -1418,10 +1419,10 @@ instruction ignores those bits. This leaves two bits of
 storage that are available to other uses that must be treated
 specially.}
 
-
 \end{itemize}
 
 
+\needlines{6}
 \subsection{Structure of Call Frame Information}
 \label{chap:structureofcallframeinformation}
 
@@ -1612,6 +1613,7 @@ rule table represents the return address of the function. Note
 that this column might not correspond to an actual machine
 register.
 
+\needlines{4}
 \item \texttt{initial\_instructions} (array of \addtoindex{ubyte}) \\
 A sequence of rules that are interpreted to create the initial
 setting of each column in the table.  
@@ -1671,6 +1673,7 @@ Enough \DWCFAnop{} instructions
 to make the size of this entry match the length value above.
 \end{enumerate}
 
+\needlines{8}
 \subsection{Call Frame Instructions}
 \label{chap:callframeinstructions}
 
@@ -1691,8 +1694,9 @@ operators cannot be used in such operands:
 
 \begin{itemize}
 \item \DWOPcalltwo, \DWOPcallfour{} 
-and \DWOPcallref{} operators
-are allowed the call frame information must not depend on other
+and \DWOPcallref{} operators are 
+not allowed in an operand of these instructions because
+the call frame information must not depend on other
 debug sections.
 
 \needlines{5}

@@ -927,7 +927,7 @@ Figure \refersec{fig:typesignaturecomputation1flattenedbytestream}.
 \end{figure}
 
 \needlines{4}
-Running an \addtoindex{MD5 hash} over this byte stream, and taking the
+Running an \MDfive{} hash over this byte stream, and taking the
 low\dash order 64 bits, yields the final signature: 
 0xd28081e8 dcf5070a.
 
@@ -1053,13 +1053,6 @@ to \texttt{N::C}, using
 refer to the type signature
 \addtoindexx{type signature}
 for that type.
-
-In computing a signature for the type \texttt{N::A}, flatten the type
-description into a byte stream according to the procedure
-outlined in 
-Section \refersec{datarep:typesignaturecomputation}.
-The result is shown in 
-Figure \refersec{fig:typesignatureexample2flattenedbytestream}.
 
 \begin{figure}
 \figurepart{1}{3}
@@ -1227,17 +1220,23 @@ Figure~\ref{fig:typesignatureexample2flattenedbytestream}: Type signature exampl
 \end{center}
 \end{figure}
 
-Running an \addtoindex{MD5 hash} over this byte stream, and taking the
+In computing a signature for the type \texttt{N::A}, flatten the type
+description into a byte stream according to the procedure
+outlined in 
+Section \refersec{datarep:typesignaturecomputation}.
+The result is shown in 
+Figure \refersec{fig:typesignatureexample2flattenedbytestream}.
+
+Running an \MDfive{} hash over this byte stream, and taking the
 low-order 64 bits, yields the final signature: 0xd6d160f5
 5589f6e9.
-
 
 A source file that includes this header file may declare a
 variable of type \texttt{N::A}, and its DWARF information may look
 like that shown in 
 Figure \refersec{fig:typesignatureexampleusage}.
 
-\begin{figure}
+\begin{figure}[h]
 \begin{dwflisting}
 \begin{alltt}
   \DWTAGcompileunit
@@ -1323,6 +1322,8 @@ empty
 \label{fig:typesignaturecomputationgrammar}
 \end{figure}
 
+
+\clearpage
 \section{Summary of Compression Techniques}
 \label{app:summaryofcompressiontechniques}
 \subsection{\#include compression}
@@ -1374,7 +1375,6 @@ References to other
 suggested above, but the naming rule is slightly
 different in that the \texttt{\textless file-designator\textgreater} 
 should be interpreted as a \texttt{\textless file-designator\textgreater}.
-
 
 
 \subsection{Single-function-per-DWARF-compilation-unit}

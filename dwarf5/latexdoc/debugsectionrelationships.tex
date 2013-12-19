@@ -76,11 +76,11 @@ versus \dotdebuginfodwo).}
 \node(zsectstr)	at (12, 14) [sect] {\dotdebugstr};
 \node(zlinkl)   at (12, 12) [link] {To strings (l)};
 \node(zsectstx) at (12, 10) [sect] {\dotdebugstroffsets};
-\node(zsectloc)	at (12,  8) [sect] {\dotdebugloc};
+\node(zsectloc)	at (12,  8) [sect] {\dotdebugloc{} (m)};
 \node(zsectran)	at (12,  6) [sect] {\dotdebugranges};
 \node(zsectmac)	at (12,  4) [sect] {\dotdebugmacinfo};
 \node(zsectlin)	at (12,  2) [sect] {\dotdebugline};
-\node(zsectadx) at (12,  0) [sect] {\dotdebugaddr};
+\node(zsectadx) at (12,  0) [sect] {\dotdebugaddr{} (m)};
 
 \draw[thick,to reversed-]		(zsectstx) -- (zlinkl);
 \draw[thick,-angle 90]			(zlinkl) -- (zsectstr);
@@ -195,11 +195,11 @@ beginning of the line number information for the referencing unit.
 %k
 \item \dotdebuginfo{} to \dotdebugaddr \\
 The value of the \DWATaddrbase{} attribute in the
-\DWTAGcompileunit{} or \DWTAGpartialunit{} DIE is the
+\DWTAGcompileunit{}, \DWTAGtypeunit{} or \DWTAGpartialunit{} DIE is the
 offset in the \dotdebugaddr{} section of the machine
-addresses for that compilation unit or type unit.
-\DWFORMaddrx, \DWOPaddrx, and \DWOPconstx{} contain
-indices relative to the beginning of that section.
+addresses for that unit.
+\DWFORMaddrx, \DWOPaddrx and \DWOPconstx{} contain
+indices relative to that offset.
 
 %l
 \item \dotdebugstroffsets{} to \dotdebugstr \\
@@ -207,4 +207,11 @@ Entries in the string offsets table
 are offsets to the corresponding string text in the 
 \dotdebugstr{} section.
 
+%m
+\item \dotdebugloc{} to \dotdebugaddr \\
+\DWOPaddrx{} and \DWOPconstx{} operators that occur in the 
+\dotdebugloc{} section refer indirectly to the 
+\dotdebugaddr{} section by way of the 
+\DWATaddrbase{} attribute in the associated \dotdebuginfo{} or 
+\dotdebugtypes{} section. 
 \end{enumerate}
