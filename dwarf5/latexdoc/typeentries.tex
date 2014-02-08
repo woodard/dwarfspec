@@ -370,14 +370,20 @@ to by the type attribute of an access type where the denoted
 type is incomplete (the name is declared as a type but the
 definition is deferred to a separate compilation unit).
 
+\addtoindex{C++} permits using the 
+\addtoindexi{\texttt{auto}}{\texttt{auto return type}} specifier for the return 
+type of a member function declaration. 
+The actual return type is deduced based on the definition of the 
+function, so it may not be known when the function is declared.  The language 
+implementation can provide an unspecified type entry with the name \texttt{auto} which 
+can be referenced by the return type attribute of a function declaration entry.  
+When the function is later defined, the \DWTAGsubprogram{} entry for the definition
+includes a reference to the actual return type.
+
+
 \section{Type Modifier Entries}
 \label{chap:typemodifierentries}
 \addtoindexx{type modifier entry}
-
-A base or user\dash defined type may be modified in different ways
-in different languages. A type modifier is represented in
-DWARF by a debugging information entry with one of the tags
-given in Table \refersec{tab:typemodifiertags}.
 \addtoindexx{type modifier|see{atomic type entry}}
 \addtoindexx{type modifier|see{constant type entry}}
 \addtoindexx{type modifier|see{reference type entry}}
@@ -386,6 +392,10 @@ given in Table \refersec{tab:typemodifiertags}.
 \addtoindexx{type modifier|see{pointer type entry}}
 \addtoindexx{type modifier|see{shared type entry}}
 \addtoindexx{type modifier|see{volatile type entry}}
+A base or user\dash defined type may be modified in different ways
+in different languages. A type modifier is represented in
+DWARF by a debugging information entry with one of the tags
+given in Table \refersec{tab:typemodifiertags}.
 
 If a name has been given to the modified type in the source
 program, then the corresponding modified type entry has
@@ -490,7 +500,7 @@ reference to an object of the type \mbox{being} modified
 \end{tabular}
 \end{table}
 
-%The following clearpage prevents splitting the example across pages.
+\needlines{6}
 \textit{As examples of how type modifiers are ordered, consider the following
 \addtoindex{C} declarations:}
 \begin{lstlisting}[numbers=none]
@@ -654,7 +664,7 @@ tag
 \DWTAGenumerationtype. These entries are
 children of the
 array type entry and are ordered to reflect the appearance of
-the dimensions in the source program (i.e., leftmost dimension
+the dimensions in the source program (that is, leftmost dimension
 first, next to leftmost second, and so on).
 
 \textit{In languages that have no concept of a 
@@ -719,6 +729,7 @@ only a lower bound and no upper bound.}
 \textit{How coarray elements are located and how coindices are 
 converted to process specifications is processor-dependent.}
 
+\needlines{8}
 \section{Structure, Union, Class and Interface Type Entries}
 \label{chap:structureunionclassandinterfacetypeentries}
 
@@ -1220,6 +1231,7 @@ the low\dash order bit of the object.}
 \addtoindexx{beginning of an object}
 beginning of the object.}
 
+\needlines{5}
 \textit{For example, take one possible representation of the following 
 \addtoindex{C} structure definition 
 in both big\dash and little\dash endian byte orders:}
@@ -1440,8 +1452,11 @@ Subroutine entries containing the
 do not need to duplicate information provided
 by the declaration entry referenced by the specification
 attribute. In particular, such entries do not need to contain
-attributes for the name or return type of the function member
-whose definition they represent.
+a name attribute giving the name of the function member whose 
+definition they represent.  
+Similarly, such entries do not need to contain a return type attribute, 
+unless the return type on the declaration was unspecified (for example, the 
+declaration used the \addtoindex{C++} \addtoindex{\texttt{auto} return type} specifier).
 
 \needlines{5}
 \subsection{Class Template Instantiations}

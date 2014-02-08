@@ -133,7 +133,7 @@ indicating the source language of the compilation
 unit. The set of language names and their meanings are given
 in Table \refersec{tab:languagenames}.
 
-\begin{table}[here]
+\begin{table}[t]
 \centering
 \caption{Language names}
 \label{tab:languagenames}
@@ -187,6 +187,8 @@ value of the statement list attribute is the offset in the
 \dotdebugline{} section of the first byte of the line number
 information for this compilation unit 
 (see Section \refersec{chap:linenumberinformation}).
+
+\clearpage
 
 \needlines{6}
 \item A \DWATmacroinfo{} attribute 
@@ -340,6 +342,7 @@ Indirect string references
 (using \DWFORMstrx) within the compilation unit are
 interpreted as indices relative to this base.
 
+\needlines{6}
 \item A \DWATaddrbaseNAME\addtoindexx{address table base attribute}
 \hypertarget{chap:DWATaddrbaseforaddresstable}{}
 attribute, whose value is a reference.
@@ -412,19 +415,31 @@ unsigned hash of the full compilation unit.  This hash
 value is computed by the method described in 
 Section \refersec{datarep:typesignaturecomputation}.
 
-\item
-A \DWATrangesbase{} attribute (the same as for regular
-compilation unit entries).
-
 \needlines{6}
 \item
-A \DWATaddrbase{} attribute (the same as for regular
-compilation unit entries).
+A \DWATuseUTFeight{} attribute (the same as for regular compilation unit
+entries).
+
+\textit{This attribute applies to strings referred to by the skeleton
+compilation unit entry itself, and strings in the associated line
+number information.
+The representation for strings in the DWARF object file is determined
+by the presence of a \DWATuseUTFeight{} attribute in the full compilation
+unit.}
 
 \item
 A \DWATstroffsetsbase{} attribute, for indirect strings references 
 from the skeleton compilation unit (the same as for regular 
 compilation unit entries).
+
+\item
+A \DWATaddrbase{} attribute (the same as for regular
+compilation unit entries).
+
+\item
+A \DWATrangesbase{} attribute (the same as for regular
+compilation unit entries).
+
 \end{enumerate}
 
 All other attributes of a compilation unit entry (described
@@ -460,6 +475,7 @@ any entity or construct in the source program. It is merely
 unit used as a partial unit, to a place in some other
 compilation unit.}
 
+\needlines{6}
 \subsection{Separate Type Unit Entries}
 \label{chap:separatetypeunitentries}
 An object file may contain any number of separate type
@@ -508,6 +524,11 @@ line number table in the \dotdebuglinedwo{} section, which
 contains only the list of directories and file names. All
 type unit entries in a split DWARF object may (but are not
 required to) refer to the same skeleton line number table.
+
+A type unit entry may have a \DWATuseUTFeight{} attribute, which is a flag
+whose presence indicates that all strings referred to by this type
+unit entry, its children, and the skeleton line number table, are
+represented using the UTF-8 representation.
 
 A \addtoindex{type unit} entry for a given type T owns a debugging
 information entry that represents a defining declaration
@@ -917,6 +938,8 @@ instance of a subroutine or function \\
 \DWTAGentrypointTARG{} & An alternate entry point \\
 \end{tabular}
 
+
+\needlines{6}
 \subsection{General Subroutine and Entry Point Information}
 \label{chap:generalsubroutineandentrypointinformation}
 The subroutine or entry point entry has a \DWATname{} 
@@ -1080,6 +1103,16 @@ to denote the type returned by that function.
 \textit{Debugging information entries for 
 \addtoindex{C} void functions should
 not have an attribute for the return type.  }
+
+\textit{Debugging information entries for declarations of \addtoindex{C++} 
+member functions with an 
+\addtoindex{\texttt{auto} return type} specifier should use an unspecified 
+type entry (see 
+Section \refersec{chap:unspecifiedtypeentries}). 
+The debugging information entry for the corresponding definition
+should provide the deduced return type.  This practice causes the description of
+the containing class to be consistent across compilation units, allowing the class
+declaration to be placed into a separate type unit if desired.}
 
 
 \subsection{Subroutine and Entry Point Locations}
@@ -1278,7 +1311,7 @@ frame of the parent. It can then attempt to find the reference
 within the context of the parent.}
 
 
-
+\needlines{8}
 \subsection{Types Thrown by Exceptions}
 \label{chap:typesthrownbyexceptions}
 
@@ -1340,7 +1373,7 @@ artificially by the compiler for this instantiation.
 \end{enumerate}
 
 
-
+\needlines{8}
 \subsection{Inlinable and Inlined Subroutines}
 A declaration or a definition of an inlinable subroutine
 is represented by a debugging information entry with the
@@ -1478,6 +1511,7 @@ entries. Also, the ordering rules for formal parameter entries,
 member entries, and so on, all apply regardless of whether
 or not a given entry is abstract.
 
+\needlines{5}
 \subsubsection{Concrete Inlined Instances}
 \label{chap:concreteinlinedinstances}
 
@@ -1502,7 +1536,7 @@ a
 attribute whose values encode the contiguous or non\dash contiguous
 address ranges, respectively, of the machine instructions
 generated for the inlined subroutine (see 
-Section \refersec{chap:codeaddressesandranges}). 
+Section \referfol{chap:codeaddressesandranges}). 
 An
 \hypertarget{chap:DWATentrypcentryaddressofinlinedsubprogram}{}
 inlined subroutine entry may 
@@ -1629,6 +1663,7 @@ to this rule is that the root of a concrete instance tree
 can only be associated with the root of its associated abstract
 instance tree (which must have the tag \DWTAGsubprogram).
 
+\needlines{6}
 In general, the structure and content of any given concrete
 inlined instance tree will be closely analogous to the
 structure and content of its associated abstract instance

@@ -1434,7 +1434,7 @@ public:
 void g() {
     A a;
     // The type of pointer is "void (A::*)() const &&".
-    auto pointer = &A::f;
+    auto pointer_to_member_function = &A::f;
 }
 \end{lstlisting}
 \caption{Member function with reference-qualification example: source \mbox{fragment}}
@@ -1446,8 +1446,44 @@ void g() {
 \begin{dwflisting}
 \begin{alltt}
 
-... to be provided...
+100$:   \DWTAGclasstype
+            \DWATname("A")
+            \DWTAGsubprogram
+                \DWATname("f")
+                \DWATrvaluereference(0x01)
+                \DWTAGformalparameter
+                    \DWATtype({ref to 200$})    ! to const A*
+                    \DWATartificial(0x01)
 
+200$:   ! const A*
+        \DWTAGpointertype
+            \DWATtype({ref to 300$})             ! to const A
+
+300$:   ! const A
+        \DWTAGconsttype
+            \DWATtype({ref to 100$})             ! to class A
+
+400$:   ! mfptr
+        \DWTAGptrtomembertype
+            \DWATtype({ref to 400$})             ! to functype
+            \DWATcontainingtype({ref to 100$})  ! to class A
+
+500$:   ! functype
+        \DWTAGsubroutinetype
+            \DWATrvaluereference(0x01)
+            \DWTAGformalparameter
+                \DWATtype({ref to 200$})         ! to const A*
+                \DWATartificial(0x01)
+
+600$:   \DWTAGsubprogram
+            \DWATname("g")
+            \DWTAGvariable
+                \DWATname("a")
+                \DWATtype({ref to 100$})         ! to class A
+            \DWTAGvariable
+                \DWATname("pointer_to_member_function")
+                \DWATtype({ref to 300$})
+         
 \end{alltt}
 \end{dwflisting}
 \caption{Member function with reference-qualification example: DWARF \mbox{description}}
