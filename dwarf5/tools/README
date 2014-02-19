@@ -1,6 +1,8 @@
 These tools are intended to help updating the latex
 source of a DWARF document to get its references
 complete and correct.
+A list of the python source files with the purpose
+of each is near the end of this FILE.
 
 CAUTION: 
 The tools don't really do parsing and
@@ -116,3 +118,77 @@ Performance:
 We simply don't care about performance as long as a task takes
 less than a few minutes. There are only about 70,000 words in a complete
 document so we ignore efficiency issues.
+
+SOURCE FILES:
+The change to internal use of DWTAGfoo etc in the document
+instead of DW\_AT\_foo (see dwarfnamecmds.tex) 
+means many of these commands are not as useful
+as they were originally.  But even so they may form useful
+examples.
+
+anylink.py: Looks for designated prefixes like DW_ADDR etc.
+  Used by other code, this was never that useful alone.
+
+attrlink.py: Uses anylink.py to turn DW_AT_ into \livelink
+
+copyfile.py: Uses fileio.py to parse and output a .tex file.
+ So we can use diff to verify the result is byte-for-byte
+ identical to the input.
+
+dellivelink.py: This uses fileio.py and replaces \livelink
+ and \livetarg with \DWXXXyyy per Ron Brender email of
+ Oct 4, 2013. Strives to be idempotent so rerunning
+ produces no further changes.  A few cases not
+ handled perfectly (where a } is at end of line?) 
+ so if needed again could use a bit of fixing.
+ Files to process must be on command line.
+
+fileio.py:  Given a list of file (.tex) names, it reads in
+  and tokenizes each file.  Functions here let
+  code eventually write stuff back out (changed or not)
+  but the output file always has a ".out" appended, it won't
+  overwrite the input.
+
+formlink.py: Using anylink.py, this transforms DW_FORM_ into
+  \livelink and \livetarg.
+
+printnameswithinteger.py: Identical to dellivelink.py, but this
+  one has a precanned list of files to process built in.
+
+
+printstandard.py:  Print the DW_* entries (and only them)
+  in the files named on the command line
+  one per line.   With any \- or \_ removed.
+  use example:
+  python printstandard.py ../latexdoc/*.tex  |sort|uniq 
+
+printtokens.py: Reads and tokenizes files named on the command
+  line . Prints the tokenized data.
+  Solely for debugging the tokenizing.
+
+refclassfixup.py:  Fixes up certain strings
+  (specified in this file) to use \livelink
+
+removehyphen.py: Turns \-\_ into \_ .
+  This was once a needed task. But run long ago, so
+  This is now a useless bit of code.
+
+removeutf8.py:  The pdf we started from had
+  various utf-8 characters. These got in the way of
+  our text processing, so this app deleted those.
+  This is now a useless bit of code.
+  
+taglink.py:  Finds all the instances of DW_TAG_ in 
+  .tex files named on the command line.
+
+tohyphen.py: The opposite of removehyphen.
+  This is now a useless bit of code.
+
+uses.py: Looks for duplicate uses and definitions of 
+  latex tags.  
+  This is based on the original approach to naming
+  and linking in .tex, not the
+  latest use using dwarfnamecmds.tex
+  
+
+
