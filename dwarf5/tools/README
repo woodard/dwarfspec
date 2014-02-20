@@ -4,6 +4,19 @@ complete and correct.
 A list of the python source files with the purpose
 of each is near the end of this FILE.
 
+SPELLCHECK: 
+One way to do a spell check on the final document,
+and to get a simple text output to look for word repeats
+is to do the following (assuming you have the necessary
+tools):
+   # -enc Latin1 to avoid utf8, we do not need utf8 here.
+   pdftotext -enc Latin1 dwarf5.pdf
+   # Now you have dwarf5.txt
+   # The _ are not understood by spell
+   sed -e 's/_//g' <dwarf5.txt >dwarf5.txt2
+   # Let upper and lower case compare equal
+   spell dwarf5.txt2 |sort -f |uniq -i
+
 CAUTION: 
 The tools don't really do parsing and
 the lexical processing is barely adequate for the task.
@@ -141,7 +154,11 @@ dellivelink.py: This uses fileio.py and replaces \livelink
  produces no further changes.  A few cases not
  handled perfectly (where a } is at end of line?) 
  so if needed again could use a bit of fixing.
- Files to process must be on command line.
+ The list of files to process are built into the source,
+ and the list is not totally up to date.
+ The program is obsolete now though, as we
+ use \DW* very differently in the source (from when
+ this was written).
 
 fileio.py:  Given a list of file (.tex) names, it reads in
   and tokenizes each file.  Functions here let
@@ -152,8 +169,10 @@ fileio.py:  Given a list of file (.tex) names, it reads in
 formlink.py: Using anylink.py, this transforms DW_FORM_ into
   \livelink and \livetarg.
 
-printnameswithinteger.py: Identical to dellivelink.py, but this
-  one has a precanned list of files to process built in.
+printnameswithinteger.py: Identical to dellivelink.py, 
+  so it is horribly misnamed!  This one needs 
+  an input list of files to process supplied on the
+  command line.
 
 
 printstandard.py:  Print the DW_* entries (and only them)
