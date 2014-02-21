@@ -40,8 +40,9 @@ def isIdNext(c):
   # : at the end of a DW* name on input.
   if c == ":":
     return "y"
+  # Do not allow \ in the middle of a name.
   if c == "\\":
-    return "y"
+    return "n"
   if c == "-":
     return "y"
   if c == "_":
