@@ -1,6 +1,6 @@
 # Copyright 2014 DWARF Debugging Information Format Committee
 #
-# Looks at dwarfnamecmds.tex to find all the commands
+# Looks at dwarfnamecmds.tex(+) to find all the commands
 # And sees what is actually used and whether references
 # have definitions.
 # The initial implemenation just *assumes* it is run from the tools
@@ -9,35 +9,35 @@
 # Run as (for example)
 #   python refer.py 
 
+# This is the simplest 'parse' of the .tex that we can manage
+# while still finding what we want to find.
+# One would hardly call it a parser, really.
+
+# There are essentially three namespaces at present in the document.
+# The hyperlink/hypertarget namespace.
+# The label  vref ref namespace
+#   which also involves  our refersec referfol.
+# The index namespace, which we are not presently filling in very much. 
 
 import sys
 import fileio
 
+# These two hold the commands we care about so we can
+# bypass most lines easily in phase two.
 # All the newdwfnamecommands
 global dwfnamecommsdict
 # All the newcommand instances.
 global newcommsdict
 
-# LINK suffix
-global linksdict  
-
-# TARG suffix hyperlink of 'chap:#1' Index #2
-global targsdict
-# INDX suffix index #2
-global indxdict
-# MARK suffix hypertarget chap:#1  and index #2
-global markdict
-
 # NAME suffix. No index, just text shows.
+# Not very useful so far
 global namedict
 
-# This is the 'normal, most common case in running text.
-# Default implies index #2 and hyperlink of chap:#1
-global defaultdict 
 
-# Targets for \hypertarget and livetarg[i]
+# Targets for \hypertarget and \hyperlink
+#targhyperdict is all the \hyperarget instances.
+#linkhyperdict is all the \hyperlink instances.
 global targhyperdict
-# Links using hyperlink.
 global linkhyperdict
 
 # label targets (labels)
@@ -46,6 +46,10 @@ global labeldict
 global labelrefdict
 
 # The index content for named things.
+# The strings here are the links, the targets are
+# built by the latex index software.
+# So this dictionary is not really needed here (yet)
+# and is not yet fully built up.
 global indexdict
 
 
@@ -53,12 +57,9 @@ newcommsdict = {}
 dwfnamecommsdict = {}
 
 # Links meaning \livelink \livetarg \livetargi macros
-linksdict  = {}
-targsdict  = {}
-indxdict  = {}
-markdict  = {}
+#linksdict  = {}
+#targsdict  = {}
 namedict  = {}
-defaultdict  = {}
 targhyperdict= {}
 linkhyperdict= {}
 labeldict = {}
@@ -132,7 +133,7 @@ def toknamestring(t):
   return ''.join(t._tex)
 
 
-def pickup(linetoks,tnumin,pattern,myfile,linenum):
+def pickup(linetoks,tnumin,pattern,myfile,linenum,suppresserr):
   """ The token pattern characters are
   i meaning identifier
   e meaning identifier, but ifnext token is }
@@ -155,21 +156,24 @@ def pickup(linetoks,tnumin,pattern,myfile,linenum):
   for c in pattern:
     patterncharnum = patterncharnum + 1
     if curnum >= inlen:
-      print "ERROR line ended surprisingly, pattern ", pattern,"  line ",linenum," file ",myfile._name
+      if suppresserr == "n":
+        print "ERROR line ended surprisingly, pattern ", pattern,"  line ",linenum," file ",myfile._name
       return outtoks,numabsorbed
     curtok = linetoks[curnum]
     if c == " ":
       while dwspace(curtok) == "y":
         curnum = curnum + 1
         if curnum >= inlen:
-          print "ERROR line ended surprisingly in space, pattern ", pattern, " line ",linenum," file ",myfile._name
+          if suppresserr == "n":
+            print "ERROR line ended surprisingly in space, pattern ", pattern, " line ",linenum," file ",myfile._name
           return outtoks,numabsorbed
         numabsorbed = numabsorbed + 1
         curtok = linetoks[curnum]
       continue
     elif c == "i":
       if curtok._class != "id":
-        print "ERROR line  expected identifier got ",curtok._tex, "pattern" , pattern, " line " ,linenum," file ",myfile._name
+        if suppresserr == "n":
+          print "ERROR line  expected identifier got ",curtok._tex, "pattern" , pattern, " line " ,linenum," file ",myfile._name
         return outtoks,numabsorbed
       numabsorbed = numabsorbed + 1
       outtoks += [curtok]
@@ -184,7 +188,8 @@ def pickup(linetoks,tnumin,pattern,myfile,linenum):
           # Do not update location.
           continue
         else:
-          print "ERROR line  expected identifier got ",curtok._tex, "pattern" , pattern, " line " ,linenum," file ",myfile._name
+          if suppresserr == "n":
+            print "ERROR line  expected identifier got ",curtok._tex, "pattern" , pattern, " line " ,linenum," file ",myfile._name
           return outtoks,numabsorbed
       else: 
         numabsorbed = numabsorbed + 1
@@ -197,7 +202,8 @@ def pickup(linetoks,tnumin,pattern,myfile,linenum):
         curnum = curnum + 1
         numabsorbed = numabsorbed + 1
       else:
-        print "ERROR line  expected {  got ",curtok._tex," pattern ",pattern," line " ,linenum," file ",myfile._name
+        if suppresserr == "n":
+          print "ERROR line  expected {  got ",curtok._tex," pattern ",pattern," line " ,linenum," file ",myfile._name
         return outtoks,numabsorbed
     elif c == "}":
       if isbrace(curtok,"}")  == "y":
@@ -205,7 +211,8 @@ def pickup(linetoks,tnumin,pattern,myfile,linenum):
         curnum = curnum + 1
         numabsorbed = numabsorbed + 1
       else:
-        print "ERROR line  expected }  got ",curtok._tex,"pattern",pattern," line " ,linenum," file ",myfile._name
+        if suppresserr == "n":
+          print "ERROR line  expected }  got ",curtok._tex,"pattern",pattern," line " ,linenum," file ",myfile._name
         return outtoks,numabsorbed
     elif c == "[":
       if isbrace(curtok,"[")  == "y":
@@ -213,7 +220,8 @@ def pickup(linetoks,tnumin,pattern,myfile,linenum):
         curnum = curnum + 1
         numabsorbed = numabsorbed + 1
       else:
-        print "ERROR line  expected [  got ",curtok._tex," pattern ",pattern," line " ,linenum," file ",myfile._name
+        if suppresserr == "n":
+          print "ERROR line  expected [  got ",curtok._tex," pattern ",pattern," line " ,linenum," file ",myfile._name
         return outtoks,numabsorbed
     elif c == "]":
       if isbrace(curtok,"]")  == "y":
@@ -221,7 +229,8 @@ def pickup(linetoks,tnumin,pattern,myfile,linenum):
         curnum = curnum + 1
         numabsorbed = numabsorbed + 1
       else:
-        print "ERROR line  expected ]  got ",curtok._tex," pattern ",pattern," line " ,linenum," file ",myfile._name
+        if suppresserr == "n":
+          print "ERROR line  expected ]  got ",curtok._tex," pattern ",pattern," line " ,linenum," file ",myfile._name
         return outtoks,numabsorbed
     elif c == "*":
       outlist = []
@@ -233,15 +242,16 @@ def pickup(linetoks,tnumin,pattern,myfile,linenum):
         if curnum >= inlen:
           outtoks += [outlist]
           if patterncharnum < (len(pattern) -1): 
-            print "ERROR insufficient tokens on line for pattern ", pattern," line " ,linenum," file ",myfile._name
+            if suppresserr == "n":
+              print "ERROR insufficient tokens on line for pattern ", pattern," line " ,linenum," file ",myfile._name
           return outtoks,numabsorbed
         numabsorbed = numabsorbed + 1
         curtok = linetoks[curnum]
       # Found a right brace, so done here.
       outtoks += [outlist]
     else:
-        print "ERROR pattern had unexpected character ",pattern
-        sys.exit(1)
+        if suppresserr == "n":
+          print "ERROR pattern had unexpected character ",pattern
   return outtoks,numabsorbed
 
 def printbadcommand(name,myfile,myline):
@@ -274,20 +284,33 @@ def countbraces(linetoks,tnumin):
      
 
 
+# Here we try two different parses, the [] is optional
+# with simplenametable.
 def processbegin(linetoks,tnumin,myfile,linenum):
   global targhyperdict
   global indexdict
   lbracecount = countbraces(linetoks,tnumin)
   if lbracecount < 3:
     return 1
-  ourtoks,inlen = pickup(linetoks,tnumin," i { i } [ * ] { * } { i }",myfile,linenum)
-  if len(ourtoks) < 12:
-    return 1
+  ourtoks,inlen = pickup(linetoks,tnumin," i { i } [ * ] { * } { i }",myfile,linenum,"y")
+  if len(ourtoks) == 13:
+    lcom = ourtoks[2]
+    lcomname = toknamestring(lcom)
+    if lcomname != "simplenametable":
+      return inlen
+    targ = ourtoks[11]
+    hypstr = toknamestring(targ)
+    hypmen = tokmention(targ,myfile,linenum)
+    applytodict(labeldict,hypstr,hypmen)
+    return inlen
+  ourtoks,inlen = pickup(linetoks,tnumin," i { i } { * } { i }",myfile,linenum,"y")
+  if len(ourtoks) < 10:
+      return inlen
   lcom = ourtoks[2]
   lcomname = toknamestring(lcom)
   if lcomname != "simplenametable":
-    return inlen
-  targ = ourtoks[11]
+      return inlen
+  targ = ourtoks[8]
   hypstr = toknamestring(targ)
   hypmen = tokmention(targ,myfile,linenum)
   applytodict(labeldict,hypstr,hypmen)
@@ -299,7 +322,7 @@ def livetargprocess(linetoks,tnumin,myfile,linenum,justlink):
   global targhyperdict
   global indexdict
   t = linetoks[tnumin]
-  ourtoks,inlen = pickup(linetoks,tnumin,"i { i } { * }",myfile,linenum)
+  ourtoks,inlen = pickup(linetoks,tnumin,"i { i } { * }",myfile,linenum,"n")
   if len(ourtoks) > 5:
     t2 = ourtoks[2];
     index = tokmention(t2,myfile,linenum)
@@ -321,7 +344,7 @@ def livetargiprocess(linetoks,tnumin,myfile,linenum):
   global targhyperdict
   global indexdict
   t = linetoks[tnumin]
-  ourtoks,inlen = pickup(linetoks,tnumin,"i { i } { e } { * }",myfile,linenum)
+  ourtoks,inlen = pickup(linetoks,tnumin,"i { i } { e } { * }",myfile,linenum,"n")
   if len(ourtoks) > 5:
     t2 = ourtoks[2];
     index = tokmention(t2,myfile,linenum)
@@ -343,7 +366,7 @@ def livelinkprocess(linetoks,tnumin,myfile,linenum,justlink):
   global linkhyperdict
   global indexdict
   t = linetoks[tnumin]
-  ourtoks,inlen = pickup(linetoks,tnumin,"i { i } { * }",myfile,linenum)
+  ourtoks,inlen = pickup(linetoks,tnumin,"i { i } { * }",myfile,linenum,"n")
   if len(ourtoks) > 5:
     t2 = ourtoks[2];
     index = tokmention(t2,myfile,linenum)
@@ -363,7 +386,7 @@ def labelprocess(linetoks,tnumin,myfile,linenum):
   """ \label{alabel} """
   global labeldict
   t = linetoks[tnumin]
-  ourtoks,inlen = pickup(linetoks,tnumin,"i { i }",myfile,linenum)
+  ourtoks,inlen = pickup(linetoks,tnumin,"i { i }",myfile,linenum,"n")
   if len(ourtoks) > 2:
     t2 = ourtoks[2];
     index = tokmention(t2,myfile,linenum)
@@ -377,7 +400,7 @@ def labelprocess(linetoks,tnumin,myfile,linenum):
 def addtoindexprocess(linetoks,tnumin,myfile,linenum):
   """ \addtoindex{strings} """
   global indexdict
-  ourtoks,inlen = pickup(linetoks,tnumin,"i { * }",myfile,linenum)
+  ourtoks,inlen = pickup(linetoks,tnumin,"i { * }",myfile,linenum,"n")
   if len(ourtoks) > 2:
     # The * means a list of tokens.
     fake = ""
@@ -399,7 +422,7 @@ def hyperlinkname(name,tnumin,myfile,linenum):
 def hyperlinkprocess(linetoks,tnumin,myfile,linenum):
   """ \hyperlink{entryname} """
   global linkhyperdict
-  ourtoks,inlen = pickup(linetoks,tnumin,"i { i }",myfile,linenum)
+  ourtoks,inlen = pickup(linetoks,tnumin,"i { i }",myfile,linenum,"n")
   if len(ourtoks) > 2:
     t2 = ourtoks[2];
     index = tokmention(t2,myfile,linenum)
@@ -413,7 +436,7 @@ def hyperlinkprocess(linetoks,tnumin,myfile,linenum):
 def indexprocess(linetoks,tnumin,myfile,linenum):
   """ \index{indexentryname} """
   global indexdict
-  ourtoks,inlen = pickup(linetoks,tnumin,"i { * }",myfile,linenum)
+  ourtoks,inlen = pickup(linetoks,tnumin,"i { * }",myfile,linenum,"n")
   if len(ourtoks) > 2:
     fake = ""
     # For now not bothering with index strings
@@ -429,7 +452,7 @@ def refersecprocess(linetoks,tnumin,myfile,linenum):
   """ \refersec{label} """
   global labelrefdict
   t = linetoks[tnumin]
-  ourtoks,inlen = pickup(linetoks,tnumin,"i { i }",myfile,linenum)
+  ourtoks,inlen = pickup(linetoks,tnumin,"i { i }",myfile,linenum,"n")
   if len(ourtoks) > 2:
     t2 = ourtoks[2];
     index = tokmention(t2,myfile,linenum)
@@ -548,17 +571,13 @@ def transfunc2(linetoks,myfile,linenum):
   global newcommsdict
 
   # Link naming target
-  global linksdict
+  global linkhyperdict
   # TARG suffix
-  global targsdict
+  global targhyperdict
   # INDX suffix
-  global indxdict
-  # MARK suffix
-  global markdict
+  global indexdict
   # NAME suffix
   global namedict
-  # This is the 'normal, most common case in running text.
-  global defaultdict
 
   if len(linetoks) < 1:
     return linetoks
@@ -599,11 +618,11 @@ def transfunc2(linetoks,myfile,linenum):
       # index the DWname
       # Link is to chap:DWname
       tm = tokmention(t,myfile,linenum)
-      applytodict(defaultdict,rawname,tm)
       linkname = makelinkname(rawname)
       indxname = deloptionalprefix(commandname,"\\")
-      applytodict(linkhyperdict,linkname,tm);
       applytodict(indexdict,indxname,tm);
+
+      applytodict(linkhyperdict,linkname,tm);
       tnumin = tnumin + 1
       continue
     if  newcommsdict.has_key(rawname):
@@ -660,9 +679,6 @@ def transfunc2(linetoks,myfile,linenum):
     # Suffixes are LINK TARG INDX MARK NAME
     commandname =rawnameiscommand(rawname,"LINK")
     if len(commandname) > 0:
-      # We do not expect to see this in text, LINK is really how
-      # the defaultdict entries are created so should
-      # be hidden from us here.
       # index the DWname
       # Link is to chap:DWname
       if dwfnamecommsdict.has_key(commandname):
@@ -683,7 +699,7 @@ def transfunc2(linetoks,myfile,linenum):
         tm = tokmention(t,myfile,linenum)
         targname = makelinkname(commandname)
         indxname = deloptionalprefix(commandname,"\\")
-        applytodict(targsdict,targname,tm)
+        applytodict(targhyperdict,targname,tm)
         applytodict(indexdict,indxname,tm);
       else:
         printodderr(rawname,commandname,myfile,linenum)
@@ -695,7 +711,7 @@ def transfunc2(linetoks,myfile,linenum):
       if dwfnamecommsdict.has_key(commandname):
         tm = tokmention(t,myfile,linenum)
         indexname = deloptionalprefix(commandname,"\\")
-        applytodict(indxdict,indexname,tm)
+        applytodict(indexdict,indexname,tm)
       else:
         printodderr(rawname,commandname,myfile,linenum)
       tnumin = tnumin + 1
@@ -706,11 +722,9 @@ def transfunc2(linetoks,myfile,linenum):
       # index DWname
       if dwfnamecommsdict.has_key(commandname):
         tm = tokmention(t,myfile,linenum)
-        applytodict(markdict,commandname,tm)
+        applytodict(targhyperdict,commandname,tm)
         indexname = deloptionalprefix(commandname,"\\")
-        applytodict(indxdict,indexname,tm)
-        targname = makelinkname(commandname)
-        applytodict(markdict,targname,tm)
+        applytodict(indexdict,indexname,tm)
       else:
         printodderr(rawname,commandname,myfile,linenum)
       tnumin = tnumin + 1
@@ -759,19 +773,38 @@ def printtokmention(ct,v):
   l = v._line
   print "    [%2d] %s in file %s line %d" %(ct,name,f._name,l)
 
+# Are the lines close? If so 
+def closetogether(l1,l2):
+  d = abs(l1 - l2)
+  if d < 4:
+    return "y"
+  return "n"
+
+def shouldprintalldups(v):
+  if len(v) != 2:
+     return "y"
+  if v[0]._file != v[1]._file:
+     return "y"
+  if closetogether(v[0]._line,v[1]._line) == "y":
+        # Are the lines near one another? 
+        # If so a harmless duplication
+    return "n"
+  return "y"
+
 def printtoomany(name,k,vlist):
   print "Duplicate in %s: %s:" %(name,k)
   ct = 0
   for v in vlist:
-      printtokmention(ct,v)
-      ct = ct + 1
+    printtokmention(ct,v)
+    ct = ct + 1
 
 def checkduplicatetargs(dname,d):
   targs = d.items()
   for vi in targs:
     (k,v) = vi
     if len(v) > 1:
-      printtoomany(dname,k,v)
+      if shouldprintalldups(v) == "y":
+        printtoomany(dname,k,v)
 
 def checkmissingtarg(name,targ,refs):
   rlist = refs.items()
@@ -788,42 +821,17 @@ def checkmissingref(name,targ,refs):
        print "Unused target from",name,":",k
   
 def print_stats():
-  # All the newdwfnamecommands
   global dwfnamecommsdict
-  # All the newcommand instances.
   global newcommsdict
-  
-  # LINK suffix
-  global linksdict
-  
-  # TARG suffix hyperlink of 'chap:#1' Index #2
-  global targsdict
-  # INDX suffix index #2
-  global indxdict
-  # MARK suffix hypertarget chap:#1  and index #2
-  global markdict
-  # NAME suffix. No index, just text shows.
-  global namedict
-  # This is the 'normal, most common case in running text.
-  # Default implies index #2 and hyperlink of chap:#1
-  global defaultdict
-  
-  # Targets for \hypertarget and livetarg[i]
   global targhyperdict
-  # Links using hyperlink.
   global linkhyperdict
-  # label targets (labels)
-  global labeldict
-  # \refersec \ref \vref to labels
-  global labelrefdict
-  # The index content for named things.
   global indexdict
+  global labeldict
+  global labelrefdict
   
-  checkduplicatetargs("targets",targsdict)
-  checkduplicatetargs("hypertargets",targhyperdict)
-  checkduplicatetargs("MARKs",markdict)
   checkduplicatetargs("newdwfname commands",dwfnamecommsdict)
   checkduplicatetargs("commands",newcommsdict)
+  checkduplicatetargs("hypertargets",targhyperdict)
   checkduplicatetargs("labels",labeldict)
 
   checkmissingtarg("hyperlinks",targhyperdict,linkhyperdict)
@@ -832,40 +840,60 @@ def print_stats():
   checkmissingtarg("labels",labeldict,labelrefdict)
   checkmissingref("labels",labeldict,labelrefdict)
 
-  checkmissingref("names",dwfnamecommsdict,namedict)
-
-debug = "n"
- 
+# Perhaps these should be controlled by
+# the command line.
+debug   = "n"
+winpath = "n"
+def buildfilepaths(files,basetarg):
+  outlist = []
+  prefix = ""
+  for f in files:
+    prefix = ""
+    if len(basetarg) > 0:
+      prefix = basetarg
+    elif winpath == "y":
+      prefix = "..\\latexdoc\\"
+    else:
+      prefix = "../latexdoc/"
+    outlist += [prefix + f]
+  return outlist
 def read_all_args():
   filelist1 = []
   filelist2 = []
+  baselist1 = []
+  baselist2 = []
+  basetarg = ""
   fileio.setkeepordeletecomments("d")
-  filelist1 = {"./testrefer.tex"}
-  filelist2 = {"./testrefer.tex"}
-  if debug == "n":
-    filelist1 = {"../latexdoc/dwarfnamecmds.tex",
-              "../latexdoc/dwarf5.tex",
-              "../latexdoc/generaldescription.tex"}
+  if debug == "y":
+    baselist1 = ["testrefer.tex"]
+    baselist2 = ["testrefer.tex"]
+    basetarg = "./"
+  else:
+    baselist1 = ["dwarfnamecmds.tex",
+              "dwarf5.tex",
+              "generaldescription.tex"]
 
-    filelist2 = {"../latexdoc/dwarf5.tex",
-              "../latexdoc/attributesbytag.tex",
-              "../latexdoc/changesummary.tex",
-              "../latexdoc/compression.tex",
-              "../latexdoc/copyright.tex",
-              "../latexdoc/dataobject.tex",
-              "../latexdoc/datarepresentation.tex",
-              "../latexdoc/debugsectionrelationships.tex",
-              "../latexdoc/encodingdecoding.tex",
-              "../latexdoc/examples.tex",
-              "../latexdoc/foreword.tex",
-              "../latexdoc/generaldescription.tex",
-              "../latexdoc/gnulicense.tex",
-              "../latexdoc/introduction.tex",
-              "../latexdoc/otherdebugginginformation.tex",
-              "../latexdoc/programscope.tex",
-              "../latexdoc/sectionversionnumbers.tex",
-              "../latexdoc/splitobjects.tex",
-              "../latexdoc/typeentries.tex"}
+    baselist2 = ["dwarf5.tex",
+              "attributesbytag.tex",
+              "changesummary.tex",
+              "compression.tex",
+              "copyright.tex",
+              "dataobject.tex",
+              "datarepresentation.tex",
+              "debugsectionrelationships.tex",
+              "encodingdecoding.tex",
+              "examples.tex",
+              "foreword.tex",
+              "generaldescription.tex",
+              "gnulicense.tex",
+              "introduction.tex",
+              "otherdebugginginformation.tex",
+              "programscope.tex",
+              "sectionversionnumbers.tex",
+              "splitobjects.tex",
+              "typeentries.tex"]
+  filelist1 = buildfilepaths(baselist1,basetarg)
+  filelist2 = buildfilepaths(baselist2,basetarg)
 
   if (len(filelist1) < 1) or (len(filelist2) < 1):
     print >> sys.stderr , "No files specified to refer.py, internal error."
