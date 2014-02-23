@@ -4,7 +4,7 @@ complete and correct.
 A list of the python source files with the purpose
 of each is near the end of this FILE.
 
-SPELLCHECK: 
+BASIC CHECKS:
 One way to do a spell check on the final document,
 and to get a simple text output to look for word repeats
 is to do the following (assuming you have the necessary
@@ -16,6 +16,23 @@ tools):
    sed -e 's/_//g' <dwarf5.txt >dwarf5.txt2
    # Let upper and lower case compare equal
    spell dwarf5.txt2 |sort -f |uniq -i
+
+Once you have dwarf5.txt, the following script and tool
+will look for repeated words and short phrases, something
+that can creep in via typos or by accidents of latex use:
+We use several lines to keep the lines short here.
+This is more than a little sloppy and repeats.py
+is not very powerful.
+   sed -e 's/:/ /g' <../latexdoc/dwarf5.txt >junk.txt
+   sed -e 's/,/ /g' -e 's/;/ /g' <junk.txt >junk2.txt
+   sed -e 's/:/ /g' <junk2.txt >junk3.txt
+   sed -e 's/(/ /g' -e 's/)/ /g' -e 's/[.]/ /g'  <junk3.txt >junk4.txt
+   # Look for 1-word repeated in a 2-word window
+   python repeats.py 2 1 junk4.txt
+   # Look for 2 words repeated in a 4-word window
+   python repeats.py 4 2 junk4.txt
+
+
 
 CAUTION: 
 The tools don't really do parsing and
