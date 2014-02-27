@@ -165,6 +165,20 @@ means many of these commands are not as useful
 as they were originally.  But even so they may form useful
 examples.
 
+refer.py: Produces a list of
+  missing/incorrect/questionable labels,links and
+  references to same. 
+  Useful with the DWTAGfoo (etc) tex files.
+  Written February 2014.
+
+repeats.py: Using a dwarf5.pdf
+  and pdftotext and some scripting and repeats.py one 
+  can find certain errors such as 
+  accidentally-repeated words and phrases
+  whether or not those are generated from Latex 
+  commands or simply typos.
+  Written February 2014.
+
 anylink.py: Looks for designated prefixes like DW_ADDR etc.
   Used by other code, this was never that useful alone.
 
@@ -191,6 +205,12 @@ fileio.py:  Given a list of file (.tex) names, it reads in
   code eventually write stuff back out (changed or not)
   but the output file always has a ".out" appended, it won't
   overwrite the input.
+  As of February 2014 it disallows a backslash inside an identifier,
+  forcing a token break.  This is closer to Latex
+  hence useful where we have  \DWTAGfoo\DWTAGbar
+  in the .tex (of course  \DWTAGfoo{}\DWTAGbar{}
+  would make this change irrelevant, but  it seemed better to
+  match latex tokenizing)
 
 formlink.py: Using anylink.py, this transforms DW_FORM_ into
   \livelink and \livetarg.
