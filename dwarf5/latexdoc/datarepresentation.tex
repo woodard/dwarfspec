@@ -108,7 +108,6 @@ of those DWARF sections that
 have a header
 (\dotdebugaranges{}, 
 \dotdebuginfo{}, 
-\dotdebugtypes{}, 
 \dotdebugline{},
 \dotdebugpubnames{}, and 
 \dotdebugpubtypes{}) or the length field
@@ -190,7 +189,7 @@ and location expressions may do so using the \DWOPaddrx{} and
 entries with an offset relative to a base offset in the
 range table for the compilation unit.
 
-\item Separate type units, in the \dotdebugtypesdwo{} section.
+\item Separate type units, in the \dotdebuginfodwo{} section.
 
 \item
 Abbreviations table(s) for the compilation unit and type
@@ -310,9 +309,6 @@ Section &Name & Role  \\ \hline
 \dotdebugpubtypes{} & \addtoindex{debug\_info\_offset} & offset in \dotdebuginfo{} \\
                 & \addtoindex{debug\_info\_length} & length of \dotdebuginfo{} \\
                 &                   & contribution \\
-\dotdebugtypes{} & \addtoindex{debug\_abbrev\_offset} & offset in \dotdebugabbrev{} \\
-                & \addtoindex{type\_offset} & offset in \dotdebugtypes{} \\
-
 \end{tabular}
 \end{center}
 
@@ -322,7 +318,7 @@ union must be accessed to distinguish whether a CIE or FDE is
 present, consequently, these two fields must exactly overlay
 each other (both offset and size).
 
-\item Within the body of the \dotdebuginfo{} or \dotdebugtypes{}
+\item Within the body of the \dotdebuginfo{}
 section, certain forms of attribute value depend on the choice
 of DWARF format as follows. For the 32\dash bit DWARF format,
 the value is a 32\dash bit unsigned integer; for the 64\dash bit DWARF
@@ -403,8 +399,9 @@ single \DWTAGcompileunit{} or
 \DWTAGpartialunit{} debugging
 information entry, together with its children.
 
-For each type defined in a compilation unit, a contribution may
-be made to the \dotdebugtypes{} 
+For each type defined in a compilation unit, a separate
+contribution may also be made to the 
+\dotdebuginfo{} 
 section of the object file. Each
 such contribution consists of a 
 \addtoindex{type unit} header 
@@ -420,16 +417,40 @@ code is followed directly by a series of attribute values.
 The appropriate entry in the 
 \addtoindex{abbreviations table} guides the
 interpretation of the information contained directly in the
-\dotdebuginfo{} or 
-\dotdebugtypes{} section.
+\dotdebuginfo{} section.
 
 \needlines{4}
 Multiple debugging information entries may share the same
 abbreviation table entry. Each compilation unit is associated
 with a particular abbreviation table, but multiple compilation
 units may share the same table.
+
 \subsection{Unit Headers}
 \label{datarep:unitheaders}
+Unit headers contain a field, \texttt{unit\_type}, whose value indicates the kind of
+compilation unit that follows. The encodings for the unit type 
+enumeration are shown in Table \refersec{tab:unitheaderunitkindencodings}.
+
+\needlines{6}
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{l|l}
+  \caption{Unit header unit kind encodings}
+  \label{tab:unitheaderunitkindencodings}
+  \addtoindexx{Unit header unit kind encodings} \\
+  \hline \bfseries Unit header unit kind encodings&\bfseries Value \\ \hline
+\endfirsthead
+  \bfseries Unit header unit kind encodings&\bfseries Value \\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+\DWUTcompileTARG    &0x01 \\ 
+\DWUTtypeTARG       &0x02 \\ 
+\DWUTpartialTARG    &0x03 \\ \hline
+\end{longtable}
+\end{centering}
 
 \subsubsection{Compilation Unit Header}
 \label{datarep:compilationunitheader}
@@ -449,12 +470,21 @@ of the 4\dash byte value \wffffffff followed by an 8\dash byte unsigned
 integer that gives the actual length 
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
-\needlines{4}
 \item  \texttt{version} (\addtoindex{uhalf}) \\
 A 2\dash byte unsigned integer representing the version of the
 DWARF information for the compilation unit \addtoindexx{version number!compilation unit} 
 (see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
-The value in this field is 4.
+The value in this field is \versiondotdebuginfo.
+
+\needlines{4}
+\item \texttt{unit\_type} (\addtoindex{ubyte}) \\
+A 1-byte unsigned integer identifying this unit as a compilation unit.
+The value of this field is 
+\DWUTcompile{} for a {normal compilation} unit or
+\DWUTpartial{} for a {partial compilation} unit
+(see Section \refersec{chap:normalandpartialcompilationunitentries}).
+
+\textit{This field is new in \DWARFVersionV.}
 
 \item \addttindex{debug\_abbrev\_offset} (\livelink{datarep:sectionoffsetlength}{section offset}) \\
 A 
@@ -484,7 +514,7 @@ offset portion of an address.
 The header for the series of debugging information entries
 contributing to the description of a type that has been
 placed in its own \addtoindex{type unit}, within the 
-\dotdebugtypes{} section,
+\dotdebuginfo{} section,
 consists of the following information:
 \begin{enumerate}[1. ]
 
@@ -493,7 +523,7 @@ consists of the following information:
 A 4\dash byte or 12\dash byte unsigned integer 
 \addtoindexx{initial length}
 representing the length
-of the \dotdebugtypes{} contribution for that type unit,
+of the \dotdebuginfo{} contribution for that type unit,
 not including the length field itself. In the \thirtytwobitdwarfformat, 
 this is a 4\dash byte unsigned integer (which must be
 less than \xfffffffzero); in the \sixtyfourbitdwarfformat, this
@@ -507,8 +537,16 @@ A 2\dash byte unsigned integer representing the version of the
 DWARF information for the 
 type unit\addtoindexx{version number!type unit} 
 (see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
-The value in this field is 4.
+The value in this field is \versiondotdebuginfo.
 
+\item \texttt{unit\_type} (\addtoindex{ubyte}) \\
+A 1-byte unsigned integer identifying this unit as a type unit.
+The value of this field is \DWUTtype{} for a type unit
+(see Section \refersec{chap:separatetypeunitentries}).
+
+\textit{This field is new in \DWARFVersionV.}
+
+\needlines{4}
 \item \addttindex{debug\_abbrev\_offset} (\livelink{datarep:sectionoffsetlength}{section offset}) \\
 A 
 \addtoindexx{section offset!in .debug\_types header}
@@ -594,8 +632,7 @@ debugging information entry. Each declaration begins with
 an unsigned LEB128 number representing the abbreviation
 code itself. It is this code that appears at the beginning
 of a debugging information entry in the 
-\dotdebuginfo{} or
-\dotdebugtypes{}
+\dotdebuginfo{}
 section. As described above, the abbreviation
 code 0 is reserved for null debugging information entries. The
 abbreviation code is followed by another unsigned LEB128
@@ -735,8 +772,7 @@ entry containing 0 for the name and 0 for the form.
 The attribute form 
 \DWFORMindirectTARG{} is a special case. For
 attributes with this form, the attribute value itself in the
-\dotdebuginfo{} or 
-\dotdebugtypes{}
+\dotdebuginfo{}
 section begins with an unsigned
 LEB128 number that represents its form. This allows producers
 to choose forms for particular attributes 
@@ -2752,9 +2788,8 @@ in the
 \dotdebugpubtypes{}, 
 \dotdebugranges{}, 
 \dotdebugstr{},
+and
 \dotdebugstroffsets{}
-and 
-\dotdebugtypes{}
 sections of an object file, or equivalent
 separate file or database. The information is not 
 word\dash aligned. Consequently:

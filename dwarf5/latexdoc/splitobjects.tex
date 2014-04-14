@@ -39,18 +39,14 @@ can be written to a separate DWARF object (dwo{}) file.
 The optional set of debugging sections includes the following:
 \begin{itemize}
 \item
-\dotdebuginfodwo{} - Contains the \DWTAGcompileunit{} DIE and
-its descendants. This is the bulk of the debugging
+\dotdebuginfodwo{} - Contains the \DWTAGcompileunit{} and
+\DWTAGtypeunit{} DIEs and
+their descendants. This is the bulk of the debugging
 information for the compilation unit that is normally found
 in the \dotdebuginfo{} section.
 \item
-\dotdebugtypesdwo{} - Contains the \DWTAGtypeunit{} DIEs and
-their descendants. This is the bulk of the debugging
-information for the type units that is normally found in the
-\dotdebugtypes{} section.
-\item
 \dotdebugabbrevdwo{} - Contains the abbreviations tables used by
-the \dotdebuginfodwo{} and \dotdebugtypesdwo{} sections.
+the \dotdebuginfodwo{} sections.
 \item
 \dotdebuglocdwo{} - Contains the location lists referenced by
 the debugging information entries in the \dotdebuginfodwo{}
@@ -61,7 +57,7 @@ relocations.
 \item
 \dotdebugstrdwo{} - Contains the string table for all indirect
 strings referenced by the debugging information in the
-\dotdebuginfodwo{} and \dotdebugtypesdwo{} sections.
+\dotdebuginfodwo{} sections.
 \item
 \dotdebugstroffsetsdwo{} - Contains the string offsets table
 for the strings in the \dotdebugstrdwo{}{} section.
@@ -70,7 +66,7 @@ for the strings in the \dotdebugstrdwo{}{} section.
 normally found in the \dotdebugmacinfo{} section.
 \item
 \dotdebuglinedwo{} - Contains skeleton line tables for the type
-units in the \dotdebugtypesdwo{} section. These line tables
+units in the \dotdebuginfodwo{} section. These line tables
 contain only the directory and files lists needed to
 interpret \DWATdeclfile{} attributes in the debugging
 information entries. Actual line number tables remain in the
@@ -84,7 +80,7 @@ information that passes through the linker into the output
 binary. A skeleton \dotdebuginfo{} section for each compilation unit
 contains a reference to the corresponding ".o" or ".dwo"
 file, and the \dotdebugline{} section (which is typically small
-compared to the \dotdebuginfo{} and \dotdebugtypes{} sections) is
+compared to the \dotdebuginfo{} sections) is
 linked into the output binary, as is the new \dotdebugaddr{}
 section.
 
@@ -161,9 +157,9 @@ the full DIE in the \dotdebuginfodwo{} section.
 
 Because of other improvements in \DWARFVersionV, most of the
 relocations that would normally be found in the \dotdebuginfodwo{}
-and \dotdebugtypesdwo{} sections is moved to the \dotdebugaddr{} and
+sections are moved to the \dotdebugaddr{} and
 \dotdebugstroffsetsdwo{} sections. Those in the
-\dotdebugstroffsetsdwo{} sections are simply be omitted because the
+\dotdebugstroffsetsdwo{} sections are simply omitted because the
 DWARF information in those sections is not combined at link
 time, so no relocation is necessary. Similarly,
 many of the remaining relocations referring to range lists are
@@ -190,7 +186,7 @@ References from \DWTAGcompileunit{} and \DWTAGtypeunit{} DIEs
 to the \dotdebugstroffsetsdwo{} section, via
 \DWATstroffsetsbase{}. Because the new sections are not
 combined at link time, the \DWATstroffsetsbase{} attribute
-is not required in a \dotdebuginfodwo{} or \dotdebugtypesdwo{}
+is not required in a \dotdebuginfodwo{}
 section.
 \item
 References from \DWTAGcompileunit{} DIEs to the \dotdebugaddr{}

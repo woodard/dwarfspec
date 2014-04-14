@@ -169,9 +169,10 @@ corresponds closely to the similarly named concepts in the
 ELF object file representation. 
 The notion of \addtoindex{section group} is
 an abstraction of common extensions of the ELF representation
-widely known as \doublequote{COMDATs} or \doublequote{COMDAT sections.} (Other
-object file representations provide COMDAT\dash style mechanisms as
-well.) There are several variations in the COMDAT schemes in
+widely known as 
+\doublequote{\COMDAT{}s} or \doublequote{\COMDAT{} sections.} (Other
+object file representations provide \COMDAT{}\dash style mechanisms as
+well.) There are several variations in the \COMDAT{} schemes in
 common use, any of which should be sufficient for the purposes
 of the 
 \addtoindexx{duplication elimination|see{DWARF duplicate elimination}}
@@ -748,7 +749,7 @@ A large portion of debug information is type information, and
 in a typical compilation environment, many types are duplicated
 many times. One method of controlling the amount of duplication
 is separating each type into a separate 
-\dotdebugtypes{} section
+\COMDAT{} \dotdebuginfo{} section
 and arranging for the linker to recognize and eliminate
 duplicates at the individual type level.
 
@@ -766,23 +767,19 @@ of each of these debug sections:
 \dotdebugline{}
 \end{alltt}
 
-and any number of these additional sections:
-
-\begin{alltt}
-\dotdebugtypes{}
-\end{alltt}
+and any number of additional \COMDAT{} \dotdebuginfo{} sections
+containing type units.
 
 \needlines{5}
 As discussed in the previous section 
 (Section \refersec{app:usingcompilationunits}), 
 many
-linkers today support the concept of a COMDAT group or
+linkers today support the concept of a \COMDAT{} group or
 linkonce section. The general idea is that a \doublequote{key} can be
 attached to a section or a group of sections, and the linker
 will include only one copy of a \addtoindex{section group}
 (or individual section) for any given key. 
-For 
-\dotdebugtypes{} sections, the
+For \COMDAT{} \dotdebuginfo{} sections, the
 key is the \addtoindex{type signature}
 formed from the algorithm given in
 Section \refersec{datarep:typesignaturecomputation}.
