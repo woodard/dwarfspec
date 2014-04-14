@@ -3,6 +3,8 @@
 # writes them out in new files.  
 # Used to verify that the output matches the input byte-for-byte
 
+# Transforms certain strings (see refclass below) into livelink commands.
+
 import sys
 import fileio
 

@@ -1,6 +1,47 @@
 These tools are intended to help updating the latex
 source of a DWARF document to get its references
 complete and correct.
+A list of the python source files with the purpose
+of each is near the end of this FILE.
+
+BASIC CHECKS:
+One way to do a spell check on the final document,
+and to get a simple text output to look for word repeats
+is to do the following (assuming you have the necessary
+tools):
+   # -enc Latin1 to avoid utf8, we do not need utf8 here.
+   pdftotext -enc Latin1 dwarf5.pdf
+   # Now you have dwarf5.txt
+   # The _ are not understood by spell
+   sed -e 's/_//g' <dwarf5.txt >dwarf5.txt2
+   # Let upper and lower case compare equal
+   spell dwarf5.txt2 |sort -f |uniq -i
+
+Once you have dwarf5.txt, the following script and tool
+will look for repeated words and short phrases, something
+that can creep in via typos or by accidents of latex use:
+We use several lines to keep the lines short here.
+This is more than a little sloppy and repeats.py
+is not very powerful. But it seems potentially useful.
+   pdftotext -enc Latin1 dwarf5.pdf
+   # Strip out some characters
+   sed -e 's/:/ /g' <../latexdoc/dwarf5.txt >junk.txt
+   sed -e 's/,/ /g' -e 's/;/ /g' <junk.txt >junk2.txt
+   sed -e 's/:/ /g' <junk2.txt >junk3.txt
+   sed -e 's/(/ /g' -e 's/)/ /g' -e 's/[.]/ /g'  <junk3.txt >junk4.txt
+   # Look for 1-word repeated in a 2-word window
+   python repeats.py 2 1 junk4.txt
+   # Look for 2 words repeated in a 4-word window
+   python repeats.py 4 2 junk4.txt
+
+A quick check on indexing lets one find
+   \addtoindex{foo!bar}
+when
+   \addtoindexx{foo!bar}
+is likely meant:
+   grep '!' *tex |grep -v toindexx
+
+
 
 CAUTION: 
 The tools don't really do parsing and
@@ -116,3 +157,103 @@ Performance:
 We simply don't care about performance as long as a task takes
 less than a few minutes. There are only about 70,000 words in a complete
 document so we ignore efficiency issues.
+
+SOURCE FILES:
+The change to internal use of DWTAGfoo etc in the document
+instead of DW\_AT\_foo (see dwarfnamecmds.tex) 
+means many of these commands are not as useful
+as they were originally.  But even so they may form useful
+examples.
+
+refer.py: Produces a list of
+  missing/incorrect/questionable labels,links and
+  references to same. 
+  Useful with the DWTAGfoo (etc) tex files.
+  Written February 2014.
+
+repeats.py: Using a dwarf5.pdf
+  and pdftotext and some scripting and repeats.py one 
+  can find certain errors such as 
+  accidentally-repeated words and phrases
+  whether or not those are generated from Latex 
+  commands or simply typos.
+  Written February 2014.
+
+anylink.py: Looks for designated prefixes like DW_ADDR etc.
+  Used by other code, this was never that useful alone.
+
+attrlink.py: Uses anylink.py to turn DW_AT_ into \livelink
+
+copyfile.py: Uses fileio.py to parse and output a .tex file.
+ So we can use diff to verify the result is byte-for-byte
+ identical to the input.
+
+dellivelink.py: This uses fileio.py and replaces \livelink
+ and \livetarg with \DWXXXyyy per Ron Brender email of
+ Oct 4, 2013. Strives to be idempotent so rerunning
+ produces no further changes.  A few cases not
+ handled perfectly (where a } is at end of line?) 
+ so if needed again could use a bit of fixing.
+ The list of files to process are built into the source,
+ and the list is not totally up to date.
+ The program is obsolete now though, as we
+ use \DW* very differently in the source (from when
+ this was written).
+
+fileio.py:  Given a list of file (.tex) names, it reads in
+  and tokenizes each file.  Functions here let
+  code eventually write stuff back out (changed or not)
+  but the output file always has a ".out" appended, it won't
+  overwrite the input.
+  As of February 2014 it disallows a backslash inside an identifier,
+  forcing a token break.  This is closer to Latex
+  hence useful where we have  \DWTAGfoo\DWTAGbar
+  in the .tex (of course  \DWTAGfoo{}\DWTAGbar{}
+  would make this change irrelevant, but  it seemed better to
+  match latex tokenizing)
+
+formlink.py: Using anylink.py, this transforms DW_FORM_ into
+  \livelink and \livetarg.
+
+printnameswithinteger.py: Identical to dellivelink.py, 
+  so it is horribly misnamed!  This one needs 
+  an input list of files to process supplied on the
+  command line.
+
+
+printstandard.py:  Print the DW_* entries (and only them)
+  in the files named on the command line
+  one per line.   With any \- or \_ removed.
+  use example:
+  python printstandard.py ../latexdoc/*.tex  |sort|uniq 
+
+printtokens.py: Reads and tokenizes files named on the command
+  line . Prints the tokenized data.
+  Solely for debugging the tokenizing.
+
+refclassfixup.py:  Fixes up certain strings
+  (specified in this file) to use \livelink
+
+removehyphen.py: Turns \-\_ into \_ .
+  This was once a needed task. But run long ago, so
+  This is now a useless bit of code.
+
+removeutf8.py:  The pdf we started from had
+  various utf-8 characters. These got in the way of
+  our text processing, so this app deleted those.
+  This is now a useless bit of code.
+  
+taglink.py:  Finds all the instances of DW_TAG_ in 
+  .tex files named on the command line.
+
+tohyphen.py: The opposite of removehyphen.
+  This is now a useless bit of code.
+
+uses.py: Looks for duplicate uses and definitions of 
+  latex tags.  
+  This is based on the original approach to naming
+  and linking in .tex, not the
+  latest use using dwarfnamecmds.tex
+  
+
+
