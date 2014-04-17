@@ -166,6 +166,7 @@ Language name & Meaning\\ \hline
 \DWLANGPascaleightythreeTARG & ISO \addtoindex{Pascal}:1983\\
 \DWLANGPLITARG{} \dag & ANSI \addtoindex{PL/I}:1976\\
 \DWLANGPythonTARG{} \dag & \addtoindex{Python}\\
+\DWLANGRustTARG{} \dag & \addtoindex{Rust} \\
 \DWLANGUPCTARG{} & \addtoindex{Unified Parallel C}\addtoindexx{UPC}\\ \hline
 \dag \ \ \textit{Support for these languages is limited.}& \\
 \end{tabular}
@@ -191,20 +192,29 @@ information for this compilation unit
 \clearpage
 
 \needlines{6}
-\item A \DWATmacroinfo{} attribute 
+\item A \DWATmacros{} attribute 
 \addtoindexx{macro information attribute}
 whose value is a 
 \addtoindexx{section offset!in macro information attribute}
 section
-\hypertarget{chap:DWATmacroinfomacroinformation}{}
+\hypertarget{chap:DWATmacrosmacroinformation}{}
 offset to the macro information for this compilation unit.
 
 This information is placed in a separate object file section
 from the debugging information entries themselves. The
 value of the macro information attribute is the offset in
-the \dotdebugmacinfo{} section of the first byte of the macro
+the \dotdebugmacro{} section of the first byte of the macro
 information for this compilation unit 
 (see Section \refersec{chap:macroinformation}).
+
+\textit{The \DWATmacros{} attribute is new in \DWARFVersionV, 
+and supersedes the 
+\DWATmacroinfo{} attribute of earlier DWARF versions.
+\livetarg{chap:DWATmacroinfomacroinformation}{}
+While \DWATmacros{} and \DWATmacroinfo{} attributes cannot both occur in the same
+compilation unit, both may be found in the set of units that make up an executable
+or shared object. The two attributes have distinct encodings to facilitate such
+coexistence.}
 
 \needlines{6}
 \item  A 
@@ -254,6 +264,7 @@ entries for the compilation unit reflect the names as they
 appear in the source program. The debugger should be sensitive
 to the case of identifier names when doing identifier lookups.
 
+\needlines{4}
 \DWIDupcaseTARG{} means that the 
 producer of the debugging
 information for this compilation unit converted all source
@@ -402,7 +413,7 @@ A \DWATcompdir{} attribute (the same as for regular
 compilation unit entries).
 
 \item
-\livetarg{chap:DWATdwoidforunit}{}
+\livetarg{chap:DWATdwonameforunit}{}
 A \DWATdwonameNAME{} attribute whose value is a
 null-terminated string containing the full or relative
 path name of the DWARF object file that contains the full
@@ -1344,6 +1355,7 @@ a function that is instantiated differently for calls with
 values of different types. DWARF does not represent the generic
 template definition, but does represent each instantiation.}
 
+\needlines{4}
 A \addtoindex{template instantiation} is represented by a debugging
 information entry with the 
 \addtoindexx{subprogram entry!use for template instantiation}
@@ -1964,6 +1976,7 @@ statement is usually the target of one or more \doublequote{go to}
 statements.
 }
 
+\needlines{4}
 A label is represented by a debugging information entry with
 \addtoindexx{label entry}
 the 
@@ -2032,6 +2045,7 @@ a \DWATlocation{} attribute, describing how to find the base
 address of the record object referenced within the body of
 the with statement.
 
+\needlines{6}
 \section{Try and Catch Block Entries}
 \label{chap:tryandcatchblockentries}
 

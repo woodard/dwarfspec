@@ -8,7 +8,7 @@
 \newcommand{\newdwfnamecommands}[2]{
 	\expandafter\def\csname #1LINK\endcsname{\index{#2}\hyperlink{chap:#1}{#2}}
 	\expandafter\def\csname #1TARG\endcsname{\index{#2}\hypertarget{chap:#1}{#2}}
-	\expandafter\def\csname #1INDX\endcsname{\index{#2}#2}
+	\expandafter\def\csname #1INDX\endcsname{\index{#2}}
 	\expandafter\def\csname #1MARK\endcsname{\hypertarget{chap:#1}{}\index{#2}}	
 	\expandafter\def\csname #1NAME\endcsname{#2}
 	% The normal, most common use in running text...
@@ -102,6 +102,7 @@
 \newdwfnamecommands{DWATlowerbound}{DW\_AT\_lower\_bound}
 %
 \newdwfnamecommands{DWATmacroinfo}{DW\_AT\_macro\_info}
+\newdwfnamecommands{DWATmacros}{DW\_AT\_macros}
 \newdwfnamecommands{DWATmainsubprogram}{DW\_AT\_main\_subprogram}
 \newdwfnamecommands{DWATmutable}{DW\_AT\_mutable}
 %
@@ -311,6 +312,7 @@
 \newdwfnamecommands{DWLANGPascaleightythree}{DW\_LANG\_Pascal83}
 \newdwfnamecommands{DWLANGPLI}{DW\_LANG\_PLI}
 \newdwfnamecommands{DWLANGPython}{DW\_LANG\_Python}
+\newdwfnamecommands{DWLANGRust}{DW\_LANG\_Rust}
 \newdwfnamecommands{DWLANGUPC}{DW\_LANG\_UPC}
 \newdwfnamecommands{DWLANGCpluspluszerothree}{DW\_LANG\_C\_plus\_plus\_03}
 \newdwfnamecommands{DWLANGCpluspluseleven}{DW\_LANG\_C\_plus\_plus\_11}
@@ -355,13 +357,27 @@
 \newdwfnamecommands{DWLNSsetisa}{DW\_LNS\_set\_isa}
 \newdwfnamecommands{DWLNSsetprologueend}{DW\_LNS\_set\_prologue\_end}
 %
-% DW_MACINFO
+% DW_MACINFO (Not used in DWARF V5)
 %
-\newdwfnamecommands{DWMACINFOdefine}{DW\_MACINFO\_define}
-\newdwfnamecommands{DWMACINFOendfile}{DW\_MACINFO\_end\_file}
-\newdwfnamecommands{DWMACINFOstartfile}{DW\_MACINFO\_start\_file}
-\newdwfnamecommands{DWMACINFOundef}{DW\_MACINFO\_undef}
-\newdwfnamecommands{DWMACINFOvendorext}{DW\_MACINFO\_vendor\_ext}
+%\newdwfnamecommands{DWMACINFOdefine}{DW\_MACINFO\_define}
+%\newdwfnamecommands{DWMACINFOendfile}{DW\_MACINFO\_end\_file}
+%\newdwfnamecommands{DWMACINFOstartfile}{DW\_MACINFO\_start\_file}
+%\newdwfnamecommands{DWMACINFOundef}{DW\_MACINFO\_undef}
+%\newdwfnamecommands{DWMACINFOvendorext}{DW\_MACINFO\_vendor\_ext}
+%
+% DW_MACRO
+%
+\newdwfnamecommands{DWMACROdefine}{DW\_MACRO\_define}
+\newdwfnamecommands{DWMACROundef}{DW\_MACRO\_undef}
+\newdwfnamecommands{DWMACROstartfile}{DW\_MACRO\_start\_file}
+\newdwfnamecommands{DWMACROendfile}{DW\_MACRO\_end\_file}
+\newdwfnamecommands{DWMACROdefineindirect}{DW\_MACRO\_define\_indirect}
+\newdwfnamecommands{DWMACROundefindirect}{DW\_MACRO\_undef\_indirect}
+\newdwfnamecommands{DWMACROtransparentinclude}{DW\_MACRO\_transparent\_include}
+\newdwfnamecommands{DWMACROdefineindirectx}{DW\_MACRO\_define\_indirectx}
+\newdwfnamecommands{DWMACROundefindirectx}{DW\_MACRO\_undef\_indirectx}
+\newdwfnamecommands{DWMACROlouser}{DW\_MACRO\_lo\_user}
+\newdwfnamecommands{DWMACROhiuser}{DW\_MACRO\_hi\_user}
 %
 % DW_OP
 %
@@ -559,7 +575,7 @@
 \newcommand{\dotdebuginfo}{\addtoindex{\texttt{.debug\_info}}}
 \newcommand{\dotdebugline}{\addtoindex{\texttt{.debug\_line}}}
 \newcommand{\dotdebugloc}{\addtoindex{\texttt{.debug\_loc}}}
-\newcommand{\dotdebugmacinfo}{\addtoindex{\texttt{.debug\_macinfo}}}
+\newcommand{\dotdebugmacinfo}{\addtoindex{\texttt{.debug\_mac\_info}}}
 \newcommand{\dotdebugmacro}{\addtoindex{\texttt{.debug\_macro}}}
 \newcommand{\dotdebugpubnames}{\addtoindex{\texttt{.debug\_pubnames}}}
 \newcommand{\dotdebugpubtypes}{\addtoindex{\texttt{.debug\_pubtypes}}}
@@ -574,7 +590,7 @@
 \newcommand{\dotdebuginfodwo}{\addtoindex{\texttt{.debug\_info.dwo}}}
 \newcommand{\dotdebuglinedwo}{\addtoindex{\texttt{.debug\_line.dwo}}}
 \newcommand{\dotdebuglocdwo}{\addtoindex{\texttt{.debug\_loc.dwo}}}
-\newcommand{\dotdebugmacinfodwo}{\addtoindex{\texttt{.debug\_macinfo.dwo}}}
+%newcommand{\dotdebugmacinfodwo}{\addtoindex{\texttt{.debug\_macinfo.dwo}}}
 \newcommand{\dotdebugmacrodwo}{\addtoindex{\texttt{.debug\_macro.dwo}}}
 \newcommand{\dotdebugpubnamesdwo}{\addtoindex{\texttt{.debug\_pubnames.dwo}}}
 \newcommand{\dotdebugpubtypesdwo}{\addtoindex{\texttt{.debug\_pubtypes.dwo}}}
@@ -608,6 +624,22 @@
 \newcommand{\DWARFVersionIII} {\addtoindex{DWARF Version 3}}
 \newcommand{\DWARFVersionIV}  {\addtoindex{DWARF Version 4}}
 \newcommand{\DWARFVersionV}   {\addtoindex{DWARF Version 5}}
+%
+% DWARF Classes of Attribute Value
+%
+\newcommand{\CLASSaddress}      {\addtoindexi{address}{address class}}
+\newcommand{\CLASSaddrptr}      {\addtoindexi{addrptr}{addrptr class}}
+\newcommand{\CLASSblock}        {\addtoindexi{block}{block class}}
+\newcommand{\CLASSconstant}     {\addtoindexi{constant}{constant class}}
+\newcommand{\CLASSexprloc}      {\addtoindexi{exprloc}{exprloc class}}
+\newcommand{\CLASSflag}         {\addtoindexi{flag}{flag class}}
+\newcommand{\CLASSlineptr}      {\addtoindexi{lineptr}{lineptr class}}
+\newcommand{\CLASSloclistptr}   {\addtoindexi{loclistptr}{loclistptr class}}
+\newcommand{\CLASSmacptr}       {\addtoindexi{macptr}{macptr class}}
+\newcommand{\CLASSrangelistptr} {\addtoindexi{rangelistptr}{rangelistptr class}}
+\newcommand{\CLASSreference}    {\addtoindexi{reference}{reference class}}
+\newcommand{\CLASSstring}       {\addtoindexi{string}{string class}}
+\newcommand{\CLASSstroffsetsptr}{\addtoindexi{stroffsetsptr}{stroffsetsptr class}}
 %
 % Miscellaneous
 %

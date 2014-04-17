@@ -273,7 +273,7 @@ to one of the classes shown in Table \refersec{tab:classesofattributevalue}.
 \DWATdwoidTARG
 &\livelinki{chap:DWATdwoidforunit}{Signature for compilation unit}{split DWARF object file!unit signature} \\
 \DWATdwonameTARG
-&\livelinki{chap:DWATdwoidforunit}{Name of split DWARF object file}{split DWARF object file!object file name} \\
+&\livelinki{chap:DWATdwonameforunit}{Name of split DWARF object file}{split DWARF object file!object file name} \\
 \DWATelementalTARG
 &\livelinki{chap:DWATelementalelementalpropertyofasubroutine}{Elemental property of a subroutine}{elemental property of a subroutine} \\
 \DWATencodingTARG
@@ -321,7 +321,9 @@ to one of the classes shown in Table \refersec{tab:classesofattributevalue}.
 \DWATlowerboundTARG
 &\livelinki{chap:DWATlowerboundlowerboundofsubrange}{Lower bound of subrange}{lower bound of subrange} \\
 \DWATmacroinfoTARG
-&\livelinki{chap:DWATmacroinfomacroinformation}{Macro information} {macro information} (\texttt{\#define}, \texttt{\#undef})\\
+&\livelinki{chap:DWATmacroinfomacroinformation}{Macro information (for pre-\DWARFVersionV{} compatibility)} {macro information (legacy)} \\
+\DWATmacrosTARG
+&\livelinki{chap:DWATmacrosmacroinformation}{Macro information} {macro information} (\texttt{\#define}, \texttt{\#undef}, and so on)\\
 \DWATmainsubprogramTARG
 &\livelinki{chap:DWATmainsubprogrammainorstartingsubprogram}{Main or starting subprogram}{main or starting subprogram} \\
 &\livelinki{chap:DWATmainsubprogramunitcontainingmainorstartingsubprogram}{Unit containing main or starting subprogram}{unit containing main or starting subprogram}\\
@@ -415,6 +417,7 @@ to one of the classes shown in Table \refersec{tab:classesofattributevalue}.
 \end{longtable}
 
 \addtoindexx{address|see {\textit{also} address class}}
+\addtoindexx{addrptr|see {\textit{also} addrptr class}}
 \addtoindexx{block|see {\textit{also} block class}}
 \addtoindexx{constant|see {\textit{also} constant class}}
 \addtoindexx{exprloc|see {\textit{also} exprloc class}}
@@ -425,7 +428,10 @@ to one of the classes shown in Table \refersec{tab:classesofattributevalue}.
 \addtoindexx{rangelistptr|see {\textit{also} rangelistptr class}}
 \addtoindexx{reference|see {\textit{also} reference class}}
 \addtoindexx{string|see {\textit{also} string class}}
+\addtoindexx{stroffsetsptr|see {\textit{also} stroffsetsptr class}}
+
 \addtoindexx{class of attribute value!address|see {address class}}
+\addtoindexx{class of attribute value!addrptr|see {addrptr class}}
 \addtoindexx{class of attribute value!block|see {block class}}
 \addtoindexx{class of attribute value!constant|see {constant class}}
 \addtoindexx{class of attribute value!exprloc|see {exprloc class}}
@@ -436,18 +442,32 @@ to one of the classes shown in Table \refersec{tab:classesofattributevalue}.
 \addtoindexx{class of attribute value!rangelistptr|see {rangelistptr class}}
 \addtoindexx{class of attribute value!reference|see {reference class}}
 \addtoindexx{class of attribute value!string|see {string class}}
+\addtoindexx{class of attribute value!stroffsetsptr|see {stroffsetsptr class}}
 
-\begin{table}[here]
+
+\begin{longtable}{l|p{11cm}}
 \caption{Classes of attribute value}
-\label{tab:classesofattributevalue}
-\centering
-\setlength{\extrarowheight}{0.1cm}
+\label{tab:classesofattributevalue} \\
+\hline \bfseries Attribute Class & \bfseries General Use and Encoding \\ \hline
+\endfirsthead
+  \bfseries Attribute Class & \bfseries General Use and Encoding \\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
 
-\begin{tabular}{l|p{11cm}} \hline
-Attribute Class & General Use and Encoding \\ \hline
 \hypertarget{chap:classaddress}{}
 \livelinki{datarep:classaddress}{address}{address class}
 &Refers to some location in the address space of the described program.
+\\
+
+\hypertarget{chap:classaddrptr}{}
+\livelinki{datarep:classaddrptr}{addrptr}{addrptr class}
+&Refers to a base location in the DWARF section that holds
+a series of machine address values. Certain attributes refer
+one of these addresses by indexing relative to this base
+location.
 \\
 
 \hypertarget{chap:classblock}{}
@@ -524,13 +544,20 @@ printable strings. Strings may be represented directly in
 the debugging information entry or as an offset in a separate
 string table.
 \\
-\hline
-\end{tabular}
-\end{table}
 
-% It is difficult to get the above table to appear before
-% the end of the chapter without a clearpage here.
-\clearpage
+\hypertarget{chap:classstroffsetsptr}{}
+\livelinki{datarep:classstroffsetsptr}{stroffsetsptr}{stroffsetsptr class}
+&Refers to a base location in the DWARF section that holds
+a series of offsets in the DWARF section that holds strings.
+Certain attributes refer one of these offets by indexing 
+relative to this base location. The resulting offset is then 
+used to index into the DWARF string section.
+\\
+
+\hline
+\end{longtable}
+
+
 \section{Relationship of Debugging Information Entries}
 \label{chap:relationshipofdebugginginformationentries}
 \textit{%
@@ -571,6 +598,7 @@ relations are taken into account, the debugging entries
 form a graph, not a tree.  
 }
 
+\needlines{4}
 The tree itself is represented
 by flattening it in prefix order. 
 Each debugging information
@@ -676,7 +704,7 @@ value is truncated to the element size and the low\dash order bits
 are pushed on the stack.
 \begin{enumerate}[1. ]
 \itembfnl{\DWOPlitzeroTARG, \DWOPlitoneTARG, \dots, \DWOPlitthirtyoneTARG}
-The \DWOPlitnNAME{} operations encode the unsigned literal values
+The \DWOPlitnTARG{} operations encode the unsigned literal values
 from 0 through 31, inclusive.
 
 \itembfnl{\DWOPaddrTARG}
@@ -701,6 +729,7 @@ an unsigned LEB128 integer constant.
 The single operand of the \DWOPconstsNAME{} operation provides
 a signed LEB128 integer constant.
 
+\needlines{4}
 \itembfnl{\DWOPaddrxTARG}
 The \DWOPaddrxNAME{} operation has a single operand that
 encodes an unsigned LEB128 value, which is a zero-based
@@ -980,6 +1009,7 @@ a bitwise or operation on the two, and pushes the result.
 The \DWOPplusTARG{} operation pops the top two stack entries,
 adds them together, and pushes the result.
 
+\needlines{6}
 \itembfnl{\DWOPplusuconstTARG}
 The \DWOPplusuconstTARG{} operation pops the top stack entry,
 adds it to the unsigned LEB128 constant operand and pushes
@@ -1798,7 +1828,7 @@ a type or type modifier (using
 \addtoindexx{type attribute}
 a \DWATtype{} attribute of its
 own). See 
-Section  \refersec{chap:typeentries} 
+Section  \referfol{chap:typeentries} 
 for descriptions of the entries describing
 base types, user-defined types and type modifiers.
 
@@ -1992,6 +2022,7 @@ also a definition, or is otherwise incomplete, to evaluate
 \hypertarget{chap:DWATdeclarationincompletenondefiningorseparateentitydeclaration}{}
 an expression correctly.
 
+\needlines{10}
 \textit{As an example, consider the following fragment of \addtoindex{C} code:}
 
 \begin{lstlisting}
@@ -2156,6 +2187,7 @@ a
 whose value is a location description
 (see Section \refersec{chap:locationdescriptions}).
 
+\needlines{4}
 A 
 \addtoindex{DWARF procedure}
 is represented by any
@@ -2232,6 +2264,7 @@ historically the \DWATlowpc{} attribute was used before the
 (in \addtoindex{DWARF Version 3}). There is
 insufficient reason to change this.}
 
+\needlines{8}
 \subsection{Continuous Address Range}
 \label{chap:contiguousaddressranges}
 When the set of addresses of a debugging information entry can
@@ -2606,7 +2639,9 @@ describing the type of the parameterized value.
 The entry also has an attribute giving the 
 actual compile-time or run-time constant value 
 of the value parameter for this instantiation.
-This can be a \DWATconstvalue{} attribute, whose
+This can be a 
+\DWATconstvalue{}\livetarg{chap:DWATconstvaluetemplatevalueparameter}{} 
+attribute, whose
 value is the compile-time constant value as represented 
 on the target architecture. 
 Or, the attribute can be a \DWATlocation{} attribute, whose value is a 

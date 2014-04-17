@@ -20,6 +20,8 @@
 # The index namespace, which we are not presently filling in very much. 
 
 import sys
+import os
+import os.path
 import fileio
 
 # These two hold the commands we care about so we can
@@ -722,7 +724,8 @@ def transfunc2(linetoks,myfile,linenum):
       # index DWname
       if dwfnamecommsdict.has_key(commandname):
         tm = tokmention(t,myfile,linenum)
-        applytodict(targhyperdict,commandname,tm)
+        targname = makelinkname(commandname)
+        applytodict(targhyperdict,targname,tm)
         indexname = deloptionalprefix(commandname,"\\")
         applytodict(indexdict,indexname,tm)
       else:
@@ -807,19 +810,25 @@ def checkduplicatetargs(dname,d):
         printtoomany(dname,k,v)
 
 def checkmissingtarg(name,targ,refs):
+  n = 0
   rlist = refs.items()
   for r in rlist:
     (k,v) = r
     if targ.has_key(k) == 0:
-       print "target missing from",name,":",k
+       n = n + 1
+       print "Missing target from " + name + ":",k
+  if n == 0: print "No missing targets from " + name +"!"
 
 def checkmissingref(name,targ,refs):
+  n = 0
   rlist = targ.items()
   for r in rlist:
     (k,v) = r
     if refs.has_key(k) == 0:
-       print "Unused target from",name,":",k
-  
+       n = n + 1
+       print "Unused target from " + name + ":",k
+  if n == 0: print "No unused targets from " + name + "..."
+
 def print_stats():
   global dwfnamecommsdict
   global newcommsdict
@@ -834,16 +843,18 @@ def print_stats():
   checkduplicatetargs("hypertargets",targhyperdict)
   checkduplicatetargs("labels",labeldict)
 
-  checkmissingtarg("hyperlinks",targhyperdict,linkhyperdict)
+  # Unused targets are nice to know
   checkmissingref("hyperlinks",targhyperdict,linkhyperdict)
-
-  checkmissingtarg("labels",labeldict,labelrefdict)
   checkmissingref("labels",labeldict,labelrefdict)
+
+  # Missing targets are a problem to be FIXED
+  checkmissingtarg("hyperlinks",targhyperdict,linkhyperdict)
+  checkmissingtarg("labels",labeldict,labelrefdict)
 
 # Perhaps these should be controlled by
 # the command line.
 debug   = "n"
-winpath = "n"
+
 def buildfilepaths(files,basetarg):
   outlist = []
   prefix = ""
@@ -851,10 +862,8 @@ def buildfilepaths(files,basetarg):
     prefix = ""
     if len(basetarg) > 0:
       prefix = basetarg
-    elif winpath == "y":
-      prefix = "..\\latexdoc\\"
     else:
-      prefix = "../latexdoc/"
+      prefix = os.path.join("..","latexdoc","")
     outlist += [prefix + f]
   return outlist
 def read_all_args():

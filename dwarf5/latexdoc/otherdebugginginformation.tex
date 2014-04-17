@@ -1169,50 +1169,102 @@ As described in
 Section \refersec{chap:normalandpartialcompilationunitentries},
 the macro information for a
 given compilation unit is represented in the 
-\dotdebugmacinfo{}
-section of an object file. The macro information for each
-compilation unit is represented as a series of \doublequote{macinfo}
-entries. Each macinfo entry consists of a \doublequote{type code} and
-up to two additional operands. The series of entries for a
+\dotdebugmacro{}
+section of an object file. 
+
+\needlines{4}
+\textit{The \dotdebugmacro{} section is new in 
+\DWARFVersionV, and supersedes the
+\dotdebugmacinfo{} section of earlier DWARF versions. 
+While \dotdebugmacro{} and \dotdebugmacinfo{}
+sections cannot both occur in the same compilation, both may be found in the 
+set of units that make up an executable or shared object.}
+
+\textit{The representation of debugging information in the \dotdebugmacinfo{} section is specified
+in earlier versions of the DWARF standard. Note that the \dotdebugmacinfo{} section does not contain 
+any headers and does not support indirect string encodings or transparent includes (see below).}
+
+The macro information for each
+compilation unit starts with a header followed by a series of 
+\doublequote{macroinfo}
+entries. Each macroinfo entry consists of a \doublequote{type code}
+followed by zero or more operands. The series of entries for a
 given compilation unit ends with an entry containing a type
 code of 0.
 
-\subsection{Macinfo Types}
-\label{chap:macinfotypes}
+The header starts with a 2-byte \texttt{version} field, followed by a
+1-byte \texttt{flags} field. Additional fields may be present, depending
+of the value of the flags \texttt{field}. 
+    
+If the least significant bit (bit 0) (the \texttt{offset\_size} flag) 
+in the \texttt{flags} field is clear, the header is for a 32-bit 
+DWARF format macro section and offsets are 4 bytes long,
+if it is set, the header is for a 64-bit DWARF format macro section 
+and offsets are 8 bytes long.
 
-The valid \addtoindex{macinfo types} are as follows:
+If the second least significant bit (bit 1) in the \texttt{flags} is set,
+there follows an offset in the \dotdebugline{} section of the
+beginning of the line number information, encoded as 4-byte offset for
+a 32-bit DWARF format macro section and 8-byte offset for a 64-bit DWARF format
+macro section.  
+
+If the third least significant bit (bit 2) in the \texttt{flags} is set, there follows
+an \texttt{opcode\_operands} table describing the operands of the macroinfo entry types.
+The macroinfo entry types defined in this standard may, but need not, be
+described in the table, while other macroinfo entry types used in the section
+are described there.  Vendor extension macroinfo entry types are
+allocated in the range from \DWMACROlouser{} to \DWMACROhiuser. Other
+unassigned codes are reserved for future DWARF standards.
+
+The table starts with a 1-byte \texttt{count} of the defined opcodes, followed by
+an entry for each of those opcodes.  Each entry starts with a 1-byte
+opcode number, followed by unsigned LEB128 encoded number of operands
+and for each operand there is a single byte describing the form in which
+the operand is encoded.  The allowed values are: 
+\DWFORMblock, \DWFORMblockone, \DWFORMblocktwo, \DWFORMblockfour,
+\DWFORMdataone, \DWFORMdatatwo, \DWFORMdatafour, \DWFORMdataeight, 
+\DWFORMsdata, \DWFORMudata, \DWFORMflag, \DWFORMsecoffset,
+\DWFORMstring, \DWFORMstrp{} and \DWFORMstrx.
+
+\textit{The table allows a consumer to skip over unknown macroinfo entry types.}
+
+\needlines{6}
+\subsection{Macroinfo Types}
+\label{chap:macroinfotypes}
+
+The valid \addtoindex{macroinfo entry types} are as follows:
 
 \begin{tabular}{ll}
-\DWMACINFOdefine{} 
-&A macro definition\\
-\DWMACINFOundef
-&A macro undefinition\\
-\DWMACINFOstartfile
-&The start of a new source file inclusion\\
-\DWMACINFOendfile
-&The end of the current source file inclusion\\
-\DWMACINFOvendorext
-& Vendor specific macro information directives\\
+\DWMACROdefine{}            &A macro definition\\
+\DWMACROundef               &A macro undefinition\\
+\DWMACROstartfile           &The start of a new source file inclusion\\
+\DWMACROendfile             &The end of the current source file inclusion\\
+\DWMACROdefineindirect      &A macro definition (indirect name string)\\
+\DWMACROundefindirect       &A macro undefinition (indirect name string)\\
+\DWMACROtransparentinclude  &A sequence of macro information entries to include\\
+\DWMACROdefineindirectx     &A macro definition (indexed name string)\\
+\DWMACROundefindirectx      &A macro undefinition (indexed name string)\\
 \end{tabular}
 
 \subsubsection{Define and Undefine Entries}
 \label{chap:defineandundefineentries}
+The define and undefine macro entries have three forms that
+use different representations of their two operands.
 
-All 
-\DWMACINFOdefineTARG{} and 
-\DWMACINFOundefTARG{} entries have two
-operands. The first operand encodes the line number of the
-source line on which the relevant defining or undefining
-macro directives appeared.
+\textit{While described in pairs below, the forms of define 
+and undefine entries may be freely intermixed.}
 
+\subsubsubsection{Define and Undefine Using Direct Strings}
+\label{chap:defineandundefinedirectentries}
+A \DWMACROdefineTARG{} or
+\DWMACROundefTARG{} entry has two
+operands. The first operand encodes the source line number 
+of the \texttt{\#define} or \texttt{\#undef} macro directive.
 The second operand consists of a null-terminated character
-string. In the case of a 
-\DWMACINFOundef{} entry, the value
-of this string will be simply the name of the pre- processor
-symbol that was undefined at the indicated source line.
+string. 
 
-In the case of a \DWMACINFOdefine{} entry, the value of this
-string will be the name of the macro symbol that was defined
+In the case of a \DWMACROdefineNAME{} entry, the value of the
+second string is the name of the macro symbol that is defined
 at the indicated source line, followed immediately by the 
 \addtoindex{macro formal parameter list}
 including the surrounding parentheses (in
@@ -1222,96 +1274,127 @@ then the name of the defined macro is followed directly by
 its definition string.
 
 In the case of a function-like macro definition, no whitespace
-characters should appear between the name of the defined
+characters appear between the name of the defined
 macro and the following left parenthesis. Also, no whitespace
-characters should appear between successive formal parameters
+characters appear between successive formal parameters
 in the formal parameter list. (Successive formal parameters
 are, however, separated by commas.) Also, exactly one space
-character should separate the right parenthesis that terminates
+character separates the right parenthesis that terminates
 the formal parameter list and the following definition string.
 
-In the case of a \doublequote{normal} (i.e. non-function-like) macro
+In the case of a \doublequote{normal} (that is, non-function-like) macro
 definition, exactly one space character should separate the
 name of the defined macro from the following definition text.
 
+In the case of a \DWMACROundefNAME{} entry, the value
+of the second string is the name of the pre-processor
+symbol that is undefined at the indicated source line.
 
+\subsubsubsection{Define and Undefine Using Indirect Strings}
+\label{chap:defineandundefineindirectentries}
+A \DWMACROdefineindirectTARG{} or \DWMACROundefindirectTARG{} entry has
+two operands.  The first operand encodes the line number of the source line
+on which the relevant defining or undefining macro directives appeared.
+The second operand consists of an offset into a string table contained in
+the \dotdebugstr{} section of the object file.  The size of the operand is
+given in the header \texttt{offset\_size} field.  Apart from the
+encoding of the operands these entries are equivalent to \DWMACROdefine{}
+and \DWMACROundef.
+
+\subsubsubsection{Define and Undefine Using Indexed Strings}
+\label{chap:defineandundefineindexedentries}
+A \DWMACROdefineindirectxTARG{} or \DWMACROundefindirectxTARG{} entry has
+two operands.  The first operand encodes the line number of the source line
+on which the relevant defining or undefining macro directives appeared.
+The second operand is represented using an unsigned LEB128 encoded value,
+which is interpreted as a zero-based index into an array of offsets in the
+\dotdebugstroffsets{} section.  Apart from the encoding of the operands 
+these entries are equivalent to \DWMACROdefine{}
+and \DWMACROundef.
 
 \subsubsection{Start File Entries}
 \label{chap:startfileentries}
-Each \DWMACINFOstartfileTARG{} entry also has two operands. The
+A \DWMACROstartfileTARG{} entry has two operands. The
 first operand encodes the line number of the source line on
 which the inclusion macro directive occurred.
+The second operand encodes a source file name index. 
 
-The second operand encodes a source file name index. This index
+The source file name index
 corresponds to a file number in the line number information
 table for the relevant compilation unit. This index indicates
 (indirectly) the name of the file that is being included by
 the inclusion directive on the indicated source line.
 
+If a \DWMACROstartfileNAME{} entry is present, the header
+contains a reference to the \dotdebugline{} section of compilation.
+
 \subsubsection{End File Entries}
 \label{chap:endfileentries}
-A \DWMACINFOendfileTARG{} entry has no operands. The presence of
+A \DWMACROendfileTARG{} entry has no operands. The presence of
 the entry marks the end of the current source file inclusion.
 
-\subsubsection{Vendor Extension Entries}
-\label{chap:vendorextensionentries}
-A \DWMACINFOvendorextTARG{} entry has two operands. The first
-is a constant. The second is a null-terminated character
-string. The meaning and/or significance of these operands is
-intentionally left undefined by this specification.
+\subsubsection{Transparent Inclusion of a Sequence of Entries}
+A \DWMACROtransparentincludeTARG{} entry has one operand, an offset into
+another part of the \dotdebugmacro{} section.  The size of the operand
+is given in the header \texttt{offset\_size} field.  The
+\DWMACROtransparentincludeNAME{} macroinfo entry instructs the consumer to 
+replace it with a sequence of macroinfo entries found
+after the section header at the given 
+\dotdebugmacro{} offset, up to, but excluding,
+the terminating entry with type code \texttt{0}.
 
-\textit{A consumer must be able to totally ignore all
-\DWMACINFOvendorext{} entries that it does not understand
-(see Section \refersec{datarep:vendorextensibility}).}
-
+\textit{The \DWMACROtransparentincludeNAME{} entry type makes it possible 
+to share duplicate sequences of macroinfo entries among different compilation units.}
 
 \subsection{Base Source Entries} 
 \label{chap:basesourceentries}
 
-A producer shall generate \DWMACINFOstartfile{} and
-\DWMACINFOendfile{} entries for the source file submitted to
-the compiler for compilation. This \DWMACINFOstartfile{} entry
+A producer shall generate \DWMACROstartfile{} and
+\DWMACROendfile{} entries for the source file submitted to
+the compiler for compilation. This \DWMACROstartfile{} entry
 has the value 0 in its line number operand and references
 the file entry in the line number information table for the
 primary source file.
 
 
-\subsection{Macinfo Entries For Command Line Options}
+\subsection{Macroinfo Entries For Command Line Options}
 \label{chap:macinfoentriesforcommandlineoptions}
-
-In addition to producing \DWMACINFOdefine{} and \DWMACINFOundef{}
-entries for each of the define and undefine directives
+%\DWMACROdefineINDX{}\DWMACROdefineindirectINDX{}\DWMACROindirectxINDX
+%\DWMACROundefINDX{}\DWMACROundefindirectINDX{}\DWMACROundefindirectxINDX
+In addition to producing define and undefine entries
+(see Section \refersec{chap:defineandundefineentries})
+for each of the define and undefine directives
 processed during compilation, the DWARF producer should
-generate a \DWMACINFOdefine{} or \DWMACINFOundef{} entry for
+generate a define or undefine entry for
 each pre-processor symbol which is defined or undefined by
 some means other than via a define or undefine directive
 within the compiled source text. In particular, pre-processor
-symbol definitions and un- definitions which occur as a
+symbol definitions and undefinitions which occur as a
 result of command line options (when invoking the compiler)
-should be represented by their own \DWMACINFOdefine{} and
-\DWMACINFOundef{} entries.
+should be represented by their own define and
+undefine entries.
 
-All such \DWMACINFOdefine{} and \DWMACINFOundef{} entries
+All such define and undefine entries
 representing compilation options should appear before the
-first \DWMACINFOstartfile{} entry for that compilation unit
+first \DWMACROstartfile{} entry for that compilation unit
 and should encode the value 0 in their line number operands.
 
 
 \subsection{General rules and restrictions}
 \label{chap:generalrulesandrestrictions}
 
-All macinfo entries within a \dotdebugmacinfo{}
+All macroinfo entries within a \dotdebugmacro{}
 section for a
 given compilation unit appear in the same order in which the
 directives were processed by the compiler.
 
-All macinfo entries representing command line options appear
+All macroinfo entries representing command line options appear
 in the same order as the relevant command line options
 were given to the compiler. In the case where the compiler
 itself implicitly supplies one or more macro definitions or
-un-definitions in addition to those which may be specified on
-the command line, macinfo entries are also produced for these
-implicit definitions and un-definitions, and these entries
+undefinitions in addition to those which may be specified on
+the command line, macroinfo entries are also produced for these
+implicit definitions and undefinitions, and these entries
 also appear in the proper order relative to each other and
 to any definitions or undefinitions given explicitly by the
 user on the command line.
@@ -1321,7 +1404,8 @@ user on the command line.
 \section{Call Frame Information}
 \label{chap:callframeinformation}
 
-\textit{Debuggers often need to be able to view and modify the state of any subroutine activation that is
+\textit{Debuggers often need to be able to view and modify the 
+state of any subroutine activation that is
 \addtoindexx{activation!call frame}
 on the call stack. An activation consists of:}
 
@@ -1369,12 +1453,12 @@ the current subroutine to its predecessor. We say that the
 debugger virtually unwinds the stack because the actual state
 of the target process is unchanged.}
 
+\needlines{4}
 \textit{The unwinding operation needs to know where registers are
 saved and how to compute the predecessor\textquoteright s CFA and code
 location. When considering an architecture-independent way
 of encoding this information one has to consider a number of
-special things.}
-
+special things:}
 
 \begin{itemize} % bullet list
 
@@ -1433,6 +1517,7 @@ an architecture specific ABI authoring committee, a hardware
 vendor, or a compiler producer. The body defining a specific
 augmentation is referred to below as the \doublequote{augmenter.}
 
+\needlines{8}
 Abstractly, this mechanism describes a very large table that
 has the following structure:
 
@@ -1456,7 +1541,7 @@ Frame Address value; it may be either a register and a signed
 offset that are added together, or a DWARF expression that
 is evaluated.
 
-The remaining columns are labeled by register number. This
+The remaining columns are labelled by register number. This
 includes some registers that have special designation on
 some architectures such as the PC and the stack pointer
 register. (The actual mapping of registers for a particular
@@ -1612,7 +1697,7 @@ rule table represents the return address of the function. Note
 that this column might not correspond to an actual machine
 register.
 
-\needlines{4}
+\needlines{8}
 \item \texttt{initial\_instructions} (array of \addtoindex{ubyte}) \\
 A sequence of rules that are interpreted to create the initial
 setting of each column in the table.  

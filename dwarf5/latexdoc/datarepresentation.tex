@@ -23,25 +23,27 @@ The labels denoting the beginning and end of the reserved
 \hypertarget{chap:DWXXXlohiuser}{}
 value range for vendor specific extensions consist of the
 appropriate prefix 
-(\DWTAGlouserMARK\DWTAGhiuserMARK{}	DW\_TAG, 
-\DWATlouserMARK\DWAThiuserMARK{}	DW\_AT,
-\DWENDlouserMARK\DWENDhiuserMARK{}	DW\_END, 
-\DWATElouserMARK\DWATEhiuserMARK{}	DW\_ATE, 
-\DWOPlouserMARK\DWOPhiuserMARK{}	DW\_OP, 
-\DWLANGlouserMARK\DWLANGhiuserMARK{}DW\_LANG, 
-\DWLNElouserMARK\DWLNEhiuserMARK{}	DW\_LNE, 
-\DWCClouserMARK\DWCChiuserMARK{}	DW\_CC or 
-\DWCFAlouserMARK\DWCFAhiuserMARK{}	DW\_CFA 
+(\DWATlouserMARK{}\DWAThiuserMARK{}	    DW\_AT,
+\DWATElouserMARK{}\DWATEhiuserMARK{}	DW\_ATE, 
+\DWCClouserMARK{}\DWCChiuserMARK{}	    DW\_CC,
+\DWCFAlouserMARK{}\DWCFAhiuserMARK{}	DW\_CFA 
+\DWENDlouserMARK{}\DWENDhiuserMARK{}	DW\_END, 
+\DWLANGlouserMARK{}\DWLANGhiuserMARK{}  DW\_LANG, 
+\DWLNElouserMARK{}\DWLNEhiuserMARK{}	DW\_LNE, 
+\DWMACROlouserMARK{}\DWMACROhiuserMARK{}DW\_MACRO,
+\DWOPlouserMARK{}\DWOPhiuserMARK{}	    DW\_OP or
+\DWTAGlouserMARK{}\DWTAGhiuserMARK{}	DW\_TAG, 
 respectively) followed by
 \_lo\_user or \_hi\_user. 
-\textit{For example, for DIE tags, the special
-labels are \DWTAGlouserNAME{} and \DWTAGhiuserNAME.}
 Values in the  range between \textit{prefix}\_lo\_user 
 and \textit{prefix}\_hi\_user inclusive,
 are reserved for vendor specific extensions. Vendors may
 use values in this range without conflicting with current or
 future system\dash defined values. All other values are reserved
 for use by the system.
+
+\textit{For example, for DIE tags, the special
+labels are \DWTAGlouserNAME{} and \DWTAGhiuserNAME.}
 
 \textit{There may also be codes for vendor specific extensions
 between the number of standard line number opcodes and
@@ -202,7 +204,7 @@ A skeleton line table (for the type units), in the
 \dotdebuglinedwo{} section (see 
 Section \refersec{chap:skeletoncompilationunitentries}).
 
-\item Macro information, in the \dotdebugmacinfodwo{} section.
+\item Macro information, in the \dotdebugmacrodwo{} section.
 
 \item A string table, in the \dotdebugstrdwo{} section.
 
@@ -486,6 +488,7 @@ The value of this field is
 
 \textit{This field is new in \DWARFVersionV.}
 
+\needlines{4}
 \item \addttindex{debug\_abbrev\_offset} (\livelink{datarep:sectionoffsetlength}{section offset}) \\
 A 
 \addtoindexx{section offset!in .debug\_info header}
@@ -558,6 +561,7 @@ the \thirtytwobitdwarfformat, this is a 4\dash byte unsigned length;
 in the \sixtyfourbitdwarfformat, this is an 8\dash byte unsigned length
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
+\needlines{4}
 \item \texttt{address\_size} (ubyte) \\
 A 1\dash byte unsigned integer representing the size 
 \addtoindexx{size of an address}
@@ -867,6 +871,21 @@ The index is relative to the value of the \DWATaddrbase{} attribute
 of the associated compilation unit.
 \end{itemize}
 
+\needlines{5}
+\item \livelink{chap:classaddrptr}{addrptr} \\
+\livetarg{datarep:classaddrptr}{}
+This is an offset into the \dotdebugaddr{} section (\DWFORMsecoffset). It
+consists of an offset from the beginning of the \dotdebugaddr{} section to the
+beginning of the list of machine addresses information for the
+referencing entity. It is relocatable in
+a relocatable object file, and relocated in an executable or
+shared object. In the \thirtytwobitdwarfformat, this offset
+is a 4\dash byte unsigned value; in the 64\dash bit DWARF
+format, it is an 8\dash byte unsigned value (see Section
+\refersec{datarep:32bitand64bitdwarfformats}).
+
+\textit{This class is new in \DWARFVersionV.}
+
 \needlines{4}
 \item \livelink{chap:classblock}{block} \\
 \livetarg{datarep:classblock}{}
@@ -1002,13 +1021,12 @@ in the \sixtyfourbitdwarfformat, it is an 8\dash byte unsigned value
 This is an 
 \addtoindexx{section offset!in class macptr value}
 offset into the 
-\dotdebugmacinfo{} or \dotdebugmacinfo{} section
+\dotdebugmacro{} or \dotdebugmacrodwo{} section
 (\DWFORMsecoffset). 
-It consists of an offset from the
-beginning of the \dotdebugmacinfo{} 
-section to the first byte of
-the data making up the macro information list for the compilation
-unit. 
+It consists of an offset from the beginning of the 
+\dotdebugmacro{} or \dotdebugmacrodwo{} 
+section to the the header making up the 
+macro information list for the compilation unit. 
 It is relocatable in a relocatable object file, and
 relocated in an executable or shared object. In the 
 \thirtytwobitdwarfformat, this offset is a 4\dash byte unsigned value;
@@ -1171,6 +1189,21 @@ information about the characters and their use.}
 of strings; for compatibility, this version also does
 not. However, the UTF\dash 8 representation is strongly recommended.}
 
+\item \livelinki{chap:classstroffsetsptr}{stroffsetsptr}{stroffsetsptr class} \\
+\livetarg{datarep:classstroffsetsptr}{}
+This is an offset into the \dotdebugstroffsets{} section 
+(\DWFORMsecoffset). It consists of an offset from the beginning of the 
+\dotdebugstroffsets{} section to the
+beginning of the string offsets information for the
+referencing entity. It is relocatable in
+a relocatable object file, and relocated in an executable or
+shared object. In the \thirtytwobitdwarfformat, this offset
+is a 4\dash byte unsigned value; in the 64\dash bit DWARF
+format, it is an 8\dash byte unsigned value (see Section
+\refersec{datarep:32bitand64bitdwarfformats}).
+
+\textit{This class is new in \DWARFVersionV.}
+
 \end{itemize}
 
 In no case does an attribute use 
@@ -1326,8 +1359,11 @@ Table \refersec{tab:attributeformencodings}.
             \addtoindexx{friend attribute!encoding}  \\
 \DWATidentifiercase&0x42&\livelink{chap:classconstant}{constant} 
             \addtoindexx{identifier case attribute!encoding}  \\
-\DWATmacroinfo&0x43&\livelink{chap:classmacptr}{macptr} 
-            \addtoindexx{macro information attribute!encoding}  \\
+\DWATmacroinfo\footnote{\raggedright Not used in \DWARFVersionV. 
+                        Reserved for compatibility and coexistence
+                        with prior DWARF versions.}
+            &0x43&\livelink{chap:classmacptr}{macptr} 
+            \addtoindexx{macro information attribute (legacy)!encoding}  \\
 \DWATnamelistitem&0x44&\livelink{chap:classreference}{reference} 
             \addtoindexx{name list item attribute!encoding}  \\
 \DWATpriority&0x45&\livelink{chap:classreference}{reference} 
@@ -1435,27 +1471,31 @@ Table \refersec{tab:attributeformencodings}.
 		\livelink{chap:classconstant}{constant}
             \addtoindexx{string length attribute!size of length}  \\
 \DWATrank~\ddag&0x71&
-		\livelink{chap:DWATrank}{constant, exprloc}
+        \livelink{chap:classconstant}{constant},
+        \livelink{chap:classexprloc}{exprloc}
             \addtoindexx{rank attribute!encoding}  \\
 \DWATstroffsetsbase~\ddag&0x72&
-		\livelink{chap:classstring}{reference}
+		\livelinki{chap:classstring}{stroffsetsptr}{stroffsetsptr class}
             \addtoindexx{string offsets base!encoding}	\\
 \DWATaddrbase~\ddag &0x73&
-		\livelink{chap:DWATaddrbase}{reference}
+		\livelinki{chap:DWATaddrbase}{addrptr}{addrptr class}
             \addtoindexx{address table base!encoding} \\
 \DWATrangesbase~\ddag&0x74&
-		\livelink{chap:DWATrangesbase}{reference}
+		\livelinki{chap:DWATrangesbase}{rangelistptr}{rangelistptr class}
             \addtoindexx{ranges base!encoding} \\
 \DWATdwoid~\ddag &0x75&
 		\livelink{chap:DWATdwoid}{constant}
             \addtoindexx{split DWARF object id!encoding} \\
 \DWATdwoname~\ddag &0x76&
-		\livelink{chap:DWATdwname}{string}
+		\livelink{chap:DWATdwoname}{string}
             \addtoindexx{split DWARF object file name!encoding} \\
 \DWATreference~\ddag &0x77&
         \livelink{chap:DWATreference}{flag} \\
 \DWATrvaluereference~\ddag &0x78&
         \livelink{chap:DWATrvaluereference}{flag} \\
+\DWATmacros~\ddag &0x79&\livelink{chap:classmacptr}{macptr} 
+            \addtoindexx{macro information attribute!encoding}  \\
+
 \DWATlouser&0x2000 & --- \addtoindexx{low user attribute encoding}  \\
 \DWAThiuser&\xiiifff& --- \addtoindexx{high user attribute encoding}  \\
 
@@ -1473,9 +1513,9 @@ Table \refersec{tab:attributeformencodings}.
 \endhead
   \hline \emph{Continued on next page}
 \endfoot
-  \hline
-
+  \hline \ddag\ \textit{New in DWARF Version 5}
 \endlastfoot
+
 \DWFORMaddr &0x01&\livelink{chap:classaddress}{address}  \\
 \textit{Reserved} &0x02& \\
 \DWFORMblocktwo &0x03&\livelink{chap:classblock}{block} \\
@@ -1501,10 +1541,10 @@ Table \refersec{tab:attributeformencodings}.
 \DWFORMsecoffset{} &0x17&\livelink{chap:classlineptr}{lineptr}, \livelink{chap:classloclistptr}{loclistptr}, \livelink{chap:classmacptr}{macptr}, \livelink{chap:classrangelistptr}{rangelistptr} \\
 \DWFORMexprloc{} &0x18&\livelink{chap:classexprloc}{exprloc} \\
 \DWFORMflagpresent{} &0x19&\livelink{chap:classflag}{flag} \\
-\DWFORMstrx &0x1a&\livelink{chap:classstring}{string} \\
-\DWFORMaddrx &0x1b&\livelink{chap:classaddess}{address} \\
+\DWFORMstrx{} \ddag &0x1a&\livelink{chap:classstring}{string} \\
+\DWFORMaddrx{} \ddag &0x1b&\livelink{chap:classaddress}{address} \\
 \DWFORMrefsigeight &0x20&\livelink{chap:classreference}{reference} \\
- 
+
 \end{longtable}
 \end{centering}
 
@@ -2061,6 +2101,7 @@ defined language.
 \DWLANGCpluspluszerothree{} \ddag &0x0019 &0 \\
 \DWLANGCpluspluseleven{} \ddag &0x001a &0 \\
 \DWLANGOCaml{} \ddag &0x001b &0	\\
+\DWLANGRust{} \ddag &0x001c &0 \\
 \DWLANGlouser{} &0x8000 & \\
 \DWLANGhiuser{} &\xffff & \\
 
@@ -2471,34 +2512,40 @@ Table \refersec{tab:linenumberfileentryformatencodings}.
 
 The source line numbers and source file indices encoded in the
 macro information section are represented as unsigned LEB128
-numbers as are the constants in a 
-\DWMACINFOvendorext{} entry.
+numbers.
 
-The macinfo type is encoded as a single byte. 
+The macro information entry type is encoded as a single byte. 
 The encodings 
-\addtoindexx{macinfo types!encoding}
+\addtoindexx{macro information entry types!encoding}
 are given in 
-Table \refersec{tab:macinfotypeencodings}.
+Table \refersec{tab:macroinfoentrytypeencodings}.
 
 
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c}
-  \caption{Macinfo type encodings} \label{tab:macinfotypeencodings}\\
-  \hline \bfseries Macinfo type name&\bfseries Value \\ \hline
+  \caption{Macro information entry type encodings} \label{tab:macroinfoentrytypeencodings}\\
+  \hline \bfseries Macro information entry type name&\bfseries Value \\ \hline
 \endfirsthead
-  \bfseries Macinfo type name&\bfseries Value\\ \hline
+  \bfseries Macro information entry type name&\bfseries Value\\ \hline
 \endhead
   \hline \emph{Continued on next page}
 \endfoot
   \hline
 \endlastfoot
 
-\DWMACINFOdefine&0x01 \\
-\DWMACINFOundef&0x02 \\
-\DWMACINFOstartfile&0x03 \\
-\DWMACINFOendfile&0x04 \\
-\DWMACINFOvendorext&\xff \\
+\DWMACROdefine              &0x01 \\
+\DWMACROundef               &0x02 \\
+\DWMACROstartfile           &0x03 \\
+\DWMACROendfile             &0x04 \\
+\DWMACROdefineindirect      &0x05 \\
+\DWMACROundefindirect       &0x06 \\
+\DWMACROtransparentinclude  &0x07 \\
+% what about 0x08 thru 0x0a??
+\DWMACROdefineindirectx     &0x0b \\
+\DWMACROundefindirectx      &0x0c \\
+\DWMACROlouser              &0xe0 \\
+\DWMACROhiuser              &\xff \\
 
 \end{longtable}
 \end{centering}
@@ -2783,7 +2830,7 @@ in the
 \dotdebuginfo{}, 
 \dotdebugline{}, 
 \dotdebugloc{}, 
-\dotdebugmacinfo{},
+\dotdebugmacro{},
 \dotdebugpubnames{}, 
 \dotdebugpubtypes{}, 
 \dotdebugranges{}, 
@@ -2999,9 +3046,11 @@ the value consists of the form code (encoded as an unsigned
 LEB128 value) followed by the encoding of the value according
 to the form code. To ensure reproducibility of the signature,
 the set of forms used in the signature computation is limited
-to the following: \DWFORMsdata, 
+to the following: 
+\DWFORMsdata, 
 \DWFORMflag, 
 \DWFORMstring,
+\DWFORMexprloc,
 and \DWFORMblock.
 
 \item If the tag in Step 3 is one of \DWTAGpointertype,

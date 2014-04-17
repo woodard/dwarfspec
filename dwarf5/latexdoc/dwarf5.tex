@@ -3,7 +3,7 @@
 % If draft is in the document class list, pix are just suggested
 % by an outline, the pic does not appear as a picture.
 %
-\newcommand{\docdate}{April 14, 2014}
+\newcommand{\docdate}{April 17, 2014}
 %
 \usepackage{ifthen}
 \newboolean{isdraft}
@@ -64,9 +64,11 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \usetikzlibrary{arrows}
 \usepackage{makeidx}       % For making an index
 % hyperref must be the last package listed.
-% The hyperref settings helps hypertext get right links in the 
-% pdf of the index.
-\usepackage[plainpages=false,pdfpagelabels,pagebackref,allcolors=blue]{hyperref} % Lets us generate colored active links inside a pdf.
+% The hyperref settings helps hypertext get links right in the 
+% pdf of the index. 
+% Also, allcolors lets us generate colored active links inside a pdf.
+% And breaklinks resolves truncation issues with very long link names.
+\usepackage[breaklinks,plainpages=false,pdfpagelabels,pagebackref,allcolors=blue]{hyperref} 
 \makeindex  % This and the makeidx package allow \index to create index entries.
 
 \newcommand{\dwf}{DWARF Debugging Information Format}
@@ -287,7 +289,7 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 		\include{changesummary}
 		}
 	}{}
-
+\cleardoublepage
 \flushleft
 \raggedbottom
 \chapterstyle{default}
@@ -313,14 +315,14 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \include{dataobject}                    \emptypage
 \include{typeentries}                   %\emptypage
 \include{otherdebugginginformation} 	\emptypage
-\include{datarepresentation}            %\emptypage
+\include{datarepresentation}            \emptypage
 
 %  The \appendix toggles us into appendix chapters
 \appendix
 
 \include{attributesbytag}				\emptypage
-\include{debugsectionrelationships}     %\emptypage
-\include{encodingdecoding}              \emptypage
+\include{debugsectionrelationships}     \emptypage
+\include{encodingdecoding}              %\emptypage
 \include{examples}                      %\emptypage
 \include{compression}                   %\emptypage
 \include{splitobjects}					%\emptypage
