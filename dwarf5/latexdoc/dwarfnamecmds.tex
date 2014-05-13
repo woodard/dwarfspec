@@ -9,8 +9,8 @@
 	\expandafter\def\csname #1LINK\endcsname{\index{#2}\hyperlink{chap:#1}{#2}}
 	\expandafter\def\csname #1TARG\endcsname{\index{#2}\hypertarget{chap:#1}{#2}}
 	\expandafter\def\csname #1INDX\endcsname{\index{#2}}
-	\expandafter\def\csname #1MARK\endcsname{\hypertarget{chap:#1}{}\index{#2}}	
-	\expandafter\def\csname #1NAME\endcsname{#2}
+	\expandafter\def\csname #1MARK\endcsname{\index{#2}\hypertarget{chap:#1}{}}	
+	\expandafter\def\csname #1NAME\endcsname{\index{#2}{#2}}
 	% The normal, most common use in running text...
 	\expandafter\def\csname #1\endcsname{\csname #1LINK\endcsname}
 	}
@@ -45,9 +45,22 @@
 \newdwfnamecommands{DWATbytesize}{DW\_AT\_byte\_size}
 \newdwfnamecommands{DWATbytestride}{DW\_AT\_byte\_stride}
 %
+\newdwfnamecommands{DWATcallallcalls}{DW\_AT\_call\_all\_calls}
+\newdwfnamecommands{DWATcallallsourcecalls}{DW\_AT\_call\_all\_source\_calls}
+\newdwfnamecommands{DWATcallalltailcalls}{DW\_AT\_call\_all\_tail\_calls}
 \newdwfnamecommands{DWATcallcolumn}{DW\_AT\_call\_column}
+\newdwfnamecommands{DWATcalldatalocation}{DW\_AT\_call\_data\_location}
+\newdwfnamecommands{DWATcalldatavalue}{DW\_AT\_call\_data\_value}
 \newdwfnamecommands{DWATcallfile}{DW\_AT\_call\_file}
 \newdwfnamecommands{DWATcallline}{DW\_AT\_call\_line}
+\newdwfnamecommands{DWATcallorigin}{DW\_AT\_call\_origin}
+\newdwfnamecommands{DWATcallparameter}{DW\_AT\_call\_parameter}
+\newdwfnamecommands{DWATcallpc}{DW\_AT\_call\_pc}
+\newdwfnamecommands{DWATcallreturnpc}{DW\_AT\_call\_return\_pc}
+\newdwfnamecommands{DWATcalltailcall}{DW\_AT\_call\_tail\_call}
+\newdwfnamecommands{DWATcalltarget}{DW\_AT\_call\_target}
+\newdwfnamecommands{DWATcalltargetclobbered}{DW\_AT\_call\_target\_clobbered}
+\newdwfnamecommands{DWATcallvalue}{DW\_AT\_call\_value}
 \newdwfnamecommands{DWATcallingconvention}{DW\_AT\_calling\_convention}
 \newdwfnamecommands{DWATcommonreference}{DW\_AT\_common\_reference}
 \newdwfnamecommands{DWATcompdir}{DW\_AT\_comp\_dir}
@@ -291,6 +304,7 @@
 \newdwfnamecommands{DWLANGC}{DW\_LANG\_C}
 \newdwfnamecommands{DWLANGCeightynine}{DW\_LANG\_C89}
 \newdwfnamecommands{DWLANGCninetynine}{DW\_LANG\_C99}
+\newdwfnamecommands{DWLANGCeleven}{DW\_LANG\_C11}
 \newdwfnamecommands{DWLANGCplusplus}{DW\_LANG\_C\_plus\_plus}
 \newdwfnamecommands{DWLANGCobolseventyfour}{DW\_LANG\_Cobol74}
 \newdwfnamecommands{DWLANGCoboleightyfive}{DW\_LANG\_Cobol85}
@@ -390,20 +404,20 @@
 \newdwfnamecommands{DWOPbregn}{DW\_OP\_breg<n>}									% Generic DW_OP_breg[0..31] name
 \newdwfnamecommands{DWOPbregzero}{DW\_OP\_breg0}
 \newdwfnamecommands{DWOPbregone}{DW\_OP\_breg1}
-\newdwfnamecommands{DWOPbregthirtyone}{DW\_OP\_breg31}
 	\newcommand{\DWOPbregtwo}{\hyperlink{chap:DWOPbregn}{DW\_OP\_breg2}}		% Link, don't index...
 	\newcommand{\DWOPbregthree}{\hyperlink{chap:DWOPbregn}{DW\_OP\_breg3}}		%
 	\newcommand{\DWOPbregfour}{\hyperlink{chap:DWOPbregn}{DW\_OP\_breg4}}		%
 	\newcommand{\DWOPbregfive}{\hyperlink{chap:DWOPbregn}{DW\_OP\_breg5}}		%
 	\newcommand{\DWOPbregeleven}{\hyperlink{chap:DWOPbregn}{DW\_OP\_breg11}}	%
+\newdwfnamecommands{DWOPbregthirtyone}{DW\_OP\_breg31}
 \newdwfnamecommands{DWOPbregx}{DW\_OP\_bregx}
 \newdwfnamecommands{DWOPcalltwo}{DW\_OP\_call2}
 \newdwfnamecommands{DWOPcallfour}{DW\_OP\_call4}
 \newdwfnamecommands{DWOPcallframecfa}{DW\_OP\_call\_frame\_cfa}
 \newdwfnamecommands{DWOPcallref}{DW\_OP\_call\_ref}
-\newdwfnamecommands{DWOPconstnx}{DW\_OP\_const<n><x>}							% Generic const[1248[su] operator name
-\newdwfnamecommands{DWOPconstns}{DW\_OP\_const<n>s}								% Generic const[1248]s operator name
-\newdwfnamecommands{DWOPconstnu}{DW\_OP\_const<n>u}								% Generic const[1248]u operator name
+\newdwfnamecommands{DWOPconstnx}{DW\_OP\_const<n><x>}				% Generic const[1248][su] operator name
+\newdwfnamecommands{DWOPconstns}{DW\_OP\_const<n>s}				% Generic const[1248]s operator name
+\newdwfnamecommands{DWOPconstnu}{DW\_OP\_const<n>u}				% Generic const[1248]u operator name
 \newdwfnamecommands{DWOPconstones}{DW\_OP\_const1s}
 \newdwfnamecommands{DWOPconstoneu}{DW\_OP\_const1u}
 \newdwfnamecommands{DWOPconsttwos}{DW\_OP\_const2s}
@@ -420,6 +434,7 @@
 \newdwfnamecommands{DWOPdiv}{DW\_OP\_div}
 \newdwfnamecommands{DWOPdrop}{DW\_OP\_drop}
 \newdwfnamecommands{DWOPdup}{DW\_OP\_dup}
+\newdwfnamecommands{DWOPentryvalue}{DW\_OP\_entry\_value}
 \newdwfnamecommands{DWOPeq}{DW\_OP\_eq}
 \newdwfnamecommands{DWOPfbreg}{DW\_OP\_fbreg}
 \newdwfnamecommands{DWOPformtlsaddress}{DW\_OP\_form\_tls\_address}
@@ -429,11 +444,13 @@
 \newdwfnamecommands{DWOPimplicitpointer}{DW\_OP\_implicit\_pointer}
 \newdwfnamecommands{DWOPimplicitvalue}{DW\_OP\_implicit\_value}
 \newdwfnamecommands{DWOPle}{DW\_OP\_le}
-\newdwfnamecommands{DWOPlitn}{DW\_OP\_lit<n>}								% generic DW_OP_lit[0..31] name
+\newdwfnamecommands{DWOPlitn}{DW\_OP\_lit<n>}					% generic DW_OP_lit[0..31] name
 \newdwfnamecommands{DWOPlitzero}{DW\_OP\_lit0}
 \newdwfnamecommands{DWOPlitone}{DW\_OP\_lit1}
     \newcommand{\DWOPlittwo}{\hyperlink{chap:DWOPlitn}{DW\_OP\_lit2}}		% Link, don't index...
     \newcommand{\DWOPlitthree}{\hyperlink{chap:DWOPlitn}{DW\_OP\_lit3}}		% Link, don't index...
+    \newcommand{\DWOPlitfour}{\hyperlink{chap:DWOPlitn}{DW\_OP\_lit4}}		% Link, don't index...
+    \newcommand{\DWOPlitfive}{\hyperlink{chap:DWOPlitn}{DW\_OP\_lit5}}		% Link, don't index...
 \newdwfnamecommands{DWOPlitthirtyone}{DW\_OP\_lit31}
 \newdwfnamecommands{DWOPlouser}{DW\_OP\_lo\_user}
 \newdwfnamecommands{DWOPlt}{DW\_OP\_lt}
@@ -451,11 +468,12 @@
 \newdwfnamecommands{DWOPplus}{DW\_OP\_plus}
 \newdwfnamecommands{DWOPplusuconst}{DW\_OP\_plus\_uconst}
 \newdwfnamecommands{DWOPpushobjectaddress}{DW\_OP\_push\_object\_address}
-\newdwfnamecommands{DWOPregn}{DW\_OP\_reg<n>}									% Generic DW_OP_reg[0..31] name
+\newdwfnamecommands{DWOPregn}{DW\_OP\_reg<n>}					% Generic DW_OP_reg[0..31] name
 \newdwfnamecommands{DWOPregzero}{DW\_OP\_reg0}
 \newdwfnamecommands{DWOPregone}{DW\_OP\_reg1}
-	\newcommand{\DWOPregtwo}{\hyperlink{chap:DWOPregn}{DW\_OP\_reg2}}			% Link, don't index
+	\newcommand{\DWOPregtwo}{\hyperlink{chap:DWOPregn}{DW\_OP\_reg2}}	% Link, don't index
 	\newcommand{\DWOPregthree}{\hyperlink{chap:DWOPregn}{DW\_OP\_reg3}}
+        \newcommand{\DWOPregfour}{\hyperlink{chap:DWOPregn}{DW\_OP\_reg4}}
 	\newcommand{\DWOPregfive}{\hyperlink{chap:DWOPregn}{DW\_OP\_reg5}}
 	\newcommand{\DWOPregten}{\hyperlink{chap:DWOPregn}{DW\_OP\_reg10}}
 \newdwfnamecommands{DWOPregthirtyone}{DW\_OP\_reg31}
@@ -482,6 +500,8 @@
 \newdwfnamecommands{DWTAGarraytype}{DW\_TAG\_array\_type}
 \newdwfnamecommands{DWTAGatomictype}{DW\_TAG\_atomic\_type}
 \newdwfnamecommands{DWTAGbasetype}{DW\_TAG\_base\_type}
+\newdwfnamecommands{DWTAGcallsite}{DW\_TAG\_call\_site}
+\newdwfnamecommands{DWTAGcallsiteparameter}{DW\_TAG\_call\_site\_parameter}
 \newdwfnamecommands{DWTAGcatchblock}{DW\_TAG\_catch\_block}
 \newdwfnamecommands{DWTAGclasstype}{DW\_TAG\_class\_type}
 \newdwfnamecommands{DWTAGcoarraytype}{DW\_TAG\_coarray\_type}
@@ -627,19 +647,19 @@
 %
 % DWARF Classes of Attribute Value
 %
-\newcommand{\CLASSaddress}      {\addtoindexi{address}{address class}}
-\newcommand{\CLASSaddrptr}      {\addtoindexi{addrptr}{addrptr class}}
-\newcommand{\CLASSblock}        {\addtoindexi{block}{block class}}
-\newcommand{\CLASSconstant}     {\addtoindexi{constant}{constant class}}
-\newcommand{\CLASSexprloc}      {\addtoindexi{exprloc}{exprloc class}}
-\newcommand{\CLASSflag}         {\addtoindexi{flag}{flag class}}
-\newcommand{\CLASSlineptr}      {\addtoindexi{lineptr}{lineptr class}}
-\newcommand{\CLASSloclistptr}   {\addtoindexi{loclistptr}{loclistptr class}}
-\newcommand{\CLASSmacptr}       {\addtoindexi{macptr}{macptr class}}
-\newcommand{\CLASSrangelistptr} {\addtoindexi{rangelistptr}{rangelistptr class}}
-\newcommand{\CLASSreference}    {\addtoindexi{reference}{reference class}}
-\newcommand{\CLASSstring}       {\addtoindexi{string}{string class}}
-\newcommand{\CLASSstroffsetsptr}{\addtoindexi{stroffsetsptr}{stroffsetsptr class}}
+\newcommand{\CLASSaddress}      {\livelinki{chap:address}{address}{address class}}
+\newcommand{\CLASSaddrptr}      {\livelinki{chap:addrptr}{addrptr}{addrptr class}}
+\newcommand{\CLASSblock}        {\livelinki{chap:block}{block}{block class}}
+\newcommand{\CLASSconstant}     {\livelinki{chap:constant}{constant}{constant class}}
+\newcommand{\CLASSexprloc}      {\livelinki{chap:exprloc}{exprloc}{exprloc class}}
+\newcommand{\CLASSflag}         {\livelinki{chap:flag}{flag}{flag class}}
+\newcommand{\CLASSlineptr}      {\livelinki{chap:lineptr}{lineptr}{lineptr class}}
+\newcommand{\CLASSloclistptr}   {\livelinki{chap:loclistptr}{loclistptr}{loclistptr class}}
+\newcommand{\CLASSmacptr}       {\livelinki{chap:macptr}{macptr}{macptr class}}
+\newcommand{\CLASSrangelistptr} {\livelinki{chap:rangelistptr}{rangelistptr}{rangelistptr class}}
+\newcommand{\CLASSreference}    {\livelinki{chap:reference}{reference}{reference class}}
+\newcommand{\CLASSstring}       {\livelinki{chap:string}{string}{string class}}
+\newcommand{\CLASSstroffsetsptr}{\livelinki{chap:stroffsetsptr}{stroffsetsptr}{stroffsetsptr class}}
 %
 % Miscellaneous
 %

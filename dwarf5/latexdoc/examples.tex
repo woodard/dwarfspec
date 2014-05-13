@@ -1308,7 +1308,7 @@ Figure~\ref{fig:namespaceexampledwarfdescription}: Namespace example: DWARF desc
 \clearpage
 \section{Member Function Examples}
 \label{app:memberfunctionexample}
-
+\addtoindexx{member function example}
 Consider the member function example fragment in 
 Figure \refersec{fig:memberfunctionexamplesourcefragment}.
 The DWARF representation in 
@@ -1437,7 +1437,7 @@ void g() {
     auto pointer_to_member_function = &A::f;
 }
 \end{lstlisting}
-\caption{Member function with reference-qualification example: source \mbox{fragment}}
+\caption{Reference- and rvalue-reference-qualification example: source \mbox{fragment}}
 \label{fig:memberfunctionrefqualexamplesourcefragment}
 \end{figure}
 
@@ -1486,7 +1486,7 @@ void g() {
          
 \end{alltt}
 \end{dwflisting}
-\caption{Member function with reference-qualification example: DWARF \mbox{description}}
+\caption{Reference- and rvalue-reference-qualification example: DWARF \mbox{description}}
 \label{fig:memberfunctionrefqualexampledwarfdescription}
 \end{figure}
 
@@ -2965,4 +2965,347 @@ int main ()
 \end{dwflisting}
 \caption{C implicit pointer example \#2: DWARF description}
 \label{fig:cimplicitpointerexample2dwarf}
+\end{figure}
+
+\clearpage
+\section{Call Site Examples}
+\label{app:callsiteexamples}
+The following examples use a hypothetical machine which: 
+\begin{itemize}
+\item
+Passes the first argument in register 0, the second in register 1, and the third in register 2.
+\item
+Keeps the stack pointer is register 3.
+\item
+Has one call preserved register 4.
+\item
+Returns a function value in register 0.
+\end{itemize}
+
+\subsection{Call Site Example \#1 (C)}
+Consider the \addtoindex{C} source in Figure \referfol{fig:callsiteexample1source}.
+
+\begin{figure}[h]
+\begin{lstlisting}
+
+extern void fn1 (long int, long int, long int);
+
+long int
+fn2 (long int a, long int b, long int c) 
+{
+    long int q = 2 * a;
+    fn1 (5, 6, 7); 
+    return 0;
+}
+ 
+long int
+fn3 (long int x, long int (*fn4) (long int *))
+{
+    long int v, w, w2, z;
+    w = (*fn4) (&w2);
+    v = (*fn4) (&w2);
+    z = fn2 (1, v + 1, w);
+    {
+        int v1 = v + 4;
+        z += fn2 (w, v * 2, x);
+    }
+    return z;
+}
+\end{lstlisting}
+\caption{Call Site Example \#1: Source}
+\label{fig:callsiteexample1source}
+\end{figure}
+
+Possible generated code for this source is shown using a suggestive 
+pseudo-\linebreak[0]assembly notation in Figure \refersec{fig:callsiteexample1code}.
+
+\begin{figure}[ht]
+\begin{lstlisting}
+fn2:
+L1:
+    %reg2 = 7   ! Load the 3rd argument to fn1
+    %reg1 = 6   ! Load the 2nd argument to fn1
+    %reg0 = 5   ! Load the 1st argument to fn1
+L2:
+    call fn1
+    %reg0 = 0   ! Load the return value from the function
+    return
+L3:
+fn3:
+    ! Decrease stack pointer to reserve local stack frame
+    %reg3 = %reg3 - 32
+    [%reg3] = %reg4       ! Save the call preserved register to
+                          !   stack
+    [%reg3 + 8] = %reg0   ! Preserve the x argument value
+    [%reg3 + 16] = %reg1  ! Preserve the fn4 argument value
+    %reg0 = %reg3 + 24    ! Load address of w2 as argument
+    call %reg1            ! Call fn4 (indirect call)
+L6:
+    %reg2 = [%reg3 + 16]  ! Load the fn4 argument value
+    [%reg3 + 16] = %reg0  ! Save the result of the first call (w)
+    %reg0 = %reg3 + 24    ! Load address of w2 as argument
+    call %reg2            ! Call fn4 (indirect call)
+L7:
+    %reg4 = %reg0         ! Save the result of the second call (v) 
+                          !   into register.
+    %reg2 = [%reg3 + 16]  ! Load 3rd argument to fn2 (w)
+    %reg1 = %reg4 + 1     ! Compute 2nd argument to fn2 (v + 1)
+    %reg0 = 1             ! Load 1st argument to fn2
+    call fn2
+L4:
+    %reg2 = [%reg3 + 8]   ! Load the 3rd argument to fn2 (x)
+    [%reg3 + 8] = %reg0   ! Save the result of the 3rd call (z)
+    %reg0 = [%reg3 + 16]  ! Load the 1st argument to fn2 (w)
+    %reg1 = %reg4 + %reg4 ! Compute the 2nd argument to fn2 (v * 2)
+    call fn2
+L5:
+    %reg2 = [%reg3 + 8]   ! Load the value of z from the stack
+    %reg0 = %reg0 + %reg2 ! Add result from the 4th call to it
+L8:
+    %reg4 = [%reg3]       ! Restore original value of call preserved 
+                          !   register
+    %reg3 = %reg3 + 32    ! Leave stack frame
+    return
+\end{lstlisting}
+\caption{Call Site Example \#1: Code}
+\label{fig:callsiteexample1code}
+\end{figure}
+
+\clearpage
+The location list for variable \texttt{a} in function \texttt{fn2}
+might look like:
+%\begin{figure}[h]
+\begin{lstlisting}
+
+! Before the call to fn1 the argument a is live in the register 0
+!
+<L1, L2> DW_OP_reg0
+
+! Afterwards it is not, the call could have clobbered the register,
+! and it is not saved in the fn2 function stack frame either, but 
+! perhap scan be looked up in the caller
+!
+<L2, L3> DW_OP_entry_value 1 DW_OP_reg0 DW_OP_stack_value
+<0, 0>
+
+\end{lstlisting}
+%\end{figure}
+(where the notation \doublequote{\texttt{<m, n>}} specifies the address
+range over which the following location description applies).
+
+Similarly, the variable q in fn2 then might have location list:
+\begin{lstlisting}
+
+! Before the call to fn1 the value of q can be computed as two times
+! the value of register 0
+!
+<L1, L2> DW_OP_lit2 DW_OP_breg0 0 DW_OP_mul DW_OP_stack_value
+
+! Afterwards it can be computed from the original value of the first
+! parameter, multiplied by two
+!
+<L2, L3> DW_OP_lit2 DW_OP_entry_value 1 DW_OP_reg0 DW_OP_mul DW_OP_stack_value
+<0, 0>
+
+\end{lstlisting}
+
+Variables \texttt{b} and \texttt{c} each have a location list similar to 
+that for variable \texttt{a},
+except for a different label between the two ranges and they
+use \DWOPregone{} and \DWOPregtwo{}, respectively, instead of \DWOPregzero.
+
+
+The call sites for all the calls in function \texttt{fn3} are children of the
+\DWTAGsubprogram{} entry for \texttt{fn3} (or of its \DWTAGlexicalblock{} entry
+if there is any for the whole function). 
+This is shown in Figure \refersec{fig:callsiteexample1dwarf}.
+
+\begin{figure}[h]
+\figurepart{1}{2}
+\begin{dwflisting}
+\begin{alltt}
+    \DWTAGcallsite
+        \DWATcallreturnpc(L6) ! First indirect call to (*fn4) in fn3.
+        ! The address of the call is preserved across the call in memory at
+        ! stack pointer + 16 bytes.
+        \DWATcalltarget(\DWOPbregthree{} 16 \DWOPderef)
+        \DWTAGcallsiteparameter
+            \DWATlocation(\DWOPregzero)
+            ! Value of the first parameter is equal to stack pointer + 24 bytes.
+            \DWATcallvalue(\DWOPbregthree{} 24)
+    \DWTAGcallsite
+        \DWATcallreturnpc(L7) ! Second indirect call to (*fn4) in fn3.
+        ! The address of the call is not preserved across the call anywhere, but
+        ! could be perhaps looked up in fn3's caller.
+        \DWATcalltarget(\DWOPentryvalue{} 1 \DWOPregone)
+        \DWTAGcallsiteparameter
+            \DWATlocation(\DWOPregzero)
+            \DWATcallvalue(\DWOPbregthree{} 24)
+    \DWTAGcallsite
+        \DWATcallreturnpc(L4) ! 3rd call in fn3, direct call to fn2
+        \DWATcallorigin(reference to fn2 DW_TAG_subprogram)
+        \DWTAGcallsiteparameter
+            \DWATcallparameter(reference to formal parameter a in subprogram fn2)
+            \DWATlocation(\DWOPregzero)
+            ! First parameter to fn2 is constant 1
+            \DWATcallvalue(\DWOPlitone)
+        \DWTAGcallsiteparameter
+            \DWATcallparameter(reference to formal parameter b in subprogram fn2)
+            \DWATlocation(\DWOPregone)
+            ! Second parameter to fn2 can be computed as the value of the call
+            !   preserved register 4 in the fn3 function plus one
+            \DWATcallvalue(\DWOPbregfour{} 1)
+        \DWTAGcallsiteparameter
+            \DWATcallparameter(reference to formal parameter c in subprogram fn2)
+            \DWATlocation(\DWOPregtwo)
+            ! Third parameter's value is preserved in memory at fn3's stack pointer
+            !   plus 16 bytes
+            \DWATcallvalue(\DWOPbregthree{} 16 \DWOPderef)
+\end{alltt}
+\end{dwflisting}
+\caption{Call Site Example \#1: DWARF Encoding}
+\label{fig:callsiteexample1dwarf}
+\end{figure}
+
+\begin{figure}
+\figurepart{2}{2}
+\begin{dwflisting}
+\begin{alltt}
+\DWTAGlexicalblock
+    \DWATlowpc(L4)
+    \DWAThighpc(L8)
+    \DWTAGvariable
+        \DWATname("v1")
+        \DWATtype(reference to int)
+        ! Value of the v1 variable can be computed as value of register 4 plus 4
+        \DWATlocation(\DWOPbregfour{} 4 \DWOPstackvalue)
+    \DWTAGcallsite
+        \DWATcallreturnpc(L5) ! 4th call in fn3, direct call to fn2
+        \DWATcalltarget(reference to subprogram fn2)
+        \DWTAGcallsiteparameter
+            \DWATcallparameter(reference to formal parameter a in subprogram fn2)
+            \DWATlocation(\DWOPregzero)
+            ! Value of the 1st argument is preserved in memory at fn3's stack 
+            !   pointer + 16 bytes.
+            \DWATcallvalue(\DWOPbregthree{} 16 \DWOPderef)
+        \DWTAGcallsiteparameter
+            \DWATcallparameter(reference to formal parameter b in subprogram fn2)
+            \DWATlocation(\DWOPregone)
+            ! Value of the 2nd argument can be computed using the preserved 
+            !   register 4 multiplied by 2
+            \DWATcallvalue(\DWOPlittwo{} \DWOPregfour{} 0 \DWOPmul)
+        \DWTAGcallsiteparameter
+            \DWATcallparameter(reference to formal parameter c in subprogram fn2)
+            \DWATlocation(\DWOPregtwo)
+            ! Value of the 3rd argument is not preserved, but could be perhaps 
+            ! computed from the value passed fn3's caller.
+            \DWATcallvalue(\DWOPentryvalue{} 1 \DWOPregzero)
+\end{alltt}
+\end{dwflisting}
+\begin{center}
+\vspace{0.4cm}
+Figure~\ref{fig:callsiteexample1dwarf} Call Site Example \#1: DWARF Encoding \textit{(concluded)}
+\end{center}
+\end{figure}
+
+\clearpage
+\subsection{Call Site Example \#2 (Fortran)}
+Consider the \addtoindex{Fortran} source in 
+Figure \refersec{fig:callsiteexample2source}
+which is used to illustrate how Fortran's \doublequote{pass by reference}
+parameters can be handled.
+
+\begin{figure}[h]
+\begin{lstlisting}
+subroutine fn4 (n)
+    integer :: n, x
+    x = n
+    n = n / 2
+    call fn6
+end subroutine
+subroutine fn5 (n)
+    interface fn4
+        subroutine fn4 (n)
+            integer :: n
+        end subroutine
+    end interface fn4
+    integer :: n, x
+    call fn4 (n)
+    x = 5
+    call fn4 (x)
+end subroutine fn5
+\end{lstlisting}
+\caption{Call Site Example \#2: Source}
+\label{fig:callsiteexample2source}
+\end{figure}
+
+Possible generated code for this source is shown using a suggestive 
+pseudo-\linebreak[0]assembly notation in Figure \refersec{fig:callsiteexample2code}.
+\begin{figure}
+\begin{lstlisting}
+fn4:
+    %reg2 = [%reg0]   ! Load value of n (passed by reference)
+    %reg2 = %reg2 / 2 ! Divide by 2
+    [%reg0] = %reg2   ! Update value of n
+    call fn6          ! Call some other function
+    return
+
+fn5:
+    %reg3 = %reg3 - 8 ! Decrease stack pointer to create stack frame
+    call fn4          ! Call fn4 with the same argument by reference 
+                      !   as fn5 has been called with
+L9:
+    [%reg3] = 5       ! Pass value of 5 by reference to fn4
+    %reg0 = %reg3     ! Put address of the value 5 on the stack
+                      !   into 1st argument register
+    call fn4
+L10:
+    %reg3 = %reg3 + 8 ! Leave stack frame
+    return
+\end{lstlisting}
+\caption{Call Site Example \#2: Code}
+\label{fig:callsiteexample2code}
+\end{figure}
+
+The location description for variable \texttt{x} in function 
+\texttt{f}n4 might be:
+\begin{lstlisting}
+DW_OP_entry_value 4 DW_OP_breg0 0 DW_OP_deref_size 4 DW_OP_stack_value
+\end{lstlisting}
+
+The call sites in (just) function \texttt{fn5} might be as shown in 
+Figure \refersec{fig:callsiteexample2dwarf}.
+
+\begin{figure}
+\begin{dwflisting}
+\begin{alltt}
+\DWTAGcallsite
+    \DWATcallreturnpc(L9) ! First call to fn4
+    \DWATcallorigin(reference to subprogram fn4)
+    \DWTAGcallsiteparameter
+        \DWATcallparameter(reference to formal parameter n in subprogram fn4)
+        \DWATlocation(\DWOPregzero)
+        ! The value of register 0 at the time of the call can be perhaps 
+        !   looked up in fn5's caller
+        \DWATcallvalue(\DWOPentryvalue{} 1 \DWOPregzero)
+        ! DW_AT_call_data_location(DW_OP_push_object_address) ! left out, implicit
+        ! And the actual value of the parameter can be also perhaps looked up in
+        ! fn5's caller
+        \DWATcalldatavalue(\DWOPentryvalue{} 4 \DWOPbregzero{} 0 \DWOPderefsize 4)
+\DWTAGcallsite
+    \DWATcallreturnpc(L10) ! Second call to fn4
+    \DWATcallorigin(reference to subprogram fn4)
+    \DWTAGcallsiteparameter
+        \DWATcallparameter(reference to formal parameter n in subprogram fn4)
+        \DWATlocation(\DWOPregzero)
+        ! The value of register 0 at the time of the call is equal to the stack
+        ! pointer value in fn5
+        \DWATcallvalue(\DWOPbregthree{} 0)
+        ! DW_AT_call_data_location(DW_OP_push_object_address) ! left out, implicit
+        ! And the value passed by reference is constant 5
+        \DWATcalldatavalue(\DWOPlitfive)
+\end{alltt}
+\end{dwflisting}
+\caption{Call Site Example \#2: DWARF Encoding}
+\label{fig:callsiteexample2dwarf}
 \end{figure}

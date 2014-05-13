@@ -1663,18 +1663,19 @@ a \DWATname{} attribute
 \addtoindexx{name attribute}
 whose value is a null\dash terminated
 string containing the enumeration type name as it appears
-in the source program. This entry also has a 
-\DWATbytesize{}
-attribute whose \livelink{chap:classconstant}{integer constant} 
-value is the number of bytes
-required to hold an instance of the enumeration.
+in the source program. 
 
 The \addtoindex{enumeration type entry}
 may have 
 \addtoindexx{type attribute}
 a \DWATtype{} attribute
 which refers to the underlying data type used to implement
-the enumeration.
+the enumeration. The entry also may have a 
+\DWATbytesize{} attribute whose 
+\livelink{chap:classconstant}{integer constant} value is the number of bytes 
+required to hold an instance of the enumeration. If no \DWATbytesize{} attribute 
+is present, the size for holding an instance of the enumeration is given by the size 
+of the underlying data type.
 
 If an enumeration type has type safe 
 \addtoindexx{type safe enumeration types}
@@ -1995,7 +1996,7 @@ a
 which is a \livelink{chap:classflag}{flag}. 
 If present, this attribute indicates whether
 this subrange represents a \addtoindex{UPC} array bound which is scaled
-by the runtime THREADS value (the number of UPC threads in
+by the runtime THREADS value (the number of \addtoindex{UPC} threads in
 this execution of the program).
 
 \textit{This allows the representation of a \addtoindex{UPC} shared array such as}
@@ -2357,19 +2358,19 @@ see Appendix \refersec{app:aggregateexamples}.}
 The presence of the
 \hypertarget{chap:DWATrankofdynamicarray}{\DWATrankINDX}
 attribute indicates that an array's rank
-(dimensionality) is dynamic, and therefore unknown at compile
+(number of dimensions) is dynamic, and therefore unknown at compile
 time. The value of the \DWATrankINDX{} attribute is either an integer constant
 or a location expression whose evaluation yields the dynamic rank.
 
-The bounds of an array with dynamic rank are described using the
-\DWTAGgenericsubrange{} tag, which  
+The bounds of an array with dynamic rank are described using a
+\DWTAGgenericsubrange{} entry, which  
 is the dynamic rank array equivalent of
 \DWTAGsubrangetype. The
-difference is that a \DWTAGgenericsubrangeINDX{} contains generic
+difference is that a \DWTAGgenericsubrange{} entry contains generic
 lower/upper bound and stride expressions that need to be evaluated for
-each dimension: Before any expression contained in a
-\DWTAGgenericsubrangeINDX{} can be evaluated, the dimension for which the
-expression should be evaluated needs to be pushed onto the stack. The
+each dimension. Before any expression contained in a
+\DWTAGgenericsubrange{} can be evaluated, the dimension for which the
+expression is to be evaluated needs to be pushed onto the stack. The
 expression will use it to find the offset of the respective field in
 the array descriptor metadata.
 

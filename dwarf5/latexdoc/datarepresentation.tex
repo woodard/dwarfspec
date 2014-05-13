@@ -607,7 +607,8 @@ this is an 8\dash byte unsigned length
 \subsection{Debugging Information Entry}
 \label{datarep:debugginginformationentry}
 
-Each debugging information entry begins with an unsigned LEB128
+Each debugging information entry begins with an 
+unsigned LEB128\addtoindexx{LEB128!unsigned}
 number containing the abbreviation code for the entry. This
 code represents an entry within the abbreviations table
 associated with the compilation unit containing this entry. The
@@ -633,13 +634,14 @@ The abbreviations table for a single compilation unit consists
 of a series of abbreviation declarations. Each declaration
 specifies the tag and attributes for a particular form of
 debugging information entry. Each declaration begins with
-an unsigned LEB128 number representing the abbreviation
+an unsigned LEB128\addtoindexx{LEB128!unsigned}
+number representing the abbreviation
 code itself. It is this code that appears at the beginning
 of a debugging information entry in the 
 \dotdebuginfo{}
 section. As described above, the abbreviation
 code 0 is reserved for null debugging information entries. The
-abbreviation code is followed by another unsigned LEB128
+abbreviation code is followed by another unsigned LEB128\addtoindexx{LEB128!unsigned}
 number that encodes the entry\textquoteright s tag. The encodings for the
 tag names are given in 
 Table \refersec{tab:tagencodings}.
@@ -714,13 +716,15 @@ Table \refersec{tab:tagencodings}.
 \DWTAGimportedunit&0x3d      \\
 \DWTAGcondition&\xiiif      \\
 \DWTAGsharedtype&0x40      \\
-\DWTAGtypeunit{} &0x41      \\
-\DWTAGrvaluereferencetype{} &0x42      \\
-\DWTAGtemplatealias{} &0x43      \\
-\DWTAGcoarraytype~\ddag &0x44 \\
-\DWTAGgenericsubrange~\ddag &0x45 \\
+\DWTAGtypeunit & 0x41      \\
+\DWTAGrvaluereferencetype & 0x42      \\
+\DWTAGtemplatealias & 0x43      \\
+\DWTAGcoarraytype~\ddag & 0x44 \\
+\DWTAGgenericsubrange~\ddag & 0x45 \\
 \DWTAGdynamictype~\ddag & 0x46 \\
 \DWTAGatomictype~\ddag & 0x47 \\
+\DWTAGcallsite~\ddag & 0x48 \\
+\DWTAGcallsiteparameter~\ddag & 0x49 \\
 \DWTAGlouser&0x4080      \\
 \DWTAGhiuser&\xffff      \\
 \end{longtable}
@@ -767,10 +771,13 @@ each chain of sibling entries is terminated by a null entry.)
 \needlines{4}
 Finally, the child encoding is followed by a series of
 attribute specifications. Each attribute specification
-consists of two parts. The first part is an unsigned LEB128
-number representing the attribute\textquoteright s name. The second part
-is an unsigned LEB128 number representing the attribute\textquoteright s
-form. The series of attribute specifications ends with an
+consists of two parts. The first part is an 
+unsigned LEB128\addtoindexx{LEB128!unsigned}
+number representing the attribute\textquoteright s name. 
+The second part is an 
+unsigned LEB128\addtoindexx{LEB128!unsigned} 
+number representing the attribute\textquoteright s form. 
+The series of attribute specifications ends with an
 entry containing 0 for the name and 0 for the form.
 
 The attribute form 
@@ -907,7 +914,8 @@ information bytes (\DWFORMblockfourTARG).
 \end{myindentpara}
 
 \begin{myindentpara}{1cm}
-An unsigned LEB128 length followed by the number of bytes
+An unsigned LEB128\addtoindexx{LEB128!unsigned}
+length followed by the number of bytes
 specified by the length (\DWFORMblockTARG).
 \end{myindentpara}
 
@@ -956,7 +964,7 @@ unsigned integers respectively, rather than
 \needlines{4}
 \item \livelinki{chap:classexprloc}{exprloc}{exprloc class} \\
 \livetarg{datarep:classexprloc}{}
-This is an unsigned LEB128 length followed by the
+This is an unsigned LEB128\addtoindexx{LEB128!unsigned} length followed by the
 number of information bytes specified by the length
 (\DWFORMexprlocTARG). 
 The information bytes contain a DWARF expression 
@@ -1084,7 +1092,8 @@ length forms for one, two, four and eight byte offsets
 \DWFORMreffourTARG,
 and \DWFORMrefeightTARG). 
 There is also an unsigned variable
-length offset encoded form that uses unsigned LEB128 numbers
+length offset encoded form that uses 
+unsigned LEB128\addtoindexx{LEB128!unsigned} numbers
 (\DWFORMrefudataTARG). 
 Because this type of reference is within
 the containing compilation unit no relocation of the value
@@ -1464,10 +1473,10 @@ Table \refersec{tab:attributeformencodings}.
             \addtoindexx{enumeration class attribute!encoding}  \\
 \DWATlinkagename{} &0x6e&\livelink{chap:classstring}{string} 
             \addtoindexx{linkage name attribute!encoding}  \\
-\DWATstringlengthbitsize{} \ddag&0x6f&
+\DWATstringlengthbitsize{}~\ddag&0x6f&
 		\livelink{chap:classconstant}{constant}
             \addtoindexx{string length attribute!size of length}  \\
-\DWATstringlengthbytesize{} \ddag&0x70&
+\DWATstringlengthbytesize{}~\ddag&0x70&
 		\livelink{chap:classconstant}{constant}
             \addtoindexx{string length attribute!size of length}  \\
 \DWATrank~\ddag&0x71&
@@ -1494,7 +1503,33 @@ Table \refersec{tab:attributeformencodings}.
 \DWATrvaluereference~\ddag &0x78&
         \livelink{chap:DWATrvaluereference}{flag} \\
 \DWATmacros~\ddag &0x79&\livelink{chap:classmacptr}{macptr} 
-            \addtoindexx{macro information attribute!encoding}  \\
+        \addtoindexx{macro information attribute!encoding}  \\
+\DWATcallallcalls~\ddag &0x7a&\CLASSflag
+        \addtoindexx{all calls summary attribute!encoding}\\
+\DWATcallallsourcecalls~\ddag &0x7b &\CLASSflag
+        \addtoindexx{all source calls summary attribute!encoding} \\
+\DWATcallalltailcalls~\ddag &0x7c&\CLASSflag
+        \addtoindexx{all tail calls summary attribute!encoding} \\
+\DWATcalldatalocation~\ddag &0x7d&\CLASSexprloc
+        \addtoindexx{call data location attribute!encoding} \\
+\DWATcalldatavalue~\ddag &0x7e&\CLASSexprloc
+        \addtoindexx{call data value attribute!encoding} \\
+\DWATcallorigin~\ddag &0x7f &\CLASSexprloc
+        \addtoindexx{call origin attribute!encoding} \\
+\DWATcallparameter~\ddag &0x80 &\CLASSreference
+        \addtoindexx{call parameter attribute!encoding} \\
+\DWATcallpc~\ddag &0x81 &\CLASSaddress
+        \addtoindexx{call pc attribute!encoding} \\
+\DWATcallreturnpc~\ddag &0x82 &\CLASSaddress
+        \addtoindexx{call return pc attribute!encoding} \\
+\DWATcalltailcall~\ddag &0x83 &\CLASSflag
+        \addtoindexx{call tail call attribute!encoding} \\
+\DWATcalltarget~\ddag &0x84 &\CLASSexprloc
+        \addtoindexx{call target attribute!encoding} \\
+\DWATcalltargetclobbered!\ddag &0x85 &\CLASSexprloc
+        \addtoindexx{call target clobbered attribute!encoding} \\
+\DWATcallvalue~\ddag &0x86 &\CLASSexprloc
+        \addtoindexx{call value attribute!encoding} \\
 
 \DWATlouser&0x2000 & --- \addtoindexx{low user attribute encoding}  \\
 \DWAThiuser&\xiiifff& --- \addtoindexx{high user attribute encoding}  \\
@@ -1570,7 +1605,7 @@ avoids using space to represent the \doublequote{big} end of an
 unsigned integer, when the big end is all zeroes or sign
 extension bits.}
 
-Unsigned LEB128 (ULEB128) numbers are encoded as follows:
+Unsigned LEB128\addtoindexx{LEB128!unsigned} (ULEB128) numbers are encoded as follows:
 \addtoindexx{LEB128!unsigned, encoding as}
 start at the low order end of an unsigned integer and chop
 it into 7\dash bit chunks. Place each chunk into the low order 7
@@ -1585,7 +1620,8 @@ The integer zero is a special case, consisting of a single
 zero byte.
 
 Table \refersec{tab:examplesofunsignedleb128encodings}
-gives some examples of unsigned LEB128 numbers. The
+gives some examples of unsigned LEB128\addtoindexx{LEB128!unsigned}
+numbers. The
 0x80 in each case is the high order bit of the byte, indicating
 that an additional byte follows.
 
@@ -1603,9 +1639,9 @@ that there is nothing within the LEB128 representation that
 indicates whether an encoded number is signed or unsigned. The
 decoder must know what type of number to expect. 
 Table \refersec{tab:examplesofunsignedleb128encodings}
-gives some examples of unsigned LEB128 numbers and 
-Table \refersec{tab:examplesofsignedleb128encodings}
-gives some examples of signed LEB128 
+gives some examples of unsigned LEB128\addtoindexx{LEB128!unsigned}
+numbers and Table \refersec{tab:examplesofsignedleb128encodings}
+gives some examples of signed LEB128\addtoindexx{LEB128!signed} 
 numbers.
 
 \textit{Appendix \refersec{app:variablelengthdataencodingdecodinginformative} 
@@ -1618,7 +1654,7 @@ gives algorithms for encoding and decoding these forms.}
 \begin{longtable}{l|l|l}
   \caption{Examples of unsigned LEB128 encodings}
   \label{tab:examplesofunsignedleb128encodings} 
-  \addtoindexx{LEB128 encoding!examples} \\
+  \addtoindexx{LEB128 encoding!examples}\addtoindexx{LEB128!unsigned} \\
   \hline \bfseries Number&\bfseries First byte &\bfseries Second byte \\ \hline
 \endfirsthead
   \bfseries Number&\bfseries First Byte &\bfseries Second byte\\ \hline
@@ -1641,7 +1677,9 @@ gives algorithms for encoding and decoding these forms.}
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|l|l}
-  \caption{Examples of signed LEB128 encodings} \label{tab:examplesofsignedleb128encodings} \\
+  \caption{Examples of signed LEB128 encodings} 
+  \label{tab:examplesofsignedleb128encodings} 
+  \addtoindexx{LEB128!signed} \\
   \hline \bfseries Number&\bfseries First byte &\bfseries Second byte \\ \hline
 \endfirsthead
   \bfseries Number&\bfseries First Byte &\bfseries Second byte\\ \hline
@@ -1779,6 +1817,8 @@ Table \refersec{tab:dwarfoperationencodings}.
                               &&&SLEB128 constant offset \\
 \DWOPaddrx~\ddag&0xa1&1&ULEB128 indirect address \\
 \DWOPconstx~\ddag&0xa2&1&ULEB128 indirect constant   \\
+\DWOPentryvalue~\ddag&0xa3&2&ULEV128 size, \\*
+                   &&&\nolink{block} of that size\\
 \DWOPlouser{} &0xe0 && \\
 \DWOPhiuser{} &\xff && \\
 
@@ -2073,35 +2113,37 @@ defined language.
   \hline
   \dag \ \textit{See text} \\ \ddag \ \textit{New in \addtoindex{DWARF Version 5}}
 \endlastfoot
+\addtoindexx{ISO-defined language names}
 
-\DWLANGCeightynine &0x0001 &0       \\
-\DWLANGC{} &0x0002 &0  \\
-\DWLANGAdaeightythree{} \dag &0x0003 &1  \addtoindexx{Ada}     \\
-\DWLANGCplusplus{} &0x0004 &0       \\
-\DWLANGCobolseventyfour{} \dag &0x0005 &1       \\
-\DWLANGCoboleightyfive{} \dag &0x0006 &1       \\
-\DWLANGFortranseventyseven &0x0007 &1       \\
-\DWLANGFortranninety &0x0008 &1       \\
-\DWLANGPascaleightythree &0x0009 &1       \\
-\DWLANGModulatwo &0x000a &1       \\
-\DWLANGJava &0x000b &0       \\
-\DWLANGCninetynine &0x000c &0       \\
-\DWLANGAdaninetyfive{} \dag &0x000d &1 \addtoindexx{Ada}      \\
-\DWLANGFortranninetyfive &0x000e &1       \\
-\DWLANGPLI{} \dag &0x000f &1 \\
-\DWLANGObjC{} &0x0010 &0 \\
-\DWLANGObjCplusplus{} &0x0011 &0 \\
-\DWLANGUPC{} &0x0012 &0 \\
-\DWLANGD{} &0x0013 &0 \\
-\DWLANGPython{} \dag &0x0014 &0 \\
-\DWLANGOpenCL{} \dag \ddag &0x0015 &0 \\
-\DWLANGGo{} \dag \ddag &0x0016 &0 \\
-\DWLANGModulathree{} \dag \ddag &0x0017 &1 \\
-\DWLANGHaskell{} \dag \ddag &0x0018 &0 \\
-\DWLANGCpluspluszerothree{} \ddag &0x0019 &0 \\
-\DWLANGCpluspluseleven{} \ddag &0x001a &0 \\
-\DWLANGOCaml{} \ddag &0x001b &0	\\
-\DWLANGRust{} \ddag &0x001c &0 \\
+\DWLANGCeightynine &0x0001 &0 \addtoindexx{C:1989 (ISO)}      \\
+\DWLANGC{} &0x0002 &0  \addtoindexx{C!non-standard} \\
+\DWLANGAdaeightythree{} \dag &0x0003 &1  \addtoindexx{Ada:1983 (ISO)}     \\
+\DWLANGCplusplus{} &0x0004 &0 \addtoindexx{C++:1998 (ISO)}      \\
+\DWLANGCobolseventyfour{} \dag &0x0005 &1 \addtoindexx{COBOL:1974 (ISO)}      \\
+\DWLANGCoboleightyfive{} \dag &0x0006 &1 \addtoindexx{COBOL:1985 (ISO)}      \\
+\DWLANGFortranseventyseven &0x0007 &1 \addtoindexx{FORTRAN:1977 (ISO)}      \\
+\DWLANGFortranninety &0x0008 &1 \addtoindexx{Fortran:1990 (ISO)}      \\
+\DWLANGPascaleightythree &0x0009 &1 \addtoindexx{Pascal:1983 (ISO)}      \\
+\DWLANGModulatwo &0x000a &1 \addtoindexx{Modula-2:1996 (ISO)}      \\
+\DWLANGJava &0x000b &0 \addtoindexx{Java}      \\
+\DWLANGCninetynine &0x000c &0 \addtoindexx{C:1999 (ISO)}      \\
+\DWLANGAdaninetyfive{} \dag &0x000d &1 \addtoindexx{Ada:1995 (ISO)}      \\
+\DWLANGFortranninetyfive &0x000e &1 \addtoindexx{Fortran:1995 (ISO)}      \\
+\DWLANGPLI{} \dag &0x000f &1 \addtoindexx{PL/I:1976 (ANSI)}\\
+\DWLANGObjC{} &0x0010 &0 \addtoindexx{Objective C}\\
+\DWLANGObjCplusplus{} &0x0011 &0 \addtoindexx{Objective C++}\\
+\DWLANGUPC{} &0x0012 &0 \addtoindexx{UPC}\\
+\DWLANGD{} &0x0013 &0 \addtoindexx{D language}\\
+\DWLANGPython{} \dag &0x0014 &0 \addtoindexx{Python}\\
+\DWLANGOpenCL{} \dag \ddag &0x0015 &0 \addtoindexx{OpenCL}\\
+\DWLANGGo{} \dag \ddag &0x0016 &0 \addtoindexx{Go}\\
+\DWLANGModulathree{} \dag \ddag &0x0017 &1 \addtoindexx{Modula-3}\\
+\DWLANGHaskell{} \dag \ddag &0x0018 &0 \addtoindexx{Haskell}\\
+\DWLANGCpluspluszerothree{} \ddag &0x0019 &0 \addtoindexx{C++:2003 (ISO)}\\
+\DWLANGCpluspluseleven{} \ddag &0x001a &0 \addtoindexx{C++:2011 (ISO)}\\
+\DWLANGOCaml{} \ddag &0x001b &0	\addtoindexx{OCaml}\\
+\DWLANGRust{} \ddag &0x001c &0 \addtoindexx{Rust}\\
+\DWLANGCeleven{} \ddag &0x001d &0 \addtoindexx{C:2011 (ISO)}\\
 \DWLANGlouser{} &0x8000 & \\
 \DWLANGhiuser{} &\xffff & \\
 
@@ -2511,8 +2553,8 @@ Table \refersec{tab:linenumberfileentryformatencodings}.
 \label{datarep:macroinformation}
 
 The source line numbers and source file indices encoded in the
-macro information section are represented as unsigned LEB128
-numbers.
+macro information section are represented as 
+unsigned LEB128\addtoindexx{LEB128!unsigned} numbers.
 
 The macro information entry type is encoded as a single byte. 
 The encodings 
@@ -2919,7 +2961,7 @@ Table \ref{tab:integerrepresentationnames}.
 \label{datarep:typesignaturecomputation}
 
 A type signature is computed only by the DWARF producer;
-\addtoindexx{type signature computation}
+\addtoindexx{type signature!computation}
 it is used by a DWARF consumer to resolve type references to
 the type definitions that are contained in 
 \addtoindexx{type unit}
@@ -3036,8 +3078,8 @@ in their own alphabetical suborder.
 
 An attribute that refers to another type entry T is processed
 as follows: (a) If T is in the list V at some V[x], use the
-letter 'R' as the marker and use the unsigned LEB128 encoding
-of x as the attribute value; otherwise, (b) use the letter 'T'
+letter 'R' as the marker and use the unsigned LEB128\addtoindexx{LEB128!unsigned}
+encoding of x as the attribute value; otherwise, (b) use the letter 'T'
 as the marker, process the type T recursively by performing
 Steps 2 through 7, and use the result as the attribute value.
 
@@ -3110,8 +3152,8 @@ both S and D, the attribute in S is used and the corresponding
 one in D is ignored.
 
 DWARF tag and attribute codes are appended to the sequence
-as unsigned LEB128 values, using the values defined earlier
-in this chapter.
+as unsigned LEB128\addtoindexx{LEB128!unsigned} values, 
+using the values defined earlier in this chapter.
 
 \textit{A grammar describing this computation may be found in
 Appendix \refersec{app:typesignaturecomputationgrammar}.
