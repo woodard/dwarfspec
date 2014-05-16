@@ -82,7 +82,7 @@ names of global objects and functions, or global types,
 respectively, whose definitions are represented by debugging
 information entries owned by a single compilation unit.
 
-\textit{C++ member functions with a definition in the class declaration
+\textit{\addtoindex{C++} member functions with a definition in the class declaration
 are definitions in every compilation unit containing the
 class declaration, but if there is no concrete out\dash of\dash line
 instance there is no need to have a 
@@ -137,7 +137,7 @@ no following string).
 
 
 In the case of the name of a function member or static data
-member of a C++ structure, class or union, the name presented
+member of a \addtoindex{C++} structure, class or union, the name presented
 in the 
 \dotdebugpubnames{} 
 section is not the simple name given
@@ -1186,53 +1186,69 @@ any headers and does not support indirect string encodings or transparent includ
 
 The macro information for each
 compilation unit starts with a header followed by a series of 
-\doublequote{macroinfo}
-entries. Each macroinfo entry consists of a \doublequote{type code}
+macro information
+entries. Each entry consists of an opcode
 followed by zero or more operands. The series of entries for a
-given compilation unit ends with an entry containing a type
-code of 0.
+given compilation unit ends with an entry containing an opcode of 0.
 
-The header starts with a 2-byte \texttt{version} field, followed by a
-1-byte \texttt{flags} field. Additional fields may be present, depending
-of the value of the flags \texttt{field}. 
-    
-If the least significant bit (bit 0) (the \texttt{offset\_size} flag) 
-in the \texttt{flags} field is clear, the header is for a 32-bit 
-DWARF format macro section and offsets are 4 bytes long,
+\subsection{Macro Information Header}
+The macro information header contains the following fields:
+
+\begin{enumerate}[1. ]
+\item \texttt{version} (uhalf) \\
+A version number (see Section \refersec{datarep:macroinformation}).
+This number is specific to the macro information and is independent
+of the DWARF version number.
+
+\item \texttt{flags} (ubyte) \\
+The bits of the \texttt{flags} field are interpreted as a set
+of flags, some of which may indicate that additional fields follow.
+The following flags, beginning with the least significant bit, are defined:
+\begin{itemize}
+\item \addttindex{offset\_size} flag \\
+If the \texttt{offset\_size} flag is clear, the header is for a 32-bit 
+DWARF format macro section and all offsets are 4 bytes long;
 if it is set, the header is for a 64-bit DWARF format macro section 
-and offsets are 8 bytes long.
+and all offsets are 8 bytes long.
+\item \addttindex{debug\_line\_ section\_ offset} flag -- see below
+\item \addttindex{opcode\_operands\_table} flag -- see below
+\end{itemize}
+All other flags are reserved by DWARF.
 
-If the second least significant bit (bit 1) in the \texttt{flags} is set,
+\item \addttindex{debug\_line\_section\_offset} \\
+If the \texttt{debug\_line\_ section\_offset} flag is set,
 there follows an offset in the \dotdebugline{} section of the
 beginning of the line number information, encoded as 4-byte offset for
 a 32-bit DWARF format macro section and 8-byte offset for a 64-bit DWARF format
 macro section.  
 
-If the third least significant bit (bit 2) in the \texttt{flags} is set, there follows
-an \texttt{opcode\_operands} table describing the operands of the macroinfo entry types.
-The macroinfo entry types defined in this standard may, but need not, be
-described in the table, while other macroinfo entry types used in the section
-are described there.  Vendor extension macroinfo entry types are
+\item \addttindex{opcode\_operands\_table} \\
+If the \texttt{opcode\_operands\_table} flag is set, there follows
+an \texttt{opcode\_operands\_table} describing the operands of the macro information entry opcodes.
+The macro information entries defined in this standard may, but need not, be
+described in the table, while other user-defined entry opcodes used in the section
+are described there.  Vendor extension entry opcodes are
 allocated in the range from \DWMACROlouser{} to \DWMACROhiuser. Other
 unassigned codes are reserved for future DWARF standards.
 
 The table starts with a 1-byte \texttt{count} of the defined opcodes, followed by
-an entry for each of those opcodes.  Each entry starts with a 1-byte
-opcode number, followed by unsigned LEB128 encoded number of operands
-and for each operand there is a single byte describing the form in which
-the operand is encoded.  The allowed values are: 
+an entry for each of those opcodes.  Each entry starts with a 1-byte unsigned
+opcode number, followed by unsigned LEB128\addtoindexx{ULEB128} encoded number of operands
+and for each operand there is a single unsigned byte describing the form in which
+the operand is encoded.  The allowed forms are: 
 \DWFORMblock, \DWFORMblockone, \DWFORMblocktwo, \DWFORMblockfour,
 \DWFORMdataone, \DWFORMdatatwo, \DWFORMdatafour, \DWFORMdataeight, 
 \DWFORMsdata, \DWFORMudata, \DWFORMflag, \DWFORMsecoffset,
 \DWFORMstring, \DWFORMstrp{} and \DWFORMstrx.
+\end{enumerate}
 
-\textit{The table allows a consumer to skip over unknown macroinfo entry types.}
+\textit{The opcode operands table allows a consumer to skip over unknown vendor-defined entry types.}
 
-\needlines{6}
-\subsection{Macroinfo Types}
-\label{chap:macroinfotypes}
+\needlines{4}
+\subsection{Macro Information Entries}
+\label{chap:macroinformationentries}
 
-The valid \addtoindex{macroinfo entry types} are as follows:
+The following kinds of macro information entries are defined:
 
 \begin{tabular}{ll}
 \DWMACROdefine{}            &A macro definition\\
@@ -1251,8 +1267,8 @@ The valid \addtoindex{macroinfo entry types} are as follows:
 The define and undefine macro entries have three forms that
 use different representations of their two operands.
 
-\textit{While described in pairs below, the forms of define 
-and undefine entries may be freely intermixed.}
+While described in pairs below, the forms of define 
+and undefine entries may be freely intermixed.
 
 \subsubsubsection{Define and Undefine Using Direct Strings}
 \label{chap:defineandundefinedirectentries}
@@ -1264,7 +1280,7 @@ The second operand consists of a null-terminated character
 string. 
 
 In the case of a \DWMACROdefineNAME{} entry, the value of the
-second string is the name of the macro symbol that is defined
+second operand is the name of the macro symbol that is defined
 at the indicated source line, followed immediately by the 
 \addtoindex{macro formal parameter list}
 including the surrounding parentheses (in
@@ -1306,7 +1322,8 @@ and \DWMACROundef.
 A \DWMACROdefineindirectxTARG{} or \DWMACROundefindirectxTARG{} entry has
 two operands.  The first operand encodes the line number of the source line
 on which the relevant defining or undefining macro directives appeared.
-The second operand is represented using an unsigned LEB128 encoded value,
+The second operand is represented using an 
+unsigned LEB128\addtoindexx{ULEB128} encoded value,
 which is interpreted as a zero-based index into an array of offsets in the
 \dotdebugstroffsets{} section.  Apart from the encoding of the operands 
 these entries are equivalent to \DWMACROdefine{}
@@ -1337,15 +1354,17 @@ the entry marks the end of the current source file inclusion.
 A \DWMACROtransparentincludeTARG{} entry has one operand, an offset into
 another part of the \dotdebugmacro{} section.  The size of the operand
 is given in the header \texttt{offset\_size} field.  The
-\DWMACROtransparentincludeNAME{} macroinfo entry instructs the consumer to 
-replace it with a sequence of macroinfo entries found
+\DWMACROtransparentincludeNAME{} entry instructs the consumer to 
+replace it with a sequence of entries found
 after the section header at the given 
 \dotdebugmacro{} offset, up to, but excluding,
-the terminating entry with type code \texttt{0}.
+the terminating entry with opcode \texttt{0}.
 
 \textit{The \DWMACROtransparentincludeNAME{} entry type makes it possible 
-to share duplicate sequences of macroinfo entries among different compilation units.}
+to share duplicate sequences of macro information entries among different 
+compilation units.}
 
+\needlines{4}
 \subsection{Base Source Entries} 
 \label{chap:basesourceentries}
 
@@ -1357,10 +1376,10 @@ the file entry in the line number information table for the
 primary source file.
 
 
-\subsection{Macroinfo Entries For Command Line Options}
-\label{chap:macinfoentriesforcommandlineoptions}
-%\DWMACROdefineINDX{}\DWMACROdefineindirectINDX{}\DWMACROindirectxINDX
-%\DWMACROundefINDX{}\DWMACROundefindirectINDX{}\DWMACROundefindirectxINDX
+\subsection{Macro Information Entries for Command Line Options}
+\label{chap:macoinformationentriesforcommandlineoptions}
+\DWMACROdefineINDX{}\DWMACROdefineindirectINDX{}\DWMACROdefineindirectxINDX
+\DWMACROundefINDX{}\DWMACROundefindirectINDX{}\DWMACROundefindirectxINDX
 In addition to producing define and undefine entries
 (see Section \refersec{chap:defineandundefineentries})
 for each of the define and undefine directives
@@ -1383,17 +1402,17 @@ and should encode the value 0 in their line number operands.
 \subsection{General rules and restrictions}
 \label{chap:generalrulesandrestrictions}
 
-All macroinfo entries within a \dotdebugmacro{}
+All macro information entries within a \dotdebugmacro{}
 section for a
 given compilation unit appear in the same order in which the
 directives were processed by the compiler.
 
-All macroinfo entries representing command line options appear
+All macro information entries representing command line options appear
 in the same order as the relevant command line options
 were given to the compiler. In the case where the compiler
 itself implicitly supplies one or more macro definitions or
 undefinitions in addition to those which may be specified on
-the command line, macroinfo entries are also produced for these
+the command line, entries are also produced for these
 implicit definitions and undefinitions, and these entries
 also appear in the proper order relative to each other and
 to any definitions or undefinitions given explicitly by the
@@ -1594,6 +1613,7 @@ represented quite compactly by recording just the differences
 starting at the beginning address of each subroutine in
 the program.}
 
+\needlines{4}
 The virtual unwind information is encoded in a self-contained
 section called 
 \dotdebugframe{}.  Entries in a 
@@ -1742,6 +1762,7 @@ If the \addttindex{segment\_size} field of this FDE's CIE is non-zero,
 the initial location is preceded by a segment selector of
 the given length.
 
+\needlines{4}
 \item  \texttt{address\_range} (target address) \\
 The 
 \addttindexx{address\_range}
@@ -1813,7 +1834,7 @@ If the \addttindex{segment\_size} field of this FDE's
 is non\dash zero, the initial location is preceded by a segment
 selector of the given length.
 
-
+\needlines{4}
 \item \textbf{\DWCFAadvancelocTARG} \\
 The \DWCFAadvancelocTARG{} instruction takes a single operand (encoded
 with the opcode) that represents a constant delta. The required
@@ -1938,6 +1959,7 @@ register number to be an offset(N) rule where the value of
 N is 
 \textit{factored offset} * \addttindex{data\_alignment\_factor}.
 
+\needlines{4}
 \item \textbf{\DWCFAoffsetextendedTARG} \\
 The \DWCFAoffsetextendedTARG{} 
 instruction takes two unsigned LEB128\addtoindexx{LEB128!unsigned} 

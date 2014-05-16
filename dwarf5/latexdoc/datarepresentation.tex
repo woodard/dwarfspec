@@ -116,6 +116,7 @@ have a header
 that occurs at the beginning of the CIE and FDE structures
 in the \dotdebugframe{} section.
 
+\needlines{4}
 In an \addtoindex{initial length field}, the values \wfffffffzero through
 \wffffffff are reserved by DWARF to indicate some form of
 extension relative to \addtoindex{DWARF Version 2}; such values must not
@@ -229,6 +230,7 @@ addresses in the debugging information for a shared object
 are offsets relative to the start of the lowest region of
 memory loaded from that shared object.
 
+\needlines{4}
 \textit{This requirement makes the debugging information for
 shared objects position independent.  Virtual addresses in a
 shared object may be calculated by adding the offset to the
@@ -552,7 +554,7 @@ The value of this field is \DWUTtype{} for a type unit
 \needlines{4}
 \item \addttindex{debug\_abbrev\_offset} (\livelink{datarep:sectionoffsetlength}{section offset}) \\
 A 
-\addtoindexx{section offset!in .debug\_types header}
+\addtoindexx{section offset!in .debug\_info header}
 4\dash byte or 8\dash byte unsigned offset into the 
 \dotdebugabbrev{}
 section. This offset associates the type unit with a
@@ -589,7 +591,7 @@ the primary type contained in this
 \item \texttt{type\_offset} (\livelink{datarep:sectionoffsetlength}{section offset}) \\
 \addttindexx{type\_offset}
 A 4\dash byte or 8\dash byte unsigned offset 
-\addtoindexx{section offset!in .debug\_types header}
+\addtoindexx{section offset!in .debug\_info header}
 relative to the beginning
 of the \addtoindex{type unit} header.
 This offset refers to the debugging
@@ -821,36 +823,17 @@ one
 \addtoindexx{loclistptr class}
 class,
 \addtoindexx{lineptr class}
-namely \livelink{chap:classlineptr}{lineptr}, 
-\livelink{chap:classloclistptr}{loclistptr}, 
-\livelink{chap:classmacptr}{macptr} or 
-\livelink{chap:classrangelistptr}{rangelistptr}; the list
-of classes allowed by the applicable attribute in 
+namely 
+\CLASSaddrptr, 
+\CLASSlineptr, 
+\CLASSloclistptr, 
+\CLASSmacptr,  
+\CLASSrangelistptr{} or
+\CLASSstroffsetsptr; 
+the list of classes allowed by the applicable attribute in 
 Table \refersec{tab:attributeencodings}
 determines the class of the form.
 
-\textit{In DWARF V3 the forms \DWFORMdatafour{} and 
-\DWFORMdataeight{} were
-\addtoindexx{lineptr class}
-members 
-\addtoindexx{rangelistptr class}
-of 
-\addtoindexx{macptr class}
-either 
-\addtoindexx{loclistptr class}
-class constant \addtoindexx{constant class}
-or one of the classes 
-\livelink{chap:classlineptr}{lineptr},
-\livelink{chap:classloclistptr}{loclistptr}, 
-\livelink{chap:classmacptr}{macptr} or 
-\livelink{chap:classrangelistptr}{rangelistptr}, depending on context. In
-DWARF V4 
-\DWFORMdatafour{} and 
-\DWFORMdataeight{} are members of class
-constant in all cases. 
-The new 
-\DWFORMsecoffset{} replaces
-their usage for the other classes.}
 
 \needlines{4}
 Each possible form belongs to one or more of the following classes:
@@ -1061,10 +1044,13 @@ format, it is an 8\dash byte unsigned value (see Section
 \refersec{datarep:32bitand64bitdwarfformats}).
 \end{itemize}
 
-\textit{Because classes \livelink{chap:classlineptr}{lineptr}, 
-\livelink{chap:classloclistptr}{loclistptr}, 
-\livelink{chap:classmacptr}{macptr} and 
-\livelink{chap:classrangelistptr}{rangelistptr}
+\textit{Because classes
+\CLASSaddrptr, 
+\CLASSlineptr, 
+\CLASSloclistptr, 
+\CLASSmacptr, 
+\CLASSrangelistptr{} and
+\CLASSstroffsetsptr{}
 share a common representation, it is not possible for an
 attribute to allow more than one of these classes}
 
@@ -1215,17 +1201,14 @@ format, it is an 8\dash byte unsigned value (see Section
 
 \end{itemize}
 
-In no case does an attribute use 
-\addtoindexx{rangelistptr class}
-one 
-\addtoindexx{loclistptr class}
-of 
-\addtoindexx{lineptr class}
-the 
-\addtoindexx{macptr class}
-classes \livelink{chap:classlineptr}{lineptr},
-\livelink{chap:classloclistptr}{loclistptr}, \livelink{chap:classmacptr}{macptr} or 
-\livelink{chap:classrangelistptr}{rangelistptr} to point into either the
+In no case does an attribute use one of the classes 
+\CLASSaddrptr,
+\CLASSlineptr,
+\CLASSloclistptr, 
+\CLASSmacptr, 
+\CLASSrangelistptr{} or 
+\CLASSstroffsetsptr{}
+to point into either the
 \dotdebuginfo{} or \dotdebugstr{} section.
 
 The form encodings are listed in 
@@ -1526,11 +1509,12 @@ Table \refersec{tab:attributeformencodings}.
         \addtoindexx{call tail call attribute!encoding} \\
 \DWATcalltarget~\ddag &0x84 &\CLASSexprloc
         \addtoindexx{call target attribute!encoding} \\
-\DWATcalltargetclobbered!\ddag &0x85 &\CLASSexprloc
+\DWATcalltargetclobbered~\ddag &0x85 &\CLASSexprloc
         \addtoindexx{call target clobbered attribute!encoding} \\
 \DWATcallvalue~\ddag &0x86 &\CLASSexprloc
         \addtoindexx{call value attribute!encoding} \\
-
+\DWATnoreturn~\ddag &0x87 &\CLASSflag 
+        \addtoindexx{noreturn attribute!encoding} \\
 \DWATlouser&0x2000 & --- \addtoindexx{low user attribute encoding}  \\
 \DWAThiuser&\xiiifff& --- \addtoindexx{high user attribute encoding}  \\
 
@@ -1573,7 +1557,8 @@ Table \refersec{tab:attributeformencodings}.
 \DWFORMrefeight&0x14&\livelink{chap:classreference}{reference} \\
 \DWFORMrefudata&0x15&\livelink{chap:classreference}{reference}  \\
 \DWFORMindirect&0x16&(see Section \refersec{datarep:abbreviationstables}) \\
-\DWFORMsecoffset{} &0x17&\livelink{chap:classlineptr}{lineptr}, \livelink{chap:classloclistptr}{loclistptr}, \livelink{chap:classmacptr}{macptr}, \livelink{chap:classrangelistptr}{rangelistptr} \\
+\DWFORMsecoffset{} &0x17& \CLASSaddrptr, \CLASSlineptr, \CLASSloclistptr, \\
+                   &    & \CLASSmacptr, \CLASSrangelistptr, \CLASSstroffsetsptr \\
 \DWFORMexprloc{} &0x18&\livelink{chap:classexprloc}{exprloc} \\
 \DWFORMflagpresent{} &0x19&\livelink{chap:classflag}{flag} \\
 \DWFORMstrx{} \ddag &0x1a&\livelink{chap:classstring}{string} \\
@@ -1843,7 +1828,7 @@ end of list entry.
 \needlines{6}
 \subsubsection{Location List Entries in Non-Split Objects}
 A \addtoindex{location list} entry consists of two address offsets followed
-by a 2\dash byte length, followed by a block of contiguous bytes
+by an unsigned 2\dash byte length, followed by a block of contiguous bytes
 that contains a DWARF location description. The length
 specifies the number of bytes in that block. The two offsets
 are the same size as an address on the target machine.
@@ -1858,11 +1843,11 @@ offsets are the same size as an address on the target machine.
 For a \addtoindex{location list} to be specified, the base address of
 \addtoindexx{base address selection entry!in location list}
 the corresponding compilation unit must be defined 
-(see Section  \refersec{chap:normalandpartialcompilationunitentries}).
+(see Section \refersec{chap:normalandpartialcompilationunitentries}).
 
 \subsubsection{Location List Entries in Split Objects}
 An alternate form for location list entries is used in split objects. 
-Each entry begins with a one-byte code that indicates the kind of entry
+Each entry begins with an unsigned 1-byte code that indicates the kind of entry
 that follows. The encodings for these constants are given in
 Table \refersec{tab:locationlistentryencodingvalues}.
 
@@ -2551,18 +2536,21 @@ Table \refersec{tab:linenumberfileentryformatencodings}.
 
 \section{Macro Information}
 \label{datarep:macroinformation}
+The \addtoindexi{version number}{version number!macro information}
+in the macro information header is \versiondotdebugmacro{}
+(see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
 
 The source line numbers and source file indices encoded in the
 macro information section are represented as 
 unsigned LEB128\addtoindexx{LEB128!unsigned} numbers.
 
-The macro information entry type is encoded as a single byte. 
+The macro information entry type is encoded as a single unsigned byte. 
 The encodings 
 \addtoindexx{macro information entry types!encoding}
 are given in 
 Table \refersec{tab:macroinfoentrytypeencodings}.
 
-
+\needlines{8}
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c}
@@ -2673,6 +2661,7 @@ of list entry.
 A \addtoindex{range list} entry consists of two relative addresses. The
 addresses are the same size as addresses on the target machine.
 
+\needlines{4}
 A base address selection entry and an 
 \addtoindexx{end of list entry!in range list}
 end of list entry each

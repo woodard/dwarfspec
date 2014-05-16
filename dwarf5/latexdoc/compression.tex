@@ -11,9 +11,9 @@ can
 \addtoindexx{DWARF duplicate elimination}
 use a lot of disk space.
 
-This is especially true for C++, where the depth and complexity
+This is especially true for \addtoindex{C++}, where the depth and complexity
 of headers can mean that many, many (possibly thousands of)
-declarations are repeated in every compilation unit. C++
+declarations are repeated in every compilation unit. \addtoindex{C++}
 templates can also mean that some functions and their DWARF
 descriptions get duplicated.
 
@@ -736,7 +736,7 @@ with an \DWATimport{} attribute that refers to the proper unit
 in the \addtoindex{section group}.
 
 \textit{The \addtoindex{C} rules for consistency of global (file scope) symbols
-across compilations are less strict than for C++; inclusion
+across compilations are less strict than for \addtoindexx{C++}; inclusion
 of the import unit attribute assures that the declarations of
 the proper \addtoindex{section group} are considered before declarations
 from other compilations.}
@@ -1317,6 +1317,63 @@ empty
 \end{dwflisting}
 \caption{Type signature computation grammar}
 \label{fig:typesignaturecomputationgrammar}
+\end{figure}
+
+\clearpage
+\subsection{Declarations Completing Non-Defining Declarations}
+\label{app:declarationscompletingnondefiningdeclarations}
+Consider a compilation unit that contains a definition of the member
+function \texttt{N::A::v()} from 
+Figure \refersec{fig:typesignatureexamplescsource}. 
+A possible representation of the
+debug information for this function in the compilation unit is shown
+in Figure \refersec{fig:completingedeclarationofamemberfunctiondwarf}.
+
+\begin{figure}[h]
+\begin{dwflisting}
+\begin{alltt}
+  \DWTAGnamespace
+      \DWATname{} : "N"
+L1:
+    \DWTAGclasstype
+        \DWATname{} : "A"
+        \DWATdeclaration{} : true
+        \DWATsignature{} : 0xd6d160f5 5589f6e9
+L2:
+      \DWTAGsubprogram
+          \DWATexternal{} : 1
+          \DWATname{} : "v"
+          \DWATdeclfile{} : 1
+          \DWATdeclline{} : 13
+          \DWATtype{} : reference to L3
+          \DWATdeclaration{} : 1
+        \DWTAGformalparameter
+            \DWATtype{} : reference to L4
+            \DWATartificial{} : 1
+...
+L3:
+  \DWTAGbasetype
+      \DWATbytesize{} : 4
+      \DWATencoding{} : \DWATEsigned
+      \DWATname{} : "int"
+...
+L4:
+  \DWTAGpointertype
+      \DWATtype{} : reference to L1
+...
+  \DWTAGsubprogram
+      \DWATspecification{} : reference to L2
+      \DWATdeclfile{} : 2
+      \DWATdeclline{} : 25
+      \DWATlowpc{} : ...
+      \DWAThighpc{} : ...
+    \DWTAGlexicalblock
+    ...
+...
+\end{alltt}
+\end{dwflisting}
+\caption{Completing declaration of a member function: DWARF \mbox{encoding}}
+\label{fig:completingedeclarationofamemberfunctiondwarf}
 \end{figure}
 
 

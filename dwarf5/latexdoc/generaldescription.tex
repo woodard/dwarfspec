@@ -143,28 +143,7 @@ There are no limitations on the
 \addtoindexx{attribute ordering}
 ordering of attributes within a debugging information entry.
 
-The attributes are listed in Table \refersec{tab:attributenames}.  
-
-The permissible values
-\addtoindexx{attribute value classes}
-for an attribute belong to one or more classes of attribute
-value forms.  
-Each form class may be represented in one or more ways. 
-For example, some attribute values consist
-of a single piece of constant data. 
-\doublequote{Constant data}
-is the class of attribute value that those attributes may have. 
-There are several representations of constant data,
-however (one, two, ,four, or eight bytes, and variable length
-data). 
-The particular representation for any given instance
-of an attribute is encoded along with the attribute name as
-part of the information that guides the interpretation of a
-debugging information entry.  
-
-Attribute value forms belong
-\addtoindexx{tag names!list of}
-to one of the classes shown in Table \refersec{tab:classesofattributevalue}.
+The attributes are listed in Table \referfol{tab:attributenames}.  
 
 \setlength{\extrarowheight}{0.1cm}
 \addtoindexx{attributes!list of}
@@ -225,7 +204,7 @@ to one of the classes shown in Table \refersec{tab:classesofattributevalue}.
            {all tail and normal calls in a subprogram are described by call site entries}
            \index{call site!summary!all tail and normal calls are described} \\
 \DWATcallallsourcecallsTARG{}
-&\livelinki{chap:DWATcallallaourcecallsofa subprogram}
+&\livelinki{chap:DWATcallallsourcecallsofasubprogram}
            {All tail, normal and inlined calls in a subprogram are described by call site and inlined subprogram entries}
            {all tail calls in a subprogram are described by call site and inlined subprogram entries}
            \index{call site!summary!all tail, normal and inlined calls are described} \\
@@ -244,7 +223,7 @@ to one of the classes shown in Table \refersec{tab:classesofattributevalue}.
            {address of the value pointed to by an argument passed in a call}
            \index{call site!address of the value pointed to by an argument} \\
 \DWATcalldatavalueTARG{}
-&\livelinki{chap:DWATcalldatavalueofcallsite}
+&\livelinki{chap:DWATcalldatavalueofcallparameter}
            {Value pointed to by an argument passed in a call}
            {value pointed to by an argument passed in a call}
            \index{call site!value pointed to by an argument} \\
@@ -266,7 +245,7 @@ to one of the classes shown in Table \refersec{tab:classesofattributevalue}.
            {subprogram called in a call}
            \index{call site!subprogram called} \\
 \DWATcallparameterTARG{}
-&\livelinki{chap:DWATcallparameterofcallsite}
+&\livelinki{chap:DWATcallparameterofcallparameter}
            {Parameter entry in a call}
            {parameter entry in a call}
            \index{call site!parameter entry} \\
@@ -296,7 +275,7 @@ to one of the classes shown in Table \refersec{tab:classesofattributevalue}.
            {address of called routine, which may be clobbered, in a call}
            \index{call site!address of called routine, which may be clobbered} \\
 \DWATcallvalueTARG{}
-&\livelinki{chap:DWATcallvalueofcallsite}
+&\livelinki{chap:DWATcallvalueofcallparameter}
            {Argument value passed in a call}
            {argument value passed in a call}
            \index{call site!argument value passed} \\
@@ -411,6 +390,8 @@ to one of the classes shown in Table \refersec{tab:classesofattributevalue}.
 &\livelinki{chap:DWATnamepathnameofcompilationsource}{Path name of compilation source}{path name of compilation source} \\
 \DWATnamelistitemTARG
 &\livelinki{chap:DWATnamelistitemnamelistitem}{Namelist item}{namelist item}\\
+\DWATnoreturnTARG
+&\livelinki{chap:DWATnoreturnofsubprogram}{\doublequote{no return} property of a subprogram}{noreturn attribute} \\
 \DWATobjectpointerTARG
 &\livelinki{chap:DWATobjectpointerobjectthisselfpointerofmemberfunction}{Object (\texttt{this}, \texttt{self}) pointer of member function}{object (\texttt{this}, \texttt{self}) pointer of member function}\\
 \DWATorderingTARG
@@ -521,6 +502,26 @@ to one of the classes shown in Table \refersec{tab:classesofattributevalue}.
 \addtoindexx{class of attribute value!string|see {string class}}
 \addtoindexx{class of attribute value!stroffsetsptr|see {stroffsetsptr class}}
 
+The permissible values
+\addtoindexx{attribute value classes}
+for an attribute belong to one or more classes of attribute
+value forms.  
+Each form class may be represented in one or more ways. 
+For example, some attribute values consist
+of a single piece of constant data. 
+\doublequote{Constant data}
+is the class of attribute value that those attributes may have. 
+There are several representations of constant data,
+however (one, two, ,four, or eight bytes, and variable length
+data). 
+The particular representation for any given instance
+of an attribute is encoded along with the attribute name as
+part of the information that guides the interpretation of a
+debugging information entry.  
+
+Attribute value forms belong
+\addtoindexx{tag names!list of}
+to one of the classes shown in Table \referfol{tab:classesofattributevalue}.
 
 \begin{longtable}{l|p{11cm}}
 \caption{Classes of attribute value}
@@ -768,6 +769,7 @@ taken to be the result (the address of the object, the
 value of the array bound, the length of a dynamic string,
 the desired value itself, and so on).
 
+\needlines{4}
 \subsubsection{Literal Encodings}
 \label{chap:literalencodings}
 The 
@@ -824,6 +826,7 @@ size of a machine address, is stored.
 This index is relative to the value of the 
 \DWATaddrbase{} attribute of the associated compilation unit.
 
+\needlines{3}
 \textit{The \DWOPconstxNAME{} operation is provided for constants that
 require link-time relocation but should not be
 interpreted by the consumer as a relocatable address
@@ -856,7 +859,7 @@ a signed LEB128\addtoindexx{LEB128!signed} offset from
 the specified register.
 
 \itembfnl{\DWOPbregxTARG{} }
-The \DWOPbregxINDX{} operation has two operands: a register
+The \DWOPbregxNAME{} operation has two operands: a register
 which is specified by an unsigned LEB128\addtoindexx{LEB128!unsigned}
 number, followed by a signed LEB128\addtoindexx{LEB128!signed} offset.
 
@@ -915,7 +918,7 @@ The \DWOPderefsizeTARG{} operation behaves like the
 \DWOPderef{}
 operation: it pops the top stack entry and treats it as an
 address. The value retrieved from that address is pushed. In
-the \DWOPderefsizeINDX{} operation, however, the size in bytes
+the \DWOPderefsizeNAME{} operation, however, the size in bytes
 of the data retrieved from the dereferenced address is
 specified by the single operand. This operand is a 1\dash byte
 unsigned integral constant whose value may not be larger
@@ -948,7 +951,7 @@ that support
 address spaces. The top two stack
 elements are popped, and a data item is retrieved through an
 implementation\dash defined address calculation and pushed as the
-new stack top. In the \DWOPxderefsizeINDX{} operation, however,
+new stack top. In the \DWOPxderefsizeNAME{} operation, however,
 the size in bytes of the data retrieved from the 
 \addtoindexi{dereferenced}{address!dereference operator}
 address is specified by the single operand. This operand is a
@@ -1014,6 +1017,7 @@ Instead of    forcing complex thread-local storage calculations into
 the DWARF expressions, the \DWOPformtlsaddress{} allows the consumer 
 to perform the computation based on the run-time environment.}
 
+\needlines{4}
 \itembfnl{\DWOPcallframecfaTARG}
 The \DWOPcallframecfaTARG{} 
 operation pushes the value of the
@@ -1112,7 +1116,7 @@ shifts the former second entry right logically (filling with
 zero bits) by the number of bits specified by the former top
 of the stack, and pushes the result.
 
-\needlines{6}
+\needlines{3}
 \itembfnl{\DWOPshraTARG}
 The \DWOPshraTARG{} operation pops the top two stack entries,
 shifts the former second entry right arithmetically (divide
@@ -1148,9 +1152,9 @@ constant value 0 if the result of the operation is false.
 \end{itemize}
 
 Comparisons are performed as signed operations. The six
-operators are \DWOPleINDX{} (less than or equal to), \DWOPgeINDX{}
-(greater than or equal to), \DWOPeqINDX{} (equal to), \DWOPltINDX{} (less
-than), \DWOPgtINDX{} (greater than) and \DWOPneINDX{} (not equal to).
+operators are \DWOPleNAME{} (less than or equal to), \DWOPgeNAME{}
+(greater than or equal to), \DWOPeqNAME{} (equal to), \DWOPltNAME{} (less
+than), \DWOPgtNAME{} (greater than) and \DWOPneNAME{} (not equal to).
 
 \needlines{6}
 \itembfnl{\DWOPskipTARG}
@@ -1172,12 +1176,12 @@ operation, beginning after the 2\dash byte constant.
 % to an overfull hbox and a visible artifact. 
 % So we use \- to suggest hyphenation in this rare situation.
 \itembfnl{\DWOPcalltwoTARG, \DWOPcallfourTARG, \DWOPcallrefTARG}
-\DWOPcalltwoINDX, 
-\DWOPcallfourINDX, 
-and \DWOPcallrefINDX{} perform
+\DWOPcalltwoNAME, 
+\DWOPcallfourNAME, 
+and \DWOPcallrefNAME{} perform
 subroutine calls during evaluation of a DWARF expression or
 location description. 
-For \DWOPcalltwoINDX{} and \DWOPcallfour{}, 
+For \DWOPcalltwoNAME{} and \DWOPcallfour{}, 
 the operand is the 2\dash~ or 4\dash byte unsigned offset, respectively,
 of a debugging information entry in the current compilation
 unit. The \DWOPcallref{} operator has a single operand. In the
@@ -1359,6 +1363,8 @@ part of a register or stored in a memory location unrelated
 to other pieces.
 
 \end{enumerate}
+
+\needlines{3}
 \item \textit{Location lists}, which are used to 
 \addtoindexx{location list}
 describe
@@ -1503,7 +1509,7 @@ does not exist in memory but its value is nonetheless known
 and is at the top of the DWARF expression stack. In this form
 of location description, the DWARF expression represents the
 actual value of the object, rather than its location. The
-\DWOPstackvalueINDX{} operation terminates the expression.
+\DWOPstackvalueNAME{} operation terminates the expression.
 
 \itembfnl{\DWOPimplicitpointerTARG}
 The \DWOPimplicitpointerNAME{} operation specifies that the object
@@ -1597,7 +1603,7 @@ the piece within that register is defined by the ABI.
 
 \textit{Many compilers store a single variable in sets of registers,
 or store a variable partially in memory and partially in
-registers. \DWOPpieceINDX{} provides a way of describing how large
+registers. \DWOPpieceNAME{} provides a way of describing how large
 a part of a variable a particular DWARF location description
 refers to. }
 
@@ -1614,22 +1620,22 @@ preceding DWARF location description.
 Interpretation of the
 offset depends on the kind of location description. If the
 location description is empty, the offset doesn\textquoteright t matter and
-the \DWOPbitpieceINDX{} operation describes a piece consisting
+the \DWOPbitpieceNAME{} operation describes a piece consisting
 of the given number of bits whose values are undefined. If
 the location is a register, the offset is from the least
 significant bit end of the register. If the location is a
-memory address, the \DWOPbitpieceINDX{} operation describes a
+memory address, the \DWOPbitpieceNAME{} operation describes a
 sequence of bits relative to the location whose address is
 on the top of the DWARF stack using the bit numbering and
 direction conventions that are appropriate to the current
 language on the target system. If the location is any implicit
-value or stack value, the \DWOPbitpieceINDX{} operation describes
+value or stack value, the \DWOPbitpieceNAME{} operation describes
 a sequence of bits using the least significant bits of that
 value.  
 \end{enumerate}
 
-\textit{\DWOPbitpieceINDX{} is 
-used instead of \DWOPpieceINDX{} when
+\textit{\DWOPbitpieceNAME{} is 
+used instead of \DWOPpieceNAME{} when
 the piece to be assembled into a value or assigned to is not
 byte-sized or is not at the start of a register or addressable
 unit of memory.}
@@ -1687,7 +1693,7 @@ base.
 Add the contents of r1 and r2 to compute a value. This value is the
 \doublequote{contents} of an otherwise anonymous location.
 
-
+\needlines{4}
 \descriptionitemnl{\DWOPlitone{} \DWOPstackvalue{} \DWOPpiece{} 4 \DWOPbregthree{} 0 \DWOPbregfour{} 0}
 \vspace{-2\parsep}\descriptionitemnl{
 \hspace{0.5cm}\DWOPplus{} \DWOPstackvalue{} \DWOPpiece{} 4 \DWOPpiece{} 4}
@@ -1759,8 +1765,8 @@ end of list entry.
 A location list entry has two forms:
 a normal location list entry and a default location list entry.
 
-A 
-\addtoindexx{location list!normal entry}
+\needlines{4}
+A \addtoindexx{location list!normal entry}
 normal location list entry consists of:
 \begin{enumerate}[1. ]
 \item A beginning address offset. 
@@ -1784,7 +1790,7 @@ and ending addresses are equal has no effect
 because the size of the range covered by such
 an entry is zero.}
 
-\item A 2-byte length describing the length of the location 
+\item An unsigned 2-byte length describing the length of the location 
 description that follows.
 
 \item A \addtoindex{single location description} 
@@ -1898,7 +1904,7 @@ Section \refersec{datarep:splitdwarfobjects}),
 location lists are contained in the \dotdebuglocdwo{} section.
 
 Each entry in the location list
-begins with a type code, which is a single byte that
+begins with a type code, which is a single unsigned byte that
 identifies the type of entry. There are five types of entries:
 \begin{enumerate}
 \itembfnl{\DWLLEendoflistentryTARG}
@@ -1980,7 +1986,7 @@ base types, user-defined types and type modifiers.
 
 \section{Accessibility of Declarations}
 \label{chap:accessibilityofdeclarations}
-\textit{Some languages, notably C++ and 
+\textit{Some languages, notably \addtoindex{C++} and 
 \addtoindex{Ada}, have the concept of
 the accessibility of an object or of some other program
 entity. The accessibility specifies which classes of other
@@ -2026,7 +2032,7 @@ Table \refersec{tab:visibilitycodes}.
 
 \section{Virtuality of Declarations}
 \label{chap:virtualityofdeclarations}
-\textit{C++ provides for virtual and pure virtual structure or class
+\textit{\addtoindex{C++} provides for virtual and pure virtual structure or class
 member functions and for virtual base classes.}
 
 The 
@@ -2052,7 +2058,7 @@ source of the application. An example is a formal parameter
 %FIXME: not as a quoted name. Changed to tt font--RB
 entry to represent the 
 \texttt{this} parameter\index{this parameter@\texttt{this} parameter}
-hidden \texttt{this} parameter that most C++
+hidden \texttt{this} parameter that most \addtoindex{C++}
 implementations pass as the first argument to non-static member
 functions.}  
 
@@ -2209,6 +2215,20 @@ information entry with a
 attribute does not need to duplicate information
 provided by the debugging information entry referenced by that specification attribute.
 
+When the non-defining declaration is contained within a type that has
+been placed in a separate type unit (see Section \refersec{chap:separatetypeunitentries}), 
+the \DWATspecification{} attribute cannot refer directly to the entry in
+the type unit. Instead, the current compilation unit may contain a
+\doublequote{skeleton} declaration of the type, which contains only the relevant
+declaration and its ancestors as necessary to provide the context
+(including containing types and namespaces). The \DWATspecification{}
+attribute would then be a reference to the declaration entry within
+the skeleton declaration tree. The debugging information entry for the
+top-level type in the skeleton tree may contain a \DWATsignature{}
+attribute whose value is the type signature 
+(see Section \refersec{datarep:typesignaturecomputation}).
+
+
 It is not the case that all attributes of the debugging information entry referenced by a
 \DWATspecification{} attribute 
 apply to the referring debugging information entry.
@@ -2306,7 +2326,7 @@ a program entity for which no name was given in the source.
 names as they appear in the source program, implementations
 of language translators that use some form of mangled name
 \addtoindexx{mangled names}
-(as do many implementations of C++) should use the unmangled
+(as do many implementations of \addtoindex{C++}) should use the unmangled
 form of the name in the 
 DWARF \DWATname{} attribute,
 \addtoindexx{name attribute}

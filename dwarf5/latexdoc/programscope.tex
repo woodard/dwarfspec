@@ -1016,9 +1016,9 @@ calling convention codes is given in
 Table \refersec{tab:callingconventioncodes}.
 
 \begin{simplenametable}[1.4in]{Calling convention codes}{tab:callingconventioncodes}
-\DWCCnormalINDX        \\
-\DWCCprogramINDX       \\
-\DWCCnocallINDX        \\
+\DWCCnormal        \\
+\DWCCprogram       \\
+\DWCCnocall        \\
 \end{simplenametable}
 
 If this attribute is not present, or its value is the constant
@@ -1100,6 +1100,12 @@ The attribute indicates whether the subroutine
 or entry point was declared with the \doublequote{recursive} keyword
 or property.
 
+A subprogram entry may have a 
+\DWATnoreturn\livetargi{chap:DWATnoreturnofsubprogram}{ attribute}{noreturn attribute}, 
+which is a \CLASSflag. The attribute 
+indicates whether the subprogram was declared with the \doublequote{noreturn} keyword or property 
+indicating that the subprogram can be called, but will never return to its caller.
+
 \subsubsection{Call Site-Related Attributes}
 A subroutine entry may have \DWATcallalltailcalls, \DWATcallallcalls{} 
 and/or \DWATcallallsourcecalls{} attributes, each of which is a 
@@ -1107,23 +1113,29 @@ and/or \DWATcallallsourcecalls{} attributes, each of which is a
 These flags indicate the completeness of the call site information 
 within the subprogram.
 
-The \DWATcallalltailcalls{} attribute indicates that every tail call 
+The \DWATcallalltailcallsNAME{}
+\livetargi{chap:DWATcallalltailcallsofasubprogram}{attribute}{all tail calls summary attribute} 
+indicates that every tail call 
 that occurs in the code for the subprogram is described by a 
 \DWTAGcallsite{} entry. 
 (There may or may not be other non-tail calls to some of the same 
 target subprograms.)
 
-The \DWATcallallcalls{} attribute indicates that every non-inlined call
+The \DWATcallallcallsNAME{}
+\livetargi{chap:DWATcallallcallsofasubprogram}{attribute}{all calls summary attribute} 
+indicates that every non-inlined call
 (either a tail call or a normal call) that occurs in the code for the subprogram
 is described by a \DWTAGcallsite{} entry.
 
-The \DWATcallallsourcecalls{} attribute indicates that every call that occurs in the
+The \DWATcallallsourcecallsNAME{}
+\livetargi{chap:DWATcallallsourcecallsofasubprogram}{attribute}{all source calls summary attribute} 
+indicates that every call that occurs in the
 code for the subprogram, including every call inlined into it, is described by either a 
 \DWTAGcallsite{} entry or a \DWTAGinlinedsubroutine{} entry; further, any call
 that is optimized out is nonetheless also described using a \DWTAGcallsite{} entry 
 that has neither a \DWATcallpc{} nor \DWATcallreturnpc{} attribute.
 
-\textit{The \DWATcallallsourcecalls{} attribute is intended for debugging 
+\textit{The \DWATcallallsourcecallsNAME{} attribute is intended for debugging 
 information format consumers that analyse call graphs.}
 
 If the value of the \DWATcallallsourcecalls{} attribute is true then the values of the
@@ -2000,7 +2012,8 @@ while \DWTAGinlinedsubroutine{} entries describe inlined calls
 (see Section \refersec{chap:inlinedsubroutines}).
 
 The call site entry has a 
-\DWATcallreturnpcTARG{} \addtoindexi{attribute}{call return pc attribute} 
+\DWATcallreturnpcNAME{}
+\livetargi{chap:DWATcallreturnpcofcallsite}{attribute}{call return pc attribute} 
 which is the return address after the call.  
 The value of this attribute corresponds to the return address computed by 
 call frame information in the called subprogram 
@@ -2011,15 +2024,18 @@ call instruction, but on architectures with delay slots it might
 be an address after the delay slot of the call.}
 
 The call site entry may have a 
-\DWATcallpcTARG{} \addtoindexi{attribute}{call pc attribute} which is the
+\DWATcallpcNAME{}
+\livetargi{chap:DWATcallpcofcallsite}{attribute}{call pc attribute} which is the
 address of the call instruction.
 
 If the call site entry corresponds to a tail call, it has the 
-\DWATcalltailcallTARG{} \addtoindexi{attribute}{call tail call attribute},
+\DWATcalltailcallNAME{}
+\livetargi{chap:DWATcalltailcallofcallsite}{attribute}{call tail call attribute},
 which is a \CLASSflag.
 
 The call site entry may have a 
-\DWATcalloriginTARG{} \addtoindex{attribute}{call origin attribute}
+\DWATcalloriginNAME{}
+\livetargi{chap:DWATcalloriginofcallsite}{attribute}{call origin attribute}
 which is a \CLASSreference.  For direct calls or jumps where the called subprogram is
 known it is a reference to the called subprogram's debugging
 information entry.  For indirect calls it may be a reference to a
@@ -2027,25 +2043,32 @@ information entry.  For indirect calls it may be a reference to a
 the subroutine pointer that is called.
 
 The call site may have a 
-\DWATcalltargetTARG{} \addtoindexi{attribute}{call target attribute} which is
+\DWATcalltargetNAME{}
+\livetargi{dwatcalltargetofcallsite}{attribute}{call target attribute} which is
 a DWARF expression.  For indirect calls or jumps where it is unknown at
 compile time which subprogram will be called the expression computes the
 address of the subprogram that will be called.  The DWARF expression should
 not use register or memory locations that might be clobbered by the call.
 
 The call site entry may have a 
-\DWATcalltargetclobberedTARG{} \addtoindexi{attribute}{call target clobbered attribute}
+\DWATcalltargetclobberedNAME{}
+\livetargi{chap:DWATcalltargetclobbered}{attribute}{call target clobbered attribute}
 which is a DWARF expression.  For indirect calls or jumps where the
 address is not computable without use of registers or memory locations that
 might be clobbered by the call the \DWATcalltargetclobberedNAME{}
 attribute is used instead of the \DWATcalltarget{} attribute.
 
-The call site entry may have a \DWATtype{} attribute referencing 
-a debugging information entry for the type of the called function.  
-When \DWATcallorigin{} is present, \DWATtype{} is usually omitted.
+The call site entry may have a \DWATtypeNAME{}
+\livetargi{chap:DWATtypeofcallsite}{attribute}{type attribute!of call site entry}
+referencing a debugging information entry for the type of the called function.  
+When \DWATcallorigin{} is present, \DWATtypeNAME{} is usually omitted.
 
-The call site entry may have \DWATcallfile{}, \DWATcallline{} and
-\DWATcallcolumn{} attributes, each of whose value is an integer constant.
+The call site entry may have 
+\DWATcallfileNAME{}, \DWATcalllineNAME{} and \DWATcallcolumnNAME{} 
+\livetargi{chap:DWATcallfileofcallsite}{attributes,}{call file attribute!of call site entry}
+\livetargi{chap:DWATcalllineofcallsite}{}{call line attribute!of call site entry}
+\livetargi{chap:DWATcallcolumnofcallsite}{}{call column attribute!of call site entry}
+each of whose value is an integer constant.
 These attributes represent the source file, source line number, and source
 column number, respectively, of the first character of the call statement or
 expression.  The call file, call line, and call column attributes are
@@ -2061,11 +2084,12 @@ The call site entry may own \DWTAGcallsiteparameterTARG{} debugging information
 entries\index{call site parameter entry} representing the parameters passed to the call.
 Each such entry has a \DWATlocation{} attribute which is a location expression.
 This location expression describes where the parameter is passed
-in (usually either some register, or a memory location expressible as the
+(usually either some register, or a memory location expressible as the
 contents of the stack register plus some offset).
 
-Each \DWTAGcallsiteparameterTARG{} entry may have a 
-\DWATcallvalue{} \addtoindexi{attribute}{call value attribute}
+Each \DWTAGcallsiteparameter{} entry may have a 
+\DWATcallvalueNAME{}
+\livetargi{chap:DWATcallvalueofcallparameter}{attribute}{call value attribute}
 which is a DWARF expression.  This expression computes the value
 passed for that parameter.  The expression should not use registers or memory
 locations that might be clobbered by the call, as it might be evaluated after
@@ -2083,9 +2107,11 @@ use the values at all.}
 For parameters passed by reference, where the code passes a pointer to
 a location which contains the parameter, or for reference type parameters
 the \DWTAGcallsiteparameter{} entry may also have 
-\DWATcalldatalocation{} \addtoindexi{attribute}{call data location attribute}
+\DWATcalldatalocationNAME{}
+\livetargi{chap:DWATcalldatalocationofcallparameter}{attribute}{call data location attribute}
 whose value is a location expression and a
-\DWATcalldatavalue{} \addtoindexi{attribute}{call data value attribute}
+\DWATcalldatavalueNAME{}
+\livetargi{chap:DWATcalldatavalueofcallparameter}{attribute}{call data value attribute}
 whose value is a DWARF expression.  The \DWATcalldatalocationNAME{} attribute 
 describes where the referenced value lives during the call.  If it is just 
 \DWOPpushobjectaddress{}, it may be left out.  The 
@@ -2095,7 +2121,8 @@ locations that might be clobbered by the call, as it might be evaluated after
 unwinding from the called function back to the caller.
 
 Each call site parameter entry may also have a 
-\DWATcallparameter{} \addtoindexi{attribute}{call parameter entry}
+\DWATcallparameter{}
+\livetargi{chap:DWATcallparameterofcallparameter}{attribute}{call parameter attribute}
 which contains a reference to a \DWTAGformalparameter{} entry,
 \DWATtype{} attribute referencing the type of the parameter or \DWATname{}
 attribute describing the parameter's name.
