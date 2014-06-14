@@ -9,8 +9,9 @@
 # Run as (for example)
 #   python refer.py 
 
-# This version assumes relevant commands are used
-# all-on-one-line, not with operands on successive lines.
+# This version turns each file into a single token list
+# instead of line by line.
+# As of June 14, 2014, it is not yet functioning.
 
 # This is the simplest 'parse' of the .tex that we can manage
 # while still finding what we want to find.
@@ -188,7 +189,7 @@ def pickup(linetoks,tnumin,pattern,myfile,linenum,suppresserr):
       if curtok._class != "id":
         if isbrace(curtok,"}") == "y":
           tk = fileio.dwtoken()
-          tk.insertid("",linenum)
+          tk.insertid("")
           outtoks += [tk]
           # Do not update location.
           continue
@@ -349,9 +350,6 @@ def livetargiprocess(linetoks,tnumin,myfile,linenum):
   global targhyperdict
   global indexdict
   t = linetoks[tnumin]
-  # The first * here used to be e but that was insufficiently general.
-  # The index is generated from the entire  * (token list 8) , not from the
-  # initial  *, token list 5
   ourtoks,inlen = pickup(linetoks,tnumin,"i { i } { * } { * }",myfile,linenum,"n")
   if len(ourtoks) > 5:
     t2 = ourtoks[2];
@@ -359,7 +357,7 @@ def livetargiprocess(linetoks,tnumin,myfile,linenum):
     name = toknamestring(t2)
     applytodict(targhyperdict,name,index)
 
-    # WARNING: looking at 5 this way was wrong.
+    # It is the final *, not the first, that is about the index.
     #t2 = ourtoks[5];
     #name = toknamestring(t2)
     #if len(name) > 0:
@@ -375,26 +373,21 @@ def livelinkprocess(linetoks,tnumin,myfile,linenum,justlink):
   global linkhyperdict
   global indexdict
   t = linetoks[tnumin]
-  if justlink == "y":
-    ourtoks,inlen = pickup(linetoks,tnumin,"i { i } { * }",myfile,linenum,"n")
-    if len(ourtoks) > 5:
-      t2 = ourtoks[2];
-      index = tokmention(t2,myfile,linenum)
-      name = toknamestring(t2)
-      applytodict(linkhyperdict,name,index)
-    else:
-      tn = toknamestring(linetoks[tnumin])
-      printbadcommand(tn,myfile,linenum)
+  ourtoks,inlen = pickup(linetoks,tnumin,"i { i } { * }",myfile,linenum,"n")
+  if len(ourtoks) > 5:
+    t2 = ourtoks[2];
+    index = tokmention(t2,myfile,linenum)
+    name = toknamestring(t2)
+    applytodict(linkhyperdict,name,index)
+
+    # can be multiword. For now do not bother with every index.
+    #t2 = ourtoks[5];
+    #index = tokmention(t2,myfile,linenum)
+    #name = toknamestring(t2)
+    #applytodict(indexdict,name,index)
   else:
-    ourtoks,inlen = pickup(linetoks,tnumin,"i { i }",myfile,linenum,"n")
-    if len(ourtoks) == 4:
-      t2 = ourtoks[2];
-      index = tokmention(t2,myfile,linenum)
-      name = toknamestring(t2)
-      applytodict(linkhyperdict,name,index)
-    else:
-      tn = toknamestring(linetoks[tnumin])
-      printbadcommand(tn,myfile,linenum)
+    tn = toknamestring(linetoks[tnumin])
+    printbadcommand(tn,myfile,linenum)
   return inlen
 def labelprocess(linetoks,tnumin,myfile,linenum):
   """ \label{alabel} """
@@ -429,7 +422,7 @@ def addtoindexprocess(linetoks,tnumin,myfile,linenum):
 def hyperlinkname(name,tnumin,myfile,linenum):
   global linkhyperdict
   tkmod = fileio.dwtoken()
-  tkmod.insertid(name,linenum)
+  tkmod.insertid(name)
   tm = tokmention(tkmod,myfile,linenum)
   applytodict(linkhyperdict,name,tm)
   return 1
@@ -496,52 +489,59 @@ def firstnonblank(linetoks):
 # This done as a first pass so we can recognize when tokens are
 # really commands, something transfunc2, the second pass, 
 # wants to know. 
-def transfunc1(linetoks,myfile,linenum):
+def transfunc1(alltoks,myfile):
   global dwfnamecommsdict
   global newcommsdict
 
-  if len(linetoks) < 1:
+  if len(alltoks) < 1:
+    return alltoks
+  tnum = firstnonblank(alltoks)
+  if tnum >= len(alltoks):
     return linetoks
-  tnum = firstnonblank(linetoks)
-  if tnum >= len(linetoks):
-    return linetoks
-  initialtok = linetoks[tnum]
-  itokstring=toknamestring(initialtok)
-  if itokstring == "\\expandafter\\def\\csname":
-    return linetoks
-  if in_lines_to_ignore(myfile,linenum) == "y":
-    return linetoks
-  if itokstring == "\\newcommand":
-    t1 = linetoks[tnum+1]
-    if not isbrace(t1,'{'):
-      print "Improper character in newcommand", myfile,linenum
-      sys.exit(1)
-    t2 = linetoks[tnum+2]
-    if toknamestring(t2) == "\\simplenametablerule":
-       add_lines_to_ignore(myfile,linenum,linenum+18)
-    if toknamestring(t2) != "\\newdwfnamecommands":
-       tm = tokmention(t2,myfile,linenum)
-       applytodict(newcommsdict,toknamestring(t2),tm)
-    #Be silent on newdwfnamecommands, it is normal.
-    #else:
-    #   print "newcommand on newdwfnamecommands ignored intentionally."
-    return linetoks
-  elif itokstring == "\\newdwfnamecommands":
-    t1 = linetoks[tnum+1]
-    if not isbrace(t1,'{'):
-       print "Improper character in newdwfnamecommands", myfile._name,linenum
-       sys.exit(1)
-    # The token name string will be DWsomething and we want
-    # The token to appear as \DWsomething as that is how references
-    # The usages determine what secondary actions are applied.
-    # are coded.
-    t2 = linetoks[tnum+2]
-    tkmod = fileio.dwtoken()
-    tkmod.insertid("\\" + toknamestring(t2),linenum)
-    tm = tokmention(tkmod,myfile,linenum)
-    applytodict(dwfnamecommsdict,toknamestring(tkmod),tm)
-    return linetoks
-  return linetoks
+  nexttoknum =tnum 
+  finaltoknum = int(len(alltoks))
+  while int(nexttoknum) < int(finaltoknum):
+    tnum = nexttoknum
+    initialtok = alltoks[tnum]
+    itokstring=toknamestring(initialtok)
+    if itokstring == "\\expandafter\\def\\csname":
+      nexttoknum =  int(nexttoknum) + 1
+      continue
+    if itokstring == "\\newcommand":
+      t1 = linetoks[tnum+1]
+      if not isbrace(t1,'{'):
+        print "Improper character in newcommand", myfile,initaltok._linenum
+        sys.exit(1)
+      t2 = linetoks[tnum+2]
+      if toknamestring(t2) == "\\simplenametablerule":
+         add_lines_to_ignore(myfile,linenum,linenum+18)
+      if toknamestring(t2) != "\\newdwfnamecommands":
+         tm = tokmention(t2,myfile,linenum)
+         applytodict(newcommsdict,toknamestring(t2),tm)
+      #Be silent on newdwfnamecommands, it is normal.
+      #else:
+      #   print "newcommand on newdwfnamecommands ignored intentionally."
+      nexttoknum = nexttoknum + 3;
+      continue
+    elif itokstring == "\\newdwfnamecommands":
+      t1 = linetoks[nexttoknum+1]
+      if not isbrace(t1,'{'):
+         print "Improper character in newdwfnamecommands", myfile._name,linenum
+         sys.exit(1)
+      # The token name string will be DWsomething and we want
+      # The token to appear as \DWsomething as that is how references
+      # The usages determine what secondary actions are applied.
+      # are coded.
+      t2 = linetoks[tnum+2]
+      tkmod = fileio.dwtoken()
+      tkmod.insertid("\\" + toknamestring(t2))
+      tm = tokmention(tkmod,myfile,linenum)
+      applytodict(dwfnamecommsdict,toknamestring(tkmod),tm)
+      nexttoknum = nexttoknum + 3;
+      continue
+    else:
+      nexttoknum =  int(nexttoknum) + 1
+  return alltoks
 
 
 def delsuffix(n,suf):
@@ -577,9 +577,15 @@ def makelinkname(t):
    return s2;
    
 
+def gotonextline(alltoks,myfile,curtoknum,lasttoknum):
+  # Iterate till line number changes,
+  # return curtoknum + count, which
+  # might be to past lasttoknum.
+FIXME
+
 # Assumes all new commands known already.
 # This deals with targets and links (various flavors).
-def transfunc2(linetoks,myfile,linenum):
+def transfunc2(alltoks,myfile):
   global newcommsdict
   global dwfnamecommsdict
   global newcommsdict
@@ -593,189 +599,196 @@ def transfunc2(linetoks,myfile,linenum):
   # NAME suffix
   global namedict
 
-  if len(linetoks) < 1:
+  if len(alltoks) < 1:
+    return alltoks
+  tnum = firstnonblank(alltoks)
+  if tnum >= len(alltoks):
     return linetoks
-  if in_lines_to_ignore(myfile,linenum) == "y":
-    return linetoks
-  initialtok = linetoks[0]
-  itokstring=toknamestring(initialtok)
-  # Skip all the newcommand stuff.
-  if itokstring == "\\newcommand":
-    return linetoks
-  elif itokstring == '\\newdwfnamecommands':
-    return linetoks
+  nexttoknum =tnum
+  lasttoknum = int(len(alltoks))
+  initialtok = alltoks[tnum]
+  currentlineno = initialtok._linenum
+  while int(nexttoknum) < int(lasttoknum):
+    tnumin = nexttoknum
+    initialtok = alltoks[tnumin]
+    itokstring=toknamestring(initialtok)
 
-  # Now deal with a regular line.
-
-  tnumin = 0
-  changes = 0
-  lasttoknum = len(linetoks) -1
-  for x in linetoks:
+    # Skip all the newcommand stuff.
+    if itokstring == "\\newcommand":
+      nexttoknum = gotonextline(alltoks, myfile,nexttoknum,lasttoknum)
+      continue
+    elif itokstring == '\\newdwfnamecommands':
+      nexttoknum = gotonextline(alltoks, myfile,nexttoknum,lasttoknum)
+      continue
+  
+FIXME
     if int(tnumin) > int(lasttoknum):
-      break
+        break
     t = linetoks[tnumin]
     if t._class != "id":
-      tnumin = tnumin + 1
-      continue
+        tnumin = tnumin + 1
+        continue
     rawname = toknamestring(t)
     commandname=""
     #rawnameiscommand(rawname,"",basecommand)
     if rawname == "\\expandafter\\def\\csname":
-      return linetoks
+        return linetoks
     if rawname == "\\begin":
-      tnumcount = processbegin(linetoks,tnumin,myfile,linenum);
-      tnumin = tnumin + tnumcount
-      continue
+        tnumcount = processbegin(linetoks,tnumin,myfile,linenum);
+        tnumin = tnumin + tnumcount
+        continue
     if dwfnamecommsdict.has_key(rawname):
-      # We know this one. 
-      # It is a default case name reference.
-      # index the DWname
-      # Link is to chap:DWname
-      tm = tokmention(t,myfile,linenum)
-      linkname = makelinkname(rawname)
-      indxname = deloptionalprefix(commandname,"\\")
-      applytodict(indexdict,indxname,tm);
-
-      applytodict(linkhyperdict,linkname,tm);
-      tnumin = tnumin + 1
-      continue
-    if  newcommsdict.has_key(rawname):
-      # We know this one. We have to see what it is
-      # To decide what to do.
-      # some DWOPbreg*  DWOPreg*   and MDfive are special.
-      # A variety of other such defined commands are irrelevant to us here.
-
-      tnumcount = 1
-      if rawname == "\\livetarg":
-        tnumcount = livetargprocess(linetoks,tnumin,myfile,linenum,"n")
-      elif rawname == "\\livetargi":
-        tnumcount = livetargiprocess(linetoks,tnumin,myfile,linenum)
-      elif rawname == "\\livelink":
-        tnumcount = livelinkprocess(linetoks,tnumin,myfile,linenum,"n")
-      elif rawname == "\\livelinki":
-        tnumcount = livelinkprocess(linetoks,tnumin,myfile,linenum,"n")
-      #elif rawname == "\\label":
-      #  tnumcount = labelprocess(linetoks,tnumin,myfile,linenum)
-      elif rawname == "\\refersec":
-        # does \ref
-        tnumcount = refersecprocess(linetoks,tnumin,myfile,linenum)
-      elif rawname == "\\referfol":
-        # does \vref from varioref package
-        tnumcount = refersecprocess(linetoks,tnumin,myfile,linenum)
-      elif rawname == "\\index":
-        tnumcount = indexprocess(linetoks,tnumin,myfile,linenum)
-      elif rawname == "\\addtoindex":
-        tnumcount = indexprocess(linetoks,tnumin,myfile,linenum)
-      elif rawname == "\\addtoindexx":
-        tnumcount = indexprocess(linetoks,tnumin,myfile,linenum)
-      elif rawname == "\\addttindex":
-        tnumcount = indexprocess(linetoks,tnumin,myfile,linenum)
-      elif rawname == "\\addttindexx":
-        tnumcount = indexprocess(linetoks,tnumin,myfile,linenum)
-      elif rawname == "\\DWOPbregtwo":
-        tnumcount = hyperlinkname("chap:DWOPbregn",tnumin,myfile,linenum)
-      elif rawname == "\\DWOPbregthree":
-        tnumcount = hyperlinkname("chap:DWOPbregn",tnumin,myfile,linenum)
-      elif rawname == "\\DWOPbregfour":
-        tnumcount = hyperlinkname("chap:DWOPbregn",tnumin,myfile,linenum)
-      elif rawname == "\\DWOPbregfive":
-        tnumcount = hyperlinkname("chap:DWOPbregn",tnumin,myfile,linenum)
-      elif rawname == "\\DWOPbregeleven":
-        tnumcount = hyperlinkname("chap:DWOPbregn",tnumin,myfile,linenum)
-      elif rawname == "\\MDfive":
-        tnumcount = hyperlinkname("def:MDfive",tnumin,myfile,linenum)
-      else:
-        fake = ""
-        # If missing anything important, perhaps turn ths on.
-        #print "Error not handled: %s in file %s line %d" %(rawname,myfile._name,linenum)
-      tnumin = tnumin + tnumcount
-      continue
-    # Suffixes are LINK TARG INDX MARK NAME
-    commandname =rawnameiscommand(rawname,"LINK")
-    if len(commandname) > 0:
-      # index the DWname
-      # Link is to chap:DWname
-      if dwfnamecommsdict.has_key(commandname):
+        # We know this one. 
+        # It is a default case name reference.
+        # index the DWname
+        # Link is to chap:DWname
         tm = tokmention(t,myfile,linenum)
-        linkname = makelinkname(commandname)
+        linkname = makelinkname(rawname)
         indxname = deloptionalprefix(commandname,"\\")
-        applytodict(linkhyperdict,linkname,tm)
         applytodict(indexdict,indxname,tm);
-      else:
-        printodderr(rawname,commandname,myfile,linenum)
-      tnumin = tnumin + 1
-      continue
+  
+        applytodict(linkhyperdict,linkname,tm);
+        tnumin = tnumin + 1
+        continue
+      if  newcommsdict.has_key(rawname):
+        # We know this one. We have to see what it is
+        # To decide what to do.
+        # some DWOPbreg*  DWOPreg*   and MDfive are special.
+        # A variety of other such defined commands are irrelevant to us here.
+  
+        tnumcount = 1
+        if rawname == "\\livetarg":
+          tnumcount = livetargprocess(linetoks,tnumin,myfile,linenum,"n")
+        elif rawname == "\\livetargi":
+          tnumcount = livetargiprocess(linetoks,tnumin,myfile,linenum)
+        elif rawname == "\\livelink":
+          tnumcount = livelinkprocess(linetoks,tnumin,myfile,linenum,"n")
+        elif rawname == "\\livelinki":
+          tnumcount = livelinkprocess(linetoks,tnumin,myfile,linenum,"n")
+        #elif rawname == "\\label":
+        #  tnumcount = labelprocess(linetoks,tnumin,myfile,linenum)
+        elif rawname == "\\refersec":
+          # does \ref
+          tnumcount = refersecprocess(linetoks,tnumin,myfile,linenum)
+        elif rawname == "\\referfol":
+          # does \vref from varioref package
+          tnumcount = refersecprocess(linetoks,tnumin,myfile,linenum)
+        elif rawname == "\\index":
+          tnumcount = indexprocess(linetoks,tnumin,myfile,linenum)
+        elif rawname == "\\addtoindex":
+          tnumcount = indexprocess(linetoks,tnumin,myfile,linenum)
+        elif rawname == "\\addtoindexx":
+          tnumcount = indexprocess(linetoks,tnumin,myfile,linenum)
+        elif rawname == "\\addttindex":
+          tnumcount = indexprocess(linetoks,tnumin,myfile,linenum)
+        elif rawname == "\\addttindexx":
+          tnumcount = indexprocess(linetoks,tnumin,myfile,linenum)
+        elif rawname == "\\DWOPbregtwo":
+          tnumcount = hyperlinkname("chap:DWOPbregn",tnumin,myfile,linenum)
+        elif rawname == "\\DWOPbregthree":
+          tnumcount = hyperlinkname("chap:DWOPbregn",tnumin,myfile,linenum)
+        elif rawname == "\\DWOPbregfour":
+          tnumcount = hyperlinkname("chap:DWOPbregn",tnumin,myfile,linenum)
+        elif rawname == "\\DWOPbregfive":
+          tnumcount = hyperlinkname("chap:DWOPbregn",tnumin,myfile,linenum)
+        elif rawname == "\\DWOPbregeleven":
+          tnumcount = hyperlinkname("chap:DWOPbregn",tnumin,myfile,linenum)
+        elif rawname == "\\MDfive":
+          tnumcount = hyperlinkname("def:MDfive",tnumin,myfile,linenum)
+        else:
+          fake = ""
+          # If missing anything important, perhaps turn ths on.
+          #print "Error not handled: %s in file %s line %d" %(rawname,myfile._name,linenum)
+        tnumin = tnumin + tnumcount
+        continue
+      # Suffixes are LINK TARG INDX MARK NAME
+      commandname =rawnameiscommand(rawname,"LINK")
+      if len(commandname) > 0:
+        # index the DWname
+        # Link is to chap:DWname
+        if dwfnamecommsdict.has_key(commandname):
+          tm = tokmention(t,myfile,linenum)
+          linkname = makelinkname(commandname)
+          indxname = deloptionalprefix(commandname,"\\")
+          applytodict(linkhyperdict,linkname,tm)
+          applytodict(indexdict,indxname,tm);
+        else:
+          printodderr(rawname,commandname,myfile,linenum)
+        tnumin = tnumin + 1
+        continue
     commandname =rawnameiscommand(rawname,"TARG")
     if len(commandname) > 0:
-      # index DWname
-      # Set chap:DWname as having target defined
-      if dwfnamecommsdict.has_key(commandname):
-        tm = tokmention(t,myfile,linenum)
-        targname = makelinkname(commandname)
-        indxname = deloptionalprefix(commandname,"\\")
-        applytodict(targhyperdict,targname,tm)
-        applytodict(indexdict,indxname,tm);
-      else:
-        printodderr(rawname,commandname,myfile,linenum)
-      tnumin = tnumin + 1
-      continue
+        # index DWname
+        # Set chap:DWname as having target defined
+        if dwfnamecommsdict.has_key(commandname):
+          tm = tokmention(t,myfile,linenum)
+          targname = makelinkname(commandname)
+          indxname = deloptionalprefix(commandname,"\\")
+          applytodict(targhyperdict,targname,tm)
+          applytodict(indexdict,indxname,tm);
+        else:
+          printodderr(rawname,commandname,myfile,linenum)
+        tnumin = tnumin + 1
+        continue
     commandname =rawnameiscommand(rawname,"INDX")
     if len(commandname) > 0:
-      # Index DWname
-      if dwfnamecommsdict.has_key(commandname):
-        tm = tokmention(t,myfile,linenum)
-        indexname = deloptionalprefix(commandname,"\\")
-        applytodict(indexdict,indexname,tm)
-      else:
-        printodderr(rawname,commandname,myfile,linenum)
-      tnumin = tnumin + 1
-      continue
+        # Index DWname
+        if dwfnamecommsdict.has_key(commandname):
+          tm = tokmention(t,myfile,linenum)
+          indexname = deloptionalprefix(commandname,"\\")
+          applytodict(indexdict,indexname,tm)
+        else:
+          printodderr(rawname,commandname,myfile,linenum)
+        tnumin = tnumin + 1
+        continue
     commandname =rawnameiscommand(rawname,"MARK")
     if len(commandname) > 0:
-      # set chap:DWname as target defined
-      # index DWname
-      if dwfnamecommsdict.has_key(commandname):
-        tm = tokmention(t,myfile,linenum)
-        targname = makelinkname(commandname)
-        applytodict(targhyperdict,targname,tm)
-        indexname = deloptionalprefix(commandname,"\\")
-        applytodict(indexdict,indexname,tm)
-      else:
-        printodderr(rawname,commandname,myfile,linenum)
-      tnumin = tnumin + 1
-      continue
+        # set chap:DWname as target defined
+        # index DWname
+        if dwfnamecommsdict.has_key(commandname):
+          tm = tokmention(t,myfile,linenum)
+          targname = makelinkname(commandname)
+          applytodict(targhyperdict,targname,tm)
+          indexname = deloptionalprefix(commandname,"\\")
+          applytodict(indexdict,indexname,tm)
+        else:
+          printodderr(rawname,commandname,myfile,linenum)
+        tnumin = tnumin + 1
+        continue
     commandname =rawnameiscommand(rawname,"NAME")
     if len(commandname) > 0:
-      # No actions with NAME (but put in namedict anyway).
-      if dwfnamecommsdict.has_key(commandname):
-        tm = tokmention(t,myfile,linenum)
-        applytodict(namedict,commandname,tm)
-      else:
-        printodderr(rawname,commandname,myfile,linenum)
-      tnumin = tnumin + 1
-      continue
-    if rawname == "\\label":
-      # This is a builtin, not our newcommand.
-      tnumcount = labelprocess(linetoks,tnumin,myfile,linenum)
-      tnumin = tnumin + tnumcount
-      continue
-    if rawname == "\\hypertarget":
-      # This is a builtin, not our newcommand.
-      tnumcount = livetargprocess(linetoks,tnumin,myfile,linenum,"y")
-      tnumin = tnumin + tnumcount
-      continue
-    if rawname == "\\hyperlink":
-      # This is a builtin, not our newcommand.
-      tnumcount = livelinkprocess(linetoks,tnumin,myfile,linenum,"y")
-      tnumin = tnumin + tnumcount
-      continue
-    # Some random data or text here.
-
-    tnumin = tnumin + 1
+        # No actions with NAME (but put in namedict anyway).
+        if dwfnamecommsdict.has_key(commandname):
+          tm = tokmention(t,myfile,linenum)
+          applytodict(namedict,commandname,tm)
+        else:
+          printodderr(rawname,commandname,myfile,linenum)
+        tnumin = tnumin + 1
+        continue
+      if rawname == "\\label":
+        # This is a builtin, not our newcommand.
+        tnumcount = labelprocess(linetoks,tnumin,myfile,linenum)
+        tnumin = tnumin + tnumcount
+        continue
+      if rawname == "\\hypertarget":
+        # This is a builtin, not our newcommand.
+        tnumcount = livetargprocess(linetoks,tnumin,myfile,linenum,"y")
+        tnumin = tnumin + tnumcount
+        continue
+      if rawname == "\\hyperlink":
+        # This is a builtin, not our newcommand.
+        tnumcount = livelinkprocess(linetoks,tnumin,myfile,linenum,"y")
+        tnumin = tnumin + tnumcount
+        continue
+      # Some random data or text here.
+  
+      nexttoknum = nexttoknum + 1
     # We don't know what this is. Probably ok?
-    # End of for loop.
-  return linetoks
-
+    # End of for loop on all tokens in the file.
+    nexttokum = nexttoknum + 1
+  # end of FOR loop.
+  return alltoks
+  
 def sort_tokmlist(mylist):
   aux = [ (''.join(x._token._tex),x) for x in mylist ]
   aux.sort()
@@ -921,11 +934,11 @@ def read_all_args():
     sys.exit(1)
   # Pickup all the newcommand instances.
   dwf = fileio.readFilelist(filelist1)
-  dwf.dwtransformline(transfunc1)
+  dwf.dwtransformtoks(transfunc1)
 
   # Now find all the uses.
   dwf2 = fileio.readFilelist(filelist2)
-  dwf2.dwtransformline(transfunc2)
+  dwf2.dwtransformtoks(transfunc2)
   print_stats()
 
 if __name__ == '__main__':
