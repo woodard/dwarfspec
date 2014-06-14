@@ -226,6 +226,7 @@ class  dwline:
        other->ind
        other->id
        id->ind
+       id->id  
        id->other
     """
     dwclass = "none"
@@ -282,6 +283,15 @@ class  dwline:
           a.setIndivid(c,linenum);
           dwclass = "ind"
           self._toks += [a]
+          continue
+        if isIdStart(c) == "y":
+          # It is a valid initial character of an id.
+          # So we have id following id, like \a\a  
+          combotok.finishUpId()
+          self._toks += [combotok]
+          combotok = dwtoken()
+          combotok.setInitialIdChar(c,linenum)
+          dwclass = "id"
           continue
         # Other class input, other starts here.
         combotok.finishUpId()
