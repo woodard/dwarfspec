@@ -88,42 +88,48 @@ class dwtoken:
     self._label = []
     # Class is "id", "ind","other","shift","none"
     self._class = "none"
-  def insertid(self,string):
+    self._linenum = 0
+  def insertid(self,string,line):
     self._class =  "id"
     self._tex = list(string)
     self._underbar = self._tex
     self._std = self._tex
     self._label = self._tex
-  def setIndivid(self,c):
+    self._linenum = line
+  def setIndivid(self,c,line):
     self._tex = [c]
     self._underbar = [c]
     self._std = [c]
     self._label = [c]
     self._class =  "ind"
-  def setInitialIdChar(self,c):
+    self._linenum = line
+  def setInitialIdChar(self,c,line):
     self._tex = [c]
     self._class =  "id"
+    self._linenum = line
   def setNextIdChar(self,c):
     self._tex += [c]
 
-  def setInitialShift(self,c):
+  def setInitialShift(self,c,line):
     self._tex = [c]
     self._underbar = [c]
     self._std = [c]
     self._label = [c]
     self._class =  "shift"
+    self._linenum = line
   def setNextShift(self,c):
     self._tex += [c]
     self._underbar += [c]
     self._std += [c]
     self._label += [c]
     self._class =  "shift"
-  def setInitialOther(self,c):
+  def setInitialOther(self,c,line):
     self._tex = [c]
     self._underbar = [c]
     self._std = [c]
     self._label = [c]
     self._class =  "other"
+    self._linenum = line
   def setNextOther(self,c):
     self._tex += [c]
     self._underbar += [c]
@@ -220,6 +226,7 @@ class  dwline:
        other->ind
        other->id
        id->ind
+       id->id  
        id->other
     """
     dwclass = "none"
@@ -241,20 +248,20 @@ class  dwline:
           continue
       elif dwclass == "none" or dwclass == "ind":
         if isShift(c) == "y":
-          combotok.setInitialShift(c)
+          combotok.setInitialShift(c,linenum)
           dwclass = "shift"
           continue
         if isIndivid(c) == "y":
           a = dwtoken()
-          a.setIndivid(c);
+          a.setIndivid(c,linenum);
           self._toks += [a]
           continue
         if isIdStart(c) == "y":
-          combotok.setInitialIdChar(c)
+          combotok.setInitialIdChar(c,linenum)
           dwclass = "id"
           continue
         # is "other"
-        combotok.setInitialOther(c)
+        combotok.setInitialOther(c,linenum)
         dwclass = "other"
         continue
       elif dwclass == "id": 
@@ -265,7 +272,7 @@ class  dwline:
           combotok.finishUpId()
           self._toks += [combotok]
           combotok = dwtoken()
-          combotok.setInitialShift(c);
+          combotok.setInitialShift(c,linenum);
           dwclass = "shift"
           continue
         if isIndivid(c) == "y":
@@ -273,15 +280,24 @@ class  dwline:
           self._toks += [combotok]
           combotok = dwtoken()
           a = dwtoken()
-          a.setIndivid(c);
+          a.setIndivid(c,linenum);
           dwclass = "ind"
           self._toks += [a]
+          continue
+        if isIdStart(c) == "y":
+          # It is a valid initial character of an id.
+          # So we have id following id, like \a\a  
+          combotok.finishUpId()
+          self._toks += [combotok]
+          combotok = dwtoken()
+          combotok.setInitialIdChar(c,linenum)
+          dwclass = "id"
           continue
         # Other class input, other starts here.
         combotok.finishUpId()
         self._toks += [combotok]
         combotok = dwtoken()
-        combotok.setInitialOther(c);
+        combotok.setInitialOther(c,linenum);
         dwclass = "other"
         continue
       elif dwclass == "shift":
@@ -292,41 +308,41 @@ class  dwline:
           self._toks += [combotok]
           combotok = dwtoken()
           a = dwtoken()
-          a.setIndivid(c);
+          a.setIndivid(c,linenum);
           dwclass = "ind"
           self._toks += [a]
           continue
         if isIdStart(c) == "y":
           self._toks += [combotok]
           combotok = dwtoken()
-          combotok.setInitialIdChar(c);
+          combotok.setInitialIdChar(c,linenum);
           dwclass = "id"
           continue
         # Shift class input, other starts here.
         self._toks += [combotok]
         combotok = dwtoken()
-        combotok.setInitialOther(c);
+        combotok.setInitialOther(c,linenum);
         dwclass = "other"
         continue
       elif dwclass == "other":
         if isShift(c) == "y":
           self._toks += [combotok]
           combotok = dwtoken()
-          combotok.setInitialShift(c);
+          combotok.setInitialShift(c,linenum);
           dwclass = "shift"
           continue
         if isIndivid(c) == "y":
           self._toks += [combotok]
           combotok = dwtoken()
           a = dwtoken()
-          a.setIndivid(c);
+          a.setIndivid(c,linenum);
           dwclass = "ind"
           self._toks += [a]
           continue
         if isIdStart(c) == "y":
           self._toks += [combotok]
           combotok = dwtoken()
-          combotok.setInitialIdChar(c);
+          combotok.setInitialIdChar(c,linenum);
           dwclass = "id"
           continue
         combotok.setNextOther(c);
@@ -406,13 +422,26 @@ class dwfile:
     for l in self._lines:
       l.dwwrite(outfile,lnum)
       lnum = lnum + 1
+  # transformtoks looks at the file as a token sequence,
+  # not a line sequence.
+  # New view required by recent changes to .tex
+  def dwtransformfiletoks(self,callfunc,myfile):
+     FIXME 
+
+  def dwtransformtoks(self,callfunc,myfile):
+    globaltoklist = [] 
+    for l in self._lines:
+      for t in l._toks:
+        globaltoklist += [t]
+    toknum = 0
+    tokmax = len(globaltoklist)
+    self.dwtransformfiletoks(callfunc,myfile)
+
   def dwtransformline(self,callfunc,myfile):
-    lnum=1
+    lnum = 1
     for l in self._lines:
       l.dwtransformline(callfunc,myfile,lnum)
       lnum = lnum + 1
-    
-
 
 class dwfiles:
   def __init__(self):
@@ -433,6 +462,9 @@ class dwfiles:
   def dwtransformline(self,callfunc):
     for f in self._files:
       f.dwtransformline(callfunc,f)
+  def dwtransformtoks(self,callfunc):
+    for f in self._files:
+      f.dwtransformtoks(callfunc,f)
 
 
 def setkeepordeletecomments(val):
