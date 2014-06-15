@@ -147,7 +147,9 @@ floating\dash point number \\
 \DWATEsignedfixedTARG{} & signed fixed\dash point scaled integer \\
 \DWATEunsignedfixedTARG& unsigned fixed\dash point scaled integer \\
 \DWATEdecimalfloatTARG{} & decimal floating\dash point number \\ 
-\DWATEUTFTARG{} & \addtoindex{Unicode} character \\
+\DWATEUTFTARG{} & \addtoindex{Unicode} character (two-byte UTF-8) \\
+\DWATEASCIITARG{} & \addtoindex{ASCII} character (one-byte) \\
+\DWATEUCSTARG{} & \addtoindex{ISO 10646} character (four-byte) \\
 \hline
 \end{tabular}
 \end{table}
@@ -163,6 +165,10 @@ ISO/IEC 10646\dash 1:1993). For example, the
 represented by a base type entry with a name attribute whose
 value is \doublequote{char16\_t}, an encoding attribute whose value
 is \DWATEUTF{} and a byte size attribute whose value is 2.}
+
+\textit{The \DWATEASCII{} and \DWATEUCS{} encodings are intended for
+the {Fortran 2003} string kinds \texttt{ASCII} (ISO/IEC 646:1991) and
+\texttt{ISO\_10646} (UCS-4 in ISO//IEC 10646:2000).}
 
 The 
 \DWATEpackeddecimal{} 
@@ -1860,6 +1866,20 @@ whose value is
 a null\dash terminated string containing the string type name as
 it appears in the source program.
 
+\textit{The 
+\addtoindex{Fortran 2003} language standard allows string 
+types that are composed of different types of (same sized) characters. 
+While there is no standard list of character kinds, the kinds
+\addttindex{ASCII} (see \DWATEASCII), \addttindex{ISO\_10646}
+(see \DWATEUCS) and \texttt{DEFAULT} are defined.}
+
+A string type entry may have a \DWATtype{} 
+\livetargi{char:DWAATtypeofstringtype}{attribute}{type attribute!of string type entry}
+describing how each character is encoded and is to be interpreted.  
+The value of this attribute is a \CLASSreference to a 
+\DWTAGbasetype{} base type entry.  If the attribute is absent, 
+then the character is encoded using the system default.
+
 \needlines{4}
 The string type entry may have a 
 \DWATbytesize{} attribute or 
@@ -2239,7 +2259,7 @@ reference to the type of the entities that are dynamically allocated.
 	
 A dynamic type entry also has a \DWATdatalocation, and may also
 have \DWATallocated{} and/or \DWATassociated{} attributes as 
-described following (Section 5.15.1). The type referenced by the
+described in Section \referfol{chap:dynamictypeproperties}. The type referenced by the
 \DWATtype{} attribute must not have any of these attributes.
 
 \subsection{Dynamic Type Properties}
