@@ -98,14 +98,35 @@ ignorethesedict = {"of":0, "a":0, "the":0, "and":0, "but":0,"DWARF":0,
 "Standards":0,"Committee":0,"Version":0 }
 
 class tokmention:
+  # _hassubcomm,_target are so we can know a command has side effects
+  # of a hyperlink or a livelinki.
   def __init__(self):
     self._token = '' 
     self._file = ""
     self._line = 0
+    self._hassubcomm = "n"
+    self._subcomm = ""
+    self._target = ""
   def __init__(self,tok,filename,line):
     self._token = tok
     self._file = filename
     self._line = line
+    self._hassubcomm = "n"
+    self._subcomm = ""
+    self._target = ""
+  def settarget(self,subcom,target):
+    self._hassubcomm = "y"
+    self._subcomm = subcom
+    self._target = target
+  def dumptm(self):
+    print "Tokmention token  class ",self._token._class,"name",self._token._tex
+    print "Tokmention file,lne ",self._file._name,self._line
+    print "Tokmention subcomm ",self._hassubcomm,self._subcomm,self._target
+
+def isid(tok):
+   if tok._class != "id":
+      return "n"
+   return "y"
 
 def ischar(tok,c):
    if tok._class != "ind":
@@ -492,10 +513,71 @@ def firstnonblank(linetoks):
       continue
     return tnum 
   return tnum
+
+# return tuple of "y" and token num
+# or "n" and 0
+def nextnonblank(linetoks,tnum):
+  lasttoknum = len(linetoks)
+  tnum = tnum + 1
+  while tnum < lasttoknum:
+    x = linetoks[tnum]
+    if x._class != "ind":
+      return ("y",tnum)
+    if toknamestring(x) == " ":
+      tnum = tnum + 1
+      continue
+    elif toknamestring(x) == "\t":
+      tnum = tnum + 1
+      continue
+    return ("y",tnum)
+  return ("n",0)
+
+# Return "n" or "y". If "y" add the proper tnum of 5 and 7.
+# Even where the token list has spaces.
+# Special examples, several of things like this exist:
+  # \newcommand{\CLASSaddress}      {\livelinki{chap:address}{address}{address class}}
+  #  \newcommand{\DWOPbregtwo}{\hyperlink{chap:DWOPbregn}{DW\_OP\_breg2}}
+  #    0        1   2        34   5      6   7
+def speciallinkdef(linetoks,tnum):
+  if len(linetoks) < (int(tnum) +7):
+    return ("n",0,0)
+  (ok,tn1) = nextnonblank(linetoks,tnum)
+  if ok == "n":
+    return ("n",0,0)
+  (ok,tn2) = nextnonblank(linetoks,tn1)
+  if ok == "n":
+    return ("n",0,0)
+  (ok,tn3) = nextnonblank(linetoks,tn2)
+  if ok == "n":
+    return ("n",0,0)
+  (ok,tn4) = nextnonblank(linetoks,tn3)
+  if ok == "n":
+    return ("n",0,0)
+  (ok,tn5) = nextnonblank(linetoks,tn4)
+  if ok == "n":
+    return ("n",0,0)
+  (ok,tn6) = nextnonblank(linetoks,tn5)
+  if ok == "n":
+    return ("n",0,0)
+  (ok,tn7) = nextnonblank(linetoks,tn6)
+  if ok == "n":
+    return ("n",0,0)
+  t5 = linetoks[tn5]
+  if toknamestring(t5) == "\\livelinki":
+    return ("y",tn5,tn7)
+  elif  toknamestring(t5) == "\\hyperlink":
+    return ("y",tn5,tn7)
+  return ("n",0,0)
+
 # Deals solely with finding new commands.
 # This done as a first pass so we can recognize when tokens are
 # really commands, something transfunc2, the second pass, 
 # wants to know. 
+# Special examples, several of things like this exist:
+  # \newcommand{\CLASSaddress}      {\livelinki{chap:address}{address}{address class}}
+  #  \newcommand{\DWOPbregtwo}{\hyperlink{chap:DWOPbregn}{DW\_OP\_breg2}}
+  #    0        1   2        34   5      6   7
+
 def transfunc1(linetoks,myfile,linenum):
   global dwfnamecommsdict
   global newcommsdict
@@ -519,12 +601,22 @@ def transfunc1(linetoks,myfile,linenum):
     t2 = linetoks[tnum+2]
     if toknamestring(t2) == "\\simplenametablerule":
        add_lines_to_ignore(myfile,linenum,linenum+18)
-    if toknamestring(t2) != "\\newdwfnamecommands":
+
+    # If the content is a hyperlink with a real id as the hyperlink
+    # target, make it special.
+    # Because some of the special lines have blanks, we let speciallink
+    # find the right indices for our tokens.
+    (res,tn5,tn7) = speciallinkdef(linetoks,tnum)
+    if res == "y":
+      t5 = linetoks[tn5]
+      t7 = linetoks[tn7]
+      tm = tokmention(t5,myfile,linenum);
+      tm.settarget(toknamestring(t5),toknamestring(t7))
+      applytodict(newcommsdict,toknamestring(t2),tm)
+    elif toknamestring(t2) != "\\newdwfnamecommands":
        tm = tokmention(t2,myfile,linenum)
        applytodict(newcommsdict,toknamestring(t2),tm)
-    #Be silent on newdwfnamecommands, it is normal.
-    #else:
-    #   print "newcommand on newdwfnamecommands ignored intentionally."
+    #Be silent on "newcommand { newdwfnamecommands }...", it is not relevant here.
     return linetoks
   elif itokstring == "\\newdwfnamecommands":
     t1 = linetoks[tnum+1]
@@ -643,17 +735,45 @@ def transfunc2(linetoks,myfile,linenum):
       # We know this one. We have to see what it is
       # To decide what to do.
       # some DWOPbreg*  DWOPreg*   and MDfive are special.
+      # Some commands are really hyperlinks.
       # A variety of other such defined commands are irrelevant to us here.
 
       tnumcount = 1
-      if rawname == "\\livetarg":
+      tml = newcommsdict[rawname]
+      if len(tml) != 1:
+         print "Too many newcommsdict entries for ",rawname,len(tml)
+         tml[0].dumptm()
+         tml[1].dumptm()
+         sys.exit(1)
+      tm = tml[0]
+      if tm._hassubcomm == "y":
+        com = tm._subcomm
+        targname = tm._target
+        com = tm._subcomm
+        targname = tm._target
+        if com == "\\hyperlink":
+          t2 = fileio.dwtoken()
+          t2.insertid(targname,linenum)
+          tm2 = tokmention(t2,myfile,linenum)
+          name = toknamestring(t2)
+          applytodict(linkhyperdict,targname,tm2)
+        elif com == "\\livelinki":
+          t2 = fileio.dwtoken()
+          t2.insertid(targname,linenum)
+          tm2 = tokmention(t2,myfile,linenum)
+          name = toknamestring(t2)
+          applytodict(linkhyperdict,targname,tm2)
+        else:
+          print "Error newcommand ommision in python code."
+          sys.exit(1)
+      elif rawname == "\\livetarg":
         tnumcount = livetargprocess(linetoks,tnumin,myfile,linenum,"n")
       elif rawname == "\\livetargi":
         tnumcount = livetargiprocess(linetoks,tnumin,myfile,linenum)
       elif rawname == "\\livelink":
         tnumcount = livelinkprocess(linetoks,tnumin,myfile,linenum,"n")
       elif rawname == "\\livelinki":
-        tnumcount = livelinkprocess(linetoks,tnumin,myfile,linenum,"n")
+          tnumcount = livelinkprocess(linetoks,tnumin,myfile,linenum,"n")
       #elif rawname == "\\label":
       #  tnumcount = labelprocess(linetoks,tnumin,myfile,linenum)
       elif rawname == "\\refersec":
