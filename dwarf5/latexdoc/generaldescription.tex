@@ -218,7 +218,7 @@ The attributes are listed in Table \referfol{tab:attributenames}.
            {Column position of inlined subroutine call}
            {column position of inlined subroutine call} \\
 \DWATcalldatalocationTARG{}
-&\livelinki{chap:DWATcalldatalocationofcallsite}
+&\livelinki{chap:DWATcalldatalocationofcallparameter}
            {Address of the value pointed to by an argument passed in a call}
            {address of the value pointed to by an argument passed in a call}
            \index{call site!address of the value pointed to by an argument} \\
@@ -1513,6 +1513,7 @@ of location description, the DWARF expression represents the
 actual value of the object, rather than its location. The
 \DWOPstackvalueNAME{} operation terminates the expression.
 
+\needlines{4}
 \itembfnl{\DWOPimplicitpointerTARG}
 The \DWOPimplicitpointerNAME{} operation specifies that the object
 is a pointer that cannot be represented as a real pointer,
@@ -2073,6 +2074,7 @@ may have a
 \DWATartificial{} attribute, 
 which is a \livelink{chap:classflag}{flag}.
 
+\needlines{6}
 \section{Segmented Addresses}
 \label{chap:segmentedaddresses}
 \textit{In some systems, addresses are specified as offsets within a
@@ -2487,6 +2489,7 @@ value is represented as an offset from the beginning of the
 \dotdebugranges{} section to the beginning of the 
 \addtoindex{range list}.
 
+\needlines{4}
 If the current compilation unit contains a \DWATrangesbase{}
 attribute, the value of that attribute establishes a base
 offset within the \dotdebugranges{} section for the compilation
@@ -2620,6 +2623,7 @@ as the lower bound of an array) that is an integer value,
 where the value may be known during compilation or may be
 computed dynamically during execution.
 
+\needlines{5}
 The value of these
 attributes is determined based on the class as follows:
 \begin{itemize}
@@ -2627,7 +2631,14 @@ attributes is determined based on the class as follows:
 the attribute.
 
 \item For a \livelink{chap:classreference}{reference}, the
-value is a DWARF procedure that computes the value of the attribute.
+value is a reference to another DIE.  This DIE may:
+\begin{itemize}
+\renewcommand{\itemsep}{0cm}
+\item describe a constant which is the attribute value,
+\item describe a variable which contains the attribute value, or
+\item contain a DWARF expression which computes the attribute value
+      (for example, be a \DWTAGdwarfprocedure{} entry).
+\end{itemize}
 
 \item For an \livelink{chap:classexprloc}{exprloc}, the value is interpreted as a 
 DWARF expression; 
@@ -2685,6 +2696,7 @@ descriptions as part of the description of other entities. It
 should not accept them in expressions, nor allow them to be
 assigned, or the like.}
 
+\needlines{4}
 \section{Byte and Bit Sizes}
 \label{chap:byteandbitsizes}
 % Some trouble here with hbox full, so we try optional word breaks.

@@ -1333,33 +1333,31 @@ void A::func1(int x) {}
 \figurepart{1}{2}
 \begin{dwflisting}
 \begin{alltt}
-1\$: \DWTAGunspecifiedtype
-        \DWATname("void")
-                ...
+
 2\$: \DWTAGbasetype
         \DWATname("int")
         ...
 3\$: \DWTAGclasstype
         \DWATname("A")
         ...
-4\$:    \DWTAGpointertype
+4\$:     \DWTAGpointertype
             \DWATtype(reference to 3\$)
             ...
-5\$:    \DWTAGconsttype
+5\$:     \DWTAGconsttype
             \DWATtype(reference to 3\$)
             ...
-6\$:    \DWTAGpointertype
+6\$:     \DWTAGpointertype
             \DWATtype(reference to 5\$)
             ...
 
-7\$:    \DWTAGsubprogram
+7\$:     \DWTAGsubprogram
             \DWATdeclaration
             \DWATname("func1")
-            \DWATtype(reference to 1\$)
             \DWATobjectpointer(reference to 8\$) \addtoindexx{object pointer attribute}
                 ! References a formal parameter in this 
                 ! member function
             ...
+
 \end{alltt}
 \end{dwflisting}
 \caption{Member function example: DWARF description}
@@ -1370,7 +1368,8 @@ void A::func1(int x) {}
 \figurepart{2}{2}
 \begin{dwflisting}
 \begin{alltt}
-8\$:        \DWTAGformalparameter
+
+8\$:         \DWTAGformalparameter
                 \DWATartificial(true)
                 \DWATname("this")
                 \DWATtype(reference to 4\$)
@@ -1379,37 +1378,36 @@ void A::func1(int x) {}
                     ! or volatile
                 \DWATlocation ...
                 ...
-9\$:        \DWTAGformalparameter
+9\$:         \DWTAGformalparameter
                 \DWATname(x1)
                 \DWATtype(reference to 2\$)
                 ...
 10\$:    \DWTAGsubprogram
-             \DWATdeclaration
-             \DWATname("func2")
-             \DWATtype(reference to 1\$)
-             \DWATobjectpointer(reference to 11\$) \addtoindexx{object pointer attribute}
-             ! References a formal parameter in this 
-             ! member function
-             ...
+            \DWATdeclaration
+            \DWATname("func2")
+            \DWATobjectpointer(reference to 11\$) \addtoindexx{object pointer attribute}
+            ! References a formal parameter in this 
+            ! member function
+            ...
 11\$:        \DWTAGformalparameter
-                 \DWATartificial(true)
-                 \DWATname("this")
-                 \DWATtype(reference to 6\$)
-                 ! Makes type of 'this' as 'A const*' =>
-                 !     func2 marked as const
-                 \DWATlocation ...
-                 ...
+                \DWATartificial(true)
+                \DWATname("this")
+                \DWATtype(reference to 6\$)
+                ! Makes type of 'this' as 'A const*' =>
+                !     func2 marked as const
+                \DWATlocation ...
+                ...
 12\$:    \DWTAGsubprogram
-             \DWATdeclaration
-             \DWATname("func3")
-             \DWATtype(reference to 1\$)
-             ...
-                 ! No object pointer reference formal parameter
-                 ! implies func3 is static
+            \DWATdeclaration
+            \DWATname("func3")
+            ...
+                ! No object pointer reference formal parameter
+                ! implies func3 is static
 13\$:        \DWTAGformalparameter
-                 \DWATname(x3)
-                 \DWATtype(reference to 2\$)
-                 ...
+                \DWATname(x3)
+                \DWATtype(reference to 2\$)
+                ...
+
 \end{alltt}
 \end{dwflisting}
 \begin{center}
@@ -1417,7 +1415,9 @@ Figure~\ref{fig:memberfunctionexampledwarfdescription}: Member function example:
 \end{center}
 \end{figure}
 
-As a further example illustrating \&- and \&\&-qualification, 
+\clearpage
+As a further example illustrating \&- and \&\&-qualification
+of member functions, 
 consider the member function example fragment in 
 Figure \refersec{fig:memberfunctionrefqualexamplesourcefragment}.
 The DWARF representation in 
@@ -2968,6 +2968,91 @@ int main ()
 \end{figure}
 
 \clearpage
+\section{String Type Examples}
+\label{app:stringtypeexamples}
+Consider the \addtoindex{Fortran 2003} string type example source in
+Figure \referfol{fig:stringtypeexamplesource}. The DWARF representation in
+Figure \refersec{fig:stringtypeexampledwarf} is appropriate.
+
+\begin{figure}[h]
+\begin{lstlisting}
+        program character_kind
+            use iso_fortran_env
+            implicit none
+            integer, parameter :: ascii = selected_char_kind ("ascii")
+            integer, parameter :: ucs4  = selected_char_kind ('ISO_10646')
+              
+            character(kind=ascii, len=26) :: alphabet
+            character(kind=ucs4,  len=30) :: hello_world
+            character (len=*), parameter :: all_digits="0123456789"
+              
+            alphabet = ascii_"abcdefghijklmnopqrstuvwxyz"
+            hello_world = ucs4_'Hello World and Ni Hao -- ' &
+                          // char (int (z'4F60'), ucs4)     &
+                          // char (int (z'597D'), ucs4)
+              
+            write (*,*) alphabet
+            write (*,*) all_digits
+              
+            open (output_unit, encoding='UTF-8')
+            write (*,*) trim (hello_world)
+        end program character_kind
+\end{lstlisting}
+\caption{String type example: source}
+\label{fig:stringtypeexamplesource}
+\end{figure}
+
+\begin{figure}[h]
+\begin{dwflisting}
+\begin{alltt}
+
+1\$: \DWTAGbasetype
+        \DWATencoding (\DWATEASCII)
+
+2\$: \DWTAGbasetype
+        \DWATencoding (\DWATEUCS)
+        \DWATbytesize (4)
+
+3\$: \DWTAGstringtype
+        \DWATbytesize (10)
+
+4\$: \DWTAGconsttype
+        \DWATtype (reference to 3\$)
+      
+5\$: \DWTAGstringtype
+        \DWATtype (1\$)
+        \DWATstringlength ( ... )
+        \DWATstringlengthbytesize ( ... )
+        \DWATdatalocation ( ... )
+      
+6\$: \DWTAGstringtype
+        \DWATtype (2\$)
+        \DWATstringlength ( ... )
+        \DWATstringlengthbytesize ( ... )
+        \DWATdatalocation ( ... )
+
+7\$: \DWTAGvariable
+        \DWATname (alphabet)
+        \DWATtype (5\$)
+        \DWATlocation ( ... )
+
+8\$: \DWTAGconstant
+        \DWATname (all\_digits)
+        \DWATtype (4\$)
+        \DWATconstvalue ( ... )
+
+9\$: \DWTAGvariable
+        \DWATname (hello\_world)
+        \DWATtype (6\$)
+        \DWATlocation ( ... )
+        
+\end{alltt}
+\end{dwflisting}
+\caption{String type example: DWARF representation}
+\label{fig:stringtypeexampledwarf}
+\end{figure}
+
+\clearpage
 \section{Call Site Examples}
 \label{app:callsiteexamples}
 The following examples use a hypothetical machine which: 
@@ -3241,8 +3326,9 @@ end subroutine fn5
 
 Possible generated code for this source is shown using a suggestive 
 pseudo-\linebreak[0]assembly notation in Figure \refersec{fig:callsiteexample2code}.
-\begin{figure}
+\begin{figure}[h]
 \begin{lstlisting}
+
 fn4:
     %reg2 = [%reg0]   ! Load value of n (passed by reference)
     %reg2 = %reg2 / 2 ! Divide by 2
@@ -3262,6 +3348,7 @@ L9:
 L10:
     %reg3 = %reg3 + 8 ! Leave stack frame
     return
+    
 \end{lstlisting}
 \caption{Call Site Example \#2: Code}
 \label{fig:callsiteexample2code}
@@ -3276,9 +3363,10 @@ DW_OP_entry_value 4 DW_OP_breg0 0 DW_OP_deref_size 4 DW_OP_stack_value
 The call sites in (just) function \texttt{fn5} might be as shown in 
 Figure \refersec{fig:callsiteexample2dwarf}.
 
-\begin{figure}
+\begin{figure}[h]
 \begin{dwflisting}
 \begin{alltt}
+
 \DWTAGcallsite
     \DWATcallreturnpc(L9) ! First call to fn4
     \DWATcallorigin(reference to subprogram fn4)
@@ -3292,6 +3380,7 @@ Figure \refersec{fig:callsiteexample2dwarf}.
         ! And the actual value of the parameter can be also perhaps looked up in
         ! fn5's caller
         \DWATcalldatavalue(\DWOPentryvalue{} 4 \DWOPbregzero{} 0 \DWOPderefsize 4)
+        
 \DWTAGcallsite
     \DWATcallreturnpc(L10) ! Second call to fn4
     \DWATcallorigin(reference to subprogram fn4)
@@ -3304,6 +3393,7 @@ Figure \refersec{fig:callsiteexample2dwarf}.
         ! DW_AT_call_data_location(DW_OP_push_object_address) ! left out, implicit
         ! And the value passed by reference is constant 5
         \DWATcalldatavalue(\DWOPlitfive)
+        
 \end{alltt}
 \end{dwflisting}
 \caption{Call Site Example \#2: DWARF Encoding}

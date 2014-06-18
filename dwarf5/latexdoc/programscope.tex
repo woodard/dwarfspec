@@ -152,27 +152,29 @@ Language name & Meaning\\ \hline
 \DWLANGCpluspluselevenTARG    & ISO C++:2011 \addtoindexx{C++:2011 (ISO)} \\
 \DWLANGCobolseventyfourTARG & ISO COBOL:1974 \addtoindexx{COBOL:1974 (ISO)} \\
 \DWLANGCoboleightyfiveTARG  & ISO COBOL:1985 \addtoindexx{COBOL:1985 (ISO)} \\
-\DWLANGDTARG{} \dag & D \addtoindexx{D language} \\
+\DWLANGDTARG{}~\dag & D \addtoindexx{D language} \\
 \DWLANGFortranseventysevenTARG & ISO FORTRAN:1977 \addtoindexx{FORTRAN:1977 (ISO)} \\
 \DWLANGFortranninetyTARG       & ISO Fortran:1990 \addtoindexx{Fortran:1990 (ISO)} \\
 \DWLANGFortranninetyfiveTARG   & ISO Fortran:1995 \addtoindexx{Fortran:1995 (ISO)} \\
-\DWLANGGoTARG{} \dag & \addtoindex{Go} \\
+\DWLANGGoTARG{}~\dag & \addtoindex{Go} \\
 \DWLANGHaskellTARG{} \dag & \addtoindex{Haskell} \\
 \DWLANGJavaTARG{} & \addtoindex{Java}\\
+\DWLANGJuliaTARG{}~\dag & \addtoindex{Julia} \\
 \DWLANGModulatwoTARG   & ISO Modula\dash 2:1996 \addtoindexx{Modula-2:1996 (ISO)} \\
 \DWLANGModulathreeTARG & \addtoindex{Modula-3} \\
 \DWLANGObjCTARG{}         & \addtoindex{Objective C} \\
 \DWLANGObjCplusplusTARG{} & \addtoindex{Objective C++} \\
-\DWLANGOCamlTARG{} \dag  & \addtoindex{OCaml}\index{Objective Caml|see{OCaml}} \\
-\DWLANGOpenCLTARG{} \dag & \addtoindex{OpenCL} \\
+\DWLANGOCamlTARG{}~\dag  & \addtoindex{OCaml}\index{Objective Caml|see{OCaml}} \\
+\DWLANGOpenCLTARG{}~\dag & \addtoindex{OpenCL} \\
 \DWLANGPascaleightythreeTARG & ISO Pascal:1983 \addtoindexx{Pascal:1983 (ISO)} \\
-\DWLANGPLITARG{} \dag & ANSI PL/I:1976 \addtoindexx{PL/I:1976 (ANSI)} \\
-\DWLANGPythonTARG{} \dag & \addtoindex{Python} \\
-\DWLANGRustTARG{} \dag & \addtoindex{Rust} \\
+\DWLANGPLITARG{}~\dag & ANSI PL/I:1976 \addtoindexx{PL/I:1976 (ANSI)} \\
+\DWLANGPythonTARG{}~\dag & \addtoindex{Python} \\
+\DWLANGRustTARG{}~\dag & \addtoindex{Rust} \\
+\DWLANGSwiftTARG{}~\dag & \addtoindex{Swift} \\
 \DWLANGUPCTARG{} & UPC (Unified Parallel C) \addtoindexx{UPC}  
                          \index{Unified Parallel C|see{UPC}} \\ 
 \hline
-\dag \ \ \textit{Support for these languages is limited.}& \\
+\dag \ \ \textit{Support for these languages is limited}& \\
 \end{tabular}
 \end{table}
 
@@ -545,6 +547,7 @@ whose presence indicates that all strings referred to by this type
 unit entry, its children, and the skeleton line number table, are
 represented using the UTF-8 representation.
 
+\needlines{4}
 A \addtoindex{type unit} entry for a given type T owns a debugging
 information entry that represents a defining declaration
 of type T. If the type is nested within enclosing types or
@@ -1257,6 +1260,7 @@ represented by a debugging information entry\addtoindexx{unspecified parameters 
 with the tag
 \DWTAGunspecifiedparametersTARG.
 
+\needlines{4}
 The entry for a subroutine that includes a
 \addtoindex{Fortran}
 \addtoindexx{Fortran!common block}
@@ -1743,6 +1747,7 @@ to an entity declared within the scope of the relevant inlined
 subroutine and for which no concrete instance entry exists,
 the reference should refer to the abstract instance entry.
 
+\needlines{4}
 \item Entries in the concrete instance tree which are associated
 with entries in the abstract instance tree such that neither
 has a \DWATname{} attribute,
@@ -1803,6 +1808,7 @@ a concrete inlined instance (that is, as references to
 corresponding entries within the associated abstract instance
 tree).
 
+\needlines{5}
 The differences between the DWARF representation of a
 concrete out\dash of\dash line instance of a given subroutine and the
 representation of a concrete inlined instance of that same
@@ -2045,7 +2051,7 @@ the subroutine pointer that is called.
 
 The call site may have a 
 \DWATcalltargetNAME{}
-\livetargi{dwatcalltargetofcallsite}{attribute}{call target attribute} which is
+\livetargi{chap:DWATcalltargetofcallsite}{attribute}{call target attribute} which is
 a DWARF expression.  For indirect calls or jumps where it is unknown at
 compile time which subprogram will be called the expression computes the
 address of the subprogram that will be called.  The DWARF expression should
@@ -2053,7 +2059,7 @@ not use register or memory locations that might be clobbered by the call.
 
 The call site entry may have a 
 \DWATcalltargetclobberedNAME{}
-\livetargi{chap:DWATcalltargetclobbered}{attribute}{call target clobbered attribute}
+\livetargi{chap:DWATcalltargetclobberedofcallsite}{attribute}{call target clobbered attribute}
 which is a DWARF expression.  For indirect calls or jumps where the
 address is not computable without use of registers or memory locations that
 might be clobbered by the call the \DWATcalltargetclobberedNAME{}
@@ -2121,6 +2127,7 @@ The expression should not use registers or memory
 locations that might be clobbered by the call, as it might be evaluated after
 unwinding from the called function back to the caller.
 
+\needlines{4}
 Each call site parameter entry may also have a 
 \DWATcallparameter{}
 \livetargi{chap:DWATcallparameterofcallparameter}{attribute}{call parameter attribute}

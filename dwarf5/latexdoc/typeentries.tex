@@ -230,14 +230,6 @@ indicating positive or negative. \\
 \end{tabular}
 \end{table}
 
-The 
-\DWATdigitcount{}
-attribute 
-\addtoindexx{digit count attribute}
-is an \livelink{chap:classconstant}{integer constant}
-value that represents the number of digits in an instance of
-the type.
-
 \hypertarget{chap:DWATdecimalscaledecimalscalefactor}{}
 The \DWATdecimalscale{}
 attribute 
@@ -252,6 +244,14 @@ stored in an instance of the type. Negative scale moves the
 decimal point to the left; if the absolute value of the scale
 is larger than the digit count, this implies additional zero
 digits on the left are not stored in an instance of the type.
+
+The 
+\DWATdigitcount{}
+attribute 
+\addtoindexx{digit count attribute}
+is an \livelink{chap:classconstant}{integer constant}
+value that represents the number of digits in an instance of
+the type.
 
 The \DWATEedited{}
 base 
@@ -1185,6 +1185,7 @@ do not allow for manipulating or computing bit offsets.}
 
 \end{enumerate}
 
+\needlines{4}
 For a \DWATdatabitoffset{} attribute, 
 the value is an \livelink{chap:classconstant}{integer constant} 
 (see Section \refersec{chap:staticanddynamicvaluesofattributes}) 
@@ -1309,6 +1310,7 @@ the right.}
 \label{fig:littleendiandatabitoffsets}
 \end{figure}
 
+\needlines{4}
 \textit{Note that data member bit offsets in this example are the
 same for both big\dash\ and little\dash endian architectures even
 though the fields are allocated in different directions
@@ -1320,6 +1322,7 @@ the target architecture may or may not make this seem natural.}
 and arrays, see 
 Appendix \refersec{app:pascalexample}.}
 
+\needlines{4}
 \textit{Attribute \DWATdatabitoffset{} 
 is new in 
 \addtoindex{DWARF Version 4}, unchanged in \addtoindex{DWARF Version 5},
@@ -1683,6 +1686,7 @@ required to hold an instance of the enumeration. If no \DWATbytesize{} attribute
 is present, the size for holding an instance of the enumeration is given by the size 
 of the underlying data type.
 
+\needlines{4}
 If an enumeration type has type safe 
 \addtoindexx{type safe enumeration types}
 semantics such that
@@ -1770,6 +1774,7 @@ arguments of specific types. The type of such pointers would
 be described with a \doublequote{pointer to} modifier applied to a
 user\dash defined type.}
 
+\needlines{4}
 A subroutine type is represented by a debugging information
 entry with the 
 \addtoindexx{subroutine type entry}
@@ -2052,31 +2057,9 @@ these attributes is determined as described in
 Section \refersec{chap:staticanddynamicvaluesofattributes}.
 
 If the lower bound value is missing, the value is assumed to
-be a language\dash dependent default constant. 
+be a language\dash dependent default constant as defined in
+Table \refersec{tab:languageencodings}.
 \addtoindexx{lower bound attribute!default}
-The default lower bound is 0 for 
-\addtoindex{C}, 
-\addtoindex{C++}, 
-\addtoindex{D},
-\addtoindex{Go},
-\addtoindex{Haskell}, 
-\addtoindex{Java}, 
-\addtoindex{Objective C}, 
-\addtoindex{Objective C++},
-\addtoindex{OpenCL},
-\addtoindex{Python}, 
-\addtoindex{Rust}, and 
-\addtoindex{UPC}. 
-The default lower bound is 1 for 
-\addtoindex{Ada}, 
-\addtoindex{COBOL},
-\addtoindex{Fortran}, 
-\addtoindex{Modula-2},
-\addtoindex{Modula-3},
-\addtoindex{Pascal} and 
-\addtoindex{PL/I}.
-
-\textit{No other default lower bound values are currently defined.}
 
 If the upper bound and count are missing, then the upper bound value is 
 \textit{unknown}.\addtoindexx{upper bound attribute!default unknown}
@@ -2115,6 +2098,7 @@ Section \refersec{chap:byteandbitsizes}.
 
 \textit{Note that the stride can be negative.}
 
+\needlines{4}
 \section{Pointer to Member Type Entries}
 \label{chap:pointertomembertypeentries}
 
