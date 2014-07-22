@@ -832,6 +832,86 @@ Figure~\refersec{fig:assumedrankdwarfparser}.
 \end{figure}
 
 
+\clearpage
+\subsection{Fortran Dynamic Type Example}
+\label{app:fortrandynamictypeexample}
+Consider the \addtoindex{Fortran 90} example of dynamic properties in 
+Figure \refersec{fig:fortrandynamictypeexamplesource}.
+This can be represented in DWARF as illustrated in 
+Figure \refersec{fig:fortrandynamictypeexampledwarfdescription}.
+Note that unnamed dynamic types are used to avoid replicating
+the full description of the underlying type \texttt{dt} that is shared by
+several variables.
+
+\begin{figure}[h]
+\begin{lstlisting}
+	    program sample
+     
+        type :: dt (l)
+            integer, len :: l
+            integer :: arr(l)
+        end type
+
+        integer :: n = 4
+        contains
+
+        subroutine s()
+            type (dt(n))               :: t1
+            type (dt(n)), pointer      :: t2
+            type (dt(n)), allocatable  :: t3, t4
+        end subroutine
+     
+        end sample
+\end{lstlisting}
+\caption{Fortran dynamic type example: source}
+\label{fig:fortrandynamictypeexamplesource}
+\end{figure}
+
+\begin{figure}[h]
+\begin{dwflisting}
+\begin{alltt}
+11$:    \DWTAGstructuretype
+            \DWATname("dt")
+            \DWTAGmember
+                ...
+			...
+
+13$:    \DWTAGdynamictype             ! plain version
+            \DWATdatalocation (dwarf expression to locate raw data)
+            \DWATtype (11$)
+
+14$:    \DWTAGdynamictype             ! 'pointer' version
+            \DWATdatalocation (dwarf expression to locate raw data)
+            \DWATassociated (dwarf expression to test if associated)
+            \DWATtype (11$)
+
+15$:    \DWTAGdynamictype             ! 'allocatable' version
+            \DWATdatalocation (dwarf expression to locate raw data)
+            \DWATallocated (dwarf expression to test is allocated)
+            \DWATtype (11$)
+
+16$:    \DWTAGvariable
+            \DWATname ("t1")
+            \DWATtype (13$)
+            \DWATlocation (dwarf expression to locate descriptor)
+17$:    \DWTAGvariable
+            \DWATname ("t2")
+            \DWATtype (14$)
+            \DWATlocation (dwarf expression to locate descriptor)
+18$:    \DWTAGvariable
+            \DWATname ("t3")
+            \DWATtype (15$)
+            \DWATlocation (dwarf expression to locate descriptor)
+19$:    \DWTAGvariable
+            \DWATname ("t4")
+            \DWATtype (15$)
+            \DWATlocation (dwarf expression to locate descriptor)
+\end{alltt}
+\end{dwflisting}
+\caption{Fortran dynamic type example: DWARF description}
+\label{fig:fortrandynamictypeexampledwarfdescription}
+\end{figure}
+
 
 \clearpage
 \subsection{Ada Example}
@@ -1078,85 +1158,7 @@ Figure~\ref{fig:packedrecordexampledwarfdescription}: Packed record example: DWA
 \end{center}
 \end{figure}
 
-\clearpage
-\subsection{Fortran Dynamic Type Example}
-\label{app:fortrandynamictypeexample}
-Consider the \addtoindex{Fortran 90} example of dynamic properties in 
-Figure \refersec{fig:fortrandynamictypeexamplesource}.
-This can be represented in DWARF as illustrated in 
-Figure \refersec{fig:fortrandynamictypeexampledwarfdescription}.
-Note that unnamed dynamic types are used to avoid replicating
-the full description of the underlying type \texttt{dt} that is shared by
-several variables.
-
-\begin{figure}[h]
-\begin{lstlisting}
-	    program sample
-     
-        type :: dt (l)
-            integer, len :: l
-            integer :: arr(l)
-        end type
-
-        integer :: n = 4
-        contains
-
-        subroutine s()
-            type (dt(n))               :: t1
-            type (dt(n)), pointer      :: t2
-            type (dt(n)), allocatable  :: t3, t4
-        end subroutine
-     
-        end sample
-\end{lstlisting}
-\caption{Fortran dynamic type example: source}
-\label{fig:fortrandynamictypeexamplesource}
-\end{figure}
-
-\begin{figure}[h]
-\begin{dwflisting}
-\begin{alltt}
-11$:    \DWTAGstructuretype
-            \DWATname("dt")
-            \DWTAGmember
-                ...
-			...
-
-13$:    \DWTAGdynamictype             ! plain version
-            \DWATdatalocation (dwarf expression to locate raw data)
-            \DWATtype (11$)
-
-14$:    \DWTAGdynamictype             ! 'pointer' version
-            \DWATdatalocation (dwarf expression to locate raw data)
-            \DWATassociated (dwarf expression to test if associated)
-            \DWATtype (11$)
-
-15$:    \DWTAGdynamictype             ! 'allocatable' version
-            \DWATdatalocation (dwarf expression to locate raw data)
-            \DWATallocated (dwarf expression to test is allocated)
-            \DWATtype (11$)
-
-16$:    \DWTAGvariable
-            \DWATname ("t1")
-            \DWATtype (13$)
-            \DWATlocation (dwarf expression to locate descriptor)
-17$:    \DWTAGvariable
-            \DWATname ("t2")
-            \DWATtype (14$)
-            \DWATlocation (dwarf expression to locate descriptor)
-18$:    \DWTAGvariable
-            \DWATname ("t3")
-            \DWATtype (15$)
-            \DWATlocation (dwarf expression to locate descriptor)
-19$:    \DWTAGvariable
-            \DWATname ("t4")
-            \DWATtype (15$)
-            \DWATlocation (dwarf expression to locate descriptor)
-\end{alltt}
-\end{dwflisting}
-\caption{Fortran dynamic type example: DWARF description}
-\label{fig:fortrandynamictypeexampledwarfdescription}
-\end{figure}
+%\clearpage
 
 \clearpage
 \section{Namespace Example}

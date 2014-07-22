@@ -147,9 +147,9 @@ floating\dash point number \\
 \DWATEsignedfixedTARG{} & signed fixed\dash point scaled integer \\
 \DWATEunsignedfixedTARG& unsigned fixed\dash point scaled integer \\
 \DWATEdecimalfloatTARG{} & decimal floating\dash point number \\ 
-\DWATEUTFTARG{} & \addtoindex{Unicode} character (two-byte UTF-8) \\
-\DWATEASCIITARG{} & \addtoindex{ASCII} character (one-byte) \\
-\DWATEUCSTARG{} & \addtoindex{ISO 10646} character (four-byte) \\
+\DWATEUTFTARG{} & \addtoindex{Unicode} character \\
+\DWATEASCIITARG{} & \addtoindex{ASCII} character \\
+\DWATEUCSTARG{} & \addtoindex{ISO 10646} character \\
 \hline
 \end{tabular}
 \end{table}
@@ -1621,6 +1621,7 @@ has been given to the condition, the condition entry has a
 whose value is a null\dash terminated string
 giving the condition name as it appears in the source program.
 
+\needlines{4}
 The condition entry's parent entry describes the conditional
 variable; normally this will be a \DWTAGvariable,
 \DWTAGmember{} or 
@@ -2243,8 +2244,10 @@ reference to the type of the entities that are dynamically allocated.
 	
 A dynamic type entry also has a \DWATdatalocation, and may also
 have \DWATallocated{} and/or \DWATassociated{} attributes as 
-described in Section \referfol{chap:dynamictypeproperties}. The type referenced by the
-\DWATtype{} attribute must not have any of these attributes.
+described in Section \referfol{chap:dynamictypeproperties}. 
+A \DWATdatalocation, \DWATallocated{} or \DWATassociated{} attribute 
+may not occur on a dynamic type entry if the same kind of attribute 
+already occurs on the type referenced by the \DWATtype{} attribute.
 
 \subsection{Dynamic Type Properties}
 \label{chap:dynamictypeproperties}

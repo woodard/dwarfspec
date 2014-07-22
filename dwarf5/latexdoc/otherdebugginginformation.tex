@@ -1205,25 +1205,25 @@ The bits of the \texttt{flags} field are interpreted as a set
 of flags, some of which may indicate that additional fields follow.
 The following flags, beginning with the least significant bit, are defined:
 \begin{itemize}
-\item \addttindex{offset\_size} flag \\
+\item \addttindex{offset\_size\_flag} \\
 If the \texttt{offset\_size} flag is clear, the header is for a 32-bit 
 DWARF format macro section and all offsets are 4 bytes long;
 if it is set, the header is for a 64-bit DWARF format macro section 
 and all offsets are 8 bytes long.
-\item \addttindex{debug\_line\_ section\_ offset} flag -- see below
-\item \addttindex{opcode\_operands\_table} flag -- see below
+\item \addttindex{debug\_line\_section\_offset\_flag} -- see below
+\item \addttindex{opcode\_operands\_table\_flag} -- see below
 \end{itemize}
 All other flags are reserved by DWARF.
 
 \item \addttindex{debug\_line\_section\_offset} \\
-If the \texttt{debug\_line\_ section\_offset} flag is set,
+If the \texttt{debug\_line\_section\_offset\_flag} is set,
 there follows an offset in the \dotdebugline{} section of the
 beginning of the line number information, encoded as 4-byte offset for
 a 32-bit DWARF format macro section and 8-byte offset for a 64-bit DWARF format
 macro section.  
 
 \item \addttindex{opcode\_operands\_table} \\
-If the \texttt{opcode\_operands\_table} flag is set, there follows
+If the \texttt{opcode\_operands\_table\_flag} is set, there follows
 an \texttt{opcode\_operands\_table} describing the operands of the macro information entry opcodes.
 The macro information entries defined in this standard may, but need not, be
 described in the table, while other user-defined entry opcodes used in the section
@@ -1560,6 +1560,7 @@ Frame Address value; it may be either a register and a signed
 offset that are added together, or a DWARF expression that
 is evaluated.
 
+\needlines{4}
 The remaining columns are labelled by register number. This
 includes some registers that have special designation on
 some architectures such as the PC and the stack pointer

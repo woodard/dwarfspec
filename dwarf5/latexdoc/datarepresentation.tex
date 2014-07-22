@@ -640,21 +640,21 @@ enumeration are shown in Table \refersec{tab:unitheaderunitkindencodings}.
 \needlines{6}
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
-\begin{longtable}{l|l}
-  \caption{Unit header unit kind encodings}
+\begin{longtable}{l|c}
+  \caption{Unit header unit type encodings}
   \label{tab:unitheaderunitkindencodings}
-  \addtoindexx{Unit header unit kind encodings} \\
-  \hline \bfseries Unit header unit kind encodings&\bfseries Value \\ \hline
+  \addtoindexx{Unit header unit type encodings} \\
+  \hline \bfseries Unit header unit type encodings&\bfseries Value \\ \hline
 \endfirsthead
-  \bfseries Unit header unit kind encodings&\bfseries Value \\ \hline
+  \bfseries Unit header unit type encodings&\bfseries Value \\ \hline
 \endhead
   \hline \emph{Continued on next page}
 \endfoot
-  \hline
+  \hline \ddag\ \textit{New in DWARF Version 5}
 \endlastfoot
-\DWUTcompileTARG    &0x01 \\ 
-\DWUTtypeTARG       &0x02 \\ 
-\DWUTpartialTARG    &0x03 \\ \hline
+\DWUTcompileTARG~\ddag    &0x01 \\ 
+\DWUTtypeTARG~\ddag       &0x02 \\ 
+\DWUTpartialTARG~\ddag    &0x03 \\ \hline
 \end{longtable}
 \end{centering}
 
@@ -852,7 +852,7 @@ Table \refersec{tab:tagencodings}.
 
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
-\begin{longtable}{l|l}
+\begin{longtable}{l|c}
   \hline
   \caption{Tag encodings} \label{tab:tagencodings} \\
   \hline \bfseries Tag name&\bfseries Value\\ \hline
@@ -955,7 +955,7 @@ each chain of sibling entries is terminated by a null entry.)
 \needlines{6}
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
-\begin{longtable}{l|l}
+\begin{longtable}{l|c}
   \caption{Child determination encodings}
   \label{tab:childdeterminationencodings}
   \addtoindexx{Child determination encodings} \\
@@ -1419,7 +1419,7 @@ Table \refersec{tab:attributeformencodings}.
 
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
-\begin{longtable}{l|l|l}
+\begin{longtable}{l|c|l}
   \caption{Attribute encodings} 
   \label{tab:attributeencodings} 
   \addtoindexx{attribute encodings} \\
@@ -1726,7 +1726,7 @@ Table \refersec{tab:attributeformencodings}.
 \needlines{8}
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
-\begin{longtable}{l|l|l}
+\begin{longtable}{l|c|l}
   \caption{Attribute form encodings} \label{tab:attributeformencodings} \\
   \hline \bfseries Form name&\bfseries Value &\bfseries Classes \\ \hline
 \endfirsthead
@@ -1838,7 +1838,7 @@ gives algorithms for encoding and decoding these forms.}
 \needlines{8}
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
-\begin{longtable}{l|l|l}
+\begin{longtable}{c|c|c}
   \caption{Examples of unsigned LEB128 encodings}
   \label{tab:examplesofunsignedleb128encodings} 
   \addtoindexx{LEB128 encoding!examples}\addtoindexx{LEB128!unsigned} \\
@@ -1863,7 +1863,7 @@ gives algorithms for encoding and decoding these forms.}
 
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
-\begin{longtable}{l|l|l}
+\begin{longtable}{c|c|c}
   \caption{Examples of signed LEB128 encodings} 
   \label{tab:examplesofsignedleb128encodings} 
   \addtoindexx{LEB128!signed} \\
@@ -2004,8 +2004,19 @@ Table \refersec{tab:dwarfoperationencodings}.
                               &&&SLEB128 constant offset \\
 \DWOPaddrx~\ddag&0xa1&1&ULEB128 indirect address \\
 \DWOPconstx~\ddag&0xa2&1&ULEB128 indirect constant   \\
-\DWOPentryvalue~\ddag&0xa3&2&ULEV128 size, \\*
+\DWOPentryvalue~\ddag&0xa3&2&ULEB128 size, \\*
                    &&&\nolink{block} of that size\\
+\DWOPconsttype~\ddag    & 0xa4 & 3 & ULEB128 type entry offset,\\*
+                               & & & 1-byte size, \\*
+                               & & & constant value \\
+\DWOPregvaltype~\ddag   & 0xa5 & 2 & ULEB128 register number, \\*
+                                 &&& ULEB128 constant offset \\
+\DWOPdereftype~\ddag    & 0xa6 & 2 & 1-byte size, \\*
+                                 &&& ULEB128 type entry offset \\
+\DWOPxdereftype~\ddag   & 0xa7 & 2 & 1-byte size, \\*
+                                 &&& ULEB128 type entry offset \\
+\DWOPconvert~\ddag      & 0xa8 & 1 & ULEB128 type entry offset \\
+\DWOPreinterpret~\ddag  & 0xa9 & 1 & ULEB128 type entry offset \\
 \DWOPlouser{} &0xe0 && \\
 \DWOPhiuser{} &\xff && \\
 
@@ -2336,6 +2347,7 @@ defined language.
 \DWLANGCeleven{} \ddag &0x001d &0 \addtoindexx{C:2011 (ISO)}\\
 \DWLANGSwift{} \ddag &0x001e &0 \addtoindexx{Swift} \\
 \DWLANGJulia{} \ddag &0x001f &1 \addtoindexx{Julia} \\
+\DWLANGDylan{} \ddag &0x0020 &0 \addtoindexx{Dylan} \\
 \DWLANGlouser{} &0x8000 & \\
 \DWLANGhiuser{} &\xffff & \\
 
@@ -2405,6 +2417,7 @@ Table \refersec{tab:callingconventionencodings}.
 \end{longtable}
 \end{centering}
 
+\needlines{12}
 \section{Inline Codes}
 \label{datarep:inlinecodes}
 
@@ -2566,7 +2579,7 @@ Each set is terminated by an
 offset containing the value 0.
 
 
-\needlines{6}
+\needlines{10}
 \section{Address Range Table}
 \label{datarep:addrssrangetable}
 
@@ -2688,7 +2701,7 @@ Table \refersec{tab:linenumberstandardopcodeencodings}.
 \end{centering}
 
 
-\needspace{10cm}
+\needspace{6cm}
 The encodings for the extended opcodes are given in 
 \addtoindexx{line number opcodes!extended opcode encoding}
 Table \refersec{tab:linenumberextendedopcodeencodings}.
@@ -2717,7 +2730,7 @@ Table \refersec{tab:linenumberextendedopcodeencodings}.
 \end{longtable}
 \end{centering}
 
-\needspace{10cm}
+\needspace{6cm}
 The encodings for the file entry format are given in 
 \addtoindexx{line number opcodes!file entry format encoding}
 Table \refersec{tab:linenumberfileentryformatencodings}.
@@ -2768,21 +2781,21 @@ Table \refersec{tab:macroinfoentrytypeencodings}.
 \endhead
   \hline \emph{Continued on next page}
 \endfoot
-  \hline
+  \hline \ddag~\textit{New in DWARF Version 5}
 \endlastfoot
 
-\DWMACROdefine              &0x01 \\
-\DWMACROundef               &0x02 \\
-\DWMACROstartfile           &0x03 \\
-\DWMACROendfile             &0x04 \\
-\DWMACROdefineindirect      &0x05 \\
-\DWMACROundefindirect       &0x06 \\
-\DWMACROtransparentinclude  &0x07 \\
-% what about 0x08 thru 0x0a??
-\DWMACROdefineindirectx     &0x0b \\
-\DWMACROundefindirectx      &0x0c \\
-\DWMACROlouser              &0xe0 \\
-\DWMACROhiuser              &\xff \\
+\DWMACROdefine~\ddag              &0x01 \\
+\DWMACROundef~\ddag               &0x02 \\
+\DWMACROstartfile~\ddag           &0x03 \\
+\DWMACROendfile~\ddag             &0x04 \\
+\DWMACROdefineindirect~\ddag      &0x05 \\
+\DWMACROundefindirect~\ddag       &0x06 \\
+\DWMACROtransparentinclude~\ddag  &0x07 \\
+\textit{Reserved}                 &0x08-0x0a \\
+\DWMACROdefineindirectx~\ddag     &0x0b \\
+\DWMACROundefindirectx~\ddag      &0x0c \\
+\DWMACROlouser~\ddag              &0xe0 \\
+\DWMACROhiuser~\ddag              &\xff \\
 
 \end{longtable}
 \end{centering}
@@ -2881,6 +2894,7 @@ For a \addtoindex{range list} to be specified, the base address of the
 corresponding compilation unit must be defined 
 (see Section \refersec{chap:normalandpartialcompilationunitentries}).
 
+\needlines{6}
 \section{String Offsets Table}
 \label{chap:stringoffsetstable}
 Each set of entries in the string offsets table contained in the
@@ -3054,10 +3068,9 @@ selector is omitted from the range list entries.
 The entries are referenced by a byte offset relative to the first
 location list following this header.
 
-
+\needlines{6}
 \section{Dependencies and Constraints}
 \label{datarep:dependenciesandconstraints}
-
 The debugging information in this format is intended to
 exist 
 \addtoindexx{DWARF section names!list of}
@@ -3123,15 +3136,15 @@ section offset that occurs at
 an arbitrary alignment.
 \end{itemize}
 
+\needlines{8}
 \section{Integer Representation Names}
 \label{datarep:integerrepresentationnames}
-
 The sizes of the integers used in the lookup by name, lookup
 by address, line number and call frame information sections
 are given in
 Table \ref{tab:integerrepresentationnames}.
 
-\needlines{8}
+\needlines{12}
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{c|l}
@@ -3350,6 +3363,7 @@ the entry S. Exception: if a particular attribute is found in
 both S and D, the attribute in S is used and the corresponding
 one in D is ignored.
 
+\needlines{4}
 DWARF tag and attribute codes are appended to the sequence
 as unsigned LEB128\addtoindexx{LEB128!unsigned} values, 
 using the values defined earlier in this chapter.

@@ -136,23 +136,43 @@ albeit possibly in a degraded manner.
 The following is a list of the major changes made to the DWARF Debugging Information
 Format since Version 4 was published. The list is not meant to be exhaustive.
 \begin{itemize}
-\item TBD...
-\item Added a new attribute, \DWATrank{}, to describe the dimensionality of
+\item OTHERS TBD...
+\item Add a split object file and package representations to allow most 
+DWARF information to be compacted and/or kept separate from an executable 
+or shared image. This includes new sections 
+\dotdebugaddr, \dotdebugstroffsets, \dotdebugabbrevdwo, \dotdebuginfodwo, 
+\dotdebuglinedwo, \dotdebuglocdwo, \dotdebugmacrodwo, \dotdebugstrdwo,
+\dotdebugstroffsetsdwo, \dotdebugcuindex{} and \dotdebugtuindex{} 
+together with new forms of attribute value for referencing these sections.
+This enhances DWARF support for very large programs.
+\item Replace the \dotdebugmacinfo{} macro information representation with
+a much more compact \dotdebugmacro{} representation.
+\item Add a new debugging information entry and related attributes and
+DWARF expression operators for describing call information, 
+including identification of tail calls and tail recursion.
+\item Add a new attribute, \DWATnoreturn{}, to identify a subprogram that 
+does not return to its caller.
+\item Add a new attribute, \DWATrank{}, to describe the dimensionality of
 an array with dynamic rank.
-\item Added a new tag, \DWTAGgenericsubrange{}, to describe the
+\item Add a new tag, \DWTAGgenericsubrange{}, to describe the
 bounds of Fortran assumed-rank arrays.
-
+\item Add language codes for C 2011, C++ 2003, C++ 2011, Dylan, Go, Haskell, 
+Julia, Modula 3, Ocaml, Rust, OpenCL and Swift.
 \end{itemize}
 
 DWARF Version 5 is compatible with DWARF Version 4 except as follows:
 \begin{itemize}
 \item A location list entry (see Section \refersec{chap:locationlists}) with 
-the address range (0, \doublequote{-1}) is defined as the new default location 
+the address range \mbox{(0, \doublequote{-1})} is defined as the new default location 
 list entry.
 \item In a string type (see Section \refersec{chap:stringtypeentries}), a \DWATbytesize{}
 attribute is defined to always describe the size of the string type. (Previously
 it described the size of the optional string length data field if the \DWATstringlength{}
 attribute was present.)
+\item The macro information representation is completely new; however, producers 
+and consumers can optionally continue to support the older representation. While
+the two representations cannot both be used in the same compilation unit, they can
+co-exist in executable or shared images.
 \end{itemize}
 
 \needlines{4}
