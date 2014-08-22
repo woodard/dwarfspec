@@ -220,12 +220,12 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 \DWATcalldatalocationTARG{}
 &\livelinki{chap:DWATcalldatalocationofcallparameter}
            {Address of the value pointed to by an argument passed in a call}
-           {address of the value pointed to by an argument passed in a call}
+           {address of the value pointed to by an argument}
            \index{call site!address of the value pointed to by an argument} \\
 \DWATcalldatavalueTARG{}
 &\livelinki{chap:DWATcalldatavalueofcallparameter}
            {Value pointed to by an argument passed in a call}
-           {value pointed to by an argument passed in a call}
+           {value pointed to by an argument}
            \index{call site!value pointed to by an argument} \\
 \DWATcallfileTARG
 &\livelinki{chap:DWATcallfilefilecontaininginlinedsubroutinecall}
@@ -242,17 +242,17 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 \DWATcalloriginTARG{}
 &\livelinki{chap:DWATcalloriginofcallsite}
            {Subprogram called in a call}
-           {subprogram called in a call}
+           {subprogram called}
            \index{call site!subprogram called} \\
 \DWATcallparameterTARG{}
 &\livelinki{chap:DWATcallparameterofcallparameter}
            {Parameter entry in a call}
-           {parameter entry in a call}
+           {parameter entry}
            \index{call site!parameter entry} \\
 \DWATcallpcTARG{}
 &\livelinki{chap:DWATcallpcofcallsite}
            {Address of the call instruction in a call}
-           {address of the call instruction in a call}
+           {address of call instruction}
            \index{call site!address of the call instruction} \\
 \DWATcallreturnpcTARG{}
 &\livelinki{chap:DWATcallreturnpcofcallsite}
@@ -267,17 +267,17 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 \DWATcalltargetTARG{}
 &\livelinki{chap:DWATcalltargetofcallsite}
            {Address of called routine in a call}
-           {address of called routine in a call}
+           {address of called routine}
            \index{call site!address of called routine} \\
 \DWATcalltargetclobberedTARG{}
 &\livelinki{chap:DWATcalltargetclobberedofcallsite}
            {Address of called routine, which may be clobbered, in a call}
-           {address of called routine, which may be clobbered, in a call}
+           {address of called routine, which may be clobbered}
            \index{call site!address of called routine, which may be clobbered} \\
 \DWATcallvalueTARG{}
 &\livelinki{chap:DWATcallvalueofcallparameter}
            {Argument value passed in a call}
-           {argument value passed in a call}
+           {argument value passed}
            \index{call site!argument value passed} \\
 \DWATcommonreferenceTARG
 &\livelinki{chap:commonreferencecommonblockusage}{Common block usage}{common block usage} \\
@@ -293,7 +293,7 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 \DWATcontainingtypeTARG
 &\livelinki{chap:DWATcontainingtypecontainingtypeofpointertomembertype}{Containing type of pointer to member type}{containing type of pointer to member type} \\
 \DWATcountTARG
-&\livelinki{chap:DWATcountelementsofsubrangetype}{Elements of subrange type}{elements ofbreg subrange type} \\
+&\livelinki{chap:DWATcountelementsofsubrangetype}{Elements of subrange type}{elements of breg subrange type} \\
 \DWATdatabitoffsetTARG
 &\livelinki{chap:DWATdatabitoffsetbasetypebitlocation}{Base type bit location}{base type bit location} \\
 &\livelinki{chap:DWATdatabitoffsetdatamemberbitlocation}{Data member bit location}{data member bit location} \\
@@ -409,7 +409,7 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 \DWATrangesTARG
 &\livelinki{chap:DWATrangesnoncontiguousrangeofcodeaddresses}{Non-contiguous range of code addresses}{non-contiguous range of code addresses} \\
 \DWATrangesbaseTARG
-&\livelinki{chap:DWATrangesbaseforrangelists}{Base offset for range lists}{Ranges lists} \\
+&\livelinki{chap:DWATrangesbaseforrangelists}{Base offset for range lists}{ranges lists} \\
 \DWATrankTARG
 &\livelinki{chap:DWATrankofdynamicarray}{Dynamic number of array dimensions}{dynamic number of array dimensions} \\
 \DWATrecursiveTARG
@@ -709,12 +709,11 @@ of the entry to which the attribute is attached.
 
 \section{Target Addresses}
 \label{chap:targetaddresses}
-Many places in this document 
-refer
-\addtoindexx{address size|see{size of an address}}
-to the size 
-of an
+Many places in this document refer to the size of an
+\addtoindexx{size of an address|see{\textit{also} address\_size}}
 \addtoindexi{address}{size of an address}
+\addtoindexx{address size|see{size of an address}}
+\addtoindexx{address size|see{\textit{also} \texttt{address\_size}}}
 on the target architecture (or equivalently, target machine)
 to which a DWARF description applies. For processors which
 can be configured to have different address sizes or different
@@ -860,14 +859,14 @@ interpreted by the consumer as a relocatable address
 (for example, offsets to thread-local storage).}
 
 \itembfnl{\DWOPconsttypeTARG}
-The \DWOPconsttypeNAME{} operation takes three operands. The first operand is an
-unsigned LEB128 integer that represents the offset of a debugging
+The \DWOPconsttypeNAME{} operation takes three operands. The first operand 
+is an unsigned LEB128 integer that represents the offset of a debugging
 information entry in the current compilation unit, which must be a
 \DWTAGbasetype{} entry that provides the type of the constant provided. The
-second operand is 1-byte unsigned integer that represents the size \texttt{n} of the
-constant, which may not be larger than the size of the largest supported
-base type of the target machine. The third operand is a block of \texttt{n} bytes to
-be interpreted as a value of the referenced type.
+second operand is 1-byte unsigned integer that specifies the size of the
+constant value, which may not be larger than the size of the largest supported
+base type of the target machine. The third operand is a block of specified 
+size that is to be interpreted as a value of the referenced type.
 
 \textit{While the size of the constant could be inferred from the base type
 definition, it is encoded explicitly into the expression so that the
@@ -1392,10 +1391,10 @@ on the location stack or any of its values.
 
 \itembfnl{\DWOPentryvalueNAME}
 The \DWOPentryvalueTARG{} operation pushes a value that had a known location
-upon entering the current subprogram.  It uses two operands: an 
+upon entering the current subprogram.  It has two operands: an 
 unsigned LEB128\addtoindexx{LEB128!unsigned} length, followed by 
 a block containing a DWARF expression or
-a simple register location description.  The length gives the length
+a simple register location description.  The length operand specifies the length
 in bytes of the block.  If the block contains a register location
 description, \DWOPentryvalueNAME{} pushes the value that register had upon
 entering the current subprogram.  If the block contains a DWARF expression,
@@ -2284,7 +2283,7 @@ address space.
 
 \textit{Some systems support different classes of 
 addresses
-\addtoindexx{address class!attribute}. 
+\addtoindexx{address class}. 
 The
 address class may affect the way a pointer is dereferenced
 or the way a subroutine is called.}
@@ -2654,10 +2653,10 @@ offset within the \dotdebugranges{} section for the compilation
 unit. The offset given by the \DWATranges{} attribute is
 relative to that base.
 
-\textit{The \DWATrangesbase{} attribute is new in \addtoindex{DWARF Version 5}.
-The advantage of this attribute is that is reduces the number of
+\textit{The \DWATrangesbase{} attribute is new in \DWARFVersionV.
+The advantage of this attribute is that it reduces the number of
 object language relocations needed for references to the \dotdebugranges{}
-section from one for each reference to a single relocation that
+section from one for each range entry to a single relocation that
 applies for the entire compilation unit.}
 
 Each entry in a \addtoindex{range list} is either a 

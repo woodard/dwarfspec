@@ -147,8 +147,8 @@ together with new forms of attribute value for referencing these sections.
 This enhances DWARF support for very large programs.
 \item Replace the \dotdebugmacinfo{} macro information representation with
 a much more compact \dotdebugmacro{} representation.
-\item Add a new debugging information entry and related attributes and
-DWARF expression operators for describing call information, 
+\item Add a new debugging information entry, related attributes and
+DWARF expression operators, to describe call information, 
 including identification of tail calls and tail recursion.
 \item Add a new attribute, \DWATnoreturn{}, to identify a subprogram that 
 does not return to its caller.
@@ -162,6 +162,11 @@ Julia, Modula 3, Ocaml, Rust, OpenCL and Swift.
 
 DWARF Version 5 is compatible with DWARF Version 4 except as follows:
 \begin{itemize}
+\item A new field is included in the line number table header to allow use of an MD5
+hash to validate source file version in use.
+\item New operand forms for attribute values are defined (\DWFORMstrx, \DWFORMaddrx).
+(Because a pre-DWARF Version 5 consumer will not be able to interpret these even to
+ignore and skip over them, they must be considered incompatible.)
 \item A location list entry (see Section \refersec{chap:locationlists}) with 
 the address range \mbox{(0, \doublequote{-1})} is defined as the new default location 
 list entry.
@@ -169,11 +174,14 @@ list entry.
 attribute is defined to always describe the size of the string type. (Previously
 it described the size of the optional string length data field if the \DWATstringlength{}
 attribute was present.)
-\item The macro information representation is completely new; however, producers 
-and consumers can optionally continue to support the older representation. While
-the two representations cannot both be used in the same compilation unit, they can
-co-exist in executable or shared images.
 \end{itemize}
+
+While not strictly an incompatibility, the macro information 
+representation is completely new; further, producers 
+and consumers may optionally continue to support the older 
+representation. While the two representations cannot both be 
+used in the same compilation unit, they can co-exist in 
+executable or shared images.
 
 \needlines{4}
 \section{Changes from Version 3 to Version 4}

@@ -93,7 +93,7 @@ Each set begins with a header containing four values:
 \begin{enumerate}[1. ]
 
 \item \texttt{unit\_length} (\livelink{datarep:initiallengthvalues}{initial length}) \\
-\addtoindexx{unit\_length}
+\addttindexx{unit\_length}
 The total length of the all of the entries for that set,
 not including the length field itself 
 (see Section \refersec{datarep:initiallengthvalues}).
@@ -177,18 +177,18 @@ The offset from the
 beginning of the \dotdebuginfo{} section of the
 compilation unit header referenced by the set.
 
-\item address\_size (\addtoindex{ubyte}) \\
+\item \texttt{address\_size} (\addtoindex{ubyte}) \\
 The \addtoindex{size of an address}
 in bytes on
-\addtoindexx{address\_size}
+\addttindexx{address\_size}
 the target architecture. For 
 \addtoindexx{address space!segmented}
 segmented addressing, this is
 the size of the offset portion of the address.
 
-\item segment\_size (\addtoindex{ubyte}) \\
+\item \texttt{segment\_size} (\addtoindex{ubyte}) \\
 The size of a segment selector in
-\addtoindexx{segment\_size}
+\addttindexx{segment\_size}
 bytes on the target architecture. If the target system uses
 a flat address space, this value is 0.
 
@@ -203,7 +203,7 @@ the corresponding compilation unit, followed by the non\dash zero
 length of that range. A particular set is terminated by an
 entry consisting of three zeroes. 
 When the 
-\addtoindex{segment\_size} value
+\addttindex{segment\_size} value
 is zero in the header, the segment selector is omitted so that
 each descriptor is just a pair, including the terminating
 entry. By scanning the table, a debugger can quickly decide
@@ -802,7 +802,7 @@ To decode a special opcode, subtract the \addttindex{opcode\_base} from
 the opcode itself to give the \textit{adjusted opcode}. 
 The \textit{operation advance} 
 is the result of the adjusted opcode divided by the
-\texttt{line\_range}. The new \texttt{address} and 
+\addttindex{line\_range}. The new \texttt{address} and 
 \addttindex{op\_index} values are given by
 \begin{alltt}
   \textit{adjusted opcode} = opcode \dash opcode\_base
@@ -1425,7 +1425,7 @@ user on the command line.
 
 \textit{Debuggers often need to be able to view and modify the 
 state of any subroutine activation that is
-\addtoindexx{activation!call frame}
+\addtoindexx{activation of call frame}
 on the call stack. An activation consists of:}
 
 \begin{itemize}
@@ -2100,7 +2100,7 @@ appropriate size.
 
 \textit{To determine the virtual unwind rule set for a given location
 (L1), one searches through the FDE headers looking at the
-\texttt{initial\_location} and \texttt{address\_range} values to see if L1 is
+\addttindex{initial\_location} and \addttindex{address\_range} values to see if L1 is
 contained in the FDE. If so, then:}
 \begin{enumerate}[1. ]
 
@@ -2118,7 +2118,7 @@ instruction is encountered, then compute a new location value
 to step 2.}
 
 \item \textit{ The end of the instruction stream can be thought
-of as a \DWCFAsetloc{} (\texttt{initial\_location + address\_range})
+of as a \DWCFAsetloc{} (\addttindex{initial\_location} + \addttindex{address\_range})
 instruction. Note that the FDE is ill-formed if L2 is less
 than L1.}
 
@@ -2144,6 +2144,7 @@ If a Return Address register is defined in the virtual
 unwind table, and its rule is undefined (for example, by
 \DWCFAundefined), then there is no return address and no
 call address, and the virtual unwind of stack activations
+\addtoindexx{activation of call frame}
 is complete.
 
 \textit{In most cases the return address is in the same context as the
