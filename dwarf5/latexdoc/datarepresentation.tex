@@ -221,9 +221,10 @@ and includes the following:
 \item
 The line number tables, range tables, frame tables, and
 accelerated access tables, in the usual sections:
-\dotdebugline, \dotdebugranges, \dotdebugframe,
+\dotdebugline, \dotdebuglinestr, \dotdebugranges, \dotdebugframe,
 \dotdebugpubnames, \dotdebugpubtypes{} and \dotdebugaranges,
 respectively.
+\needlines{4}
 \item
 An address table, in the \dotdebugaddr{} section. This table
 contains all addresses and constants that require
@@ -277,7 +278,7 @@ units, in the \dotdebugabbrevdwo{} section.
 \item Location lists, in the \dotdebuglocdwo{} section.
 
 \item
-A skeleton line table (for the type units), in the
+A skeleton line number table (for the type units), in the
 \dotdebuglinedwo{} section (see 
 Section \refersec{chap:skeletoncompilationunitentries}).
 
@@ -516,6 +517,84 @@ words, with L columns and N rows, in row-major order. Each row in
 the array is indexed starting from 1 (row 0 of the table of
 offsets also serves as the key for the table of sizes).
 
+\subsection{DWARF Supplementary Object Files}
+\label{data:dwarfsupplemetaryobjectfiles}
+In order to minimize the size of debugging information, it is possible
+to move duplicate debug information entries, strings and macro entries from
+several executables or shared objects into a separate 
+\addtoindexi{\textit{supplementary object file}}{supplementary object file} by some
+post-linking utility; the moved entries and strings can be then referenced
+from the debugging information of each of those executables or shared objects.
+
+A DWARF supplementary object file is itself an object file, using the same object
+file format, byte order, and size as the corresponding application executables
+or shared libraries. It consists only of a file header, section table, and
+a number of DWARF debug information sections.  Both the supplementary object file
+and all the executables or shared objects that reference entries or strings in that
+file must contain a \dotdebugsup{} section that establishes the relationship.
+
+The \dotdebugsup section contains:
+\begin{enumerate}[1. ]
+\item \texttt{version} (uhalf) \\
+A 2-byte unsigned integer representing the version of the DWARF
+information for the compilation unit (see Appendix G). The
+value in this field is \versiondotdebugsup.
+
+\item \texttt{is\_supplementary} (ubyte) \\
+A 1-byte unsigned integer, which contains the value 1 if it is
+in the \addtoindex{supplementary object file} that other executables or 
+shared objects refer to, or 0 if it is an executable or shared object 
+referring to a supplemental object file file.
+
+\needlines{4}
+\item \texttt{sup\_filename} (null terminated filename string) \\
+If \texttt{is\_supplementary} is 0, this contains either an absolute 
+filename for the supplementary object file, or a filename relative to 
+the object file containing the \dotdebugsup{} section.  
+If \texttt{is\_supplementary} is 1, then \texttt{sup\_filename}
+is not needed and must be an empty string (a single nul byte).
+
+\needlines{4}
+\item \texttt{sup\_checksum\_len} (unsigned LEB128) \\
+Length of the following \texttt{sup\_checksum} field; 
+his value can be 0 if no checksum is provided.
+
+
+\item \texttt{sup\_checksum} (array of ubyte) \\
+Some checksum or cryptographic hash function of the \dotdebuginfo{}, 
+\dotdebugstr{} and \dotdebugmacro{} sections of the 
+\addtoindex{supplementary object file}, or some unique identifier
+which the implementation can choose to verify that the supplementary 
+section object file matches what the debug information in the executables 
+or shared objects expects.
+\end{enumerate}
+
+Debug information entries that refer to an executable's or shared
+object's addresses must \emph{not} be moved to supplementary files (the
+addesses will likely not be the same). Similarly,
+entries referenced from within locationexpressions or using loclistptr
+form attributes must not be moved.
+
+Executable or shared object compilation units can use
+\DWTAGimportedunit{} with \DWFORMrefsup{} form \DWATimport{} attribute
+to import entries from the supplementary object file, other \DWFORMrefsup{}
+attributes to refer to them and \DWFORMstrpsup{} form attributes to
+refer to strings that are used by debug information of multiple
+executables or shared objects.  Within the \addtoindex{supplementary object file}'s
+debugging sections, form \DWFORMrefsup{} or \DWFORMstrpsup{} should
+not be used, and all reference forms referring to some other sections
+refer to the local sections in the supplementary object file.
+
+In macro information, \DWMACROdefineindirectsup{} or
+\DWMACROundefindirectsup{} opcodes can refer to strings in the 
+\dotdebugstr section of the supplementary file, or \DWMACROtransparentincludesup{} 
+can refer to \dotdebugmacro section entries.  Within the 
+\dotdebugmacro{} section of a \addtoindex{supplementary object file}, 
+\DWMACROdefineindirect{} and \DWMACROundefindirect{}
+opcodes refer to the local \dotdebugstr{} section, not the one in
+the executable or shared object."
+
+
 \needlines{6}
 \section{32-Bit and 64-Bit DWARF Formats}
 \label{datarep:32bitand64bitdwarfformats}
@@ -603,13 +682,29 @@ of DWARF format as follows. For the 32\dash bit DWARF format,
 the value is a 32\dash bit unsigned integer; for the 64\dash bit DWARF
 format, the value is a 64\dash bit unsigned integer.
 \begin{center}
-\begin{tabular}{ll}
-Form & Role  \\ \hline
-\DWFORMrefaddr& offset in \dotdebuginfo{} \\
-\DWFORMsecoffset& offset in a section other than \\
-											&\dotdebuginfo{} or \dotdebugstr{} \\
-\DWFORMstrp&offset in \dotdebugstr{} \\
-\DWOPcallref&offset in \dotdebuginfo{} \\
+\begin{tabular}{lp{6cm}}
+Form             & Role  \\ \hline
+\DWFORMlinestrp  & offset in \dotdebuglinestr \\
+\DWFORMrefaddr   & offset in \dotdebuginfo{} \\
+\DWFORMrefsup    & offset in \dotdebuginfo{} section of a \mbox{supplementary} object file \\
+                   \addtoindexx{supplementary object file}
+\DWFORMsecoffset & offset in a section other than \\
+		 & \dotdebuginfo{} or \dotdebugstr{} \\
+\DWFORMstrp      & offset in \dotdebugstr{} \\
+\DWFORMstrpsup   & offset in \dotdebugstr{} section of a \mbox{supplementary} object file \\
+\DWOPcallref     & offset in \dotdebuginfo{} \\
+\end{tabular}
+\end{center}
+
+\needlines{5}
+\item Within the body of the \dotdebugline{} section, certain forms of content
+description depend on the choice of DWARF format as follows: for the
+32-bit DWARF format, the value is a 32-bit unsigned integer; for the
+64-bit DWARF format, the value is a 64-bit unsigned integer.
+\begin{center}
+\begin{tabular}{lp{6cm}}
+Form             & Role  \\ \hline
+\DWFORMlinestrp  & offset in \dotdebuglinestr
 \end{tabular}
 \end{center}
 
@@ -731,6 +826,7 @@ enumeration are shown in Table \refersec{tab:unitheaderunitkindencodings}.
 \end{longtable}
 \end{centering}
 
+\needlines{5}
 \subsubsection{Compilation Unit Header}
 \label{datarep:compilationunitheader}
 \begin{enumerate}[1. ]
@@ -1183,13 +1279,14 @@ debugging information entries or data bytes.
 
 \item \livelinki{chap:classconstant}{constant}{constant class} \\
 \livetarg{datarep:classconstant}{}
-There are six forms of constants. There are fixed length
-constant data forms for one, two, four and eight byte values
+There are seven forms of constants. There are fixed length
+constant data forms for one-, two-, four-, eight- and sixteen-byte values
 (respectively, 
 \DWFORMdataoneTARG, 
 \DWFORMdatatwoTARG, 
 \DWFORMdatafourTARG,
-and \DWFORMdataeightTARG). 
+\DWFORMdataeightTARG{} and
+\DWFORMdatasixteenTARG). 
 There are also variable length constant
 data forms encoded using LEB128 numbers (see below). Both
 signed (\DWFORMsdataTARG) and unsigned 
@@ -1199,8 +1296,9 @@ length constants are available
 \needlines{4}
 The data in \DWFORMdataone, 
 \DWFORMdatatwo, 
-\DWFORMdatafour{} and
-\DWFORMdataeight{} 
+\DWFORMdatafour{}, 
+\DWFORMdataeight{} and
+\DWFORMdatasixteen{} 
 can be anything. Depending on context, it may
 be a signed integer, an unsigned integer, a floating\dash point
 constant, or anything else. A consumer must use context to
@@ -1332,7 +1430,7 @@ attribute to allow more than one of these classes}
 \begin{itemize}
 \item \livelinki{chap:classreference}{reference}{reference class} \\
 \livetarg{datarep:classreference}{}
-There are three types of reference.
+There are four types of reference.
 
 The 
 \addtoindexx{reference class}
@@ -1368,7 +1466,9 @@ entry in a different shared object.  This type of reference
 (\DWFORMrefaddrTARG) 
 is an offset from the beginning of the
 \dotdebuginfo{} 
-section of the target executable or shared object;
+section of the target executable or shared object, or, for
+references within a \addtoindex{supplementary object file}, 
+an offset from the beginning of the local \dotdebuginfo{} section;
 it is relocatable in a relocatable object file and frequently
 relocated in an executable file or shared object. For
 references from one shared object or static executable file
@@ -1381,8 +1481,7 @@ unsigned value
 
 \textit{A debugging information entry that may be referenced by
 another compilation unit using 
-\DWFORMrefaddr{} must have a
-global symbolic name.}
+\DWFORMrefaddr{} must have a global symbolic name.}
 
 \textit{For a reference from one executable or shared object to
 another, the reference is resolved by the debugger to identify
@@ -1399,19 +1498,28 @@ reference (\DWFORMrefsigeightTARG) is the
 \addtoindexx{type signature}
 64\dash bit type signature 
 (see Section \refersec{datarep:typesignaturecomputation}) 
-that was computed
-for the type.
+that was computed for the type. 
+
+The fourth type of reference is a reference from within the 
+\dotdebuginfo{} section of the executable or shared object to
+a debugging information entry in the \dotdebuginfo{} section of 
+a \addtoindex{supplementary object file}.
+This type of reference (\DWFORMrefsupTARG) is an offset from the 
+beginning of the \dotdebuginfo{} section in the supplementary 
+object file.
 
 \textit{The use of compilation unit relative references will reduce the
 number of link\dash time relocations and so speed up linking. The
-use of the second and third type of reference allows for the
+use of the second, third and fourth type of reference allows for the
 sharing of information, such as types, across compilation
-units.}
+units, while the fourth type further allows for sharing of information 
+across compilation units from different executables or shared objects.}
 
 \textit{A reference to any kind of compilation unit identifies the
 debugging information entry for that unit, not the preceding
 header.}
 
+\needlines{4}
 \item \livelinki{chap:classstring}{string}{string class} \\
 \livetarg{datarep:classstring}{}
 A string is a sequence of contiguous non\dash null bytes followed by
@@ -1419,18 +1527,26 @@ one null byte.
 \addtoindexx{string class}
 A string may be represented: 
 \begin{itemize}
+\setlength{\itemsep}{0em}
 \item immediately in the debugging information entry itself 
 (\DWFORMstringTARG), 
+
 \item as an 
 \addtoindexx{section offset!in class string value}
 offset into a string table contained in
-the \dotdebugstr{} section of the object file 
-(\DWFORMstrpTARG).
+the \dotdebugstr{} section of the object file (\DWFORMstrpTARG), 
+the \dotdebuglinestr{} section of the object file (\DWFORMlinestrpTARG),
+or as an offset into a string table contained in the
+\dotdebugstr{} section of a \addtoindex{supplementary object file} 
+(\DWFORMstrpsupTARG).  \DWFORMstrpNAME{} offsets from the \dotdebuginfo{}  
+section of a \addtoindex{supplementary object file}
+refer to the local \dotdebugstr{} section of that same file.
 In the \thirtytwobitdwarfformat, the representation of a 
 \DWFORMstrpNAME{}
 value is a 4\dash byte unsigned offset; in the \sixtyfourbitdwarfformat,
 it is an 8\dash byte unsigned offset 
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
+
 \item as an indirect offset into the string table using an 
 index into a table of offsets contained in the 
 \dotdebugstroffsets{} section of the object file (\DWFORMstrxTARG).
@@ -1446,11 +1562,14 @@ If the \DWATuseUTFeight{}
 \addtoindexx{use UTF8 attribute}\addtoindexx{UTF-8} attribute is specified for the
 compilation, partial, skeleton or type unit entry, string values are encoded using the
 UTF\dash 8 (\addtoindex{Unicode} Transformation Format\dash 8) from the Universal
-Character Set standard (ISO/IEC 10646\dash 1:1993). Otherwise,
-the string representation is unspecified.
+Character Set standard (ISO/IEC 10646\dash 1:1993).
+\addtoindexx{ISO 10646 character set standard}
+Otherwise, the string representation is unspecified.
 
 \textit{The \addtoindex{Unicode} Standard Version 3 is fully compatible with
-ISO/IEC 10646\dash 1:1993. It contains all the same characters
+ISO/IEC 10646\dash 1:1993. 
+\addtoindexx{ISO 10646 character set standard}
+It contains all the same characters
 and encoding points as ISO/IEC 10646, as well as additional
 information about the characters and their use.}
 
@@ -1458,6 +1577,7 @@ information about the characters and their use.}
 of strings; for compatibility, this version also does
 not. However, the UTF\dash 8 representation is strongly recommended.}
 
+\needlines{4}
 \item \livelinki{chap:classstroffsetsptr}{stroffsetsptr}{stroffsetsptr class} \\
 \livetarg{datarep:classstroffsetsptr}{}
 This is an offset into the \dotdebugstroffsets{} section 
@@ -1789,6 +1909,8 @@ Table \refersec{tab:attributeformencodings}.
         \addtoindexx{call value attribute} \\
 \DWATnoreturn~\ddag &0x87 &\CLASSflag 
         \addtoindexx{noreturn attribute} \\
+\DWATalignment~\ddag &0x88 &\CLASSconstant 
+        \addtoindexx{alignment attribute} \\
 \DWATlouser&0x2000 & --- \addtoindexx{low user attribute encoding}  \\
 \DWAThiuser&\xiiifff& --- \addtoindexx{high user attribute encoding}  \\
 
@@ -1837,7 +1959,10 @@ Table \refersec{tab:attributeformencodings}.
 \DWFORMflagpresent{} &0x19&\livelink{chap:classflag}{flag} \\
 \DWFORMstrx{} \ddag &0x1a&\livelink{chap:classstring}{string} \\
 \DWFORMaddrx{} \ddag &0x1b&\livelink{chap:classaddress}{address} \\
-\DWFORMrefsigeight &0x20&\livelink{chap:classreference}{reference} \\
+\DWFORMrefsup{}~\ddag &0x1c &\livelink{chap:classreference}{reference} \\
+\DWFORMstrpsup{}~\ddag &0x1d &\livelink{chap:classstring}{string} \\
+\DWFORMdatasixteen~\ddag &0x1e &\CLASSconstant \\
+\DWFORMrefsigeight &0x20 &\livelink{chap:classreference}{reference} \\
 
 \end{longtable}
 \end{centering}
@@ -1926,7 +2051,7 @@ gives algorithms for encoding and decoding these forms.}
 127&127& ---\\
 128& 0 + 0x80 & 1 \\
 129& 1 + 0x80 & 1 \\
-130& 2 + 0x80 & 1 \\
+%130& 2 + 0x80 & 1 \\
 12857& 57 + 0x80 & 100 \\
 \end{longtable}
 \end{centering}
@@ -2777,6 +2902,7 @@ The encodings for the extended opcodes are given in
 \addtoindexx{line number opcodes!extended opcode encoding}
 Table \refersec{tab:linenumberextendedopcodeencodings}.
 
+\needlines{20}
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c}
@@ -2787,14 +2913,14 @@ Table \refersec{tab:linenumberextendedopcodeencodings}.
 \endhead
   \hline \emph{Continued on next page}
 \endfoot
-  \hline \ddag~\textit{New in DWARF Version 5}
+  \hline %\ddag~\textit{New in DWARF Version 5}
 \endlastfoot
 
 \DWLNEendsequence	&0x01 \\
 \DWLNEsetaddress	&0x02 \\
-\DWLNEdefinefile	&0x03 \\
-\DWLNEsetdiscriminator &0x04 \\
-\DWLNEdefinefileMDfive~\ddag &0x05 \\
+\textit{Reserved}	&0x03\footnote{Code 0x03 is reserved to allow backward compatible support of the 
+                                       \texttt{DW\_LNE\_define\_file} operation which was defined prior to \DWARFVersionV.} \\
+\DWLNEsetdiscriminator  &0x04 \\
 \DWLNElouser		&0x80 \\
 \DWLNEhiuser		&\xff \\
 
@@ -2802,26 +2928,29 @@ Table \refersec{tab:linenumberextendedopcodeencodings}.
 \end{centering}
 
 \needspace{6cm}
-The encodings for the file entry format are given in 
+The encodings for the line number header entry formats are given in 
 \addtoindexx{line number opcodes!file entry format encoding}
-Table \refersec{tab:linenumberfileentryformatencodings}.
+Table \refersec{tab:linenumberheaderentryformatencodings}.
 
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c}
-  \caption{Line number file entry format \mbox{encodings}} \label{tab:linenumberfileentryformatencodings}\\
-  \hline \bfseries File entry format name&\bfseries Value \\ \hline
+  \caption{Line number header entry format \mbox{encodings}} \label{tab:linenumberheaderentryformatencodings}\\
+  \hline \bfseries Line number header entry format name&\bfseries Value \\ \hline
 \endfirsthead
-  \bfseries File entry format name&\bfseries Value\\ \hline
+  \bfseries Line number header entry format name&\bfseries Value\\ \hline
 \endhead
   \hline \emph{Continued on next page}
 \endfoot
-  \hline
+  \hline \ddag~\textit{New in DWARF Version 5}
 \endlastfoot
-
-\DWLNFtimestampsize	& 0x01	\\
-\DWLNFMDfive		& 0x02	\\
-
+\DWLNCTpath~\ddag           & 0x1 \\
+\DWLNCTdirectoryindex~\ddag & 0x2 \\
+\DWLNCTtimestamp~\ddag      & 0x3 \\
+\DWLNCTsize~\ddag           & 0x4 \\
+\DWLNCTMDfive~\ddag         & 0x5 \\
+\DWLNCTlouser~\ddag         & 0x2000 \\
+\DWLNCThiuser~\ddag         & \xiiifff \\
 \end{longtable}
 \end{centering}
 
@@ -2835,13 +2964,14 @@ The source line numbers and source file indices encoded in the
 macro information section are represented as 
 unsigned LEB128\addtoindexx{LEB128!unsigned} numbers.
 
+\needlines{4}
 The macro information entry type is encoded as a single unsigned byte. 
 The encodings 
 \addtoindexx{macro information entry types!encoding}
 are given in 
 Table \refersec{tab:macroinfoentrytypeencodings}.
 
-\needlines{8}
+\needlines{10}
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c}
@@ -2862,7 +2992,9 @@ Table \refersec{tab:macroinfoentrytypeencodings}.
 \DWMACROdefineindirect~\ddag      &0x05 \\
 \DWMACROundefindirect~\ddag       &0x06 \\
 \DWMACROtransparentinclude~\ddag  &0x07 \\
-\textit{Reserved}                 &0x08-0x0a \\
+\DWMACROdefineindirectsup~\ddag   &0x08 \\
+\DWMACROundefindirectsup~\ddag    &0x09 \\
+\DWMACROtransparentincludesup~\ddag&0x0a \\
 \DWMACROdefineindirectx~\ddag     &0x0b \\
 \DWMACROundefindirectx~\ddag      &0x0c \\
 \DWMACROlouser~\ddag              &0xe0 \\
@@ -2983,11 +3115,12 @@ DWARF format, this consists of the 4-byte value
 that gives the actual length (see 
 Section \refersec{datarep:32bitand64bitdwarfformats}).
 
-\needlines{4}
+%\needlines{4}
 \item  \texttt{version} (\addtoindex{uhalf}) \\
 A 2-byte version identifier containing the value
 \versiondotdebugstroffsets{} 
 (see Appendix \refersec{app:dwarfsectionversionnumbersinformative}).
+
 \item \texttt{padding} (\addtoindex{uhalf}) \\
 \end{enumerate}
 
@@ -3115,7 +3248,7 @@ A 2-byte version identifier containing the value
 \versiondotdebugloc{} 
 (see Appendix \refersec{app:dwarfsectionversionnumbersinformative}).
 
-\needlines{4}
+\needlines{5}
 \item	\texttt{address\_size} (\addtoindex{ubyte}) \\
 A 1-byte unsigned integer containing the size in
 bytes of an address (or the offset portion of an
@@ -3152,6 +3285,7 @@ in the
 \dotdebugframe{},
 \dotdebuginfo{}, 
 \dotdebugline{}, 
+\dotdebuglinestr{},
 \dotdebugloc{}, 
 \dotdebugmacro{},
 \dotdebugpubnames{}, 
@@ -3292,6 +3426,7 @@ code, and the attribute value.
 \DWATname,
 \DWATaccessibility,
 \DWATaddressclass,
+\DWATalignment,
 \DWATallocated,
 \DWATartificial,
 \DWATassociated,
@@ -3476,6 +3611,7 @@ least significant 64 bits are taken as the type signature.
 the type that uniquely identifies that type (that is, a different
 type is highly unlikely to produce the same string).}
 
+\needlines{6}
 \textit{A debugging information entry should not be placed in a
 separate \addtoindex{type unit}
 if any of the following apply:}

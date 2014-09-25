@@ -8,7 +8,9 @@ the diagram and associated notes on the following pages.
 
 \textit{This diagram does not distinguish between the normal
 and split object section pairs (for example, \dotdebuginfo{} 
-versus \dotdebuginfodwo).}
+versus \dotdebuginfodwo). Similarly, it does not show the 
+relationship between the main debugging sections of an executable
+or sharable file and a related \addtoindex{supplementary object file}.}
 
 \clearpage
 \begin{landscape}
@@ -20,37 +22,37 @@ versus \dotdebuginfodwo).}
 	 link/.style={rectangle,                       draw,
         inner sep=.2cm, minimum width=4.5cm}]
 
-% The left column, first sections, then links, from top to bottom
+% The first (leftmost) column, first sections, then links, from top to bottom
 %
 \node(zsectara) at ( 0, 15.0) [sect] {\dotdebugaranges};
 \node(zlinka)   at ( 0, 13.5) [link] {To compilation unit~~(a)};
 \node(zsectinf) at ( 0,  7.5) [sect] {\begin{tabular}{c} 
-									 \dotdebuginfo 
-									 \end{tabular}};
+				      \dotdebuginfo 
+				      \end{tabular}};
 \node(zlinkb)   at ( 0,  1.5) [link] {To compilation unit~~(b)};
 \node(zsectpub) at ( 0,  0.0) [sect] {\begin{tabular}{c} 
-									 \dotdebugpubnames \\ 
-									 \dotdebugpubtypes 
-									 \end{tabular}};
+				      \dotdebugpubnames \\ 
+				      \dotdebugpubtypes 
+				      \end{tabular}};
 
 \draw[thick,-to reversed]		(zlinka) -- (zsectara);
 \draw[thick,angle 90-] 			(zsectinf) -- (zlinka);
 \draw[thick,-angle 90] 			(zlinkb) -- (zsectinf);
 \draw[thick,to reversed-]		(zsectpub) -- (zlinkb);
 
-% The middle column, similarly
+% The seond column, similarly
 %
 \node(zsectfra) at (5, 15.0)  [sect] {\dotdebugframe};
 \node(zlinkc)   at (5, 13.5)  [link] {To abbreviations~~(c)};
 \node(zlinkd)   at (5, 12.1)  [link] {\DWFORMstrp{}~~(d)};
 \node(zlinke)	at (5, 10.4)  [link] {\begin{tabular}{c}
-									  \DWATstroffsetsbase \\
-									  \DWFORMstrx{}~~~~~~~~~(e) \\
-									  \end{tabular}};
+				      \DWATstroffsetsbase \\
+				      \DWFORMstrx{}~~~~~~~~~(e) \\
+				      \end{tabular}};
 \node(zlinkf)   at (5,  8.4)  [link] {\begin{tabular}{c}
-									  \DWOPcallref{}~~~~~(f) \\
-									  \DWFORMrefaddr
-									  \end{tabular}};
+				      \DWOPcallref{}~~~~~(f) \\
+				      \DWFORMrefaddr
+				      \end{tabular}};
 \node(zlinki)   at (5,  6.7)  [link] {\DWATmacros{}~~(g)};
 \node(zlinkj)   at (5,  5.4)  [link] {\DWATstmtlist{}~~(h)};
 \node(zlinkh)   at (5,  3.9)  [link] {\begin{tabular}{c}
@@ -59,25 +61,25 @@ versus \dotdebuginfodwo).}
                                       \end{tabular}};
 \node(zlinkg)   at (5,  2.4)  [link] {\DWATlocation{}, etc.~~(j)};
 \node(zlinkk)	at (5,  0.5)  [link] {\begin{tabular}(c)
-									  \DWATaddrbase    \\
-									  \DWFORMaddrx \\
-									  \DWOPaddrx \\
-									  \DWOPconstx
-									  \end{tabular} (k)};
+				      \DWATaddrbase    \\
+				      \DWFORMaddrx \\
+				      \DWOPaddrx \\
+				      \DWOPconstx
+				      \end{tabular} (k)};
 
-% Links between left and center
+% Links between first and second columns
 %
-\draw[thick,to reversed-]			(zsectinf) -- (zlinkc.west);
-\draw[thick,to reversed-]			(zsectinf) -- (zlinkd.west);
-\draw[thick,to reversed-]			(zsectinf) -- (zlinke.west);
-\draw[<->,thick]					(zsectinf) -- (zlinkf.west);
-\draw[thick,to reversed-]			(zsectinf) -- (zlinkg.west);
-\draw[thick,to reversed-]			(zsectinf) -- (zlinkh.west);
-\draw[thick,to reversed-]			(zsectinf) -- (zlinki.west);
-\draw[thick,to reversed-]			(zsectinf) -- (zlinkj.west);
-\draw[thick,to reversed-]			(zsectinf) -- (zlinkk.north west);
+\draw[thick,to reversed-]	(zsectinf) -- (zlinkc.west);
+\draw[thick,to reversed-]	(zsectinf) -- (zlinkd.west);
+\draw[thick,to reversed-]	(zsectinf) -- (zlinke.west);
+\draw[<->,thick]		(zsectinf) -- (zlinkf.west);
+\draw[thick,to reversed-]	(zsectinf) -- (zlinkg.west);
+\draw[thick,to reversed-]	(zsectinf) -- (zlinkh.west);
+\draw[thick,to reversed-]	(zsectinf) -- (zlinki.west);
+\draw[thick,to reversed-]	(zsectinf) -- (zlinkj.west);
+\draw[thick,to reversed-]	(zsectinf) -- (zlinkk.north west);
 
-% The right column
+% The thrid column
 %
 \node(zsectabb)	at (10, 15.00) [sect] {\dotdebugabbrev};
 \node(zsectstr)	at (10, 13.75) [sect] {\dotdebugstr};
@@ -102,8 +104,8 @@ versus \dotdebuginfodwo).}
                                        \end{tabular} (o)};
 \node(zsectadx) at (10,  -0.25) [sect] {\dotdebugaddr{}};
 
-\draw[thick,to reversed-]		(zsectstx) -- (zlinkl);
-\draw[thick,-angle 90]			(zlinkl) -- (zsectstr);
+\draw[thick,to reversed-]	(zsectstx) -- (zlinkl);
+\draw[thick,-angle 90]		(zlinkl) -- (zsectstr);
 \draw[thick,to reversed-]       (zsectmac) -- (zlinkm);
 \draw[thick,-angle 90]          (zlinkm) -- (zsectstx);
 \draw[thick,to reversed-]       (zsectmac) -- (zlinkn);
@@ -111,7 +113,7 @@ versus \dotdebuginfodwo).}
 \draw[thick,to reversed-]       (zsectloc) -- (zlinko);
 \draw[thick,-angle 90]          (zlinko) -- (zsectadx);
 
-% Links between center and right
+% Links between second and third colums
 %
 \draw[thick,-angle 90]		(zlinkc.east) -- (zsectabb.west);
 \draw[thick,-angle 90]		(zlinkd.east) -- (zsectstr.west);
@@ -122,20 +124,25 @@ versus \dotdebuginfodwo).}
 \draw[thick,-angle 90]		(zlinkj.east) -- (zsectlin.west);
 \draw[thick,-angle 90]		(zlinkk.east) -- (zsectadx.west);
 
-\node(zlinky)   at (15.5, 10.5) [link] {\begin{tabular}{c}
+% The fourth column
+%
+\node(zlinky)   at (15.6, 10.5) [link] {\begin{tabular}{c}
                                         \DWMACROdefineindirect \\
                                         \DWMACROundefindirect \\
                                         (p)
                                         \end{tabular}};
-\node(zlinkz)   at (15.5,  6.0) [link] {\begin{tabular}{c}
+\node(zlinkz)   at (15.6,  6.0) [link] {\begin{tabular}{c}
                                         \DWMACROtransparentinclude \\
                                         (q)
                                         \end{tabular}};
-
+\node(zlinkx)   at (15.6,  3.8) [link]  {\DWFORMlinestrp~(r)};
+\node(zsectlns) at (15.6,  2.0) [sect]  {\dotdebuglinestr};
+                                        
 \draw[thick,to reversed-]       (zsectmac.east) -- (zlinky);
 \draw[thick,-angle 90]          (zlinky) -- (zsectstr.east);
-\draw[<->,thick]				(zsectmac.east) -- (zlinkz);
-
+\draw[<->,thick]		(zsectmac.east) -- (zlinkz);
+\draw[thick,to reversed-]       (zsectlin.east) -- (zlinkx);
+\draw[thick, -angle 90]         (zlinkx) -- (zsectlns);
 \end{tikzpicture}
 \vspace{5mm}
 \caption{Debug section relationships}
@@ -281,6 +288,7 @@ into the string offset table in the
 \dotdebugstroffsets{} section.
 
 %q
+\needlines{4}
 \item \dotdebugmacro{} to \dotdebugmacro \\
 The second operand of a 
 \DWMACROtransparentinclude{} macro information
@@ -288,5 +296,11 @@ entry is an offset into another part of the
 \dotdebugmacro{} section to the header for the 
 sequence to be transparently included.
 
+%r
+\item \dotdebugline{} to \dotdebuglinestr \\
+The value of a \DWFORMlinestrp{} form refers to a
+string section specific to the line number table.
+This form can be used in a \dotdebugline{} section
+(as shown) or in a \dotdebuginfo{} section (not shown).
 
 \end{enumerate}

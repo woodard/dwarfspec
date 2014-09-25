@@ -137,6 +137,12 @@ The following is a list of the major changes made to the DWARF Debugging Informa
 Format since Version 4 was published. The list is not meant to be exhaustive.
 \begin{itemize}
 \item OTHERS TBD...
+\item Add support for collecting common DWARF information (DIEs and macro definitions)
+across multiple executable and shared files and keeping it in a single
+supplementary object file.
+\item Add a string section specific to the line number table (\dotdebuglinestr)
+to more properly support the common practice of stripping all DWARF sections
+except for line number information.
 \item Add a split object file and package representations to allow most 
 DWARF information to be compacted and/or kept separate from an executable 
 or shared image. This includes new sections 
@@ -150,11 +156,11 @@ a much more compact \dotdebugmacro{} representation.
 \item Add a new debugging information entry, related attributes and
 DWARF expression operators, to describe call information, 
 including identification of tail calls and tail recursion.
-\item Add a new attribute, \DWATnoreturn{}, to identify a subprogram that 
+\item Add a new attribute, \DWATnoreturnNAME{}, to identify a subprogram that 
 does not return to its caller.
-\item Add a new attribute, \DWATrank{}, to describe the dimensionality of
+\item Add a new attribute, \DWATrankNAME{}, to describe the dimensionality of
 an array with dynamic rank.
-\item Add a new tag, \DWTAGgenericsubrange{}, to describe the
+\item Add a new tag, \DWTAGgenericsubrangeNAME{}, to describe the
 bounds of Fortran assumed-rank arrays.
 \item Add language codes for C 2011, C++ 2003, C++ 2011, Dylan, Go, Haskell, 
 Julia, Modula 3, Ocaml, Rust, OpenCL and Swift.
@@ -162,17 +168,21 @@ Julia, Modula 3, Ocaml, Rust, OpenCL and Swift.
 
 DWARF Version 5 is compatible with DWARF Version 4 except as follows:
 \begin{itemize}
-\item A new field is included in the line number table header to allow use of an MD5
-hash to validate source file version in use.
-\item New operand forms for attribute values are defined (\DWFORMstrx, \DWFORMaddrx).
+\item A new line number program header design provides the ability to 
+use an MD5 hash to validate source file version in use, allows pooling 
+of directory and file name strings and make provision for vendor-defined
+extensions.
+\item New operand forms for attribute values are defined 
+(\DWFORMaddrxNAME, \DWFORMdatasixteenNAME, \DWFORMlinestrpNAME, \DWFORMrefsupNAME, 
+\DWFORMstrpNAME, \DWFORMstrpsupNAME, \DWFORMstrxNAME).
 (Because a pre-DWARF Version 5 consumer will not be able to interpret these even to
 ignore and skip over them, they must be considered incompatible.)
 \item A location list entry (see Section \refersec{chap:locationlists}) with 
 the address range \mbox{(0, \doublequote{-1})} is defined as the new default location 
 list entry.
-\item In a string type (see Section \refersec{chap:stringtypeentries}), a \DWATbytesize{}
+\item In a string type (see Section \refersec{chap:stringtypeentries}), a \DWATbytesizeNAME{}
 attribute is defined to always describe the size of the string type. (Previously
-it described the size of the optional string length data field if the \DWATstringlength{}
+it described the size of the optional string length data field if the \DWATstringlengthNAME{}
 attribute was present.)
 \end{itemize}
 
@@ -197,11 +207,11 @@ name) from DWARF expressions, which compute a final value (such as an array boun
 \item Add support for bundled instructions on machine architectures where instructions do not
 occupy a whole number of bytes.
 \item Add a new attribute form for 
-section offsets, \DWFORMsecoffset, 
+section offsets, \DWFORMsecoffsetNAME, 
 \addtoindexx{section offset}
 to replace the use
-of \DWFORMdatafour{} and \DWFORMdataeight{} for section offsets.
-\item Add an attribute, \DWATmainsubprogram, to identify the main subprogram of a
+of \DWFORMdatafourNAME{} and \DWFORMdataeightNAME{} for section offsets.
+\item Add an attribute, \DWATmainsubprogramNAME, to identify the main subprogram of a
 program.
 \item Define default array lower bound values for each supported language.
 \item Add a new technique using separate type units, type signatures and \COMDAT{} sections to
@@ -222,7 +232,7 @@ section offsets, flag compression, type signature references, and so on) cannot 
 \addtoindex{DWARF Version 3}
 consumers because the consumer will not know how to skip over the
 unexpected form of data.
-\item DWARF frame and line table sections include a additional fields that affect the location
+\item DWARF frame and line bumber table sections include a additional fields that affect the location
 and interpretation of other data in the section.
 \end{itemize}
 
@@ -272,7 +282,7 @@ is defined to increase the possible size of DWARF descriptions
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 \item
 References that use the attribute form 
-\DWFORMrefaddr{}
+\DWFORMrefaddrNAME{}
 are specified to be four bytes in the DWARF 32-bit format and
 eight bytes in the DWARF 64-bit format, while 
 \addtoindex{DWARF Version 2} 

@@ -3,7 +3,7 @@
 % If draft is in the document class list, pix are just suggested
 % by an outline, the pic does not appear as a picture.
 %
-\newcommand{\docdate}{August 22, 2014}
+\newcommand{\docdate}{September 25, 2014}
 %
 \usepackage{ifthen}
 \newboolean{isdraft}
@@ -185,24 +185,8 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
         \end{table}
         }
 
-% Anti-ligature commands added because \/ and {} don't work for unknown reasons
-% nor does the microtext package DisableLigatures command...???
-%
-\newcommand{\xiiif}				{0x3\hspace{1pt}f}
-\newcommand{\xiiifff}			{0x3\hspace{1pt}f\hspace{2pt}f\hspace{2pt}f}
-\newcommand{\xff}				{0x\hspace{1pt}f\hspace{2pt}f}
-\newcommand{\xffff}				{0x\hspace{1pt}f\hspace{2pt}f\hspace{2pt}f\hspace{2pt}f}
-%
-% These are intended for use in running text...
-%
-\newcommand{\xffffffff}   		{\texttt{0xffffffff}}			% use with following punctutation
-\newcommand{\wffffffff}   		{\texttt{0xffffffff}\ }			% use as separate "word"
-\newcommand{\xfffffffzero}		{\texttt{0xfffffff0}}			% use with following punctutation
-\newcommand{\wfffffffzero}		{\texttt{0xfffffff0}\ }
-\newcommand{\xffffffffffffffff}	{\texttt{0xffffffffffffffff}}	% use with following punctutation
-\newcommand{\wffffffffffffffff}	{\texttt{0xffffffffffffffff}\ }
-
 % Define commands for all of the DWARF names (DW\_*, .debug_*, a few others)
+%
 \include{dwarfnamecmds}
 
 %--- Begin the document pages
@@ -288,9 +272,10 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 		\makeevenhead{plain}{}{Change Summary}{}
 		\makeoddhead{plain}{}{Change Summary}{}
 		\include{changesummary}
+                \emptypage
 		}
 	}{}
-\cleardoublepage
+%\cleardoublepage
 \flushleft
 \raggedbottom
 \chapterstyle{default}
@@ -310,24 +295,24 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 % Define the levels of sectionality that are numbered.
 \setcounter{secnumdepth}{5}
 
-\include{introduction}
-\include{generaldescription}            \emptypage
+\include{introduction}                  \emptypage
+\include{generaldescription}            %\emptypage
 \include{programscope}                  %\emptypage
 \include{dataobject}                    \emptypage
-\include{typeentries}                   %\emptypage
+\include{typeentries}                   \emptypage
 \include{otherdebugginginformation} 	%\emptypage
 \include{datarepresentation}            \emptypage
 
 %  The \appendix toggles us into appendix chapters
 \appendix
 
-\include{attributesbytag}		%\emptypage
-\include{debugsectionrelationships}     %\emptypage
+\include{attributesbytag}		\emptypage
+\include{debugsectionrelationships}     \emptypage
 \include{encodingdecoding}              \emptypage
 \include{examples}                      %\emptypage
-\include{compression}                   %\emptypage
-\include{splitobjects}			\emptypage
-\include{sectionversionnumbers}
+\include{compression}                   \emptypage
+\include{splitobjects}			%\emptypage
+\include{sectionversionnumbers}         \emptypage
 \include{gnulicense}
 
 \printindex

@@ -67,13 +67,24 @@ for the strings in the \dotdebugstrdwo{}{} section.
 \dotdebugmacrodwo{} - Contains macro definition information,
 normally found in the \dotdebugmacro{} section.
 \item
-\dotdebuglinedwo{} - Contains skeleton line tables for the type
-units in the \dotdebuginfodwo{} section. These line tables
-contain only the directory and files lists needed to
+\dotdebuglinedwo{} - Contains skeleton line number tables for the type
+units in the \dotdebuginfodwo{} section. These tables
+contain only the directory and filename lists needed to
 interpret \DWATdeclfile{} attributes in the debugging
 information entries. Actual line number tables remain in the
 \dotdebugline{} section, and remain in the relocatable object
 (.o) files.
+
+In a .dwo file there is no benefit to having a separate string
+section for directories and file names because the primary
+string table will never be stripped. Accordingly, no
+\texttt{.debug\_line\_str.dwo} is defined. Content descriptions corresponding
+to \DWFORMlinestrp{} in an executable file (for example, in the
+skeleton compilation unit) instead use \DWFORMstrx. This allows
+directory and file name strings to be merged with general
+strings and across compilations in package files (which are not
+subject to potential stripping).
+
 \end{itemize}
 
 In order for the consumer to locate and process the debug

@@ -234,12 +234,12 @@ or statement to statement.}
 
 Line number information generated for a compilation unit is
 represented in the 
-\dotdebugline{} section of an object file and
+\dotdebugline{} section of an object file, and optionally
+also in the \dotdebuglinestr{} section, and
 is referenced by a corresponding compilation unit debugging
 information entry 
 (see Section \refersec{chap:normalandpartialcompilationunitentries}) 
-in the \dotdebuginfo{}
-section.
+in the \dotdebuginfo{} section.
 
 \textit{Some computer architectures employ more than one instruction
 set (for example, the ARM 
@@ -422,7 +422,7 @@ program, the state of the registers is:
 \texttt{line} & 1 \\
 \texttt{column} & 0 \\
 \addttindex{is\_stmt} & determined by \addttindex{default\_is\_stmt} 
-									in the line number program header \\
+			in the line number program header \\
 \addttindex{basic\_block}    & \doublequote{false} \addtoindexx{basic block} \\
 \addttindex{end\_sequence}   & \doublequote{false} \\
 \addttindex{prologue\_end}   & \doublequote{false} \\
@@ -466,7 +466,7 @@ extended opcode). \\
 
 
 \subsection{The Line Number Program Header}
-
+\label{chap:linenumberprogramheader}
 The optimal encoding of line number information depends to a
 certain degree upon the architecture of the target machine. The
 line number program header provides information used by
@@ -491,6 +491,26 @@ This number is specific to
 the line number information and is independent of the DWARF
 version number. 
 
+\item \texttt{address\_size} (ubyte)\\
+A 1-byte unsigned integer containing the size in bytes of an
+address (or offset portion of an address for segmented addressing)
+on the target system.
+   
+\textit{The \texttt{address\_size} field is new in DWARF Version 5. 
+It is needed to legitimize the common practice of stripping all but 
+the line number sections (\dotdebugline{} and \dotdebuglinestr{}) 
+from an executable.}
+
+\item \texttt{segment\_size} (ubyte) \\
+A 1-byte unsigned integer containing the size in bytes of a segment
+selector on the target system.
+   
+\textit{The \texttt{segment\_size} field is new in DWARF Version 5. 
+It is needed in combination with the \texttt{address\_size} field (preceding) 
+to accurately characterize the address representation on the target 
+system.}
+
+\needlines{4}
 \item \texttt{header\_length}  \\
 The number of bytes following the \addttindex{header\_length} field to the
 beginning of the first byte of the line number program itself.
@@ -559,6 +579,7 @@ This parameter affects the meaning of the special opcodes. See below.
 \addttindexx{line\_range}
 This parameter affects the meaning of the special opcodes. See below.
 
+\needlines{4}
 \item \texttt{opcode\_base} (\addtoindex{ubyte}) \\
 The 
 \addttindexx{opcode\_base}
@@ -600,111 +621,253 @@ do not know about these new opcodes to be able to skip them.}
 \textit{Codes for vendor specific extensions, if any, are described
 just like standard opcodes.}
 
-\item \texttt{file\_entry\_format} (\addtoindex{ubyte}) \\
-A format code indicating the format of certain data in the 
-entries of the file names field (see below). The format codes 
-and their meanings are as follows:
+%%% Save the current enum counter so we can restart later
+%%% End this enumeration so the following text is outdented to
+%%% the left margin (because it applies to the many following
+%%% items
+\newcounter{saveenumi}
+\setcounter{saveenumi}{\value{enumi}}
+\end{enumerate}
+
+\textit{The remaining fields provide information about the
+source files used in the compilation. These fields
+have been revised in \DWARFVersionV{} to support these
+goals:}
 \begin{itemize}
-\item \DWLNFtimestampsizeTARG \\
-Entries contain a modification timestamp and file size.
-\item \DWLNFMDfiveTARG \\
-Entries contain an \MDfive{} digest of the file contents.
+\item
+    \textit{To allow new alternative means for a consumer to
+    check that a file it can access is the same version
+    as that used in the compilation.}
+\item
+    \textit{To allow a producer to collect file name strings
+    in a new section (\dotdebuglinestr{}) that can be used
+    to merge duplicate file name strings.}
+\item
+    \textit{To add the ability for producers to provide 
+    vendor-defined information that can be skipped by a consumer
+    that is unprepared to process it.}
 \end{itemize}
 
-\needlines{3}
-\item \texttt{include\_directories} (sequence of path names) \\
-Entries 
-\addttindexx{include\_directories}
-in this sequence describe each path that was searched
-for included source files in this compilation. (The paths
-include those directories specified explicitly by the user for
-the compiler to search and those the compiler searches without
-explicit direction.) Each path entry is either a full path name
-or is relative to the current directory of the compilation.
-
-The last entry is followed by a single null byte.
-
-The line number program assigns numbers to each of the file
-entries in order, beginning with 1. The current directory of
-the compilation is understood to be the zeroth entry and is
-not explicitly represented.
-
-\item  \texttt{file\_names} (sequence of file entries) \\
-Entries 
-\addtoindexx{file names}
-in 
-\addttindexx{file\_names}
-this sequence describe source files that contribute
-to the line number information for this compilation unit or is
-used in other contexts, such as in a 
-\livelinki{chap:declarationcoordinates}{declaration coordinate}{declaration coordinates} or
-a macro file inclusion. Each entry consists of the following
-values:
-
-
+\begin{enumerate}[1. ]
+%%% Resume enumeration count where it left off above
+\setcounter{enumi}{\value{saveenumi}}
+\item \texttt{directory\_entry\_format\_count} (ubyte) \\
+    A count of the number of entries that occur in the
+    following \texttt{directory\_entry\_format} field.
+   
+\item \texttt{directory\_entry\_format} (sequence of uleb pairs) \\
+    A sequence of directory entry format descriptions.
+    Each description consists of a pair of uleb values:
 \begin{itemize}
-\item A null\dash terminated string containing the full or relative
-path name of a source file. If the entry contains a file
-name or relative path name, the file is located relative
-to either the compilation directory (as specified by the
-\DWATcompdir{} 
-attribute given in the compilation unit) or one
-of the directories listed in the 
-\addttindex{include\_directories} section.
-
-\item An unsigned LEB128\addtoindexx{LEB128!unsigned} 
-number representing the directory
-index of a directory in the 
-\addttindex{include\_directories} section.
-
-\item If \texttt{file\_entry\_format} (see above) is \DWLNFtimestampsize:
-\begin{itemize}
-    \item An unsigned LEB128\addtoindexx{LEB128!unsigned}
-    number representing the
-    (implementation-\linebreak[0]defined) time of last modification for
-    the file, or 0 if not available.
-
-    \item An unsigned LEB128\addtoindexx{LEB128!unsigned} 
-    number representing the length in
-    bytes of the file, or 0 if not available.  
-\end{itemize}
-If \texttt{file\_entry\_format} is \DWLNFMDfive:
-\begin{itemize}
-\item A 16-byte \MDfive{} digest of the file contents.
+\setlength{\itemsep}{0em}
+\item A content type code (see below)
+\item A form code using the attribute form codes
 \end{itemize}
 
+\needlines{4} 
+\item \texttt{directories\_count} (uleb) \\
+A count of the number of entries that occur in the
+following directories field.
+
+\needlines{4}    
+\item \texttt{directories} (sequence of directory names) \\
+A sequence of directory names and optional related
+information. Each entry is encoded as described
+by the \texttt{directory\_entry\_format} field.
+   
+Entries in this sequence describe each path that was
+searched for included source files in this compilation,
+including the compilation directory of the compilation.
+(The paths include those directories specified by the
+user for the compiler to search and those the compiler
+searches without explicit direction.)
+   
+The first entry is the current directory of the compilation.
+Each additional path entry is either a full path name or
+is relative to the current directory of the compilation.
+   
+The line number program assigns a number (index) to each
+of the directory entries in order, beginning with 0.
+   
+\textit{Prior to \DWARFVersionV, the current directory was not
+represented in the directories field and a directory index
+of 0 implicitly referred to that directory as found in the
+\DWATcompdir{} attribute of the compilation unit DIE. In
+\DWARFVersionV, the current directory is explicitly present
+in the directories field. This is needed to legitimize the
+common practice of stripping all but the line number sections
+(\dotdebugline{} and \dotdebuglinestr) from an executable.}
+
+\textit{Note that if a \dotdebuglinestr{} section is present, 
+both the compilation unit DIE and the line number header can
+share a single copy of the current directory name string.}
+
+\item \texttt{file\_name\_entry\_format\_count} (ubyte) \\
+A count of the number of file entry format entries that
+occur in the following \texttt{file\_name\_entry\_format} field. 
+If this field is zero, then the \texttt{file\_names\_count} field 
+(see below) must also be zero.
+
+\item \texttt{file\_name\_entry\_format} (sequence of uleb pairs) \\
+A sequence of file entry format descriptions.
+Each description consists of a pair of uleb values:
+\begin{itemize}
+\setlength{\itemsep}{0em}
+\item A content type code (see below)
+\item A form code using the attribute form codes
 \end{itemize}
 
-The last entry is followed by a single null byte.
+\item \texttt{file\_names\_count} (uleb) \\
+A count of the number of file name entries that occur
+in the following \texttt{file\_names} field.
 
-The directory index represents an entry in the
-\addttindex{include\_directories} section. 
-The index is 0 if the file was
-found in the current directory of the compilation, 1 if it
-was found in the first directory in the 
-\addttindex{include\_directories}
-section, and so on. The directory index is ignored for file
-names that represent full path names.
+\needlines{4}
+\item \texttt{file\_names} (sequence of file name entries) \\
+A sequence of file names and optional related
+information. Each entry is encoded as described
+by the \texttt{file\_name\_entry\_format} field (in the
+order described).
+  
+Entries in this sequence describe source files that
+contribute to the line number information for this
+compilation or is used in other contexts, such as in
+a declaration coordinate or a macro file inclusion.
+ 
+The first entry in the sequence is the primary source file 
+whose file name exactly matches that given in the 
+\DWATname{} attribute in the compilation unit DIE.
+   
+The line number program assigns numbers to each of
+the file name entries in order, beginning with 0, and uses
+those numbers instead of file names in the line number
+program that follows.
 
-The primary source file is described by an entry whose path
-name exactly matches that given in the \DWATname{} attribute
-in the compilation unit, and whose directory is understood
-to be given by the implicit entry with index 0.
-
-The line number program assigns numbers to each of the file
-entries in order, beginning with 1, and uses those numbers
-instead of file names in the file register.
-
-\textit{A compiler may generate a single null byte for the file
-names field and define file names using the extended opcode
-\DWLNEdefinefile{} (when \texttt{file\_entry\_format} is \DWLNFtimestampsize) or
-\DWLNEdefinefileMDfive{} (when \texttt{file\_entry\_format} is \DWLNFMDfive).}
-
+\textit{Prior to \DWARFVersionV, the current compilation 
+file name was not represented in the \texttt{file\_names}
+field. In \DWARFVersionV, the current compilation file name 
+is explicitly present and has index 0. This is needed to legitimize 
+the common practice of stripping all but the line number sections
+(\dotdebugline{} and \dotdebuglinestr) from an executable.}
 
 \end{enumerate}
 
-\subsection{The Line Number Program}
+\subsubsubsection{Standard Content Descriptions}
+DWARF-defined content type codes are used to indicate
+the type of information that is represented in one
+component of an include directory or file name description.
+The following type codes are defined.
+\begin{enumerate}[1. ]
 
+\item  \DWLNCTpathTARG \\
+The component is a null-terminated path name string.
+If the associated form code is \DWFORMstring{}, then the
+string occurs immediately in the containing \texttt{directories}
+or \texttt{file\_names} field. If the form code is \DWFORMlinestrp{},
+then the string is included in the \dotdebuglinestr{} section
+and its offset occurs immediately in the containing
+\texttt{directories} or \texttt{file\_names} field.
+
+\textit{Note that this use of \DWFORMlinestrp{} is similar to
+\DWFORMstrp{} but refers to the \dotdebuglinestr{} section,
+not \dotdebugstr.}
+   
+In a \dotdebuglinedwo{} section, the form \DWFORMstrx{} may
+also be used. This refers into the \dotdebugstroffsetsdwo{}
+section (and indirectly also the \dotdebugstrdwo{} section)
+because no \texttt{.debug\_line\_str\_offsets.dwo} or 
+\texttt{.debug\_line\_str.dwo} sections exist or are defined for 
+use in split objects. (The form \DWFORMstring{} may also be used, 
+but this precludes the benefits of string sharing.)
+   
+In the 32-bit DWARF format, the representation of a
+\DWFORMlinestrp{} value is a 4-byte unsigned offset; in the
+64-bit DWARF format, it is an 8-byte unsigned offset (see
+Section \refersec{datarep:32bitand64bitdwarfformats}).
+   
+\item \DWLNCTdirectoryindexTARG \\
+The unsigned directory index represents an entry in the
+directories field of the header. The index is 0 if
+the file was found in the current directory of the compilation
+(hence, the first directory in the directories field),
+1 if it was found in the second directory in the directories
+field, and so on.
+
+This content code is always paired with one of \DWFORMdataone, 
+\DWFORMdatatwo{} or \DWFORMudata.
+
+\textit{The optimal form for a producer to use (which results in the
+minimum size for the set of \texttt{include\_index} fields) depends not only
+on the number of directories in the directories
+field, but potentially on the order in which those directories are
+listed and the number of times each is used in the \texttt{file\_names} field.
+However, \DWFORMudata{} is expected to be near optimal in most common
+cases.}
+   
+\item \DWLNCTtimestampTARG \\
+\DWLNCTtimestampNAME{} indicates that the value is the implementation-defined 
+time of last modification of the file, or 0 if not available. 
+It is always paired with one of the forms
+\DWFORMudata, \DWFORMdatafour, \DWFORMdataeight{} or \DWFORMblock.
+   
+\item  \DWLNCTsizeTARG \\
+\DWLNCTsizeNAME{} indicates that the value is the unsigned size of the
+file in bytes, or 0 if not available. It is paired with one of the
+forms \DWFORMudata, \DWFORMdataone, \DWFORMdatatwo, \DWFORMdatafour{}
+or \DWFORMdataeight.
+ 
+\item \DWLNCTMDfiveTARG \\
+\DWLNCTMDfiveNAME{} indicates that the value is a 16-byte \MDfive digest
+of the file contents. It is paired with form \DWFORMdatasixteen.
+\end{enumerate}
+
+\textit{Using this representation, the information found in a DWARF
+Version 4 line number header could be encoded as shown in 
+Figure \refersec{fig:preV5LNCTusingV5}.}
+
+\begin{figure}[here]
+\begin{dwflisting}
+\begin{alltt}
+  Field           Field Name                      Value(s)
+  Number
+     1    \textit{Same as in Version 4}            ...
+     2    version                         5
+     3    \textit{Not present in Version 4}        -
+     4    \textit{Not present in Version 4}        -
+   5-12   \textit{Same as in Version 4}            ...
+    13    directory_entry_format_count    1
+    14    directory_entry_format          \DWLNCTpath, \DWFORMstring
+    15    directories_count               <n>
+    16    directories                     <n>*<null terminated string>
+    17    file_name_entry_format_count    4
+    18    file_name_entry_format          \DWLNCTpath, \DWFORMstring,
+                                          \DWLNCTdirectoryindex, \DWFORMudata,
+                                          \DWLNCTtimestamp, \DWFORMudata,
+                                          \DWLNCTsize, \DWFORMudata
+    19    file_names_count                <m>
+    20    file_names                      <m>*{<null terminated string>,
+                                          <index>, <timestamp>, <size>}
+\end{alltt}
+\end{dwflisting}
+\caption{Pre-\DWARFVersionV{} Line Number Program Header Information \mbox{Encoded} Using \DWARFVersionV}
+\label{fig:preV5LNCTusingV5}
+\end{figure}
+
+\subsubsubsection{Vendor-defined Content Descriptions}
+Vendor-defined content descriptions may be defined using content
+type codes in the range \DWLNCTlouserTARG{} to \DWLNCThiuserTARG{}. Each
+such code may be combined with one or more forms from the set:
+\DWFORMblock, \DWFORMblockone, \DWFORMblocktwo, \DWFORMblockfour,
+\DWFORMdataone, \DWFORMdatatwo, \DWFORMdatafour, \DWFORMdataeight,
+\DWFORMdatasixteen,
+\DWFORMflag, \DWFORMlinestrp, \DWFORMsdata, \DWFORMsecoffset,
+\DWFORMstring, \DWFORMstrp, \DWFORMstrx{}  and \DWFORMudata.
+
+If a consumer encounters a vendor-defined content type that
+it does not understand, it should skip the content data as though
+it was not present.
+
+\subsection{The Line Number Program}
+\label{linenumberprogram}
 As stated before, the goal of a line number program is to build
 a matrix representing one compilation unit, which may have
 produced multiple sequences of target machine instructions.
@@ -1073,49 +1236,6 @@ sets the \addttindex{op\_index} register to 0.
 affect the \texttt{address} register add a delta to it. This instruction
 stores a relocatable value into it instead.}
 
-\needlines{4}
-\item \textbf{\DWLNEdefinefileTARG} \\
-The \DWLNEdefinefileTARG{} opcode takes four operands:
-\begin{enumerate}[1. ]
-
-\item A null\dash terminated string containing the full or relative
-path name of a source file. If the entry contains a file
-name or a relative path name, the file is located relative
-to either the compilation directory (as specified by the
-\DWATcompdir{} attribute given in the compilation unit)
-or one of the directories in the 
-\addttindex{include\_directories} section.
-
-\item An unsigned LEB128\addtoindexx{LEB128!unsigned} 
-number representing the directory index
-of the directory in which the file was found.  
-
-\item An unsigned LEB128\addtoindexx{LEB128!unsigned} 
-number representing the time of last modification
-of the file, or 0 if not available.  
-
-\item An unsigned LEB128\addtoindexx{LEB128!unsigned}
-number representing the length in bytes of the file, or 0 if
-not available.
-\end{enumerate}
-
-The directory index represents an entry in the
-\addttindex{include\_directories} section of the line number program
-header. The index is 0 if the file was found in the current
-directory of the compilation, 1 if it was found in the first
-directory in the \addttindex{include\_directories} section,
-and so on. The
-directory index is ignored for file names that represent full
-path names.
-
-The primary source file is described by an entry whose path
-name exactly matches that given in the \DWATname{} attribute
-in the compilation unit, and whose directory index is 0. The
-files are numbered, starting at 1, in the order in which they
-appear; the names in the header come before names defined by
-the \DWLNEdefinefile{} instruction. These numbers are used
-in the file register of the state machine.
-
 \item \textbf{\DWLNEsetdiscriminatorTARG} \\
 The \DWLNEsetdiscriminatorTARG{}
 opcode takes a single
@@ -1123,28 +1243,11 @@ parameter, an unsigned LEB128\addtoindexx{LEB128!unsigned}
 integer. It sets the
 \addttindex{discriminator} register to the new value.
 
-\needlines{4}
-\item \textbf{\DWLNEdefinefileMDfiveTARG} \\
-The \DWLNEdefinefileMDfiveTARG{} opcode takes three operands:
-\begin{enumerate}[1. ]
-
-\item A null\dash terminated string containing the full or relative
-path name of a source file. If the entry contains a file
-name or a relative path name, the file is located relative
-to either the compilation directory (as specified by the
-\DWATcompdir{} attribute given in the compilation unit)
-or one of the directories in the 
-\addttindex{include\_directories} section.
-
-\item An unsigned LEB128\addtoindexx{LEB128!unsigned} 
-number representing the directory index
-of the directory in which the file was found.  
-
-\item A 16-byte \MDfive{} digest of the file contents.
 \end{enumerate}
-The first two operands are interpreted in the same way as the 
-first two operands of \DWLNEdefinefile.
-\end{enumerate}
+
+\textit{The \texttt{DW\_LNE\_define\_file} operation defined
+in earlier versions of DWARF is deprecated in \DWARFVersionV.}
+\addtoindexx{\texttt{DW\_LNE\_define\_file}!deprecated}
 
 \textit{Appendix \refersec{app:linenumberprogramexample} 
 gives some sample line number programs.}
@@ -1238,7 +1341,7 @@ and for each operand there is a single unsigned byte describing the form in whic
 the operand is encoded.  The allowed forms are: 
 \DWFORMblock, \DWFORMblockone, \DWFORMblocktwo, \DWFORMblockfour,
 \DWFORMdataone, \DWFORMdatatwo, \DWFORMdatafour, \DWFORMdataeight, 
-\DWFORMsdata, \DWFORMudata, \DWFORMflag, \DWFORMsecoffset,
+\DWFORMdatasixteen, \DWFORMsdata, \DWFORMudata, \DWFORMflag, \DWFORMsecoffset,
 \DWFORMstring, \DWFORMstrp{} and \DWFORMstrx.
 \end{enumerate}
 
@@ -1248,19 +1351,33 @@ the operand is encoded.  The allowed forms are:
 \subsection{Macro Information Entries}
 \label{chap:macroinformationentries}
 
-The following kinds of macro information entries are defined:
-
-\begin{tabular}{ll}
+The kinds of macro information entries are shown in Table \refersec{tab:macroinformationentrykinds}.
+\begin{table}[here]
+\centering
+\caption{Macro information entry kinds}
+\label{tab:macroinformationentrykinds}
+\begin{tabular}{l|p{7cm}}
+\hline
+Name&Meaning\\ \hline
 \DWMACROdefine{}            &A macro definition\\
 \DWMACROundef               &A macro undefinition\\
 \DWMACROstartfile           &The start of a new source file inclusion\\
-\DWMACROendfile             &The end of the current source file inclusion\\
+\DWMACROendfile             &The end of the current source file \mbox{inclusion}\\
 \DWMACROdefineindirect      &A macro definition (indirect name string)\\
 \DWMACROundefindirect       &A macro undefinition (indirect name string)\\
-\DWMACROtransparentinclude  &A sequence of macro information entries to include\\
+\DWMACROtransparentinclude  &A sequence of macro information \mbox{entries} to include\\
+\DWMACROdefineindirectsup   &A macro definition whose indirect name string is in the 
+                             \addtoindex{supplementary object file}\\
+\DWMACROundefindirectsup    &A macro undefinition whose indirect name string is in the 
+                             supplementary object file)\\
+\DWMACROtransparentincludesup
+                            &A sequence of macro information \mbox{entries} to include 
+                             from the \addtoindex{supplementary object file}\\
 \DWMACROdefineindirectx     &A macro definition (indexed name string)\\
 \DWMACROundefindirectx      &A macro undefinition (indexed name string)\\
+\hline
 \end{tabular}
+\end{table}
 
 \subsubsection{Define and Undefine Entries}
 \label{chap:defineandundefineentries}
@@ -1329,6 +1446,18 @@ which is interpreted as a zero-based index into an array of offsets in the
 these entries are equivalent to \DWMACROdefine{}
 and \DWMACROundef.
 
+\subsubsubsection{Define and Undefine Using Indirect Strings in a Supplementary Object File}
+A \DWMACROdefineindirectsupTARG{} or \DWMACROundefindirectsupTARG{} entry has
+two operands.  The first operand encodes the line number of the source line
+on which the relevant defining or undefining macro directives appeared.
+The second operand consists of an offset into a string table contained in
+the \dotdebugstr{} section of the \addtoindex{supplementary object file}.  
+The size of the operand is given in the section header \texttt{offset\_size} field.  
+Apart from the encoding of the second operand these entries are equivalent to
+\DWMACROdefineindirect{} and \DWMACROundefindirect{}, respectively.
+
+
+
 \subsubsection{Start File Entries}
 \label{chap:startfileentries}
 A \DWMACROstartfileTARG{} entry has two operands. The
@@ -1351,6 +1480,11 @@ A \DWMACROendfileTARG{} entry has no operands. The presence of
 the entry marks the end of the current source file inclusion.
 
 \subsubsection{Transparent Inclusion of a Sequence of Entries}
+\textit{The transparent inclusion entry types makes it possible 
+to share duplicate sequences of macro information entries among different 
+compilation units or object files.}
+
+\subsubsubsection{Transparent Inclusion within the Current Compilation}
 A \DWMACROtransparentincludeTARG{} entry has one operand, an offset into
 another part of the \dotdebugmacro{} section.  The size of the operand
 is given in the header \texttt{offset\_size} field.  The
@@ -1360,9 +1494,23 @@ after the section header at the given
 \dotdebugmacro{} offset, up to, but excluding,
 the terminating entry with opcode \texttt{0}.
 
-\textit{The \DWMACROtransparentincludeNAME{} entry type makes it possible 
-to share duplicate sequences of macro information entries among different 
-compilation units.}
+\subsubsubsection{Transparent Inclusion Across Executable and Shared Object Files}
+A \DWMACROtransparentincludesupTARG{} entry has one operand, an 
+offset from the start of the \dotdebugmacro{} section in the 
+\addtoindex{supplementary object file}.  
+The size of the operand is given in the section header offset size. 
+Apart from the different location in which to find the sequence of 
+macro  information  entries this entry type is equivalent to 
+\DWMACROtransparentinclude. This entry type is aimed at sharing duplicate 
+sequences of macro information entries between \dotdebugmacro{}
+sections from different executables or shared objects.  
+
+\needlines{4}
+From within the \dotdebugmacro{} section of the \addtoindex{supplementary object file}, 
+\DWMACROdefineindirect{} and \DWMACROundefindirect{} entry types refer to the 
+local \dotdebugstr{} section and \DWMACROtransparentinclude{} refers to the 
+local \dotdebugmacro{} section.
+
 
 \needlines{4}
 \subsection{Base Source Entries} 

@@ -17,7 +17,15 @@ as two byte unsigned integers.
 
 Table \refersec{tab:sectionversionnumbers}
 shows what version
-numbers are in use for each section.
+numbers are in use for each section. In that table:
+\begin{itemize}
+\setlength{\itemsep}{0em}
+\item  \doublequote{V2} means \addtoindex{DWARF Version 2}, published July 27, 1993.
+\item  \doublequote{V3} means \addtoindex{DWARF Version 3}, published December 20, 2005.
+\item  \doublequote{V4} means \addtoindex{DWARF Version 4}, published June 10, 2010.
+\item  \doublequote{V5} means \addtoindex{DWARF Version 5}\footnote{Higher numbers are reserved for future use.}, published 
+			\ifthenelse{\boolean{isdraft}}{\textit{<to be determined>}}{\docdate}.
+\end{itemize}
 
 There are sections with no version number encoded in them;
 they are only accessed via the 
@@ -26,11 +34,15 @@ sections and so an incompatible change in those sections'
 format would be represented by a change in the 
 \dotdebuginfo{} section version number.
 
+\needlines{10}
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{lcccc}
   \caption{Section version numbers} \label{tab:sectionversionnumbers} \\
-  \hline \bfseries Section Name &\bfseries V2 &\bfseries V3 &\bfseries V4 &\bfseries V5 \\ \hline
+  \hline 
+  \bfseries Section Name &\bfseries V2 &\bfseries V3 &\bfseries V4 
+                         &\bfseries V5 \\ 
+  \hline
 \endfirsthead
    \bfseries Section Name &\bfseries V2 &\bfseries V3 &\bfseries V4 &\bfseries V5 \\ \hline
 \endhead
@@ -45,6 +57,7 @@ format would be represented by a change in the
                     & 1 & 3 & 4 & 4 \\
 \dotdebuginfo{}     & 2 & 3 & 4 & 5 \\
 \dotdebugline{}     & 2 & 3 & 4 & 5 \\
+\dotdebuglinestr{}  & - & - & - & 5 \\
 \dotdebugloc{}      & * & * & * & 5 \\
 \dotdebugmacinfo{}  & * & * & * & - \\*
 \dotdebugmacro{}    & - & - & - & 5 \\
@@ -53,6 +66,7 @@ format would be represented by a change in the
 \dotdebugranges{}   & - & * & * & 5 \\
 \dotdebugstr{}      & * & * & * & * \\
 \dotdebugstroffsets & - & - & - & 5 \\
+\dotdebugsup        & - & - & - & 5 \\
 \addtoindexi{\texttt{.debug\_types}}{\texttt{.debug\_types} (Version 4)}
                     & - & - & 4 & - \\
 
@@ -69,27 +83,18 @@ format would be represented by a change in the
 \hspace{3.5cm}\textit{(.dwp sections)}\\
 \dotdebugcuindex{}  & - & - & - & 5 \\
 \dotdebugtuindex{}  & - & - & - & 5 \\
-
 \end{longtable}
 \end{centering}
 
+\needlines{8}
 Notes:
-
 \begin{itemize}
-\item  \doublequote{V2} means \addtoindex{DWARF Version 2}, published July 27, 1993.
-\item  \doublequote{V3} means \addtoindex{DWARF Version 3}, published December 20, 2005.
-\item  \doublequote{V4} means \addtoindex{DWARF Version 4}, published June 10, 2010.
-\item  \doublequote{V5} means \addtoindex{DWARF Version 5}, published 
-			\ifthenelse{\boolean{isdraft}}{\textit{<to be determined>}}{\docdate}.
 \item  \doublequote{*} means that a version number is not applicable
 (the section does not include a header or the section's header does not include a version).
-
 \item  \doublequote{-} means that the section was not defined in that
 version of the DWARF standard.
-
 \item  The version numbers for corresponding .debug\_<kind> and .debug\_<kind>.dwo 
 sections are the same.
-
 \end{itemize}
-Higher numbers are reserved for future use.
+
 
