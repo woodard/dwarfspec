@@ -90,6 +90,7 @@ explanatory or supplementary material, and not part of the
 format definition itself. The several appendices consist only
 of explanatory or supplementary material, and are not part
 of the formal definition.
+
 \section{Vendor Extensibility}
 
 This document does not attempt to cover all interesting
@@ -111,7 +112,7 @@ All
 names and values not reserved for vendor additions, however,
 are reserved for future versions of this document.
 
-\addtoindex{DWARF Version 4} is intended to be permissive rather than
+DWARF is intended to be permissive rather than
 prescriptive. 
 Where this specification provides a means for
 describing the source language, implementors are expected
@@ -136,12 +137,20 @@ albeit possibly in a degraded manner.
 The following is a list of the major changes made to the DWARF Debugging Information
 Format since Version 4 was published. The list is not meant to be exhaustive.
 \begin{itemize}
-\item OTHERS TBD...
+\item The \dotdebugtypes{}
+%\addtoindexi{\texttt{.debug\_types}}{\texttt{.debug\_types} (Version 4)}
+section introduced in \DWARFVersionIV{} 
+is eliminated and its contents instead contained in \dotdebuginfo{} sections
+to facilitate other changes.
 \item Add support for collecting common DWARF information (DIEs and macro definitions)
 across multiple executable and shared files and keeping it in a single
 supplementary object file.
-\item Add a string section specific to the line number table (\dotdebuglinestr)
-to more properly support the common practice of stripping all DWARF sections
+\item A new line number program header design provides the ability to 
+use an MD5 hash to validate source file version in use, allows pooling 
+of directory and file name strings and makes provision for vendor-defined
+extensions. It also adds a string section specific to the line number table 
+(\dotdebuglinestr)
+to properly support the common practice of stripping all DWARF sections
 except for line number information.
 \item Add a split object file and package representations to allow most 
 DWARF information to be compacted and/or kept separate from an executable 
@@ -150,12 +159,14 @@ or shared image. This includes new sections
 \dotdebuglinedwo, \dotdebuglocdwo, \dotdebugmacrodwo, \dotdebugstrdwo,
 \dotdebugstroffsetsdwo, \dotdebugcuindex{} and \dotdebugtuindex{} 
 together with new forms of attribute value for referencing these sections.
-This enhances DWARF support for very large programs.
+This enhances DWARF support for very large programs by saving space 
+and improving link times.
 \item Replace the \dotdebugmacinfo{} macro information representation with
 a much more compact \dotdebugmacro{} representation.
 \item Add a new debugging information entry, related attributes and
 DWARF expression operators, to describe call information, 
 including identification of tail calls and tail recursion.
+This facilitates debugging optimized code.
 \item Add a new attribute, \DWATnoreturnNAME{}, to identify a subprogram that 
 does not return to its caller.
 \item Add a new attribute, \DWATrankNAME{}, to describe the dimensionality of
@@ -168,15 +179,12 @@ Julia, Modula 3, Ocaml, Rust, OpenCL and Swift.
 
 DWARF Version 5 is compatible with DWARF Version 4 except as follows:
 \begin{itemize}
-\item A new line number program header design provides the ability to 
-use an MD5 hash to validate source file version in use, allows pooling 
-of directory and file name strings and make provision for vendor-defined
-extensions.
+\item The line number table header is substantially revised.
 \item New operand forms for attribute values are defined 
 (\DWFORMaddrxNAME, \DWFORMdatasixteenNAME, \DWFORMlinestrpNAME, \DWFORMrefsupNAME, 
 \DWFORMstrpNAME, \DWFORMstrpsupNAME, \DWFORMstrxNAME).
 (Because a pre-DWARF Version 5 consumer will not be able to interpret these even to
-ignore and skip over them, they must be considered incompatible.)
+ignore and skip over them, such new forms must be considered incompatible.)
 \item A location list entry (see Section \refersec{chap:locationlists}) with 
 the address range \mbox{(0, \doublequote{-1})} is defined as the new default location 
 list entry.
@@ -232,7 +240,7 @@ section offsets, flag compression, type signature references, and so on) cannot 
 \addtoindex{DWARF Version 3}
 consumers because the consumer will not know how to skip over the
 unexpected form of data.
-\item DWARF frame and line bumber table sections include a additional fields that affect the location
+\item DWARF frame and line number table sections include additional fields that affect the location
 and interpretation of other data in the section.
 \end{itemize}
 

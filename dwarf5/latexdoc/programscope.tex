@@ -133,13 +133,17 @@ indicating the source language of the compilation
 unit. The set of language names and their meanings are given
 in Table \refersec{tab:languagenames}.
 
-\begin{table}[t]
-\centering
-\caption{Language names}
-\label{tab:languagenames}
-\begin{tabular}{l|l}
-\hline
-Language name & Meaning\\ \hline
+\begin{centering}
+  \setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{l|l}
+  \caption{Language names} \label{tab:languagenames} \\
+  \hline \bfseries Language name & \bfseries Meaning \\ \hline
+\endfirsthead
+  \bfseries Language name & \bfseries Meaning \\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+\endlastfoot
 \addtoindexx{ISO-defined language names}
 \DWLANGAdaeightythreeTARG{} \dag & ISO Ada:1983 \addtoindexx{Ada:1983 (ISO)} \\
 \DWLANGAdaninetyfiveTARG{}  \dag & ISO Ada:1995 \addtoindexx{Ada:1995 (ISO)} \\
@@ -150,6 +154,7 @@ Language name & Meaning\\ \hline
 \DWLANGCplusplusTARG          & ISO C++:1998 \addtoindexx{C++:1998 (ISO)} \\
 \DWLANGCpluspluszerothreeTARG & ISO C++:2003 \addtoindexx{C++:2003 (ISO)} \\
 \DWLANGCpluspluselevenTARG    & ISO C++:2011 \addtoindexx{C++:2011 (ISO)} \\
+\DWLANGCplusplusfourteenTARG  & ISO C++:2014 \addtoindexx{C++:2014 (ISO)} \\
 \DWLANGCobolseventyfourTARG & ISO COBOL:1974 \addtoindexx{COBOL:1974 (ISO)} \\
 \DWLANGCoboleightyfiveTARG  & ISO COBOL:1985 \addtoindexx{COBOL:1985 (ISO)} \\
 \DWLANGDTARG{}~\dag & D \addtoindexx{D language} \\
@@ -176,9 +181,10 @@ Language name & Meaning\\ \hline
                          \index{Unified Parallel C|see{UPC}} \\ 
 \hline
 \dag \ \ \textit{Support for these languages is limited}& \\
-\end{tabular}
-\end{table}
+\end{longtable}
+\end{centering}
 
+\needlines{6}
 \item A \DWATstmtlist{}
 attribute whose value is 
 \addtoindexx{statement list attribute}
@@ -196,9 +202,6 @@ value of the statement list attribute is the offset in the
 information for this compilation unit 
 (see Section \refersec{chap:linenumberinformation}).
 
-\clearpage
-
-\needlines{6}
 \item A \DWATmacros{} attribute 
 \addtoindexx{macro information attribute}
 whose value is a 
@@ -324,6 +327,7 @@ presence indicates that all strings (such as the names of
 declared entities in the source program, or filenames in the line number table) 
 are represented using the UTF\dash 8 representation. 
 
+\needlines{4}
 \item A \DWATmainsubprogram{} attribute, which is a \livelink{chap:classflag}{flag}
 \addtoindexx{main subprogram attribute}
 whose presence indicates 
@@ -1315,12 +1319,12 @@ but more
 compact. However, these are not equivalent in general.}
 
 \needlines{5}
-\textit{The frame base for a procedure is typically an address fixed
+\textit{The frame base for a subprogram is typically an address fixed
 relative to the first unit of storage allocated for the
-procedure\textquoteright s stack frame. The \DWATframebase{} attribute
+subprogram\textquoteright s stack frame. The \DWATframebase{} attribute
 can be used in several ways:}
 \begin{enumerate}[1. ]
-\item \textit{In procedures that need 
+\item \textit{In subprograms that need 
 \addtoindexx{location list}
 location lists to locate local
 variables, the \DWATframebase{} can hold the needed location
@@ -1357,7 +1361,7 @@ constraints:
 
 \begin{enumerate}[1. ]
 \item It should compute a value that does not change during the
-life of the procedure, and
+life of the subprogram, and
 
 \item The computed value should be unique among instances of
 the same subroutine. (For typical \DWATframebase{} use, this

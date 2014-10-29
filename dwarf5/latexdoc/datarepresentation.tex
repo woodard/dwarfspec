@@ -536,11 +536,13 @@ file must contain a \dotdebugsup{} section that establishes the relationship.
 The \dotdebugsup section contains:
 \begin{enumerate}[1. ]
 \item \texttt{version} (uhalf) \\
+\addttindexx{version}
 A 2-byte unsigned integer representing the version of the DWARF
 information for the compilation unit (see Appendix G). The
 value in this field is \versiondotdebugsup.
 
 \item \texttt{is\_supplementary} (ubyte) \\
+\addttindexx{is\_supplementary}
 A 1-byte unsigned integer, which contains the value 1 if it is
 in the \addtoindex{supplementary object file} that other executables or 
 shared objects refer to, or 0 if it is an executable or shared object 
@@ -548,19 +550,22 @@ referring to a supplemental object file file.
 
 \needlines{4}
 \item \texttt{sup\_filename} (null terminated filename string) \\
-If \texttt{is\_supplementary} is 0, this contains either an absolute 
+\addttindexx{sup\_filename}
+If \addttindex{is\_supplementary} is 0, this contains either an absolute 
 filename for the supplementary object file, or a filename relative to 
 the object file containing the \dotdebugsup{} section.  
-If \texttt{is\_supplementary} is 1, then \texttt{sup\_filename}
+If \addttindex{is\_supplementary} is 1, then \addttindex{sup\_filename}
 is not needed and must be an empty string (a single nul byte).
 
 \needlines{4}
 \item \texttt{sup\_checksum\_len} (unsigned LEB128) \\
-Length of the following \texttt{sup\_checksum} field; 
+\addttindexx{sup\_checksum\_len}
+Length of the following \addttindex{sup\_checksum} field; 
 his value can be 0 if no checksum is provided.
 
 
 \item \texttt{sup\_checksum} (array of ubyte) \\
+\addttindexx{sup\_checksum}
 Some checksum or cryptographic hash function of the \dotdebuginfo{}, 
 \dotdebugstr{} and \dotdebugmacro{} sections of the 
 \addtoindex{supplementary object file}, or some unique identifier
@@ -846,6 +851,7 @@ integer that gives the actual length
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
 \item  \texttt{version} (\addtoindex{uhalf}) \\
+\addttindexx{version}
 A 2\dash byte unsigned integer representing the version of the
 DWARF information for the compilation unit \addtoindexx{version number!compilation unit} 
 (see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
@@ -853,6 +859,7 @@ The value in this field is \versiondotdebuginfo.
 
 \needlines{4}
 \item \texttt{unit\_type} (\addtoindex{ubyte}) \\
+\addttindexx{unit\_type}
 A 1-byte unsigned integer identifying this unit as a compilation unit.
 The value of this field is 
 \DWUTcompile{} for a {normal compilation} unit or
@@ -863,6 +870,7 @@ The value of this field is
 
 \needlines{4}
 \item \addttindex{debug\_abbrev\_offset} (\livelink{datarep:sectionoffsetlength}{section offset}) \\
+\addttindexx{debug\_abbrev\_offset}
 A 
 \addtoindexx{section offset!in .debug\_info header}
 4\dash byte or 8\dash byte unsigned offset into the 
@@ -874,8 +882,8 @@ in the \sixtyfourbitdwarfformat, this is an 8\dash byte unsigned length
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
 \item \texttt{address\_size} (\addtoindex{ubyte}) \\
-A 1\dash byte unsigned integer representing the size in bytes of
 \addttindexx{address\_size}
+A 1\dash byte unsigned integer representing the size in bytes of
 an address on the target architecture. If the system uses
 \addtoindexx{address space!segmented}
 segmented addressing, this value represents the size of the
@@ -908,6 +916,7 @@ consists of the 4\dash byte value \wffffffff followed by an
 
 \needlines{4}
 \item  \texttt{version} (\addtoindex{uhalf}) \\
+\addttindexx{version}
 A 2\dash byte unsigned integer representing the version of the
 DWARF information for the 
 type unit\addtoindexx{version number!type unit} 
@@ -915,6 +924,7 @@ type unit\addtoindexx{version number!type unit}
 The value in this field is \versiondotdebuginfo.
 
 \item \texttt{unit\_type} (\addtoindex{ubyte}) \\
+\addttindexx{unit\_type}
 A 1-byte unsigned integer identifying this unit as a type unit.
 The value of this field is \DWUTtype{} for a type unit
 (see Section \refersec{chap:separatetypeunitentries}).
@@ -923,6 +933,7 @@ The value of this field is \DWUTtype{} for a type unit
 
 \needlines{4}
 \item \addttindex{debug\_abbrev\_offset} (\livelink{datarep:sectionoffsetlength}{section offset}) \\
+\addttindexx{debug\_abbrev\_offset}
 A 
 \addtoindexx{section offset!in .debug\_info header}
 4\dash byte or 8\dash byte unsigned offset into the 
@@ -935,20 +946,19 @@ in the \sixtyfourbitdwarfformat, this is an 8\dash byte unsigned length
 
 \needlines{4}
 \item \texttt{address\_size} (addtoindex{ubyte}) \\
+\addttindexx{address\_size}
 A 1\dash byte unsigned integer representing the size 
 \addtoindexx{size of an address}
 in bytes of
-\addttindexx{address\_size}
 an address on the target architecture. If the system uses
 \addtoindexx{address space!segmented}
 segmented addressing, this value represents the size of the
 offset portion of an address.
 
 \item \texttt{type\_signature} (8\dash byte unsigned integer) \\
-\addtoindexx{type signature}
-A 
 \addttindexx{type\_signature}
-64\dash bit unique signature (see Section 
+\addtoindexx{type signature}
+A 64\dash bit unique signature (see Section 
 \refersec{datarep:typesignaturecomputation})
 of the type described in this type
 unit.  
@@ -2545,6 +2555,7 @@ defined language.
 \DWLANGSwift{} \ddag &0x001e &0 \addtoindexx{Swift} \\
 \DWLANGJulia{} \ddag &0x001f &1 \addtoindexx{Julia} \\
 \DWLANGDylan{} \ddag &0x0020 &0 \addtoindexx{Dylan} \\
+\DWLANGCplusplusfourteen{} \ddag &0x0021 &0 \addtoindexx{C++:2014 (ISO)}\\
 \DWLANGlouser{} &0x8000 & \\
 \DWLANGhiuser{} &\xffff & \\
 
@@ -3105,6 +3116,7 @@ Each set of entries in the string offsets table contained in the
 section begins with a header containing:
 \begin{enumerate}[1. ]
 \item \texttt{unit\_length} (\livelink{datarep:initiallengthvalues}{initial length}) \\
+\addttindexx{unit\_length}
 A 4-byte or 12-byte length containing the length of
 the set of entries for this compilation unit, not
 including the length field itself. In the 32-bit
@@ -3139,6 +3151,7 @@ Each set of entries in the address table contained in the
 \dotdebugaddr{} section begins with a header containing:
 \begin{enumerate}[1. ]
 \item \texttt{unit\_length} (\livelink{datarep:initiallengthvalues}{initial length}) \\
+\addttindexx{unit\_length}
 A 4-byte or 12-byte length containing the length of
 the set of entries for this compilation unit, not
 including the length field itself. In the 32-bit
@@ -3184,6 +3197,7 @@ Each set of entries in the range list table contained in the
 \dotdebugranges{} section begins with a header containing:
 \begin{enumerate}[1. ]
 \item \texttt{unit\_length} (\livelink{datarep:initiallengthvalues}{initial length}) \\
+\addttindexx{unit\_length}
 A 4-byte or 12-byte length containing the length of
 the set of entries for this compilation unit, not
 including the length field itself. In the 32-bit
@@ -3214,7 +3228,7 @@ bytes of a segment selector on the target system.
 \end{enumerate}
 
 This header is followed by a series of range list entries as
-described in Section \refersec{chap:locationlists}.
+described in Section \refersec{chap:noncontiguousaddressranges}.
 The segment size is given by the
 \addttindex{segment\_size} field of the header, and the address size is
 given by the \addttindex{address\_size} field of the header. If the
@@ -3232,6 +3246,7 @@ Each set of entries in the location list table contained in the
 \dotdebugloc{} or \dotdebuglocdwo{} sections begins with a header containing:
 \begin{enumerate}[1. ]
 \item \texttt{unit\_length} (\livelink{datarep:initiallengthvalues}{initial length}) \\
+\addttindexx{unit\_length}
 A 4-byte or 12-byte length containing the length of
 the set of entries for this compilation unit, not
 including the length field itself. In the 32-bit

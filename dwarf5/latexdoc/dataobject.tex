@@ -134,15 +134,19 @@ for
 \addtoindexx{formal parameter entry!with default value}
 a formal parameter
 \hypertarget{chap:DWATdefaultvaluedefaultvalueofparameter}{}
-entry. The value of this attribute is a reference to the
-debugging information entry for a variable or subroutine,
-or the value may be a constant. If the attribute form is of
-class reference, the default value of the parameter is the
-value of the referenced variable (which may be constant) or
-the value returned by the referenced subroutine; a reference
-value of 0 means that no default value has been specified.
-If the value is of class constant, that constant is interpreted
-as a default value of the type of the formal parameter.
+entry. The value of this attribute may be a constant, or a reference to the
+debugging information entry for a variable, or a reference to a
+debugging information entry containing a DWARF procedure.  If the
+attribute form is of class constant, that constant is interpreted as
+a default value of the type of the formal parameter. If the attribute
+form is of class reference, and the referenced entry is for a
+variable, the default value of the parameter is the value of the
+referenced variable.  If the reference value is 0, no default value
+has been specified.  Otherwise, the attribute represents an implicit
+\DWOPcallref{} to the referenced debugging information entry, and
+the default value of the parameter is the value returned by that
+DWARF procedure, interpreted as a value of the type of the formal
+parameter.
 
 \textit{For a constant form there is no way to 
 express the absence of a default value.}

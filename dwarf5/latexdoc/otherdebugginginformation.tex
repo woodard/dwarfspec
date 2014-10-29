@@ -307,7 +307,7 @@ one compilation unit. \\
 \addtoindex{basic block} &
  A sequence of instructions where only the first instruction may be a
 branch target and only the last instruction may transfer control. A
-procedure invocation is defined to be an exit from a 
+subprogram invocation is defined to be an exit from a 
 \addtoindex{basic block}.
 
 \textit{A \addtoindex{basic block} does not 
@@ -496,17 +496,18 @@ A 1-byte unsigned integer containing the size in bytes of an
 address (or offset portion of an address for segmented addressing)
 on the target system.
    
-\textit{The \texttt{address\_size} field is new in DWARF Version 5. 
+\textit{The \addttindex{address\_size} field is new in DWARF Version 5. 
 It is needed to legitimize the common practice of stripping all but 
 the line number sections (\dotdebugline{} and \dotdebuglinestr{}) 
 from an executable.}
 
 \item \texttt{segment\_size} (ubyte) \\
+\addttindexx{segment\_size}
 A 1-byte unsigned integer containing the size in bytes of a segment
 selector on the target system.
    
-\textit{The \texttt{segment\_size} field is new in DWARF Version 5. 
-It is needed in combination with the \texttt{address\_size} field (preceding) 
+\textit{The \addttindex{segment\_size} field is new in DWARF Version 5. 
+It is needed in combination with the \addttindex{address\_size} field (preceding) 
 to accurately characterize the address representation on the target 
 system.}
 
@@ -652,10 +653,12 @@ goals:}
 %%% Resume enumeration count where it left off above
 \setcounter{enumi}{\value{saveenumi}}
 \item \texttt{directory\_entry\_format\_count} (ubyte) \\
+\addttindexx{directory\_entry\_format\_count}
     A count of the number of entries that occur in the
-    following \texttt{directory\_entry\_format} field.
+    following \addttindex{directory\_entry\_format} field.
    
 \item \texttt{directory\_entry\_format} (sequence of uleb pairs) \\
+\addttindexx{directory\_entry\_format}
     A sequence of directory entry format descriptions.
     Each description consists of a pair of uleb values:
 \begin{itemize}
@@ -666,14 +669,16 @@ goals:}
 
 \needlines{4} 
 \item \texttt{directories\_count} (uleb) \\
+\addttindexx{directories\_count}
 A count of the number of entries that occur in the
 following directories field.
 
 \needlines{4}    
 \item \texttt{directories} (sequence of directory names) \\
+\addttindexx{directories}
 A sequence of directory names and optional related
 information. Each entry is encoded as described
-by the \texttt{directory\_entry\_format} field.
+by the \addttindex{directory\_entry\_format} field.
    
 Entries in this sequence describe each path that was
 searched for included source files in this compilation,
@@ -703,12 +708,14 @@ both the compilation unit DIE and the line number header can
 share a single copy of the current directory name string.}
 
 \item \texttt{file\_name\_entry\_format\_count} (ubyte) \\
+\addttindexx{file\_name\_entry\_format\_count}
 A count of the number of file entry format entries that
-occur in the following \texttt{file\_name\_entry\_format} field. 
-If this field is zero, then the \texttt{file\_names\_count} field 
+occur in the following \addttindex{file\_name\_entry\_format} field. 
+If this field is zero, then the \addttindex{file\_names\_count} field 
 (see below) must also be zero.
 
 \item \texttt{file\_name\_entry\_format} (sequence of uleb pairs) \\
+\addttindexx{file\_name\_entry\_format}
 A sequence of file entry format descriptions.
 Each description consists of a pair of uleb values:
 \begin{itemize}
@@ -718,14 +725,16 @@ Each description consists of a pair of uleb values:
 \end{itemize}
 
 \item \texttt{file\_names\_count} (uleb) \\
+\addttindexx{file\_names\_count}
 A count of the number of file name entries that occur
-in the following \texttt{file\_names} field.
+in the following \addttindex{file\_names} field.
 
 \needlines{4}
 \item \texttt{file\_names} (sequence of file name entries) \\
+\addttindexx{file\_names}
 A sequence of file names and optional related
 information. Each entry is encoded as described
-by the \texttt{file\_name\_entry\_format} field (in the
+by the \addttindex{file\_name\_entry\_format} field (in the
 order described).
   
 Entries in this sequence describe source files that
@@ -743,15 +752,19 @@ those numbers instead of file names in the line number
 program that follows.
 
 \textit{Prior to \DWARFVersionV, the current compilation 
-file name was not represented in the \texttt{file\_names}
+file name was not represented in the \addttindex{file\_names}
 field. In \DWARFVersionV, the current compilation file name 
 is explicitly present and has index 0. This is needed to legitimize 
 the common practice of stripping all but the line number sections
 (\dotdebugline{} and \dotdebuglinestr) from an executable.}
 
+\textit{Note that if a \dotdebuglinestr{} section is present, 
+both the compilation unit DIE and the line number header can
+share a single copy of the current file name string.}
+
 \end{enumerate}
 
-\subsubsubsection{Standard Content Descriptions}
+\subsubsection{Standard Content Descriptions}
 DWARF-defined content type codes are used to indicate
 the type of information that is represented in one
 component of an include directory or file name description.
@@ -762,10 +775,10 @@ The following type codes are defined.
 The component is a null-terminated path name string.
 If the associated form code is \DWFORMstring{}, then the
 string occurs immediately in the containing \texttt{directories}
-or \texttt{file\_names} field. If the form code is \DWFORMlinestrp{},
+or \addttindex{file\_names} field. If the form code is \DWFORMlinestrp{},
 then the string is included in the \dotdebuglinestr{} section
 and its offset occurs immediately in the containing
-\texttt{directories} or \texttt{file\_names} field.
+\addttindex{directories} or \addttindex{file\_names} field.
 
 \textit{Note that this use of \DWFORMlinestrp{} is similar to
 \DWFORMstrp{} but refers to the \dotdebuglinestr{} section,
@@ -796,10 +809,10 @@ This content code is always paired with one of \DWFORMdataone,
 \DWFORMdatatwo{} or \DWFORMudata.
 
 \textit{The optimal form for a producer to use (which results in the
-minimum size for the set of \texttt{include\_index} fields) depends not only
+minimum size for the set of \addttindex{include\_index} fields) depends not only
 on the number of directories in the directories
 field, but potentially on the order in which those directories are
-listed and the number of times each is used in the \texttt{file\_names} field.
+listed and the number of times each is used in the \addttindex{file\_names} field.
 However, \DWFORMudata{} is expected to be near optimal in most common
 cases.}
    
@@ -820,9 +833,9 @@ or \DWFORMdataeight.
 of the file contents. It is paired with form \DWFORMdatasixteen.
 \end{enumerate}
 
-\textit{Using this representation, the information found in a DWARF
-Version 4 line number header could be encoded as shown in 
-Figure \refersec{fig:preV5LNCTusingV5}.}
+\textit{Using this representation, the information found in a 
+\DWARFVersionIV{} line number header could be encoded as shown in 
+Figure \referfol{fig:preV5LNCTusingV5}.}
 
 \begin{figure}[here]
 \begin{dwflisting}
@@ -834,25 +847,27 @@ Figure \refersec{fig:preV5LNCTusingV5}.}
      3    \textit{Not present in Version 4}        -
      4    \textit{Not present in Version 4}        -
    5-12   \textit{Same as in Version 4}            ...
-    13    directory_entry_format_count    1
-    14    directory_entry_format          \DWLNCTpath, \DWFORMstring
-    15    directories_count               <n>
-    16    directories                     <n>*<null terminated string>
-    17    file_name_entry_format_count    4
-    18    file_name_entry_format          \DWLNCTpath, \DWFORMstring,
+    13    \HFNdirectoryentryformatcount{}    1
+    14    \HFNdirectoryentryformat{}          \DWLNCTpath, \DWFORMstring
+    15    \HFNdirectoriescount{}               <n>
+    16    \HFNdirectories{}                     <n>*<null terminated string>
+    17    \HFNfilenameentryformatcount{}    4
+    18    \HFNfilenameentryformat{}          \DWLNCTpath, \DWFORMstring,
                                           \DWLNCTdirectoryindex, \DWFORMudata,
                                           \DWLNCTtimestamp, \DWFORMudata,
                                           \DWLNCTsize, \DWFORMudata
-    19    file_names_count                <m>
-    20    file_names                      <m>*{<null terminated string>,
+    19    \HFNfilenamescount{}                <m>
+    20    \HFNfilenames{}                      <m>*{<null terminated string>,
                                           <index>, <timestamp>, <size>}
 \end{alltt}
 \end{dwflisting}
+\begin{centering}
 \caption{Pre-\DWARFVersionV{} Line Number Program Header Information \mbox{Encoded} Using \DWARFVersionV}
+\end{centering}
 \label{fig:preV5LNCTusingV5}
 \end{figure}
 
-\subsubsubsection{Vendor-defined Content Descriptions}
+\subsubsection{Vendor-defined Content Descriptions}
 Vendor-defined content descriptions may be defined using content
 type codes in the range \DWLNCTlouserTARG{} to \DWLNCThiuserTARG{}. Each
 such code may be combined with one or more forms from the set:
@@ -1313,13 +1328,13 @@ If the \texttt{offset\_size} flag is clear, the header is for a 32-bit
 DWARF format macro section and all offsets are 4 bytes long;
 if it is set, the header is for a 64-bit DWARF format macro section 
 and all offsets are 8 bytes long.
-\item \addttindex{debug\_line\_section\_offset\_flag} -- see below
+\item \addttindex{debug\_line\_offset\_flag} -- see below
 \item \addttindex{opcode\_operands\_table\_flag} -- see below
 \end{itemize}
 All other flags are reserved by DWARF.
 
-\item \addttindex{debug\_line\_section\_offset} \\
-If the \texttt{debug\_line\_section\_offset\_flag} is set,
+\item \addttindex{debug\_line\_offset} \\
+If the \texttt{debug\_line\_offset\_flag} is set,
 there follows an offset in the \dotdebugline{} section of the
 beginning of the line number information, encoded as 4-byte offset for
 a 32-bit DWARF format macro section and 8-byte offset for a 64-bit DWARF format
@@ -1677,7 +1692,7 @@ specially.}
 \label{chap:structureofcallframeinformation}
 
 DWARF supports virtual unwinding by defining an architecture
-independent basis for recording how procedures save and restore
+independent basis for recording how subprograms save and restore
 registers during their lifetimes. This basis must be augmented
 on some machines with specific information that is defined by
 an architecture specific ABI authoring committee, a hardware
