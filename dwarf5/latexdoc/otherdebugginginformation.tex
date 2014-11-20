@@ -1295,7 +1295,7 @@ section of an object file.
 \DWARFVersionV, and supersedes the
 \dotdebugmacinfo{} section of earlier DWARF versions. 
 While \dotdebugmacro{} and \dotdebugmacinfo{}
-sections cannot both occur in the same compilation, both may be found in the 
+sections cannot both occur in the same compilation unit, both may be found in the 
 set of units that make up an executable or shared object.}
 
 \textit{The representation of debugging information in the \dotdebugmacinfo{} section is specified
@@ -1396,7 +1396,7 @@ Name&Meaning\\ \hline
 
 \subsubsection{Define and Undefine Entries}
 \label{chap:defineandundefineentries}
-The define and undefine macro entries have three forms that
+The define and undefine macro entries have multiple forms that
 use different representations of their two operands.
 
 While described in pairs below, the forms of define 
@@ -1467,11 +1467,9 @@ two operands.  The first operand encodes the line number of the source line
 on which the relevant defining or undefining macro directives appeared.
 The second operand consists of an offset into a string table contained in
 the \dotdebugstr{} section of the \addtoindex{supplementary object file}.  
-The size of the operand is given in the section header \texttt{offset\_size} field.  
+The size of the operand depends on the section header \texttt{offset\_size} field.  
 Apart from the encoding of the second operand these entries are equivalent to
-\DWMACROdefineindirect{} and \DWMACROundefindirect{}, respectively.
-
-
+\DWMACROdefineindirect{} and \DWMACROundefindirect{}.
 
 \subsubsection{Start File Entries}
 \label{chap:startfileentries}
@@ -1502,7 +1500,7 @@ compilation units or object files.}
 \subsubsubsection{Transparent Inclusion within the Current Compilation}
 A \DWMACROtransparentincludeTARG{} entry has one operand, an offset into
 another part of the \dotdebugmacro{} section.  The size of the operand
-is given in the header \texttt{offset\_size} field.  The
+depends on the header \texttt{offset\_size} field.  The
 \DWMACROtransparentincludeNAME{} entry instructs the consumer to 
 replace it with a sequence of entries found
 after the section header at the given 
@@ -1513,9 +1511,9 @@ the terminating entry with opcode \texttt{0}.
 A \DWMACROtransparentincludesupTARG{} entry has one operand, an 
 offset from the start of the \dotdebugmacro{} section in the 
 \addtoindex{supplementary object file}.  
-The size of the operand is given in the section header offset size. 
+The size of the operand depends on the section header \texttt{offset\_size} field. 
 Apart from the different location in which to find the sequence of 
-macro  information  entries this entry type is equivalent to 
+macro information  entries this entry type is equivalent to 
 \DWMACROtransparentinclude. This entry type is aimed at sharing duplicate 
 sequences of macro information entries between \dotdebugmacro{}
 sections from different executables or shared objects.  

@@ -91,7 +91,7 @@ In order for the consumer to locate and process the debug
 information, the compiler must produce a small amount of debug
 information that passes through the linker into the output
 binary. A skeleton \dotdebuginfo{} section for each compilation unit
-contains a reference to the corresponding ".o" or ".dwo"
+contains a reference to the corresponding \texttt{.o} or \texttt{.dwo}
 file, and the \dotdebugline{} section (which is typically small
 compared to the \dotdebuginfo{} sections) is
 linked into the output binary, as is the new \dotdebugaddr{}
@@ -283,12 +283,578 @@ which will also lead to a skeleton compilation unit. For a file
 and line number lookup, the skeleton compilation units can be
 used to locate the line number tables.
 
-\section{Split DWARF Object Examples}
-\label{app:splitdwarfobjectexamples}
+\section{Split DWARF Object Example}
+\label{app:splitdwarfobjectexample}
+\addtoindexx{split dwarf object!example}
+Consider the example source code in 
+Figure \refersec{fig:splitobjectexamplesourcefragment1}, 
+Figure \refersec{fig:splitobjectexamplesourcefragment2} and
+Figure \refersec{fig:splitobjectexamplesourcefragment3}.
+When compiled with split DWARF, we will have two object files,
+\texttt{demo1.o} and \texttt{demo2.o}, and two split DWARF objects, 
+\texttt{demo1.dwo} and \texttt{demo2.dwo}.
 
-[TBD]
+\begin{figure}[b]
+\textit{File demo1.cc}
+\begin{lstlisting}
+#include "demo.h"
 
+bool Box::contains(const Point& p) const
+{
+    return (p.x() >= ll_.x() && p.x() <= ur_.x() &&
+            p.y() >= ll_.y() && p.y() <= ur_.y());
+}
+\end{lstlisting}
+\caption{Split object example: source fragment \#1}
+\label{fig:splitobjectexamplesourcefragment1}
+\end{figure}
+
+\begin{figure}[h]
+\textit{File demo2.cc}
+\begin{lstlisting}
+#include "demo.h"
+
+bool Line::clip(const Box& b)
+{
+  float slope = (end_.y() - start_.y()) / (end_.x() - start_.x());
+  while (1) {
+    // Trivial acceptance.
+    if (b.contains(start_) && b.contains(end_)) return true;
+
+    // Trivial rejection.
+    if (start_.x() < b.l() && end_.x() < b.l()) return false;
+    if (start_.x() > b.r() && end_.x() > b.r()) return false;
+    if (start_.y() < b.b() && end_.y() < b.b()) return false;
+    if (start_.y() > b.t() && end_.y() > b.t()) return false;
+
+    if (b.contains(start_)) {
+      // Swap points so that start_ is outside the clipping 
+      // rectangle.
+      Point temp = start_;
+      start_ = end_;
+      end_ = temp;
+    }
+
+    if (start_.x() < b.l())
+      start_ = Point(b.l(), 
+                     start_.y() + (b.l() - start_.x()) * slope);
+    else if (start_.x() > b.r())
+      start_ = Point(b.r(), 
+                     start_.y() + (b.r() - start_.x()) * slope);
+    else if (start_.y() < b.b())
+      start_ = Point(start_.x() + (b.b() - start_.y()) / slope, 
+                     b.b());
+    else if (start_.y() > b.t())
+      start_ = Point(start_.x() + (b.t() - start_.y()) / slope, 
+                     b.t());
+  }
+}
+\end{lstlisting}
+\caption{Split object example: source fragment \#2}
+\label{fig:splitobjectexamplesourcefragment2}
+\end{figure}
+
+\begin{figure}[h]
+\textit{File demo.h}
+\begin{lstlisting}
+class A {
+  public:
+    Point(float x, float y) : x_(x), y_(y){}
+    float x() const { return x_; }
+    float y() const { return y_; }
+  private:
+    float x_;
+    float y_;
+};
+
+class Line {
+  public:
+    Line(Point start, Point end) : start_(start), end_(end){}
+    bool clip(const Box& b);
+    Point start() const { return start_; }
+    Point end() const { return end_; }
+  private:
+    Point start_;
+    Point end_;
+};
+
+class Box {
+  public:
+    Box(float l, float r, float b, float t) : ll_(l, b), ur_(r, t){}
+    Box(Point ll, Point ur) : ll_(ll), ur_(ur){}
+    bool contains(const Point& p) const;
+    float l() const { return ll_.x(); }
+    float r() const { return ur_.x(); }
+    float b() const { return ll_.y(); }
+    float t() const { return ur_.y(); }
+  private:
+    Point ll_;
+    Point ur_;
+};
+
+\end{lstlisting}
+\caption{Split object example: source fragment \#3}
+\label{fig:splitobjectexamplesourcefragment3}
+\end{figure}
+
+\clearpage
+\subsection{Contents of the Object File}
+The object files each contain the following sections of debug
+information:
+\begin{alltt}
+  \dotdebugabbrev
+  \dotdebuginfo
+  \dotdebugranges
+  \dotdebugline
+  \dotdebugstr
+  \dotdebugaddr
+  \dotdebugpubnames
+  \dotdebugpubtypes
+  \dotdebugaranges
+\end{alltt}
+
+The \dotdebugabbrev{} section contains just a single entry describing
+the skeleton compilation unit DIE.
+
+The DWARF description in the \dotdebuginfo{} section 
+contains just a single DIE, the skeleton compilation unit, 
+which may look like 
+Figure \referfol{fig:splitdwafexampleskeletondwarfdescription}.
+
+\begin{figure}[h]
+\begin{dwflisting}
+\begin{alltt}
+
+    \DWTAGcompileunit
+      \DWATcompdir: (reference to directory name in .debug_str)
+      \DWATdwoname: (reference to "demo1.dwo" in .debug_str)
+      \DWATdwoid: 0x44e413b8a2d1b8f
+      \DWATaddrbase: (reference to .debug_addr section)
+      \DWATrangesbase: (reference to range list in .debug_ranges section)
+      \DWATranges: (offset of range list in .debug_ranges section)
+      \DWATstmtlist: (reference to .debug_line section)
+      \DWATlowpc: 0
+      
+\end{alltt}
+\end{dwflisting}
+\caption{Split object example: Skeleton DWARF description}
+\label{fig:splitdwafexampleskeletondwarfdescription}
+\end{figure}
+
+The \DWATcompdir{} and \DWATdwoname{} attributes provide the
+location of the corresponding split DWARF object file that
+contains the full debug information; that file is normally
+expected to be in the same directory as the object file itself.
+
+The \DWATdwoid{} attribute provides a hash of the debug
+information contained in the split DWARF object. This hash serves
+two purposes: it can be used to verify that the debug information
+in the split DWARF object matches the information in the object
+file, and it can be used to find the debug information in a DWARF
+package file.
+
+\needlines{4}
+The \DWATaddrbase{} attribute contains the relocatable offset of
+this object file's contribution to the \dotdebugaddr{} section, and
+the \DWATrangesbase{} attribute contains the relocatable offset
+of this object file's contribution to the \dotdebugranges{} section.
+The \DWATranges{} attribute refers to a specific range list within
+that contribution, and its value is a (non-relocatable) offset
+relative to the base. In a compilation unit with a single
+contiguous range of code, the \DWATranges{} attribute might be
+omitted, and instead replaced by the pair \DWATlowpc{} and
+\DWAThighpc.
+
+The \DWATstmtlist{} attribute contains the relocatable offset of
+this file's contribution to the \dotdebugline{} table.
+
+If there is a \DWATranges{} attribute, the \DWATlowpc{} attribute
+provides a default base address for the range list entries in the
+\dotdebugranges{} section. It may be omitted if each range list entry
+provides an explicit base address selection entry; it may provide
+a relocatable base address, in which case the offsets in each
+range list entry are relative to it; or it may have the value 0,
+in which case the offsets in each range list entry are themselves
+relocatable addresses.
+
+The \dotdebugranges{} section contains the range list referenced by
+the \DWATranges{} attribute in the skeleton compilation unit DIE,
+plus any range lists referenced by \DWATranges{} attributes in the
+split DWARF object. In our example, \texttt{demo1.o} would contain range
+list entries for the function \texttt{Box::contains}, as well as for
+out-of-line copies of the inline functions \texttt{Point::x} and 
+\texttt{Point::y}.
+
+The \dotdebugline{} section contains the full line number table for
+the compiled code in the object file. In this example, the line
+number program header would list the two files, \texttt{demo.h} and
+\texttt{demo1.cc}, and would contain line number programs for
+\texttt{Box::contains}, \texttt{Point::x}, and \texttt{Point::y}.
+
+The \dotdebugstr{} section contains the strings referenced indirectly
+by the compilation unit DIE and by the line number program.
+
+The \dotdebugaddr{} section contains relocatable addresses of
+locations in the loadable text and data that are referenced by
+debugging information entries in the split DWARF object. In this
+example, \texttt{demo1.o} may have three entries:
+\begin{center}
+%\footnotesize
+\begin{tabular}{cl}
+Slot & Location referenced \\
+\hline
+   0   &  low pc value for Box::contains  \\
+   1   &  low pc value for Point::x       \\
+   2   &  low pc value for Point::y       \\
+\end{tabular}
+\end{center}
+
+\needlines{4}
+\textit{\textbf{[***The following paragraph will need updating when the accelerated access
+proposal is finalized.***]}}
+
+The \dotdebugpubnames{} and \dotdebugpubtypes{}
+sections contain the public names defined by the debugging
+information in the split DWARF object, and reference the skeleton
+compilation unit. When linked together into a final executable,
+they can be used by a DWARF consumer to lookup a name to find one
+or more skeleton compilation units that provide information about
+that name. From the skeleton compilation unit, the consumer can
+find the split DWARF object that it can read to get the full
+DWARF information.
+
+The \dotdebugaranges{} section contains the PC ranges defined in this
+compilation unit, and allow a DWARF consumer to map a PC value to
+a skeleton compilation unit, and then to a split DWARF object.
+
+
+\subsection{Contents of the Split DWARF Object}
+The split DWARF objects each contain the following sections:
+\begin{alltt}
+  \dotdebugabbrevdwo
+  \dotdebuginfodwo{} (for the compilation unit)
+  \dotdebuginfodwo{} (one COMDAT section for each type unit)
+  \dotdebuglocdwo
+  \dotdebuglinedwo
+  \dotdebugstroffsetsdwo
+  \dotdebugstrdwo
+\end{alltt}
+The \dotdebugabbrevdwo{} section contains the abbreviation
+declarations for the debugging information entries in the
+\dotdebuginfodwo{} section. In general, it looks just like a normal
+\dotdebugabbrev{} section in a non-split object file.
+
+The \dotdebuginfodwo{} section containing the compilation unit
+contains the full debugging information for the compile unit, and
+looks much like a normal \dotdebuginfo{} section in a non-split
+object file, with the following exceptions:
+\begin{itemize}
+\item The \DWTAGcompileunit{} DIE does not need to repeat the
+\DWATranges, \DWATlowpc, \DWAThighpc, and
+\DWATstmtlist{} attributes that are provided in the skeleton
+compilation unit.
+
+\item References to strings in the string table use the new form
+code \DWFORMstrx, referring to slots in the
+\dotdebugstroffsetsdwo{} section.
+
+\needlines{4}
+\item References to range lists in the \dotdebugranges{} section are
+all relative to the base offset given by \DWATrangesbase{}
+in the skeleton compilation unit.
+
+\item References to relocatable addresses in the object file use
+the new form code \DWFORMaddrx, referring to slots in the
+\dotdebugaddr{} table, relative to the base offset given by
+\DWATaddrbase{} in the skeleton compilation unit.
+\end{itemize}
+
+Figure \refersec{fig:splitobjectexampledemo1dwodwarfexcerpts} presents
+some excerpts from the \dotdebuginfodwo{} section for \texttt{demo1.dwo}.
+
+\begin{figure}[h]
+\figurepart{1}{2}
+\begin{dwflisting}
+\begin{alltt}
+
+    \DWTAGcompileunit
+        \DWATproducer [\DWFORMstrx]: (slot 15) (producer string)
+        \DWATlanguage: \DWLANGCplusplus
+        \DWATname [\DWFORMstrx]: (slot 7) "demo1.cc"
+        \DWATcompdir [\DWFORMstrx]: (slot 4) (directory name)
+        \DWATdwoid [\DWFORMdataeight]: 0x44e413b8a2d1b8f
+1$:   \DWTAGclasstype
+          \DWATname [\DWFORMstrx]: (slot 12) "Point"
+          \DWATsignature [\DWFORMrefsigeight]: 0x2f33248f03ff18ab
+          \DWATdeclaration: true
+2$:     \DWTAGsubprogram
+          \DWATexternal: true
+          \DWATname [\DWFORMstrx]: (slot 12) "Point"
+          \DWATdeclfile: 1
+          \DWATdeclline: 5
+          \DWATlinkagename [\DWFORMstrx]: (slot 16): "_ZN5PointC4Eff"
+          \DWATaccessibility: \DWACCESSpublic
+          \DWATdeclaration: true
+        ...
+3$:   \DWTAGclasstype
+          \DWATname [\DWFORMstring]: "Box"
+          \DWATsignature [\DWFORMrefsigeight]: 0xe97a3917c5a6529b
+          \DWATdeclaration: true
+        ...
+4$:     \DWTAGsubprogram
+            \DWATexternal: true
+            \DWATname [\DWFORMstrx]: (slot 0) "contains"
+            \DWATdeclfile: 1
+            \DWATdeclline: 28
+            \DWATlinkagename [\DWFORMstrx]: (slot 8) "_ZNK3Box8containsERK5Point"
+            \DWATtype: (reference to 7$)
+            \DWATaccessibility: \DWACCESSpublic
+            \DWATdeclaration: true
+        ...
+\end{alltt}
+\end{dwflisting}
+\caption{Split object example: \texttt{demo1.dwo} excerpts}
+\label{fig:splitobjectexampledemo1dwodwarfexcerpts}
+\end{figure}
+        
+\begin{figure}
+\figurepart{2}{2}
+\begin{dwflisting}
+\begin{alltt}
+
+5$:   \DWTAGsubprogram
+          \DWATspecification: (reference to 4$)
+          \DWATdeclfile: 2
+          \DWATdeclline: 3
+          \DWATlowpc [\DWFORMaddrx]: (slot 0)
+          \DWAThighpc [\DWFORMdataeight]: 0xbb
+          \DWATframebase: \DWOPcallframecfa
+          \DWATobjectpointer: (reference to 6$)
+6$:     \DWTAGformalparameter
+            \DWATname [\DWFORMstrx]: (slot 13): "this"
+            \DWATtype: (reference to 8$)
+            \DWATartificial: true
+            \DWATlocation: \DWOPfbreg(-24)
+        \DWTAGformalparameter
+            \DWATname [\DWFORMstring]: "p"
+            \DWATdeclfile: 2
+            \DWATdeclline: 3
+            \DWATtype: (reference to 11$)
+            \DWATlocation: \DWOPfbreg(-32)
+      ...
+7$:   \DWTAGbasetype
+          \DWATbytesize: 1
+          \DWATencoding: \DWATEboolean
+          \DWATname [\DWFORMstrx]: (slot 5) "bool"
+      ...
+8$:   \DWTAGconsttype
+          \DWATtype: (reference to 9$)
+9$:   \DWTAGpointertype
+          \DWATbytesize: 8
+          \DWATtype: (reference to 10$)
+10$:  \DWTAGconsttype
+          \DWATtype: (reference to 3$)
+      ...
+11$:  \DWTAGconsttype
+          \DWATtype: (reference to 12$)
+12$:  \DWTAGreferencetype
+          \DWATbytesize: 8
+          \DWATtype: (reference to 13$)
+13$:  \DWTAGconsttype
+          \DWATtype: (reference to 1$)
+      ...
+\end{alltt}
+\end{dwflisting}
+\begin{center}
+\vspace{3mm}
+Figure~\ref{fig:splitobjectexampledemo1dwodwarfexcerpts}: Split object example: \texttt{demo1.dwo} DWARF excerpts \textit{(concluded)}
+\end{center}
+\end{figure}
+
+In the defining declaration for \texttt{Box::contains} at 5\$, the
+\DWATlowpc{} attribute is represented with \DWFORMaddrx,
+referring to slot 0 in the \dotdebugaddr{} table from \texttt{demo1.o}.
+That slot contains the relocated address of the beginning of the
+function.
+
+Each type unit is contained in its own COMDAT \dotdebuginfodwo{}
+section, and looks like a normal type unit in a non-split object,
+except that the \DWTAGtypeunit{} DIE contains a \DWATstmtlist{}
+attribute that refers to a skeleton \dotdebuglinedwo{} section. The
+skeleton \dotdebuglinedwo{} section contains a normal line number
+program header with a list of include directories and filenames,
+but no line number program. This section is used only as a
+reference for filenames needed for \DWATdeclfile{} attributes
+within the type unit.
+
+The \dotdebugstroffsetsdwo{} section contains an entry for each
+unique string in the string table. In the \texttt{demo1.dwo} example,
+these string table slots have been assigned as shown in
+Figure \refersec{fig:splitobjectexamplestringtableslots}.
+
+\begin{figure}[H]
+\begin{center}
+\footnotesize
+\begin{tabular}{cl|cl}
+    Slot & String & Slot & String \\
+    \hline
+    0  &   contains                         &    10 &   \_ZNK3Box1rEv \\
+    1  &   \_ZNK5Point1xEv                  &    11 &   \_ZN3BoxC4E5PointS0\_ \\
+    2  &   \_ZNK3Box1lEv                    &    12 &   Point\\
+    3  &   \_ZNK3Box1bEv                    &    13 &   this\\
+    4  &   \textit{(compilation directory)} &    14 &   float \\
+    5  &   bool                             &    15 &   \textit{(producer string)} \\
+    6  &   \_ZN3BoxC4Effff                  &    16 &   \_ZN5PointC4Eff \\
+    7  &   demo1.cc                         &    17 &   \_ZNK3Box1tEv \\
+    8  &   \_ZNK3Box8containsERK5Point      & \\
+    9  &   \_ZNK5Point1yEv                  & \\
+\end{tabular}
+\end{center}
+\caption{Split object example: String table slots}
+\label{fig:splitobjectexamplestringtableslots}
+\end{figure}
+
+Each entry in the table is the offset of the string, which is
+contained in the \dotdebugstrdwo{} section. In a split DWARF object,
+these offsets are not relocatable, since they are not part of the
+relocatable object, but when combined into a DWARF package file,
+each slot must be adjusted to refer to the appropriate offset
+within the merged string table (see Section 
+\refersec{app:dwarfpackagefileexample} for an example of
+a DWARF package file).
+
+\needlines{4}
+The \dotdebuglocdwo{} section contains the location lists referenced
+by \DWATlocation{} attributes in the \dotdebuginfodwo{} section. This
+section has a similar format to the \dotdebugloc{} section in a
+non-split object, but it has some small differences as explained
+in Section \refersec{datarep:locationlistentriesinsplitobjects}. 
+In \texttt{demo2.dwo} as shown in 
+Figure \refersec{fig:splitobjectexampledemo2dwodwarfdebuginfodwoexcerpts}, 
+the debugging information for \texttt{Line::clip} describes a local 
+variable \texttt{slope} whose location varies based on the PC.
+Figure \refersec{fig:splitobjectexampledemo2dwodwarfdebuglocdwoexcerpts} 
+presents some excerpts from the \dotdebuginfodwo{} section for 
+\texttt{demo2.dwo}.
+
+\begin{figure}[b]
+\figurepart{1}{2}
+\begin{dwflisting}
+\begin{alltt}
+
+1$: \DWTAGclasstype
+        \DWATname [\DWFORMstrx]: (slot 20) "Line"
+        \DWATsignature [\DWFORMrefsigeight]: 0x79c7ef0eae7375d1
+        \DWATdeclaration: true
+    ...
+2$:   \DWTAGsubprogram
+          \DWATexternal: true
+          \DWATname [\DWFORMstrx]: (slot 19) "clip"
+          \DWATdeclfile: 2
+          \DWATdeclline: 16
+          \DWATlinkagename [\DWFORMstrx]: (slot 2) "_ZN4Line4clipERK3Box"
+          \DWATtype: (reference to DIE for bool)
+          \DWATaccessibility: \DWACCESSpublic
+          \DWATdeclaration: true
+      ...
+\end{alltt}
+\end{dwflisting}
+\caption{Split object example: \texttt{demo2.dwo} DWARF \dotdebuginfodwo{} excerpts}
+\label{fig:splitobjectexampledemo2dwodwarfdebuginfodwoexcerpts}
+\end{figure}
+
+\begin{figure}
+\figurepart{2}{2}
+\begin{dwflisting}
+\begin{alltt}
+
+3$:   \DWTAGsubprogram
+          \DWATspecification: (reference to 2$)
+          \DWATdeclfile: 1
+          \DWATdeclline: 3
+          \DWATlowpc [\DWFORMaddrx]: (slot 32)
+          \DWAThighpc [\DWFORMdataeight]: 0x1ec
+          \DWATframebase: \DWOPcallframecfa
+          \DWATobjectpointer: (reference to 4$)
+4$:     \DWTAGformalparameter
+            \DWATname: (indexed string: 0x11): this
+            \DWATtype: (reference to DIE for type const Point* const)
+            \DWATartificial: 1
+            \DWATlocation: 0x0 (location list)
+5$:     \DWTAGformalparameter
+            \DWATname: b
+            \DWATdeclfile: 1
+            \DWATdeclline: 3
+            \DWATtype: (reference to DIE for type const Box& const)
+            \DWATlocation [\DWFORMsecoffset]: 0x2a
+6$:     \DWTAGlexicalblock
+            \DWATlowpc [\DWFORMaddrx]: (slot 17)
+            \DWAThighpc: 0x1d5
+7$:       \DWTAGvariable
+              \DWATname [\DWFORMstrx]: (slot 28): "slope"
+              \DWATdeclfile: 1
+              \DWATdeclline: 5
+              \DWATtype: (reference to DIE for type float)
+              \DWATlocation [\DWFORMsecoffset]: 0x49
+
+\end{alltt}
+\end{dwflisting}
+\begin{center}
+\vspace{3mm}
+Figure~\ref{fig:splitobjectexampledemo2dwodwarfdebuginfodwoexcerpts}: Split object example: \texttt{demo2.dwo} DWARF \dotdebuginfodwo{} excerpts \textit{(concluded)}
+\end{center}
+\end{figure}
+
+In Figure \refersec{fig:splitobjectexampledemo2dwodwarfdebuginfodwoexcerpts},
+The \DWTAGformalparameter{} entries at 4\$ and 5\$ refer to the
+location lists at offset \texttt{0x0} and \texttt{0x2a}, respectively, and the
+\DWTAGvariable{} entry for \texttt{slope} at 7\$ refers to the location
+list at offset \texttt{0x49}. 
+Figure \refersec{fig:splitobjectexampledemo2dwodwarfdebuglocdwoexcerpts}
+shows a representation of the
+location lists at those offsets in the \dotdebuglocdwo{} section.
+
+\begin{figure}
+\begin{dwflisting}
+\begin{tabular}{rlrrl}
+\texttt{offset} & entry type & start & length & expression \\
+\hline \\
+0x00 & \DWLLEstartlengthentry &  [9] & 0x002f & \DWOPregfive~(rdi) \\
+0x09 & \DWLLEstartlengthentry & [11] & 0x01b9 & \DWOPregthree~(rbx) \\
+0x12 & \DWLLEstartlengthentry & [29] & 0x0003 & \DWOPbregtwelve~(r12):\\
+&&&& -8; \DWOPstackvalue \\
+0x1d & \DWLLEstartlengthentry & [31] & 0x0001 & \DWOPentryvalue: \\
+&&&& (\DWOPregfive~(rdi)); \\
+&&&& \DWOPstackvalue \\
+0x29 & \DWLLEendoflistentry &&& \\
+\\   & \hhline{-} &&& \\
+0x2a & \DWLLEstartlengthentry &  [9] & 0x002f & \DWOPregfour~(rsi)) \\
+0x33 & \DWLLEstartlengthentry & [11] & 0x01ba & \DWOPregsix~(rbp)) \\
+0x3c & \DWLLEstartlengthentry & [30] & 0x0003 & \DWOPentryvalue: \\
+&&&& (\DWOPregfour~(rsi)); \\
+&&&& \DWOPstackvalue \\
+0x48 & \DWLLEendoflistentry &&& \\
+\\   & \hhline{-} &&& \\
+0x49 & \DWLLEstartlengthentry & [10] & 0x0004 & \DWOPregeighteen~(xmm1) \\
+0x52 & \DWLLEstartlengthentry & [11] & 0x01bd & \DWOPfbreg: -36 \\
+0x5c & \DWLLEendoflistentry &&& \\
+&&&& \\
+\end{tabular}
+\end{dwflisting}
+\caption{Split object example: \texttt{demo2.dwo} DWARF \dotdebuglocdwo{} excerpts}
+\label{fig:splitobjectexampledemo2dwodwarfdebuglocdwoexcerpts}
+\end{figure}
+
+In each \DWLLEstartlengthentry{}, the start field is the index
+of an slot in the \dotdebugaddr{} section, relative to the base
+offset defined by the compilations unit's \DWATaddrbase{}
+attribute. The \dotdebugaddr{} slots referenced by these entries give
+the relocated address of a label within the function where the
+address range begins. The length field gives the length of the
+address range.
+
+\clearpage
 \section{DWARF Package File Example}
 \label{app:dwarfpackagefileexample}
-\addtoindex{DWARF duplicate elimination!examples}
+\addtoindexx{DWARF duplicate elimination!examples}
 [TBD]
