@@ -785,8 +785,6 @@ be understood to apply to \addtoindex{C++} structures as well.}
 
 \subsection{Structure, Union and Class Type Entries}
 \label{chap:structureunionandclasstypeentries}
-
-
 Structure, union, and class types are represented by debugging
 \addtoindexx{structure type entry}
 information entries 
@@ -810,6 +808,16 @@ by debugging information entries that are owned by the
 corresponding structure type, union type, or class type entry
 and appear in the same order as the corresponding declarations
 in the source program.
+
+A structure, union, or class type may have a \DWATexportsymbolsNAME{}
+attribute 
+\livetarg{chap:DWATexportsymbolsofstructunionclass}{}
+which indicates that all member names defined within 
+the structure, union, or class may be referenced as if they were
+defined within the containing structure, union, or class. 
+
+\textit{This may be used to describe anonymous structures, unions 
+and classes in \addtoindex{C} or \addtoindex{C++}}.
 
 A structure type, union type or class type entry may have
 either a \DWATbytesize{} or a
@@ -1848,6 +1856,7 @@ part of the type of the
 the \DWATreference{} and \DWATrvaluereference{} attributes, respectively. 
 See also Section \refersec{chap:memberfunctionentries}.}
 
+\needlines{4}
 A subroutine type entry may have the \DWATreference{} or
 \DWATrvaluereference{} attribute to indicate that it describes the
 type of a member function with reference or rvalue-reference 
@@ -2314,6 +2323,7 @@ integer value of the attribute (see below) specifies whether
 an object of the type is 
 currently allocated or not.
 
+\needlines{4}
 \hypertarget{chap:DWATassociatedassociationstatusoftypes}{}
 The 
 \DWATassociated{} attribute 

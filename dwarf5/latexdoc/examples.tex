@@ -912,8 +912,55 @@ several variables.
 \label{fig:fortrandynamictypeexampledwarfdescription}
 \end{figure}
 
-
 \clearpage
+\subsection{C/C++ Anonymous Structure Example}
+\label{app:ccxxanonymousstructureexample}
+\addtoindexx{anonymous structure}
+An example of a \addtoindex{C}/\addtoindex{C++} structure is shown in
+Figure \ref{fig:anonymousstructureexamplesourcefragment}. 
+For this source, the DWARF description in 
+Figure \ref{fig:anonymousstructureexampledwarfdescription}
+is appropriate. In this example, \texttt{b} is referenced as if it 
+were defined in the enclosing structure \texttt{foo}.
+
+\begin{figure}[h]
+\begin{lstlisting}
+struct foo {
+    int a;
+    struct {
+        int b;
+    };
+} x;
+
+void bar(void)
+{
+    struct foo t;
+    t.a = 1;
+    t.b = 2;
+}
+
+\end{lstlisting}
+\caption{Anonymous structure example: source fragment}
+\label{fig:anonymousstructureexamplesourcefragment}
+\end{figure}
+
+\begin{figure}[h]
+\begin{dwflisting}
+\begin{alltt}
+1$:   \DWTAGstructuretype  
+          \DWATname("foo")
+2$:       \DWTAGmember
+              \DWATname("a")
+3$:       \DWTAGstructuretype
+              \DWATexportsymbols
+4$:           \DWTAGmember
+                  \DWATname("b")
+\end{alltt}
+\end{dwflisting}
+\caption{Anonymous structure example: DWARF description}
+\label{fig:anonymousstructureexampledwarfdescription}
+\end{figure}
+
 \subsection{Ada Example}
 \label{app:adaexample}
 Figure \refersec{fig:adaexamplesourcefragment}
@@ -1160,16 +1207,16 @@ Figure~\ref{fig:packedrecordexampledwarfdescription}: Packed record example: DWA
 \end{figure}
 
 \clearpage
-\section{Namespace Example}
-\label{app:namespaceexample}
+\section{Namespace Examples}
+\label{app:namespaceexamples}
 
 The \addtoindex{C++} example in 
-Figure \refersec{fig:namespaceexamplesourcefragment}
+Figure \refersec{fig:namespaceexample1sourcefragment}
 is used 
 \addtoindexx{namespace (C++)!example}
 to illustrate the representation of namespaces.
 The DWARF representation in 
-Figure \refersec{fig:namespaceexampledwarfdescription}
+Figure \refersec{fig:namespaceexample1dwarfdescription}
 is appropriate.
 
 \begin{figure}[h]
@@ -1206,8 +1253,8 @@ int Foo::myfunc(int a)
     return myfunc2(3) + j + i + a + 2;
 }
 \end{lstlisting}
-\caption{Namespace example: source fragment}
-\label{fig:namespaceexamplesourcefragment}
+\caption{Namespace example \#1: source fragment}
+\label{fig:namespaceexample1sourcefragment}
 \end{figure}
 
 
@@ -1255,8 +1302,8 @@ int Foo::myfunc(int a)
                 ...
 \end{alltt}
 \end{dwflisting}
-\caption{Namespace example: DWARF description}
-\label{fig:namespaceexampledwarfdescription}
+\caption{Namespace example \#1: DWARF description}
+\label{fig:namespaceexample1dwarfdescription}
 \end{figure}
 
 \begin{figure}
@@ -1303,8 +1350,56 @@ int Foo::myfunc(int a)
 \end{dwflisting}
 \begin{center}
 \vspace{3mm}
-Figure~\ref{fig:namespaceexampledwarfdescription}: Namespace example: DWARF description \textit{(concluded)}
+Figure~\ref{fig:namespaceexample1dwarfdescription}: Namespace example \#1: DWARF description \textit{(concluded)}
 \end{center}
+\end{figure}
+
+\clearpage
+As a further namespace example, consider the inlined namespace shown in
+Figure \refersec{fig:namespaceexample2sourcefragment}. For this source,
+the DWARF description in Figure \ref{fig:namespaceexample2dwarfdescription}
+is appropriate. In this example, \texttt{a} may be referenced either as a member of 
+the fully qualified namespace \texttt{A::B}, or as if it were defined
+in the enclosing namespace, \texttt{A}.
+
+\begin{figure}[h]
+\begin{lstlisting}
+namespace A {
+    inline namespace B {   // (1) inline namespace
+        int a;
+    }
+}
+
+void foo (void)
+{
+    using A::B::a;
+    a = 1;
+}
+
+void bar (void)
+{
+    using A::a;
+    a = 2;
+}
+\end{lstlisting}
+\caption{Namespace example \#2: source fragment}
+\label{fig:namespaceexample2sourcefragment}
+\end{figure}
+
+\begin{figure}[h]
+\begin{dwflisting}
+\begin{alltt}
+1$:   \DWTAGnamespace
+          \DWATname("A")       
+2$:       \DWTAGnamespace
+              \DWATname("B")      
+              \DWATexportsymbols     
+3$:           \DWTAGvariable
+                  \DWATname("a")       
+\end{alltt}
+\end{dwflisting}
+\caption{Namespace example \#2: DWARF description}
+\label{fig:namespaceexample2dwarfdescription}
 \end{figure}
 
 \clearpage
@@ -2978,6 +3073,7 @@ Figure \referfol{fig:stringtypeexamplesource}. The DWARF representation in
 Figure \refersec{fig:stringtypeexampledwarf} is appropriate.
 
 \begin{figure}[h]
+\addtoindexx{ISO 10646 character set standard}
 \begin{lstlisting}
         program character_kind
             use iso_fortran_env
@@ -2986,7 +3082,6 @@ Figure \refersec{fig:stringtypeexampledwarf} is appropriate.
                 selected_char_kind ("ascii")
             integer, parameter :: ucs4  = 
                 selected_char_kind ('ISO_10646')
-\addtoindexx{ISO 10646 character set standard}             
             character(kind=ascii, len=26) :: alphabet
             character(kind=ucs4,  len=30) :: hello_world
             character (len=*), parameter :: all_digits="0123456789"
@@ -3173,7 +3268,7 @@ might look like:
 
 ! Afterwards it is not, the call could have clobbered the register,
 ! and it is not saved in the fn2 function stack frame either, but 
-! perhap scan be looked up in the caller
+! perhaps can be looked up in the caller
 !
 <L2, L3> DW_OP_entry_value 1 DW_OP_reg0 DW_OP_stack_value
 <0, 0>

@@ -162,6 +162,8 @@ in Table \refersec{tab:languagenames}.
 \DWLANGFortranseventysevenTARG & ISO FORTRAN:1977 \addtoindexx{FORTRAN:1977 (ISO)} \\
 \DWLANGFortranninetyTARG       & ISO Fortran:1990 \addtoindexx{Fortran:1990 (ISO)} \\
 \DWLANGFortranninetyfiveTARG   & ISO Fortran:1995 \addtoindexx{Fortran:1995 (ISO)} \\
+\DWLANGFortranzerothreeTARG    & ISO Fortran:2004 \addtoindexx{Fortran:2004 (ISO)} \\
+\DWLANGFortranzeroeightTARG    & ISO Fortran:2010 \addtoindexx{Fortran:2010 (ISO)} \\
 \DWLANGGoTARG{}~\dag & \addtoindex{Go} \\
 \DWLANGHaskellTARG{} \dag & \addtoindex{Haskell} \\
 \DWLANGJavaTARG{} & \addtoindex{Java}\\
@@ -400,8 +402,8 @@ When generating a split DWARF object (see
 Section \refersec{datarep:splitdwarfobjects}), the
 compilation unit in the \dotdebuginfo{} section is a "skeleton"
 compilation unit, which contains only a subset of the
-attributes of the full compilation unit. In general, it
-contains those attributes that are necessary for the consumer
+attributes of a full normal or partial compilation unit. In general, 
+it contains those attributes that are necessary for the consumer
 to locate the DWARF object where the full compilation unit
 can be found, and for the consumer to interpret references to
 addresses in the program. 
@@ -696,6 +698,16 @@ owned program entities may be declarations,
 including certain declarations that are also object or
 function definitions.}
 
+A namespace may have a \DWATexportsymbolsNAME{} attribute
+\livetarg{chap:DWATexportsymbolsofnamespace}{}
+\addtoindexx{export symbols attribute}
+\addtoindexx{inline namespace|see{\textit{also} export symbols attribute}}
+which indicates that all member names defined within the 
+namespace may be referenced as if they were defined within 
+the containing namespace. 
+
+\textit{This may be used to describe an \addtoindex{inline namespace} in \addtoindex{C++}}.
+
 If a type, variable, or function declared in a namespace is
 defined outside of the body of the namespace declaration,
 that type, variable, or function definition entry has a
@@ -754,12 +766,12 @@ is large and will probably be referenced in
 every \addtoindex{C++} compilation unit.
 }
 
-\textit{For a \addtoindex{C++} namespace example, 
-see Appendix \refersec{app:namespaceexample}.
+\textit{For \addtoindex{C++} namespace examples, 
+see Appendix \refersec{app:namespaceexamples}.
 }
 
 
-
+\needlines{5}
 \subsection{Imported (or Renamed) Declaration Entries} 
 \label{chap:importedorrenameddeclarationentries}
 \textit{Some languages support the concept of importing into or making
@@ -934,7 +946,7 @@ because there is no explicit representation for X in module B.
 \addtoindexx{namespace (C++)!using declaration}
 \addtoindexx{using declaration|see {namespace (C++), using declaration}}
 that imports an entity in terms of a namespace alias. See 
-Appendix  \refersec{app:namespaceexample}
+Appendix  \refersec{app:namespaceexamples}
 for an example.
 }
 
@@ -1153,6 +1165,7 @@ those attributes need not be present. Similarly, if the value of the
 \DWATcallallcalls{} attribute is true then the value of the \DWATcallalltailcalls{} 
 attribute is also true and the latter attribute need not be present.
 
+\needlines{5}
 \subsection{Subroutine and Entry Point Return Types}
 \label{chap:subroutineandentrypointreturntypes}
 

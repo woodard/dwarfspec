@@ -1897,30 +1897,32 @@ Table \refersec{tab:attributeformencodings}.
         \addtoindexx{all source calls summary attribute} \\
 \DWATcallalltailcalls~\ddag &0x7c&\CLASSflag
         \addtoindexx{all tail calls summary attribute} \\
-\DWATcalldatalocation~\ddag &0x7d &\CLASSexprloc
-        \addtoindexx{call data location attribute} \\
-\DWATcalldatavalue~\ddag &0x7e &\CLASSexprloc
-        \addtoindexx{call data value attribute} \\
+\DWATcallreturnpc~\ddag &0x7d &\CLASSaddress
+        \addtoindexx{call return pc attribute} \\
+\DWATcallvalue~\ddag &0x7e &\CLASSexprloc
+        \addtoindexx{call value attribute} \\
 \DWATcallorigin~\ddag &0x7f &\CLASSexprloc
         \addtoindexx{call origin attribute} \\
 \DWATcallparameter~\ddag &0x80 &\CLASSreference
         \addtoindexx{call parameter attribute} \\
 \DWATcallpc~\ddag &0x81 &\CLASSaddress
         \addtoindexx{call pc attribute} \\
-\DWATcallreturnpc~\ddag &0x82 &\CLASSaddress
-        \addtoindexx{call return pc attribute} \\
-\DWATcalltailcall~\ddag &0x83 &\CLASSflag
+\DWATcalltailcall~\ddag &0x82 &\CLASSflag
         \addtoindexx{call tail call attribute} \\
-\DWATcalltarget~\ddag &0x84 &\CLASSexprloc
+\DWATcalltarget~\ddag &0x83 &\CLASSexprloc
         \addtoindexx{call target attribute} \\
-\DWATcalltargetclobbered~\ddag &0x85 &\CLASSexprloc
+\DWATcalltargetclobbered~\ddag &0x84 &\CLASSexprloc
         \addtoindexx{call target clobbered attribute} \\
-\DWATcallvalue~\ddag &0x86 &\CLASSexprloc
-        \addtoindexx{call value attribute} \\
+\DWATcalldatalocation~\ddag &0x85 &\CLASSexprloc
+        \addtoindexx{call data location attribute} \\
+\DWATcalldatavalue~\ddag &0x86 &\CLASSexprloc
+        \addtoindexx{call data value attribute} \\
 \DWATnoreturn~\ddag &0x87 &\CLASSflag 
         \addtoindexx{noreturn attribute} \\
 \DWATalignment~\ddag &0x88 &\CLASSconstant 
         \addtoindexx{alignment attribute} \\
+\DWATexportsymbols~\ddag &0x89 &\CLASSflag
+        \addtoindexx{export symbols attribute} \\
 \DWATlouser&0x2000 & --- \addtoindexx{low user attribute encoding}  \\
 \DWAThiuser&\xiiifff& --- \addtoindexx{high user attribute encoding}  \\
 
@@ -1999,7 +2001,8 @@ avoids using space to represent the \doublequote{big} end of an
 unsigned integer, when the big end is all zeroes or sign
 extension bits.}
 
-Unsigned LEB128\addtoindexx{LEB128!unsigned} (ULEB128) numbers are encoded as follows:
+Unsigned LEB128\addtoindexx{LEB128!unsigned} (\addtoindex{ULEB128}) 
+numbers are encoded as follows:
 \addtoindexx{LEB128!unsigned, encoding as}
 start at the low order end of an unsigned integer and chop
 it into 7\dash bit chunks. Place each chunk into the low order 7
@@ -2020,8 +2023,8 @@ numbers. The
 that an additional byte follows.
 
 
-The encoding for signed, two\textquoteright s complement LEB128 (SLEB128)
-\addtoindexx{LEB128!signed, encoding as}
+The encoding for signed, two\textquoteright s complement LEB128 
+(\addtoindex{SLEB128}) \addtoindexx{LEB128!signed, encoding as}
 numbers is similar, except that the criterion for discarding
 high order bytes is not whether they are zero, but whether
 they consist entirely of sign extension bits. Consider the
@@ -2556,7 +2559,9 @@ defined language.
 \DWLANGSwift{} \ddag &0x001e &0 \addtoindexx{Swift} \\
 \DWLANGJulia{} \ddag &0x001f &1 \addtoindexx{Julia} \\
 \DWLANGDylan{} \ddag &0x0020 &0 \addtoindexx{Dylan} \\
-\DWLANGCplusplusfourteen{} \ddag &0x0021 &0 \addtoindexx{C++:2014 (ISO)}\\
+\DWLANGCplusplusfourteen{}~\ddag &0x0021 &0 \addtoindexx{C++:2014 (ISO)}     \\
+\DWLANGFortranzerothree{}~\ddag  &0x0022 &1 \addtoindexx{Fortran:2004 (ISO)} \\
+\DWLANGFortranzeroeight{}~\ddag  &0x0023 &1 \addtoindexx{Fortran:2010 (ISO)} \\
 \DWLANGlouser{} &0x8000 & \\
 \DWLANGhiuser{} &\xffff & \\
 
