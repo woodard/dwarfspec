@@ -1027,18 +1027,19 @@ and will therefore not be safe to call from within a debugger.
 }
 
 A subroutine entry may 
-\hypertarget{chap:DWATcallingconventionsubprogramcallingconvention}{}
+\hypertarget{chap:DWATcallingconventionforsubprograms}{}
 contain a 
 \DWATcallingconventionNAME{}
+\addtoindexx{calling convention attribute}
 attribute, whose value is an 
 \livelink{chap:classconstant}{integer constant}. The set of
-calling convention codes is given in 
-Table \refersec{tab:callingconventioncodes}.
+\addtoindexi{calling convention codes for subroutines}{calling convention codes!for subroutines}
+is given in Table \refersec{tab:callingconventioncodesforsubroutines}.
 
-\begin{simplenametable}[1.4in]{Calling convention codes}{tab:callingconventioncodes}
-\DWCCnormal        \\
-\DWCCprogram       \\
-\DWCCnocall        \\
+\begin{simplenametable}[1.4in]{Calling convention codes for subroutines}{tab:callingconventioncodesforsubroutines}
+\DWCCnormalTARG        \\
+\DWCCprogramTARG       \\
+\DWCCnocallTARG        \\
 \end{simplenametable}
 
 If this attribute is not present, or its value is the constant
@@ -1048,6 +1049,10 @@ architecture. If the value of the calling convention attribute
 is the constant \DWCCnocallTARG, the subroutine does not obey
 standard calling conventions, and it may not be safe for the
 debugger to call this subroutine.
+
+\textit{Note that \DWCCnormal{} is also used as a calling convention 
+code for certain types 
+(see Table \refersec{tab:callingconventioncodesfortypes}).}
 
 If the semantics of the language of the compilation unit
 containing the subroutine entry distinguishes between ordinary

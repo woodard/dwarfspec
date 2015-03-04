@@ -132,13 +132,7 @@ design.
 \dotdebugranges{} - Contains the range lists, unaffected by this
 design.
 \item
-\dotdebugpubnames{} - Contains the public names for use in
-building an index section. This section has the same
-format and use as always. The section header refers to a
-compilation unit offset, which is the offset of the
-skeleton compilation unit in the \dotdebuginfo{} section.
-\item
-\dotdebugpubtypes{} - Contains the public types for use in
+\dotdebugnames{} - Contains the names for use in
 building an index section. This section has the same
 format and use as always. The section header refers to a
 compilation unit offset, which is the offset of the
@@ -270,9 +264,10 @@ start/length, and offset pair), the two operand values are
 followed by a location description as in a normal location list
 entry in the \dotdebugloc{} section.
 
+\needlines{8}
 This design depends on having an index of debugging information
 available to the consumer. For name lookups, the consumer can use
-the \dotdebugpubnames{} and \dotdebugpubtypes{} sections (or an index
+the \dotdebugnames{} sections (or an index
 built at link time based on the information in those sections),
 which will lead to a skeleton compilation unit. The
 \DWATcompdir{} and \DWATdwoname{} attributes in the skeleton
@@ -408,8 +403,7 @@ information:
   \dotdebugline
   \dotdebugstr
   \dotdebugaddr
-  \dotdebugpubnames
-  \dotdebugpubtypes
+  \dotdebugnames
   \dotdebugaranges
 \end{alltt}
 
@@ -510,17 +504,14 @@ Slot & Location referenced \\
 \end{center}
 
 \needlines{4}
-\textit{\textbf{[***The following paragraph will need updating when the accelerated access
-proposal is finalized.***]}}
-
-The \dotdebugpubnames{} and \dotdebugpubtypes{}
-sections contain the public names defined by the debugging
+The \dotdebugnames{}
+section contains the public names defined by the debugging
 information in the split DWARF object, and reference the skeleton
 compilation unit. When linked together into a final executable,
 they can be used by a DWARF consumer to lookup a name to find one
 or more skeleton compilation units that provide information about
 that name. From the skeleton compilation unit, the consumer can
-find the split DWARF object that it can read to get the full
+find the split DWARF object that it can then read to get the full
 DWARF information.
 
 The \dotdebugaranges{} section contains the PC ranges defined in this

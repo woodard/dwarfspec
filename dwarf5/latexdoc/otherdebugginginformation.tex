@@ -67,113 +67,487 @@ entries owned by a particular compilation unit entry in a
 more condensed format.
 
 \subsection{Lookup by Name}
-
-For lookup by name, 
 \addtoindexx{lookup!by name}
-two tables are maintained in separate
 \addtoindexx{accelerated access!by name}
-object file sections named 
-\dotdebugpubnames{} for objects and
-functions, and 
-\dotdebugpubtypes{}
-for types. Each table consists
-of sets of variable length entries. Each set describes the
-names of global objects and functions, or global types,
-respectively, whose definitions are represented by debugging
-information entries owned by a single compilation unit.
+For lookup by name, a name index is maintained in a separate
+object file section named \dotdebugnames{}. 
 
-\textit{\addtoindex{C++} member functions with a definition in the class declaration
-are definitions in every compilation unit containing the
-class declaration, but if there is no concrete out\dash of\dash line
-instance there is no need to have a 
-\dotdebugpubnames{} entry
-for the member function.}
+\textit{The \dotdebugnames{} section is new in \DWARFVersionV,
+and supersedes the \dotdebugpubnames{} and \dotdebugpubtypes{}
+sections of earlier DWARF versions. While \dotdebugnames{} and
+either \dotdebugpubnames{} and/or \dotdebugpubtypes{} sections
+cannot both occur in the same compilation unit, both may be
+found in the set of units that make up an executable or shared
+object.}
 
-Each set begins with a header containing four values:
-\begin{enumerate}[1. ]
+The index consists
+primarily of two parts: a list of names, and a list of index
+entries. A name, such as a subprogram name, type name, or
+variable name, may have several defining declarations in the
+debugging information. In this case, the entry for that name in
+the list of names will refer to a sequence of index entries in
+the second part of the table, each corresponding to one defining
+declaration in the \dotdebuginfo{} section.
 
-\item \texttt{unit\_length} (\livelink{datarep:initiallengthvalues}{initial length}) \\
-\addttindexx{unit\_length}
-The total length of the all of the entries for that set,
-not including the length field itself 
-(see Section \refersec{datarep:initiallengthvalues}).
+The name index may also contain an optional hash table for faster
+lookup.
 
-\item  version (\addtoindex{uhalf}) \\
-A version number
-\addtoindexx{version number!name lookup table}
-\addtoindexx{version number!type lookup table} 
-(see Section \refersec{datarep:namelookuptables}). 
-This number is specific
-to the name lookup table and is independent of the DWARF
-version number.
+\subsubsection{Contents of the Name Index}
+\label{chap:contentsofthenameindex}
+The name index must contain an entry for each DIE that defines a
+named subprogram, label, variable, type, or namespace, subject to
+the following rules:
+\begin{itemize}
 
-\item debug\_info\_offset (section offset) \\
-The 
-\addtoindexx{section offset!in .debug\_pubtypes header}
-offset 
-\addtoindexx{section offset!in .debug\_pubtypes header}
-from the beginning of the 
-\dotdebuginfo{} section of
-the compilation unit header referenced by the set.
+\item All non-defining declarations (that is, DIEs with a
+      \DWATdeclaration{} attribute) are excluded.
 
-\item debug\_info\_length (section length) \\
-\addtoindexx{section length!in .debug\_pubnames header}
-The 
-\addtoindexx{section length!in .debug\_pubtypes header}
-size in bytes of the contents of the 
-\dotdebuginfo{} section
-generated to represent that compilation unit.
+\item \DWTAGnamespace{} DIEs without a \DWATname{} attribute are
+      included with the name \doublequote{\texttt{(anonymous namespace)}}.
+
+\item All other DIEs without a \DWATname{} attribute are excluded.
+
+\item \DWTAGsubprogram{}, \DWTAGinlinedsubroutine{}, and
+      \DWTAGlabel{} DIEs without an address attribute (\DWATlowpc{},
+      \DWAThighpc{}, \DWATranges{}, or \DWATentrypc{}) are excluded.
+
+\item \DWTAGvariable{} DIEs with a \DWATlocation{} attribute that
+      includes a \DWOPaddr{} or \DWOPformtlsaddress{} operator are
+      included; otherwise, they are excluded.
+
+\item If a subprogram or inlined subroutine is included, and has a
+      \DWATlinkagename{} attribute, there will be an additional
+      index entry for the linkage name.
+      
+\end{itemize}
+
+For the purposes of determining whether a DIE has a particular
+attribute (such as \DWATname{}), if DIE A has a \DWATspecification{}
+or \DWATabstractorigin{} attribute pointing to another DIE B, any
+attributes of DIE B are considered to be part of DIE A.
+
+\textit{The intent of the above rules is to provide the consumer with
+some assurance that looking up an unqualified name in the index
+will yield all relevant DIEs that provide a defining declaration
+at global scope for that name.}
+
+\textit{A producer may choose to implement additional rules for what
+names are placed in the index, and may communicate those rules to
+a cooperating consumer via an augmentation string, described
+below.}
+
+\subsubsection{Structure of the Name Index}
+\label{chap:structureofthenametindex}
+Logically, the name index can be viewed as a list of names, with a
+list of index entries for each name. Each index entry corresponds to a
+DIE that matches the criteria given in the previous section. For
+example, if one compilation unit has a function named \texttt{fred} and
+another has a struct named \texttt{fred}, a lookup for \doublequote{fred} will find the
+list containing those two index entries.
+
+The index section contains eight individual parts, as illustrated in 
+Figure \referfol{fig:nameindexlayout}.
+\begin{enumerate}
+\item A header, describing the layout of the section.
+
+\item A list of compile units (CUs) referenced by this index.
+
+\item A list of local type units (TUs) referenced by this index
+    that are present in this object file.
+
+\item A list of foreign type units (TUs) referenced by this index
+    that are not present in this object file (that is, that have
+    been placed in a split DWARF object).
+
+\item An optional hash lookup table.
+
+\item The name table.
+
+\item An abbreviations table, similar to the one used by the
+    \dotdebuginfo{} section.
+
+\item The entry pool, containing a list of index entries for each
+    name in the name list.
 \end{enumerate}
 
-This header is followed by a variable number of offset/name
-pairs. Each pair consists of the section offset from the
-beginning of the compilation unit corresponding to the current
-set to the debugging information entry for the given object,
-followed by a null\dash terminated character string representing
-the name of the object as given by the \DWATname{} attribute
-of the referenced debugging information entry. Each set of
-names is terminated by an offset field containing zero (and
-no following string).
+\begin{figure}[t]
+\includegraphics[keepaspectratio=true,scale=0.5]{acceleratednameaccessdiagram}
+\caption{Name Index Layout}
+\label{fig:nameindexlayout}
+\end{figure}
+
+The formats of the header and the hash lookup table are described
+below, in Section \refersec{chap:datarepresentationofthenameindex}.
+
+The list of CUs and the list of local TUs are each an array of
+offsets, each of which is the offset of a compile unit or a type unit
+in the \dotdebuginfo{} section. For a per-CU index, there is a single CU
+entry, and there may be a TU entry for each type unit generated in the
+same translation unit as the single CU. For a per-module index, there
+will be one CU entry for each compile unit in the module, and one TU
+entry for each unique type unit in the module. Each list is indexed
+starting at 0.
+
+The list of foreign TUs is an array of 8-byte (\DWFORMrefsigeight) type
+signatures, representing types referenced by the index whose
+definitions have been placed in a different object file (that is, a split
+DWARF object). This list may be empty. This list is indexed starting
+with the size of the local TU list, so that the two lists of TUs are
+logically combined into one list that can be indexed contiguously.
+
+The name table is logically a table with a row for each unique name in
+the index, and two columns. The first column contains a reference to
+the name, as a string. The second column contains the offset within
+the entry pool of the list of index entries for the name.
+
+The abbreviations table describes the formats of the entries in the
+entry pool. Like the DWARF abbreviations table in the \dotdebugabbrev{}
+section, it defines one or more abbreviation codes. Each abbreviation
+code provides a DWARF tag value followed by a list of pairs that
+defines an attribute and form code used by entries with that
+abbreviation code.
+
+The entry pool contains all the index entries, grouped by name. The
+second column of the name list points to the first index entry for the
+name, and all the index entries for that name are placed one after the
+other.
+
+Each index entry begins with an unsigned LEB128 abbreviation code.
+The  abbreviation list for that code provides the DWARF tag value for
+the entry as well as the set of attributes provided by the entry and
+their forms.
+
+The standard attributes are:
+\begin{itemize}
+\item Compilation Unit (CU), a reference to an entry in the list of
+    CUs. In a per-CU index, index entries without this attribute
+    implicitly refer to the single CU.
+
+\item Type Unit (TU), a reference to an entry in the list of local
+    or foreign TUs.
+
+\item DIE offset within the CU or TU.
+
+\item Parent DIE, a reference to the index entry for the parent.
+    This is represented as the offset of the entry relative to
+    the start of the entry pool.
+
+\item Type hash, an 8-byte hash of the type declaration.
+\end{itemize}
+
+It is possible that an indexed DIE has a parent that is not
+indexed (for example, if its parent does not have a name attribute). In
+such a case, a parent attribute may point to a nameless index
+entry (that is, one that cannot be reached from any entry in the
+name table), or it may point to the nearest ancestor that does
+have an index entry.
+
+A producer may define additional vendor-specific attributes, 
+and a consumer will be able to ignore and skip over any attributes 
+it is not prepared to handle.
+
+\needlines{4}
+When an index entry refers to a foreign type unit, it may have
+attributes for both CU and (foreign) TU. For such entries, the CU
+attribute gives the consumer a reference to the CU that may be used to
+locate a split DWARF object that contains the type unit.
+
+The type hash attribute, not to be confused with the type signature
+for a TU, may be provided for type entries whose declarations are not
+in a type unit, for the convenience of link-time or post-link
+utilities that wish to de-duplicate type declarations across
+compilation units. The type hash should, however, be computed by the
+same method as specified for type signatures.
+
+The last entry for each name is followed by a zero byte that
+terminates the list. There may be gaps between the lists.
+
+\subsubsection{Per-CU versus Per-Module Indexes \textit{(Non-Normative)}}
+\label{chap:percuvspermoduleindexes}
+\textit{In a per-CU index, the CU list may have only a single entry, 
+and index entries may omit the CU attribute. (Cross-module or link-time
+optimization, however, may produce an object file with several compile
+units in one object. A compiler in this case may produce a separate
+index for each CU, or a combined index for all CUs. In the latter
+case, index entries will require the CU attribute.) Most name table
+entries may have only a single index entry for each, but sometimes a
+name may be used in more than one context and will require multiple
+index entries, each pointing to a different debugging information
+entry.}
+
+\textit{When linking object files containing per-CU indexes, the 
+linker may choose to concatenate the indexes as ordinary sections, 
+or it may choose to combine the input indexes into a single 
+per-module index.}
+
+\textit{A per-module index will contain a number of CUs, and each index 
+entry should contain a CU attribute or a TU attribute to identify which 
+CU or TU contains the debugging information entry being indexed. When a
+given name is used in multiple CUs or TUs, it will typically have a
+series of index entries pointing to each CU or TU where it is declared. 
+For example, an index entry for a \addtoindex{C++} namespace will need to
+list each occurrence, since each CU may contribute additional names to
+the namespace, and the consumer will need to find them all. On the
+other hand, some index entries do not need to list more than one
+definition; for example, with the one-definition rule in \addtoindex{C++},
+duplicate entries for a function may be omitted, since the consumer
+only needs to find one declaration. Likewise, a per-module index needs
+to list only a single copy of a type declaration contained in a type
+unit.}
+
+\textit{For the benefit of link-time or post-link utilities that consume
+per-CU indexes and produce a per-module index, the per-CU index
+entries provide the tag encoding for the original debugging
+information entry, and may provide a type hash for certain types that
+may benefit from de-duplication. For example, the standard declaration
+of the typedef \texttt{uint32\_t} is likely to occur in many CUs, but a
+combined per-module index needs to retain only one; a user declaration
+of a typedef \texttt{mytype} may refer to a different type at each
+occurrence, and a combined per-module index should retain each unique
+declaration of that type.}
 
 
-In the case of the name of a function member or static data
-member of a \addtoindex{C++} structure, class or union, the name presented
-in the 
-\dotdebugpubnames{} 
-section is not the simple name given
-by the \DWATname{} attribute of the referenced debugging
-information entry, but rather the fully qualified name of
-the data or function member.
+\subsubsection{Data Representation of the Name Index}
+\label{chap:datarepresentationofthenameindex}
+The name index is placed in a section named \dotdebugnames, and
+consists of the eight parts described below.
+
+\subsubsubsection{Section Header}
+The section header contains the following fields:
+\begin{enumerate}[1. ]
+\item \texttt{unit\_length} (\livelink{datarep:initiallengthvalues}{initial length}) \\
+\addttindexx{unit\_length}
+The length of this contribution to the name index section,
+not including the length field itself.
+
+\item \texttt{version} (\addtoindex{uhalf}) \\
+A version number\addtoindexx{version number!name index table} 
+(see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
+This number is specific to the name index table and is
+independent of the DWARF version number.
+
+\item \textit{padding} (\addtoindex{uhalf}) \\
+
+\item \texttt{comp\_unit\_count} (4-byte unsigned integer) \\
+The number of CUs in the CU list.
+
+\item \texttt{local\_type\_unit\_count} (4-byte unsigned integer) \\
+The number of TUs in the first TU list.
+
+\item \texttt{foreign\_type\_unit\_count} (4-byte unsigned integer) \\
+The number of TUs in the second TU list.
+
+\item \texttt{bucket\_count} (4-byte unsigned integer) \\
+The number of hash buckets in the hash lookup table. 
+If there is no hash lookup table, this field contains 0.
+
+\item \texttt{name\_count} (4-byte unsigned integer) \\
+The number of unique names in the index.
+
+\item \texttt{abbrev\_table\_size} (4-byte unsigned integer) \\
+The size in bytes of the abbreviations table.
+
+\item \texttt{augmentation\_string\_size} (4-byte unsigned integer) \\
+The size in bytes of the augmentation string. This value should be
+rounded up to a multiple of 4.
+
+\item \texttt{augmentation\_string} (sequence of characters) \\
+A vendor-specific augmentation string, which provides additional 
+information about the contents of this index. If provided, the string
+should begin with a 4-byte vendor ID. The remainder of the
+string is meant to be read by a cooperating consumer, and its
+contents and interpretation are not specified here. The
+string should be padded with null characters to a multiple of
+four bytes in length.
+
+\end{enumerate}
+
+\subsubsubsection{List of CUs}
+
+The list of CUs immediately follows the header. Each entry in the list
+is a section offset. In the DWARF-32 format, a section offset is 4
+bytes, while in the DWARF-64 format, a section offset is 8 bytes.
+
+The total number of entries in the list is given by \texttt{comp\_unit\_count}.
+There must be at least one CU.
+
+\subsubsubsection{List of Local TUs}
+
+The list of local TUs immediately follows the list of CUs. Each entry
+in the list is a section offset. In the DWARF-32 format, a section
+offset is 4 bytes, while in the DWARF-64 format, a section offset is 8
+bytes.
+
+The total number of entries in the list is given by
+\texttt{local\_type\_unit\_count}. This list may be empty.
+
+\subsubsubsection{List of Foreign TUs}
+
+The list of foreign TUs immediately follows the list of local TUs.
+Each entry in the list is an 8-byte type signature (as described by
+\DWFORMrefsigeight).
+
+The number of entries in the list is given by \texttt{foreign\_type\_unit\_count}.
+This list may be empty.
+
+\subsubsubsection{Hash Lookup Table}
+
+The optional hash lookup table immediately follows the list of type signatures.
+
+The hash lookup table is actually two separate arrays: an array of
+buckets, followed immediately by an array of hashes. The number of
+entries in the buckets array is given by \texttt{bucket\_count}, and the number
+of entries in the hashes array is given by \texttt{name\_count}. Each array
+contains 4-byte unsigned integers.
+
+\needlines{4}
+Symbols are entered into the hash table by first computing a hash
+value from the symbol name. The hash is computed by the \doublequote{DJB}
+hash function (the same hash function used for the \texttt{DT\_GNU\_HASH}
+table in ELF object files). Given a hash value for the symbol,
+the symbol is entered into a bucket whose index is the hash value
+modulo \texttt{bucket\_count}. The buckets array is indexed starting at 0.
+
+Each bucket contains the index of an entry in the hashes array. The
+hashes array is indexed starting at 1, and an empty bucket is
+represented by the value 0.
+
+The hashes array contains a list of the full hash values for each
+symbol. All symbols that fall into the same bucket must be grouped
+together in the hashes array, and the bucket refers to the first
+symbol in the group. When searching for a symbol, the search should
+start at the index given by the bucket, and continue either until a
+matching symbol is found or until a hash value from a different bucket
+is found. If two different symbol names produce the same hash value,
+that hash value will occur twice in the hashes array. Thus, if a
+matching hash value is found, but the name does not match, the search
+should continue visiting subsequent entries in the hashes table.
+
+When a matching hash value is found in the hashes array, the index of
+that entry in the hashes array is used to find the corresponding entry
+in the name table.
+
+\subsubsubsection{Name Table}
+
+The name table immediately follows the hash lookup table. The name
+table is laid out in column-major order (that is, the first column,
+followed by the second column). Each entry in the first column
+contains the string table offset (\DWFORMstrp) of the name in the
+\dotdebugstr{} (or \dotdebugstrdwo) section. Each entry in the second
+column contains the offset (as a section offset) within the entry pool
+of the list of index entries for the name. Rows in the name table are
+indexed starting at 1 (to match the hashes array).
+
+The number of rows in the name table is given by \texttt{name\_count}.
+
+If there is a hash lookup table, the entries in the name table must be
+grouped by bucket: all names that fall into the same hash bucket must
+be grouped together. The row number of an entry in the name table must
+match the row number of its corresponding entry in the hashes array.
+
+If there is no hash lookup table, there is no ordering or grouping
+requirement for the name table.
+
+\subsubsubsection{Abbreviations Table}
+
+The abbreviations table immediately follows the name table. Like the
+abbreviations table for debugging information entries, this table
+consists of a series of abbreviation declarations. Its size is given
+by \texttt{abbrev\_table\_size}.
+
+Each abbreviation declaration defines the tag and other attributes for
+a particular form of index entry. Each declaration starts with an
+unsigned LEB128 number representing the abbreviation code itself. It
+is this code that appears at the beginning of an index entry. The
+abbreviation code must not be 0.
+
+The abbreviation code is followed by another unsigned LEB128 number
+that encodes the tag of the debugging information entry corresponding
+to the index entry.
+
+Following the tag encoding is a series of attribute specifications.
+Each attribute consists of two parts: an unsigned LEB128 number that
+represents the index attribute, and another unsigned LEB128 number
+that represents the attribute's form (as described in 
+Section \refersec{datarep:attributeencodings}). The series of attribute 
+specifications ends with an entry containing 0 for the attribute and 
+0 for the form.
+
+The index attributes and their meanings are listed in Table \referfol{tab:indexattributeencodings}.
+
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{l|l}
+  \caption{Index attribute encodings} \label{tab:indexattributeencodings}\\
+  \hline \bfseries Attribute name &\bfseries Meaning \\ \hline
+\endfirsthead
+  \bfseries Attribute name &\bfseries Meaning \\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+\endlastfoot
+\DWIDXcompileunitTARG & Index of CU                                  \\
+\DWIDXtypeunitTARG    & Index of TU (\mbox{local} or foreign)        \\
+\DWIDXdieoffsetTARG   & Offset of DIE within CU or TU                \\
+\DWIDXparentTARG      & Index of name \mbox{table} entry for parent  \\
+\DWIDXtypehashTARG    & Hash of type \mbox{declaration}              \\
+\DWIDXlouserTARG      & Start of user-defined range                  \\
+\DWIDXhiuserTARG      & End of user-defined range                    \\
+\end{longtable}
+\end{centering}
+
+The abbreviations table ends with an entry consisting of a single 0
+byte for the abbreviation code. The size of the table given by
+\texttt{abbrev\_table\_size} may include optional padding following the
+terminating 0 byte.
+
+\subsubsubsection{Entry Pool}
+
+The entry pool immediately follows the abbreviations table. The second
+column of each row of the name table points to an offset in the entry
+pool, where a series of index entries for that name is located.
+
+Each index entry in the series begins with an abbreviation code, and is
+followed by the attributes described by the abbreviation declaration
+for that code. The last index entry in the series is followed by a
+terminating entry whose abbreviation code is 0.
+
+Gaps are not allowed between entries in a series (that is, the entries
+for a single name must all be contiguous), but there may be gaps
+between series (if, for example, a producer/consumer combination finds
+it useful to maintain alignment).
+
+The size of the entry pool is limited by the size of the contribution
+to the index section, as defined by the \texttt{unit\_length} header field.
 
 \subsection{Lookup by Address}
-
-For 
-\addtoindexx{lookup!by address}
+\label{chap:lookupbyaddress}
+For \addtoindexx{lookup!by address}
 lookup by address, a table is maintained in a separate
 \addtoindexx{accelerated access!by address}
 object file section called 
 \dotdebugaranges{}. The table consists
 of sets of variable length entries, each set describing the
-portion of the program\textquoteright s address space that is covered by
+portion of the program\textquoteright{}s address space that is covered by
 a single compilation unit.
 
 Each set begins with a header containing five values:
 \begin{enumerate}[1. ]
 \item \texttt{unit\_length} (\livelink{datarep:initiallengthvalues}{initial length}) \\
 \addttindexx{unit\_length}
-The total length of all of the
-entries for that set, not including the length field itself
-(see Section \refersec{datarep:initiallengthvalues}).
+The length of this contribution to the address lookup section,
+not including the length field itself.
 
-\item version (\addtoindex{uhalf}) \\
+\item \texttt{version} (\addtoindex{uhalf}) \\
 A version number\addtoindexx{version number!address lookup table} 
 (see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
 This number is specific to the address lookup table and is
 independent of the DWARF version number.
 
-\item debug\_info\_offset (section offset) \\
+\item \texttt{debug\_info\_offset} (section offset) \\
 The offset from the
-\addtoindexx{section offset!in .debug\_pubnames header}
+\addtoindexx{section offset!in .debug\_aranges header}
 beginning of the \dotdebuginfo{} section of the
 compilation unit header referenced by the set.
 
@@ -194,7 +568,6 @@ a flat address space, this value is 0.
 
 \end{enumerate}
 
-
 This header is followed by a variable number of address range
 descriptors. Each descriptor is a triple consisting of a
 segment selector, the beginning address within that segment
@@ -213,8 +586,6 @@ information for an object that has a given address.
 \textit{If the range of addresses covered by the text and/or data
 of a compilation unit is not contiguous, then there may be
 multiple address range descriptors for that compilation unit.}
-
-
 
 
 \section{Line Number Information}
@@ -291,7 +662,6 @@ separate matrix for each contiguous subrange.}
 The following terms are used in the description of the line
 number information format:
 
-
 \begin{longtable} {lp{9cm}}
 state machine &
 The hypothetical machine used by a consumer of the line number
@@ -314,20 +684,20 @@ subprogram invocation is defined to be an exit from a
 necessarily correspond to a specific source code
 construct.} \\
 
-
 sequence &
 A series of contiguous target machine instructions. One compilation unit
 may emit multiple sequences (that is, not all instructions within a
 compilation unit are assumed to be contiguous). \\
 \end{longtable}
 
-\needlines{5}
+\needlines{8}
 \subsection{State Machine Registers}
 \label{chap:statemachineregisters}
-The line number information state machine has the following 
-registers:
+The line number information state machine has a number of  
+registers as shown in Table \referfol{tab:statemachineregisters}.
+
 \begin{longtable}{l|p{9cm}}
-  \caption{State machine registers } \\
+  \caption{State machine registers } \label{tab:statemachineregisters} \\
   \hline \bfseries Register name&\bfseries Meaning\\ \hline
 \endfirsthead
   \bfseries Register name&\bfseries Meaning\\ \hline
@@ -833,9 +1203,10 @@ or \DWFORMdataeight.
 of the file contents. It is paired with form \DWFORMdatasixteen.
 \end{enumerate}
 
+\needlines{6}
 \textit{Using this representation, the information found in a 
 \DWARFVersionIV{} line number header could be encoded as shown in 
-Figure \referfol{fig:preV5LNCTusingV5}.}
+Figure \refersec{fig:preV5LNCTusingV5}.}
 
 \begin{figure}[here]
 \begin{dwflisting}
@@ -857,14 +1228,14 @@ Figure \referfol{fig:preV5LNCTusingV5}.}
                                           \DWLNCTtimestamp, \DWFORMudata,
                                           \DWLNCTsize, \DWFORMudata
     19    \HFNfilenamescount{}                <m>
-    20    \HFNfilenames{}                      <m>*{<null terminated string>,
-                                          <index>, <timestamp>, <size>}
+    20    \HFNfilenames{}                      <m>*\{<null terminated string>, <index>, 
+                                               <timestamp>, <size>\}
 \end{alltt}
 \end{dwflisting}
 \begin{centering}
-\caption{Pre-\DWARFVersionV{} Line Number Program Header Information \mbox{Encoded} Using \DWARFVersionV}
-\end{centering}
+\caption{Pre-\DWARFVersionV{} line number program header information \mbox{encoded} using \DWARFVersionV}
 \label{fig:preV5LNCTusingV5}
+\end{centering}
 \end{figure}
 
 \subsubsection{Vendor-defined Content Descriptions}
@@ -881,6 +1252,7 @@ If a consumer encounters a vendor-defined content type that
 it does not understand, it should skip the content data as though
 it was not present.
 
+\needlines{6}
 \subsection{The Line Number Program}
 \label{linenumberprogram}
 As stated before, the goal of a line number program is to build
@@ -1063,6 +1435,7 @@ Figure \refersec{fig:examplelinenumberspecialopcodemapping}.}
 255 - \addttindex{line\_base} + 1 be an integral multiple of
 \addttindex{line\_range}. }
 
+\needlines{6}
 \subsubsection{Standard Opcodes}
 \label{chap:standardopcodes}
 
@@ -1592,9 +1965,9 @@ on the call stack. An activation consists of:}
 \begin{itemize}
 \item \textit{A code location that is within the
 subroutine. This location is either the place where the program
-stopped when the debugger got control (e.g. a breakpoint), or
+stopped when the debugger got control (for example, a breakpoint), or
 is a place where a subroutine made a call or was interrupted
-by an asynchronous event (e.g. a signal).}
+by an asynchronous event (for example, a signal).}
 
 \item \textit{An area of memory that is allocated on a stack called a
 \doublequote{call frame.} The call frame is identified by an address
@@ -1842,6 +2215,7 @@ needs to be freed on exit from the routine.}
 any \dotdebuginfo{} section, the augmentation string always uses
 UTF\dash 8 encoding.}
 
+\needlines{4}
 \item  \texttt{address\_size} (\addtoindex{ubyte}) \\
 The size of a target address
 \addttindexx{address\_size}
@@ -1979,6 +2353,7 @@ these instructions because its use would be circular.
 include \DWCFAdefcfaexpression, \DWCFAexpression{}
 and \DWCFAvalexpression.}
 
+\needlines{8}
 \subsubsection{Row Creation Instructions}
 \label{chap:rowcreationinstructions}
 \begin{enumerate}[1. ]
@@ -2096,6 +2471,7 @@ expression operators that can be used.}
 
 \end{enumerate}
 
+\needlines{8}
 \subsubsection{Register Rule Instructions}
 \label{chap:registerruleinstructions}
 \begin{enumerate}[1. ]
@@ -2278,6 +2654,7 @@ instruction is encountered, then compute a new location value
 (L2). If L1 $\geq$ L2 then process the instruction and go back
 to step 2.}
 
+\needlines{6}
 \item \textit{ The end of the instruction stream can be thought
 of as a \DWCFAsetloc{} (\addttindex{initial\_location} + \addttindex{address\_range})
 instruction. Note that the FDE is ill-formed if L2 is less
@@ -2322,7 +2699,7 @@ same context as the calling address, the unwind might fail.}
 the return address immediately follows the call instruction,
 a simple solution is to subtract the length of an instruction
 from the return address to obtain the calling instruction. For
-architectures with variable-length instructions (e.g.  x86),
+architectures with variable-length instructions (for example, x86),
 this is not possible. However, subtracting 1 from the return
 address, although not guaranteed to provide the exact calling
 address, generally will produce an address within the same

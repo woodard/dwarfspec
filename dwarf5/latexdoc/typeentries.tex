@@ -783,6 +783,11 @@ in the following discussion statements about
 \addtoindex{C++} classes may
 be understood to apply to \addtoindex{C++} structures as well.}
 
+\textit{\addtoindex{C++} has the notion of a "trivial" class, 
+whose objects can be bitwise copied. Trivial classes may have 
+different rules for passing objects of that type as parameters 
+or return values.}
+
 \subsection{Structure, Union and Class Type Entries}
 \label{chap:structureunionandclasstypeentries}
 Structure, union, and class types are represented by debugging
@@ -910,6 +915,34 @@ struct A::B { ... };
 different compilation units to 
 facilitate DWARF space compression 
 (see Appendix \refersec{app:usingcompilationunits}).}
+
+\needlines{4}
+A structure type, union type or class type entry may have a
+\DWATcallingconvention{} attribute,
+\addtoindexx{calling convention attribute} 
+whose value indicates whether a value of the type should be passed by reference 
+or passed by value. The set of calling convention codes for use with types 
+\addtoindexx{calling convention codes!for types}
+\hypertarget{chap:DWATcallingconventionfortypes}{}
+is given in Table \referfol{tab:callingconventioncodesfortypes}.
+
+\begin{simplenametable}[2.2in]{Calling convention codes for types}{tab:callingconventioncodesfortypes}
+\DWCCnormalTARG             \\
+\DWCCpassbyvalueTARG        \\
+\DWCCpassbyreferenceTARG    \\
+\end{simplenametable}
+
+If this attribute is not present, or its value is
+\DWCCnormalNAME, the convention to be used for an object of the
+given type is assumed to be unspecified.
+
+\textit{Note that \DWCCnormalNAME{} is also used as a calling convention 
+code for certain subprograms 
+(see Table \refersec{tab:callingconventioncodesforsubroutines}).}
+
+\textit{If unspecified, a consumer may be able to deduce the calling
+convention based on knowledge of the type and the ABI.}
+
 
 \subsection{Interface Type Entries}
 \label{chap:interfacetypeentries}
@@ -1368,6 +1401,7 @@ may contain the same attributes and follows the same rules
 as non\dash member global subroutine entries 
 (see Section \refersec{chap:subroutineandentrypointentries}).
 
+\needlines{4}
 \textit{In particular, if the member function entry is an
 instantiation of a member function template, it follows the 
 same rules as function template instantiations (see Section 
@@ -1476,9 +1510,58 @@ by the declaration entry referenced by the specification
 attribute. In particular, such entries do not need to contain
 a name attribute giving the name of the function member whose 
 definition they represent.  
-Similarly, such entries do not need to contain a return type attribute, 
-unless the return type on the declaration was unspecified (for example, the 
-declaration used the \addtoindex{C++} \autoreturntype{} specifier).
+Similarly, such entries do not need to contain a return type 
+attribute, unless the return type on the declaration was 
+unspecified (for example, the declaration used the 
+\addtoindex{C++} \autoreturntype{} specifier).
+
+\textit{In \addtoindex{C++}, a member function may be declared 
+as deleted. This prevents the compiler from generating a default
+implementation of a special member function such as a
+constructor or destructor, and can affect overload resolution
+when used on other member functions.}
+
+If the member function entry has been declared as deleted,
+\hypertarget{chap:DWATdeleted}{}
+then that entry has a \DWATdeletedTARG{} attribute.\addtoindexx{deleted attribute}
+
+\textit{In \addtoindex{C++}, a special member function may be 
+declared as defaulted, which explicitly declares a default
+compiler-generated implementation of the function. The
+declaration may have different effects on the calling
+convention used for objects of its class, depending on
+whether the default declaration is made inside or outside the
+class.}
+
+If the member function has been declared as defaulted, 
+then the entry has a \DWATdefaultedTARG{} 
+attribute\addtoindexx{defaulted attribute}
+whose integer constant value indicates whether, and if so,
+how, that member is defaulted. The possible values and
+their meanings are shown in 
+Table \referfol{tab:defaultedattributevaluenames}.
+
+\begin{centering}
+  \setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{l|l}
+  \caption{Defaulted attribute names} \label{tab:defaultedattributevaluenames} \\
+  \hline \bfseries Defaulted attribute name & \bfseries Meaning \\ \hline
+\endfirsthead
+  \bfseries Defaulted attribute name & \bfseries Meaning \\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+\endlastfoot
+\DWDEFAULTEDnoTARG        & Not declared default \\
+\DWDEFAULTEDinclassTARG   & Defaulted within the class \\
+\DWDEFAULTEDoutofclassTARG& Defaulted outside of the class \\
+\hline
+\end{longtable}
+\end{centering}
+
+\textit{An artificial member function (that is, a compiler-generated
+copy that does not appear in the source) does not have a
+\DWATdefaultedNAME{} attribute.}
 
 \needlines{5}
 \subsection{Class Template Instantiations}
@@ -1862,7 +1945,7 @@ A subroutine type entry may have the \DWATreference{} or
 type of a member function with reference or rvalue-reference 
 semantics, respectively.
 
-
+\needlines{6}
 \section{String Type Entries}
 \label{chap:stringtypeentries}
 
@@ -1939,6 +2022,7 @@ size attribute is present, the size of the data to be retrieved
 is the same as the 
 \addtoindex{size of an address} on the target machine.
 
+\needlines{8}
 \addtoindexx{DWARF Version 5}	% Avoid italics
 \textit{Prior to DWARF Version 5, the meaning of a 
 \DWATbytesize{} attribute depends on the presence of the

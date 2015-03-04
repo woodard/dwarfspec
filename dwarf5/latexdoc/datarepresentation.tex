@@ -105,14 +105,13 @@ not appear in DWARF debugging information.
 \addtoindexx{reserved values!initial length}
 
 An \livetarg{datarep:initiallengthvalues}{initial length} field 
-\addtoindex{initial length field|see{initial length}}
-is one of the length fields that occur at the beginning 
+\addtoindexx{initial length field|see{initial length}}
+is one of the fields that occur at the beginning 
 of those DWARF sections that have a header
 (\dotdebugaranges{}, 
 \dotdebuginfo{}, 
-\dotdebugline{},
-\dotdebugpubnames{}, and 
-\dotdebugpubtypes{}) or the length field
+\dotdebugline{} and
+\dotdebugnames{}) or the length field
 that occurs at the beginning of the CIE and FDE structures
 in the \dotdebugframe{} section.
 
@@ -205,7 +204,7 @@ of the program, and requires relocation.
  The \dotdebugstroffsets{} section contains a list of string offsets,
 each of which is an offset of a string in the \dotdebugstr{} section. Each
 of these offsets requires relocation. Depending on the implementation,
-these relocations may be implicit (i.e., the producer may not need to
+these relocations may be implicit (that is, the producer may not need to
 emit any explicit relocation information for these offsets).
 \end{itemize}
 
@@ -222,7 +221,7 @@ and includes the following:
 The line number tables, range tables, frame tables, and
 accelerated access tables, in the usual sections:
 \dotdebugline, \dotdebuglinestr, \dotdebugranges, \dotdebugframe,
-\dotdebugpubnames, \dotdebugpubtypes{} and \dotdebugaranges,
+\dotdebugnames{} and \dotdebugaranges,
 respectively.
 \needlines{4}
 \item
@@ -336,6 +335,7 @@ corresponding application binary. It consists only of a file
 header, section table, a number of DWARF debug information
 sections, and two index sections.
 
+\needlines{5}
 Each DWARF package file contains no more than one of each of the
 following sections, copied from a set of object or DWARF object
 files, and combined, section by section:
@@ -650,31 +650,22 @@ in the headers of DWARF sections (other than initial length
 \addtoindexx{initial length}
 fields) are listed following. In the 32\dash bit DWARF format these
 are 32\dash bit unsigned integer values; in the 64\dash bit DWARF format,
-they 
-\addtoindexx{section length!in .debug\_aranges header}
-are 
-\addtoindexx{section length!in .debug\_pubnames header}
-64\dash bit 
-\addtoindexx{section length!in .debug\_pubtypes header}
-unsigned integer values.
+they are 64\dash bit unsigned integer values.
 
 \begin{center}
 \begin{tabular}{lll}
 Section &Name & Role  \\ \hline
-\dotdebugaranges{} & \addttindex{debug\_info\_offset} & offset in \dotdebuginfo{} \\
-\dotdebugframe{}/CIE & \addttindex{CIE\_id} & CIE distinguished value \\
-\dotdebugframe{}/FDE & \addttindex{CIE\_pointer} & offset in \dotdebugframe{} \\
-\dotdebuginfo{} & \addttindex{debug\_abbrev\_offset} & offset in \dotdebugabbrev{} \\
-\dotdebugline{} & \addttindex{header\_length} & length of header itself \\
-\dotdebugpubnames{} & \addttindex{debug\_info\_offset} & offset in \dotdebuginfo{} \\
-                & \addttindex{debug\_info\_length} & length of \dotdebuginfo{} \\
-                &                   & contribution \\
-\dotdebugpubtypes{} & \addttindex{debug\_info\_offset} & offset in \dotdebuginfo{} \\
-                & \addttindex{debug\_info\_length} & length of \dotdebuginfo{} \\
-                &                   & contribution \\
+\dotdebugaranges{}   & \addttindex{debug\_info\_offset}   & offset in \dotdebuginfo{} \\
+\dotdebugframe{}/CIE & \addttindex{CIE\_id}               & CIE distinguished value \\
+\dotdebugframe{}/FDE & \addttindex{CIE\_pointer}          & offset in \dotdebugframe{} \\
+\dotdebuginfo{}      & \addttindex{debug\_abbrev\_offset} & offset in \dotdebugabbrev{} \\
+\dotdebugline{}      & \addttindex{header\_length}        & length of header itself \\
+\dotdebugnames{}     & entry in array of CUs              & offset in \dotdebuginfo{} \\
+                     & or local TUs                       & \\
 \end{tabular}
 \end{center}
 
+\needlines{4}
 The \texttt{CIE\_id} field in a CIE structure must be 64 bits because
 it overlays the \texttt{CIE\_pointer} in a FDE structure; this implicit
 union must be accessed to distinguish whether a CIE or FDE is
@@ -713,13 +704,13 @@ Form             & Role  \\ \hline
 \end{tabular}
 \end{center}
 
-\item Within the body of the \dotdebugpubnames{} and
-\dotdebugpubtypes{} 
-sections, the representation of the first field
-of each tuple (which represents an offset in the 
+\item Within the body of the \dotdebugnames{} 
+sections, the representation of each entry in the array of
+compilation units (CUs) and the array of local type units
+(TUs), which represents an offset in the 
 \dotdebuginfo{}
-section) depends on the DWARF format as follows: in the
-32\dash bit DWARF format, this field is a 32\dash bit unsigned integer;
+section, depends on the DWARF format as follows: in the
+32\dash bit DWARF format, each entry is a 32\dash bit unsigned integer;
 in the 64\dash bit DWARF format, it is a 64\dash bit unsigned integer.
 
 \needlines{4}
@@ -1173,6 +1164,12 @@ to choose forms for particular attributes
 dynamically,
 without having to add a new entry to the abbreviations table.
 
+The attribute form \DWFORMimplicitconstTARG{} is another special case.
+For attributes with this form, the attribute specification contains 
+a third part, which is a signed LEB128\addtoindexx{LEB128!signed} 
+number. The value of this number is used as the value of the 
+attribute, and no value is stored in the \dotdebuginfo{} section.
+
 The abbreviations for a given compilation unit end with an
 entry consisting of a 0 byte for the abbreviation code.
 
@@ -1289,7 +1286,7 @@ debugging information entries or data bytes.
 
 \item \livelinki{chap:classconstant}{constant}{constant class} \\
 \livetarg{datarep:classconstant}{}
-There are seven forms of constants. There are fixed length
+There are eight forms of constants. There are fixed length
 constant data forms for one-, two-, four-, eight- and sixteen-byte values
 (respectively, 
 \DWFORMdataoneTARG, 
@@ -1298,10 +1295,12 @@ constant data forms for one-, two-, four-, eight- and sixteen-byte values
 \DWFORMdataeightTARG{} and
 \DWFORMdatasixteenTARG). 
 There are also variable length constant
-data forms encoded using LEB128 numbers (see below). Both
-signed (\DWFORMsdataTARG) and unsigned 
-(\DWFORMudataTARG) variable
-length constants are available
+data forms encoded using LEB128 numbers (see below). 
+Both signed (\DWFORMsdataTARG) and unsigned 
+(\DWFORMudataTARG) variable length constants are available.
+There is also an implicit constant (\DWFORMimplicitconst),
+whose value is provided as part of the abbreviation
+declaration.
 
 \needlines{4}
 The data in \DWFORMdataone, 
@@ -1548,11 +1547,11 @@ the \dotdebugstr{} section of the object file (\DWFORMstrpTARG),
 the \dotdebuglinestr{} section of the object file (\DWFORMlinestrpTARG),
 or as an offset into a string table contained in the
 \dotdebugstr{} section of a \addtoindex{supplementary object file} 
-(\DWFORMstrpsupTARG).  \DWFORMstrpNAME{} offsets from the \dotdebuginfo{}  
+(\DWFORMstrpsupTARG).  \DWFORMstrpsupNAME{} offsets from the \dotdebuginfo{}  
 section of a \addtoindex{supplementary object file}
 refer to the local \dotdebugstr{} section of that same file.
 In the \thirtytwobitdwarfformat, the representation of a 
-\DWFORMstrpNAME{}
+\DWFORMstrpNAME{}, \DWFORMstrpNAME{} or \DWFORMstrpsupNAME{}
 value is a 4\dash byte unsigned offset; in the \sixtyfourbitdwarfformat,
 it is an 8\dash byte unsigned offset 
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
@@ -1923,6 +1922,8 @@ Table \refersec{tab:attributeformencodings}.
         \addtoindexx{alignment attribute} \\
 \DWATexportsymbols~\ddag &0x89 &\CLASSflag
         \addtoindexx{export symbols attribute} \\
+\DWATdeleted~\ddag &0x8a &\CLASSflag \addtoindexx{deleted attribute} \\
+\DWATdefaulted~\ddag &0x8b &\CLASSconstant \addtoindexx{defaulted attribute} \\
 \DWATlouser&0x2000 & --- \addtoindexx{low user attribute encoding}  \\
 \DWAThiuser&\xiiifff& --- \addtoindexx{high user attribute encoding}  \\
 
@@ -1974,8 +1975,9 @@ Table \refersec{tab:attributeformencodings}.
 \DWFORMrefsup{}~\ddag &0x1c &\livelink{chap:classreference}{reference} \\
 \DWFORMstrpsup{}~\ddag &0x1d &\livelink{chap:classstring}{string} \\
 \DWFORMdatasixteen~\ddag &0x1e &\CLASSconstant \\
+\DWFORMlinestrp~\ddag &0x1f &\CLASSstring \\
 \DWFORMrefsigeight &0x20 &\livelink{chap:classreference}{reference} \\
-
+\DWFORMimplicitconst~\ddag &0x21 &\CLASSconstant \\
 \end{longtable}
 \end{centering}
 
@@ -2618,13 +2620,15 @@ Table \refersec{tab:callingconventionencodings}.
 \endhead
   \hline \emph{Continued on next page}
 \endfoot
-  \hline
+  \hline \ddag\ \textit{New in DWARF Version 5}
 \endlastfoot
 
-\DWCCnormal&0x01     \\
+\DWCCnormal &0x01     \\
 \DWCCprogram&0x02     \\
-\DWCCnocall&0x03     \\
-\DWCClouser&0x40     \\
+\DWCCnocall &0x03     \\
+\DWCCpassbyreference~\ddag &0x04 \\
+\DWCCpassbyvalue~\ddag     &0x05 \\
+\DWCClouser &0x40     \\
 \DWCChiuser&\xff     \\
 
 \end{longtable}
@@ -2725,71 +2729,92 @@ Table \refersec{tab:discriminantdescriptorencodings}.
 \end{centering}
 
 \needlines{6}
-\section{Name Lookup Tables}
-\label{datarep:namelookuptables}
-
-Each set of entries in the table of global names contained
-in the \dotdebugpubnames{} and 
-\dotdebugpubtypes{} sections begins
-with a header consisting of:
+\section{Name Index Table}
+\label{datarep:nameindextable}
+Each name index table in the \dotdebugnames{} section 
+begins with a header consisting of:
 \begin{enumerate}[1. ]
-
 \item \texttt{unit\_length} (\livelink{datarep:initiallengthvalues}{initial length}) \\
 \addttindexx{unit\_length}
-A 4\dash byte or 12\dash byte unsigned integer 
-\addtoindexx{initial length}
-representing the length
-of the \dotdebuginfo{}
-contribution for that compilation unit,
-not including the length field itself. In the 
-\thirtytwobitdwarfformat, this is a 4\dash byte unsigned integer (which must be less
-than \xfffffffzero); in the \sixtyfourbitdwarfformat, this consists
-of the 4\dash byte value \wffffffff followed by an 8\dash byte unsigned
-integer that gives the actual length
-(see Section \refersec{datarep:32bitand64bitdwarfformats}).
+A 4-byte or 12-byte initial length field that 
+contains the size in bytes of this contribution to the \dotdebugnames{} 
+section, not including the length field itself
+(see Section \refersec{datarep:initiallengthvalues}).
 
-\item  version (\addtoindex{uhalf}) \\
-A 2\dash byte unsigned integer representing the version of the
-DWARF information for the name lookup table
-\addtoindexx{version number!name lookup table}
-(see Appendix \refersec{app:dwarfsectionversionnumbersinformative}).
-The value in this field is 2.
+\item \texttt{version} (\addtoindex{uhalf}) \\
+A 2-byte version number\addtoindexx{version number!name index table} 
+(see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
+This number is specific to the name index table and is
+independent of the DWARF version number.
 
-\needlines{4}
-\item \addttindex{debug\_info\_offset} (section offset) \\
-A 
-\addtoindexx{section offset!in name lookup table set of entries}
-4\dash byte or 8\dash byte 
-offset into the 
-\dotdebuginfo{} or \dotdebuginfodwo{}
-section of the compilation unit header.
-In the \thirtytwobitdwarfformat, this is a 4\dash byte unsigned offset;
-in the \sixtyfourbitdwarfformat, this is an 8\dash byte unsigned offsets
-(see Section \refersec{datarep:32bitand64bitdwarfformats}).
+The value in this field is \versiondotdebugnames.
 
-\item  \addttindex{debug\_info\_length} (\livelink{datarep:sectionoffsetlength}{section length}) \\
-\addtoindexx{section length!in .debug\_pubnames header}
-A 
-\addtoindexx{section length!in .debug\_pubtypes header}
-4\dash byte or 8\dash byte length containing the size in bytes of the
-contents of the \dotdebuginfo{}
-section generated to represent
-this compilation unit. In the \thirtytwobitdwarfformat, this is
-a 4\dash byte unsigned length; in the \sixtyfourbitdwarfformat, this
-is an 8-byte unsigned length 
-(see Section \refersec{datarep:32bitand64bitdwarfformats}).
+\item padding (\addtoindex{uhalf}) \\
 
+\item \texttt{comp\_unit\_count} (4-byte unsigned integer) \\
+The number of CUs in the CU list.
+
+\item \texttt{local\_type\_unit\_count} (4-byte unsigned integer) \\
+The number of TUs in the first TU list.
+
+\item \texttt{foreign\_type\_unit\_count} (4-byte unsigned integer) \\
+The number of TUs in the second TU list.
+
+\item \texttt{bucket\_count} (4-byte unsigned integer) \\
+The number of hash buckets in the hash lookup table. 
+If there is no hash lookup table, this field contains 0.
+
+\item \texttt{name\_count} (4-byte unsigned integer) \\
+The number of unique names in the index.
+
+\item \texttt{abbrev\_table\_size} (4-byte unsigned integer) \\
+The size in bytes of the abbreviations table.
+
+\item \texttt{augmentation\_string\_size} (4-byte unsigned integer) \\
+The size in bytes of the augmentation string. This value should be
+rounded up to a multiple of 4.
+
+\item \texttt{augmentation\_string} (sequence of characters) \\
+A vendor-specific augmentation string, which provides additional 
+information about the contents of this index. If provided, the string
+should begin with a 4-byte vendor ID. The remainder of the
+string is meant to be read by a cooperating consumer, and its
+contents and interpretation are not specified here. The
+string should be padded with null characters to a multiple of
+four bytes in length.
 
 \end{enumerate}
 
-This header is followed by a series of tuples. Each tuple
-consists of a 4\dash byte or 8\dash byte offset followed by a string
-of non\dash null bytes terminated by one null byte. 
-In the 32\dash bit
-DWARF format, this is a 4\dash byte offset; in the 64\dash bit DWARF
-format, it is an 8\dash byte offset. 
-Each set is terminated by an
-offset containing the value 0.
+The index attributes and their encodings are listed in Table \referfol{datarep:indexattributeencodings}.
+
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{l|c|l}
+  \caption{Index attribute encodings} \label{datarep:indexattributeencodings}\\
+  \hline \bfseries Attribute name&\bfseries Value &\bfseries Form/Class \\ \hline
+\endfirsthead
+  \bfseries Attribute name&\bfseries Value &\bfseries Form/Class \\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+  \ddag \ \textit{New in \DWARFVersionV}
+\endlastfoot
+\DWIDXcompileunit~\ddag & 1        & \CLASSconstant \\
+\DWIDXtypeunit~\ddag    & 2        & \CLASSconstant \\
+\DWIDXdieoffset~\ddag   & 3        & \CLASSreference \\
+\DWIDXparent~\ddag      & 4        & \CLASSconstant \\
+\DWIDXtypehash~\ddag    & 5        & \DWFORMdataeight \\
+\DWIDXlouser~\ddag      & 0x2000   & \\
+\DWIDXhiuser~\ddag      & \xiiifff & \\
+\end{longtable}
+\end{centering}
+
+The abbreviations table ends with an entry consisting of a single 0
+byte for the abbreviation code. The size of the table given by
+\texttt{abbrev\_table\_size} may include optional padding following the
+terminating 0 byte.
+
 
 
 \needlines{10}
@@ -2819,9 +2844,9 @@ the actual length
 A 2\dash byte version identifier representing the version of the
 DWARF information for the address range table
 (see Appendix \refersec{app:dwarfsectionversionnumbersinformative}).
+
 This value in this field \addtoindexx{version number!address range table} is 2. 
  
-
 \item debug\_info\_offset (\livelink{datarep:sectionoffsetlength}{section offset}) \\
 A 
 \addtoindexx{section offset!in .debug\_aranges header}
@@ -2879,6 +2904,8 @@ used by the line number information program are encoded
 as a single byte containing the value 0 
 for \doublequote{false,} and a non-zero value for \doublequote{true.}
 
+\clearpage
+\needlines{10}
 The encodings for the standard opcodes are given in 
 \addtoindexx{line number opcodes!standard opcode encoding}
 Table \refersec{tab:linenumberstandardopcodeencodings}.
@@ -2913,13 +2940,11 @@ Table \refersec{tab:linenumberstandardopcodeencodings}.
 \end{longtable}
 \end{centering}
 
-
 \needspace{6cm}
 The encodings for the extended opcodes are given in 
 \addtoindexx{line number opcodes!extended opcode encoding}
 Table \refersec{tab:linenumberextendedopcodeencodings}.
 
-\needlines{20}
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c}
@@ -2944,6 +2969,7 @@ Table \refersec{tab:linenumberextendedopcodeencodings}.
 \end{longtable}
 \end{centering}
 
+\clearpage
 \needspace{6cm}
 The encodings for the line number header entry formats are given in 
 \addtoindexx{line number opcodes!file entry format encoding}
@@ -3309,8 +3335,7 @@ in the
 \dotdebuglinestr{},
 \dotdebugloc{}, 
 \dotdebugmacro{},
-\dotdebugpubnames{}, 
-\dotdebugpubtypes{}, 
+\dotdebugnames{}, 
 \dotdebugranges{}, 
 \dotdebugstr{},
 and
