@@ -23,15 +23,15 @@ The labels denoting the beginning and end of the reserved
 \hypertarget{chap:DWXXXlohiuser}{}
 value range for vendor specific extensions consist of the
 appropriate prefix 
-(\DWATlouserMARK{}\DWAThiuserMARK{}	    DW\_AT,
+(\DWATlouserMARK{}\DWAThiuserMARK{}	DW\_AT,
 \DWATElouserMARK{}\DWATEhiuserMARK{}	DW\_ATE, 
-\DWCClouserMARK{}\DWCChiuserMARK{}	    DW\_CC,
+\DWCClouserMARK{}\DWCChiuserMARK{}	DW\_CC,
 \DWCFAlouserMARK{}\DWCFAhiuserMARK{}	DW\_CFA 
 \DWENDlouserMARK{}\DWENDhiuserMARK{}	DW\_END, 
 \DWLANGlouserMARK{}\DWLANGhiuserMARK{}  DW\_LANG, 
 \DWLNElouserMARK{}\DWLNEhiuserMARK{}	DW\_LNE, 
 \DWMACROlouserMARK{}\DWMACROhiuserMARK{}DW\_MACRO,
-\DWOPlouserMARK{}\DWOPhiuserMARK{}	    DW\_OP or
+\DWOPlouserMARK{}\DWOPhiuserMARK{}	DW\_OP or
 \DWTAGlouserMARK{}\DWTAGhiuserMARK{}	DW\_TAG, 
 respectively) followed by
 \_lo\_user or \_hi\_user. 
@@ -410,11 +410,11 @@ a table of sizes. The index sections are aligned at 8-byte
 boundaries in the file.
 
 \needlines{6}
-The index section header contains four unsigned 32-bit values
-(using the byte order of the application binary):
+The index section header contains four unsigned 32-bit values:
+%(using the byte order of the application binary):
 \begin{itemize}
 \item The \addtoindexi{version number}{version number!package index tables}
- of the format of this index (currently 5)
+ of the format of this index (currently \versiondotdebugcuindex)
 \item L, the number of columns in the table of section offsets
 \item N, the number of compilation units or type units in the index
 \item M, the number of slots in the hash table
@@ -427,12 +427,14 @@ The size of the hash table, M, must be $2^k$ such that:
 
 The hash table begins at offset 16 in the section, and consists
 of an array of M 64-bit slots. Each slot contains a 64-bit
-signature (using the byte order of the application binary).
+signature.
+% (using the byte order of the application binary).
 
-The parallel table begins immediately after the hash table (at
-offset \mbox{16 + 8 * M} from the beginning of the section), and
-consists of an array of M 32-bit slots (using the byte order of
-the application binary), corresponding 1-1 with slots in the hash
+The parallel table of indices begins immediately after the hash table 
+(at offset \mbox{16 + 8 * M} from the beginning of the section), and
+consists of an array of M 32-bit slots,
+% (using the byte order of the application binary), 
+corresponding 1-1 with slots in the hash
 table. Each entry in the parallel table contains a row index into
 the tables of offsets and sizes.
 
@@ -466,7 +468,7 @@ The table is a two-dimensional array of 32-bit words (using the
 byte order of the application binary), with L columns and N+1
 rows, in row-major order. Each row in the array is indexed
 starting from 0. The first row provides a key to the columns:
-each column in this row provides an identifier for a debug
+each column in this row provides a section identifier for a debug
 section, and the offsets in the same column of subsequent rows
 refer to that section. The section identifiers are shown in
 Table \referfol{tab:dwarfpackagefilesectionidentifierencodings}.
@@ -486,7 +488,7 @@ Table \referfol{tab:dwarfpackagefilesectionidentifierencodings}.
   \hline
 \endlastfoot
 \DWSECTINFOTARG         & 1 & \dotdebuginfodwo \\
-\textit(reserved)       & 2 & \\
+\textit{Reserved}       & 2 & \\
 \DWSECTABBREVTARG       & 3 & \dotdebugabbrevdwo \\
 \DWSECTLINETARG         & 4 & \dotdebuglinedwo \\
 \DWSECTLOCTARG          & 5 & \dotdebuglocdwo \\
@@ -533,7 +535,7 @@ a number of DWARF debug information sections.  Both the supplementary object fil
 and all the executables or shared objects that reference entries or strings in that
 file must contain a \dotdebugsup{} section that establishes the relationship.
 
-The \dotdebugsup section contains:
+The \dotdebugsup{} section contains:
 \begin{enumerate}[1. ]
 \item \texttt{version} (uhalf) \\
 \addttindexx{version}
@@ -577,8 +579,8 @@ or shared objects expects.
 Debug information entries that refer to an executable's or shared
 object's addresses must \emph{not} be moved to supplementary files (the
 addesses will likely not be the same). Similarly,
-entries referenced from within locationexpressions or using loclistptr
-form attributes must not be moved.
+entries referenced from within location expressions or using loclistptr
+form attributes must not be moved to a supplementary object file.
 
 Executable or shared object compilation units can use
 \DWTAGimportedunit{} with \DWFORMrefsup{} form \DWATimport{} attribute
@@ -592,8 +594,8 @@ refer to the local sections in the supplementary object file.
 
 In macro information, \DWMACROdefineindirectsup{} or
 \DWMACROundefindirectsup{} opcodes can refer to strings in the 
-\dotdebugstr section of the supplementary file, or \DWMACROtransparentincludesup{} 
-can refer to \dotdebugmacro section entries.  Within the 
+\dotdebugstr{} section of the supplementary file, or \DWMACROtransparentincludesup{} 
+can refer to \dotdebugmacro{} section entries.  Within the 
 \dotdebugmacro{} section of a \addtoindex{supplementary object file}, 
 \DWMACROdefineindirect{} and \DWMACROundefindirect{}
 opcodes refer to the local \dotdebugstr{} section, not the one in
@@ -918,7 +920,7 @@ The value in this field is \versiondotdebuginfo.
 \addttindexx{unit\_type}
 A 1-byte unsigned integer identifying this unit as a type unit.
 The value of this field is \DWUTtype{} for a type unit
-(see Section \refersec{chap:separatetypeunitentries}).
+(see Section \refersec{chap:typeunitentries}).
 
 \textit{This field is new in \DWARFVersionV.}
 
@@ -936,7 +938,7 @@ in the \sixtyfourbitdwarfformat, this is an 8\dash byte unsigned length
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
 \needlines{4}
-\item \texttt{address\_size} (addtoindex{ubyte}) \\
+\item \texttt{address\_size} (\addtoindex{ubyte}) \\
 \addttindexx{address\_size}
 A 1\dash byte unsigned integer representing the size 
 \addtoindexx{size of an address}
@@ -1645,10 +1647,14 @@ Table \refersec{tab:attributeformencodings}.
         \livelink{chap:classexprloc}{exprloc}, 
         \livelink{chap:classreference}{reference}
             \addtoindexx{byte size attribute} \\
-\DWATbitoffset&0x0c&\livelink{chap:classconstant}{constant}, 
+\textit{Reserved}&0x0c\footnote{Code 0x0c is reserved to allow backward compatible support of the 
+                                       DW\_AT\_bit\_offset \mbox{attribute} which was 
+                                       defined in \DWARFVersionIII{} and earlier.}
+       &\livelink{chap:classconstant}{constant}, 
         \livelink{chap:classexprloc}{exprloc}, 
         \livelink{chap:classreference}{reference}
-            \addtoindexx{bit offset attribute (Version 3)}  \\
+            \addtoindexx{bit offset attribute (Version 3)}
+            \addtoindexx{DW\_AT\_bit\_offset (deprecated)}  \\
 \DWATbitsize&0x0d&\livelink{chap:classconstant}{constant}, 
         \livelink{chap:classexprloc}{exprloc}, 
         \livelink{chap:classreference}{reference}   
@@ -1873,21 +1879,21 @@ Table \refersec{tab:attributeformencodings}.
 		\livelinki{chap:classstring}{stroffsetsptr}{stroffsetsptr class}
             \addtoindexx{string offsets base!encoding}	\\
 \DWATaddrbase~\ddag &0x73&
-		\livelinki{chap:DWATaddrbase}{addrptr}{addrptr class}
+		\livelinki{chap:classaddrptr}{addrptr}{addrptr class}
             \addtoindexx{address table base!encoding} \\
 \DWATrangesbase~\ddag&0x74&
-		\livelinki{chap:DWATrangesbase}{rangelistptr}{rangelistptr class}
+		\livelinki{chap:classrangelistptr}{rangelistptr}{rangelistptr class}
             \addtoindexx{ranges base!encoding} \\
 \DWATdwoid~\ddag &0x75&
-		\livelink{chap:DWATdwoid}{constant}
+		\livelink{chap:classconstant}{constant}
             \addtoindexx{split DWARF object id!encoding} \\
 \DWATdwoname~\ddag &0x76&
-		\livelink{chap:DWATdwoname}{string}
+		\livelink{chap:classstring}{string}
             \addtoindexx{split DWARF object file name!encoding} \\
 \DWATreference~\ddag &0x77&
-        \livelink{chap:DWATreference}{flag} \\
+        \livelink{chap:classflag}{flag} \\
 \DWATrvaluereference~\ddag &0x78&
-        \livelink{chap:DWATrvaluereference}{flag} \\
+        \livelink{chap:classflag}{flag} \\
 \DWATmacros~\ddag &0x79&\livelink{chap:classmacptr}{macptr} 
         \addtoindexx{macro information attribute}  \\
 \DWATcallallcalls~\ddag &0x7a&\CLASSflag
@@ -2247,8 +2253,8 @@ location of a variable or other entity.
 
 Each entry in a \addtoindex{location list} is either a location list entry,
 a base address selection entry, or an 
-\addtoindexx{end of list entry!in location list}
-end of list entry.
+\addtoindexx{end-of-list entry!in location list}
+end-of-list entry.
 
 \needlines{6}
 \subsubsection{Location List Entries in Non-Split Objects}
@@ -2260,8 +2266,8 @@ are the same size as an address on the target machine.
 
 \needlines{5}
 A base address selection entry and an 
-\addtoindexx{end of list entry!in location list}
-end of list entry each
+\addtoindexx{end-of-list entry!in location list}
+end-of-list entry each
 consist of two (constant or relocated) address offsets. The two
 offsets are the same size as an address on the target machine.
 
@@ -2777,7 +2783,7 @@ rounded up to a multiple of 4.
 \item \texttt{augmentation\_string} (sequence of characters) \\
 A vendor-specific augmentation string, which provides additional 
 information about the contents of this index. If provided, the string
-should begin with a 4-byte vendor ID. The remainder of the
+should begin with a 4-character vendor ID. The remainder of the
 string is meant to be read by a cooperating consumer, and its
 contents and interpretation are not specified here. The
 string should be padded with null characters to a multiple of
@@ -2785,12 +2791,12 @@ four bytes in length.
 
 \end{enumerate}
 
-The index attributes and their encodings are listed in Table \referfol{datarep:indexattributeencodings}.
+The name index attributes and their encodings are listed in Table \referfol{datarep:indexattributeencodings}.
 
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c|l}
-  \caption{Index attribute encodings} \label{datarep:indexattributeencodings}\\
+  \caption{Name index attribute encodings} \label{datarep:indexattributeencodings}\\
   \hline \bfseries Attribute name&\bfseries Value &\bfseries Form/Class \\ \hline
 \endfirsthead
   \bfseries Attribute name&\bfseries Value &\bfseries Form/Class \\ \hline
@@ -2815,7 +2821,30 @@ byte for the abbreviation code. The size of the table given by
 \texttt{abbrev\_table\_size} may include optional padding following the
 terminating 0 byte.
 
+\section{Defaulted Member Encodings}
+\hypertarget{datarep:defaultedmemberencodings}{}
 
+The encodings of the constants used in the \DWATdefaulted{} attribute
+are given in Table \referfol{datarep:defaultedattributeencodings}.
+
+\begin{centering}
+\setlength{\extrarowheight}{0.1cm}
+\begin{longtable}{l|c}
+  \caption{Defaulted attribute encodings} \label{datarep:defaultedattributeencodings}\\
+  \hline \bfseries Defaulted name&\bfseries Value \\ \hline
+\endfirsthead
+  \bfseries Defaulted name&\bfseries Value \\ \hline
+\endhead
+  \hline \emph{Continued on next page}
+\endfoot
+  \hline
+  \ddag \ \textit{New in \DWARFVersionV}
+\endlastfoot
+\DWDEFAULTEDno~\ddag   & 0x00 \\
+\DWDEFAULTEDinclass~\ddag       & 0x01 \\
+\DWDEFAULTEDoutofclass~\ddag    & 0x02 \\
+\end{longtable}
+\end{centering}
 
 \needlines{10}
 \section{Address Range Table}
@@ -2961,7 +2990,8 @@ Table \refersec{tab:linenumberextendedopcodeencodings}.
 \DWLNEendsequence	&0x01 \\
 \DWLNEsetaddress	&0x02 \\
 \textit{Reserved}	&0x03\footnote{Code 0x03 is reserved to allow backward compatible support of the 
-                                       \texttt{DW\_LNE\_define\_file} operation which was defined prior to \DWARFVersionV.} \\
+                                       DW\_LNE\_define\_file operation which was defined in \DWARFVersionIV{} 
+                                       and earlier.} \\
 \DWLNEsetdiscriminator  &0x04 \\
 \DWLNElouser		&0x80 \\
 \DWLNEhiuser		&\xff \\
@@ -3121,16 +3151,15 @@ is either a
 \addtoindexx{base address selection entry!in range list}
 range list entry, 
 \addtoindexx{range list}
-a base address selection entry, or an end
-of list entry.
+a base address selection entry, or an end-of-list entry.
 
 A \addtoindex{range list} entry consists of two relative addresses. The
 addresses are the same size as addresses on the target machine.
 
 \needlines{4}
 A base address selection entry and an 
-\addtoindexx{end of list entry!in range list}
-end of list entry each
+\addtoindexx{end-of-list entry!in range list}
+end-of-list entry each
 \addtoindexx{base address selection entry!in range list}
 consist of two (constant or relocated) addresses. The two
 addresses are the same size as addresses on the target machine.
@@ -3391,7 +3420,7 @@ an arbitrary alignment.
 \section{Integer Representation Names}
 \label{datarep:integerrepresentationnames}
 The sizes of the integers used in the lookup by name, lookup
-by address, line number and call frame information sections
+by address, line number, call frame information and other sections
 are given in
 Table \ref{tab:integerrepresentationnames}.
 
@@ -3477,7 +3506,7 @@ code, and the attribute value.
 \DWATartificial,
 \DWATassociated,
 \DWATbinaryscale,
-\DWATbitoffset,
+%\DWATbitoffset,
 \DWATbitsize,
 \DWATbitstride,
 \DWATbytesize,

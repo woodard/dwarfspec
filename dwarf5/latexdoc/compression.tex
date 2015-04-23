@@ -144,23 +144,22 @@ linker (outside of DWARF itself, and normal object/linker
 facilities such as simple relocations) are:
 \begin{enumerate}[1. ]
 
-\item A means of referencing from inside one \dotdebuginfo{}
-compilation unit to another 
-\dotdebuginfo{} compilation unit
-(\DWFORMrefaddr{} provides this).
+\item A means to reference the \dotdebuginfo{} information 
+of one compilation unit from the \dotdebuginfo{} section of 
+another compilation unit (\DWFORMrefaddr{} provides this).
 
-\item A means of having multiple contributions to specific sections
-(for example, \dotdebuginfo{}, and so on) in a single object file.
+\item A means to combine multiple contributions to specific sections
+(for example, \dotdebuginfo{}) into a single object file.
 
-\item  A means of identifying a \addtoindex{section group} (giving it a name).
+\item  A means to identify a \addtoindex{section group} 
+(giving it a name).
 
-\item A means of identifying which sections go together to make
-up a \addtoindex{section group}, 
-so that the group can be treated as a unit
-(kept or discarded).
+\item A means to indicate which sections go together to make
+up a \addtoindex{section group}, so that the group can be 
+treated as a unit (kept or discarded).
 
-\item  A means of indicating how each \addtoindex{section group} should be
-processed by the linker.
+\item  A means to indicate how each \addtoindex{section group} 
+should be processed by the linker.
 
 \end{enumerate}
 
@@ -259,7 +258,7 @@ above is given the name \texttt{my.compiler.company.cpp.wa.h.123456}.
 
 Global labels for 
 \addtoindexx{debugging information entry!ownership relation}
-debugging information entries (need explained
+debugging information entries (the need for which is explained
 below) within a \addtoindex{section group}
 can be given names of the form
 
@@ -550,6 +549,27 @@ globally visible (in accordance with
 \DWTAGpartialunit{} 
 is not needed for the same reason.
 
+\needlines{6}
+\subsubsection{C Example}
+
+The \addtoindex{C++} example 
+\addtoindexx{DWARF duplicate elimination!examples}
+in this Section might appear to be equally
+valid as a \addtoindex{C} example. However, for \addtoindex{C} 
+it is prudent to include a \DWTAGimportedunit{}
+in the primary unit 
+(see Figure \refersec{fig:duplicateeliminationexample1primarycompilationunit})
+as well as an \DWATimport{} attribute that refers to the proper unit
+in the \addtoindex{section group}.
+
+\needlines{4}
+\textit{The \addtoindex{C} rules for consistency of global (file scope) symbols
+across compilations are less strict than for \addtoindex{C++}; inclusion
+of the import unit attribute assures that the declarations of
+the proper \addtoindex{section group} are considered before declarations
+from other compilations.}
+
+
 \subsubsection{Fortran Example}
 
 
@@ -558,7 +578,7 @@ For a \addtoindex{Fortran}
 example, consider 
 Figure \refersec{fig:duplicateeliminationexample2fortransource}.
 
-\begin{figure}
+\begin{figure}[h]
 \textit{File CommonStuff.f\hspace{1pt}h}
 \addtoindexx{Fortran}
 \begin{lstlisting}[numbers=none]
@@ -720,26 +740,6 @@ Figure \refersec{fig:duplicateeliminationexample2companiondwarf}.
 This example uses \DWTAGpartialunit{} for the \addtoindex{section group}
 because the included declarations are not independently
 visible as global entities.
-
-
-\needlines{6}
-\subsubsection{C++ Example}
-
-The \addtoindex{C++} example 
-\addtoindexx{DWARF duplicate elimination!examples}
-in this Section might appear to be equally
-valid as a \addtoindex{C} example. However, it is prudent to include
-a \DWTAGimportedunit{}
-in the primary unit 
-(see Figure \refersec{fig:duplicateeliminationexample1primarycompilationunit})
-with an \DWATimport{} attribute that refers to the proper unit
-in the \addtoindex{section group}.
-
-\textit{The \addtoindex{C} rules for consistency of global (file scope) symbols
-across compilations are less strict than for \addtoindexx{C++}; inclusion
-of the import unit attribute assures that the declarations of
-the proper \addtoindex{section group} are considered before declarations
-from other compilations.}
 
 
 \section{Using Type Units}

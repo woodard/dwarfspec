@@ -9,19 +9,17 @@ In the descriptions that follow, these terms are used to
 specify the representation of DWARF sections:
 \begin{itemize}
 \item
-Initial length, section offset and 
-\addtoindex{section length}, which are
+\HFTinitiallength{}, \HFTsectionoffset{} and 
+\HFTsectionlength{}, which are
 defined in 
-Sections \refersec{datarep:locationdescriptions} and 
+Sections \refersec{datarep:initiallengthvalues} and 
 \refersec{datarep:32bitand64bitdwarfformats}.
 \item
-Sbyte, 
-\addtoindex{ubyte}, 
-\addtoindex{uhalf}, and 
-\addtoindex{uword}, 
-which 
-\addtoindexx{sbyte}
-are defined in 
+\HFTsbyte{}, 
+\HFTubyte{}, 
+\HFTuhalf{} and 
+\HFTuword{}, 
+which are defined in 
 Section \refersec{datarep:integerrepresentationnames}.
 \end{itemize}
 
@@ -59,9 +57,9 @@ entries for different compilation units within a large program
 would potentially require the access of many memory pages,
 probably hurting debugger performance.}
 
-To make lookups of program entities (data objects, functions
-and types) by name or by address faster, a producer of DWARF
-information may provide three different types of tables
+To make lookups of program entities (including data objects, 
+functions and types) by name or by address faster, a producer 
+of DWARF information may provide two different types of tables
 containing information about the debugging information
 entries owned by a particular compilation unit entry in a
 more condensed format.
@@ -354,7 +352,7 @@ rounded up to a multiple of 4.
 \item \texttt{augmentation\_string} (sequence of characters) \\
 A vendor-specific augmentation string, which provides additional 
 information about the contents of this index. If provided, the string
-should begin with a 4-byte vendor ID. The remainder of the
+should begin with a 4-character vendor ID. The remainder of the
 string is meant to be read by a cooperating consumer, and its
 contents and interpretation are not specified here. The
 string should be padded with null characters to a multiple of
@@ -639,7 +637,7 @@ object code. The matrix would have columns for:}
 \textit{Such a matrix, however, would be impractically large. We
 shrink it with two techniques. First, we delete from
 the matrix each row whose file, line, source column and
-\addtoindex{discriminator} information 
+discriminator\addttindexx{discriminator} 
 is identical with that of its
 predecessors. Any deleted row would never be the beginning of
 a source statement. Second, we design a byte\dash coded language
@@ -856,7 +854,7 @@ compilation unit, not including the length field itself
 
 \item \texttt{version} (\addtoindex{uhalf}) \\
 A version number\addtoindexx{version number!line number information} 
-(see Appendix \refersec{datarep:linenumberinformation}). 
+(see Section \refersec{datarep:linenumberinformation}). 
 This number is specific to
 the line number information and is independent of the DWARF
 version number. 
@@ -1366,10 +1364,10 @@ is the result of the adjusted opcode divided by the
     (\addttindex{op\_index} + \addtoindex{operation advance}) \% \addttindex{maximum\_operations\_per\_instruction}
 \end{alltt}
 
-\textit{When the \addttindex{maximum\_operations\_per\_instruction} field is 1,
-\texttt{op\_index} is always 0 and these calculations simplify to those
-given for addresses in 
-\addtoindex{DWARF Version 3}.}
+\textit{When the \addttindex{maximum\_operations\_per\_instruction} 
+field is 1,
+\texttt{op\_index} is always 0 and these calculations simplify to 
+those given for addresses in \DWARFVersionIII{} and earlier.}
 
 The amount to increment the line register is the 
 \addttindex{line\_base} plus
@@ -1633,9 +1631,9 @@ integer. It sets the
 
 \end{enumerate}
 
-\textit{The \texttt{DW\_LNE\_define\_file} operation defined
+\textit{The DW\_LNE\_define\_file operation defined
 in earlier versions of DWARF is deprecated in \DWARFVersionV.}
-\addtoindexx{\texttt{DW\_LNE\_define\_file}!deprecated}
+\addtoindexx{DW\_LNE\_define\_file  (deprecated)}
 
 \textit{Appendix \refersec{app:linenumberprogramexample} 
 gives some sample line number programs.}
@@ -1866,7 +1864,7 @@ A \DWMACROendfileTARG{} entry has no operands. The presence of
 the entry marks the end of the current source file inclusion.
 
 \subsubsection{Transparent Inclusion of a Sequence of Entries}
-\textit{The transparent inclusion entry types makes it possible 
+\textit{The transparent inclusion entry types make it possible 
 to share duplicate sequences of macro information entries among different 
 compilation units or object files.}
 

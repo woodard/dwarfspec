@@ -100,24 +100,22 @@ of zero is assumed.
 
 \textit{Attribute 
 \DWATdatabitoffset{} 
-is 
-\addtoindexx{bit offset attribute (Version 3)}
+is\addtoindexx{bit offset attribute (Version 3)}
 \addtoindexx{bit offset attribute (Version 3)|see{\textit{also} data bit offset attribute}}
 new 
 \addtoindexx{data bit offset attribute}
 in 
-\addtoindex{DWARF Version 4}, unchanged in \addtoindex{DWARF Version 5}, and
+\DWARFVersionIV{}, unchanged in \DWARFVersionV{}, and
 is also used for bit field members 
 (see Section \refersec{chap:datamemberentries}). 
-It
-\hypertarget{chap:DWATbitoffsetbasetypebitlocation}{}
-replaces the attribute 
-\DWATbitoffset{} 
-when used for base
+%\hypertarget{chap:DWATbitoffsetbasetypebitlocation}{}
+It replaces the attribute DW\_AT\_bit\_offset
 \addtoindexx{bit offset attribute (Version 3)}
+which used for base
 types as defined in \DWARFVersionIII{} and earlier.
-\DWATbitoffset{}
-is deprecated for use in base types in DWARF Version 4 and later.
+DW\_AT\_bit\_offset is deprecated
+\addtoindexx{DW\_AT\_bit\_offset (deprecated)}
+for use in base types in DWARF Version 4 and later.
 See Section 5.1 in the \DWARFVersionIV{}
 specification for a discussion of compatibility considerations.}
 
@@ -364,7 +362,7 @@ whose value is
 a null\dash terminated
 string containing the name as it appears in the source program.
 
-The interpretation of this debugging information entry is
+\textit{The interpretation of this debugging information entry is
 intentionally left flexible to allow it to be interpreted
 appropriately in different languages. For example, in 
 \addtoindex{C} and \addtoindex{C++}
@@ -380,16 +378,16 @@ example, in \addtoindex{Ada} such an unspecified type entry can be referred
 to by the type attribute of an access type where the denoted
 \addtoindexx{incomplete type (Ada)}
 type is incomplete (the name is declared as a type but the
-definition is deferred to a separate compilation unit).
+definition is deferred to a separate compilation unit).}
 
-\addtoindex{C++} permits using the 
+\textit{\addtoindex{C++} permits using the 
 \autoreturntype{} specifier for the return type of a member function declaration. 
 The actual return type is deduced based on the definition of the 
 function, so it may not be known when the function is declared.  The language 
 implementation can provide an unspecified type entry with the name \texttt{auto} which 
 can be referenced by the return type attribute of a function declaration entry.  
 When the function is later defined, the \DWTAGsubprogram{} entry for the definition
-includes a reference to the actual return type.
+includes a reference to the actual return type.}
 
 
 \section{Type Modifier Entries}
@@ -738,7 +736,7 @@ concept in DWARF, the \DWTAGsubrangetype{} child entry for that index has
 only a lower bound and no upper bound.}
 
 \textit{How coarray elements are located and how coindices are 
-converted to process specifications is processor-dependent.}
+converted to process specifications is implementation-dependent.}
 
 \needlines{8}
 \section{Structure, Union, Class and Interface Type Entries}
@@ -779,14 +777,9 @@ of a class or structure.}
 \textit{The \addtoindex{C++} notion of 
 structure is more general than in \addtoindex{C}, being
 equivalent to a class with minor differences. Accordingly,
-in the following discussion statements about 
+in the following discussion, statements about 
 \addtoindex{C++} classes may
 be understood to apply to \addtoindex{C++} structures as well.}
-
-\textit{\addtoindex{C++} has the notion of a "trivial" class, 
-whose objects can be bitwise copied. Trivial classes may have 
-different rules for passing objects of that type as parameters 
-or return values.}
 
 \subsection{Structure, Union and Class Type Entries}
 \label{chap:structureunionandclasstypeentries}
@@ -845,7 +838,7 @@ a \DWATdeclaration{} attribute.
 If the complete declaration of a type has been placed in
 \hypertarget{chap:DWATsignaturetypesignature}{}
 a separate \addtoindex{type unit}
-(see Section \refersec{chap:separatetypeunitentries}), 
+(see Section \refersec{chap:typeunitentries}), 
 an incomplete declaration 
 \addtoindexx{incomplete type}
 of that type in the compilation unit may provide
@@ -972,7 +965,7 @@ information entries that are owned by the interface type
 entry and that appear in the same order as the corresponding
 declarations in the source program.
 
-\subsection{Derived or Extended Structs, Classes and Interfaces}
+\subsection{Derived or Extended Structures, Classes and Interfaces}
 \label{chap:derivedorextendedstructsclasesandinterfaces}
 
 \textit{In \addtoindex{C++}, a class (or struct) 
@@ -1045,13 +1038,11 @@ may
 have a
 \DWATaccessibility{}
 attribute. 
-If no accessibility attribute
-is present, private access is assumed for an entry of a class
-and public access is assumed for an entry of an interface,
-struct or union.
+If no accessibility attribute is present, private access 
+is assumed for an entry of a class and public access is 
+assumed for an entry of a struct, union or interface.
 
-If 
-\hypertarget{chap:DWATvirtualityvirtualityofbaseclass}{}
+If\hypertarget{chap:DWATvirtualityvirtualityofbaseclass}{}
 the class referenced by the 
 \addtoindexx{inheritance entry}
 inheritance entry serves
@@ -1371,20 +1362,21 @@ Appendix \refersec{app:pascalexample}.}
 \needlines{4}
 \textit{Attribute \DWATdatabitoffset{} 
 is new in 
-\addtoindex{DWARF Version 4}, unchanged in \addtoindex{DWARF Version 5},
+\addtoindex{DWARF Version 4}, unchanged in \DWARFVersionV,
 and is also used for base types 
 (see Section 
 \refersec{chap:basetypeentries}). 
-It replaces the
-\livetarg{chap:DWATbitoffsetdatamemberbitlocation}{}
-attributes \DWATbitoffset{} and
-\DWATbytesize{} when used to
+%\livetarg{chap:DWATbitoffsetdatamemberbitlocation}{}
+It replaces the attributes 
+DW\_AT\_bit\_offset\addtoindexx{bit offset attribute (Version 3)}
+and \DWATbytesize{} when used to
 identify the beginning of bit field data members as defined
-in DWARF V3 and earlier. The \DWATbytesize, 
+in \DWARFVersionIII{} and earlier. The 
+\DWATbytesize, 
 \DWATbitsize{} and 
-\DWATbitoffset{}
-attribute combination is deprecated for data members in DWARF
-Version 4 and later. See Section 5.6.6 in the DWARF Version 4
+DW\_AT\_bit\_offset\addtoindexx{DW\_AT\_bit\_offset (deprecated)}
+attribute combination is deprecated for data members in 
+\DWARFVersionIV{} and later. See Section 5.6.6 in the \DWARFVersionIV{}
 specification for a discussion of compatibility considerations.}
 
 \subsection{Member Function Entries}
@@ -1479,17 +1471,23 @@ the entry describes a non\dash static member function whose
 object formal parameter has a type that has an equivalent
 const\dash volatile qualification.
 
-\textit{In \addtoindex{C++:2011 (ISO)}, non-static member functions can also have one of the
-ref-qualifiers, \& and \&\&. They do not change the type of the
-\doublequote{\texttt{this}}-pointer, but they affect the types of object values the
-function can be invoked on.}
+\textit{Beginning in \addtoindex{C++:2011 (ISO)}, non-static member 
+functions can also have one of the ref-qualifiers, \& and \&\&. 
+These do not change the type of the
+\doublequote{\texttt{this}}-pointer, but they do affect the types of 
+object values on which the function can be invoked.}
 
+\needlines{6}
 The member function entry may have an \DWATreferenceNAME{} attribute
 \livetarg{chap:DWATreferenceofnonstaticmember}{}
 to indicate a non-static member function that can only be called on
-l-value objects, or the \DWATrvaluereferenceNAME{} attribute 
+lvalue objects, or the \DWATrvaluereferenceNAME{} attribute 
 \livetarg{chap:DWATrvaluereferenceofnonstaticmember}{}
-to indicate that it can only be called on pr-values and x-values.
+to indicate that it can only be called on prvalues and xvalues.
+
+\textit{The lvalue, prvalue and xvalue concepts are defined in the
+\addtoindex{C++:2011} and later standards and not repeated or
+considered further in DWARF.}
 
 If a subroutine entry represents the defining declaration
 of a member function and that definition appears outside of
@@ -1523,7 +1521,8 @@ when used on other member functions.}
 
 If the member function entry has been declared as deleted,
 \hypertarget{chap:DWATdeleted}{}
-then that entry has a \DWATdeletedTARG{} attribute.\addtoindexx{deleted attribute}
+then that entry has a \DWATdeletedNAME{}\livetarg{chap:DWATdeleteddef}{}
+attribute.\addtoindexx{deleted attribute}
 
 \textit{In \addtoindex{C++}, a special member function may be 
 declared as defaulted, which explicitly declares a default
@@ -1534,13 +1533,14 @@ whether the default declaration is made inside or outside the
 class.}
 
 If the member function has been declared as defaulted, 
-then the entry has a \DWATdefaultedTARG{} 
+then the entry has a \DWATdefaultedNAME{}\livetarg{chap:DWATdefaulteddef}{}
 attribute\addtoindexx{defaulted attribute}
 whose integer constant value indicates whether, and if so,
 how, that member is defaulted. The possible values and
 their meanings are shown in 
 Table \referfol{tab:defaultedattributevaluenames}.
 
+\needlines{8}
 \begin{centering}
   \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|l}
@@ -1969,6 +1969,13 @@ whose value is
 a null\dash terminated string containing the string type name as
 it appears in the source program.
 
+A string type entry may have a \DWATtype{} 
+\livetargi{char:DWAATtypeofstringtype}{attribute}{type attribute!of string type entry}
+describing how each character is encoded and is to be interpreted.  
+The value of this attribute is a \CLASSreference{} to a 
+\DWTAGbasetype{} base type entry.  If the attribute is absent, 
+then the character is encoded using the system default.
+
 \textit{The 
 \addtoindex{Fortran 2003} language standard allows string 
 types that are composed of different types of (same sized) characters. 
@@ -1979,13 +1986,6 @@ While there is no standard list of character kinds, the kinds
 (see \DWATEUCS) and 
 \texttt{DEFAULT}\index{DEFAULT@\texttt{DEFAULT} (Fortran string kind)}
 are defined.}
-
-A string type entry may have a \DWATtype{} 
-\livetargi{char:DWAATtypeofstringtype}{attribute}{type attribute!of string type entry}
-describing how each character is encoded and is to be interpreted.  
-The value of this attribute is a \CLASSreference to a 
-\DWTAGbasetype{} base type entry.  If the attribute is absent, 
-then the character is encoded using the system default.
 
 \needlines{4}
 The string type entry may have a 
@@ -2025,17 +2025,17 @@ is the same as the
 \needlines{8}
 \addtoindexx{DWARF Version 5}	% Avoid italics
 \textit{Prior to DWARF Version 5, the meaning of a 
-\DWATbytesize{} attribute depends on the presence of the
+\DWATbytesize{} attribute depended on the presence of the
 \DWATstringlength{} attribute:
 \begin{itemize}
-\item If \DWATstringlength{} is present, \DWATbytesize{} 
-	specifies the size of the length data to be retrieved 
+\item If \DWATstringlength{} was present, \DWATbytesize{} 
+	specified the size of the length data to be retrieved 
 	from the location specified by the \DWATstringlength{} attribute.
-\item If \DWATstringlength{} is not present, \DWATbytesize{}
-	specifies the amount of storage allocated for objects
+\item If \DWATstringlength{} was not present, \DWATbytesize{}
+	specified the amount of storage allocated for objects
 	of the string type.
 \end{itemize}
-In DWARF Version 5, \DWATbytesize{} always specifies the amount of storage 
+In \DWARFVersionV{}, \DWATbytesize{} always specifies the amount of storage 
 allocated for objects of the string type.}
 
 \needlines{6}
@@ -2466,7 +2466,7 @@ The presence of the
 attribute indicates that an array's rank
 (number of dimensions) is dynamic, and therefore unknown at compile
 time. The value of the \DWATrankNAME{} attribute is either an integer constant
-or a location expression whose evaluation yields the dynamic rank.
+or a DWARF expression whose evaluation yields the dynamic rank.
 
 The bounds of an array with dynamic rank are described using a
 \DWTAGgenericsubrange{} entry, which  
@@ -2487,8 +2487,8 @@ the array descriptor metadata.
   to by the descriptor, or even allocated independently of the
   descriptor.}
 
-Dimensions are enumerated $0$ to $\mathit{rank}-1$ in a left-to-right
-fashion.
+Dimensions are enumerated $0$ to $\mathit{rank}-1$ in source program
+order.
 
 \textit{For an example in Fortran 2008, see
   Section~\refersec{app:assumedrankexample}.}

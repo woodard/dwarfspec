@@ -4,8 +4,8 @@
 This section presents the debugging information entries that
 describe individual data objects: variables, parameters and
 constants, and lists of those objects that may be grouped in
-a single declaration, such as 
-a common \livelink{chap:commonblockentry}{block}.
+a single declaration, such as a 
+\livelink{chap:commonblockentry}{common block}.
 
 \section{Data Object Entries}
 \label{chap:dataobjectentries}
@@ -28,13 +28,13 @@ formal parameter or constant may have the following attributes:
 \begin{enumerate}[1. ]
 \item A \DWATname{} attribute,
 \addtoindexx{name attribute}
-whose value is a null-terminated
-string, containing the data object name as it appears in the
+whose value of class \CLASSstring{} describes a null-terminated
+string for the data object name as it appears in the
 source program.
 
 If a variable entry describes an 
 \addtoindex{anonymous union},
-the name attribute is omitted or consists of a single
+the name attribute is omitted or its value describes a single
 zero byte.
 
 \item A \DWATexternal{} attribute, 
@@ -194,7 +194,7 @@ is non-contiguous
 the value of this
 attribute is the offset in bytes of the beginning of the scope
 for the object from the beginning of the first \addtoindex{range list} entry
-that is not a base selection entry, a default selection entry or an end of list entry.
+that is not a base selection entry, a default selection entry or an end-of-list entry.
 
 \needlines{4}
 \item Otherwise, the scope of the object is specified using
@@ -307,14 +307,15 @@ tag \DWTAGcommonblockTARG.
 The common \nolink{block} 
 entry has a \DWATname{} attribute 
 \addtoindexx{name attribute}
-whose value
-is a null-terminated string containing the 
-\livetargi{chap:commonblockreferenceattribute}{common}{common block reference attribute} \nolink{block}
+whose value of class \CLASSstring{} describes a null-terminated
+string for the
+\livetargi{chap:commonblockreferenceattribute}{common}{common block reference attribute} 
+\nolink{block}
 name as it appears in the source program. It may also have a
 \DWATlinkagename{} attribute as described in 
 Section \refersec{chap:linkagenames}. 
-It
-also has a \DWATlocation{} attribute
+
+A common block entry also has a \DWATlocation{} attribute
 \addtoindexx{location attribute}
 whose value describes the
 location of the beginning of the common \nolink{block}. 
@@ -322,6 +323,9 @@ location of the beginning of the common \nolink{block}.
 The common
 \nolink{block} entry owns debugging information entries describing
 the variables contained within the common \nolink{block}.
+
+\textit{\addtoindex{Fortran} allows each declarer of a common block 
+to independently define its contents; thus, common blocks are not types.}
 
 \section{Namelist Entries}
 \label{chap:namelistentries}
@@ -337,8 +341,8 @@ tag \DWTAGnamelistTARG.
 If the namelist itself has a
 name, the namelist entry has a \DWATname{} attribute,
 \addtoindexx{name attribute}
-whose
-value is a null-terminated string containing the namelist\textquoteright s
+whose value of class \CLASSstring{} describes a null-terminated
+string for the namelist\textquoteright s
 name as it appears in the source program.
 
 Each 

@@ -3,43 +3,46 @@
 This section describes debugging information entries that
 relate to different levels of program scope: compilation,
 module, subprogram, and so on. Except for separate type
-entries (see Section \refersec{chap:separatetypeunitentries}), 
+entries (see Section \refersec{chap:typeunitentries}), 
 these entries may be thought of
 as bounded by ranges of text addresses within the program.
 
 \section{Unit Entries}
 An object file may contain one or more compilation units,
 of which there are
-\addtoindexx{unit|see {compilation unit, partial unit \textit{or} type unit}} 
+\addtoindexx{unit|see {compilation unit}} 
 \addtoindexx{compilation unit}
-three kinds: 
-\addtoindexx{normal compilation unit}
-\addtoindexx{normal compilation unit|see {compilation unit}}
+these kinds:
 normal compilation units,
-partial compilation units and 
-\addtoindexx{type unit}
-type units. A 
+partial compilation units, 
+type units,\addtoindexx{type unit} and
+skeleton units. A 
 \addtoindex{partial compilation unit}
 is related to one or more other compilation units that
-import it. A 
-\addtoindex{type unit} represents 
-a single complete type in a
-separate unit. Either a normal compilation unit or a 
+import it.  
+A skeleton unit contains only a subset of the attributes of 
+a full normal or partial compilation unit plus two attributes 
+used to locate the DWARF object file where the full 
+compilation unit can be found.
+A \addtoindex{type unit} represents a single complete type 
+in a compilation unit of its own.
+Either a normal compilation unit or a 
 \addtoindex{partial compilation unit}
 may be logically incorporated into another
 compilation unit using an 
-\addtoindex{imported unit entry}.
+\addtoindex{imported unit entry}
+(see Section \refersec{chap:importedunitentries}).
 
 
 \subsection[Normal and Partial CU Entries]{Normal and Partial Compilation Unit Entries}
 \label{chap:normalandpartialcompilationunitentries}
-
-A \addtoindex{normal compilation unit} is represented by a debugging
-information entry with the 
-tag \DWTAGcompileunitTARG. 
-A \addtoindex{partial compilation unit} is represented by a debugging information
-entry with the 
-tag \DWTAGpartialunitTARG.
+ 
+A \addtoindex{normal compilation unit}\addtoindexx{compilation unit!normal} 
+is represented by a debugging information entry with the tag 
+\DWTAGcompileunitTARG. 
+A \addtoindex{partial compilation unit}\addtoindexx{compilation unit!partial} 
+is represented by a debugging information entry with the tag 
+\DWTAGpartialunitTARG.
 
 In a simple normal compilation, a single compilation unit with
 the tag 
@@ -187,14 +190,12 @@ in Table \refersec{tab:languagenames}.
 \end{centering}
 
 \needlines{6}
-\item A \DWATstmtlist{}
+\item A \DWATstmtlist{}\hypertarget{chap:DWATstmtlistlinenumberinformationforunit}{}
 attribute whose value is 
 \addtoindexx{statement list attribute}
-a 
+a
 \addtoindexx{section offset!in statement list attribute}
-section
-\hypertarget{chap:DWATstmtlistlinenumberinformationforunit}{}
-offset to the line number information for this compilation
+section offset to the line number information for this compilation
 unit.
 
 This information is placed in a separate object file
@@ -204,13 +205,12 @@ value of the statement list attribute is the offset in the
 information for this compilation unit 
 (see Section \refersec{chap:linenumberinformation}).
 
-\item A \DWATmacros{} attribute 
+\item A \DWATmacros{}\hypertarget{chap:DWATmacrosmacroinformation}{}
+attribute 
 \addtoindexx{macro information attribute}
 whose value is a 
 \addtoindexx{section offset!in macro information attribute}
-section
-\hypertarget{chap:DWATmacrosmacroinformation}{}
-offset to the macro information for this compilation unit.
+section offset to the macro information for this compilation unit.
 
 This information is placed in a separate object file section
 from the debugging information entries themselves. The
@@ -387,7 +387,6 @@ References to range lists (using \DWFORMsecoffset)
 within the compilation unit are
 interpreted as offsets relative to this base.
 
-
 \end{enumerate}
 
 The  base address of a compilation unit is defined as the
@@ -398,6 +397,8 @@ of that compilation unit is not valid.
 
 \subsection{Skeleton Compilation Unit Entries}
 \label{chap:skeletoncompilationunitentries}
+\addtoindexx{compilation unit!skeleton}
+\addtoindexx{skeleton compilation unit}
 When generating a split DWARF object (see 
 Section \refersec{datarep:splitdwarfobjects}), the
 compilation unit in the \dotdebuginfo{} section is a "skeleton"
@@ -409,7 +410,8 @@ can be found, and for the consumer to interpret references to
 addresses in the program. 
 
 A skeleton compilation unit has no
-children, and may have the following attributes:
+children, and may have the following attributes
+(including at least \DWATdwoname{} and \DWATdwoid{}):
 \begin{enumerate}[1. ]
 
 \item
@@ -476,32 +478,12 @@ unit entry, except for \DWATdwoid, which should appear in
 both entries so that the consumer can verify that it has
 found the correct DWARF object.
 
-
-\subsection{Imported Unit Entries}
-\label{chap:importedunitentries}
-The 
-\hypertarget{chap:DWATimportimportedunit}{}
-place where a normal or partial unit is imported is
-represented by a debugging information entry with the 
-\addtoindexx{imported unit entry}
-tag \DWTAGimportedunitTARG. 
-An imported unit entry contains 
-\addtoindexx{import attribute}
-a
-\DWATimport{} attribute 
-whose value is a \livelink{chap:classreference}{reference} to the
-normal or partial compilation unit whose declarations logically
-belong at the place of the imported unit entry.
-
-\textit{An imported unit entry does not necessarily correspond to
-any entity or construct in the source program. It is merely
-\doublequote{glue} used to relate a partial unit, or a compilation
-unit used as a partial unit, to a place in some other
-compilation unit.}
-
 \needlines{6}
-\subsection{Separate Type Unit Entries}
-\label{chap:separatetypeunitentries}
+\subsection{Type Unit Entries}
+\label{chap:typeunitentries}
+\addtoindexx{type unit}
+\addtoindexx{type unit|see{\textit{also} compilation unit}}
+\addtoindexx{compilation unit!\textit{see also} type unit}
 An object file may contain any number of separate type
 unit entries, each representing a single complete type
 definition. 
@@ -517,7 +499,10 @@ information entries that represent the definition of a single
 type, plus additional debugging information entries that may
 be necessary to include as part of the definition of the type.
 
-A type unit entry may have a 
+A type unit entry may have the following attributes:
+\begin{enumerate}[1. ]
+
+\item A 
 \DWATlanguage{} attribute, 
 whose
 \addtoindexx{language attribute}
@@ -525,7 +510,7 @@ constant value is an integer code indicating the source
 language used to define the type. The set of language names
 and their meanings are given in Table \refersec{tab:languagenames}.
 
-A type unit entry may have a 
+\item A 
 \DWATstroffsetsbase\addtoindexx{string base offset attribute}
 attribute, whose value is a reference. This attribute points
 to the first string offset of the type unit's contribution to
@@ -533,7 +518,7 @@ the \dotdebugstroffsets{} section. Indirect string references
 (using \DWFORMstrx) within the type unit must be interpreted
 as indices relative to this base.
 
-A type unit entry may have a \DWATstmtlist{} attribute, whose
+\item A \DWATstmtlist{} attribute, whose
 value is a section offset to a line number table for this
 type unit. Because type units do not describe any code, they
 do not actually need a line number table, but the line number
@@ -541,7 +526,7 @@ tables also contain a list of directories and file names that
 may be referenced by the \DWATdeclfile{} attribute. In a
 normal object file with a regular compilation unit entry, the
 type unit entries can simply refer to the line number table
-used by the compilation unit. In a split DWARF object, where
+used by the compilation unit. In a split DWARF object file, where
 the type units are located in a separate DWARF object file,
 the \DWATstmtlist{} attribute refers to a "skeleton"
 line number table in the \dotdebuglinedwo{} section, which
@@ -549,12 +534,13 @@ contains only the list of directories and file names. All
 type unit entries in a split DWARF object may (but are not
 required to) refer to the same skeleton line number table.
 
-A type unit entry may have a \DWATuseUTFeight{} attribute, which is a flag
+\item A \DWATuseUTFeight{} attribute, which is a flag
 whose presence indicates that all strings referred to by this type
 unit entry, its children, and the skeleton line number table, are
 represented using the UTF-8 representation.
 
-\needlines{4}
+\end{enumerate}
+
 A \addtoindex{type unit} entry for a given type T owns a debugging
 information entry that represents a defining declaration
 of type T. If the type is nested within enclosing types or
@@ -583,7 +569,7 @@ for separate type units. Base types and other small types
 are not usually worth the overhead of placement in separate
 type units. Types that are unlikely to be replicated, such
 as those defined in the main source file, are also better
-left in the main compilation unit.}
+left in the main compilation unit.}F
 
 \section{Module, Namespace and Importing Entries}
 \textit{Modules and namespaces provide a means to collect related
@@ -698,9 +684,9 @@ owned program entities may be declarations,
 including certain declarations that are also object or
 function definitions.}
 
-A namespace may have a \DWATexportsymbolsNAME{} attribute
-\livetarg{chap:DWATexportsymbolsofnamespace}{}
-\addtoindexx{export symbols attribute}
+A namespace may have a 
+\DWATexportsymbolsNAME{}\livetarg{chap:DWATexportsymbolsofnamespace}{}
+attribute\addtoindexx{export symbols attribute}
 \addtoindexx{inline namespace|see{\textit{also} export symbols attribute}}
 which indicates that all member names defined within the 
 namespace may be referenced as if they were defined within 
@@ -950,6 +936,28 @@ Appendix  \refersec{app:namespaceexamples}
 for an example.
 }
 
+\subsection{Imported Unit Entries}
+\label{chap:importedunitentries}
+The 
+\hypertarget{chap:DWATimportimportedunit}{}
+place where a normal or partial unit is imported is
+represented by a debugging information entry with the 
+\addtoindexx{imported unit entry}
+tag \DWTAGimportedunitTARG. 
+An imported unit entry contains 
+\addtoindexx{import attribute}
+a
+\DWATimport{} attribute 
+whose value is a \livelink{chap:classreference}{reference} to the
+normal or partial compilation unit whose declarations logically
+belong at the place of the imported unit entry.
+
+\textit{An imported unit entry does not necessarily correspond to
+any entity or construct in the source program. It is merely
+\doublequote{glue} used to relate a partial unit, or a compilation
+unit used as a partial unit, to a place in some other
+compilation unit.}
+
 \section{Subroutine and Entry Point Entries}
 \label{chap:subroutineandentrypointentries}
 
@@ -1007,7 +1015,7 @@ may contain a
 attribute 
 \addtoindexx{main subprogram attribute}
 which is 
-a \CLASSflag whose presence indicates that the
+a \CLASSflag{} whose presence indicates that the
 subroutine has been identified as the starting function of
 the program.  If more than one subprogram contains this 
 \nolink{flag},
@@ -1165,7 +1173,7 @@ that has neither a \DWATcallpc{} nor \DWATcallreturnpc{} attribute.
 information format consumers that analyse call graphs.}
 
 If the value of the \DWATcallallsourcecalls{} attribute is true then the values of the
-\DWATcallallcalls{} and \DWATcallallcalls{} attributes are necessarily also true, and 
+\DWATcallallcalls{} and \DWATcallalltailcalls{} attributes are necessarily also true, and 
 those attributes need not be present. Similarly, if the value of the 
 \DWATcallallcalls{} attribute is true then the value of the \DWATcallalltailcalls{} 
 attribute is also true and the latter attribute need not be present.
@@ -1429,8 +1437,8 @@ values of different types. DWARF does not represent the generic
 template definition, but does represent each instantiation.}
 
 \needlines{4}
-A \addtoindex{template instantiation} is represented by a debugging
-information entry with the 
+A \addtoindex{function template instantiation}\addtoindexx{template instantiation!function} 
+is represented by a debugging information entry with the 
 \addtoindexx{subprogram entry!use for template instantiation}
 tag \DWTAGsubprogram. 
 With the following
@@ -1507,28 +1515,23 @@ entry with the tag \DWTAGsubprogram. Such an entry has a
 \needlines{4}
 \subsubsection{Abstract Instances}
 \label{chap:abstractinstances}
-Any debugging information entry that is owned (either
+Any subroutine entry that contains a
+\DWATinline{} attribute\addtoindexx{inline attribute} 
+whose value is other than 
+\DWINLnotinlined{}
+is known as an
+\doublequote{abstract instance root.}\addtoindexx{abstract instance!root}
 \hypertarget{chap:DWATinlineabstracttinstance}{}
-directly or indirectly) by a debugging information entry
-that contains the 
-\DWATinline{} attribute is referred to
-\addtoindexx{abstract instance!entry}
-as an \doublequote{abstract instance entry.} 
-Any subroutine entry
-that contains 
-\addtoindexx{inline attribute}
-a \DWATinline{} attribute whose value is other
-than \DWINLnotinlined{}
-is known as 
-\addtoindexx{abstract instance!root}
-an \doublequote{abstract instance root.} 
+Any debugging information entry that is owned (either
+directly or indirectly) by an abstract instance root
+is known as an
+\doublequote{abstract instance entry.}\addtoindexx{abstract instance!entry}
 Any set of abstract instance entries that are all
 children (either directly or indirectly) of some abstract
-instance root, together with the root itself, is known as
-\addtoindexx{abstract instance!tree}
-an \doublequote{abstract instance tree.} However, in the case where
-an abstract instance tree is nested within another abstract
-instance tree, the entries in the 
+instance root, together with the root itself, is known as an
+\doublequote{abstract instance tree.}\addtoindexx{abstract instance!tree}
+However, in the case where an abstract instance tree is 
+nested within another abstract instance tree, the entries in the 
 \addtoindex{nested abstract instance}
 tree are not considered to be entries in the outer abstract
 instance tree.
@@ -1934,18 +1937,19 @@ using any of the following forms, which are listed in order
 of preference:
 
 \begin{itemize}
-\item If the value is of class reference, then the value
+\item If the value is of class \CLASSreference{}, then the value
 specifies the debugging information entry of the target
 subprogram.
 
-\item If the value is of class address, then the value is
+\item If the value is of class \CLASSaddress{}, then the value is
 the relocated address of the target subprogram.
 
-\item If the value is of class string, then the value is the
+\needlines{6}
+\item If the value is of class \CLASSstring{}, then the value is the
 (possibly mangled) \addtoindexx{mangled names}
 name of the target subprogram.
 
-\item If the value is of class \livelink{chap:classflag}{flag}, then the value true
+\item If the value is of class \CLASSflag, then the value true
 indicates that the containing subroutine is a trampoline but
 that the target subroutine is not known.
 \end{itemize}
@@ -1955,15 +1959,13 @@ The target subprogram may itself be a trampoline. (A sequence
 of trampolines necessarily ends with a non\dash trampoline
 subprogram.)
 
-\textit{In \addtoindex{C++}, trampolines may be used 
-to implement derived virtual
-member functions; such trampolines typically adjust the
-\addtoindexx{this parameter}
-implicit this pointer parameter in the course of passing
-control.  
-Other languages and environments may use trampolines
-in a manner sometimes known as transfer functions or transfer
-vectors.}
+\textit{In \addtoindex{C++}, trampolines may be used to implement 
+derived virtual member functions; such trampolines typically 
+adjust the implicit 
+\texttt{this} parameter\index{this parameter@\texttt{this} parameter}
+in the course of passing control.  
+Other languages and environments may use trampolines in a manner 
+sometimes known as transfer functions or transfer vectors.}
 
 \textit{Trampolines may sometimes pass control to the target
 subprogram using a branch or jump instruction instead of a
@@ -2113,7 +2115,7 @@ line, and declaration column attributes, respectively
 (see Section \refersec{chap:declarationcoordinates}).
 
 \textit{The call file, call line and call column coordinates do not describe the
-coordinates of the subroutine declaration that was inlined, rather they describe
+coordinates of the subroutine declaration that was called, rather they describe
 the coordinates of the call.}
 
 The call site entry may own \DWTAGcallsiteparameterTARG{} debugging information
@@ -2312,25 +2314,23 @@ the with statement.
 \needlines{6}
 \section{Try and Catch Block Entries}
 \label{chap:tryandcatchblockentries}
-
-\textit{In \addtoindex{C++} a lexical \livelink{chap:lexicalblock}{block} may be 
+\livetargi{chap:tryandcatchblockentries}{}
+\textit{In \addtoindex{C++}, a \livelink{chap:lexicalblock}{lexical block} may be 
 designated as a \doublequote{catch \nolink{block}.} 
-A catch \livetargi{chap:catchblock}{block}{catch block} is an 
-exception handler that handles
-exceptions thrown by an immediately 
-preceding \doublequote{try \livelink{chap:tryblock}{block}.}
-A catch \livelink{chap:catchblock}{block} 
-designates the type of the exception that it
-can handle.}
+A catch \nolink{block} is an exception handler that 
+handles exceptions thrown by an immediately preceding 
+\doublequote{try \nolink{block}.}
+A catch \nolink{block} 
+designates the type of the exception that it can handle.}
 
-A try \livetargi{chap:tryblock}{block}{try block} is represented 
+A \livetargi{chap:tryblock}{try block}{try block} is represented 
 by a debugging information entry
 \addtoindexx{try block entry}
 with the tag \DWTAGtryblockTARG.  
-A catch \livelink{chap:catchblock}{block} is represented by
-a debugging information entry with 
+A \livetargi{chap:catchblock}{catch block} is represented by
+a debugging information entry
 \addtoindexx{catch block entry}
-the tag \DWTAGcatchblockTARG.
+with the tag \DWTAGcatchblockTARG.
 
 % nolink as we have links just above and do not have a combo link for both
 Both try and catch \nolink{block} entries may have either a
@@ -2344,36 +2344,29 @@ a
 \addtoindexx{ranges attribute}
 whose values encode the contiguous
 or non\dash contiguous address ranges, respectively, of the
-machine instructions generated for the \livelink{chap:lexicalblock}{block}
-(see Section
-\refersec{chap:codeaddressesandranges}).
+machine instructions generated for the \nolink{block}
+(see Section \refersec{chap:codeaddressesandranges}).
 
-A 
 \hypertarget{chap:DWATentrypcoftryblock}{}
 \hypertarget{chap:DWATentrypcofcatchblock}{}
-try or catch block entry may also have 
+A try or catch block entry may also have 
 \addtoindexx{entry pc attribute!for try block}
 \addtoindexx{entry pc attribute!for catch block}
 a 
 \DWATentrypc{} attribute
 whose value is the address of the first executable instruction
-of the try or catch block (see 
-Section \refersec{chap:entryaddress}).
+of the try or catch block 
+(see Section \refersec{chap:entryaddress}).
 
-Catch \livelink{chap:catchblock}{block} entries have at 
-least one child entry, an
-entry representing the type of exception accepted by
-that catch \livelink{chap:catchblock}{block}. 
-This child entry has one of 
-\addtoindexx{formal parameter entry!in catch block}
-the 
-\addtoindexx{unspecified parameters entry!in catch block}
-tags
-\DWTAGformalparameter{} or
-\DWTAGunspecifiedparameters,
+Catch \nolink{block} entries have at least one child entry, 
+an entry representing the type of exception accepted by
+that catch \nolink{block}. 
+This child entry has one of the tags
+\DWTAGformalparameter{}\addtoindexx{formal parameter entry!in catch block}
+or
+\DWTAGunspecifiedparameters,\addtoindexx{unspecified parameters entry!in catch block}
 and will have the same form as other parameter entries.
 
-The siblings immediately following 
-a try \livelink{chap:tryblock}{block} entry are its
-corresponding catch \livelink{chap:catchblock}{block} entries.
+The siblings immediately following a try \nolink{block} 
+entry are its corresponding catch \nolink{block} entries.
 

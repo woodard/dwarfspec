@@ -165,9 +165,7 @@ unit entry).
 The \texttt{debug\_info\_offset} value in the header is the offset in the
 \dotdebuginfo{} section of the 
 corresponding compilation unit header (not
-the compilation unit entry). Each pubname/pubtype unit has the offset (within
-the corresponding compilation unit) of the applicable debugging
-information entry.
+the compilation unit entry). 
 
 %c
 \item \dotdebuginfo{} to \dotdebugabbrev \\
@@ -183,7 +181,7 @@ value is the offset in the \dotdebugstr{}
 section of the corresponding string.
 
 %e
-\item \dotdebugstroffsets{} to \dotdebugstroffsets \\
+\item \dotdebuginfo{} to \dotdebugstroffsets \\
 The value of the \DWATstroffsetsbase{} attribute in a
 \DWTAGcompileunit{}, \DWTAGtypeunit{} or \DWTAGpartialunit{} 
 DIE is the offset in the
@@ -200,7 +198,7 @@ The operand of the \DWOPcallref{}
 DWARF expression operator is the
 offset of a debugging information entry in the 
 \dotdebuginfo{} section of another compilation.
-Similarly for attribute operands that have use
+Similarly for attribute operands that use
 \DWFORMrefaddr.
 
 %g
@@ -242,7 +240,7 @@ section of a
 %k
 \item \dotdebuginfo{} to \dotdebugaddr \\
 The value of the \DWATaddrbase{} attribute in the
-\DWTAGcompileunit{}, \DWTAGtypeunit{} or \DWTAGpartialunit{} DIE is the
+\DWTAGcompileunit{} or \DWTAGpartialunit{} DIE is the
 offset in the \dotdebugaddr{} section of the machine
 addresses for that unit.
 \DWFORMaddrx, \DWOPaddrx{} and \DWOPconstx{} contain
@@ -255,7 +253,7 @@ are offsets to the corresponding string text in the
 \dotdebugstr{} section.
 
 %m
-\item \dotdebugmacro{} to \dotdebugstroffsets \\
+\item \dotdebugmacro{} to \dotdebugstr \\
 The second operand of a 
 \DWMACROdefineindirect{} or \DWMACROundefindirect{} macro information
 entry is an index into the string table in the 
@@ -288,7 +286,7 @@ into the string offset table in the
 %q
 \needlines{4}
 \item \dotdebugmacro{} to \dotdebugmacro \\
-The second operand of a 
+The operand of a 
 \DWMACROtransparentinclude{} macro information
 entry is an offset into another part of the 
 \dotdebugmacro{} section to the header for the 

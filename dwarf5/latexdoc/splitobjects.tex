@@ -1,7 +1,7 @@
 \chapter[Split DWARF Objects (Informative)]{Split DWARF Objects (Informative)}
 \label{app:splitdwarfobjectsinformative}
 \addtoindexx{DWARF compression}
-\addtoindex{DWARF duplicate elimination}
+\addtoindexx{DWARF duplicate elimination}
 With the traditional DWARF format, debug information is designed
 with the expectation that it will be processed by the linker to
 produce an output binary with complete debug information, and
@@ -259,7 +259,8 @@ respectively, relative to the base address. As in the \dotdebugloc{}
 section, the base address is obtained either from the nearest
 preceding base address selection entry, or, if there is no such
 entry, from the compilation unit base address (as defined in
-Section 3.1.1). For the latter three types (start/end,
+Section \refersec{chap:normalandpartialcompilationunitentries}). 
+For the latter three types (start/end,
 start/length, and offset pair), the two operand values are
 followed by a location description as in a normal location list
 entry in the \dotdebugloc{} section.
@@ -480,7 +481,8 @@ out-of-line copies of the inline functions \texttt{Point::x} and
 \texttt{Point::y}.
 
 The \dotdebugline{} section contains the full line number table for
-the compiled code in the object file. In this example, the line
+the compiled code in the object file. In the example in
+Figure \refersec{fig:splitobjectexamplesourcefragment1}, the line
 number program header would list the two files, \texttt{demo.h} and
 \texttt{demo1.cc}, and would contain line number programs for
 \texttt{Box::contains}, \texttt{Point::x}, and \texttt{Point::y}.
@@ -490,24 +492,27 @@ by the compilation unit DIE and by the line number program.
 
 The \dotdebugaddr{} section contains relocatable addresses of
 locations in the loadable text and data that are referenced by
-debugging information entries in the split DWARF object. In this
-example, \texttt{demo1.o} may have three entries:
+debugging information entries in the split DWARF object. In the
+example in \refersec{fig:splitobjectexamplesourcefragment3}, 
+\texttt{demo1.o} may have three entries:
 \begin{center}
 %\footnotesize
 \begin{tabular}{cl}
 Slot & Location referenced \\
 \hline
-   0   &  low pc value for Box::contains  \\
-   1   &  low pc value for Point::x       \\
-   2   &  low pc value for Point::y       \\
+   0   &  low pc value for \texttt{Box::contains}  \\
+   1   &  low pc value for \texttt{Point::x}       \\
+   2   &  low pc value for \texttt{Point::y}       \\
 \end{tabular}
 \end{center}
 
 \needlines{4}
 The \dotdebugnames{}
-section contains the public names defined by the debugging
-information in the split DWARF object, and reference the skeleton
-compilation unit. When linked together into a final executable,
+section contains the names defined by the debugging
+information in the split DWARF object 
+(see Section \refersec{chap:contentsofthenameindex}, 
+and references the skeleton compilation unit. 
+When linked together into a final executable,
 they can be used by a DWARF consumer to lookup a name to find one
 or more skeleton compilation units that provide information about
 that name. From the skeleton compilation unit, the consumer can
@@ -527,6 +532,7 @@ The split DWARF objects each contain the following sections:
   \dotdebuginfodwo{} (one COMDAT section for each type unit)
   \dotdebuglocdwo
   \dotdebuglinedwo
+  \dotdebugmacro
   \dotdebugstroffsetsdwo
   \dotdebugstrdwo
 \end{alltt}
@@ -548,6 +554,8 @@ compilation unit.
 \item References to strings in the string table use the new form
 code \DWFORMstrx, referring to slots in the
 \dotdebugstroffsetsdwo{} section.
+
+\textit{Use of \DWFORMstrp{} is not appropriate in a split DWARF object file.}
 
 \needlines{4}
 \item References to range lists in the \dotdebugranges{} section are
@@ -671,8 +679,11 @@ function.
 Each type unit is contained in its own COMDAT \dotdebuginfodwo{}
 section, and looks like a normal type unit in a non-split object,
 except that the \DWTAGtypeunit{} DIE contains a \DWATstmtlist{}
-attribute that refers to a skeleton \dotdebuglinedwo{} section. The
-skeleton \dotdebuglinedwo{} section contains a normal line number
+attribute that refers to a specialized \dotdebuglinedwo{}
+\addtoindexx{type unit!specialized \texttt{.debug\_line.dwo} section in}
+\addtoindexx{specialized \texttt{.debug\_line.dwo} section}
+section. This
+section contains a normal line number
 program header with a list of include directories and filenames,
 but no line number program. This section is used only as a
 reference for filenames needed for \DWATdeclfile{} attributes
@@ -706,7 +717,7 @@ Figure \refersec{fig:splitobjectexamplestringtableslots}.
 \end{figure}
 
 Each entry in the table is the offset of the string, which is
-contained in the \dotdebugstrdwo{} section. In a split DWARF object,
+contained in the \dotdebugstrdwo{} section. In a split DWARF object file,
 these offsets are not relocatable, since they are not part of the
 relocatable object, but when combined into a DWARF package file,
 each slot must be adjusted to refer to the appropriate offset

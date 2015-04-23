@@ -134,13 +134,15 @@ Appendix \refersec{app:splitdwarfobjectsinformative} for details.
 
 As a further option, debugging information entries and other debugging
 information that are the same in multiple executables or shared objects 
-may found in a separate \addtoindex{supplementary object file} that 
+may be found in a separate \addtoindex{supplementary object file} that 
 contains supplementary debug sections.
 The executable or shared object which contains references to
 those debugging information entries contain a \dotdebugsup{} section
 with information that identifies the supplementary object file; the 
 supplementary object file contains a variant of this same section
 that is used to unambiguously associate it with the referencing object.
+See Section \refersec{data:dwarfsupplemetaryobjectfiles} for
+further details.
  
 \section{Attribute Types}
 \label{chap:attributetypes}
@@ -176,54 +178,74 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 &\livelink{chap:DWATaccessibilitycppinheritedmembers}{C++ inherited members} \\
 \DWATaddressclassTARG
 &\livelinki{chap:DWATadressclasspointerorreferencetypes}{Pointer or reference types}{pointer or reference types}  \\
-&\livelinki{chap:DWATaddressclasssubroutineorsubroutinetype}{Subroutine or subroutine type}{subroutine or subroutine type} \\
+&\livelinki{chap:DWATaddressclasssubroutineorsubroutinetype}
+           {Subroutine or subroutine type}
+           {subroutine or subroutine type} \\
 \DWATaddrbaseTARG
 &\livelinki{chap:DWATaddrbaseforaddresstable}{Base offset for address table}{address table} \\
 \DWATalignmentTARG
-&\livelinki{chap:DWATalignmentnondefault}{Non-default alignment of type, subprogram or variable}{non-default alignment}
-\addtoindexx{alignment!non-default} \\
+&\livelinki{chap:DWATalignmentnondefault}
+           {Non-default alignment of type, subprogram or variable}
+           {non-default alignment} \addtoindexx{alignment!non-default} \\
 \DWATallocatedTARG
 &\livelinki{chap:DWATallocatedallocationstatusoftypes}{Allocation status of types}{allocation status of types}  \\
 \DWATartificialTARG
-&\livelinki{chap:DWATartificialobjectsortypesthat}{Objects or types that are not actually declared in the source}{objects or types that are not actually declared in the source}  \\
+&\livelinki{chap:DWATartificialobjectsortypesthat}
+           {Objects or types that are not actually declared in the source}
+           {objects or types that are not actually declared in the source}  \\
 \DWATassociatedTARG{} 
 &\livelinki{chap:DWATassociatedassociationstatusoftypes}{Association status of types}{association status of types} \\
 \DWATbasetypesTARG{} 
-&\livelinki{chap:DWATbasetypesprimitivedatatypesofcompilationunit}{Primitive data types of compilation unit}{primitive data types of compilation unit} \\
+&\livelinki{chap:DWATbasetypesprimitivedatatypesofcompilationunit}
+           {Primitive data types of compilation unit}
+           {primitive data types of compilation unit} \\
 \DWATbinaryscaleTARG{} 
-&\livelinki{chap:DWATbinaryscalebinaryscalefactorforfixedpointtype}{Binary scale factor for fixed-point type}{binary scale factor for fixed-point type} \\
-\DWATbitoffsetTARG{} 
-&\livelinki{chap:DWATbitoffsetbasetypebitlocation}{Base type bit location}{base type bit location} \\
-&\livelinki{chap:DWATbitoffsetdatamemberbitlocation}{Data member bit location}{data member bit location} \\
+&\livelinki{chap:DWATbinaryscalebinaryscalefactorforfixedpointtype}
+           {Binary scale factor for fixed-point type}
+           {binary scale factor for fixed-point type} \\
+%\DWATbitoffsetTARG{} 
+%&\livelinki{chap:DWATbitoffsetbasetypebitlocation}{Base type bit location}{base type bit location} \\
+%&\livelinki{chap:DWATbitoffsetdatamemberbitlocation}{Data member bit location}{data member bit location} \\
 \DWATbitsizeTARG{} 
-&\livelinki{chap:DWATbitsizebasetypebitsize}{Base type bit size}{base type bit size} \\
-&\livelinki{chap:DWATbitsizedatamemberbitsize}{Data member bit size}{data member bit size} \\
+&\livelinki{chap:DWATbitsizebasetypebitsize}{Size of a base in bits}{base type bit size} \\
+&\livelinki{chap:DWATbitsizedatamemberbitsize}{Size of a data member in bits}{data member bit size} \\
 \DWATbitstrideTARG{} 
-&\livelinki{chap:DWATbitstridearrayelementstrideofarraytype}{Array element stride (of array type)}{array element stride (of array type)} \\
-&\livelinki{chap:DWATbitstridesubrangestridedimensionofarraytype}{Subrange stride (dimension of array type)}{subrange stride (dimension of array type)} \\
-&\livelinki{chap:DWATbitstrideenumerationstridedimensionofarraytype}{Enumeration stride (dimension of array type)}{enumeration stride (dimension of array type)} \\
+&\livelinki{chap:DWATbitstridearrayelementstrideofarraytype}
+           {Array element stride (of array type)}
+           {array element stride (of array type)} \\
+&\livelinki{chap:DWATbitstridesubrangestridedimensionofarraytype}
+           {Subrange stride (dimension of array type)}
+           {subrange stride (dimension of array type)} \\
+&\livelinki{chap:DWATbitstrideenumerationstridedimensionofarraytype}
+           {Enumeration stride (dimension of array type)}
+           {enumeration stride (dimension of array type)} \\
 \DWATbytesizeTARG{} 
-&\livelinki{chap:DWATbytesizedataobjectordatatypesize}{Data object or data type size}{data object or data type size} \\
+&\livelinki{chap:DWATbytesizedataobjectordatatypesize}
+           {Size of a data object or data type in bytes}{data object or data type size} \\
 \DWATbytestrideTARG{} 
-&\livelinki{chap:DWATbytestridearrayelementstrideofarraytype}{Array element stride (of array type)}{array element stride (of array type)} \\
-&\livelinki{chap:DWATbytestridesubrangestridedimensionofarraytype}{Subrange stride (dimension of array type)}{subrange stride (dimension of array type)} \\
+&\livelinki{chap:DWATbytestridearrayelementstrideofarraytype}
+           {Array element stride (of array type)}
+           {array element stride (of array type)} \\
+&\livelinki{chap:DWATbytestridesubrangestridedimensionofarraytype}
+           {Subrange stride (dimension of array type)}
+           {subrange stride (dimension of array type)} \\
 &\livelinki{chap:DWATbytestrideenumerationstridedimensionofarraytype}
            {Enumeration stride (dimension of array type)}
            {enumeration stride (dimension of array type)} \\
 \DWATcallallcallsTARG{}
 &\livelinki{chap:DWATcallallcallsofasubprogram}
            {All tail and normal calls in a subprogram are described by call site entries}
-           {all tail and normal calls in a subprogram are described by call site entries}
+           {all tail and normal calls are described}
            \index{call site!summary!all tail and normal calls are described} \\
 \DWATcallallsourcecallsTARG{}
 &\livelinki{chap:DWATcallallsourcecallsofasubprogram}
            {All tail, normal and inlined calls in a subprogram are described by call site and inlined subprogram entries}
-           {all tail calls in a subprogram are described by call site and inlined subprogram entries}
+           {all tail, normal and inlined calls are described}
            \index{call site!summary!all tail, normal and inlined calls are described} \\
 \DWATcallalltailcallsTARG{}
 &\livelinki{chap:DWATcallalltailcallsofasubprogram}
            {All tail calls in a subprogram are described by call site entries}
-           {all tail calls in a subprogram are described by call site entries}
+           {all tail calls are described}
            \index{call site!summary!all tail calls are described} \\
 \DWATcallcolumnTARG{} 
 &\livelinki{chap:DWATcallcolumncolumnpositionofinlinedsubroutinecall}
@@ -330,11 +352,11 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 \DWATdeclarationTARG
 &\livelinki{chap:DWATdeclarationincompletenondefiningorseparateentitydeclaration}{Incomplete, non-defining, or separate entity declaration}{incomplete, non-defining, or separate entity declaration} \\
 \DWATdefaultedTARG
-&\livelinki{chap:DWATdefaulted}{Whether a member function has been declared as default}{defaulted attribute} \\
+&\livelinki{chap:DWATdefaulteddef}{Whether a member function has been declared as default}{defaulted attribute} \\
 \DWATdefaultvalueTARG
 &\livelinki{chap:DWATdefaultvaluedefaultvalueofparameter}{Default value of parameter}{default value of parameter} \\
 \DWATdeletedTARG
-&\livelinki{chap:DWATdeleted}{Whether a member has been declared as deleted}{Deletion of member function} \\
+&\livelinki{chap:DWATdeleteddef}{Whether a member has been declared as deleted}{Deletion of member function} \\
 \DWATdescriptionTARG{} 
 &\livelinki{chap:DWATdescriptionartificialnameordescription}{Artificial name or description}{artificial name or description} \\
 \DWATdigitcountTARG
@@ -401,9 +423,16 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 \DWATlowerboundTARG
 &\livelinki{chap:DWATlowerboundlowerboundofsubrange}{Lower bound of subrange}{lower bound of subrange} \\
 \DWATmacroinfoTARG
-&\livelinki{chap:DWATmacroinfomacroinformation}{Macro information (for pre-\DWARFVersionV{} compatibility)} {macro information (legacy)} \\
+&\livelinki{chap:DWATmacroinfomacroinformation}
+           {Macro preprocessor information (legacy)} 
+           {macro preprocessor information (legacy)} \\
+&          \textit{(reserved for coexistence with \DWARFVersionIV{} and earlier)} \\
 \DWATmacrosTARG
-&\livelinki{chap:DWATmacrosmacroinformation}{Macro information} {macro information} (\texttt{\#define}, \texttt{\#undef}, and so on)\\
+&\livelinki{chap:DWATmacrosmacroinformation}
+           {Macro preprocessor information} 
+           {macro preprocessor information} \\
+&          \textit{(\texttt{\#define}, \texttt{\#undef}, and so on in \addtoindex{C}, 
+                \addtoindex{C++} and similar languages)} \\
 \DWATmainsubprogramTARG
 &\livelinki{chap:DWATmainsubprogrammainorstartingsubprogram}{Main or starting subprogram}{main or starting subprogram} \\
 &\livelinki{chap:DWATmainsubprogramunitcontainingmainorstartingsubprogram}{Unit containing main or starting subprogram}{unit containing main or starting subprogram}\\
@@ -439,32 +468,47 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 \DWATrecursiveTARG
 &\livelinki{chap:DWATrecursiverecursivepropertyofasubroutine}{Recursive property of a subroutine}{recursive property of a subroutine} \\
 \DWATreferenceTARG
-&\livelink{chap:DWATreferenceofnonstaticmember}{\&-qualified non-static member function} \\
+&\livelink{chap:DWATreferenceofnonstaticmember}
+          {\&-qualified non-static member function} \textit{(\addtoindex{C++})} \\
 \DWATreturnaddrTARG
-&\livelinki{chap:DWATreturnaddrsubroutinereturnaddresssavelocation}{Subroutine return address save location}{subroutine return address save location} \\
+&\livelinki{chap:DWATreturnaddrsubroutinereturnaddresssavelocation}
+           {Subroutine return address save location}
+           {subroutine return address save location} \\
 \DWATrvaluereferenceTARG
-&\livelink{chap:DWATrvaluereferenceofnonstaticmember}{\&\&-qualified non-static member function} \\
+&\livelink{chap:DWATrvaluereferenceofnonstaticmember}
+          {\&\&-qualified non-static member function} \textit{(\addtoindex{C++})} \\
 
 \DWATsegmentTARG
 &\livelinki{chap:DWATsegmentaddressinginformation}{Addressing information}{addressing information} \\
 \DWATsiblingTARG
-&\livelinki{chap:DWATsiblingdebugginginformationentryrelationship}{Debugging information entry relationship}{debugging information entry relationship} \\
+&\livelinki{chap:DWATsiblingdebugginginformationentryrelationship}
+           {Debugging information entry relationship}
+           {debugging information entry relationship} \\
 \DWATsmallTARG
-&\livelinki{chap:DWATsmallscalefactorforfixedpointtype}{Scale factor for fixed-point type}{scale factor for fixed-point type} \\
+&\livelinki{chap:DWATsmallscalefactorforfixedpointtype}
+           {Scale factor for fixed-point type}
+           {scale factor for fixed-point type} \\
 \DWATsignatureTARG
-&\livelinki{chap:DWATsignaturetypesignature}{Type signature}{type signature}\\
+&\livelinki{chap:DWATsignaturetypesignature}
+           {Type signature}
+           {type signature}\\
 \DWATspecificationTARG
-&\livelinki{chap:DWATspecificationincompletenondefiningorseparatedeclaration}{Incomplete, non-defining, or separate declaration corresponding to a declaration}{incomplete, non-defining, or separate declaration corresponding to a declaration} \\
+&\livelinki{chap:DWATspecificationincompletenondefiningorseparatedeclaration}
+           {Incomplete, non-defining, or separate declaration corresponding to a declaration}
+           {incomplete, non-defining, or separate declaration corresponding to a declaration} \\
 \DWATstartscopeTARG
 &\livelinki{chap:DWATstartscopeobjectdeclaration}{Object declaration}{object declaration}\\*
 &\livelinki{chap:DWATstartscopetypedeclaration}{Type declaration}{type declaration}\\
 \DWATstaticlinkTARG
 &\livelinki{chap:DWATstaticlinklocationofuplevelframe}{Location of uplevel frame}{location of uplevel frame} \\
 \DWATstmtlistTARG
-&\livelinki{chap:DWATstmtlistlinenumberinformationforunit}{Line number information for unit}{line number information for unit}\\
+&\livelinki{chap:DWATstmtlistlinenumberinformationforunit}
+           {Line number information for unit}
+           {line number information for unit}\\
 \DWATstringlengthTARG
-&\livelinki{chap:DWATstringlengthstringlengthofstringtype}{String length of string type}{string length of string type}
- \\
+&\livelinki{chap:DWATstringlengthstringlengthofstringtype}
+           {String length of string type}
+           {string length of string type} \\
 \DWATstringlengthbitsizeTARG
 &\livelinki{chap:DWATstringlengthstringlengthofstringtype}{Size of string length of string type}{string length of string type!size of}
  \\
@@ -538,7 +582,7 @@ of a single piece of constant data.
 \doublequote{Constant data}
 is the class of attribute value that those attributes may have. 
 There are several representations of constant data,
-however (one, two, ,four, or eight bytes, and variable length
+however (one, two, four, or eight bytes, and variable length
 data). 
 The particular representation for any given instance
 of an attribute is encoded along with the attribute name as
@@ -564,13 +608,13 @@ to one of the classes shown in Table \referfol{tab:classesofattributevalue}.
 
 \hypertarget{chap:classaddress}{}
 \livelinki{datarep:classaddress}{address}{address class}
-&Refers to some location in the address space of the described program.
+&Refers to some location in the address space of the \mbox{described} program.
 \\
 
 \hypertarget{chap:classaddrptr}{}
 \livelinki{datarep:classaddrptr}{addrptr}{addrptr class}
 &Refers to a base location in the DWARF section that holds
-a series of machine address values. Certain attributes refer
+a series of machine address values. Certain attributes \mbox{refer}
 one of these addresses by indexing relative to this base
 location.
 \\
@@ -595,7 +639,7 @@ sometimes called \doublequote{integer constants} for emphasis.}
 
 \hypertarget{chap:classexprloc}{}
 \livelinki{datarep:classexprloc}{exprloc}{exprloc class}
-&A DWARF expression or location description.
+&A DWARF expression for a value or a location in the \mbox{address} space of the described program.
 \\
 
 \hypertarget{chap:classflag}{}
@@ -610,7 +654,7 @@ sometimes called \doublequote{integer constants} for emphasis.}
 
 \hypertarget{chap:classloclistptr}{}
 \livelinki{datarep:classloclistptr}{loclistptr}{loclistptr class}
-&Refers to a location in the DWARF section that holds location lists, which
+&Refers to a location in the DWARF section that holds \mbox{location} lists, which
 describe objects whose location can change during their lifetime.
 \\
 
@@ -628,17 +672,20 @@ describe objects whose location can change during their lifetime.
 \hypertarget{chap:classreference}{}
 \livelinki{datarep:classreference}{reference}{reference class}
 & Refers to one of the debugging information
-entries that describe the program.  There are three types of
-reference. The first is an offset relative to the beginning
-of the compilation unit in which the reference occurs and must
+entries that \mbox{describe} the program.  There are four types of
+\mbox{reference}. The first is an offset relative to the beginning
+of the \mbox{compilation} unit in which the reference occurs and must
 refer to an entry within that same compilation unit. The second
-type of reference is the offset of a debugging information
+type of reference is the offset of a debugging \mbox{information}
 entry in any compilation unit, including one different from
 the unit containing the reference. The third type of reference
 is an indirect reference to a 
 \addtoindexx{type signature}
-type definition using a 64\dash bit signature 
-for that type.
+type definition using a 64\dash bit \mbox{signature} 
+for that type. The fourth type of reference is a reference from within the 
+\dotdebuginfo{} section of the executable or shared object to
+a debugging information entry in the \dotdebuginfo{} section of 
+a \addtoindex{supplementary object file}.
 \\
 
 \hypertarget{chap:classstring}{}
@@ -646,7 +693,7 @@ for that type.
 & A null\dash terminated sequence of zero or more
 (non\dash null) bytes. Data in this class are generally
 printable strings. Strings may be represented directly in
-the debugging information entry or as an offset in a separate
+the debugging \mbox{information} entry or as an offset in a separate
 string table.
 \\
 
@@ -654,8 +701,8 @@ string table.
 \livelinki{datarep:classstroffsetsptr}{stroffsetsptr}{stroffsetsptr class}
 &Refers to a base location in the DWARF section that holds
 a series of offsets in the DWARF section that holds strings.
-Certain attributes refer one of these offets by indexing 
-relative to this base location. The resulting offset is then 
+Certain attributes refer one of these offsets by indexing 
+\mbox{relative} to this base location. The resulting offset is then 
 used to index into the DWARF string section.
 \\
 
@@ -790,7 +837,7 @@ a value of any supported base type of the target machine.  Instead of
 a base type, elements can have a special address type, 
 which is an integral type that has the 
 \addtoindex{size of an address} on the target machine and 
-unspecified signedness.The value on the top of the stack after 
+unspecified signedness. The value on the top of the stack after 
 \doublequote{executing} the 
 \addtoindex{DWARF expression}
 is 
@@ -936,10 +983,10 @@ which is specified by an unsigned LEB128\addtoindexx{LEB128!unsigned}
 number, followed by a signed LEB128\addtoindexx{LEB128!signed} offset.
 
 \itembfnl{\DWOPregvaltypeTARG}
-The \DWOPregvaltypeNAME{} operation takes two parameters. The first parameter is
-an unsigned LEB128\addtoindexx{LEB128!unsigned} number, 
+The \DWOPregvaltypeNAME{} operation takes two operands. The first 
+operand is an unsigned LEB128\addtoindexx{LEB128!unsigned} number, 
 which identifies a register whose contents is to
-be pushed onto the stack. The second parameter is an 
+be pushed onto the stack. The second operand is an 
 unsigned LEB128\addtoindexx{LEB128!unsigned} number
 that represents the offset of a debugging information entry in the current
 compilation unit, which must be a \DWTAGbasetype{} entry that provides the
@@ -1124,7 +1171,7 @@ integral type identifier, translates this
 value into an address in the 
 \addtoindexx{thread-local storage}
 thread\dash local storage for a thread, and pushes the address 
-onto the stack togethe with the special address type identifier. 
+onto the stack together with the special address type identifier. 
 The meaning of the value on the top of the stack prior to this 
 operation is defined by the run-time environment.  If the run-time 
 environment supports multiple thread\dash local storage 
@@ -1133,17 +1180,18 @@ corresponding to the executable or shared
 library containing this DWARF expression is used.
    
 \textit{Some implementations of 
-\addtoindex{C} and \addtoindex{C++} support a
-thread\dash local storage class. Variables with this storage class
+\addtoindex{C}, \addtoindex{C++}, \addtoindex{Fortran}, and other 
+languages, support a 
+thread-local storage class. Variables with this storage class
 have distinct values and addresses in distinct threads, much
 as automatic variables have distinct values and addresses in
 each function invocation. Typically, there is a single \nolink{block}
 of storage containing all thread\dash local variables declared in
 the main executable, and a separate \nolink{block} for the variables
-declared in each shared library. 
-Each thread\dash local variable can then be accessed in its block using an
-identifier. This identifier is typically an offset into the block and pushed
-onto the DWARF stack by one of the 
+declared in each shared library. Each 
+thread\dash local variable can then be accessed in its block using an
+identifier. This identifier is typically an offset into the block and 
+pushed onto the DWARF stack by one of the 
 \DWOPconstnx{} operations prior to the
 \DWOPformtlsaddress{} operation. 
 Computing the address of
@@ -1434,17 +1482,18 @@ being pushed by the \DWOPentryvalueNAME{} operation.
 \DWOPpushobjectaddress{} is not meaningful inside of this DWARF operation.
 
 \textit{The \DWOPentryvalueNAME{} operation can be used by consumers if they are able
-to find the call site in the caller function, unwind to it and the corresponding
+to find the call site in the caller function, can unwind to it, and the corresponding
 \DWTAGcallsiteparameter{} entry has \DWATcallvalue{} or
 \DWATcalldatavalue{} attributes that can be evaluated to find out the
 value a function parameter had on the first instruction in the function.
-Or non-interactive consumers which know what variables will need to be
-inspected ahead of running the debugged program could put breakpoint
-on the first instruction in functions where there is no other way to find
-some variable's value, but evaluating \DWOPentryvalueNAME{} operation.  The
-consumer can collect there the value of registers or memory referenced in
+Non-interactive consumers which know what variables will need to be
+inspected ahead of running the debugged program could put breakpoints
+on the first instruction in functions where there is no other way to find(see 
+some variable's value, other than evaluating the \DWOPentryvalueNAME{} 
+operation.  The consumer can collect the value of registers or 
+memory referenced in
 \DWOPentryvalueNAME{} operations, then continue to breakpoints where the values
-of variables or parameters need to be inspected and use there the remembered
+of variables or parameters need to be inspected and there use the remembered
 register or memory values during \DWOPentryvalueNAME{} evaluation.
 }
 
@@ -1595,7 +1644,6 @@ DWARF expression is evaluated independently of any others
 
 
 \subsubsection{Simple Location Descriptions}
-
 A 
 \addtoindexx{location description!simple}
 simple location description consists of one 
@@ -1908,7 +1956,7 @@ to form an address and then push the value of the memory location at that addres
 \subsection{Location Lists}
 \label{chap:locationlists}
 There are two forms of location lists. The first form 
-is intended for use in other than a split DWARF object,
+is intended for use in other than a split DWARF object file,
 while the second is intended for use in a split DWARF object
 (see Section \refersec{datarep:splitdwarfobjects}). The two
 forms are otherwise equivalent.
@@ -1938,8 +1986,8 @@ a
 address selection entry, 
 \addtoindexx{location list!base address selection entry}
 or an 
-\addtoindexx{end of list entry!in location list}
-end of list entry.
+\addtoindexx{end-of-list entry!in location list}
+end-of-list entry.
 
 A location list entry has two forms:
 a normal location list entry and a default location list entry.
@@ -1964,7 +2012,7 @@ range over which the location is valid. The ending address
 must be greater than or equal to the beginning address.
 
 \textit{A location list entry (but not a base address selection or 
-end of list entry) whose beginning
+end-of-list entry) whose beginning
 and ending addresses are equal has no effect 
 because the size of the range covered by such
 an entry is zero.}
@@ -2016,7 +2064,7 @@ base address (except to the extent to which base addresses
 affect prior normal location list entries).
 
 A default location list entry must be the last location list
-entry of a location list except for the terminating end of list
+entry of a location list except for the terminating end-of-list
 entry.
 
 A default location list entry describes an unlimited number
@@ -2046,36 +2094,37 @@ affects only the list in which it is contained.}
 
 \needlines{5}
 The end of any given location list is marked by an 
-\addtoindexx{location list!end of list entry}
-end of list entry, which consists of a 0 for the beginning address
+\addtoindexx{location list!end-of-list entry}
+end-of-list entry, which consists of a 0 for the beginning address
 offset and a 0 for the ending address offset. A location list
 containing only an 
-\addtoindexx{end of list entry!in location list}
-end of list entry describes an object that
+\addtoindexx{end-of-list entry!in location list}
+end-of-list entry describes an object that
 exists in the source code but not in the executable program.
 
-Neither a base address selection entry nor an end of list
+Neither a base address selection entry nor an end-of-list
 entry includes a location description.
 
+\needlines{4}
 \textit{When a DWARF consumer is parsing and decoding a location
 list, it must recognize the beginning and ending address
-offsets of (0, 0) for an end of list entry and (0, \doublequote{-1}) for
+offsets of (0, 0) for an end-of-list entry and 
+\mbox{(0, \texttt{maximum-address})} for
 a default location list entry prior to applying any base
 address. Any other pair of offsets beginning with 0 is a
 valid normal location list entry. Next, it must recognize the
-beginning address offset of \doublequote{-1} for a base address selection
+beginning address offset of \texttt{maximum-address} for a base address selection
 entry prior to applying any base address. The current base
 address is not applied to the subsequent value (although there
 may be an underlying object language relocation that affects
 that value).}
 
-\textit{A base address selection entry and an end of list
+\textit{A base address selection entry and an end-of-list
 entry for a location list are identical to a base address
-selection entry and end of list entry, respectively, for a
+selection entry and end-of-list entry, respectively, for a
 \addtoindex{range list}
 (see Section \refersec{chap:noncontiguousaddressranges}) 
-in interpretation
-and representation.}
+in interpretation and representation.}
 
 \subsubsection{Location Lists in Split Objects}
 \label{chap:locationlistsinsplitobjects}
@@ -2141,9 +2190,8 @@ description follows the fields that define the address range.
 
 \section{Types of Program Entities}
 \label{chap:typesofprogramentities}
-Any 
 \hypertarget{chap:DWATtypetypeofdeclaration}{}
-debugging information entry describing a declaration that
+Any debugging information entry describing a declaration that
 has a type has 
 \addtoindexx{type attribute}
 a \DWATtype{} attribute, whose value is a
@@ -2239,11 +2287,10 @@ for objects or types that were not actually declared in the
 source of the application. An example is a formal parameter
 %FIXME: The word 'this' should be rendered like a variant italic,
 %FIXME: not as a quoted name. Changed to tt font--RB
-entry to represent the 
+entry to represent the hidden 
 \texttt{this} parameter\index{this parameter@\texttt{this} parameter}
-hidden \texttt{this} parameter that most \addtoindex{C++}
-implementations pass as the first argument to non-static member
-functions.}  
+that most \addtoindex{C++} implementations pass as the first argument 
+to non-static member functions.}  
 
 Any debugging information entry representing the
 \addtoindexx{artificial attribute}
@@ -2305,11 +2352,9 @@ entry is assumed to exist within a
 \addtoindexi{flat}{address space!flat}
 address space.
 
-\textit{Some systems support different classes of 
-addresses
-\addtoindexx{address class}. 
-The
-address class may affect the way a pointer is dereferenced
+\textit{Some systems support different 
+classes of addresses\addtoindexx{address class}. 
+The address class may affect the way a pointer is dereferenced
 or the way a subroutine is called.}
 
 
@@ -2389,19 +2434,18 @@ of a program entity has a
 
 \subsection{Declarations Completing Non-Defining Declarations}
 A debugging information entry that represents a 
-\hypertarget{chap:DWATspecificationincompletenondefiningorseparatedeclaration}{}
-declaration that completes another (earlier) 
-non\dash defining declaration may have a 
+declaration\hypertarget{chap:DWATspecificationincompletenondefiningorseparatedeclaration}{}
+that completes another (earlier) non-defining declaration may have a 
 \DWATspecification{}
 attribute whose value is a \livelink{chap:classreference}{reference} to
-the debugging information entry representing the non-defining declaration. A debugging
-information entry with a 
+the debugging information entry representing the non-defining declaration. 
+A debugging information entry with a 
 \DWATspecification{} 
-attribute does not need to duplicate information
-provided by the debugging information entry referenced by that specification attribute.
+attribute does not need to duplicate information provided by the 
+debugging information entry referenced by that specification attribute.
 
 When the non-defining declaration is contained within a type that has
-been placed in a separate type unit (see Section \refersec{chap:separatetypeunitentries}), 
+been placed in a separate type unit (see Section \refersec{chap:typeunitentries}), 
 the \DWATspecification{} attribute cannot refer directly to the entry in
 the type unit. Instead, the current compilation unit may contain a
 \doublequote{skeleton} declaration of the type, which contains only the relevant
@@ -2414,7 +2458,7 @@ attribute whose value is the type signature
 (see Section \refersec{datarep:typesignaturecomputation}).
 
 
-It is not the case that all attributes of the debugging information entry referenced by a
+Not all attributes of the debugging information entry referenced by a
 \DWATspecification{} attribute 
 apply to the referring debugging information entry.
 
@@ -2489,8 +2533,7 @@ indicates that no column has been specified.
 
 \section{Identifier Names}
 \label{chap:identifiernames}
-Any 
-\hypertarget{chap:DWATnamenameofdeclaration}{}
+Any\hypertarget{chap:DWATnamenameofdeclaration}{}
 debugging information entry 
 \addtoindexx{identifier names}
 representing 
@@ -2507,21 +2550,20 @@ no name attribute, or containing a name attribute whose value
 consists of a name containing a single null byte, represents
 a program entity for which no name was given in the source.
 
-\textit{Because the names of program objects described by DWARF are the
-names as they appear in the source program, implementations
+\textit{Because the names of program objects described by DWARF are 
+the names as they appear in the source program, implementations
 of language translators that use some form of mangled name
 \addtoindexx{mangled names}
-(as do many implementations of \addtoindex{C++}) should use the unmangled
-form of the name in the 
-DWARF \DWATname{} attribute,
+(as do many implementations of \addtoindex{C++}) should use the 
+unmangled form of the name in the 
+\DWATname{} attribute,
 \addtoindexx{name attribute}
 including the keyword operator (in names such as \doublequote{operator +}),
 if present. See also 
-Section \referfol{chap:linkagenames} regarding the use
-of \DWATlinkagename{} for 
+Section \referfol{chap:linkagenames} regarding the use of 
+\DWATlinkagename{} for 
 \addtoindex{mangled names}.
-Sequences of
-multiple whitespace characters may be compressed.}
+Sequences of multiple whitespace characters may be compressed.}
 
 \section{Data Locations and DWARF Procedures}
 Any debugging information entry describing a data object (which
@@ -2608,10 +2650,12 @@ relocated address for the entity.
 
 \textit{While the \DWATentrypc{}
 attribute might also seem appropriate for this purpose,
-historically the \DWATlowpc{} attribute was used before the
+historically the \DWATlowpc{} attribute was used before
 \DWATentrypc{} was introduced 
 (in \addtoindex{DWARF Version 3}). There is
-insufficient reason to change this.}
+insufficient reason to change this;
+\DWATlowpc{} serves as a default entry PC address as described
+in Section \refersec{chap:entryaddress}.}
 
 \needlines{8}
 \subsection{Continuous Address Range}
@@ -2687,8 +2731,8 @@ Each entry in a \addtoindex{range list} is either a
 \addtoindex{range list} entry,
 \addtoindexx{base address selection entry!in range list}
 a base address selection entry, or an 
-\addtoindexx{end of list entry!in range list}
-end of list entry.
+\addtoindexx{end-of-list entry!in range list}
+end-of-list entry.
 
 A \addtoindex{range list} entry consists of:
 \begin{enumerate}[1. ]
@@ -2712,7 +2756,7 @@ equal to the beginning address.
 
 \needlines{4}
 \textit{A \addtoindex{range list} entry (but not a base address 
-selection or end of list entry) whose beginning and
+selection or end-of-list entry) whose beginning and
 ending addresses are equal has no effect because the size of the 
 range covered by such an entry is zero.}
 \end{enumerate}
@@ -2748,20 +2792,20 @@ affects only the list in which it is contained.}
 
 
 The end of any given \addtoindex{range list} is marked by an 
-\addtoindexx{end of list entry!in range list}
-end of list entry, 
+\addtoindexx{end-of-list entry!in range list}
+end-of-list entry, 
 which consists of a 0 for the beginning address
 offset and a 0 for the ending address offset. 
 A \addtoindex{range list}
-containing only an end of list entry describes an empty scope
+containing only an end-of-list entry describes an empty scope
 (which contains no instructions).
 
 \textit{A base address selection entry and an 
-\addtoindexx{end of list entry!in range list}
-end of list entry for
+\addtoindexx{end-of-list entry!in range list}
+end-of-list entry for
 a \addtoindex{range list} 
 are identical to a base address selection entry
-and end of list entry, respectively, for a location list
+and end-of-list entry, respectively, for a location list
 (see Section \refersec{chap:locationlists}) 
 in interpretation and representation.}
 
@@ -2777,12 +2821,11 @@ cases, the entry address needs to be specified explicitly.}
 Any debugging information entry describing an entity that has
 a range of code addresses, which includes compilation units,
 module initialization, subroutines, 
-ordinary \livelink{chap:lexicalblock}{block}, 
-try/catch \nolink{blocks} (see Section 
-\refersec{chap:tryandcatchblockentries}),
+\livelink{chap:lexicalblock}{lexical \nolink{blocks}},
+\livelink{chap:tryandcatchblockentries}{try/catch \nolink{blocks}},
 and the like, may have a \DWATentrypcNAME{} attribute to
-indicate the first executable instruction within that range
-\hypertarget{chap:entryaddressofscope}{}
+indicate the first executable instruction within that 
+range\hypertarget{chap:entryaddressofscope}{}
 of addresses. The value of the \DWATentrypcNAME{} attribute is a
 relocated address if the
 value of \DWATentrypcNAME{} is of class address; or if it is of class
@@ -2837,7 +2880,7 @@ rules of the applicable programming language.
 \textit{The applicable attributes include: 
 \DWATallocated,
 \DWATassociated, 
-\DWATbitoffset, 
+%\DWATbitoffset, 
 \DWATbitsize,
 \DWATbitstride,
 \DWATbytesize,
@@ -2846,18 +2889,18 @@ rules of the applicable programming language.
 \DWATlowerbound,
 \DWATrank,
 \DWATupperbound,
-(and possibly others).}
+and possibly others.}
 
 \needlines{4}
 \section{Entity Descriptions}
 \textit{Some debugging information entries may describe entities
-in the program that are artificial, or which otherwise are
-\doublequote{named} in ways which are not valid identifiers in the
+in the program that are artificial, or which otherwise have a 
+\doublequote{name} that is not a valid identifier in the
 programming language. For example, several languages may
 capture or freeze the value of a variable at a particular
 point in the program. 
 \addtoindex{Ada} 95 has package elaboration routines,
-type descriptions of the form typename\textquoteright Class, and 
+type descriptions of the form \texttt{typename\textquoteright Class}, and 
 \doublequote{access typename} parameters.  }
 
 Generally, any debugging information
@@ -2946,8 +2989,7 @@ and \DWTAGvariable.
 
 \section{Template Parameters}
 \label{chap:templateparameters}
-\textit{
-In \addtoindex{C++}, a template is a generic definition of a class, function, member
+\textit{In \addtoindex{C++}, a template is a generic definition of a class, function, member
 function, or typedef (alias).  A template has formal parameters that
 can be types or constant values; the class, function,
 member function, or typedef is instantiated differently for each

@@ -3,7 +3,7 @@
 % If draft is in the document class list, pix are just suggested
 % by an outline, the pic does not appear as a picture.
 %
-\newcommand{\docdate}{March 4, 2015}
+\newcommand{\docdate}{April 23, 2015}
 %
 \usepackage{ifthen}
 \newboolean{isdraft}
@@ -148,7 +148,9 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \newcommand{\singlequote}[1]{\textquoteleft #1\textquoteright}
 
 % Better naming for the lowest level section header
-\newcommand{\subsubsubsection}[1]{\paragraph{#1.}}
+\newcommand{\subsubsubsection}[1]{\paragraph{#1.}~\newline}
+%\newcommand{\subsubsubsection}         %% Has to be in a style file--ugh...
+%   {\@startsection{subsubsubsection}{4}{0mm}{-\baselineskip}{\baselineskip}{\normalfont\normalsize\itshap}}
 
 % Issue \clearpage if less than n lines remain on page
 \newcommand{\needlines}[1]{\needspace{#1\baselineskip}}
@@ -258,8 +260,12 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \include{foreword}
 
 \newpage
+~ % Make the page non-empty...
+\newpage
 \tableofcontents
 
+\newpage
+~ % Make non-empty
 \cleardoublepage
 \listoffigures
 
@@ -267,13 +273,13 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \listoftables
 
 \ifthenelse{\boolean{isdraft}}
-	{	\emptypage
+	{	%\emptypage
 		{% Environment to keep the following header change local
 		\clearpage
 		\makeevenhead{plain}{}{Change Summary}{}
 		\makeoddhead{plain}{}{Change Summary}{}
 		\include{changesummary}
-                \emptypage
+                %\emptypage
 		}
 	}{}
 %\cleardoublepage
