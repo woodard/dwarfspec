@@ -1,7 +1,7 @@
 \chapter[Attributes by Tag (Informative)]{Attributes by Tag Value (Informative)}
 \label{chap:attributesbytagvalueinformative}
 
-The list below enumerates the attributes that are
+The table below enumerates the attributes that are
 most applicable to each type of debugging information
 entry. DWARF does not in general require that a given
 debugging information entry contain a particular attribute
@@ -11,23 +11,33 @@ text as being applicable to a given entry. Other attributes
 (both those defined within this document but not explicitly
 associated with the entry in question, and new, vendor-defined
 ones) may also appear in a given debugging information
-entry. Therefore, the list may be taken as instructive, but
+entry. Therefore, the table may be taken as instructive, but
 cannot be considered definitive.  
 
-In the following table,
+In the following table, the following special conventions apply:
+\begin{enumerate}[1. ]
+\item The pseudo-attribute
 \addtoindex{DECL}
 \livetarg{chap:DECL}{}
-means include all three of the
+stands for all three of the
 \addtoindex{declaration coordinates} 
-%\addtoindexx{declaration coordinates|see 
-%    {DW\_AT\_decl\_file, DW\_AT\_decl\_line, DW\_AT\_decl\_column}}
 \DWATdeclcolumn,
 \DWATdeclfile{} and 
 \DWATdeclline.
+\item The attribute \DWATsibling{} can be used on any DIE.
+For simplicity, this attribute is not explicitly shown.
+\item The attribute \DWATabstractorigin{} can be used with
+almost any DIE; the exceptions are mostly the compilation
+unit-like DIEs. For simplicity, this attribute is not 
+explicitly shown. 
+\end{enumerate}
 
+\small
+
+\needlines{10}
 \label{tab:attributesbytag}
 \setlength{\extrarowheight}{0.1cm}
-\begin{longtable}{l|p{8cm}}
+\begin{longtable}{l|l}
   \caption{Attributes by tag value} \\
   \hline \bfseries TAG name&\bfseries Applicable attributes\\ \hline
 \endfirsthead
@@ -39,18 +49,16 @@ means include all three of the
 \endlastfoot
 
 \DWTAGaccessdeclaration{} 
-&\livelink{chap:DECL}{DECL} \\
-&\DWATaccessibility{} \\
-&\DWATdescription{} \\
-&\DWATname{} \\
-&\DWATsibling{} \\
+&\livelink{chap:DECL}{DECL} \\*
+&\DWATaccessibility{} \\*
+&\DWATdescription{} \\*
+&\DWATname{} \\*
 
 \hline
 \DWTAGarraytype
-&\livelink{chap:DECL}{DECL} \\
-&\DWATabstractorigin{} \\
-&\DWATaccessibility{} \\
-&\DWATalignment{} \\
+&\livelink{chap:DECL}{DECL} \\*
+&\DWATaccessibility{} \\*
+&\DWATalignment{} \\*
 &\DWATallocated{} \\
 &\DWATassociated{} \\
 &\DWATbitsize{} \\
@@ -62,24 +70,23 @@ means include all three of the
 &\DWATname{} \\
 &\DWATordering{} \\
 &\DWATrank{} \\
-&\DWATsibling{} \\
 &\DWATspecification{} \\
-&\DWATstartscope{} \\
-&\DWATtype{} \\
-&\DWATvisibility{} \\
+&\DWATstartscope{} \\*
+&\DWATtype{} \\*
+&\DWATvisibility{} \\*
 
 \hline
 \DWTAGatomictype
 &\livelink{chap:DECL}{DECL} \\*
 &\DWATalignment{} \\*
-&\DWATsibling{} \\*
+&\DWATname{} \\*
 &\DWATtype{} \\*
 
 \hline
 \DWTAGbasetype
-&\livelink{chap:DECL}{DECL} \\
-&\DWATalignment{} \\
-&\DWATallocated{} \\
+&\livelink{chap:DECL}{DECL} \\*
+&\DWATalignment{} \\*
+&\DWATallocated{} \\*
 &\DWATassociated{} \\
 &\DWATbinaryscale{} \\
 %&\DWATbitoffset{} \\
@@ -93,9 +100,8 @@ means include all three of the
 &\DWATdigitcount{} \\
 &\DWATencoding{} \\
 &\DWATendianity{} \\
-&\DWATname{} \\
+&\DWATname{} \\*
 &\DWATpicturestring{} \\*
-&\DWATsibling{} \\*
 &\DWATsmall{} \\*
 
 \hline
@@ -117,28 +123,24 @@ means include all three of the
 &\DWATcalldatavalue     \\*
 &\DWATcallparameter     \\*
 &\DWATcallvalue         \\
-&\DWATlocation          \\
+&\DWATlocation          \\*
 &\DWATname              \\*
-&\DWATsibling           \\*
 &\DWATtype              \\*
 
 \hline
 \DWTAGcatchblock
 &\livelink{chap:DECL}{DECL} \\*
-&\DWATabstractorigin{} \\*
 &\DWATentrypc{} \\*
-&\DWAThighpc{} \\
-&\DWATlowpc{} \\
+&\DWAThighpc{} \\*
+&\DWATlowpc{} \\*
 &\DWATranges{} \\*
 &\DWATsegment{} \\*
-&\DWATsibling{} \\*
 
 \hline
 \DWTAGclasstype
 &\livelink{chap:DECL}{DECL} \\*
-&\DWATabstractorigin{} \\*
 &\DWATaccessibility{} \\*
-&\DWATalignment{} \\
+&\DWATalignment{} \\*
 &\DWATallocated{} \\
 &\DWATassociated{} \\
 &\DWATbitsize{} \\
@@ -149,19 +151,17 @@ means include all three of the
 &\DWATdescription{} \\
 &\DWATexportsymbols{} \\
 &\DWATname{} \\
-&\DWATsibling{} \\
 &\DWATsignature{} \\
-&\DWATspecification{} \\
-&\DWATstartscope{} \\
-&\DWATvisibility{} \\
+&\DWATspecification{} \\*
+&\DWATstartscope{} \\*
+&\DWATvisibility{} \\*
 
 \hline
 \DWTAGcoarraytype
 &\livelink{chap:DECL}{DECL} \\*
 &\DWATname{} \\*
-&\DWATdescription{} \\
+&\DWATdescription{} \\*
 &\DWATalignment{} \\*
-&\DWATsibling{} \\*
 &\DWATtype{} \\*
 
 \hline
@@ -171,24 +171,22 @@ means include all three of the
 &\DWATdescription{} \\*
 &\DWATlinkagename{} \\
 &\DWATlocation{} \\
-&\DWATname{} \\
-&\DWATsegment{} \\
-&\DWATsibling{} \\
-&\DWATvisibility{} \\
+&\DWATname{} \\*
+&\DWATsegment{} \\*
+&\DWATvisibility{} \\*
 
 \hline
 \DWTAGcommoninclusion
 &\livelink{chap:DECL}{DECL} \\*
 &\DWATcommonreference{} \\*
 &\DWATdeclaration{} \\*
-&\DWATsibling{} \\
-&\DWATvisibility{} \\
+&\DWATvisibility{} \\*
 
 \hline
 \DWTAGcompileunit
-&\DWATaddrbase{} \\
-&\DWATbasetypes{} \\
-&\DWATcompdir{} \\
+&\DWATaddrbase{} \\*
+&\DWATbasetypes{} \\*
+&\DWATcompdir{} \\*
 &\DWATdwoid{} \\
 &\DWATdwoname{} \\
 &\DWATentrypc{} \\
@@ -205,19 +203,18 @@ means include all three of the
 &\DWATsegment{} \\
 &\DWATstmtlist{} \\*
 &\DWATstroffsetsbase{} \\*
-&\DWATuseUTFeight{} \\
+&\DWATuseUTFeight{} \\*
 
 \hline
 \DWTAGcondition
-&\livelink{chap:DECL}{DECL} \\
-&\DWATname{} \\
-&\DWATsibling{} \\
+&\livelink{chap:DECL}{DECL} \\*
+&\DWATname{} \\*
 
 \hline
 \DWTAGconsttype
 &\livelink{chap:DECL}{DECL} \\*
 &\DWATalignment{} \\*
-&\DWATsibling{} \\*
+&\DWATname{} \\*
 &\DWATtype{} \\*
 
 \hline
@@ -231,10 +228,9 @@ means include all three of the
 &\DWATexternal{} \\
 &\DWATlinkagename{} \\
 &\DWATname{} \\
-&\DWATsibling{} \\
-&\DWATstartscope{} \\
-&\DWATtype{} \\
-&\DWATvisibility{} \\
+&\DWATstartscope{} \\*
+&\DWATtype{} \\*
+&\DWATvisibility{} \\*
 
 \hline
 \DWTAGdwarfprocedure
@@ -243,37 +239,33 @@ means include all three of the
 \hline
 \DWTAGdynamictype
 &\livelink{chap:DECL}{DECL} \\*
-&\DWATabstractorigin \\*
 &\DWATalignment{} \\*
-&\DWATallocated \\
+&\DWATallocated \\*
 &\DWATassociated \\
 &\DWATdatalocation \\
-&\DWATdescription \\
-&\DWATname \\
-&\DWATtype \\
-&\DWATsibling \\
+&\DWATdescription \\*
+&\DWATname \\*
+&\DWATtype \\*
 
 \hline
 \DWTAGentrypoint
-&\livelink{chap:DECL}{DECL} \\
-&\DWATaddressclass{} \\
-&\DWATdescription{} \\
+&\livelink{chap:DECL}{DECL} \\*
+&\DWATaddressclass{} \\*
+&\DWATdescription{} \\*
 &\DWATframebase{} \\
 &\DWATlinkagename{} \\
 &\DWATlowpc{} \\
 &\DWATname{} \\
 &\DWATreturnaddr{} \\
-&\DWATsegment{} \\
-&\DWATsibling{} \\
-&\DWATstaticlink{} \\
-&\DWATtype{} \\
+&\DWATsegment{} \\*
+&\DWATstaticlink{} \\*
+&\DWATtype{} \\*
 
 \hline
 \DWTAGenumerationtype
 &\livelink{chap:DECL}{DECL} \\*
-&\DWATabstractorigin{} \\*
 &\DWATaccessibility{} \\*
-&\DWATalignment{} \\
+&\DWATalignment{} \\*
 &\DWATallocated{} \\
 &\DWATassociated{} \\
 &\DWATbitsize{} \\
@@ -285,12 +277,11 @@ means include all three of the
 &\DWATdescription{} \\
 &\DWATenumclass{} \\
 &\DWATname{} \\
-&\DWATsibling{} \\
 &\DWATsignature{} \\
 &\DWATspecification{} \\
-&\DWATstartscope{} \\
-&\DWATtype{} \\
-&\DWATvisibility{} \\
+&\DWATstartscope{} \\*
+&\DWATtype{} \\*
+&\DWATvisibility{} \\*
 
 \hline
 \DWTAGenumerator
@@ -298,56 +289,48 @@ means include all three of the
 &\DWATconstvalue{} \\*
 &\DWATdescription{} \\*
 &\DWATname{} \\*
-&\DWATsibling{} \\*
 
 \hline
 \DWTAGfiletype
 &\livelink{chap:DECL}{DECL} \\*
-&\DWATabstractorigin{} \\*
 &\DWATalignment{} \\*
-&\DWATallocated{} \\
+&\DWATallocated{} \\*
 &\DWATassociated{} \\
 &\DWATbitsize{} \\
 &\DWATbytesize{} \\
 &\DWATdatalocation{} \\
 &\DWATdescription{} \\
 &\DWATname{} \\
-&\DWATsibling{} \\
-&\DWATstartscope{} \\
-&\DWATtype{} \\
-&\DWATvisibility{} \\
+&\DWATstartscope{} \\*
+&\DWATtype{} \\*
+&\DWATvisibility{} \\*
 
 \hline
 \DWTAGformalparameter
-&\livelink{chap:DECL}{DECL} \\
-&\DWATabstractorigin{} \\
-&\DWATartificial{} \\
-&\DWATconstvalue{} \\
+&\livelink{chap:DECL}{DECL} \\*
+&\DWATartificial{} \\*
+&\DWATconstvalue{} \\*
 &\DWATdefaultvalue{} \\
 &\DWATdescription{} \\
 &\DWATendianity{} \\
 &\DWATisoptional{} \\
 &\DWATlocation{} \\
 &\DWATname{} \\
-&\DWATsegment{} \\
-&\DWATsibling{} \\*
+&\DWATsegment{} \\*
 &\DWATtype{} \\*
 &\DWATvariableparameter{} \\*
 
 \hline
 \DWTAGfriend
-&\livelink{chap:DECL}{DECL} \\
-&\DWATabstractorigin{} \\
-&\DWATfriend{} \\
-&\DWATsibling{} \\
+&\livelink{chap:DECL}{DECL} \\*
+&\DWATfriend{} \\*
 
 \hline
 % Please keep in synch with DW_TAG_subrange_type.
 \DWTAGgenericsubrange
 &\livelink{chap:DECL}{DECL}  \\*
-&\DWATabstractorigin{}  \\*
 &\DWATaccessibility{}  \\*
-&\DWATallocated{}  \\
+&\DWATallocated{}  \\*
 &\DWATassociated{}  \\
 &\DWATbitsize{}  \\
 &\DWATbitstride{}  \\
@@ -359,28 +342,25 @@ means include all three of the
 &\DWATdescription{}  \\
 &\DWATlowerbound{}  \\
 &\DWATname{}  \\
-&\DWATsibling{}  \\
 &\DWATthreadsscaled{}  \\
 &\DWATtype{}  \\*
 &\DWATupperbound{}  \\*
-&\DWATvisibility{}  \\
+&\DWATvisibility{}  \\*
 
 \hline
 \DWTAGimporteddeclaration
-&\livelink{chap:DECL}{DECL} \\
-&\DWATaccessibility{} \\
-&\DWATdescription{} \\
-&\DWATimport{} \\
+&\livelink{chap:DECL}{DECL} \\*
+&\DWATaccessibility{} \\*
+&\DWATdescription{} \\*
+&\DWATimport{} \\*
 &\DWATname{} \\*
-&\DWATsibling{} \\*
 &\DWATstartscope{} \\*
 
 \hline
 \DWTAGimportedmodule
 &\livelink{chap:DECL}{DECL} \\*
 &\DWATimport{} \\*
-&\DWATsibling{} \\*
-&\DWATstartscope{} \\
+&\DWATstartscope{} \\*
 
 \hline
 \DWTAGimportedunit
@@ -388,29 +368,26 @@ means include all three of the
 
 \hline
 \DWTAGinheritance
-&\livelink{chap:DECL}{DECL} \\
-&\DWATaccessibility{} \\
-&\DWATdatamemberlocation{} \\
-&\DWATsibling{} \\*
+&\livelink{chap:DECL}{DECL} \\*
+&\DWATaccessibility{} \\*
+&\DWATdatamemberlocation{} \\*
 &\DWATtype{} \\*
 &\DWATvirtuality{} \\*
 
 \hline
 \DWTAGinlinedsubroutine
-&\DWATabstractorigin{} \\
-&\DWATcallcolumn{} \\
-&\DWATcallfile{} \\
-&\DWATcallline{} \\
+&\DWATcallcolumn{} \\*
+&\DWATcallfile{} \\*
+&\DWATcallline{} \\*
 &\DWATconstexpr{} \\
 &\DWATentrypc{} \\
 &\DWAThighpc{} \\
 &\DWATlowpc{} \\
 &\DWATranges{} \\
 &\DWATreturnaddr{} \\
-&\DWATsegment{} \\
-&\DWATsibling{} \\
-&\DWATstartscope{} \\
-&\DWATtrampoline{} \\
+&\DWATsegment{} \\*
+&\DWATstartscope{} \\*
+&\DWATtrampoline{} \\*
 
 \hline
 \DWTAGinterfacetype
@@ -418,40 +395,35 @@ means include all three of the
 &\DWATaccessibility{} \\*
 &\DWATalignment{} \\*
 &\DWATdescription{} \\
-&\DWATname{} \\
-&\DWATsibling{} \\*
+&\DWATname{} \\*
 &\DWATsignature \\*
 &\DWATstartscope{} \\*
 
 \hline
 \DWTAGlabel
 &\livelink{chap:DECL}{DECL} \\*
-&\DWATabstractorigin{} \\*
 &\DWATdescription{} \\*
-&\DWATlowpc{} \\
-&\DWATname{} \\
-&\DWATsegment{} \\
-&\DWATsibling{} \\
-&\DWATstartscope{} \\
+&\DWATlowpc{} \\*
+&\DWATname{} \\*
+&\DWATsegment{} \\*
+&\DWATstartscope{} \\*
 
 \hline
 \DWTAGlexicalblock
 &\livelink{chap:DECL}{DECL} \\*
-&\DWATabstractorigin{} \\*
 &\DWATdescription{} \\*
-&\DWATentrypc{} \\
+&\DWATentrypc{} \\*
 &\DWAThighpc{} \\
 &\DWATlowpc{} \\
-&\DWATname{} \\
-&\DWATranges{} \\
-&\DWATsegment{} \\
-&\DWATsibling{} \\
+&\DWATname{} \\*
+&\DWATranges{} \\*
+&\DWATsegment{} \\*
 
 \hline
 \DWTAGmember
-&\livelink{chap:DECL}{DECL} \\
-&\DWATaccessibility{} \\
-&\DWATartificial{} \\
+&\livelink{chap:DECL}{DECL} \\*
+&\DWATaccessibility{} \\*
+&\DWATartificial{} \\*
 %&\DWATbitoffset{} \\
 &\DWATbitsize{} \\
 &\DWATbytesize{} \\
@@ -460,16 +432,15 @@ means include all three of the
 &\DWATdeclaration{} \\
 &\DWATdescription{} \\
 &\DWATmutable{} \\
-&\DWATname{} \\
-&\DWATsibling{} \\*
+&\DWATname{} \\*
 &\DWATtype{} \\*
 &\DWATvisibility{} \\*
 
 \hline
 \DWTAGmodule
-&\livelink{chap:DECL}{DECL} \\
-&\DWATaccessibility{} \\
-&\DWATdeclaration{} \\
+&\livelink{chap:DECL}{DECL} \\*
+&\DWATaccessibility{} \\*
+&\DWATdeclaration{} \\*
 &\DWATdescription{} \\
 &\DWATentrypc{} \\
 &\DWAThighpc{} \\
@@ -477,49 +448,44 @@ means include all three of the
 &\DWATname{} \\
 &\DWATpriority{} \\
 &\DWATranges{} \\
-&\DWATsegment{} \\
-&\DWATsibling{} \\*
+&\DWATsegment{} \\*
 &\DWATspecification{} \\*
-&\DWATvisibility{} \\
+&\DWATvisibility{} \\*
 
 \hline
 \DWTAGnamelist
-&\livelink{chap:DECL}{DECL} \\
-&\DWATabstractorigin{} \\
-&\DWATaccessibility{} \\
-&\DWATdeclaration{} \\
-&\DWATname{} \\
-&\DWATsibling{} \\
-&\DWATvisibility{} \\
+&\livelink{chap:DECL}{DECL} \\*
+&\DWATaccessibility{} \\*
+&\DWATdeclaration{} \\*
+&\DWATname{} \\*
+&\DWATvisibility{} \\*
 
 \hline
 \DWTAGnamelistitem
-&\livelink{chap:DECL}{DECL} \\
-&\DWATnamelistitem{} \\
-&\DWATsibling{} \\
+&\livelink{chap:DECL}{DECL} \\*
+&\DWATnamelistitem{} \\*
 
 \hline
 \DWTAGnamespace
 &\livelink{chap:DECL}{DECL} \\*
 &\DWATdescription{} \\*
 &\DWATexportsymbols{} \\*
-&\DWATextension{} \\
+&\DWATextension{} \\*
 &\DWATname{} \\*
-&\DWATsibling{} \\*
 &\DWATstartscope{} \\*
 
 \hline
 \DWTAGpackedtype
 &\livelink{chap:DECL}{DECL} \\*
 &\DWATalignment{} \\*
-&\DWATsibling{} \\*
+&\DWATname{} \\*
 &\DWATtype{} \\*
 
 \hline
 \DWTAGpartialunit
 &\DWATaddrbase{} \\*
 &\DWATbasetypes{}  \\*  
-&\DWATcompdir{}  \\
+&\DWATcompdir{}  \\*
 &\DWATdescription{}  \\
 &\DWATdwoid{} \\
 &\DWATdwoname{} \\
@@ -535,24 +501,25 @@ means include all three of the
 &\DWATranges{}  \\
 &\DWATrangesbase{} \\
 &\DWATsegment{}  \\
-&\DWATstmtlist{}  \\
-&\DWATstroffsetsbase{} \\
-&\DWATuseUTFeight{}  \\
+&\DWATstmtlist{}  \\*
+&\DWATstroffsetsbase{} \\*
+&\DWATuseUTFeight{}  \\*
 
 \hline
 \DWTAGpointertype
 &\livelink{chap:DECL}{DECL}  \\*
 &\DWATaddressclass{}  \\*
 &\DWATalignment{} \\*
-&\DWATsibling{} \\*
+&\DWATbitsize{} \\
+&\DWATbytesize \\*
+&\DWATname{} \\*
 &\DWATtype{} \\*
 
 \hline
 \DWTAGptrtomembertype
 &\livelink{chap:DECL}{DECL}  \\*
-&\DWATabstractorigin{}  \\*
 &\DWATaddressclass{}  \\*
-&\DWATalignment{} \\
+&\DWATalignment{} \\*
 &\DWATallocated{}  \\
 &\DWATassociated{}  \\
 &\DWATcontainingtype{}  \\
@@ -560,41 +527,42 @@ means include all three of the
 &\DWATdeclaration{}  \\
 &\DWATdescription{}  \\
 &\DWATname{}  \\
-&\DWATsibling{}  \\
-&\DWATtype{}  \\
-&\DWATuselocation{}  \\
-&\DWATvisibility{}  \\
+&\DWATtype{}  \\*
+&\DWATuselocation{}  \\*
+&\DWATvisibility{}  \\*
 
 \hline
 \DWTAGreferencetype
 &\livelink{chap:DECL}{DECL} \\*
 &\DWATaddressclass{}  \\*
 &\DWATalignment{} \\*
-&\DWATsibling{} \\*
+&\DWATbitsize{} \\
+&\DWATbytesize \\*
+&\DWATname{} \\*
 &\DWATtype{} \\*
 
 \hline
 \DWTAGrestricttype
 &\livelink{chap:DECL}{DECL} \\*
 &\DWATalignment{} \\*
-&\DWATsibling{} \\*
+&\DWATname{} \\*
 &\DWATtype{} \\*
-
 
 \hline
 \DWTAGrvaluereferencetype
 &\livelink{chap:DECL}{DECL}  \\*
 &\DWATaddressclass{}  \\*
 &\DWATalignment{} \\*
-&\DWATsibling{}  \\*
+&\DWATbitsize{} \\
+&\DWATbytesize \\*
+&\DWATname{} \\*
 &\DWATtype{}  \\*
 
 \hline
 \DWTAGsettype
 &\livelink{chap:DECL}{DECL}  \\*
-&\DWATabstractorigin{}  \\*
 &\DWATaccessibility{}  \\*
-&\DWATalignment{} \\
+&\DWATalignment{} \\*
 &\DWATallocated{}  \\
 &\DWATassociated{}  \\
 &\DWATbitsize{}  \\
@@ -603,25 +571,23 @@ means include all three of the
 &\DWATdeclaration{}  \\
 &\DWATdescription{}  \\
 &\DWATname{}  \\
-&\DWATstartscope{}  \\
-&\DWATsibling{}  \\
-&\DWATtype{}  \\
-&\DWATvisibility{}  \\
+&\DWATstartscope{}  \\*
+&\DWATtype{}  \\*
+&\DWATvisibility{}  \\*
 
 \hline
 \DWTAGsharedtype
 &\livelink{chap:DECL}{DECL}  \\*
 &\DWATcount{}  \\*
 &\DWATalignment{} \\*
-&\DWATsibling{}  \\*
+&\DWATname{} \\*
 &\DWATtype{}  \\*
 
 \hline
 \DWTAGstringtype
 &\livelink{chap:DECL}{DECL}  \\*
-&\DWATabstractorigin{}  \\*
 &\DWATalignment{} \\*
-&\DWATaccessibility{}  \\
+&\DWATaccessibility{}  \\*
 &\DWATallocated{}  \\
 &\DWATassociated{}  \\
 &\DWATbitsize{}  \\
@@ -630,9 +596,8 @@ means include all three of the
 &\DWATdeclaration{}  \\
 &\DWATdescription{}  \\
 &\DWATname{}  \\
-&\DWATsibling{}  \\
 &\DWATstartscope{}  \\
-&\DWATstringlength{}  \\*
+&\DWATstringlength{}  \\
 &\DWATstringlengthbitsize{}  \\*
 &\DWATstringlengthbytesize{}  \\*
 &\DWATvisibility{}  \\*
@@ -640,9 +605,8 @@ means include all three of the
 \hline
 \DWTAGstructuretype
 &\livelink{chap:DECL}{DECL}  \\*
-&\DWATabstractorigin{}  \\*
 &\DWATaccessibility{}  \\*
-&\DWATalignment{} \\
+&\DWATalignment{} \\*
 &\DWATallocated{}  \\
 &\DWATassociated{}  \\
 &\DWATbitsize{}  \\
@@ -653,7 +617,6 @@ means include all three of the
 &\DWATdescription{}  \\
 &\DWATexportsymbols{} \\
 &\DWATname{}  \\
-&\DWATsibling{}  \\
 &\DWATsignature{}  \\
 &\DWATspecification{}  \\*
 &\DWATstartscope{}  \\*
@@ -662,9 +625,8 @@ means include all three of the
 \hline
 \DWTAGsubprogram
 &\livelink{chap:DECL}{DECL}  \\*
-&\DWATabstractorigin{}  \\*
 &\DWATaccessibility{}  \\*
-&\DWATaddressclass{}  \\
+&\DWATaddressclass{}  \\*
 &\DWATalignment{} \\
 &\DWATartificial{}  \\
 &\DWATcallingconvention{}  \\
@@ -693,7 +655,6 @@ means include all three of the
 &\DWATreturnaddr{}  \\
 &\DWATrvaluereference{} \\
 &\DWATsegment{}  \\
-&\DWATsibling{}  \\
 &\DWATspecification{}  \\
 &\DWATstartscope{}  \\
 &\DWATstaticlink{}  \\
@@ -706,9 +667,8 @@ means include all three of the
 \hline
 \DWTAGsubrangetype
 &\livelink{chap:DECL}{DECL}  \\*
-&\DWATabstractorigin{}  \\*
 &\DWATaccessibility{}  \\*
-&\DWATalignment{} \\
+&\DWATalignment{} \\*
 &\DWATallocated{}  \\
 &\DWATassociated{}  \\
 &\DWATbitsize{}  \\
@@ -721,18 +681,16 @@ means include all three of the
 &\DWATdescription{}  \\
 &\DWATlowerbound{}  \\
 &\DWATname{}  \\
-&\DWATsibling{}  \\
 &\DWATthreadsscaled{}  \\
 &\DWATtype{}  \\*
 &\DWATupperbound{}  \\*
-&\DWATvisibility{}  \\
+&\DWATvisibility{}  \\*
 
 \hline
 \DWTAGsubroutinetype
 &\livelink{chap:DECL}{DECL}  \\*
-&\DWATabstractorigin{}  \\*
 &\DWATaccessibility{}  \\*
-&\DWATaddressclass{}  \\
+&\DWATaddressclass{}  \\*
 &\DWATalignment{} \\
 &\DWATallocated{}  \\
 &\DWATassociated{}  \\
@@ -743,23 +701,20 @@ means include all three of the
 &\DWATprototyped{}  \\
 &\DWATreference{} \\
 &\DWATrvaluereference{} \\
-&\DWATsibling{}  \\
-&\DWATstartscope{}  \\
-&\DWATtype{}  \\
-&\DWATvisibility{}  \\
+&\DWATstartscope{}  \\*
+&\DWATtype{}  \\*
+&\DWATvisibility{}  \\*
 
 \hline
 \DWTAGtemplatealias
-&\livelink{chap:DECL}{DECL}   \\
-&\DWATabstractorigin{}   \\
-&\DWATaccessibility{}   \\
-&\DWATallocated{}   \\
+&\livelink{chap:DECL}{DECL}   \\*
+&\DWATaccessibility{}   \\*
+&\DWATallocated{}   \\*
 &\DWATassociated{}   \\
 &\DWATdatalocation{}   \\
 &\DWATdeclaration{}   \\
 &\DWATdescription{}   \\
 &\DWATname{}   \\
-&\DWATsibling{}   \\
 &\DWATsignature{}   \\
 &\DWATstartscope{}   \\*
 &\DWATtype{}   \\*
@@ -767,21 +722,19 @@ means include all three of the
 
 \hline
 \DWTAGtemplatetypeparameter
-&\livelink{chap:DECL}{DECL}   \\
-&\DWATdefaultvalue{}	\\
-&\DWATdescription{}   \\
+&\livelink{chap:DECL}{DECL}   \\*
+&\DWATdefaultvalue{}	\\*
+&\DWATdescription{}   \\*
 &\DWATname{}      \\*
-&\DWATsibling{}   \\*
 &\DWATtype{}      \\*
 
 \hline
 \DWTAGtemplatevalueparameter{} 
-&\livelink{chap:DECL}{DECL}   \\
-&\DWATconstvalue{}   \\
-&\DWATdefaultvalue{}	\\
-&\DWATdescription{}   \\
+&\livelink{chap:DECL}{DECL}   \\*
+&\DWATconstvalue{}   \\*
+&\DWATdefaultvalue{}	\\*
+&\DWATdescription{}   \\*
 &\DWATname{}   \\*
-&\DWATsibling{}   \\*
 &\DWATtype{}   \\*
 
 \hline
@@ -790,37 +743,33 @@ means include all three of the
 &\DWATalignment{} \\*
 &\DWATallocated{}   \\*
 &\DWATassociated{}   \\
-&\DWATdatalocation{}   \\
-&\DWATsibling{}   \\
-&\DWATtype{}   \\
+&\DWATdatalocation{}   \\*
+&\DWATname{} \\*
+&\DWATtype{}   \\*
 
 \hline
 \DWTAGtryblock
-&\livelink{chap:DECL}{DECL}   \\
-&\DWATabstractorigin{}   \\
-&\DWATentrypc{} \\
-&\DWAThighpc{}   \\
-&\DWATlowpc{}   \\
-&\DWATranges{}   \\
-&\DWATsegment{}   \\
-&\DWATsibling{}   \\
+&\livelink{chap:DECL}{DECL}   \\*
+&\DWATentrypc{} \\*
+&\DWAThighpc{}   \\*
+&\DWATlowpc{}   \\*
+&\DWATranges{}   \\*
+&\DWATsegment{}   \\*
 
 \hline
 \DWTAGtypedef
 &\livelink{chap:DECL}{DECL}   \\*
-&\DWATabstractorigin{}   \\*
 &\DWATaccessibility{}   \\*
-&\DWATalignment{} \\
+&\DWATalignment{} \\*
 &\DWATallocated{}   \\
 &\DWATassociated{}   \\
 &\DWATdatalocation{}   \\
 &\DWATdeclaration{}   \\
 &\DWATdescription{}   \\
 &\DWATname{}   \\
-&\DWATsibling{}   \\
-&\DWATstartscope{}   \\
-&\DWATtype{}   \\
-&\DWATvisibility{}   \\
+&\DWATstartscope{}   \\*
+&\DWATtype{}   \\*
+&\DWATvisibility{}   \\*
 
 \hline
 \DWTAGtypeunit
@@ -832,9 +781,8 @@ means include all three of the
 \hline
 \DWTAGuniontype
 &\livelink{chap:DECL}{DECL}   \\*
-&\DWATabstractorigin{}   \\*
 &\DWATaccessibility{}   \\*
-&\DWATalignment{} \\
+&\DWATalignment{} \\*
 &\DWATallocated{}   \\
 &\DWATassociated{}   \\
 &\DWATbitsize{}   \\
@@ -845,7 +793,6 @@ means include all three of the
 &\DWATdescription{}   \\
 &\DWATexportsymbols{} \\
 &\DWATname{}   \\
-&\DWATsibling{}   \\
 &\DWATsignature{}   \\
 &\DWATspecification{}   \\*
 &\DWATstartscope{}   \\*
@@ -853,23 +800,20 @@ means include all three of the
 
 \hline
 \DWTAGunspecifiedparameters
-&\livelink{chap:DECL}{DECL}   \\
-&\DWATabstractorigin{}   \\
-&\DWATartificial{}   \\
-&\DWATsibling{}   \\
+&\livelink{chap:DECL}{DECL}   \\*
+&\DWATartificial{}   \\*
 
 \hline
 \DWTAGunspecifiedtype
-&\livelink{chap:DECL}{DECL}   \\
-&\DWATdescription{}   \\
-&\DWATname{}    \\
+&\livelink{chap:DECL}{DECL}   \\*
+&\DWATdescription{}   \\*
+&\DWATname{}    \\*
 
 \hline
 \DWTAGvariable
 &\livelink{chap:DECL}{DECL}    \\*
-&\DWATabstractorigin{}    \\*
 &\DWATaccessibility{}    \\*
-&\DWATalignment{}     \\
+&\DWATalignment{}     \\*
 &\DWATartificial{}    \\
 &\DWATconstexpr{}    \\
 &\DWATconstvalue{}    \\
@@ -881,36 +825,31 @@ means include all three of the
 &\DWATlocation{}    \\
 &\DWATname{}    \\
 &\DWATsegment{}    \\
-&\DWATsibling{}    \\
 &\DWATspecification{}    \\
-&\DWATstartscope{}    \\
-&\DWATtype{}    \\
-&\DWATvisibility{}    \\
+&\DWATstartscope{}    \\*
+&\DWATtype{}    \\*
+&\DWATvisibility{}    \\*
 
 \hline
 \DWTAGvariant
-&\livelink{chap:DECL}{DECL}    \\
-&\DWATaccessibility{}   \\
-&\DWATabstractorigin{}   \\
-&\DWATdeclaration{}   \\
+&\livelink{chap:DECL}{DECL}    \\*
+&\DWATaccessibility{}   \\*
+&\DWATdeclaration{}   \\*
 &\DWATdiscrlist{}   \\*
 &\DWATdiscrvalue{}   \\*
-&\DWATsibling{}   \\*
 
 \hline
 \DWTAGvariantpart
 &\livelink{chap:DECL}{DECL}   \\*
-&\DWATabstractorigin{}   \\*
 &\DWATaccessibility{}   \\*
-&\DWATdeclaration{}   \\
+&\DWATdeclaration{}   \\*
 &\DWATdiscr{}   \\*
-&\DWATsibling{} \\*
 &\DWATtype{}    \\*
 
 \hline
 \DWTAGvolatiletype{}  
 &\livelink{chap:DECL}{DECL}   \\*
-&\DWATsibling{}    \\*
+&\DWATname{} \\*
 &\DWATtype{}    \\*
 
 \hline
@@ -919,12 +858,13 @@ means include all three of the
 &\DWATaddressclass{}    \\*
 &\DWATdeclaration{}    \\*
 &\DWATentrypc{} \\*
-&\DWAThighpc{}    \\*
-&\DWATlocation{}    \\*
-&\DWATlowpc{}    \\*
+&\DWAThighpc{}    \\
+&\DWATlocation{}    \\
+&\DWATlowpc{}    \\
 &\DWATranges{}    \\*
 &\DWATsegment{}    \\*
-&\DWATsibling{}    \\*
 &\DWATtype{}    \\*
 &\DWATvisibility{}    \\*
 \end{longtable}
+
+\normalsize

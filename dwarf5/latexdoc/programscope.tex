@@ -44,6 +44,7 @@ A \addtoindex{partial compilation unit}\addtoindexx{compilation unit!partial}
 is represented by a debugging information entry with the tag 
 \DWTAGpartialunitTARG.
 
+\needlines{6}
 In a simple normal compilation, a single compilation unit with
 the tag 
 \DWTAGcompileunit{} represents a complete object file
@@ -274,7 +275,8 @@ as the values of \DWATname{} attributes
 in debugging information
 entries for the compilation unit reflect the names as they
 appear in the source program. The debugger should be sensitive
-to the case of identifier names when doing identifier lookups.
+to the case of \addtoindex{identifier names} when doing identifier 
+lookups.
 
 \needlines{4}
 \DWIDupcaseTARG{} means that the 
@@ -346,7 +348,9 @@ subroutine of a program.
 \addtoindex{C} uses the name \doublequote{main} to identify
 the main subprogram of a program. Some other languages provide
 similar or other means to identify the main subprogram of
-a program.}
+a program. The \DWATmainsubprogram{} attribute may also be used to
+identify such subprograms (see 
+Section \refersec{chap:generalsubroutineandentrypointinformation}).}
 
 \item A \DWATentrypc{} attribute whose value is the address of the first
 \hypertarget{chap:DWATentrypcofcompileunit}{}
@@ -488,7 +492,7 @@ An object file may contain any number of separate type
 unit entries, each representing a single complete type
 definition. 
 Each \addtoindex{type unit} must be uniquely identified by
-a 64\dash bit signature, stored as part of the type unit, which
+a 64-bit signature, stored as part of the type unit, which
 can be used to reference the type definition from debugging
 information entries in other compilation units and type units.
 
@@ -528,16 +532,17 @@ normal object file with a regular compilation unit entry, the
 type unit entries can simply refer to the line number table
 used by the compilation unit. In a split DWARF object file, where
 the type units are located in a separate DWARF object file,
-the \DWATstmtlist{} attribute refers to a "skeleton"
+the \DWATstmtlist{} attribute refers to a "specialized"
 line number table in the \dotdebuglinedwo{} section, which
 contains only the list of directories and file names. All
 type unit entries in a split DWARF object may (but are not
-required to) refer to the same skeleton line number table.
+required to) refer to the same \addtoindex{specialized line number table}.
 
 \item A \DWATuseUTFeight{} attribute, which is a flag
 whose presence indicates that all strings referred to by this type
-unit entry, its children, and the skeleton line number table, are
-represented using the UTF-8 representation.
+unit entry, its children, and its associated 
+\addtoindex{specialized line number table}, 
+are represented using the UTF-8 representation.
 
 \end{enumerate}
 
@@ -1791,6 +1796,7 @@ the actual parameters for a particular inlined expansion,
 it could be described as a constant value without the need
 for that separate debugging information entry.
 
+\needlines{4}
 \item A concrete instance tree may contain entries which do
 not correspond to entries in the abstract instance tree
 to describe new entities that are specific to a particular
@@ -1836,12 +1842,10 @@ a concrete inlined instance (that is, as references to
 corresponding entries within the associated abstract instance
 tree).
 
-\needlines{5}
 The differences between the DWARF representation of a
 concrete out\dash of\dash line instance of a given subroutine and the
 representation of a concrete inlined instance of that same
 subroutine are as follows:
-
 \begin{enumerate}[1. ]
 \item  The root entry for a concrete out\dash of\dash line instance
 of a given inlined subroutine has the same tag as does its
@@ -2118,6 +2122,7 @@ line, and declaration column attributes, respectively
 coordinates of the subroutine declaration that was called, rather they describe
 the coordinates of the call.}
 
+\needlines{5}
 The call site entry may own \DWTAGcallsiteparameterTARG{} debugging information
 entries\index{call site parameter entry} representing the parameters passed to the call.
 Each such entry has a \DWATlocation{} attribute which is a location expression.
@@ -2167,7 +2172,7 @@ which contains a reference to a \DWTAGformalparameter{} entry,
 attribute describing the parameter's name.
 
 
-
+\needlines{8}
 \section{Lexical Block Entries}
 \label{chap:lexicalblockentries}
 
@@ -2358,6 +2363,7 @@ whose value is the address of the first executable instruction
 of the try or catch block 
 (see Section \refersec{chap:entryaddress}).
 
+\needlines{4}
 Catch \nolink{block} entries have at least one child entry, 
 an entry representing the type of exception accepted by
 that catch \nolink{block}. 

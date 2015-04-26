@@ -162,17 +162,20 @@ and improving link times.
 a much more compact \dotdebugmacro{} representation.
 \item Replace the \dotdebugpubnames{} and \dotdebugtypes{} sections
 with a single and more functional name index section, \dotdebugnames{}.
-\item Add a new debugging information entry, related attributes and
-DWARF expression operators, to describe call information, 
+\item Add a new debugging information entry (\DWTAGcallsiteNAME) and related 
+attributes and DWARF expression operators to describe call site information, 
 including identification of tail calls and tail recursion.
 This facilitates debugging of optimized code.
+\item Add improved support for \addtoindex{FORTRAN} assumed rank arrays 
+(\DWTAGgenericsubrangeNAME), dynamic rank arrays (\DWATrankNAME)
+and co-arrays (\DWTAGcoarraytypeNAME{}).
+\item Add a new option to allow debuggers and other DWARF consumers to
+support a DWARF expression stack containing typed values.
+\item Add improved support for the \addtoindex{C++} \texttt{auto}
+return type, deleted member functions (\DWATdeletedNAME), as well as defaulted 
+constructors and destructors (\DWATdefaultedNAME).
 \item Add a new attribute, \DWATnoreturnNAME{}, to identify 
 a subprogram that does not return to its caller.
-\item Add a new attribute, \DWATrankNAME{}, to describe the 
-dimensionality of an array with dynamic rank.
-\item Add a new tag, \DWTAGgenericsubrangeNAME{}, to describe the
-bounds of Fortran assumed-rank arrays.
-\item Add a new tag, \DWTAGcoarraytypeNAME{}, to describe Fortran co-arrays.
 \item Add language codes for C 2011, C++ 2003, C++ 2011, C++ 2014,
 Dylan, Fortran 2003, Fortran 2008, Go, Haskell, 
 Julia, Modula 3, Ocaml, Rust, OpenCL and Swift.
@@ -189,6 +192,7 @@ DWARF Version 5 is compatible with DWARF Version 4 except as follows:
 (Because a pre-DWARF Version 5 consumer will not be able to interpret 
 these even to ignore and skip over them, such new forms must be 
 considered incompatible.)
+\needlines{4}
 \item A location list entry (see Section \refersec{chap:locationlists}) 
 with the address range \mbox{(0, \textit{maximum-address})} is defined 
 as the new default location list entry.
@@ -335,6 +339,7 @@ processing the DWARF information. The definers believe that the
 reduction in I/O and in memory paging should more than make
 up for any increase in processing time.  
 
+\needlines{5}
 The representation
 of information changed from Version 1 to Version 2, so that
 Version 2 DWARF information is not binary compatible with

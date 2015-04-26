@@ -233,6 +233,7 @@ The standard attributes are:
 \item Type hash, an 8-byte hash of the type declaration.
 \end{itemize}
 
+\needlines{6}
 It is possible that an indexed DIE has a parent that is not
 indexed (for example, if its parent does not have a name attribute). In
 such a case, a parent attribute may point to a nameless index
@@ -318,38 +319,39 @@ The section header contains the following fields:
 The length of this contribution to the name index section,
 not including the length field itself.
 
-\item \texttt{version} (\addtoindex{uhalf}) \\
+\item \texttt{version} (\HFTuhalf) \\
 A version number\addtoindexx{version number!name index table} 
 (see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
 This number is specific to the name index table and is
 independent of the DWARF version number.
 
-\item \textit{padding} (\addtoindex{uhalf}) \\
+\item \textit{padding} (\HFTuhalf) \\
+Reserved to DWARF.
 
-\item \texttt{comp\_unit\_count} (4-byte unsigned integer) \\
+\item \texttt{comp\_unit\_count} (\HFTuword) \\
 The number of CUs in the CU list.
 
-\item \texttt{local\_type\_unit\_count} (4-byte unsigned integer) \\
+\item \texttt{local\_type\_unit\_count} (\HFTuword) \\
 The number of TUs in the first TU list.
 
-\item \texttt{foreign\_type\_unit\_count} (4-byte unsigned integer) \\
+\item \texttt{foreign\_type\_unit\_count} (\HFTuword) \\
 The number of TUs in the second TU list.
 
-\item \texttt{bucket\_count} (4-byte unsigned integer) \\
+\item \texttt{bucket\_count} (\HFTuword) \\
 The number of hash buckets in the hash lookup table. 
 If there is no hash lookup table, this field contains 0.
 
-\item \texttt{name\_count} (4-byte unsigned integer) \\
+\item \texttt{name\_count} (\HFTuword) \\
 The number of unique names in the index.
 
-\item \texttt{abbrev\_table\_size} (4-byte unsigned integer) \\
+\item \texttt{abbrev\_table\_size} (\HFTuword) \\
 The size in bytes of the abbreviations table.
 
-\item \texttt{augmentation\_string\_size} (4-byte unsigned integer) \\
+\item \texttt{augmentation\_string\_size} (\HFTuword) \\
 The size in bytes of the augmentation string. This value should be
 rounded up to a multiple of 4.
 
-\item \texttt{augmentation\_string} (sequence of characters) \\
+\item \texttt{augmentation\_string} (\HFTaugstring) \\
 A vendor-specific augmentation string, which provides additional 
 information about the contents of this index. If provided, the string
 should begin with a 4-character vendor ID. The remainder of the
@@ -361,7 +363,6 @@ four bytes in length.
 \end{enumerate}
 
 \subsubsubsection{List of CUs}
-
 The list of CUs immediately follows the header. Each entry in the list
 is a section offset. In the DWARF-32 format, a section offset is 4
 bytes, while in the DWARF-64 format, a section offset is 8 bytes.
@@ -370,7 +371,6 @@ The total number of entries in the list is given by \texttt{comp\_unit\_count}.
 There must be at least one CU.
 
 \subsubsubsection{List of Local TUs}
-
 The list of local TUs immediately follows the list of CUs. Each entry
 in the list is a section offset. In the DWARF-32 format, a section
 offset is 4 bytes, while in the DWARF-64 format, a section offset is 8
@@ -380,7 +380,6 @@ The total number of entries in the list is given by
 \texttt{local\_type\_unit\_count}. This list may be empty.
 
 \subsubsubsection{List of Foreign TUs}
-
 The list of foreign TUs immediately follows the list of local TUs.
 Each entry in the list is an 8-byte type signature (as described by
 \DWFORMrefsigeight).
@@ -388,8 +387,8 @@ Each entry in the list is an 8-byte type signature (as described by
 The number of entries in the list is given by \texttt{foreign\_type\_unit\_count}.
 This list may be empty.
 
+\needlines{4}
 \subsubsubsection{Hash Lookup Table}
-
 The optional hash lookup table immediately follows the list of type signatures.
 
 The hash lookup table is actually two separate arrays: an array of
@@ -426,7 +425,6 @@ that entry in the hashes array is used to find the corresponding entry
 in the name table.
 
 \subsubsubsection{Name Table}
-
 The name table immediately follows the hash lookup table. The name
 table is laid out in column-major order (that is, the first column,
 followed by the second column). Each entry in the first column
@@ -447,7 +445,6 @@ If there is no hash lookup table, there is no ordering or grouping
 requirement for the name table.
 
 \subsubsubsection{Abbreviations Table}
-
 The abbreviations table immediately follows the name table. Like the
 abbreviations table for debugging information entries, this table
 consists of a series of abbreviation declarations. Its size is given
@@ -501,7 +498,6 @@ byte for the abbreviation code. The size of the table given by
 terminating 0 byte.
 
 \subsubsubsection{Entry Pool}
-
 The entry pool immediately follows the abbreviations table. The second
 column of each row of the name table points to an offset in the entry
 pool, where a series of index entries for that name is located.
@@ -537,7 +533,7 @@ Each set begins with a header containing five values:
 The length of this contribution to the address lookup section,
 not including the length field itself.
 
-\item \texttt{version} (\addtoindex{uhalf}) \\
+\item \texttt{version} (\HFTuhalf) \\
 A version number\addtoindexx{version number!address lookup table} 
 (see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
 This number is specific to the address lookup table and is
@@ -549,7 +545,7 @@ The offset from the
 beginning of the \dotdebuginfo{} section of the
 compilation unit header referenced by the set.
 
-\item \texttt{address\_size} (\addtoindex{ubyte}) \\
+\item \texttt{address\_size} (\HFTubyte) \\
 The \addtoindex{size of an address}
 in bytes on
 \addttindexx{address\_size}
@@ -558,7 +554,7 @@ the target architecture. For
 segmented addressing, this is
 the size of the offset portion of the address.
 
-\item \texttt{segment\_size} (\addtoindex{ubyte}) \\
+\item \texttt{segment\_size} (\HFTubyte) \\
 The size of a segment selector in
 \addttindexx{segment\_size}
 bytes on the target architecture. If the target system uses
@@ -616,7 +612,7 @@ set (for example, the ARM
 and 
 MIPS architectures support
 \addtoindexx{MIPS instruction set architecture}
-a 32\dash bit as well as a 16\dash bit instruction set). Because the
+a 32-bit as well as a 16-bit instruction set). Because the
 instruction set is a function of the program counter, it is
 convenient to encode the applicable instruction set in the
 \dotdebugline{} section as well.}
@@ -810,13 +806,13 @@ The state machine instructions in a line number program belong to one of three c
 
 \begin{enumerate}[1. ]
 \item special opcodes \\
-These have a \addtoindex{ubyte} opcode field and no operands.\vspace{1ex}
+These have a \HFTubyte opcode field and no operands.\vspace{1ex}
 
 \textit{Most of the instructions in a 
 line number program are special opcodes.}
 
 \item standard opcodes \\
-These have a \addtoindex{ubyte} opcode field which may be followed by zero or more
+These have a \HFTubyte opcode field which may be followed by zero or more
 \addtoindex{LEB128} operands (except for 
 \mbox{\DWLNSfixedadvancepc,} see below).
 The opcode implies the number of operands and their meanings, but the
@@ -828,7 +824,7 @@ each standard opcode.
 These have a multiple byte format. The first byte is zero; the next bytes
 are an unsigned LEB128\addtoindexx{LEB128!unsigned} integer giving the number of bytes in the
 instruction itself (does not include the first zero byte or the size). The
-remaining bytes are the instruction itself (which begins with a \addtoindex{ubyte}
+remaining bytes are the instruction itself (which begins with a \HFTubyte
 extended opcode). \\
 \end{enumerate}
 
@@ -852,14 +848,14 @@ The size in bytes of the line number information for this
 compilation unit, not including the length field itself
 (see Section \refersec{datarep:initiallengthvalues}). 
 
-\item \texttt{version} (\addtoindex{uhalf}) \\
+\item \texttt{version} (\HFTuhalf) \\
 A version number\addtoindexx{version number!line number information} 
 (see Section \refersec{datarep:linenumberinformation}). 
 This number is specific to
 the line number information and is independent of the DWARF
 version number. 
 
-\item \texttt{address\_size} (ubyte)\\
+\item \texttt{address\_size} (\HFTubyte)\\
 A 1-byte unsigned integer containing the size in bytes of an
 address (or offset portion of an address for segmented addressing)
 on the target system.
@@ -869,7 +865,7 @@ It is needed to legitimize the common practice of stripping all but
 the line number sections (\dotdebugline{} and \dotdebuglinestr{}) 
 from an executable.}
 
-\item \texttt{segment\_size} (ubyte) \\
+\item \texttt{segment\_size} (\HFTubyte) \\
 \addttindexx{segment\_size}
 A 1-byte unsigned integer containing the size in bytes of a segment
 selector on the target system.
@@ -883,12 +879,12 @@ system.}
 \item \texttt{header\_length}  \\
 The number of bytes following the \addttindex{header\_length} field to the
 beginning of the first byte of the line number program itself.
-In the \thirtytwobitdwarfformat, this is a 4\dash byte unsigned
+In the \thirtytwobitdwarfformat, this is a 4-byte unsigned
 length; in the \sixtyfourbitdwarfformat, this field is an
-8\dash byte unsigned length 
+8-byte unsigned length 
 (see Section \refersec{datarep:32bitand64bitdwarfformats}). 
 
-\item \texttt{minimum\_instruction\_length} (\addtoindex{ubyte})  \\
+\item \texttt{minimum\_instruction\_length} (\HFTubyte)  \\
 \addttindexx{minimum\_instruction\_length}
 The size in bytes of the smallest target machine
 instruction. Line number program opcodes that alter
@@ -898,7 +894,7 @@ registers use this and
 (see following) in their calculations. 
 
 \needlines{9}
-\item \texttt{maximum\_operations\_per\_instruction} (\addtoindex{ubyte}) \\
+\item \texttt{maximum\_operations\_per\_instruction} (\HFTubyte) \\
 The 
 \addttindexx{maximum\_operations\_per\_instruction}
 maximum number of individual operations that may be
@@ -913,7 +909,7 @@ architectures, this field is 1, the \addttindex{op\_index} register is always
 0, and the operation pointer is simply the \texttt{address} register.
 
 \needlines{4}
-\item \texttt{default\_is\_stmt} (\addtoindex{ubyte}) \\
+\item \texttt{default\_is\_stmt} (\HFTubyte) \\
 \addttindexx{default\_is\_stmt}
 The initial value of the \addttindex{is\_stmt} register.  
 
@@ -940,16 +936,16 @@ constitute such a recommendation and
 be either \doublequote{true} or \doublequote{false.} This approach might be
 used as part of support for debugging optimized code.}
 
-\item \texttt{line\_base} (\addtoindex{sbyte}) \\
+\item \texttt{line\_base} (\HFTsbyte) \\
 \addttindexx{line\_base}
 This parameter affects the meaning of the special opcodes. See below.
 
-\item \texttt{line\_range} (\addtoindex{ubyte}) \\
+\item \texttt{line\_range} (\HFTubyte) \\
 \addttindexx{line\_range}
 This parameter affects the meaning of the special opcodes. See below.
 
 \needlines{4}
-\item \texttt{opcode\_base} (\addtoindex{ubyte}) \\
+\item \texttt{opcode\_base} (\HFTubyte) \\
 The 
 \addttindexx{opcode\_base}
 number assigned to the first special opcode.
@@ -974,7 +970,7 @@ that of the highest standard opcode and the first special
 opcode (not inclusive) are used for vendor specific extensions.}
 
 \needlines{4}
-\item \texttt{standard\_opcode\_lengths} (array of \addtoindex{ubyte}) \\
+\item \texttt{standard\_opcode\_lengths} (array of \HFTubyte) \\
 \addttindexx{standard\_opcode\_lengths}
 This array specifies the number of \addtoindex{LEB128} operands for each
 of the standard opcodes. The first element of the array
@@ -1020,7 +1016,7 @@ goals:}
 \begin{enumerate}[1. ]
 %%% Resume enumeration count where it left off above
 \setcounter{enumi}{\value{saveenumi}}
-\item \texttt{directory\_entry\_format\_count} (ubyte) \\
+\item \texttt{directory\_entry\_format\_count} (\HFTubyte) \\
 \addttindexx{directory\_entry\_format\_count}
     A count of the number of entries that occur in the
     following \addttindex{directory\_entry\_format} field.
@@ -1075,7 +1071,7 @@ common practice of stripping all but the line number sections
 both the compilation unit DIE and the line number header can
 share a single copy of the current directory name string.}
 
-\item \texttt{file\_name\_entry\_format\_count} (ubyte) \\
+\item \texttt{file\_name\_entry\_format\_count} (\HFTubyte) \\
 \addttindexx{file\_name\_entry\_format\_count}
 A count of the number of file entry format entries that
 occur in the following \addttindex{file\_name\_entry\_format} field. 
@@ -1264,7 +1260,7 @@ scheduling or other optimization.)
 
 \subsubsection{Special Opcodes} 
 \label{chap:specialopcodes}
-Each \addtoindex{ubyte} special opcode has the following effect on the state machine:
+Each \HFTubyte special opcode has the following effect on the state machine:
 
 \begin{enumerate}[1. ]
 
@@ -1515,7 +1511,7 @@ or more bytes.}
 
 \item \textbf{\DWLNSfixedadvancepcTARG} \\ 
 The \DWLNSfixedadvancepcTARG{} opcode
-takes a single \addtoindex{uhalf} (unencoded) operand and adds it to the
+takes a single \HFTuhalf (unencoded) operand and adds it to the
 \texttt{address} register of the state machine and sets the \addttindex{op\_index}
 register to 0. This is the only standard opcode whose operand
 is \textbf{not} a variable length number. It also does 
@@ -1684,12 +1680,12 @@ given compilation unit ends with an entry containing an opcode of 0.
 The macro information header contains the following fields:
 
 \begin{enumerate}[1. ]
-\item \texttt{version} (uhalf) \\
+\item \texttt{version} (\HFTuhalf) \\
 A version number (see Section \refersec{datarep:macroinformation}).
 This number is specific to the macro information and is independent
 of the DWARF version number.
 
-\item \texttt{flags} (ubyte) \\
+\item \texttt{flags} (\HFTubyte) \\
 The bits of the \texttt{flags} field are interpreted as a set
 of flags, some of which may indicate that additional fields follow.
 The following flags, beginning with the least significant bit, are defined:
@@ -1765,6 +1761,7 @@ Name&Meaning\\ \hline
 \end{tabular}
 \end{table}
 
+\needlines{6}
 \subsubsection{Define and Undefine Entries}
 \label{chap:defineandundefineentries}
 The define and undefine macro entries have multiple forms that
@@ -1773,6 +1770,7 @@ use different representations of their two operands.
 While described in pairs below, the forms of define 
 and undefine entries may be freely intermixed.
 
+\needlines{6}
 \subsubsubsection{Define and Undefine Using Direct Strings}
 \label{chap:defineandundefinedirectentries}
 A \DWMACROdefineTARG{} or
@@ -2179,14 +2177,14 @@ integral multiple of the address size.
 \item  \texttt{CIE\_id} (4 or 8 bytes, see Section \refersec{datarep:32bitand64bitdwarfformats}) \\
 A constant that is used to distinguish CIEs from FDEs.
 
-\item  \texttt{version} (\addtoindex{ubyte}) \\
+\item  \texttt{version} (\HFTubyte) \\
 A version number\addtoindexx{version number!call frame information} 
 (see Section \refersec{datarep:callframeinformation}). 
 This number is specific to the call frame information
 and is independent of the DWARF version number.
 
 \needlines{8}
-\item  \texttt{augmentation} (\addtoindex{UTF\dash 8} string) \\
+\item  \texttt{augmentation} (\HFTaugstring) \\
 A null\dash terminated UTF\dash 8 string that identifies the augmentation
 to this CIE or to the FDEs that use it. If a reader encounters
 an augmentation string that is unexpected, then only the
@@ -2214,14 +2212,14 @@ any \dotdebuginfo{} section, the augmentation string always uses
 UTF\dash 8 encoding.}
 
 \needlines{4}
-\item  \texttt{address\_size} (\addtoindex{ubyte}) \\
+\item  \texttt{address\_size} (\HFTubyte) \\
 The size of a target address
 \addttindexx{address\_size}
 in this CIE and any FDEs that
 use it, in bytes. If a compilation unit exists for this frame,
 its address size must match the address size here.
 
-\item  \texttt{segment\_size} (\addtoindex{ubyte}) \\
+\item  \texttt{segment\_size} (\HFTubyte) \\
 The \addttindexx{segment\_size}
 size of a segment selector in this CIE and any FDEs that
 use it, in bytes.
@@ -2252,7 +2250,7 @@ that this column might not correspond to an actual machine
 register.
 
 \needlines{8}
-\item \texttt{initial\_instructions} (array of \addtoindex{ubyte}) \\
+\item \texttt{initial\_instructions} (array of \HFTubyte) \\
 A sequence of rules that are interpreted to create the initial
 setting of each column in the table.  
 
@@ -2262,7 +2260,7 @@ is the undefined rule. However, an ABI authoring body or a
 compilation system authoring body may specify an alternate
 default value for any or all columns.
 
-\item \texttt{padding} (array of \addtoindex{ubyte}) \\
+\item \texttt{padding} (array of \HFTubyte) \\
 Enough \DWCFAnop{} instructions to make the size of this entry
 match the length value above.
 \end{enumerate}
@@ -2304,10 +2302,10 @@ number
 \addtoindexx{target address}
 of bytes of program instructions described by this entry.
 
-\item \texttt{instructions} (array of \addtoindex{ubyte}) \\
+\item \texttt{instructions} (array of \HFTubyte) \\
 A sequence of table defining instructions that are described below.
 
-\item \texttt{padding} (array of \addtoindex{ubyte}) \\
+\item \texttt{padding} (array of \HFTubyte) \\
 Enough \DWCFAnop{} instructions 
 to make the size of this entry match the length value above.
 \end{enumerate}
@@ -2381,7 +2379,7 @@ All other values in the new row are initially identical to the
 current row
 
 \item \textbf{\DWCFAadvanceloconeTARG{}} \\
-The \DWCFAadvanceloconeTARG{} instruction takes a single \addtoindex{ubyte}
+The \DWCFAadvanceloconeTARG{} instruction takes a single \HFTubyte
 operand that represents a constant delta. This instruction
 is identical to \DWCFAadvanceloc{} except for the encoding
 and size of the delta operand.
@@ -2389,14 +2387,14 @@ and size of the delta operand.
 \needlines{6}
 \item \textbf{\DWCFAadvanceloctwoTARG} \\
 The \DWCFAadvanceloctwoTARG{} instruction takes a single
-\addtoindex{uhalf}
+\HFTuhalf
 operand that represents a constant delta. This instruction
 is identical to \DWCFAadvanceloc{} except for the encoding
 and size of the delta operand.
 
 \item \textbf{\DWCFAadvancelocfourTARG} \\
 The \DWCFAadvancelocfourTARG{} instruction takes a single
-\addtoindex{uword}
+\HFTuword
 operand that represents a constant delta. This instruction
 is identical to \DWCFAadvanceloc{} except for the encoding
 and size of the delta operand.

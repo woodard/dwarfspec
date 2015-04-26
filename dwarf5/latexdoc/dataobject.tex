@@ -28,9 +28,8 @@ formal parameter or constant may have the following attributes:
 \begin{enumerate}[1. ]
 \item A \DWATname{} attribute,
 \addtoindexx{name attribute}
-whose value of class \CLASSstring{} describes a null-terminated
-string for the data object name as it appears in the
-source program.
+whose value is a null-terminated string containing the data object 
+name as it appears in the source program.
 
 If a variable entry describes an 
 \addtoindex{anonymous union},
@@ -77,6 +76,10 @@ specified modifies the location specified by the defining declaration and only a
 scope of the variable entry; if no location is specified, then the location specified in the
 defining declaration applies.
 
+\textit{This can occur, for example, for a \addtoindex{C} or \addtoindex{C++}
+external variable (one that is defined and allocated in another compilation unit) 
+and whose location varies in the current unit due to optimization.}
+
 The location of a variable may be further specified with 
 \addtoindexx{segment attribute!and data segment}
 a 
@@ -113,6 +116,7 @@ type of the data member whose definition they
 \hypertarget{chap:DWATvariableparameternonconstantparameterflag}{}
 represent.
 
+\needlines{4}
 \item A \DWATvariableparameter{}
 attribute\addtoindexx{variable parameter attribute}, 
 which is a \livelink{chap:classflag}{flag},
@@ -274,7 +278,7 @@ the target architecture's ABI or processor definition. The
 exact definition of these formats may differ in subtle ways
 for different architectures.
 
-
+\needlines{6}
 \item A \DWATconstexpr{} attribute, 
 which 
 \hypertarget{chap:DWATconstexprcompiletimeconstantobject}{}
@@ -307,10 +311,9 @@ tag \DWTAGcommonblockTARG.
 The common \nolink{block} 
 entry has a \DWATname{} attribute 
 \addtoindexx{name attribute}
-whose value of class \CLASSstring{} describes a null-terminated
-string for the
-\livetargi{chap:commonblockreferenceattribute}{common}{common block reference attribute} 
-\nolink{block}
+whose value is a null-terminated
+string containing the
+\livetargi{chap:commonblockreferenceattribute}{common \nolink{block}}{common block reference attribute} 
 name as it appears in the source program. It may also have a
 \DWATlinkagename{} attribute as described in 
 Section \refersec{chap:linkagenames}. 
@@ -327,6 +330,7 @@ the variables contained within the common \nolink{block}.
 \textit{\addtoindex{Fortran} allows each declarer of a common block 
 to independently define its contents; thus, common blocks are not types.}
 
+\needlines{8}
 \section{Namelist Entries}
 \label{chap:namelistentries}
 \textit{At least one language, Fortran 90, has the concept of a
@@ -341,8 +345,8 @@ tag \DWTAGnamelistTARG.
 If the namelist itself has a
 name, the namelist entry has a \DWATname{} attribute,
 \addtoindexx{name attribute}
-whose value of class \CLASSstring{} describes a null-terminated
-string for the namelist\textquoteright s
+whose value is a null-terminated
+string containing the namelist\textquoteright{}s
 name as it appears in the source program.
 
 Each 
