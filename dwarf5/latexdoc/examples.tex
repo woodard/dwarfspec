@@ -5,9 +5,12 @@ The following sections provide examples that illustrate
 various aspects of the DWARF debugging information format.
 
 
-\section{Compilation Units and Abbreviations Table Example}
-\label{app:compilationunitsandabbreviationstableexample}
+\section{General Description Examples}
+\label{app:generaldescriptionexamples}
 
+
+\subsection{Compilation Units and Abbreviations Table Example}
+\label{app:compilationunitsandabbreviationstableexample}
 
 Figure \refersec{fig:compilationunitsandabbreviationstable}
 depicts the relationship of the abbreviations tables contained
@@ -208,6 +211,137 @@ Abbreviation Table: \dotdebugabbrev{}
 % Ensures we get the above float out before we go on.
 \clearpage
 
+\subsection{DWARF Stack Operation Examples}
+\label{app:dwarfstackoperationexamples}
+\textit {The 
+\addtoindexx{DWARF expression!examples}
+stack operations defined in 
+Section \refersec{chap:stackoperations}.
+are fairly conventional, but the following
+examples illustrate their behavior graphically.}
+
+\begin{longtable}[c]{rrcrr} 
+\multicolumn{2}{c}{Before} & Operation & \multicolumn{2}{c}{After} \\
+\hline
+\endhead
+\endfoot
+0& 17& \DWOPdup{} &0 &17 \\*
+1&   29& &  1 & 17 \\*
+2& 1000 & & 2 & 29\\*
+& & &         3&1000\\
+
+& & & & \\
+0 & 17 & \DWOPdrop{} & 0 & 29 \\*
+1 &29  &            & 1 & 1000 \\*
+2 &1000& & &          \\
+
+& & & & \\
+0 & 17 & \DWOPpick, 2 & 0 & 1000 \\*
+1 & 29 & & 1&17 \\*
+2 &1000& &2&29 \\*
+  &    & &3&1000 \\
+
+& & & & \\
+0&17& \DWOPover&0&29 \\*
+1&29& &  1&17 \\*
+2&1000 & & 2&29\\*
+ &     & & 3&1000 \\
+
+& & & & \\
+0&17& \DWOPswap{} &0&29 \\*
+1&29& &  1&17 \\*
+2&1000 & & 2&1000 \\
+
+& & & & \\
+0&17&\DWOProt{} & 0 &29 \\*
+1&29 & & 1 & 1000 \\*
+2& 1000 & &  2 & 17 \\
+\end{longtable}
+
+\subsection{DWARF Location Description Examples}
+\label{app:dwarflocationdescriptionexamples}
+
+Following are examples of DWARF operations used to form location descriptions:
+
+\newcommand{\descriptionitemnl}[1]
+        {\vspace{0.5\baselineskip}\item[#1]\mbox{}\\\vspace{0.5\baselineskip}}
+\begin{description}
+\descriptionitemnl{\DWOPregthree}
+The value is in register 3.
+
+\descriptionitemnl{\DWOPregx{} 54}
+The value is in register 54.
+
+\descriptionitemnl{\DWOPaddr{} 0x80d0045c}
+The value of a static variable is at machine address 0x80d0045c.
+
+\descriptionitemnl{\DWOPbregeleven{} 44}
+Add 44 to the value in register 11 to get the address of an automatic
+variable instance.
+
+\needlines{4}
+\descriptionitemnl{\DWOPfbreg{} -50}
+Given a \DWATframebase{} value of
+\doublequote{\DWOPbregthirtyone{} 64,} this example
+computes the address of a local variable that is -50 bytes from a
+logical frame pointer that is computed by adding 64 to the current
+stack pointer (register 31).
+
+\descriptionitemnl{\DWOPbregx{} 54 32 \DWOPderef}
+A call-by-reference parameter whose address is in the word 32 bytes
+from where register 54 points.
+
+\descriptionitemnl{\DWOPplusuconst{} 4}
+A structure member is four bytes from the start of the structure
+instance. The base address is assumed to be already on the stack.
+
+\descriptionitemnl{\DWOPregthree{} \DWOPpiece{} 4 \DWOPregten{} \DWOPpiece{} 2}
+A variable whose first four bytes reside in register 3 and whose next
+two bytes reside in register 10.
+
+\needlines{4}
+\descriptionitemnl{\DWOPregzero{} \DWOPpiece{} 4 \DWOPpiece{} 4 \DWOPfbreg{} -12 \DWOPpiece{} 4}
+\vspace{-2\parsep}A twelve byte value whose first four bytes reside in register zero,
+whose middle four bytes are unavailable (perhaps due to optimization),
+and whose last four bytes are in memory, 12 bytes before the frame
+base.
+
+\descriptionitemnl{\DWOPbregone{} 0 \DWOPbregtwo{} 0 \DWOPplus{} \DWOPstackvalue{} }
+Add the contents of r1 and r2 to compute a value. This value is the
+\doublequote{contents} of an otherwise anonymous location.
+
+\needlines{4}
+\descriptionitemnl{\DWOPlitone{} \DWOPstackvalue{} \DWOPpiece{} 4 \DWOPbregthree{} 0 \DWOPbregfour{} 0}
+\vspace{-3\parsep}\descriptionitemnl{
+\hspace{0.5cm}\DWOPplus{} \DWOPstackvalue{} \DWOPpiece{} 4 }
+The object value is found in an anonymous (virtual) location whose
+value consists of two parts, given in memory address order: the 4 byte
+value 1 followed by the four byte value computed from the sum of the
+contents of r3 and r4.
+
+\descriptionitemnl{\DWOPentryvalue{} 1 \DWOPregone{} \DWOPstackvalue }
+The value register 1 had upon entering the current subprogram.
+
+\descriptionitemnl{\DWOPentryvalue{} 2 \DWOPbregone{} 0 \DWOPstackvalue }
+The value register 1 had upon entering the current subprogram (same as the previous example).
+%Both of these location descriptions evaluate to the value register 1 had upon
+%entering the current subprogram.
+
+%FIXME: The following gets an undefined control sequence error for reasons unknown... 
+%\descriptionitemnl{\DWOPentryvalue{} 1 \DWOPregthirtyone{} \DWOPregone{} \DWOPadd{} \DWOPstackvalue }
+%The value register 31 had upon entering the current subprogram
+%plus the value register 1 currently has.
+
+\descriptionitemnl{\DWOPentryvalue{} 3 \DWOPbregfour{} 16 \DWOPderef{} \DWOPstackvalue }
+%FIXME: similar undefined as just above
+%\descriptionitemnl{\DWOPentryvalue{} 6 \DWOPentryvalue{} 1 \DWOPregfour{} \DWOPplusuconst{} 16 \DWOPderef{} \DWOPstackvalue }
+%These two location expressions do the same thing, p
+Add 16 to the value register 4 had upon entering the current subprogram
+to form an address and then push the value of the memory location at that address.
+
+\end{description}
+
+\clearpage
 \section{Aggregate Examples}
 \label{app:aggregateexamples}
 
@@ -1206,6 +1340,115 @@ Section \refersec{chap:datamemberentries}.
 Figure~\ref{fig:packedrecordexampledwarfdescription}: Packed record example: DWARF description \textit{(concluded)}
 \end{center}
 \end{figure}
+
+\clearpage
+\subsection{C/C++ Bit-Field Examples}
+\label{app:ccppbitfieldexamples}
+\textit{Bit fields\addtoindexx{bit fields} in \addtoindex{C} 
+and \addtoindex{C++} typically require the use of the
+\DWATdatabitoffset{}\addtoindexx{data bit offset}
+and \DWATbitsize{}\addtoindexx{data bit size} attributes.}
+
+\needlines{6}
+\textit{This Standard uses the following bit numbering and direction
+conventions in examples. These conventions are for illustrative
+purposes and other conventions may apply on particular
+architectures.}
+\begin{itemize}
+\item \textit{For big\dash endian architectures, bit offsets are
+counted from high-order to low\dash order bits within a byte (or
+larger storage unit); in this case, the bit offset identifies
+the high\dash order bit of the object.}
+
+\item \textit{For little-endian architectures, bit offsets are
+counted from low\dash order to high\dash order bits within a byte (or
+larger storage unit); in this case, the bit offset identifies
+the low\dash order bit of the object.}
+\end{itemize}
+
+\textit{In either case, the bit so identified is defined as the 
+\addtoindexx{beginning of an object}
+beginning of the object.}
+
+\needlines{5}
+This section illustrates one possible representation of the 
+following \addtoindex{C} structure definition in both big- 
+and little-endian byte orders:
+
+\begin{lstlisting}
+struct S {
+    int j:5;
+    int k:6;
+    int m:5;
+    int n:8;
+};
+\end{lstlisting}
+
+Figures \ref{fig:bigendiandatabitoffsets} and
+\refersec{fig:littleendiandatabitoffsets}
+show the structure layout
+and data bit offsets for example big- and little-endian
+architectures, respectively. Both diagrams show a structure
+that begins at address A and whose size is four bytes. Also,
+high order bits are to the left and low order bits are to
+the right.
+
+\begin{figure}[h]
+\begin{dwflisting}
+\begin{verbatim}
+
+    j:0
+    k:5
+    m:11
+    n:16
+
+    Addresses increase ->
+    |       A       |     A + 1     |    A + 2      |    A + 3      | 
+
+    Data bit offsets increase ->
+    +---------------+---------------+---------------+---------------+
+    |0     4|5         10|11      15|16           23|24           31|
+    |   j   |     k      | m        |        n      |       <pad>   |
+    |       |            |          |               |               | 
+    +---------------------------------------------------------------+ 
+
+\end{verbatim}
+\end{dwflisting}
+\caption{Big-endian data bit offsets}
+\label{fig:bigendiandatabitoffsets}
+\end{figure}
+
+\begin{figure}[h]
+\begin{dwflisting}
+\begin{verbatim}
+
+    j:0
+    k:5
+    m:11
+    n:16
+                                               <- Addresses increase
+    |     A + 3     |     A + 2     |    A + 1      |       A       | 
+
+                                        <-  Data bit offsets increase 
+    +---------------+---------------+---------------+---------------+
+    |31           24|23           16|15     11|10       5|4        0|
+    |     <pad>     |        n      |    m    |    k     |     j    |
+    |               |               |         |          |          |
+    +---------------------------------------------------------------+
+
+\end{verbatim}
+\end{dwflisting}
+\caption{Little-endian data bit offsets}
+\label{fig:littleendiandatabitoffsets}
+\end{figure}
+
+\needlines{4}
+Note that data member bit offsets in this example are the
+same for both big\dash\ and little\dash endian architectures even
+though the fields are allocated in different directions
+(high\dash order to low-order versus low\dash order to high\dash order);
+the bit naming conventions for memory and/or registers of
+the target architecture may or may not make this seem natural.
 
 \clearpage
 \section{Namespace Examples}

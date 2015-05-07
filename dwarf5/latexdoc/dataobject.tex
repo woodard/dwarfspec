@@ -32,7 +32,7 @@ whose value is a null-terminated string containing the data object
 name as it appears in the source program.
 
 If a variable entry describes an 
-\addtoindex{anonymous union},
+\addtoindex{anonymous union} or other construct,
 the name attribute is omitted or its value describes a single
 zero byte.
 
@@ -44,11 +44,11 @@ is a \livelink{chap:classflag}{flag}, if the name
 of a variable is visible outside of its enclosing compilation
 unit.  
 
-\textit{The definitions of \addtoindex{C++} static data members of structures
-or classes are represented by variable entries \nolink{flagged} as
-external. Both file static and local variables in \addtoindex{C} and \addtoindex{C++}
-are represented by non-external variable entries.
-}
+\textit{The definitions of \addtoindex{C++} static data members 
+of structures or classes are represented by variable entries 
+\nolink{flagged} as external. Both file static and local variables 
+in \addtoindex{C} and \addtoindex{C++} are represented by 
+non-external variable entries.}
 
 \item A \DWATdeclaration{} attribute, 
 \addtoindexx{declaration attribute}
@@ -66,25 +66,27 @@ entry representing the definition of a variable (that is,
 with no 
 \DWATdeclaration{} attribute),
 or if the location attribute is present but has
-an empty location description (as described in Section \refersec{chap:locationdescriptions}),
+an empty location description (as described in Section 
+\refersec{chap:locationdescriptions}),
 \addtoindexx{unallocated variable}
 the variable is assumed to exist in the source code but not
 in the executable program (but see number 10, below).
 
-In a variable entry representing a non-defining declaration of a variable, the location
-specified modifies the location specified by the defining declaration and only applies for the
-scope of the variable entry; if no location is specified, then the location specified in the
-defining declaration applies.
+In a variable entry representing a non-defining declaration 
+of a variable, the location specified supersedes the location 
+specified by the defining declaration but only within the
+scope of the variable entry; if no location is specified, 
+then the location specified in the defining declaration 
+applies.
 
-\textit{This can occur, for example, for a \addtoindex{C} or \addtoindex{C++}
-external variable (one that is defined and allocated in another compilation unit) 
-and whose location varies in the current unit due to optimization.}
+\textit{This can occur, for example, for a \addtoindex{C} 
+or \addtoindex{C++} external variable (one that is defined 
+and allocated in another compilation unit) and whose location 
+varies in the current unit due to optimization.}
 
 The location of a variable may be further specified with 
 \addtoindexx{segment attribute!and data segment}
-a 
-\DWATsegment{} attribute, if
-appropriate.
+a \DWATsegment{} attribute, if appropriate.
 
 \item A \DWATtype{} attribute describing the type of the variable,
 constant or formal parameter.
@@ -191,7 +193,7 @@ the beginning of that containing scope, then the scope of the
 object is specified using a value of class constant. If the
 containing scope is contiguous, the value of this attribute
 is the offset in bytes of the beginning of the scope for the
-object from the low pc value of the debugging information
+object from the low PC value of the debugging information
 entry that defines its scope. If the containing scope
 is non-contiguous 
 (see \refersec{chap:noncontiguousaddressranges})
@@ -282,16 +284,16 @@ for different architectures.
 \item A \DWATconstexpr{} attribute, 
 which 
 \hypertarget{chap:DWATconstexprcompiletimeconstantobject}{}
-is a \livelink{chap:classflag}{flag}, if a
+is a \CLASSflag, if a
 variable entry represents a \addtoindex{C++} object declared with the
 \texttt{constexpr} specifier. This attribute indicates that the
 variable can be evaluated as a compile\dash time constant.  
 
 \textit{In \addtoindex{C++},
-a variable declared with \texttt{constexpr} is implicitly \texttt{const}. Such a
-variable has a \DWATtype{} attribute whose value is a 
-\livelink{chap:classreference}{reference}
-to a debugging information entry describing a const qualified type.}
+a variable declared with \texttt{constexpr} is implicitly 
+\texttt{const}. Such a variable has a \DWATtype{} attribute 
+whose value is a \CLASSreference{} to a debugging information 
+entry describing a \texttt{const} qualified type.}
 
 \item A \DWATlinkagename{} attribute for a 
 variable or constant entry as described in 
@@ -301,11 +303,12 @@ Section \refersec{chap:linkagenames}.
 
 \section{Common Block Entries}
 \label{chap:commonblockentries}
-A Fortran \livetargi{chap:fortrancommonblock}{common}{Fortran!common block} \livetargi{chap:commonblockentry}{block}{common block entry} 
+A Fortran 
+\livetargi{chap:fortrancommonblock}{common}{Fortran!common block}
+\livetargi{chap:commonblockentry}{block}{common block entry} 
 may 
 \addtoindexx{Fortran!common block}
-be described by a debugging
-information entry with the 
+be described by a debugging information entry with the 
 tag \DWTAGcommonblockTARG. 
 
 The common \nolink{block} 

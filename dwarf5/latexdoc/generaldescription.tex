@@ -905,7 +905,8 @@ Each general operation represents a postfix operation on
 a simple stack machine. 
 Each element of the stack has a type and a value, and can represent
 a value of any supported base type of the target machine.  Instead of
-a base type, elements can have a special address type, 
+a base type, elements can have a 
+\livetarg{chap:specialaddresstype}{special address type},
 which is an integral type that has the 
 \addtoindex{size of an address} on the target machine and 
 unspecified signedness. The value on the top of the stack after 
@@ -945,10 +946,10 @@ The
 following operations all push a value onto the DWARF
 stack. 
 \addtoindexx{DWARF expression!stack operations}
-Operations other than \DWOPconsttype{} push a value with the special 
-address type, and if the value of a constant in one of these operations
-is larger than can be stored in a single stack element, the
-value is truncated to the element size and the low-order bits
+Operations other than \DWOPconsttype{} push a value with the 
+\specialaddresstype, and if the value of a constant in one of these 
+operations is larger than can be stored in a single stack element, 
+the value is truncated to the element size and the low-order bits
 are pushed on the stack.
 \begin{enumerate}[1. ]
 \itembfnl{\DWOPlitzeroTARG, \DWOPlitoneTARG, \dots, \DWOPlitthirtyoneTARG}
@@ -1029,7 +1030,7 @@ to a given signed offset.
 \DWOPregvaltype{} pushes the contents
 of the register together with the given base type, while the other operations
 push the result of adding the contents of a register to a given
-signed offset together with the special address type.
+signed offset together with the \specialaddresstype.
 
 \needlines{4}
 \begin{enumerate}[1. ]
@@ -1050,13 +1051,15 @@ a signed LEB128\addtoindexx{LEB128!signed} offset from
 the specified register.
 
 \itembfnl{\DWOPbregxTARG}
-The \DWOPbregxNAME{} operation has two operands: a register
+The \DWOPbregxNAME{} operation provides the sum of two values specified
+by its two operands. The first operand is a register number
 which is specified by an unsigned LEB128\addtoindexx{LEB128!unsigned}
-number, followed by a signed LEB128\addtoindexx{LEB128!signed} offset.
+number. The second operand is a signed LEB128\addtoindexx{LEB128!signed} offset.
 
 \needlines{8}
 \itembfnl{\DWOPregvaltypeTARG}
-The \DWOPregvaltypeNAME{} operation takes two operands. The first 
+The \DWOPregvaltypeNAME{} operation provides the contents of
+a given register interpreted as a value of a given type. The first 
 operand is an unsigned LEB128\addtoindexx{LEB128!unsigned} number, 
 which identifies a register whose contents is to
 be pushed onto the stack. The second operand is an 
@@ -1082,12 +1085,12 @@ consisting of the value together with its type identifier.
 The \DWOPderef{}, \DWOPderefsize{}, \DWOPxderef{}, \DWOPxderefsize{} 
 and \DWOPformtlsaddress{}
 operations require the popped values to have an integral type, either the
-special address type or some other integral base type, and push a 
-value with the special address type.  
+\specialaddresstype{} or some other integral base type, and push a 
+value with the \specialaddresstype.  
 \DWOPdereftype{} and \DWOPxdereftype{} operations have the
 same requirement on the popped values, but push a value together 
 with the same type as the popped values.
-All other operations push a value together with the special address type.
+All other operations push a value together with the \specialaddresstype.
 
 \begin{enumerate}[1. ]
 \itembfnl{\DWOPdupTARG}
@@ -1129,7 +1132,7 @@ becomes the second entry.
 The \DWOPderefNAME{} operation pops the top stack entry and 
 treats it as an address. The popped value must have an integral type.
 The value retrieved from that address is pushed, together with the
-special address type identifier. 
+\specialaddresstype{} identifier. 
 The size of the data retrieved from the 
 \addtoindexi{dereferenced}{address!dereference operator}
 address is the \addtoindex{size of an address} on the target machine.
@@ -1141,12 +1144,12 @@ The \DWOPderefsizeNAME{} operation behaves like the
 operation: it pops the top stack entry and treats it as an
 address. The popped value must have an integral type.
 The value retrieved from that address is pushed, together with the
-special address type identifier. In
+\specialaddresstype{} identifier. In
 the \DWOPderefsizeNAME{} operation, however, the size in bytes
 of the data retrieved from the dereferenced address is
 specified by the single operand. This operand is a 1-byte
 unsigned integral constant whose value may not be larger
-than the \addtoindex{size of an address} on the target machine. The data
+than the size of the \specialaddresstype. The data
 retrieved is zero extended to the size of an address on the
 target machine before being pushed onto the expression stack.
 
@@ -1176,11 +1179,10 @@ Both of these entries must have integral type identifiers.
 The top two stack elements are popped,
 and a data item is retrieved through an implementation-defined
 address calculation and pushed as the new stack top together with the
-special address type identifier.
+\specialaddresstype{} identifier.
 The size of the data retrieved from the 
 \addtoindexi{dereferenced}{address!dereference operator}
-address is the
-\addtoindex{size of an address} on the target machine.
+address is the size of the \specialaddresstype.
 
 \itembfnl{\DWOPxderefsizeTARG}
 The \DWOPxderefsizeNAME{} operation behaves like the
@@ -1202,7 +1204,7 @@ address is specified by the single operand. This operand is a
 than the \addtoindex{size of an address} on the target machine. The data
 retrieved is zero extended to the \addtoindex{size of an address} on the
 target machine before being pushed onto the expression stack together
-with the special address type identifier.
+with the \specialaddresstype{} identifier.
 
 \itembfnl{\DWOPxdereftypeTARG}
 The \DWOPxdereftypeNAME{} operation behaves like the \DWOPxderefsize{}
@@ -1243,12 +1245,12 @@ The \DWOPformtlsaddressNAME{}
 operation pops a value from the stack, which must have an 
 integral type identifier, translates this
 value into an address in the 
-\addtoindexx{thread-local storage}
-thread\dash local storage for a thread, and pushes the address 
-onto the stack together with the special address type identifier. 
+\addtoindex{thread-local storage}
+for a thread, and pushes the address 
+onto the stack together with the \specialaddresstype{} identifier. 
 The meaning of the value on the top of the stack prior to this 
 operation is defined by the run-time environment.  If the run-time 
-environment supports multiple thread\dash local storage 
+environment supports multiple thread-local storage 
 \nolink{blocks} for a single thread, then the \nolink{block} 
 corresponding to the executable or shared 
 library containing this DWARF expression is used.
@@ -1293,26 +1295,29 @@ is present, then it already encodes such changes, and it is
 space efficient to reference that.}
 \end{enumerate}
 
+\textit{Examples illustrating many of these stack operations are
+found in Appendix \refersec{app:dwarfstackoperationexamples}.}
+
 \subsubsection{Arithmetic and Logical Operations} 
 \addtoindexx{DWARF expression!arithmetic operations}
 \addtoindexx{DWARF expression!logical operations}
 The following provide arithmetic and logical operations.  If an operation
 pops two values from the stack, both values must have the same type,
-either the same base type or both the special address type.
+either the same base type or both the \specialaddresstype.
 The result of the operation which is pushed back has the same type
 as the type of the operands.  
 
-If the type of the operands is the special
-address type, except as otherwise specified, the arithmetic operations
+If the type of the operands is the \specialaddresstype, 
+except as otherwise specified, the arithmetic operations
 perform addressing arithmetic, that is, unsigned arithmetic that is performed
 modulo one plus the largest representable address (for example, 0x100000000
 when the \addtoindex{size of an address} is 32 bits). 
 
 Operations other than \DWOPabs{},
-\DWOPdiv{}, \DWOPminus{}, \DWOPmul{}, \DWOPneg{} and \DWOPplus{} require integral
-types of the operand (either integral base type or the special address
-type).  Operations do not cause an exception on overflow.
-
+\DWOPdiv{}, \DWOPminus{}, \DWOPmul{}, \DWOPneg{} and \DWOPplus{} 
+require integral types of the operand (either integral base type 
+or the \specialaddresstype).  Operations do not cause an exception 
+on overflow.
 
 \needlines{4}
 \begin{enumerate}[1. ]
@@ -1409,7 +1414,7 @@ following operations provide simple control of the flow of a DWARF expression.
 The six relational operators each:
 \begin{itemize}
 \item pop the top two stack values, which should both have the same type,
-either the same base type or both the special address type, 
+either the same base type or both the \specialaddresstype, 
 
 \item compare the operands:
 \linebreak
@@ -1418,10 +1423,10 @@ either the same base type or both the special address type,
 \item push the constant value 1 onto the stack 
 if the result of the operation is true or the
 constant value 0 if the result of the operation is false.
-The pushed value has the special address type.
+The pushed value has the \specialaddresstype.
 \end{itemize}
 
-If the operands have the special address type, the comparisons  
+If the operands have the \specialaddresstype, the comparisons  
 are performed as signed operations.
 The six operators are \DWOPleNAME{} (less than or equal to), \DWOPgeNAME{}
 (greater than or equal to), \DWOPeqNAME{} (equal to), \DWOPltNAME{} (less
@@ -1504,7 +1509,7 @@ The \DWOPconvertNAME{} operation pops the top stack entry, converts it to a
 different type, then pushes the result. It takes one operand, which is an
 unsigned LEB128 integer that represents the offset of a debugging
 information entry in the current compilation unit, or value 0 which
-represents the special address type. If the operand is non-zero, the
+represents the \specialaddresstype. If the operand is non-zero, the
 referenced entry must be a \DWTAGbasetype{} entry that provides the type
 to which the value is converted.
 
@@ -1513,17 +1518,10 @@ The \DWOPreinterpretNAME{} operation pops the top stack entry, reinterprets
 the bits in its value as a value of a different type, then pushes the
 result. It takes one operand, which is an unsigned LEB128 integer that
 represents the offset of a debugging information entry in the current
-compilation unit, or value 0 which represents the special address type.
+compilation unit, or value 0 which represents the \specialaddresstype.
 If the operand is non-zero, the referenced entry must be a
 \DWTAGbasetype{} entry that provides the type to which the value is converted.
 The type of the operand and result type should have the same size in bits.
-
-\textit{The semantics of the reinterpretation of a value is as if in 
-\addtoindex{C} or \addtoindex{C++}
-there are two variables, one with the type of the operand, into which
-the popped value is stored, then copied using \texttt{memcpy} into the other variable
-with the type of the result and the pushed result value is the value of the
-other variable after \texttt{memcpy}.}
 
 \end{enumerate}
 
@@ -1542,8 +1540,9 @@ on the location stack or any of its values.
 The \DWOPentryvalueTARG{} operation pushes a value that had a known location
 upon entering the current subprogram.  It has two operands: an 
 unsigned LEB128\addtoindexx{LEB128!unsigned} length, followed by 
-a block containing a DWARF expression or
-a simple register location description.  The length operand specifies the length
+a block containing a DWARF expression or a register location description 
+(see Section \refersec{chap:registerlocationdescriptions}).  
+The length operand specifies the length
 in bytes of the block.  If the block contains a register location
 description, \DWOPentryvalueNAME{} pushes the value that register had upon
 entering the current subprogram.  If the block contains a DWARF expression,
@@ -1558,67 +1557,21 @@ being pushed by the \DWOPentryvalueNAME{} operation.
 \textit{The \DWOPentryvalueNAME{} operation can be used by consumers if they are able
 to find the call site in the caller function, can unwind to it, and the corresponding
 \DWTAGcallsiteparameter{} entry has \DWATcallvalue{} or
-\DWATcalldatavalue{} attributes that can be evaluated to find out the
+\DWATcalldatavalue{} attributes that can be evaluated to find the
 value a function parameter had on the first instruction in the function.
 Non-interactive consumers which know what variables will need to be
-inspected ahead of running the debugged program could put breakpoints
-on the first instruction in functions where there is no other way to find(see 
-some variable's value, other than evaluating the \DWOPentryvalueNAME{} 
+inspected in advance of running the debugged program could put breakpoints
+on the first instruction in functions where there is no way to find
+some variable's value other than by evaluating the \DWOPentryvalueNAME{} 
 operation.  The consumer can collect the value of registers or 
 memory referenced in
 \DWOPentryvalueNAME{} operations, then continue to breakpoints where the values
-of variables or parameters need to be inspected and there use the remembered
-register or memory values during \DWOPentryvalueNAME{} evaluation.
-}
+of variables or parameters need to be inspected and use the remembered
+register or memory values during \DWOPentryvalueNAME{} evaluation.}
 
 \end{enumerate}
 
-\subsection{Example Stack Operations}
-\textit {The 
-\addtoindexx{DWARF expression!examples}
-stack operations defined in 
-Section \refersec{chap:stackoperations}.
-are fairly conventional, but the following
-examples illustrate their behavior graphically.}
-
-\begin{longtable}[c]{rrcrr} 
-\multicolumn{2}{c}{Before} & Operation & \multicolumn{2}{c}{After} \\
-\hline
-\endhead
-\endfoot
-0& 17& \DWOPdup{} &0 &17 \\*
-1&   29& &  1 & 17 \\*
-2& 1000 & & 2 & 29\\*
-& & &         3&1000\\
-
-& & & & \\
-0 & 17 & \DWOPdrop{} & 0 & 29 \\*
-1 &29  &            & 1 & 1000 \\*
-2 &1000& & &          \\
-
-& & & & \\
-0 & 17 & \DWOPpick, 2 & 0 & 1000 \\*
-1 & 29 & & 1&17 \\*
-2 &1000& &2&29 \\*
-  &    & &3&1000 \\
-
-& & & & \\
-0&17& \DWOPover&0&29 \\*
-1&29& &  1&17 \\*
-2&1000 & & 2&29\\*
- &     & & 3&1000 \\
-
-& & & & \\
-0&17& \DWOPswap{} &0&29 \\*
-1&29& &  1&17 \\*
-2&1000 & & 2&1000 \\
-
-& & & & \\
-0&17&\DWOProt{} & 0 &29 \\*
-1&29 & & 1 & 1000 \\*
-2& 1000 & &  2 & 17 \\
-\end{longtable}
-
+\needlines{5}
 \section{Location Descriptions}
 \label{chap:locationdescriptions}
 \textit{Debugging information 
@@ -1695,7 +1648,7 @@ separate
 \addtoindexx{location list}
 location list table).
 
-
+\needlines{8}
 \subsection{Single Location Descriptions}
 A single location description is either:
 \begin{enumerate}[1. ]
@@ -1941,91 +1894,6 @@ the piece to be assembled into a value or assigned to is not
 byte-sized or is not at the start of a register or addressable
 unit of memory.}
 
-
-
-
-\subsubsection{Example Single Location Descriptions}
-
-Here are some examples of how DWARF operations are used to form location descriptions:
-% Probably the only place that this will be used, so not in dwarf.tex?
-\newcommand{\descriptionitemnl}[1]{\item[#1]\mbox{}\\}
-\begin{description}
-\descriptionitemnl{\DWOPregthree}
-The value is in register 3.
-
-\descriptionitemnl{\DWOPregx{} 54}
-The value is in register 54.
-
-\descriptionitemnl{\DWOPaddr{} 0x80d0045c}
-The value of a static variable is at machine address 0x80d0045c.
-
-\descriptionitemnl{\DWOPbregeleven{} 44}
-Add 44 to the value in register 11 to get the address of an automatic
-variable instance.
-
-\needlines{4}
-\descriptionitemnl{\DWOPfbreg{} -50}
-Given a \DWATframebase{} value of
-\doublequote{\DWOPbregthirtyone{} 64,} this example
-computes the address of a local variable that is -50 bytes from a
-logical frame pointer that is computed by adding 64 to the current
-stack pointer (register 31).
-
-\descriptionitemnl{\DWOPbregx{} 54 32 \DWOPderef}
-A call-by-reference parameter whose address is in the word 32 bytes
-from where register 54 points.
-
-\needlines{4}
-\descriptionitemnl{\DWOPplusuconst{} 4}
-A structure member is four bytes from the start of the structure
-instance. The base address is assumed to be already on the stack.
-
-\descriptionitemnl{\DWOPregthree{} \DWOPpiece{} 4 \DWOPregten{} \DWOPpiece{} 2}
-A variable whose first four bytes reside in register 3 and whose next
-two bytes reside in register 10.
-
-\descriptionitemnl{\DWOPregzero{} \DWOPpiece{} 4 \DWOPpiece{} 4 \DWOPfbreg{} -12 \DWOPpiece{} 4}
-\vspace{-2\parsep}A twelve byte value whose first four bytes reside in register zero,
-whose middle four bytes are unavailable (perhaps due to optimization),
-and whose last four bytes are in memory, 12 bytes before the frame
-base.
-
-\descriptionitemnl{\DWOPbregone{} 0 \DWOPbregtwo{} 0 \DWOPplus{} \DWOPstackvalue{} }
-Add the contents of r1 and r2 to compute a value. This value is the
-\doublequote{contents} of an otherwise anonymous location.
-
-\needlines{4}
-\descriptionitemnl{\DWOPlitone{} \DWOPstackvalue{} \DWOPpiece{} 4 \DWOPbregthree{} 0 \DWOPbregfour{} 0}
-\vspace{-2\parsep}\descriptionitemnl{
-\hspace{0.5cm}\DWOPplus{} \DWOPstackvalue{} \DWOPpiece{} 4 \DWOPpiece{} 4}
-The object value is found in an anonymous (virtual) location whose
-value consists of two parts, given in memory address order: the 4 byte
-value 1 followed by the four byte value computed from the sum of the
-contents of r3 and r4.
-
-\descriptionitemnl{\DWOPentryvalue{} 1 \DWOPregone{} \DWOPstackvalue }
-The value register 1 had upon entering the current subprogram.
-
-\descriptionitemnl{\DWOPentryvalue{} 2 \DWOPbregone{} 0 \DWOPstackvalue }
-The value register 1 had upon entering the current subprogram (same as the previous example).
-%Both of these location descriptions evaluate to the value register 1 had upon
-%entering the current subprogram.
-
-%FIXME: The following gets an undefined control sequence error for reasons unknown... 
-%\descriptionitemnl{\DWOPentryvalue{} 1 \DWOPregthirtyone{} \DWOPregone{} \DWOPadd{} \DWOPstackvalue }
-%The value register 31 had upon entering the current subprogram
-%plus the value register 1 currently has.
-
-\descriptionitemnl{\DWOPentryvalue{} 3 \DWOPbregfour{} 16 \DWOPderef{} \DWOPstackvalue }
-%FIXME: similar undefined as just above
-%\descriptionitemnl{\DWOPentryvalue{} 6 \DWOPentryvalue{} 1 \DWOPregfour{} \DWOPplusuconst{} 16 \DWOPderef{} \DWOPstackvalue }
-%These two location expressions do the same thing, p
-Add 16 to the value register 4 had upon entering the current subprogram
-to form an address and then push the value of the memory location at that address.
-
-\end{description}
-
-
 \subsection{Location Lists}
 \label{chap:locationlists}
 There are two forms of location lists. The first form 
@@ -2051,6 +1919,19 @@ attribute whose value is an offset from the beginning of
 the \dotdebugloc{} section to the first byte of the list for the
 object in question.
 
+The \addtoindex{applicable base address} of a normal
+location list entry (see following) is
+\addtoindexx{location list!base address selection entry}
+determined by the closest preceding base address selection
+entry in the same location list. If there is
+no such selection entry, then the applicable base address
+defaults to the base address of the compilation unit (see
+Section \refersec{chap:normalandpartialcompilationunitentries}).  
+
+\textit{In the case of a compilation unit where all of
+the machine code is contained in a single contiguous section,
+no base address selection entry is needed.}
+
 Each entry in a location list is either a location 
 \addtoindexi{list}{address selection|see{base address selection}} 
 entry,
@@ -2062,12 +1943,14 @@ or an
 \addtoindexx{end-of-list entry!in location list}
 end-of-list entry.
 
+\subsubsubsection{Location List Entry}
 A location list entry has two forms:
 a normal location list entry and a default location list entry.
 
 \needlines{4}
-A \addtoindexx{location list!normal entry}
-normal location list entry consists of:
+\subsubsubsubsection{Normal Location List Entry}
+A\addtoindexx{location list!normal entry}
+\addtoindex{normal location list entry} consists of:
 \begin{enumerate}[1. ]
 \item A beginning address offset. 
 This address offset has the \addtoindex{size of an address} and is
@@ -2098,20 +1981,6 @@ describing the location of the object over the range specified by
 the beginning and end addresses.
 \end{enumerate}
 
-\needlines{5}
-The applicable base address of a normal
-location list entry is
-\addtoindexx{location list!base address selection entry}
-determined by the closest preceding base address selection
-entry (see below) in the same location list. If there is
-no such selection entry, then the applicable base address
-defaults to the base address of the compilation unit (see
-Section \refersec{chap:normalandpartialcompilationunitentries}).  
-
-\textit{In the case of a compilation unit where all of
-the machine code is contained in a single contiguous section,
-no base address selection entry is needed.}
-
 Address ranges defined by normal location list entries
 may overlap. When they do, they describe a
 situation in which an object exists simultaneously in more than
@@ -2121,7 +1990,8 @@ object in question is defined, it is assumed that the object is
 not available for the portion of the range that is not covered.
 
 \needlines{4}
-A default location list entry consists of:
+\subsubsubsubsection{Default Location List Entry}
+A \addtoindex{default location list entry} consists of:
 \addtoindexx{location list!default entry}
 \begin{enumerate}[1. ]
 \item The value 0.
@@ -2140,13 +2010,12 @@ A default location list entry must be the last location list
 entry of a location list except for the terminating end-of-list
 entry.
 
-A default location list entry describes an unlimited number
-(zero, one or more) of address ranges, none of which overlap
-any of the address ranges defined earlier in the same location
-list. Further, all such address ranges have the same simple
-location.
+A \addtoindex{default location list entry} describes a simple 
+location which applies to all addresses which are not included 
+in any range defined earlier in the same location list.
 
 \needlines{5}
+\subsubsubsection{Base Address Selection Entry}
 A base 
 \addtoindexi{address}{address selection|see{base address selection}}
 \addtoindexx{location list!base address selection entry}
@@ -2163,9 +2032,10 @@ and ending address offsets of subsequent entries of the location list.
 \end{enumerate}
 
 \textit{A base address selection entry 
-affects only the list in which it is contained.}
+affects only the remainder of the list in which it is contained.}
 
 \needlines{5}
+\subsubsubsection{End-of-List Entry}
 The end of any given location list is marked by an 
 \addtoindexx{location list!end-of-list entry}
 end-of-list entry, which consists of a 0 for the beginning address
@@ -2199,13 +2069,23 @@ selection entry and end-of-list entry, respectively, for a
 (see Section \refersec{chap:noncontiguousaddressranges}) 
 in interpretation and representation.}
 
+\needlines{5}
 \subsubsection{Location Lists in Split Objects}
 \label{chap:locationlistsinsplitobjects}
 In a split DWARF object (see 
 Section \refersec{datarep:splitdwarfobjects}), 
 location lists are contained in the \dotdebuglocdwo{} section.
 
-Each entry in the location list
+The \addtoindex{applicable base address} of a split
+location list entry (see following) is
+\addtoindexx{location list!base address selection entry}
+determined by the closest preceding base address selection
+entry (\DWLLEbaseaddressselectionentry) in the same location list. If there is
+no such selection entry, then the applicable base address
+defaults to the base address of the compilation unit (see
+Section \refersec{chap:normalandpartialcompilationunitentries}).
+
+Each entry in the split location list
 begins with a type code, which is a single unsigned byte that
 identifies the type of entry. There are five types of entries:
 \begin{enumerate}
@@ -2229,7 +2109,8 @@ This entry contains two unsigned LEB128\addtoindexx{LEB128!unsigned}
 values immediately following the type code. These values are the
 indices of two addresses in the \dotdebugaddr{} section.
 These indices are relative to the value of the 
-\DWATaddrbase{} attribute of the associated compilation unit.
+\DWATaddrbase{} attribute of the associated compilation unit
+(see Section \refersec{chap:unitentries}).
 These indicate the starting and ending addresses,
 respectively, that define the address range for which
 this location is valid. The starting and ending addresses
@@ -2260,6 +2141,14 @@ the applicable base address, that define the address
 range for which this location is valid. A single location
 description follows the fields that define the address range.
 \end{enumerate}
+
+\textit{The \DWLLEbaseaddressselectionentry, \DWLLEstartendentry{}
+and \DWLLEstartlengthentry entries obtain addresses within the 
+target program indirectly using an index (not an offset) into an 
+array of addresses. The base of that array is obtained using the 
+\DWATaddrbase{} attribute of the containing compilation unit. 
+The value of that attribute is the offset of the base of the array 
+in the \dotdebugaddr{} section of the unit.}
 
 \needlines{10}
 \section{Types of Program Entities}
@@ -2400,7 +2289,7 @@ of the item being described. If the entry containing the
 \DWAThighpc,
 \DWATranges{} or 
 \DWATentrypc{} attribute, 
-\addtoindexx{entry pc attribute}
+\addtoindexx{entry PC attribute}
 or 
 a location
 description that evaluates to an address, then those address
@@ -2492,8 +2381,10 @@ void myfunc()
 
 
 \textit{\addtoindex{C} scoping rules require that the 
-value of the variable x passed to the function g is the value of the
-global variable x rather than of the local version.}
+value of the variable \texttt{x} passed to the function 
+\texttt{g} is the value of the global \texttt{float} 
+variable \texttt{x} rather than of the local \texttt{int} 
+variable \texttt{x}.}
 
 \subsection{Non-Defining Declarations}
 A debugging information entry that 
@@ -2535,19 +2426,16 @@ attribute whose value is the type signature
 Not all attributes of the debugging information entry referenced by a
 \DWATspecification{} attribute 
 apply to the referring debugging information entry.
-
-\textit{For 
-\addtoindexx{declaration attribute}
+For\addtoindexx{declaration attribute}
 example,
 \DWATsibling{} and 
 \DWATdeclaration{} 
 \addtoindexx{declaration attribute}
-clearly cannot apply to a 
+cannot apply to a 
 \addtoindexx{declaration attribute}
 referring
 \addtoindexx{sibling attribute}
-entry.}
-
+entry.
 
 
 \section{Declaration Coordinates}
@@ -2761,7 +2649,7 @@ and exists totally within the boundaries specified by those
 two attributes. If that is not the case, no low and high PC
 attributes should be produced.
 
-\subsection{Non\dash Contiguous Address Ranges}
+\subsection{Non-Contiguous Address Ranges}
 \label{chap:noncontiguousaddressranges}
 When the set of addresses of a debugging information entry
 \addtoindexx{non-contiguous address ranges}
@@ -2798,42 +2686,8 @@ object language relocations needed for references to the \dotdebugranges{}
 section from one for each range entry to a single relocation that
 applies for the entire compilation unit.}
 
-Each entry in a \addtoindex{range list} is either a 
-\addtoindex{range list} entry,
-\addtoindexx{base address selection entry!in range list}
-a base address selection entry, or an 
-\addtoindexx{end-of-list entry!in range list}
-end-of-list entry.
-
-A \addtoindex{range list} entry consists of:
-\begin{enumerate}[1. ]
-\item A beginning address offset. This address offset has the 
-\addtoindex{size of an address} and is relative to
-the applicable base address of the compilation unit referencing this 
-\addtoindex{range list}. 
-It marks the
-beginning of an 
-\addtoindexi{address}{address range!in range list} 
-range.
-
-\item An ending address offset. This address offset again has the 
-\addtoindex{size of an address} and is relative
-to the applicable base address of the compilation unit referencing 
-this \addtoindex{range list}.
-It marks the
-first address past the end of the address range.
-The ending address must be greater than or
-equal to the beginning address.
-
-\needlines{4}
-\textit{A \addtoindex{range list} entry (but not a base address 
-selection or end-of-list entry) whose beginning and
-ending addresses are equal has no effect because the size of the 
-range covered by such an entry is zero.}
-\end{enumerate}
-
-The applicable base address of a \addtoindex{range list} entry
-is determined
+The \addtoindex{applicable base address} of a \addtoindex{range list} 
+entry is determined
 by the closest preceding base address selection entry (see
 below) in the same range list. If there is no such selection
 entry, then the applicable base address defaults to the base
@@ -2844,24 +2698,58 @@ address of the compilation unit
 code is contained in a single contiguous section, no base
 address selection entry is needed.}
 
-Address range entries in
-a \addtoindex{range list} may not overlap.
-There is no requirement that
-the entries be ordered in any particular way.
+Address range entries in a \addtoindex{range list} may not overlap.
+There is no requirement that the entries be ordered in any particular way.
+
+Each entry in a \addtoindex{range list} is either a 
+\addtoindex{range list entry},
+\addtoindexx{base address selection entry!in range list}
+a base address selection entry, or an 
+\addtoindexx{end-of-list entry!in range list}
+end-of-list entry.
 
 \needlines{5}
-A base address selection entry consists of:
+\subsubsection{Range List Entry}
+A \addtoindex{range list entry} consists of:
 \begin{enumerate}[1. ]
-\item The value of the largest representable address offset (for example, \wffffffff when the size of
-an address is 32 bits).
+\item A beginning address offset. This address offset has the 
+\addtoindex{size of an address} and is relative to
+the \addtoindex{applicable base address} of the compilation unit referencing this 
+\addtoindex{range list}. 
+It marks the beginning of an 
+\addtoindexi{address range}{address range!in range list}. 
 
-\item An address, which defines the appropriate base address for use in interpreting the beginning
-and ending address offsets of subsequent entries of the location list.
+\item An ending address offset. This address offset again has the 
+\addtoindex{size of an address} and is relative
+to the \addtoindex{applicable base address} of the compilation unit referencing 
+this \addtoindex{range list}.
+It marks the first address past the end of the address range.
+The ending address must be greater than or
+equal to the beginning address.
+
+\needlines{4}
+\textit{A \addtoindex{range list} entry (but not a base address 
+selection or end-of-list entry) whose beginning and
+ending addresses are equal has no effect because the size of the 
+range covered by such an entry is zero.}
 \end{enumerate}
-\textit{A base address selection entry 
-affects only the list in which it is contained.}
 
+\needlines{5}
+\subsubsection{Base Address Selection Entry}
+A \addtoindex{base address selection entry} consists of:
+\begin{enumerate}[1. ]
+\item The value of the largest representable address offset 
+(for example, \wffffffff when the size of an address is 32 bits).
 
+\item An address, which defines the appropriate base address 
+for use in interpreting the beginning and ending address offsets 
+of subsequent entries of the location list.
+\end{enumerate}
+
+\textit{A base address selection entry affects only the 
+remainder of list in which it is contained.}
+
+\subsubsection{End-of-List Entry}
 The end of any given \addtoindex{range list} is marked by an 
 \addtoindexx{end-of-list entry!in range list}
 end-of-list entry, 
@@ -2881,7 +2769,6 @@ and end-of-list entry, respectively, for a location list
 in interpretation and representation.}
 
 
-
 \section{Entry Address}
 \label{chap:entryaddress}
 \textit{The entry or first executable instruction generated
@@ -2894,13 +2781,14 @@ a range of code addresses, which includes compilation units,
 module initialization, subroutines, 
 \livelink{chap:lexicalblock}{lexical \nolink{blocks}},
 \livelink{chap:tryandcatchblockentries}{try/catch \nolink{blocks}},
-and the like, may have a \DWATentrypcNAME{} attribute to
-indicate the first executable instruction within that 
+and the like, may have a \DWATentrypcNAME{} attribute 
+\addtoindexx{entry PC address}
+to indicate the first executable instruction within that 
 range\hypertarget{chap:entryaddressofscope}{}
 of addresses. The value of the \DWATentrypcNAME{} attribute is a
 relocated address if the
-value of \DWATentrypcNAME{} is of class address; or if it is of class
-constant, the value is an unsigned integer offset which, when
+value of \DWATentrypcNAME{} is of class \CLASSaddress; or if it is of class
+\CLASSconstant, the value is an unsigned integer offset which, when
 added to the base address of the function, gives the entry
 address. 
 
@@ -2909,8 +2797,8 @@ The base address of the containing scope is given by either the
 ranges given by the \DWATranges{} attribute. 
 If no \DWATentrypcNAME{} attribute is present,
 then the entry address is assumed to be the same as the
-value of the \DWATlowpc{} attribute, if present; otherwise,
-the entry address is unknown.
+base address.
+
 
 \section{Static and Dynamic Values of Attributes}
 \label{chap:staticanddynamicvaluesofattributes}
@@ -2943,24 +2831,9 @@ evaluation of the expression yields the value of
 the attribute.
 \end{itemize}
 
-\textit{%
-Whether an attribute value can be dynamic depends on the
+\textit{Whether an attribute value can be dynamic depends on the
 rules of the applicable programming language.
 }
-
-\textit{The applicable attributes include: 
-\DWATallocated,
-\DWATassociated, 
-%\DWATbitoffset, 
-\DWATbitsize,
-\DWATbitstride,
-\DWATbytesize,
-\DWATbytestride, 
-\DWATcount, 
-\DWATlowerbound,
-\DWATrank,
-\DWATupperbound,
-and possibly others.}
 
 \needlines{4}
 \section{Entity Descriptions}
@@ -2969,13 +2842,12 @@ in the program that are artificial, or which otherwise have a
 \doublequote{name} that is not a valid identifier in the
 programming language. For example, several languages may
 capture or freeze the value of a variable at a particular
-point in the program. 
+point in the program and hold that value in an artificial variable. 
 \addtoindex{Ada} 95 has package elaboration routines,
 type descriptions of the form \texttt{typename\textquoteright Class}, and 
-\doublequote{access typename} parameters.  }
+\doublequote{\texttt{access} typename} parameters.}
 
-Generally, any debugging information
-entry that 
+Generally, any debugging information entry that 
 \hypertarget{chap:DWATdescriptionartificialnameordescription}{}
 has, or may have, 
 \addtoindexx{name attribute}
@@ -2987,11 +2859,8 @@ a
 \DWATdescription{} attribute whose value is a
 null-terminated string providing a description of the entity.
 
-
 \textit{It is expected that a debugger will only display these
-descriptions as part of the description of other entities. It
-should not accept them in expressions, nor allow them to be
-assigned, or the like.}
+descriptions as part of the description of other entities.}
 
 \needlines{4}
 \section{Byte and Bit Sizes}
@@ -3046,23 +2915,17 @@ a
 attribute whose value is a null-terminated string containing the 
 object file linkage name associated with the corresponding entity.
 
-% Some trouble here with hbox full, so we try optional word breaks.
-\textit{Debugging information entries to which \DWATlinkagename{}
-may apply include: \DWTAGcommonblock, \DWTAGconstant,
-\DWTAGentrypoint, \DWTAGsubprogram{} 
-and \DWTAGvariable.
-}
 
 \section{Template Parameters}
 \label{chap:templateparameters}
-\textit{In \addtoindex{C++}, a template is a generic definition of a class, function, member
-function, or typedef (alias).  A template has formal parameters that
+\textit{In \addtoindex{C++}, a template is a generic definition 
+of a class, function, member function, or typedef (alias).  
+A template has formal parameters that
 can be types or constant values; the class, function,
 member function, or typedef is instantiated differently for each
 distinct combination of type or value actual parameters.  DWARF does
 not represent the generic template definition, but does represent each
-instantiation.
-}
+instantiation.}
 
 A debugging information entry that represents a 
 \addtoindex{template instantiation}
@@ -3108,10 +2971,9 @@ actual compile-time or run-time constant value
 of the value parameter for this instantiation.
 This can be a 
 \DWATconstvalue{}\livetarg{chap:DWATconstvaluetemplatevalueparameter}{} 
-attribute, whose
-value is the compile-time constant value as represented 
-on the target architecture. 
-Or, the attribute can be a \DWATlocation{} attribute, whose value is a 
+attribute, whose value is the compile-time constant value 
+as represented on the target architecture, or a 
+\DWATlocation{} attribute, whose value is a 
 single location description for the run-time constant address.
 
 \section{Alignment}
@@ -3127,17 +2989,6 @@ This constant describes the actual alignment used by the compiler.
 user specified an alignment the compiler could not satisfy, then 
 only the strictest alignment is added using this attribute.)
 
-\textit{Debugging information entries to which \DWATalignment{} may 
-apply include (but are not limited to):
-\DWTAGarraytype, \DWTAGatomictype, \DWTAGbasetype, 
-\DWTAGclasstype, 
-\DWTAGcoarraytype, \DWTAGconsttype, \DWTAGdynamictype,
-\DWTAGenumerationtype, \DWTAGfiletype, \DWTAGinterfacetype,
-\DWTAGpackedtype, \DWTAGpointertype, \DWTAGptrtomembertype,
-\DWTAGreferencetype, \DWTAGrestricttype, \DWTAGrvaluereferencetype,
-\DWTAGsettype, \DWTAGsharedtype, \DWTAGstringtype, \DWTAGstructuretype,
-\DWTAGsubprogram, \DWTAGsubrangetype, \DWTAGsubroutinetype,
-\DWTAGthrowntype, \DWTAGtypedef, \DWTAGuniontype, and \DWTAGvariable.}
-
-
-
+\textit{For example, an alignment attribute whose value is 8 indicates
+that the entity to which it applies occurs at an address that is a
+multiple of eight (not a multiple of $2^8$ or 256).}

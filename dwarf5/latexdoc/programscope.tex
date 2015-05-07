@@ -8,6 +8,7 @@ these entries may be thought of
 as bounded by ranges of text addresses within the program.
 
 \section{Unit Entries}
+\label{chap:unitentries}
 An object file may contain one or more compilation units,
 of which there are
 \addtoindexx{unit|see {compilation unit}} 
@@ -63,7 +64,7 @@ used to represent portions of an object file.
 \textit{A normal compilation unit typically represents the text and
 data contributed to an executable by a single relocatable
 object file. It may be derived from several source files,
-including pre\dash processed \doublequote{include files.} 
+including pre-processed header files. 
 A \addtoindex{partial compilation unit} typically represents a part of the text
 and data of a relocatable object file, in a manner that can
 potentially be shared with the results of other compilations
@@ -316,13 +317,13 @@ entries used by entries in the current compilation unit
 (see Section \refersec{chap:basetypeentries}).
 
 \needlines{6}
-This attribute provides a consumer a way to find the definition
+\textit{This attribute provides a consumer a way to find the definition
 of base types for a compilation unit that does not itself
 contain such definitions. This allows a consumer, for example,
 to interpret a type conversion to a base type 
 % getting this link target at the right spot is tricky.
 \hypertarget{chap:DWATuseUTF8compilationunitusesutf8strings}{}
-correctly.
+correctly.}
 
 \item A \DWATuseUTFeight{} attribute,
 \addtoindexx{use UTF8 attribute}\addtoindexx{UTF-8} 
@@ -360,6 +361,7 @@ Section \refersec{chap:generalsubroutineandentrypointinformation}).}
 executable instruction of the unit (see 
 Section \refersec{chap:entryaddress}).
 
+\needlines{8}
 \item A \DWATstroffsetsbaseNAME\addtoindexx{string offset base attribute}
 \hypertarget{chap:DWATstroffsetbaseforindirectstringtable}{} 
 attribute, whose value is a reference. 
@@ -406,10 +408,11 @@ of that compilation unit is not valid.
 When generating a split DWARF object (see 
 Section \refersec{datarep:splitdwarfobjects}), the
 compilation unit in the \dotdebuginfo{} section is a "skeleton"
-compilation unit, which contains only a subset of the
+compilation unit, which contains \DWATdwoname{} and \DWATdwoid{}
+attributes as well as a subset of the
 attributes of a full normal or partial compilation unit. In general, 
 it contains those attributes that are necessary for the consumer
-to locate the DWARF object where the full compilation unit
+to locate the object file where the full compilation unit
 can be found, and for the consumer to interpret references to
 addresses in the program. 
 
@@ -435,7 +438,7 @@ compilation unit entries).
 \livetarg{chap:DWATdwonameforunit}{}
 A \DWATdwonameNAME{} attribute whose value is a
 null-terminated string containing the full or relative
-path name of the DWARF object file that contains the full
+path name of the object file that contains the full
 compilation unit.
 
 \item
@@ -453,9 +456,9 @@ entries).
 \textit{This attribute applies to strings referred to by the skeleton
 compilation unit entry itself, and strings in the associated line
 number information.
-The representation for strings in the DWARF object file is determined
-by the presence of a \DWATuseUTFeight{} attribute in the full compilation
-unit.}
+The representation for strings in the object file referenced 
+by the \DWATdwoname{} attribute is determined by the presence 
+of a \DWATuseUTFeight{} attribute in the full compilation unit.}
 
 \item
 A \DWATstroffsetsbase{} attribute, for indirect strings references 
@@ -474,13 +477,12 @@ compilation unit entries).
 
 All other attributes of a compilation unit entry (described
 in Section \refersec{chap:normalandpartialcompilationunitentries}) 
-should be placed in the full compilation
-unit entry in the \dotdebuginfodwo{} section of the split DWARF
-object. The attributes provided by the skeleton compilation
+should be placed in the full compilation unit.
+The attributes provided by the skeleton compilation
 unit entry do not need to be repeated in the full compilation
 unit entry, except for \DWATdwoid, which should appear in
 both entries so that the consumer can verify that it has
-found the correct DWARF object.
+found the correct object file.
 
 \needlines{6}
 \subsection{Type Unit Entries}
@@ -514,6 +516,7 @@ constant value is an integer code indicating the source
 language used to define the type. The set of language names
 and their meanings are given in Table \refersec{tab:languagenames}.
 
+\needlines{4}
 \item A 
 \DWATstroffsetsbase\addtoindexx{string base offset attribute}
 attribute, whose value is a reference. This attribute points
@@ -522,9 +525,10 @@ the \dotdebugstroffsets{} section. Indirect string references
 (using \DWFORMstrx) within the type unit must be interpreted
 as indices relative to this base.
 
-\item A \DWATstmtlist{} attribute, whose
-value is a section offset to a line number table for this
-type unit. Because type units do not describe any code, they
+\item A \DWATstmtlist{} attribute\addtoindexx{statement list attribute}
+whose value of class \CLASSlineptr{} points to the line number 
+information for this type unit.
+Because type units do not describe any code, they
 do not actually need a line number table, but the line number
 tables also contain a list of directories and file names that
 may be referenced by the \DWATdeclfile{} attribute. In a
@@ -567,6 +571,7 @@ U is a direct child of the type unit entry. The containing
 entries may be shared among the additional types and between
 T and the additional types.
 
+\needlines{4}
 \textit{Types are not required to be placed in type units. In general,
 only large types such as structure, class, enumeration, and
 union types included from header files should be considered
@@ -626,7 +631,7 @@ the module initialization code
 (see Section \refersec{chap:codeaddressesandranges}). 
 \hypertarget{chap:DWATentrypcentryaddressofmoduleinitialization}{}
 It may also
-\addtoindexx{entry pc attribute!for module initialization}
+\addtoindexx{entry PC attribute!for module initialization}
 have a 
 \DWATentrypc{} attribute whose value is the address of
 the first executable instruction of that initialization code
@@ -792,7 +797,7 @@ An imported declaration may also have a
 \DWATname{}
 attribute
 \addtoindexx{name attribute}
-whose value is a null\dash terminated string containing the
+whose value is a null-terminated string containing the
 name, as it appears in the source program, by which the
 imported entity is to be known in the context of the imported
 declaration entry (which may be different than the name of
@@ -1032,13 +1037,7 @@ and provide a user\dash supplied name for the main subroutine of
 a program.
 }
 
-\textit{A common debugger feature is to allow the debugger user to call
-a subroutine within the subject program. In certain cases,
-however, the generated code for a subroutine will not obey
-the standard calling conventions for the target architecture
-and will therefore not be safe to call from within a debugger.
-}
-
+\subsubsection{Calling Convention Information}
 A subroutine entry may 
 \hypertarget{chap:DWATcallingconventionforsubprograms}{}
 contain a 
@@ -1076,19 +1075,25 @@ then the debugging information entry for such a subroutine
 may have a calling convention attribute whose value is the
 constant \DWCCprogramTARG.
 
+\textit{A common debugger feature is to allow the debugger user to call
+a subroutine within the subject program. In certain cases,
+however, the generated code for a subroutine will not obey
+the standard calling conventions for the target architecture
+and will therefore not be safe to call from within a debugger.}
+
 \textit{The \DWCCprogram{} 
 value is intended to support \addtoindex{Fortran} main
 \addtoindexx{Fortran!main program}
 programs which in some implementations may not be callable
 or which must be invoked in a special way. It is not intended
-as a way of finding the entry address for the program.
-}
+as a way of finding the entry address for the program.}
 
+
+\subsubsection{Miscellaneous Subprogram Properties}
 \textit{In \addtoindex{C}
 there is a difference between the types of functions
 declared using function prototype style declarations and
-those declared using non\dash prototype declarations.
-}
+those declared using non\dash prototype declarations.}
 
 A subroutine entry declared with a function prototype style
 declaration may have 
@@ -1146,11 +1151,19 @@ indicates whether the subprogram was declared with the \doublequote{noreturn} ke
 indicating that the subprogram can be called, but will never return to its caller.
 
 \subsubsection{Call Site-Related Attributes}
+\textit{While subprogram attributes in the pervious section provide
+information about the subprogram and it's entry point(s) as a whole,
+the following attributes provide summary information about the calls
+that occur within a subprogram.}
+
 A subroutine entry may have \DWATcallalltailcalls, \DWATcallallcalls{} 
 and/or \DWATcallallsourcecalls{} attributes, each of which is a 
 \livelink{chap:classflag}{flag}.
+\addtoindexx{call site summary information}
+\addtoindexx{subroutine call site summary attributes}
 These flags indicate the completeness of the call site information 
-within the subprogram.
+provided by call site entries (see 
+Section \refersec{chap:callsiteentries}) within the subprogram.
 
 The \DWATcallalltailcallsNAME{}
 \livetargi{chap:DWATcallalltailcallsofasubprogram}{attribute}{all tail calls summary attribute} 
@@ -1229,7 +1242,7 @@ Section \refersec{chap:codeaddressesandranges}).
 A 
 \hypertarget{chap:DWATentrypcentryaddressofsubprogram}{}
 subroutine entry may also have 
-\addtoindexx{entry pc attribute!for subroutine}
+\addtoindexx{entry PC attribute!for subroutine}
 a 
 \DWATentrypc{} attribute
 whose value is the address of the first executable instruction
@@ -1274,7 +1287,7 @@ range attributes.
 
 \subsection{Declarations Owned by Subroutines and Entry Points} 
 \label{chap:declarationsownedbysubroutinesandentrypoints}
-
+\addtoindexx{subroutine formal parameters}
 The declarations enclosed by a subroutine or entry point are
 represented by debugging information entries that are owned
 by the subroutine or entry point entry. Entries representing
@@ -1285,15 +1298,15 @@ source program.
 
 \needlines{5}
 \textit{There is no ordering requirement for entries for declarations
-that are children of subroutine or entry point entries but
-that do not represent formal parameters. The formal parameter
+other than formal parameters. The formal parameter
 entries may be interspersed with other entries used by formal
 parameter entries, such as type entries.}
 
-The unspecified parameters of a variable parameter list are
-represented by a debugging information entry\addtoindexx{unspecified parameters entry}
-with the tag
-\DWTAGunspecifiedparametersTARG.
+The unspecified (sometimes called \doublequote{varying}) 
+parameters of a subroutine parameter list are
+represented by a debugging information 
+entry\addtoindexx{unspecified parameters entry}
+with the tag \DWTAGunspecifiedparametersTARG.
 
 \needlines{4}
 The entry for a subroutine that includes a
@@ -1323,7 +1336,7 @@ subroutine or entry point entry may have
 a 
 \DWATreturnaddr{}
 attribute, whose value is a location description. The location
-calculated is the place where the return address for the
+specified is the place where the return address for the
 subroutine or entry point is stored.
 
 A 
@@ -1332,7 +1345,7 @@ subroutine or entry point entry may also have
 \addtoindexx{frame base attribute}
 a
 \DWATframebase{} attribute, whose value is a location
-description that computes the \doublequote{frame base} for the
+description that describes the \doublequote{frame base} for the
 subroutine or entry point. If the location description is
 a simple register location description, the given register
 contains the frame base address. If the location description is
@@ -1350,7 +1363,7 @@ but more
 compact. However, these are not equivalent in general.}
 
 \needlines{5}
-\textit{The frame base for a subprogram is typically an address fixed
+\textit{The frame base for a subprogram is typically an address
 relative to the first unit of storage allocated for the
 subprogram\textquoteright s stack frame. The \DWATframebase{} attribute
 can be used in several ways:}
@@ -1640,7 +1653,7 @@ inlined subroutine entry may
 also 
 \addtoindexx{inlined subprogram entry}
 contain 
-\addtoindexx{entry pc attribute!for inlined subprogram}
+\addtoindexx{entry PC attribute!for inlined subprogram}
 a 
 \DWATentrypc{}
 attribute, representing the first executable instruction of
@@ -1998,8 +2011,8 @@ and expressions where some value is no longer present in the current
 subroutine's registers or local stack frame, but it is known that the 
 values are equal to some parameter passed to the function.  
 The consumer can then use unwind
-information to find the caller and in the call site information sometimes
-find how to compute the value passed in a particular parameter.}
+information to find the caller and it's call site information and then
+compute the value passed in a particular parameter.}
 
 A call site is represented by a debugging information entry with the tag
 \DWTAGcallsiteTARG{}.  The entry for a call site is owned by the innermost
@@ -2009,22 +2022,21 @@ call is present in the source program.
 \textit{A scope entry (for example, for a lexical block) that would not 
 otherwise be present in the debugging information of a subroutine
 need not be introduced solely to represent the immediately containing scope
-of a call. The call site entry is owned by the innermost scope entry that
-is present.}
+of a call.}
 
 A source call can be compiled into different types of machine code:
 \begin{itemize}
 \item
-A \textit{normal call} uses a call-like instruction which transfers control to the start
-of some subprogram and leaves the call site location address somewhere where
-unwind information can find it.  
+A \textit{normal call} uses a call-like instruction which transfers 
+control to the start of some subprogram and leaves the call site 
+location address somewhere where unwind information can find it.  
 \item
 A \textit{tail call} uses a jump-like instruction which
 transfers control to the start of some subprogram, but the call site location
 address is not preserved (and thus not available using the unwind information).  
 \item
 A \textit{tail recursion call} is a call
-to the current subroutine which is compiled as a loop into the middle of the
+to the current subroutine which is compiled as a jump into the middle of the
 current subroutine.
 \needlines{4}
 \item
@@ -2103,7 +2115,8 @@ attribute is used instead of the \DWATcalltarget{} attribute.
 The call site entry may have a \DWATtypeNAME{}
 \livetargi{chap:DWATtypeofcallsite}{attribute}{type attribute!of call site entry}
 referencing a debugging information entry for the type of the called function.  
-When \DWATcallorigin{} is present, \DWATtypeNAME{} is usually omitted.
+
+\textit{When \DWATcallorigin{} is present, \DWATtypeNAME{} is usually omitted.}
 
 The call site entry may have 
 \DWATcallfileNAME{}, \DWATcalllineNAME{} and \DWATcallcolumnNAME{} 
@@ -2210,7 +2223,7 @@ for the lexical \nolink{block}
 A 
 \hypertarget{chap:DWATentrypcoflexicalblock}{}
 lexical block entry may also have 
-\addtoindexx{entry pc attribute!for lexical block}
+\addtoindexx{entry PC attribute!for lexical block}
 a 
 \DWATentrypc{} attribute
 whose value is the address of the first executable instruction
@@ -2298,7 +2311,7 @@ for the with statement
 A 
 \hypertarget{chap:DWATentrypcofwithstmt}{}
 with statement entry may also have 
-\addtoindexx{entry pc attribute!for with statement}
+\addtoindexx{entry PC attribute!for with statement}
 a 
 \DWATentrypc{} attribute
 whose value is the address of the first executable instruction
@@ -2355,8 +2368,8 @@ machine instructions generated for the \nolink{block}
 \hypertarget{chap:DWATentrypcoftryblock}{}
 \hypertarget{chap:DWATentrypcofcatchblock}{}
 A try or catch block entry may also have 
-\addtoindexx{entry pc attribute!for try block}
-\addtoindexx{entry pc attribute!for catch block}
+\addtoindexx{entry PC attribute!for try block}
+\addtoindexx{entry PC attribute!for catch block}
 a 
 \DWATentrypc{} attribute
 whose value is the address of the first executable instruction

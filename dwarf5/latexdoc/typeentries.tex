@@ -6,7 +6,7 @@ user\dash defined types.
 
 If the scope of the declaration of a named type begins after
 \hypertarget{chap:DWATstartscopetypedeclaration}{}
-the low pc value for the scope most closely enclosing the
+the low PC value for the scope most closely enclosing the
 declaration, the declaration may have a 
 \DWATstartscope{}
 attribute as described for objects in 
@@ -22,29 +22,21 @@ Each programming language has a set of base
 types that are considered to be built into that language.}
 
 A base type is represented by a debugging information entry
-with the tag 
-\DWTAGbasetypeTARG.
+with the tag \DWTAGbasetypeTARG.
 
 A \addtoindex{base type entry}
-has a \DWATname{} attribute
-whose
-\addtoindexx{name attribute}
-value is
-a null\dash terminated string containing the name of the base type
+may have a \DWATname{} attribute\addtoindexx{name attribute}
+whose value is
+a null-terminated string containing the name of the base type
 as recognized by the programming language of the compilation
 unit containing the base type entry.
 
 A base type entry has 
 \addtoindexx{encoding attribute}
 a \DWATencoding{} attribute describing
-how the base type is encoded and is to be interpreted. The
-value of this attribute is an 
-\livelink{chap:classconstant}{integer constant}. The set of
-values and their meanings for the
-\DWATencoding{} attribute
-is given in 
-Table \refersec{tab:encodingattributevalues}
-and following text.  
+how the base type is encoded and is to be interpreted. 
+The \DWATencoding{} attribute is described in
+Section \referfol{chap:basetypeencodings}.
 
 A base type entry
 may have a \DWATendianity{} attribute
@@ -54,6 +46,7 @@ Section \refersec{chap:dataobjectentries}.
 If omitted, the encoding assumes the representation that
 is the default for the target architecture.
 
+\needlines{4}
 A base type entry has 
 \hypertarget{chap:DWATbytesizedataobjectordatatypesize}{}
 either a \DWATbytesize{} attribute
@@ -98,90 +91,163 @@ target system to locate the beginning of the storage and
 value. If this attribute is omitted a default data bit offset
 of zero is assumed.
 
-\textit{Attribute 
-\DWATdatabitoffset{} 
-is\addtoindexx{bit offset attribute (Version 3)}
-\addtoindexx{bit offset attribute (Version 3)|see{\textit{also} data bit offset attribute}}
-new 
-\addtoindexx{data bit offset attribute}
-in 
-\DWARFVersionIV{}, unchanged in \DWARFVersionV{}, and
-is also used for bit field members 
-(see Section \refersec{chap:datamemberentries}). 
-%\hypertarget{chap:DWATbitoffsetbasetypebitlocation}{}
-It replaces the attribute DW\_AT\_bit\_offset
-\addtoindexx{bit offset attribute (Version 3)}
-which used for base
-types as defined in \DWARFVersionIII{} and earlier.
-DW\_AT\_bit\_offset is deprecatedF
-\addtoindexx{DW\_AT\_bit\_offset (deprecated)}
-for use in base types in DWARF Version 4 and later.
-See Section 5.1 in the \DWARFVersionIV{}
-specification for a discussion of compatibility considerations.}
+A \DWTAGbasetype{} entry may have additional attributes that
+augment certain of the base type encodings; these are described
+in the following section.
 
+\subsection{Base Type Encodings}
+\label{chap:basetypeencodings}
+A base type entry has 
+\addtoindexx{encoding attribute}
+a \DWATencoding{} attribute describing
+how the base type is encoded and is to be interpreted. The 
+value of this attribute is an integer of class \CLASSconstant.
+The set of values and their meanings for the
+\DWATencoding{} attribute is given in 
+Table \refersec{tab:encodingattributevalues}.
+
+\textit{In Table \ref{tab:encodingattributevalues}, encodings
+are shown in groups that have similar characteristics purely
+for presentation purposes. These groups are not part of this
+DWARF specification.}
+
+\newcommand{\EncodingGroup}[1]{\multicolumn{2}{l}{\hspace{2cm}\bfseries\textit{#1}}}
 \begin{table}[!here]
 \caption{Encoding attribute values}
 \label{tab:encodingattributevalues}
 \centering
 \begin{tabular}{l|p{8cm}}
 \hline
-Name&Meaning\\ \hline
-\DWATEaddressTARG{} & linear machine address (for segmented\break
-  addresses see
-  Section \refersec{chap:segmentedaddresses}) \\
-\DWATEbooleanTARG& true or false \\
+\bfseries Name & \bfseries Meaning\\ \hline
 
-\DWATEcomplexfloatTARG& complex binary
-floating\dash point number \\
-\DWATEfloatTARG{} & binary floating\dash point number \\
-\DWATEimaginaryfloatTARG& imaginary binary
-floating\dash point number \\
-\DWATEsignedTARG& signed binary integer \\
-\DWATEsignedcharTARG& signed character \\
-\DWATEunsignedTARG{} & unsigned binary integer \\
-\DWATEunsignedcharTARG{} & unsigned character \\
-\DWATEpackeddecimalTARG{}  & packed decimal \\
-\DWATEnumericstringTARG& numeric string \\
-\DWATEeditedTARG{} & edited string \\
-\DWATEsignedfixedTARG{} & signed fixed\dash point scaled integer \\
-\DWATEunsignedfixedTARG& unsigned fixed\dash point scaled integer \\
-\DWATEdecimalfloatTARG{} & decimal floating\dash point number \\ 
-\DWATEUTFTARG{} & \addtoindexi{Unicode character}{Unicode character base type} \\
-\DWATEASCIITARG{} & \addtoindexi{ASCII character}{ASCII character base type}\\
-\DWATEUCSTARG{} & \addtoindexi{ISO 10646 character}{ISO 10646 character base type}
-                  \addtoindexx{ISO 10646 character set standard}  \\
+\EncodingGroup{Simple encodings} \\
+\DWATEbooleanTARG      & true or false \\
+\DWATEaddressTARG{}    & linear machine address$^a$ \\
+\DWATEsignedTARG       & signed binary integer \\
+\DWATEsignedcharTARG   & signed character \\
+\DWATEunsignedTARG     & unsigned binary integer \\
+\DWATEunsignedcharTARG & unsigned character \\
+
+\EncodingGroup{Character encodings} \\
+\DWATEASCIITARG{} & \addtoindex{ISO/IEC 646:1991 character} 
+                    \addtoindexx{ASCII character} \\
+\DWATEUCSTARG{}   & \addtoindex{ISO/IEC 10646-1:1993 character (UCS-4)} 
+                    \addtoindexx{UCS character} \\
+\DWATEUTFTARG{}   & \addtoindex{ISO/IEC 10646-1:1993 character}
+                    \addtoindexx{UTF character} \\
+
+\EncodingGroup{Scaled encodings} \\
+\DWATEsignedfixedTARG{} & signed fixed-point scaled integer \\
+\DWATEunsignedfixedTARG & unsigned fixed-point scaled integer \\
+
+\EncodingGroup{Floating-point encodings} \\
+\DWATEfloatTARG          & binary floating-point number \\
+\DWATEcomplexfloatTARG   & complex binary floating-point number \\
+\DWATEimaginaryfloatTARG & imaginary binary floating-point number \\
+\DWATEdecimalfloatTARG{} & \addtoindex{IEEE 754R decimal floating-point number} \\ 
+
+\EncodingGroup{Decimal string encodings} \\
+\DWATEpackeddecimalTARG & packed decimal number\\
+\DWATEnumericstringTARG & numeric string \\
+\DWATEeditedTARG        & edited string \\
+
 \hline
+\multicolumn{2}{l}{$^a$For segmented addresses, see Section \refersec{chap:segmentedaddresses}} \\
 \end{tabular}
 \end{table}
 
-\textit{The \DWATEdecimalfloat{} encoding is intended for
-floating\dash point representations that have a power\dash of\dash ten
-exponent, such as that specified in IEEE 754R.}
+\subsubsection{Simple Encodings}
+\label{simpleencodings}
+Types with simple encodings are widely supported in many
+programming languages and do not require further discussion.
 
-\textit{The \DWATEUTF{} encoding is intended for \addtoindex{Unicode}
+\needlines{6}
+\subsubsection{Character Encodings}
+\label{characterencodings}
+The \DWATEUTF{} encoding is intended for \addtoindex{Unicode}
 string encodings (see the Universal Character Set standard,
 ISO/IEC 10646\dash 1:1993).
- \addtoindexx{ISO 10646 character set standard}
+\addtoindexx{ISO 10646 character set standard}
 For example, the 
 \addtoindex{C++} type char16\_t is
 represented by a base type entry with a name attribute whose
 value is \doublequote{char16\_t}, an encoding attribute whose value
-is \DWATEUTF{} and a byte size attribute whose value is 2.}
+is \DWATEUTF{} and a byte size attribute whose value is 2.
 
-\textit{The \DWATEASCII{} and \DWATEUCS{} encodings are intended for
+\needlines{4}
+The \DWATEASCII{} and \DWATEUCS{} encodings are intended for
 the {Fortran 2003} string kinds 
 \texttt{ASCII}\index{ASCII@\texttt{ASCII} (Fortran string kind)} (ISO/IEC 646:1991) and
-\texttt{ISO\_10646}\index{ISO\_10646@\texttt{ISO\_10646} (Fortran string kind)} (UCS-4 in ISO/IEC 10646:2000).}
+\texttt{ISO\_10646}\index{ISO\_10646@\texttt{ISO\_10646} (Fortran string kind)} (UCS-4 in ISO/IEC 10646:2000).
 \addtoindexx{ISO 10646 character set standard}
 
-The 
-\DWATEpackeddecimal{} 
-and 
-\DWATEnumericstring{} 
-base types
+\subsubsection{Scaled Encodings}
+\label{scaledencodings}
+The \DWATEsignedfixed{} and \DWATEunsignedfixed{} entries
+describe signed and unsigned fixed\dash point binary data types,
+respectively.
+
+The fixed binary type encodings have a
+\DWATdigitcount{} attribute\addtoindexx{digit count attribute}
+with the same interpretation as described for the
+\DWATEpackeddecimal{} and \DWATEnumericstring{} base type encodings
+(see Section \refersec{chap:decimalstringencodings}).
+
+\needlines{4}
+For a data type with a decimal scale factor, the fixed binary
+type entry has a \DWATdecimalscale{} attribute 
+\addtoindexx{decimal scale attribute}
+with the same interpretation as described for the 
+\DWATEpackeddecimal{} and \DWATEnumericstring{} base types
+(see Section \refersec{chap:decimalstringencodings}).
+
+\hypertarget{chap:DWATbinaryscalebinaryscalefactorforfixedpointtype}{}
+For a data type with a binary scale factor, the fixed
+binary type entry has a \DWATbinaryscale{} attribute. 
+The \DWATbinaryscale{} attribute\addtoindexx{binary scale attribute} 
+is an \livelink{chap:classconstant}{integer constant} value
+that represents the exponent of the base two scale factor to
+be applied to an instance of the type.  Zero scale puts the
+binary point immediately to the right of the least significant
+bit. Positive scale moves the binary point to the right and
+implies that additional zero bits on the right are not stored
+in an instance of the type. Negative scale moves the binary
+point to the left; if the absolute value of the scale is
+larger than the number of bits, this implies additional zero
+bits on the left are not stored in an instance of the type.
+
+For 
+\hypertarget{chap:DWATsmallscalefactorforfixedpointtype}{}
+a data type with a non-decimal and non-binary scale factor,
+the fixed binary type entry has a \DWATsmall{} attribute which
+\addtoindexx{small attribute} references a 
+\DWTAGconstant{} entry. The scale factor value
+is interpreted in accordance with the value defined by the
+\DWTAGconstant{} entry. The value represented is the product
+of the integer value in memory and the associated constant
+entry for the type.
+
+\textit{The \DWATsmall{} attribute is defined with the 
+\addtoindex{Ada} \texttt{small} attribute in mind.}
+
+\needlines{6}
+\subsubsection{Floating-Point Encodings}
+\label{chap:floatingpointencodings}
+Types with binary floating-point encodings 
+(\DWATEfloat{}, \DWATEcomplexfloat{} and \DWATEimaginaryfloat{})
+are supported in many
+programming languages and do not require further discussion.
+
+The \DWATEdecimalfloat{} encoding is intended for
+floating-point representations that have a power-of-ten
+exponent, such as that specified in IEEE 754R.
+
+\subsubsection{Decimal String Encodings}
+\label{chap:decimalstringencodings}
+The \DWATEpackeddecimal{} and \DWATEnumericstring{} 
+base type encodings
 represent packed and unpacked decimal string numeric data
-types, respectively, either of which may be 
-either 
+types, respectively, either of which may be either 
 \addtoindexx{decimal scale attribute}
 signed
 \addtoindexx{decimal sign attribute}
@@ -218,9 +284,9 @@ alternatively, no sign at all.
 \hline
 \DWDSunsignedTARG{} &  Unsigned \\
 \DWDSleadingoverpunchTARG{} & Sign
-is encoded in the most significant digit in a target\dash dependent  manner \\
+is encoded in the most significant digit in a target-dependent  manner \\
 \DWDStrailingoverpunchTARG{} & Sign
-is encoded in the least significant digit in a target\dash dependent manner \\
+is encoded in the least significant digit in a target-dependent manner \\
 \DWDSleadingseparateTARG{} 
 & Decimal type: Sign is a \doublequote{+} or \doublequote{-} character 
 to the left of the most significant digit. \\
@@ -234,6 +300,7 @@ indicating positive or negative. \\
 \end{tabular}
 \end{table}
 
+\needlines{4}
 \hypertarget{chap:DWATdecimalscaledecimalscalefactor}{}
 The \DWATdecimalscale{}
 attribute 
@@ -249,16 +316,13 @@ decimal point to the left; if the absolute value of the scale
 is larger than the digit count, this implies additional zero
 digits on the left are not stored in an instance of the type.
 
-The 
-\DWATdigitcount{}
-attribute 
+The \DWATdigitcount{} attribute 
 \addtoindexx{digit count attribute}
 is an \livelink{chap:classconstant}{integer constant}
 value that represents the number of digits in an instance of
 the type.
 
-The \DWATEedited{}
-base 
+The \DWATEedited{} base 
 \hypertarget{chap:DWATpicturestringpicturestringfornumericstringtype}{}
 type is used to represent an edited
 numeric or alphanumeric data type. It is used in combination
@@ -268,8 +332,7 @@ string associated with the type.
 
 If the edited base type entry describes an edited numeric
 data type, the edited type entry has a \DWATdigitcount{} and a
-\DWATdecimalscale{} attribute. 
-\addtoindexx{decimal scale attribute}
+\DWATdecimalscale{} attribute.\addtoindexx{decimal scale attribute}
 These attributes have the same
 interpretation as described for the 
 \DWATEpackeddecimal{} and
@@ -278,70 +341,13 @@ types. If the edited type entry
 describes an edited alphanumeric data type, the edited type
 entry does not have these attributes.
 
-
 \textit{The presence or absence of the \DWATdigitcount{} and
-\DWATdecimalscale{} attributes 
-\addtoindexx{decimal scale attribute}
+\DWATdecimalscale{} attributes\addtoindexx{decimal scale attribute}
 allows a debugger to easily
 distinguish edited numeric from edited alphanumeric, although
 in principle the digit count and scale are derivable by
 interpreting the picture string.}
 
-The \DWATEsignedfixed{} and \DWATEunsignedfixed{} entries
-describe signed and unsigned fixed\dash point binary data types,
-respectively.
-
-The fixed binary type entries have 
-\addtoindexx{digit count attribute}
-a 
-\DWATdigitcount{}
-attribute with the same interpretation as described for the
-\DWATEpackeddecimal{} and \DWATEnumericstring{} base types.
-
-\needlines{4}
-For a data type with a decimal scale factor, the fixed binary
-type entry has a 
-\DWATdecimalscale{} attribute 
-\addtoindexx{decimal scale attribute}
-with the same
-interpretation as described for the 
-\DWATEpackeddecimal{}
-and \DWATEnumericstring{} base types.
-
-\hypertarget{chap:DWATbinaryscalebinaryscalefactorforfixedpointtype}{}
-For a data type with a binary scale factor, the fixed
-\addtoindexx{binary scale attribute}
-binary type entry has a 
-\DWATbinaryscale{} attribute. 
-The
-\DWATbinaryscale{} attribute 
-is an \livelink{chap:classconstant}{integer constant} value
-that represents the exponent of the base two scale factor to
-be applied to an instance of the type.  Zero scale puts the
-binary point immediately to the right of the least significant
-bit. Positive scale moves the binary point to the right and
-implies that additional zero bits on the right are not stored
-in an instance of the type. Negative scale moves the binary
-point to the left; if the absolute value of the scale is
-larger than the number of bits, this implies additional zero
-bits on the left are not stored in an instance of the type.
-
-For 
-\hypertarget{chap:DWATsmallscalefactorforfixedpointtype}{}
-a data type with a non\dash decimal and non\dash binary scale factor,
-the fixed binary type entry has a 
-\DWATsmall{} attribute which
-\addtoindexx{small attribute}
-references a 
-\DWTAGconstant{} entry. The scale factor value
-is interpreted in accordance with the value defined by the
-\DWTAGconstant{} entry. The value represented is the product
-of the integer value in memory and the associated constant
-entry for the type.
-
-\textit{The \DWATsmall{} attribute 
-is defined with the \addtoindex{Ada} \texttt{small}
-attribute in mind.}
 
 \section{Unspecified Type Entries}
 \label{chap:unspecifiedtypeentries}
@@ -608,7 +614,7 @@ have a \DWATordering{} attribute whose
 interpreted to mean either row-major or column-major ordering
 of array elements. The set of values and their meanings
 for the ordering attribute are listed in 
-Table \refersec{tab:arrayordering}. 
+Table \referfol{tab:arrayordering}. 
 If no
 ordering attribute is present, the default ordering for the
 source language (which is indicated by the 
@@ -700,7 +706,7 @@ Other attributes especially applicable to arrays are
 \DWATassociated{} and 
 \DWATdatalocation,
 which are described in 
-Section \refersec{chap:dynamictypeproperties}. 
+Section \refersec{chap:dynamicpropertiesoftypes}. 
 For relevant examples, see also Appendix \refersec{app:fortranarrayexample}.
 
 \section{Coarray Type Entries}
@@ -735,7 +741,7 @@ concept in DWARF, the \DWTAGsubrangetype{} child entry for that index has
 only a lower bound and no upper bound.}
 
 \textit{How coarray elements are located and how coindices are 
-converted to process specifications is implementation-dependent.}
+converted to process specifications is implementation-defined.}
 
 \needlines{8}
 \section{Structure, Union, Class and Interface Type Entries}
@@ -888,7 +894,7 @@ referencing the debugging information entry
 owned by the body of the structure, union or class entry and
 representing a non\dash defining declaration of the data, function
 or type member. The referenced entry will not have information
-about the location of that member (low and high pc attributes
+about the location of that member (low and high PC attributes
 for function members, location descriptions for data members)
 and will have a \DWATdeclaration{} attribute.
 
@@ -1092,18 +1098,15 @@ entities.
 \subsection{Friends}
 \label{chap:friends}
 
-Each \doublequote{friend} 
-\addtoindexx{friend entry}
+Each friend\addtoindexx{friend entry}
 declared by a structure, union or class
 \hypertarget{chap:DWATfriendfriendrelationship}{}
 type may be represented by a debugging information entry
 that is a child of the structure, union or class type entry;
-the friend entry has the 
-tag \DWTAGfriendTARG.
+the friend entry has the tag \DWTAGfriendTARG.
 
-A friend entry has 
-\addtoindexx{friend attribute}
-a \DWATfriend{} attribute, whose value is
+A friend entry has a \DWATfriendTARG{} attribute,
+\addtoindexx{friend attribute} whose value is
 a reference to the debugging information entry describing
 the declaration of the friend.
 
@@ -1126,20 +1129,15 @@ program. If the member entry describes an
 the name attribute is omitted or the value of the attribute
 consists of a single zero byte.
 
-The data member entry has 
-\addtoindexx{type attribute}
-a 
-\DWATtype{} attribute to denote
-\addtoindexx{member entry (data)}
-the type of that member.
+The data member entry has a 
+\DWATtype{} attribute\addtoindexx{type attribute} to denote
+\addtoindexx{member entry (data)} the type of that member.
 
-A data member entry may 
-\addtoindexx{accessibility attribute}
-have a 
-\DWATaccessibility{}
-attribute. If no accessibility attribute is present, private
-access is assumed for an entry of a class and public access
-is assumed for an entry of a structure, union, or interface.
+A data member entry may have a \DWATaccessibility{}
+attribute.\addtoindexx{accessibility attribute} 
+If no accessibility attribute is present, private
+access is assumed for an member of a class and public access
+is assumed for an member of a structure, union, or interface.
 
 A data member 
 \hypertarget{chap:DWATmutablemutablepropertyofmemberdata}{}
@@ -1234,150 +1232,17 @@ per byte.
 
 If the size of a data member is not the same as the size
 of the type given for the data member, the data member has
-\addtoindexx{bit size attribute}
-either a \DWATbytesize{} 
-or a \DWATbitsize{} attribute whose
+either a \DWATbytesize\addtoindexx{byte size attribute} 
+or a \DWATbitsize{} attribute\addtoindexx{bit size attribute} whose
 \livelink{chap:classconstant}{integer constant} value 
 (see Section \refersec{chap:staticanddynamicvaluesofattributes}) 
 is the amount
 of storage needed to hold the value of the data member.
 
-\textit{Bit fields in \addtoindex{C} and \addtoindex{C++} 
-typically 
-\addtoindexx{bit fields} 
-require the use 
-\addtoindexx{data bit offset}
-of 
-\addtoindexx{data bit size}
-the
-\DWATdatabitoffset{} and 
-\DWATbitsize{} attributes.}
+\textit{For showing nested and packed records and arrays, 
+see Appendix \refersec{app:pascalexample} and 
+\refersec{app:ccppbitfieldexamples}.}
 
-\needlines{6}
-\textit{This Standard uses the following bit numbering and direction
-conventions in examples. These conventions are for illustrative
-purposes and other conventions may apply on particular
-architectures.}
-\begin{itemize}
-\item \textit{For big\dash endian architectures, bit offsets are
-counted from high-order to low\dash order bits within a byte (or
-larger storage unit); in this case, the bit offset identifies
-the high\dash order bit of the object.}
-
-\item \textit{For little\dash endian architectures, bit offsets are
-counted from low\dash order to high\dash order bits within a byte (or
-larger storage unit); in this case, the bit offset identifies
-the low\dash order bit of the object.}
-\end{itemize}
-
-
-\textit{In either case, the bit so identified is defined as the 
-\addtoindexx{beginning of an object}
-beginning of the object.}
-
-\needlines{5}
-\textit{For example, take one possible representation of the following 
-\addtoindex{C} structure definition 
-in both big\dash and little\dash endian byte orders:}
-
-\begin{lstlisting}
-struct S {
-    int j:5;
-    int k:6;
-    int m:5;
-    int n:8;
-};
-\end{lstlisting}
-
-\textit{Figures \referfol{fig:bigendiandatabitoffsets} and
-\refersec{fig:littleendiandatabitoffsets}
-show the structure layout
-and data bit offsets for example big\dash\   and little\dash endian
-architectures, respectively. Both diagrams show a structure
-that begins at address A and whose size is four bytes. Also,
-high order bits are to the left and low order bits are to
-the right.}
-
-\begin{figure}[h]
-\begin{dwflisting}
-\begin{verbatim}
-
-    j:0
-    k:5
-    m:11
-    n:16
-
-    Addresses increase ->
-    |       A       |     A + 1     |    A + 2      |    A + 3      | 
-
-    Data bit offsets increase ->
-    +---------------+---------------+---------------+---------------+
-    |0     4|5         10|11      15|16           23|24           31|
-    |   j   |     k      | m        |        n      |       <pad>   |
-    |       |            |          |               |               | 
-    +---------------------------------------------------------------+ 
-
-\end{verbatim}
-\end{dwflisting}
-\caption{Big-endian data bit offsets}
-\label{fig:bigendiandatabitoffsets}
-\end{figure}
-
-\begin{figure}[h]
-\begin{dwflisting}
-\begin{verbatim}
-
-    j:0
-    k:5
-    m:11
-    n:16
-                                               <- Addresses increase
-    |     A + 3     |     A + 2     |    A + 1      |       A       | 
-
-                                        <-  Data bit offsets increase 
-    +---------------+---------------+---------------+---------------+
-    |31           24|23           16|15     11|10       5|4        0|
-    |     <pad>     |        n      |    m    |    k     |     j    |
-    |               |               |         |          |          |
-    +---------------------------------------------------------------+
-
-\end{verbatim}
-\end{dwflisting}
-\caption{Little-endian data bit offsets}
-\label{fig:littleendiandatabitoffsets}
-\end{figure}
-
-\needlines{4}
-\textit{Note that data member bit offsets in this example are the
-same for both big\dash\ and little\dash endian architectures even
-though the fields are allocated in different directions
-(high\dash order to low-order versus low\dash order to high\dash order);
-the bit naming conventions for memory and/or registers of
-the target architecture may or may not make this seem natural.}
-
-\textit{For a more extensive example showing nested and packed records
-and arrays, see 
-Appendix \refersec{app:pascalexample}.}
-
-\needlines{4}
-\textit{Attribute \DWATdatabitoffset{} 
-is new in 
-\addtoindex{DWARF Version 4}, unchanged in \DWARFVersionV,
-and is also used for base types 
-(see Section 
-\refersec{chap:basetypeentries}). 
-%\livetarg{chap:DWATbitoffsetdatamemberbitlocation}{}
-It replaces the attributes 
-DW\_AT\_bit\_offset\addtoindexx{bit offset attribute (Version 3)}
-and \DWATbytesize{} when used to
-identify the beginning of bit field data members as defined
-in \DWARFVersionIII{} and earlier. The 
-\DWATbytesize, 
-\DWATbitsize{} and 
-DW\_AT\_bit\_offset\addtoindexx{DW\_AT\_bit\_offset (deprecated)}
-attribute combination is deprecated for data members in 
-\DWARFVersionIV{} and later. See Section 5.6.6 in the \DWARFVersionIV{}
-specification for a discussion of compatibility considerations.}
 
 \subsection{Member Function Entries}
 \label{chap:memberfunctionentries}
@@ -1644,9 +1509,9 @@ a debugging information entry\addtoindexx{variant entry} with the
 tag \DWTAGvariantTARG{}
 and is a child of the variant part entry. The value that
 selects a given variant may be represented in one of three
-ways. The variant entry may have a 
-\DWATdiscrvalue{} attribute
-whose value represents a single case label. The value of this
+ways. The variant entry may have a \DWATdiscrvalue{} attribute
+whose value represents the discriminant value selecting 
+this variant. The value of this
 attribute is encoded as an LEB128 number. The number is signed
 if the tag type for the variant part containing this variant
 is a signed type. The number is unsigned if the tag type is
@@ -1657,13 +1522,12 @@ Alternatively,
 \hypertarget{chap:DWATdiscrlistlistofdiscriminantvalues}{}
 the variant entry may contain 
 \addtoindexx{discriminant list attribute}
-a 
-\DWATdiscrlist{}
+a \DWATdiscrlist{}
 attribute, whose value represents a list of discriminant
 values. This list is represented by any of the 
-\livelink{chap:classblock}{block} forms and
-may contain a mixture of case labels and label ranges. Each
-item on the list is prefixed with a discriminant value
+\livelink{chap:classblock}{block} forms and may contain a 
+mixture of discriminant values and discriminant ranges. 
+Each item on the list is prefixed with a discriminant value
 descriptor that determines whether the list item represents
 a single label or a label range. A single case label is
 represented as an LEB128 number as defined above for 
@@ -1823,8 +1687,8 @@ such entry is a child of the
 enumerator entries appear in the same order as the declarations
 of the enumeration literals in the source program.
 
-Each \addtoindex{enumerator entry} has a 
-\DWATname{} attribute, whose
+\needlines{4}
+Each \addtoindex{enumerator entry} has a \DWATname{} attribute, whose
 \addtoindexx{name attribute}
 value is a null\dash terminated string containing the name of the
 \hypertarget{chap:DWATconstvalueenumerationliteralvalue}{}
@@ -1833,7 +1697,6 @@ Each enumerator entry also has a
 \DWATconstvalue{} attribute,
 whose value is the actual numeric value of the enumerator as
 represented on the target system.
-
 
 If the enumeration type occurs as the description of a
 \addtoindexx{enumeration type entry!as array dimension}
@@ -1911,6 +1774,7 @@ a
 \DWATprototyped{} attribute, which is
 a \livelink{chap:classflag}{flag}.
 
+\needlines{4}
 Each debugging information entry owned by a subroutine
 type entry corresponds to either a formal parameter or the sequence of
 unspecified parameters of the subprogram type:
@@ -2012,13 +1876,13 @@ allocated for the string (as specified by the \DWATbytesize{}
 or \DWATbitsize{} attribute).
 
 The string type entry may also have a 
-\DWATstringlengthbytesizeNAME{}
-attribute or
+\DWATstringlengthbytesizeNAME{} or
 \DWATstringlengthbitsizeNAME{} attribute,
+\addtoindexx{string length size attribute}
 \addtoindexx{string length attribute!size of length data}
 whose value (see Section \refersec{chap:byteandbitsizes}) 
 is the size of the data to be retrieved from the location
-referenced by the string length attribute. If no (byte or bit)
+referenced by the \DWATstringlength{} attribute. If no byte or bit
 size attribute is present, the size of the data to be retrieved
 is the same as the 
 \addtoindex{size of an address} on the target machine.
@@ -2076,31 +1940,26 @@ the amount of storage needed to hold a value of the set type.
 \label{chap:subrangetypeentries}
 
 \textit{Several languages support the concept of a \doublequote{subrange}
-type object. These objects can represent a subset of the
-values that an object of the basis type for the subrange can
-represent. 
-Subrange type entries may also be used to represent
-the bounds of array dimensions.}
+type. Objects of the subrange type can represent only a contiguous 
+subset (range) of values from the type on which the subrange is defined.
+Subrange types may also be used to represent the bounds of array dimensions.}
 
 A subrange type is represented by a debugging information
-entry with the 
-\addtoindexx{subrange type entry}
-tag \DWTAGsubrangetypeTARG. 
-If a name has been
-given to the subrange type, then the subrange type entry
-has a \DWATname{} attribute
-\addtoindexx{name attribute}
-whose value is a null\dash terminated
+entry with the tag 
+\DWTAGsubrangetypeTARG.\addtoindexx{subrange type entry} 
+If a name has been given to the subrange type, then the 
+subrange type entry has a 
+\DWATname{} attribute\addtoindexx{name attribute}
+whose value is a null-terminated
 string containing the subrange type name as it appears in
 the source program.
 
-The tag \DWTAGgenericsubrange{} is
-used to describe arrays with a dynamic rank. See Section
+The tag \DWTAGgenericsubrange{}
+is used to describe arrays with a dynamic rank. See Section
 \refersec{chap:DWTAGgenericsubrange}.
 
-The subrange entry may have 
-\addtoindexx{type attribute}
-a \DWATtype{} attribute to describe
+The subrange entry may have a 
+\DWATtype{} attribute\addtoindexx{type attribute} to describe
 the type of object, called the basis type, of whose values
 this subrange is a subset.
 
@@ -2113,19 +1972,16 @@ type entry has a
 \DWATbitsize{}
 attribute, whose value 
 (see Section \refersec{chap:staticanddynamicvaluesofattributes})
-is the amount of
-storage needed to hold a value of the subrange type.
+is the amount of storage needed to hold a value of the subrange type.
 
 The 
 \hypertarget{chap:DWATthreadsscaledupcarrayboundthreadsscalfactor}{}
-subrange entry may have 
-\addtoindexx{threads scaled attribute}
-a 
-\DWATthreadsscaled{} attribute,
+subrange entry may have a 
+\DWATthreadsscaled{} attribute\addtoindexx{threads scaled attribute},
 which is a \livelink{chap:classflag}{flag}. 
 If present, this attribute indicates whether
 this subrange represents a \addtoindex{UPC} array bound which is scaled
-by the runtime THREADS value (the number of \addtoindex{UPC} threads in
+by the runtime \texttt{THREADS} value (the number of \addtoindex{UPC} threads in
 this execution of the program).
 
 \textit{This allows the representation of a \addtoindex{UPC} shared array such as}
@@ -2134,6 +1990,7 @@ this execution of the program).
 int shared foo[34*THREADS][10][20];
 \end{lstlisting}
 
+\needlines{4}
 The 
 \hypertarget{chap:DWATlowerboundlowerboundofsubrange}{}
 subrange 
@@ -2316,17 +2173,16 @@ The file type entry also has a
 (see Section \refersec{chap:staticanddynamicvaluesofattributes})
 is the amount of storage need to hold a value of the file type.
 
-\section{Dynamic Type Entries and Properties}
-
-\subsection{Dynamic Type Entries}
+\section{Dynamic Type Entries}
+\label{chap:dynamictypeentries}
 \textit{Some languages such as 
 \addtoindex{Fortran 90}, provide types whose values
 may be dynamically allocated or associated with a variable
-under explicit program control. However, unlike the related
+under explicit program control. However, unlike the
 pointer type in \addtoindex{C} or 
 \addtoindex{C++}, the indirection involved in accessing
 the value of the variable is generally implicit, that is, not
-indicated as part of program source.}
+indicated as part of the program source.}
 
 A dynamic type entry is used to declare a dynamic type that is 
 \doublequote{just like} another non-dynamic type without needing to
@@ -2343,20 +2199,43 @@ reference to the type of the entities that are dynamically allocated.
 	
 A dynamic type entry also has a \DWATdatalocation, and may also
 have \DWATallocated{} and/or \DWATassociated{} attributes as 
-described in Section \referfol{chap:dynamictypeproperties}. 
+described in Section \refersec{chap:dynamicpropertiesoftypes}. 
 A \DWATdatalocation, \DWATallocated{} or \DWATassociated{} attribute 
 may not occur on a dynamic type entry if the same kind of attribute 
 already occurs on the type referenced by the \DWATtype{} attribute.
 
-\subsection{Dynamic Type Properties}
-\label{chap:dynamictypeproperties}
-\textit{
-The \DWATdatalocation, \DWATallocated{} and \DWATassociated{} 
-attributes described in this section can be used for any type, not
-just dynamic types.}
 
 \needlines{6}
-\subsubsection{Data Location}
+\section{Template Alias Entries}
+\label{chap:templatealiasentries}
+
+\textit{In \addtoindex{C++}, a template alias is a form of typedef that has template
+parameters.  DWARF does not represent the template alias definition
+but does represent instantiations of the alias.}
+
+A type named using a template alias is represented
+by a debugging information entry 
+\addtoindexx{template alias entry}
+with the tag
+\DWTAGtemplatealiasTARG. 
+The template alias entry has a
+\DWATname{} attribute 
+\addtoindexx{name attribute}
+whose value is a null\dash terminated string
+containing the name of the template alias as it appears in
+the source program.
+The template alias entry has child entries describing the template
+actual parameters (see Section \refersec{chap:templateparameters}).
+
+
+\section{Dynamic Properties of Types}
+\label{chap:dynamicpropertiesoftypes}
+\textit{The \DWATdatalocation, \DWATallocated{} and \DWATassociated{}
+attributes described in this section are motivated for use with
+\DWTAGdynamictype{} entries but can be used for any other type as well.}
+
+\needlines{6}
+\subsection{Data Location}
 \label{chap:datalocation}
 
 \textit{Some languages may represent objects using descriptors to hold
@@ -2387,7 +2266,7 @@ calculation. For an example using
 for a \addtoindex{Fortran 90 array}, see 
 Appendix \refersec{app:fortranarrayexample}.}
 
-\subsubsection{Allocation and Association Status}
+\subsection{Allocation and Association Status}
 \label{chap:allocationandassociationstatus}
 
 \textit{Some languages, such as \addtoindex{Fortran 90},
@@ -2396,11 +2275,8 @@ may be dynamically allocated or associated with a variable
 under explicit program control.}
 
 \hypertarget{chap:DWATallocatedallocationstatusoftypes}{}
-The 
-\DWATallocated{} 
-attribute 
-\addtoindexx{allocated attribute}
-may optionally be used with any
+The \DWATallocated{} attribute\addtoindexx{allocated attribute}
+may be used with any
 type for which objects of the type can be explicitly allocated
 and deallocated. The presence of the attribute indicates that
 objects of the type are allocatable and deallocatable. The
@@ -2420,11 +2296,6 @@ associated with other objects. The presence of the attribute
 indicates that objects of the type can be associated. The
 integer value of the attribute (see below) indicates whether
 an object of the type is currently associated or not.
-
-\textit{While these attributes are defined specifically with 
-\addtoindex{Fortran 90} ALLOCATABLE and POINTER types
-in mind, usage is not limited
-to just that language.}
 
 The value of these attributes is determined as described in
 Section \refersec{chap:staticanddynamicvaluesofattributes}.
@@ -2453,14 +2324,14 @@ pointer assignment.}
 arrays, 
 see Appendix \refersec{app:aggregateexamples}.}
 
-\subsubsection{Array Rank}
+\subsection{Array Rank}
 \label{chap:DWATrank}
 \addtoindexx{array!assumed-rank}
 \addtoindexx{assumed-rank array|see{array, assumed-rank}}
 \textit{The Fortran language supports \doublequote{assumed-rank arrays}. The
   rank (the number of dimensions) of an assumed-rank array is unknown
-  at compile time. The Fortran runtime stores the rank in the array
-  descriptor metadata.}
+  at compile time. The Fortran runtime stores the rank in an array
+  descriptor.}
 
 The presence of the
 \hypertarget{chap:DWATrankofdynamicarray}{\DWATrankINDX}
@@ -2481,7 +2352,7 @@ expression is to be evaluated needs to be pushed onto the stack. The
 expression will use it to find the offset of the respective field in
 the array descriptor metadata.
 
-\textit{The Fortran compiler is free to choose any layout for the
+\textit{A producer is free to choose any layout for the
   array descriptor. In particular, the upper and lower bounds and
   stride values do not need to be bundled into a structure or record,
   but could be laid end to end in the containing descriptor, pointed
@@ -2493,28 +2364,4 @@ order.
 
 \textit{For an example in Fortran 2008, see
   Section~\refersec{app:assumedrankexample}.}
-
-\needlines{6}
-\section{Template Alias Entries}
-\label{chap:templatealiasentries}
-
-\textit{
-In \addtoindex{C++}, a template alias is a form of typedef that has template
-parameters.  DWARF does not represent the template alias definition
-but does represent instantiations of the alias.
-}
-
-A type named using a template alias is represented
-by a debugging information entry 
-\addtoindexx{template alias entry}
-with the tag
-\DWTAGtemplatealiasTARG. 
-The template alias entry has a
-\DWATname{} attribute 
-\addtoindexx{name attribute}
-whose value is a null\dash terminated string
-containing the name of the template alias as it appears in
-the source program.
-The template alias entry has child entries describing the template
-actual parameters (see Section \refersec{chap:templateparameters}).
 
