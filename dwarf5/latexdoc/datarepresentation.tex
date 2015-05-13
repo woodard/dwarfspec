@@ -552,10 +552,12 @@ post-linking utility; the moved entries and strings can be then referenced
 from the debugging information of each of those executables or shared objects.
 
 \needlines{4}
-A DWARF supplementary object file is itself an object file, using the same object
+A DWARF \addtoindex{supplementary object file} is itself an object file, 
+using the same object
 file format, byte order, and size as the corresponding application executables
 or shared libraries. It consists only of a file header, section table, and
-a number of DWARF debug information sections.  Both the supplementary object file
+a number of DWARF debug information sections.  Both the 
+\addtoindex{supplementary object file}
 and all the executables or shared objects that reference entries or strings in that
 file must contain a \dotdebugsup{} section that establishes the relationship.
 
@@ -572,16 +574,16 @@ value in this field is \versiondotdebugsup.
 A 1-byte unsigned integer, which contains the value 1 if it is
 in the \addtoindex{supplementary object file} that other executables or 
 shared objects refer to, or 0 if it is an executable or shared object 
-referring to a supplemental object file file.
+referring to a \addtoindex{supplementary object file}.
 
 \needlines{4}
 \item \texttt{sup\_filename} (null terminated filename string) \\
 \addttindexx{sup\_filename}
 If \addttindex{is\_supplementary} is 0, this contains either an absolute 
-filename for the supplementary object file, or a filename relative to 
-the object file containing the \dotdebugsup{} section.  
+filename for the \addtoindex{supplementary object file}, or a filename 
+relative to the object file containing the \dotdebugsup{} section.  
 If \addttindex{is\_supplementary} is 1, then \addttindex{sup\_filename}
-is not needed and must be an empty string (a single nul byte).
+is not needed and must be an empty string (a single null byte).
 
 \needlines{4}
 \item \texttt{sup\_checksum\_len} (unsigned LEB128) \\
@@ -604,21 +606,22 @@ Debug information entries that refer to an executable's or shared
 object's addresses must \emph{not} be moved to supplementary files (the
 addesses will likely not be the same). Similarly,
 entries referenced from within location expressions or using loclistptr
-form attributes must not be moved to a supplementary object file.
+form attributes must not be moved to a \addtoindex{supplementary object file}.
 
 Executable or shared object compilation units can use
 \DWTAGimportedunit{} with \DWFORMrefsup{} form \DWATimport{} attribute
-to import entries from the supplementary object file, other \DWFORMrefsup{}
+to import entries from the \addtoindex{supplementary object file}, other \DWFORMrefsup{}
 attributes to refer to them and \DWFORMstrpsup{} form attributes to
 refer to strings that are used by debug information of multiple
 executables or shared objects.  Within the \addtoindex{supplementary object file}'s
 debugging sections, form \DWFORMrefsup{} or \DWFORMstrpsup{} should
 not be used, and all reference forms referring to some other sections
-refer to the local sections in the supplementary object file.
+refer to the local sections in the \addtoindex{supplementary object file}.
 
 In macro information, \DWMACROdefineindirectsup{} or
 \DWMACROundefindirectsup{} opcodes can refer to strings in the 
-\dotdebugstr{} section of the supplementary file, or \DWMACROtransparentincludesup{} 
+\dotdebugstr{} section of the \addtoindex{supplementary object file}, 
+or \DWMACROtransparentincludesup{} 
 can refer to \dotdebugmacro{} section entries.  Within the 
 \dotdebugmacro{} section of a \addtoindex{supplementary object file}, 
 \DWMACROdefineindirect{} and \DWMACROundefindirect{}
@@ -1856,8 +1859,8 @@ The fourth type of reference is a reference from within the
 a debugging information entry in the \dotdebuginfo{} section of 
 a \addtoindex{supplementary object file}.
 This type of reference (\DWFORMrefsupTARG) is an offset from the 
-beginning of the \dotdebuginfo{} section in the supplementary 
-object file.
+beginning of the \dotdebuginfo{} section in the 
+\addtoindex{supplementary object file}.
 
 \textit{The use of compilation unit relative references will reduce the
 number of link\dash time relocations and so speed up linking. The
