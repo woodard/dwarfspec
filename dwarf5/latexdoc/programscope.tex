@@ -227,7 +227,7 @@ and supersedes the
 \livetarg{chap:DWATmacroinfomacroinformation}{}
 While \DWATmacros{} and \DWATmacroinfo{} attributes cannot both occur in the same
 compilation unit, both may be found in the set of units that make up an executable
-or shared object. The two attributes have distinct encodings to facilitate such
+or shared object file. The two attributes have distinct encodings to facilitate such
 coexistence.}
 
 \needlines{6}
@@ -405,8 +405,8 @@ of that compilation unit is not valid.
 \label{chap:skeletoncompilationunitentries}
 \addtoindexx{compilation unit!skeleton}
 \addtoindexx{skeleton compilation unit}
-When generating a split DWARF object (see 
-Section \refersec{datarep:splitdwarfobjects}), the
+When generating a \splitDWARFobjectfile{} (see 
+Section \refersec{datarep:splitdwarfobjectfiles}), the
 compilation unit in the \dotdebuginfo{} section is a "skeleton"
 compilation unit, which contains \DWATdwoname{} and \DWATdwoid{}
 attributes as well as a subset of the
@@ -416,9 +416,9 @@ to locate the object file where the full compilation unit
 can be found, and for the consumer to interpret references to
 addresses in the program. 
 
-A skeleton compilation unit has no
-children, and may have the following attributes
-(including at least \DWATdwoname{} and \DWATdwoid{}):
+A skeleton compilation unit has \DWATdwoname{} and 
+\DWATdwoid{} attributes and no children; it may have additional
+attributes from among the following:
 \begin{enumerate}[1. ]
 
 \item
@@ -534,12 +534,12 @@ tables also contain a list of directories and file names that
 may be referenced by the \DWATdeclfile{} attribute. In a
 normal object file with a regular compilation unit entry, the
 type unit entries can simply refer to the line number table
-used by the compilation unit. In a split DWARF object file, where
+used by the compilation unit. In a \splitDWARFobjectfile, where
 the type units are located in a separate DWARF object file,
 the \DWATstmtlist{} attribute refers to a "specialized"
 line number table in the \dotdebuglinedwo{} section, which
 contains only the list of directories and file names. All
-type unit entries in a split DWARF object may (but are not
+type unit entries in a \splitDWARFobjectfile{} may (but are not
 required to) refer to the same \addtoindex{specialized line number table}.
 
 \item A \DWATuseUTFeight{} attribute, which is a flag
@@ -1049,9 +1049,9 @@ attribute, whose value is an
 is given in Table \refersec{tab:callingconventioncodesforsubroutines}.
 
 \begin{simplenametable}[1.4in]{Calling convention codes for subroutines}{tab:callingconventioncodesforsubroutines}
-\DWCCnormalTARG        \\
-\DWCCprogramTARG       \\
-\DWCCnocallTARG        \\
+\DWCCnormal        \\
+\DWCCprogram       \\
+\DWCCnocall        \\
 \end{simplenametable}
 
 If this attribute is not present, or its value is the constant

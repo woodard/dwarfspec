@@ -1,7 +1,8 @@
-\chapter[Split DWARF Objects (Informative)]{Split DWARF Objects (Informative)}
+\chapter[Split DWARF Object Files (Informative)]{Split DWARF Object Files (Informative)}
 \label{app:splitdwarfobjectsinformative}
 \addtoindexx{DWARF compression}
-\addtoindexx{DWARF duplicate elimination}
+\addtoindexx{DWARF duplicate elimination|see{\textit{also} DWARF compression}}
+\addtoindexx{DWARF duplicate elimination|see{\textit{also} split DWARF object file}}
 With the traditional DWARF format, debug information is designed
 with the expectation that it will be processed by the linker to
 produce an output binary with complete debug information, and
@@ -22,7 +23,12 @@ required, in the form of load maps or symbol tables, and the
 details of the relocation are not covered by the DWARF
 specification, and vary with each vendor's implementation.
 
-These limitations are removed by the design described here.
+Section \refersec{datarep:splitdwarfobjectfiles} describes a new
+platform-independent mechanism that allows a producer to
+split the debugging information into relocatable and
+non-relocatable partitions. This Appendix describes the use
+of \splitDWARFobjectfile{s} and provides some illustrative
+examples.
 
 \section{Overview}
 \label{app:splitoverview}
@@ -75,6 +81,8 @@ information entries. Actual line number tables remain in the
 \dotdebugline{} section, and remain in the relocatable object
 (.o) files.
 
+\end{itemize}
+
 In a .dwo file there is no benefit to having a separate string
 section for directories and file names because the primary
 string table will never be stripped. Accordingly, no
@@ -85,7 +93,7 @@ directory and file name strings to be merged with general
 strings and across compilations in package files (which are not
 subject to potential stripping).
 
-\end{itemize}
+
 
 In order for the consumer to locate and process the debug
 information, the compiler must produce a small amount of debug
@@ -156,11 +164,17 @@ The skeleton \DWTAGcompileunit{} DIE has the following attributes:
 \DWATstmtlist{},
 \DWATstroffsetsbase{}
 }
-\dag{} If \DWATranges{} is present, \DWATlowpc{} and \DWAThighpc{} are
-not used, and vice versa.
+\dag{} If \DWATranges{} is present, the \DWATlowpc{}/\DWAThighpc{}
+pair is not used, although \DWATlowpc{} may still be present
+to provide a default base address for range list entries.
+Conversely, if the \DWATlowpc/\linebreak[0]\DWAThighpc{} pair is
+present, then \DWATranges{} is not used.
 
 All other attributes of the compilation unit DIE are moved to
 the full DIE in the \dotdebuginfodwo{} section.
+The \DWATdwoid{} attribute is present
+in both the skeleton DIE and the full DIE, so that a consumer
+can verify a match.
 
 \needlines{4}
 Because of other improvements in \DWARFVersionV, most of the
@@ -267,10 +281,10 @@ entry in the \dotdebugloc{} section.
 
 \needlines{8}
 This design depends on having an index of debugging information
-available to the consumer. For name lookups, the consumer can use
-the \dotdebugnames{} sections (or an index
-built at link time based on the information in those sections),
-which will lead to a skeleton compilation unit. The
+available to the consumer. For name lookups, the consumer can 
+use the \dotdebugnames{} index section (see 
+Section \refersec{chap:acceleratedaccess}) to 
+locate a skeleton compilation unit. The
 \DWATcompdir{} and \DWATdwoname{} attributes in the skeleton
 compilation unit can then be used to locate the corresponding
 DWARF object file for the compilation unit. Similarly, for an
@@ -279,15 +293,15 @@ which will also lead to a skeleton compilation unit. For a file
 and line number lookup, the skeleton compilation units can be
 used to locate the line number tables.
 
-\section{Split DWARF Object Example}
-\label{app:splitdwarfobjectexample}
-\addtoindexx{split dwarf object!example}
+\section{Split DWARF Object File Example}
+\label{app:splitdwarfobjectfileexample}
+\addtoindexx{split DWARF object file!example}
 Consider the example source code in 
 Figure \refersec{fig:splitobjectexamplesourcefragment1}, 
 Figure \refersec{fig:splitobjectexamplesourcefragment2} and
 Figure \refersec{fig:splitobjectexamplesourcefragment3}.
 When compiled with split DWARF, we will have two object files,
-\texttt{demo1.o} and \texttt{demo2.o}, and two split DWARF objects, 
+\texttt{demo1.o} and \texttt{demo2.o}, and two \splitDWARFobjectfile{s}, 
 \texttt{demo1.dwo} and \texttt{demo2.dwo}.
 
 \begin{figure}[b]
@@ -437,14 +451,14 @@ Figure \referfol{fig:splitdwafexampleskeletondwarfdescription}.
 \end{figure}
 
 The \DWATcompdir{} and \DWATdwoname{} attributes provide the
-location of the corresponding split DWARF object file that
+location of the corresponding \splitDWARFobjectfile{} that
 contains the full debug information; that file is normally
 expected to be in the same directory as the object file itself.
 
 The \DWATdwoid{} attribute provides a hash of the debug
-information contained in the split DWARF object. This hash serves
+information contained in the \splitDWARFobjectfile. This hash serves
 two purposes: it can be used to verify that the debug information
-in the split DWARF object matches the information in the object
+in the \splitDWARFobjectfile{} matches the information in the object
 file, and it can be used to find the debug information in a DWARF
 package file.
 
@@ -509,23 +523,23 @@ Slot & Location referenced \\
 \needlines{4}
 The \dotdebugnames{}
 section contains the names defined by the debugging
-information in the split DWARF object 
+information in the \splitDWARFobjectfile{} 
 (see Section \refersec{chap:contentsofthenameindex}, 
 and references the skeleton compilation unit. 
 When linked together into a final executable,
 they can be used by a DWARF consumer to lookup a name to find one
 or more skeleton compilation units that provide information about
 that name. From the skeleton compilation unit, the consumer can
-find the split DWARF object that it can then read to get the full
+find the \splitDWARFobjectfile{} that it can then read to get the full
 DWARF information.
 
 The \dotdebugaranges{} section contains the PC ranges defined in this
 compilation unit, and allow a DWARF consumer to map a PC value to
-a skeleton compilation unit, and then to a split DWARF object.
+a skeleton compilation unit, and then to a \splitDWARFobjectfile.
 
 
-\subsection{Contents of the Split DWARF Object}
-The split DWARF objects each contain the following sections:
+\subsection{Contents of the Split DWARF Object Files}
+The \splitDWARFobjectfile{s} each contain the following sections:
 \begin{alltt}
   \dotdebugabbrevdwo
   \dotdebuginfodwo{} (for the compilation unit)
@@ -555,7 +569,7 @@ compilation unit.
 code \DWFORMstrx, referring to slots in the
 \dotdebugstroffsetsdwo{} section.
 
-\textit{Use of \DWFORMstrp{} is not appropriate in a split DWARF object file.}
+\textit{Use of \DWFORMstrp{} is not appropriate in a \splitDWARFobjectfile.}
 
 \needlines{4}
 \item References to range lists in the \dotdebugranges{} section are
@@ -717,13 +731,15 @@ Figure \refersec{fig:splitobjectexamplestringtableslots}.
 \end{figure}
 
 Each entry in the table is the offset of the string, which is
-contained in the \dotdebugstrdwo{} section. In a split DWARF object file,
-these offsets are not relocatable, since they are not part of the
-relocatable object, but when combined into a DWARF package file,
-each slot must be adjusted to refer to the appropriate offset
-within the merged string table (see Section 
-\refersec{app:dwarfpackagefileexample} for an example of
-a DWARF package file).
+contained in the \dotdebugstrdwo{} section. In a split DWARF 
+object file, these offsets have no relocations, since they 
+are not part of the relocatable object file. When combined into a 
+DWARF package file, however, each slot must be adjusted to 
+refer to the appropriate offset within the merged string table.
+The tool that builds the DWARF package file must understand 
+the structure of the section in order to apply the necessary 
+adjustments. (See Section \refersec{app:dwarfpackagefileexample} 
+for an example of a DWARF package file.)
 
 \needlines{4}
 The \dotdebuglocdwo{} section contains the location lists referenced
@@ -848,7 +864,7 @@ location lists at those offsets in the \dotdebuglocdwo{} section.
 \end{figure}
 
 In each \DWLLEstartlengthentry{}, the start field is the index
-of an slot in the \dotdebugaddr{} section, relative to the base
+of a slot in the \dotdebugaddr{} section, relative to the base
 offset defined by the compilations unit's \DWATaddrbase{}
 attribute. The \dotdebugaddr{} slots referenced by these entries give
 the relocated address of a label within the function where the

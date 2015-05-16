@@ -129,19 +129,19 @@ the \dotdebuginfodwo{} sections. These
 sections may be placed in the object file but marked so that
 the linker ignores them, or they may be placed in a separate
 DWARF object file that resides alongside the normal object
-file. See Section \refersec{datarep:splitdwarfobjects} and
+file. See Section \refersec{datarep:splitdwarfobjectfiles} and
 Appendix \refersec{app:splitdwarfobjectsinformative} for details.
 
 As a further option, debugging information entries and other debugging
-information that are the same in multiple executables or shared objects 
+information that are the same in multiple executable or shared object files 
 may be found in a separate \addtoindex{supplementary object file} that 
 contains supplementary debug sections.
-The executable or shared object which contains references to
+The executable or shared object file which contains references to
 those debugging information entries contain a \dotdebugsup{} section
 with information that identifies the \addtoindex{supplementary object file}; 
 the supplementary object file contains a variant of this same section
 that is used to unambiguously associate it with the referencing object.
-See Section \refersec{data:dwarfsupplemetaryobjectfiles} for
+See Section \refersec{datarep:dwarfsupplemetaryobjectfiles} for
 further details.
  
 \section{Attribute Types}
@@ -754,7 +754,7 @@ is an indirect reference to a
 \addtoindexx{type signature}
 type definition using a 64-bit \mbox{signature} 
 for that type. The fourth type of reference is a reference from within the 
-\dotdebuginfo{} section of the executable or shared object to
+\dotdebuginfo{} section of the executable or shared object file to
 a debugging information entry in the \dotdebuginfo{} section of 
 a \addtoindex{supplementary object file}.
 \\
@@ -795,7 +795,7 @@ describe the static \livelink{chap:lexicalblock}{block} structure
 within a source file,
 to show the members of a structure, union, or class, and to
 associate declarations with source files or source files
-with shared objects.  
+with shared object files.  
 }
 
 
@@ -1468,9 +1468,9 @@ in the \sixtyfourbitdwarfformat, it is an 8-byte unsigned value
 The operand is used as the offset of a
 debugging information entry in a 
 \dotdebuginfo{}
-section which may be contained in a shared object or executable
+section which may be contained in an executable or shared object file
 other than that containing the operator. For references from
-one shared object or executable to another, the relocation
+one executable or shared object file to another, the relocation
 must be performed by the consumer.  
 
 \textit{Operand interpretation of
@@ -1623,7 +1623,7 @@ to other pieces.
 
 \end{enumerate}
 
-\needlines{3}
+\needlines{4}
 \item \textit{Location lists}, which are used to 
 \addtoindexx{location list}
 describe
@@ -1791,10 +1791,10 @@ signed LEB128\addtoindexx{LEB128!signed} number.
 
 The first operand is used as the offset of a debugging
 information entry in a \dotdebuginfo{} section, which may be
-contained in a shared object or executable other than that
-containing the operator. For references from one shared object
-or executable to another, the relocation must be performed by
-the consumer.
+contained in an executable or shared object file other than that
+containing the operator. For references from one executable or
+shared object file to another, the relocation must be performed 
+by the consumer.
 
 \textit{The debugging information entry referenced by a 
 \DWOPimplicitpointerNAME{} operation is typically a
@@ -1894,15 +1894,16 @@ the piece to be assembled into a value or assigned to is not
 byte-sized or is not at the start of a register or addressable
 unit of memory.}
 
+\needlines{6}
 \subsection{Location Lists}
 \label{chap:locationlists}
 There are two forms of location lists. The first form 
-is intended for use in other than a split DWARF object file,
-while the second is intended for use in a split DWARF object
-(see Section \refersec{datarep:splitdwarfobjects}). The two
+is intended for use in other than a \splitDWARFobjectfile,
+while the second is intended for use in a \splitDWARFobjectfile{} 
+(see Section \refersec{datarep:splitdwarfobjectfiles}). The two
 forms are otherwise equivalent.
 
-\textit{The form for split DWARF objects is new in \DWARFVersionV.}
+\textit{The form for \splitDWARFobjectfile{s} is new in \DWARFVersionV.}
 
 \subsubsection{Location Lists in Non-split Objects}
 \label{chap:locationlistsinnonsplitobjects}
@@ -2070,10 +2071,10 @@ selection entry and end-of-list entry, respectively, for a
 in interpretation and representation.}
 
 \needlines{5}
-\subsubsection{Location Lists in Split Objects}
-\label{chap:locationlistsinsplitobjects}
-In a split DWARF object (see 
-Section \refersec{datarep:splitdwarfobjects}), 
+\subsubsection{Location Lists in Split Object Files}
+\label{chap:locationlistsinsplitobjectfiles}
+In a \splitDWARFobjectfile{} (see 
+Section \refersec{datarep:splitdwarfobjectfiles}), 
 location lists are contained in the \dotdebuglocdwo{} section.
 
 The \addtoindex{applicable base address} of a split

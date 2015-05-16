@@ -130,8 +130,8 @@ the other values is reserved for possible future extensions.
 \section{Relocatable, Split, Executable, Shared and Package Object Files} 
 \label{datarep:executableobjectsandsharedobjects}
 
-\subsection{Relocatable Objects}
-\label{data:relocatableobjects}
+\subsection{Relocatable Object Files}
+\label{datarep:relocatableobjectfiles}
 A DWARF producer (for example, a compiler) typically generates its
 debugging information as part of a relocatable object file.
 Relocatable object files are then combined by a linker to form an
@@ -208,8 +208,9 @@ these relocations may be implicit (that is, the producer may not need to
 emit any explicit relocation information for these offsets).
 \end{itemize}
 
-\subsection{Split DWARF Objects}
-\label{datarep:splitdwarfobjects}
+\subsection{Split DWARF Object Files}
+\label{datarep:splitdwarfobjectfiles}
+\addtoindexx{split DWARF object file}
 A DWARF producer may partition the debugging
 information such that the majority of the debugging
 information can remain in individual object files without
@@ -301,23 +302,23 @@ applies also to the corresponding split DWARF section (for example,
 The relocated addresses in the debugging information for an
 executable object are virtual addresses.
 
-\subsection{Shared Objects}
-\label{datarep:sharedobjects}
+\subsection{Shared Object Files}
+\label{datarep:sharedobject Files}
 The relocated
-addresses in the debugging information for a shared object
+addresses in the debugging information for a shared object file
 are offsets relative to the start of the lowest region of
-memory loaded from that shared object.
+memory loaded from that shared object file.
 
 \needlines{4}
 \textit{This requirement makes the debugging information for
-shared objects position independent.  Virtual addresses in a
-shared object may be calculated by adding the offset to the
-base address at which the object was attached. This offset
+shared object files position independent.  Virtual addresses in a
+shared object file may be calculated by adding the offset to the
+base address at which the object file was attached. This offset
 is available in the run\dash time linker\textquoteright s data structures.}
 
 \subsection{DWARF Package Files}
 \label{datarep:dwarfpackagefiles}
-\textit{Using split DWARF objects allows the developer to compile, 
+\textit{Using \splitDWARFobjectfile{s} allows the developer to compile, 
 link, and debug an application quickly with less link-time overhead,
 but a more convenient format is needed for saving the debug
 information for later debugging of a deployed application. A
@@ -447,13 +448,13 @@ The size of the hash table, $S$, must be $2^k$ such that:
 \hspace{0.3cm}$2^k\ \ >\ \ 3*U/2$
 
 The hash table begins at offset 16 in the section, and consists
-of an array of $M$ 64-bit slots. Each slot contains a 64-bit
+of an array of $S$ 64-bit slots. Each slot contains a 64-bit
 signature.
 % (using the byte order of the application binary).
 
 The parallel table of indices begins immediately after the hash table 
 (at offset \mbox{$16 + 8 * S$} from the beginning of the section), and
-consists of an array of $M$ 32-bit slots,
+consists of an array of $S$ 32-bit slots,
 % (using the byte order of the application binary), 
 corresponding 1-1 with slots in the hash
 table. Each entry in the parallel table contains a row index into
@@ -476,10 +477,10 @@ an entry in the hash table is located as follows:
     zeroes), terminate the search: the signature is not present
     in the table.
 
-\item Let $H = (H + H')\ modulo\ M$. Repeat at Step 3.
+\item Let $H = (H + H')\ modulo\ S$. Repeat at Step 3.
 \end{enumerate}
 
-Because $M > U$, and $H'$ and $M$ are relatively prime, the search is
+Because $S > U$, and $H'$ and $S$ are relatively prime, the search is
 guaranteed to stop at an unused slot or find the match.
 
 \needlines{4}
@@ -543,13 +544,13 @@ the array is indexed starting from 1 (row 0 of the table of
 offsets also serves as the key for the table of sizes).
 
 \subsection{DWARF Supplementary Object Files}
-\label{data:dwarfsupplemetaryobjectfiles}
+\label{datarep:dwarfsupplemetaryobjectfiles}
 In order to minimize the size of debugging information, it is possible
 to move duplicate debug information entries, strings and macro entries from
-several executables or shared objects into a separate 
+several executables or shared object files into a separate 
 \addtoindexi{\textit{supplementary object file}}{supplementary object file} by some
 post-linking utility; the moved entries and strings can be then referenced
-from the debugging information of each of those executables or shared objects.
+from the debugging information of each of those executable or shared object files.
 
 \needlines{4}
 A DWARF \addtoindex{supplementary object file} is itself an object file, 
@@ -558,7 +559,7 @@ file format, byte order, and size as the corresponding application executables
 or shared libraries. It consists only of a file header, section table, and
 a number of DWARF debug information sections.  Both the 
 \addtoindex{supplementary object file}
-and all the executables or shared objects that reference entries or strings in that
+and all the executable or shared object files that reference entries or strings in that
 file must contain a \dotdebugsup{} section that establishes the relationship.
 
 The \dotdebugsup{} section contains:
@@ -572,8 +573,8 @@ value in this field is \versiondotdebugsup.
 \item \texttt{is\_supplementary} (\HFTubyte) \\
 \addttindexx{is\_supplementary}
 A 1-byte unsigned integer, which contains the value 1 if it is
-in the \addtoindex{supplementary object file} that other executables or 
-shared objects refer to, or 0 if it is an executable or shared object 
+in the \addtoindex{supplementary object file} that other executable or 
+shared object files refer to, or 0 if it is an executable or shared object 
 referring to a \addtoindex{supplementary object file}.
 
 \needlines{4}
@@ -598,8 +599,8 @@ Some checksum or cryptographic hash function of the \dotdebuginfo{},
 \dotdebugstr{} and \dotdebugmacro{} sections of the 
 \addtoindex{supplementary object file}, or some unique identifier
 which the implementation can choose to verify that the supplementary 
-section object file matches what the debug information in the executables 
-or shared objects expects.
+section object file matches what the debug information in the executable 
+or shared object file expects.
 \end{enumerate}
 
 Debug information entries that refer to an executable's or shared
@@ -608,12 +609,12 @@ addesses will likely not be the same). Similarly,
 entries referenced from within location expressions or using loclistptr
 form attributes must not be moved to a \addtoindex{supplementary object file}.
 
-Executable or shared object compilation units can use
+Executable or shared object file compilation units can use
 \DWTAGimportedunit{} with \DWFORMrefsup{} form \DWATimport{} attribute
 to import entries from the \addtoindex{supplementary object file}, other \DWFORMrefsup{}
 attributes to refer to them and \DWFORMstrpsup{} form attributes to
 refer to strings that are used by debug information of multiple
-executables or shared objects.  Within the \addtoindex{supplementary object file}'s
+executables or shared object files.  Within the \addtoindex{supplementary object file}'s
 debugging sections, form \DWFORMrefsup{} or \DWFORMstrpsup{} should
 not be used, and all reference forms referring to some other sections
 refer to the local sections in the \addtoindex{supplementary object file}.
@@ -626,7 +627,7 @@ can refer to \dotdebugmacro{} section entries.  Within the
 \dotdebugmacro{} section of a \addtoindex{supplementary object file}, 
 \DWMACROdefineindirect{} and \DWMACROundefindirect{}
 opcodes refer to the local \dotdebugstr{} section, not the one in
-the executable or shared object."
+the executable or shared object file.
 
 
 \needlines{6}
@@ -774,7 +775,7 @@ reporting of all such errors.)
 \textit{It is expected that DWARF producing compilers will \emph{not} use
 the 64-bit format \emph{by default}. In most cases, the division of
 even very large applications into a number of executable and
-shared objects will suffice to assure that the DWARF sections
+shared object files will suffice to assure that the DWARF sections
 within each individual linked object are less than 4 GBytes
 in size. However, for those cases where needed, the 64-bit
 format allows the unusual case to be handled as well. Even
@@ -1480,7 +1481,7 @@ Table \referfol{tab:attributeencodings}.
             \addtoindexx{ranges base!encoding} \\
 \DWATdwoid~\ddag &0x75&
 		\livelink{chap:classconstant}{constant}
-            \addtoindexx{split DWARF object id!encoding} \\
+            \addtoindexx{split DWARF object file id!encoding} \\
 \DWATdwoname~\ddag &0x76&
 		\livelink{chap:classstring}{string}
             \addtoindexx{split DWARF object file name!encoding} \\
@@ -1571,7 +1572,7 @@ address on the target machine
 The size is encoded in the compilation unit header 
 (see Section \refersec{datarep:compilationunitheader}).
 This address is relocatable in a relocatable object file and
-is relocated in an executable file or shared object.
+is relocated in an executable file or shared object file.
 
 \item An indirect index into a table of addresses (as 
 described in the previous bullet) in the
@@ -1591,7 +1592,7 @@ consists of an offset from the beginning of the \dotdebugaddr{} section to the
 beginning of the list of machine addresses information for the
 referencing entity. It is relocatable in
 a relocatable object file, and relocated in an executable or
-shared object. In the \thirtytwobitdwarfformat, this offset
+shared object file. In the \thirtytwobitdwarfformat, this offset
 is a 4-byte unsigned value; in the 64-bit DWARF
 format, it is an 8-byte unsigned value (see Section
 \refersec{datarep:32bitand64bitdwarfformats}).
@@ -1707,7 +1708,7 @@ section to the first byte of
 the data making up the line number list for the compilation
 unit. 
 It is relocatable in a relocatable object file, and
-relocated in an executable or shared object. In the 
+relocated in an executable or shared object file. In the 
 \thirtytwobitdwarfformat, this offset is a 4-byte unsigned value;
 in the \sixtyfourbitdwarfformat, it is an 8-byte unsigned value
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
@@ -1727,7 +1728,7 @@ section to the first byte of
 the data making up the 
 \addtoindex{location list} for the compilation unit. 
 It is relocatable in a relocatable object file, and
-relocated in an executable or shared object. In the 
+relocated in an executable or shared object file. In the 
 \thirtytwobitdwarfformat, this offset is a 4-byte unsigned value;
 in the \sixtyfourbitdwarfformat, it is an 8-byte unsigned value
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
@@ -1745,7 +1746,7 @@ It consists of an offset from the beginning of the
 section to the the header making up the 
 macro information list for the compilation unit. 
 It is relocatable in a relocatable object file, and
-relocated in an executable or shared object. In the 
+relocated in an executable or shared object file. In the 
 \thirtytwobitdwarfformat, this offset is a 4-byte unsigned value;
 in the \sixtyfourbitdwarfformat, it is an 8-byte unsigned value
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
@@ -1764,7 +1765,7 @@ to the beginning of the non\dash contiguous address ranges
 information for the referencing entity.  
 It is relocatable in
 a relocatable object file, and relocated in an executable or
-shared object. In the \thirtytwobitdwarfformat, this offset
+shared object file. In the \thirtytwobitdwarfformat, this offset
 is a 4-byte unsigned value; in the 64-bit DWARF
 format, it is an 8-byte unsigned value (see Section
 \refersec{datarep:32bitand64bitdwarfformats}).
@@ -1816,15 +1817,15 @@ information entry within a
 \dotdebuginfo{} section; in particular,
 it may refer to an entry in a different compilation unit
 from the unit containing the reference, and may refer to an
-entry in a different shared object.  This type of reference
+entry in a different shared object file.  This type of reference
 (\DWFORMrefaddrTARG) 
 is an offset from the beginning of the
 \dotdebuginfo{} 
-section of the target executable or shared object, or, for
+section of the target executable or shared object file, or, for
 references within a \addtoindex{supplementary object file}, 
 an offset from the beginning of the local \dotdebuginfo{} section;
 it is relocatable in a relocatable object file and frequently
-relocated in an executable file or shared object. For
+relocated in an executable or shared object file. For
 references from one shared object or static executable file
 to another, the relocation and identification of the target
 object must be performed by the consumer. In the 
@@ -1837,10 +1838,10 @@ unsigned value
 another compilation unit using 
 \DWFORMrefaddr{} must have a global symbolic name.}
 
-\textit{For a reference from one executable or shared object to
+\textit{For a reference from one executable or shared object file to
 another, the reference is resolved by the debugger to identify
-the shared object or executable and the offset into that
-object\textquoteright s \dotdebuginfo{}
+the executable or shared object file and the offset into that
+file\textquoteright s \dotdebuginfo{}
 section in the same fashion as the run
 time loader, either when the debug information is first read,
 or when the reference is used.}
@@ -1855,7 +1856,7 @@ reference (\DWFORMrefsigeightTARG) is the
 that was computed for the type. 
 
 The fourth type of reference is a reference from within the 
-\dotdebuginfo{} section of the executable or shared object to
+\dotdebuginfo{} section of the executable or shared object file to
 a debugging information entry in the \dotdebuginfo{} section of 
 a \addtoindex{supplementary object file}.
 This type of reference (\DWFORMrefsupTARG) is an offset from the 
@@ -1867,7 +1868,7 @@ number of link\dash time relocations and so speed up linking. The
 use of the second, third and fourth type of reference allows for the
 sharing of information, such as types, across compilation
 units, while the fourth type further allows for sharing of information 
-across compilation units from different executables or shared objects.}
+across compilation units from different executables or shared object files.}
 
 \textit{A reference to any kind of compilation unit identifies the
 debugging information entry for that unit, not the preceding
@@ -1941,7 +1942,7 @@ This is an offset into the \dotdebugstroffsets{} section
 beginning of the string offsets information for the
 referencing entity. It is relocatable in
 a relocatable object file, and relocated in an executable or
-shared object. In the \thirtytwobitdwarfformat, this offset
+shared object file. In the \thirtytwobitdwarfformat, this offset
 is a 4-byte unsigned value; in the 64-bit DWARF
 format, it is an 8-byte unsigned value (see Section
 \refersec{datarep:32bitand64bitdwarfformats}).
@@ -2924,18 +2925,16 @@ address
 \addtoindexx{address space!segmented}
 addressing) on the target system.
 
-\item \texttt{segment\_size} (\HFTubyte) \\
-A 
-\addttindexx{segment\_size}
-1-byte unsigned integer containing the size in bytes of a
+\item \HFNsegmentselectorsize{} (\HFTubyte) \\
+A 1-byte unsigned integer containing the size in bytes of a
 segment selector on the target system.
 
 \end{enumerate}
 
 This header is followed by a series of tuples. Each tuple
 consists of a segment, an address and a length. 
-The segment
-size is given by the \addttindex{segment\_size} field of the header; the
+The segment selector
+size is given by the \HFNsegmentselectorsize{} field of the header; the
 address and length size are each given by the \addttindex{address\_size}
 field of the header. 
 The first tuple following the header in
@@ -2945,7 +2944,7 @@ plus twice the \addtoindex{size of an address}).
 The header is padded, if
 necessary, to that boundary. Each set of tuples is terminated
 by a 0 for the segment, a 0 for the address and 0 for the
-length. If the \addttindex{segment\_size} field in the header is zero,
+length. If the \HFNsegmentselectorsize{} field in the header is zero,
 the segment selectors are omitted from all tuples, including
 the terminating tuple.
 
@@ -3264,15 +3263,15 @@ address for segmented addressing) on the target
 system.
 
 \needlines{4}
-\item	\texttt{segment\_size} (\HFTubyte) \\
+\item	\HFNsegmentselectorsize{} (\HFTubyte) \\
 A 1-byte unsigned integer containing the size in
 bytes of a segment selector on the target system.
 \end{enumerate}
 
 This header is followed by a series of segment/address pairs.
-The segment size is given by the \addttindex{segment\_size} field of the
+The segment size is given by the \HFNsegmentselectorsize{} field of the
 header, and the address size is given by the \addttindex{address\_size}
-field of the header. If the \addttindex{segment\_size} field in the header
+field of the header. If the \HFNsegmentselectorsize{} field in the header
 is zero, the entries consist only of an addresses.
 
 The \DWATaddrbase{} attribute points to the first entry
@@ -3311,7 +3310,7 @@ address for segmented addressing) on the target
 system.
 
 \needlines{4}
-\item	\texttt{segment\_size} (\HFTubyte) \\
+\item	\HFNsegmentselectorsize{} (\HFTubyte) \\
 A 1-byte unsigned integer containing the size in
 bytes of a segment selector on the target system.
 \end{enumerate}
@@ -3319,9 +3318,9 @@ bytes of a segment selector on the target system.
 This header is followed by a series of range list entries as
 described in Section \refersec{chap:noncontiguousaddressranges}.
 The segment size is given by the
-\addttindex{segment\_size} field of the header, and the address size is
+\HFNsegmentselectorsize{} field of the header, and the address size is
 given by the \addttindex{address\_size} field of the header. If the
-\addttindex{segment\_size} field in the header is zero, the segment
+\HFNsegmentselectorsize{} field in the header is zero, the segment
 selector is omitted from the range list entries.
 
 The \DWATrangesbase{} attribute points to the first entry
@@ -3360,7 +3359,7 @@ address for segmented addressing) on the target
 system.
 
 \needlines{4}
-\item	\texttt{segment\_size} (\HFTubyte) \\
+\item	\HFNsegmentselectorsize{} (\HFTubyte) \\
 A 1-byte unsigned integer containing the size in
 bytes of a segment selector on the target system.
 \end{enumerate}
@@ -3368,10 +3367,10 @@ bytes of a segment selector on the target system.
 This header is followed by a series of location list entries as
 described in Section \refersec{chap:locationlists}.
 The segment size is given by the
-\addttindex{segment\_size} field of the header, and the address size is
-given by the \texttt{address\_size} field of the header. If the
-\addttindex{segment\_size} field in the header is zero, the segment
-selector is omitted from the range list entries.
+\HFNsegmentselectorsize{} field of the header, and the address size is
+given by the \HFNaddresssize{} field of the header. If the
+\HFNsegmentselectorsize{} field in the header is zero, the segment
+selector is omitted from range list entries.
 
 The entries are referenced by a byte offset relative to the first
 location list following this header.
@@ -3768,4 +3767,36 @@ line).}
 
 An example that illustrates the computation of an \MDfive{} hash may be found in 
 Appendix \refersec{app:usingtypeunits}.
+
+\section{Name Table Hash Function}
+\label{datarep:nametablehashfunction}
+The hash function used for hashing name strings in the accelerated 
+access name index table (see Section \refersec{chap:acceleratedaccess})
+is defined in \addtoindex{C} as shown in 
+Figure \referfol{fig:nametablehashfunctiondefinition}.\footnote{
+This hash function is sometimes informally known as the 
+"\addtoindex{TJB hash function}" or the "\addtoindex{Berstein hash function}"
+(see, for example, 
+\hrefself{http://en.wikipedia.org/wiki/List\_of\_hash\_functions} or
+\hrefself{http://stackoverflow.com/questions/10696223/reason-for-5381-number-in-djb-hash-function)}.} 
+
+\begin{figure}[here]
+\begin{lstlisting}
+
+unsigned long \* must be a 32-bit integer type *\
+    hash(unsigned char *str)
+    {
+        unsigned long hash = 5381;
+        int c;
+
+        while (c = *str++)
+            hash = hash * 33 + c;
+
+        return hash;
+    }
+
+\end{lstlisting}
+\caption{Name Table Hash Function Definition}
+\label{fig:nametablehashfunctiondefinition}
+\end{figure}
 
