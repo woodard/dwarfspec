@@ -3,7 +3,7 @@
 % If draft is in the document class list, pix are just suggested
 % by an outline, the pic does not appear as a picture.
 %
-\newcommand{\docdate}{May 16, 2015}
+\newcommand{\docdate}{June 7, 2015}
 %
 \usepackage{ifthen}
 \newboolean{isdraft}
@@ -61,8 +61,9 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \usepackage{needspace}     % For assuring space remaining on a page
 \usepackage{ifthen}        % For conditional processing
 \usepackage{changepage}    % For odd/even page checks
-\usepackage{lscape}
-\usepackage{tikz}		   % graphics (Appendix B)
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{lscape}        % For landscape mode (Appendix B)
+\usepackage{tikz}	   % graphics (Appendix B)
 \usetikzlibrary{shapes.geometric}
 \usetikzlibrary{arrows,decorations.pathmorphing}
 \usepackage{makeidx}       % For making an index
@@ -174,6 +175,13 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
     \begin{center} \textit{(empty page)} \end{center}
     }
 
+% Define a new column type P that is just like p except
+% that it uses ragged right (rather than right justification}
+% within a column  of a tabular environment. (See Goossens,
+% Mittelback&Samarin, "The LaTex Companion", pp108&114.)
+\newcommand{\PBS}[1]{\let\temp=\\#1\let\\=\temp}
+\newcolumntype{P}[1]{>{\PBS\raggedright\hspace{0pt}}p{#1}}
+
 % A simple rule used in simple tables; default length is 2 inches
 \newcommand{\simplerule}[1][2in]{\rule[4pt]{#1}{0.5pt}}
 
@@ -195,6 +203,7 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 
 % Define commands for all of the DWARF names (DW\_*, .debug_*, a few others)
 %
+\newcommand{\definition}[1]{\textcolor{red!80!black}{#1}}
 \include{dwarfnamecmds}
 
 %--- Begin the document pages

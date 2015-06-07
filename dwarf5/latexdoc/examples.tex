@@ -357,17 +357,18 @@ Figure \referfol{fig:fortranarrayexamplesourcefragment}.
 
 \begin{figure}[here]
 \begin{lstlisting}
-type array_ptr
-real :: myvar
-real, dimension (:), pointer :: ap
-end type array_ptr
-type(array_ptr), allocatable, dimension(:) :: arrayvar
-allocate(arrayvar(20))
-do i = 1, 20
-allocate(arrayvar(i)%ap(i+10))
-end do
+        type array_ptr
+        real :: myvar
+        real, dimension (:), pointer :: ap
+        end type array_ptr
+        type(array_ptr), allocatable, dimension(:) :: arrayvar
+        allocate(arrayvar(20))
+        do i = 1, 20
+            allocate(arrayvar(i)%ap(i+10))
+        end do
 \end{lstlisting}
-\caption{Fortran array example: source fragment} \label{fig:fortranarrayexamplesourcefragment}
+\caption{Fortran array example: source fragment} 
+\label{fig:fortranarrayexamplesourcefragment}
 \end{figure}
 
 For allocatable and pointer arrays, it is essentially required
@@ -1373,7 +1374,7 @@ beginning of the object.}
 \needlines{5}
 This section illustrates one possible representation of the 
 following \addtoindex{C} structure definition in both big- 
-and little-endian byte orders:
+and little-endian \byteorder{s}:
 
 \begin{lstlisting}
 struct S {
@@ -3840,4 +3841,203 @@ Figure \refersec{fig:callsiteexample2dwarf}.
 \end{dwflisting}
 \caption{Call Site Example \#2: DWARF Encoding}
 \label{fig:callsiteexample2dwarf}
+\end{figure}
+
+
+\clearpage
+\section{Macro Example}
+\label{macroexample}
+Consider the \addtoindex{C} source in Figure 
+\referfol{ref:macroexamplesource} which is used to illustrate the
+DWARF encoding of macro information (see Section \refersec{chap:macroinformation}).
+
+\begin{figure}[h]
+\textit{File a.c}
+\begin{lstlisting}
+#include "a.h"
+#define FUNCTION_LIKE_MACRO(x) 4+x
+#include "b.h"
+\end{lstlisting}
+\vspace{7mm}
+\textit{File a.h}
+\begin{lstlisting}
+#define LONGER_MACRO 1
+#define B 2
+#include "b.h"
+#define B 3
+\end{lstlisting}
+\vspace{7mm}
+\textit{File b.h}
+\begin{lstlisting}
+#undef B
+#define D 3
+#define FUNCTION_LIKE_MACRO(x) 4+x
+\end{lstlisting}
+\caption{Macro example: Source}
+\label{ref:macroexamplesource}
+\end{figure}
+
+Two possible encodings are shown. The first, in 
+Figure \refersec{fig:macroexamplesimpledwarfencoding}, is perhaps the simplest
+possible encoding. It includes all macro information from the
+main source file (\texttt{a.c}) as well as its two included files
+(\texttt{a.h} and \texttt{b.h}) in a single macro unit. Further,
+all strings are included as immediate operands of the macro
+operators (that is, there is no string pooling). The size
+of the macro unit is 160 bytes.
+
+The second encoding, in 
+Figure \refersec{fig:macroexampledsharablewarfencoding},
+saves space in two ways:
+\begin{enumerate}[1. ]
+\item Longer strings are pooled by storing them in the
+\dotdebugstr{} section where they can be referenced more than
+once.
+
+\item Macro information entries contained in included files
+are represented as separate macro units which are then
+imported for each \texttt{\#include} directive.
+
+\end{enumerate}
+The combined size of the three macro units and their referenced
+strings is 129 bytes.
+
+\needlines{4}
+A number of observations are worth mentioning:
+\begin{itemize}
+\item
+Strings that are the same size as a reference or less are
+better represented as immediate operands. Strings longer
+than twice the size of a reference are better stored in the
+string table if there are at least two references.
+
+\item
+There is a trade-off between the size of the macro information
+of a file and the number of times it is included when evaluating
+whether to create a separate macro unit. However, the amount
+of overhead (the size of a macro header) needed to represent a
+unit as well as the size of the operation to import a macro unit
+are both small.
+
+\item
+A macro unit need not describe all of the macro information in
+a file. For example, in Figure \ref{fig:macroexampledsharablewarfencoding}
+the second macro unit (beginning at \texttt{i\$1h}) includes macros
+from just the first two lines of file \texttt{a.h}.
+
+\item
+An implementation may be able to share macro units across object
+files (not shown in this example). To support this, it may be
+advantageous to create macro units in cases where they do not
+offer an advantage in a single compilation of itself.
+
+\needlines{6}
+\item
+The header of a macro unit that contains a \DWMACROstartfile{}
+operation must include a reference to the compilation line number 
+header to allow interpretation of the file number operands in
+those commands. However, the presence of those offsets complicates
+or may preclude sharing across compilations.
+
+\end{itemize}
+
+
+\begin{figure}
+\begin{dwflisting}
+\begin{alltt}
+
+! *** Section \dotdebugmacro{} contents
+! Macro unit for "a.c"
+0$h:    Version:        5
+        Flags:          2
+            \HFNoffsetsizeflag: 0           ! 4-byte offsets
+            \HFNdebuglineoffsetflag: 1     ! Line number offset present
+            \HFNopcodeoperandstableflag: 0 ! No extensions
+        Offset in \dotdebugline{} section: 0  ! Line number offset
+0$m:    \DWMACROstartfile, 0, 0     ! Implicit Line: 0, File: 0 "a.c"
+        \DWMACROstartfile, 1, 1     ! #include Line: 1, File: 1 "a.h"
+        \DWMACROdefine, 1, "LONGER\_MACRO 1"
+                                      ! #define Line: 1, String: "LONGER\_MACRO 1"  
+        \DWMACROdefine, 2, "B 2"     ! #define Line: 2, String: "B 2"  
+        \DWMACROstartfile, 3, 2     ! #include Line: 3, File: 2 "b.h" 
+        \DWMACROundef, 1, "B"        ! #undef Line: 1, String: "b" 
+        \DWMACROdefine 2, "D 3"      ! #define Line: 2, String: "D 3"
+        \DWMACROdefine, 3, "FUNCTION\_LIKE\_MACRO(x) 4+x"
+                                      ! #define Line: 3, 
+                                      !   String: "FUNCTION\_LIKE\_MACRO(x) 4+x"
+        \DWMACROendfile{}             ! End "b.h" -> back to "a.h"
+        \DWMACROdefine, 4, "B 3"     ! #define Line: 4, String: "B 3"
+        \DWMACROendfile{}             ! End "a.h" -> back to "a.c"
+        \DWMACROdefine, 2, "FUNCTION\_LIKE\_MACRO(x) 4+x"
+                                      ! #define Line: 2, 
+                                      !   String: "FUNCTION\_LIKE\_MACRO(x) 4+x"
+        \DWMACROstartfile, 3, 2     ! #include Line: 3, File: 2 "b.h" 
+        \DWMACROundef, 1, "B"        ! #undef Line: 1, String: "b" 
+        \DWMACROdefine, 2, "D 3"     ! #define Line: 2, String: "D 3"
+        \DWMACROdefine, 3, "FUNCTION\_LIKE\_MACRO(x) 4+x"
+                                      ! #define Line: 3, 
+                                      !   String: "FUNCTION\_LIKE\_MACRO(x) 4+x"
+        \DWMACROendfile{}             ! End "b.h" -> back to "a.c"
+        \DWMACROendfile{}             ! End "a.c" -> back to ""
+        0                             ! End macro unit
+\end{alltt}
+\end{dwflisting}
+\caption{Macro Example: Simple DWARF Encoding}
+\label{fig:macroexamplesimpledwarfencoding}
+\end{figure}
+
+
+\begin{figure}
+\begin{dwflisting}
+\begin{alltt}
+! *** Section \dotdebugmacro{} contents
+! Macro unit for "a.c"
+0$h:    Version:        5
+        Flags:          2
+            \HFNoffsetsizeflag: 0           ! 4-byte offsets
+            \HFNdebuglineoffsetflag: 1     ! Line number offset present
+            \HFNopcodeoperandstableflag: 0 ! No extensions
+        Offset in \dotdebugline{} section: 0  ! Line number offset
+0$m:    \DWMACROstartfile, 0, 0     ! Implicit Line: 0, File: 0 "a.c"
+        \DWMACROstartfile, 1, 1     ! #include Line: 1, File: 1 "a.h"
+        \DWMACROimport, i$1h         ! Import unit at i$1h (lines 1-2)
+        \DWMACROstartfile, 3, 2     ! #include Line: 3, File: 2 "b.h" 
+        \DWMACROimport, i$2h         ! Import unit i$2h (lines all)
+        \DWMACROendfile{}             ! End "b.h" -> back to "a.h"
+        \DWMACROdefine, 4, "B 3"     ! #define Line: 4, String: "B 3"
+        \DWMACROendfile{}             ! End "a.h" -> back to "a.c"
+        \DWMACROdefine, 2, s$1       ! #define Line: 3, 
+                                      !   String: "FUNCTION\_LIKE\_MACRO(x) 4+x"
+        \DWMACROstartfile, 3, 2     ! #include Line: 3, File: 2 "b.h" 
+        \DWMACROimport, i$2h         ! Import unit i$2h (lines all)
+        \DWMACROendfile{}             ! End "b.h" -> back to "a.c"
+        \DWMACROendfile{}             ! End "a.c" -> back to ""
+        0                             ! End macro unit
+! Macro unit for "a.h" lines 1-2
+i$1h:   Version:        5
+        Flags:          0
+            \HFNoffsetsizeflag: 0           ! 4-byte offsets
+            \HFNdebuglineoffsetflag: 0     ! No line number offset
+            \HFNopcodeoperandstableflag: 0 ! No extensions
+i$1m:   \DWMACROdefinestrp, 1, s$2  ! #define Line: 1, String: "LONGER\_MACRO 1"  
+        \DWMACROdefine, 2, "B 2"     ! #define Line: 2, String: "B 2"  
+        0                             ! End macro unit
+! Macro unit for "b.h"
+i$2h:   Version:        5
+        Flags:          0
+            \HFNoffsetsizeflag: 0           ! 4-byte offsets
+            \HFNdebuglineoffsetflag: 0     ! No line number offset
+            \HFNopcodeoperandstableflag: 0 ! No extensions
+i$2m:   \DWMACROundef, 1, "B"        ! #undef Line: 1, String: "B" 
+        \DWMACROdefine, 2, "D 3"     ! #define Line: 2, String: "D 3"
+        \DWMACROdefinestrp, 3, s$1  ! #define Line: 3, 
+                                      !   String: "FUNCTION\_LIKE\_MACRO(x) 4+x"
+        0                             ! End macro unit
+! *** Section \dotdebugstr{} contents
+s$1:    String: "FUNCTION\_LIKE\_MACRO(x) 4+x"
+s$2:    String: "LONGER\_MACRO 1"
+\end{alltt}
+\end{dwflisting}
+\caption{Macro Example: Sharable DWARF Encoding}
+\label{fig:macroexampledsharablewarfencoding}
 \end{figure}

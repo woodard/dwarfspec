@@ -5,13 +5,21 @@
 %
 
 % A command to define multiple helpful DWARF name commands
+%   nameLINK    emits the name as hyperlink to nameTARG (or nameMARK)
+%   nameTARG    emit and index the name, and define this place as target for the name
+%   nameINDX    do not emit the name but index it anyway
+%   nameMARK    do not emit the name but index it and define this place as target anyway
+%   nameNAME    emit and index the name, but w/o hyperlink
+%   nameDEFN    secondary definition; like nameTARG but does not define target of hyperlink
+%   name        alias for nameLINK
 %
 \newcommand{\newdwfnamecommands}[2]{
 	\expandafter\def\csname #1LINK\endcsname{\index{#2}\hyperlink{chap:#1}{#2}}
-	\expandafter\def\csname #1TARG\endcsname{\index{#2}\hypertarget{chap:#1}{#2}}
+	\expandafter\def\csname #1TARG\endcsname{\index{#2}\hypertarget{chap:#1}{\definition{#2}}}
 	\expandafter\def\csname #1INDX\endcsname{\index{#2}}
 	\expandafter\def\csname #1MARK\endcsname{\index{#2}\hypertarget{chap:#1}{}}	
 	\expandafter\def\csname #1NAME\endcsname{\index{#2}{#2}}
+        \expandafter\def\csname #1DEFN\endcsname{\index{#2}{\definition{#2}}}
 	% The normal, most common use in running text...
 	\expandafter\def\csname #1\endcsname{\csname #1LINK\endcsname}
 	}
@@ -433,14 +441,14 @@
 \newdwfnamecommands{DWMACROundef}{DW\_MACRO\_undef}
 \newdwfnamecommands{DWMACROstartfile}{DW\_MACRO\_start\_file}
 \newdwfnamecommands{DWMACROendfile}{DW\_MACRO\_end\_file}
-\newdwfnamecommands{DWMACROdefineindirect}{DW\_MACRO\_define\_indirect}
-\newdwfnamecommands{DWMACROundefindirect}{DW\_MACRO\_undef\_indirect}
-\newdwfnamecommands{DWMACROtransparentinclude}{DW\_MACRO\_transparent\_include}
-\newdwfnamecommands{DWMACROdefineindirectsup}{DW\_MACRO\_define\_indirect\_sup}
-\newdwfnamecommands{DWMACROundefindirectsup}{DW\_MACRO\_undef\_indirect\_sup}
-\newdwfnamecommands{DWMACROtransparentincludesup}{DW\_MACRO\_transparent\_include\_sup}
-\newdwfnamecommands{DWMACROdefineindirectx}{DW\_MACRO\_define\_indirectx}
-\newdwfnamecommands{DWMACROundefindirectx}{DW\_MACRO\_undef\_indirectx}
+\newdwfnamecommands{DWMACROdefinestrp}{DW\_MACRO\_define\_strp}
+\newdwfnamecommands{DWMACROundefstrp}{DW\_MACRO\_undef\_strp}
+\newdwfnamecommands{DWMACROimport}{DW\_MACRO\_import}
+\newdwfnamecommands{DWMACROdefinesup}{DW\_MACRO\_define\_sup}
+\newdwfnamecommands{DWMACROundefsup}{DW\_MACRO\_undef\_sup}
+\newdwfnamecommands{DWMACROimportsup}{DW\_MACRO\_import\_sup}
+\newdwfnamecommands{DWMACROdefinestrx}{DW\_MACRO\_define\_strx}
+\newdwfnamecommands{DWMACROundefstrx}{DW\_MACRO\_undef\_strx}
 \newdwfnamecommands{DWMACROlouser}{DW\_MACRO\_lo\_user}
 \newdwfnamecommands{DWMACROhiuser}{DW\_MACRO\_hi\_user}
 %
@@ -748,6 +756,7 @@
 \newcommand{\HFNdebuginfolength}          {\addttindex{debug\_info\_length}}
 \newcommand{\HFNdebuginfooffset}          {\addttindex{debug\_info\_offset}}
 \newcommand{\HFNdebuglineoffset}          {\addttindex{debug\_line\_offset}}
+\newcommand{\HFNdebuglineoffsetflag}      {\addttindex{debug\_line\_offset\_flag}}
 \newcommand{\HFNdefaultisstmt}            {\addttindex{default\_is\_stmt}}
 \newcommand{\HFNdirectoryentryformatcount}{\addttindex{directory\_entry\_format\_count}}
 \newcommand{\HFNdirectoryentryformat}     {\addttindex{directory\_entry\_format}}
@@ -763,8 +772,10 @@
 \newcommand{\HFNlinerange}                {\addttindex{line\_range}}
 \newcommand{\HFNminimuminstructionlength} {\addttindex{minimum\_instruction\_length}}
 \newcommand{\HFNmaximumoperationsperinstruction}{\addttindex{maximum\_operations\_per\_instruction}}
+\newcommand{\HFNoffsetsizeflag}           {\addttindex{offset\_size\_flag}}
 \newcommand{\HFNopcodebase}               {\addttindex{opcode\_base}}
 \newcommand{\HFNopcodeoperandstable}      {\addttindex{opcode\_operands\_table}}
+\newcommand{\HFNopcodeoperandstableflag}  {\addttindex{opcode\_operands\_table\_flag}}
 \newcommand{\HFNsegmentselectorsize}      {\addttindex{segment\_selector\_size}}
 \newcommand{\HFNstandardopcodelengths}    {\addttindex{standard\_opcode\_lengths}}
 \newcommand{\HFNtypeoffset}               {\addttindex{type\_offset}}
@@ -791,6 +802,10 @@
 \newcommand{\autoreturntype}{\texttt{auto} return type\index{auto return type@\texttt{auto} return type}}
 \newcommand{\specialaddresstype}{\livelink{chap:specialaddresstype}{special address type}}
 \newcommand{\splitDWARFobjectfile}{\addtoindex{split DWARF object file}}
+\newcommand{\compunitset}{\addtoindex{compilation unit set}}
+\newcommand{\typeunitset}{\addtoindex{type unit set}}
+\newcommand{\byteorder}{\addtoindex{byte order}}
+\newcommand{\associatedcompilationunit}{\addtoindex{associated compilation unit}}
 %
 % Anti-ligature commands added because \/ and {} don't work for unknown reasons
 % nor does the microtext package DisableLigatures command...???

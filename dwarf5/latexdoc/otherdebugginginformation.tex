@@ -187,13 +187,13 @@ will be one CU entry for each compile unit in the module, and one TU
 entry for each unique type unit in the module. Each list is indexed
 starting at 0.
 
-The list of foreign TUs is an array of 8-byte (\DWFORMrefsigeight) type
+The list of foreign TUs is an array of 64-bit (\DWFORMrefsigeight) type
 signatures, representing types referenced by the index whose
 definitions have been placed in a different object file (that is, a split
 DWARF object). This list may be empty. 
 The foreign TU list immediately follows the local TU list 
 and they both use the same index, so that if there are $N$ local TU entries, 
-the index for the first foreign TU is $N+1$.
+the index for the first foreign TU is $N$.
 
 The name table is logically a table with a row for each unique name in
 the index, and two columns. The first column contains a reference to
@@ -385,7 +385,7 @@ The total number of entries in the list is given by
 
 \subsubsubsection{List of Foreign TUs}
 The list of foreign TUs immediately follows the list of local TUs.
-Each entry in the list is an 8-byte type signature (as described by
+Each entry in the list is an 64-bit type signature (as described by
 \DWFORMrefsigeight).
 
 The number of entries in the list is given by \texttt{foreign\_type\_unit\_count}.
@@ -659,7 +659,7 @@ instruction addresses.}
 The following terms are used in the description of the line
 number information format:
 
-\begin{longtable} {lp{9cm}}
+\begin{longtable} {lP{9cm}}
 state machine &
 The hypothetical machine used by a consumer of the line number
 information to expand the byte\dash coded 
@@ -693,7 +693,7 @@ compilation unit are assumed to be contiguous). \\
 The line number information state machine has a number of  
 registers as shown in Table \referfol{tab:statemachineregisters}.
 
-\begin{longtable}{l|p{9cm}}
+\begin{longtable}{l|P{9cm}}
   \caption{State machine registers } \label{tab:statemachineregisters} \\
   \hline \bfseries Register name&\bfseries Meaning\\ \hline
 \endfirsthead
@@ -1580,15 +1580,16 @@ set of units that make up an executable or shared object file.}
 
 \textit{The representation of debugging information in the \dotdebugmacinfo{} section is specified
 in earlier versions of the DWARF standard. Note that the \dotdebugmacinfo{} section does not contain 
-any headers and does not support indirect string encodings or transparent includes (see below).}
+any headers and does not support sharing of strings or sharing of repeated macro sequences.}
 
-The macro information for each
-compilation unit starts with a header followed by a series of 
-macro information
-entries. Each entry consists of an opcode
-followed by zero or more operands. The series of entries for a
-given compilation unit ends with an entry containing an opcode of 0.
+The macro information for each compilation unit consists of one or
+more macro units.  Each macro unit starts with a header
+and is followed by a series of macro information entries or file
+inclusion entries.  Each entry consists of an opcode followed by
+zero or more operands. Each macro unit ends with an entry
+containing an opcode of 0.
 
+\needlines{6}
 \subsection{Macro Information Header}
 The macro information header contains the following fields:
 
@@ -1603,8 +1604,8 @@ The bits of the \texttt{flags} field are interpreted as a set
 of flags, some of which may indicate that additional fields follow.
 The following flags, beginning with the least significant bit, are defined:
 \begin{itemize}
-\item \addttindex{offset\_size\_flag} \\
-If the \texttt{offset\_size} flag is zero, the header is for a 32-bit 
+\item \HFNoffsetsizeflag \\
+If the \HFNoffsetsizeflag{} is zero, the header is for a 32-bit 
 DWARF format macro section and all offsets are 4 bytes long;
 if it is one, the header is for a 64-bit DWARF format macro section 
 and all offsets are 8 bytes long.
@@ -1638,6 +1639,7 @@ are described there.  Vendor extension entry opcodes are
 allocated in the range from \DWMACROlouser{} to \DWMACROhiuser. Other
 unassigned codes are reserved for future DWARF standards.
 
+\needlines{4}
 The table starts with a 1-byte \texttt{count} of the defined opcodes, followed by
 an entry for each of those opcodes.  Each entry starts with a 1-byte unsigned
 opcode number, followed by unsigned LEB128\addtoindexx{ULEB128} encoded number of operands
@@ -1652,9 +1654,10 @@ the operand is encoded.  The allowed forms are:
 \subsection{Macro Information Entries}
 \label{chap:macroinformationentries}
 All macro information entries within a \dotdebugmacro{}
-section for a
-given compilation unit appear in the same order in which the
-directives were processed by the compiler.
+section for a given compilation unit appear in the same 
+order in which the directives were processed by the 
+compiler (after taking into account the effect of the
+macro import directives).
 
 
 \subsubsection{Define and Undefine Entries}
@@ -1674,52 +1677,52 @@ of the \texttt{\#define} or \texttt{\#undef} macro directive.
 The second operand is a null-terminated character
 string for the macro being defined or undefined. 
 
-The contents of the string is described below (see Sections 
+The contents of the operands are described below (see Sections 
 \ref{chap:macrodefinestring} and \referfol{chap:macroundefinestring}).
 
-\itembfnl{\DWMACROdefineindirectTARG{}, \DWMACROundefindirectTARG{}}
-A \DWMACROdefineindirectNAME{} or \DWMACROundefindirectNAME{} 
-entry has two operands.  The first operand encodes the line number
+\itembfnl{\DWMACROdefinestrpTARG{}, \DWMACROundefstrpTARG{}}
+A \DWMACROdefinestrpNAME{} or \DWMACROundefstrpNAME{} 
+entry has two operands.  The first operand encodes the source line number
 of the \texttt{\#define} or \texttt{\#undef} macro directive. 
 The second operand consists of an offset into a string table contained in
 the \dotdebugstr{} section of the object file.  The size of the operand is
-given in the header \texttt{offset\_size} field. 
+given in the header \HFNoffsetsizeflag{} field. 
 
-The contents of the string is described below (see Sections 
+The contents of the operands are described below (see Sections 
 \ref{chap:macrodefinestring} and \referfol{chap:macroundefinestring}).
 
-\itembfnl{\DWMACROdefineindirectxTARG{}, \DWMACROundefindirectxTARG{}}
-A \DWMACROdefineindirectxNAME{} or \DWMACROundefindirectxNAME{} entry 
+\itembfnl{\DWMACROdefinestrxTARG{}, \DWMACROundefstrxTARG{}}
+A \DWMACROdefinestrxNAME{} or \DWMACROundefstrxNAME{} entry 
 has two operands.  The first operand encodes the line number 
 of the \texttt{\#define} or \texttt{\#undef} macro directive.
-
 The second operand identifies a string; it is represented using an 
 unsigned LEB128\addtoindexx{ULEB128} encoded value,
 which is interpreted as a zero-based index into an array of offsets in the
 \dotdebugstroffsets{} section. 
 
-The contents of the string is described below (see Sections 
+The contents of the operands are described below (see Sections 
 \ref{chap:macrodefinestring} and \referfol{chap:macroundefinestring}).
 
 \needlines{6}
-\itembfnl{\DWMACROdefineindirectsupTARG{}, \DWMACROundefindirectsupTARG{}}
-A \DWMACROdefineindirectsupNAME{} or \DWMACROundefindirectsupNAME{} entry 
+\itembfnl{\DWMACROdefinesupTARG{}, \DWMACROundefsupTARG{}}
+A \DWMACROdefinesupNAME{} or \DWMACROundefsupNAME{} entry 
 has two operands.  The first operand encodes the line number 
 of the \texttt{\#define} or \texttt{\#undef} macro directive.
 The second operand identifies a string; it is represented as
 an offset into a string table contained in the \dotdebugstr{} 
 section of the \addtoindex{supplementary object file}.  
 The size of the operand depends on the macro section header 
-\texttt{offset\_size} field.  
+\HFNoffsetsizeflag{} field.  
 
-The contents of the string is described below (see Sections 
+The contents of the operands are described below (see Sections 
 \ref{chap:macrodefinestring} and \referfol{chap:macroundefinestring}).
 
 \end{enumerate}
 
 \subsubsection{Macro Source Line Number}
 \label{char:macrosourcelinenumber}
-In all the define and undefine macro information entries,
+In all define and undefine macro information entries,
+as well as the \DWMACROstartfile{} entry,
 the line number of the entry occurs is encoded as an
 unsigned LEB128 integer.
 
@@ -1732,9 +1735,9 @@ beginning of the \dotdebugmacro{} section. \DWMACROstartfile{} and
 \label{chap:macrodefinestring}
 In the case of a 
 \DWMACROdefine{},
-\DWMACROdefineindirect{},
-\DWMACROdefineindirectx{} or
-\DWMACROdefineindirectsup{}
+\DWMACROdefinestrp{},
+\DWMACROdefinestrx{} or
+\DWMACROdefinesup{}
 entry, the value of the
 second operand is the name of the macro symbol that is defined
 at the indicated source line, followed immediately by the 
@@ -1761,16 +1764,16 @@ name of the defined macro from the following definition text.
 \label{chap:macroundefinestring}
 In the case of a 
 \DWMACROundef{},
-\DWMACROundefindirect{},
-\DWMACROundefindirectx{} or
-\DWMACROundefindirectsup{}
+\DWMACROundefstrp{},
+\DWMACROundefstrx{} or
+\DWMACROundefsup{}
 entry, the value of the second string is the name of the pre-processor
 symbol that is undefined at the indicated source line.
 
 \subsubsection{Entries for Command Line Options}
 \label{chap:entriesforcommandlineoptions}
-\DWMACROdefineINDX{}\DWMACROdefineindirectINDX{}\DWMACROdefineindirectxINDX
-\DWMACROundefINDX{}\DWMACROundefindirectINDX{}\DWMACROundefindirectxINDX
+\DWMACROdefineINDX{}\DWMACROdefinestrpINDX{}\DWMACROdefinestrxINDX
+\DWMACROundefINDX{}\DWMACROundefstrpINDX{}\DWMACROundefstrxINDX
 A DWARF producer
 generates a define or undefine entry for
 each pre-processor symbol which is defined or undefined by
@@ -1784,18 +1787,26 @@ undefine entries.
 All such define and undefine entries representing compilation 
 options appear before the first \DWMACROstartfile{} 
 entry for that compilation unit
-(see Section \referfol{chap:fileinclusionentries}
+(see Section \referfol{chap:fileinclusionentries})
 and encode the value 0 in their line number operands.
 
 \subsection{File Inclusion Entries}
 \label{chap:fileinclusionentries}
+
+\subsubsection{Source Include Directives}
+\label{chap:sourceincludedirectives}
+
+The following directives describe a source
+file inclusion directive (\texttt{\#include} in
+\addtoindex{C}/\addtoindex{C++}) and the
+ending of an included file.
 
 \begin{enumerate}[1. ]
 
 \itembfnl{\DWMACROstartfileTARG{}}
 A \DWMACROstartfileNAME{} entry has two operands. The
 first operand encodes the line number of the source line on
-which the \texttt{\#include} macro directive occurred
+which the \texttt{\#include} macro directive occur
 (see Section \refersec{char:macrosourcelinenumber}).
 The second operand encodes a source file name index. 
 
@@ -1820,46 +1831,51 @@ has the value 0 in its line number operand and references
 the file entry in the line number information table for the
 primary source file.
 
-\subsubsection{Inclusion of a Sequence of Entries}
-\label{chap:transparentincludeofasequenceofentries}
-The transparent include entry types make it possible 
-to share duplicate sequences of macro information entries.
-The first form supports sharing within the current compilation
-and the second form supports sharing across separate 
+\subsubsection{Importation of Macro Units}
+\label{chap:importationofmacrounits}
+The import entries make it possible to replicate macro units.
+The first form supports replication within the current compilation
+and the second form supports replication across separate 
 executable or shared object files.
 
+\textit{Import entries do not reflect the source program
+and, in fact, are not necessary at all. However, they do
+provide a mechanism that can be used to reduce redundancy
+in the macro information and thereby to save space.}
 
 \begin{enumerate}[1. ]
 
-\itembfnl{\DWMACROtransparentincludeTARG{}}
-A \DWMACROtransparentincludeNAME{} entry has one operand, an offset into
-another part of the \dotdebugmacro{} section.  The size of the operand
-depends on the header \texttt{offset\_size} field.  The
-\DWMACROtransparentincludeNAME{} entry instructs the consumer to 
-replace it with a sequence of entries beginning  at the given 
+\itembfnl{\DWMACROimportTARG{}}
+A \DWMACROimportNAME{} entry has one operand, an offset into
+another part of the \dotdebugmacro{} section that is
+the beginning of a target macro unit. The size of the operand
+depends on the header \HFNoffsetsizeflag{} field.  The
+\DWMACROimportNAME{} entry instructs the consumer to
+replicate the sequence of entries following the target macro 
+header which begins at the given 
 \dotdebugmacro{} offset, up to, but excluding,
-the terminating entry with opcode \texttt{0}.
+the terminating entry with opcode \texttt{0},
+as though it occurs in place of the import operation.
 
-\itembfnl{\DWMACROtransparentincludesupTARG}
-A \DWMACROtransparentincludesupNAME{} entry has one operand, an 
+\itembfnl{\DWMACROimportsupTARG}
+A \DWMACROimportsupNAME{} entry has one operand, an 
 offset from the start of the \dotdebugmacro{} section in the 
 \addtoindex{supplementary object file}.  
 The size of the operand depends on the section header 
-\texttt{offset\_size} field. 
-Apart from the different location in which to find the sequence of 
-macro information  entries this entry type is equivalent to 
-\DWMACROtransparentinclude. 
+\HFNoffsetsizeflag{} field. 
+Apart from the different location in which to find the macro unit,
+this entry type is equivalent to \DWMACROimport. 
 
 \textit{This entry type is aimed at sharing duplicate 
-sequences of macro information entries between \dotdebugmacro{}
+macro units between \dotdebugmacro{}
 sections from different executable or shared object files.}  
 
 \needlines{4}
 From within the \dotdebugmacro{} section of the 
-\addtoindex{supplementary object file}, \DWMACROdefineindirect{} 
-and \DWMACROundefindirect{} entries refer to the
+\addtoindex{supplementary object file}, \DWMACROdefinestrp{} 
+and \DWMACROundefstrp{} entries refer to the
 \dotdebugstr{} section of that same supplementary file;
-similarly, \DWMACROtransparentinclude{} entries refer to the 
+similarly, \DWMACROimport{} entries refer to the 
 \dotdebugmacro{} section of that same supplementary file.
 
 \end{enumerate}
@@ -2019,7 +2035,7 @@ previous frame.
 \needlines{6}
 The register rules are:
 
-\begin{longtable}{lp{8cm}}
+\begin{longtable}{lP{9cm}}
 undefined 
 &A register that has this rule has no recoverable value in the previous frame.
 (By convention, it is not preserved by a callee.) \\
@@ -2076,7 +2092,7 @@ Frame Description Entry (FDE).
 contiguous, there may be multiple CIEs and FDEs corresponding
 to the parts of that function.}
 
-
+\needlines{6}
 A Common Information Entry holds information that is shared
 among many Frame Description Entries. There is at least one
 CIE in every non-empty \dotdebugframe{} section. A CIE contains
@@ -2220,6 +2236,7 @@ of bytes of program instructions described by this entry.
 \item \texttt{instructions} (array of \HFTubyte) \\
 A sequence of table defining instructions that are described below.
 
+\needlines{4}
 \item \texttt{padding} (array of \HFTubyte) \\
 Enough \DWCFAnop{} instructions 
 to make the size of this entry match the length value above.
@@ -2293,13 +2310,13 @@ and adding the value of
 All other values in the new row are initially identical to the
 current row
 
+\needlines{6}
 \item \textbf{\DWCFAadvanceloconeTARG{}} \\
 The \DWCFAadvanceloconeNAME{} instruction takes a single \HFTubyte{}
 operand that represents a constant delta. This instruction
 is identical to \DWCFAadvanceloc{} except for the encoding
 and size of the delta operand.
 
-\needlines{6}
 \item \textbf{\DWCFAadvanceloctwoTARG} \\
 The \DWCFAadvanceloctwoNAME{} instruction takes a single \HFTuhalf{}
 operand that represents a constant delta. This instruction
@@ -2355,7 +2372,7 @@ to use the provided offset (but to keep the old register). This
 operation is valid only if the current CFA rule is defined
 to use a register and offset.
 
-
+\needlines{6}
 \item \textbf{\DWCFAdefcfaoffsetsfTARG} \\
 The \DWCFAdefcfaoffsetsfNAME{} instruction takes a signed
 LEB128\addtoindexx{LEB128!signed} operand representing a factored offset. This instruction
@@ -2415,6 +2432,7 @@ offset. This instruction is identical to
 \DWCFAoffset{} 
 except for the encoding and size of the register operand.
 
+\needlines{6}
 \item \textbf{\DWCFAoffsetextendedsfTARG} \\
 The \DWCFAoffsetextendedsfNAME{} 
 instruction takes two operands:

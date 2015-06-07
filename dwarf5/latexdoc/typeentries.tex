@@ -8,7 +8,7 @@ If the scope of the declaration of a named type begins after
 \hypertarget{chap:DWATstartscopetypedeclaration}{}
 the low PC value for the scope most closely enclosing the
 declaration, the declaration may have a 
-\DWATstartscope{}
+\DWATstartscopeDEFN{}
 attribute as described for objects in 
 Section \refersec{chap:dataobjectentries}.
 
@@ -69,14 +69,11 @@ and a byte size attribute whose value is 4.}
 If the value of an object of the given type does not fully
 occupy the storage described by a byte size attribute,
 \hypertarget{chap:DWATdatabitoffsetbasetypebitlocation}{}
-the base type entry may also have 
+the base type entry may also have a 
+\DWATbitsizeDEFN{} and a \DWATdatabitoffsetDEFN{} attribute,
 \addtoindexx{bit size attribute}
-a 
-\DWATbitsize{} and a
-\DWATdatabitoffset{} attribute, 
-both 
 \addtoindexx{data bit offset attribute}
-of whose values are
+both of whose values are
 \livelink{chap:classconstant}{integer constant} values
 (see Section \refersec{chap:staticanddynamicvaluesofattributes}). 
 The bit size
@@ -116,7 +113,7 @@ DWARF specification.}
 \caption{Encoding attribute values}
 \label{tab:encodingattributevalues}
 \centering
-\begin{tabular}{l|p{8cm}}
+\begin{tabular}{l|P{8cm}}
 \hline
 \bfseries Name & \bfseries Meaning\\ \hline
 
@@ -203,8 +200,8 @@ with the same interpretation as described for the
 
 \hypertarget{chap:DWATbinaryscalebinaryscalefactorforfixedpointtype}{}
 For a data type with a binary scale factor, the fixed
-binary type entry has a \DWATbinaryscale{} attribute. 
-The \DWATbinaryscale{} attribute\addtoindexx{binary scale attribute} 
+binary type entry has a \DWATbinaryscaleNAME{} attribute. 
+The \DWATbinaryscaleDEFN{} attribute\addtoindexx{binary scale attribute} 
 is an \livelink{chap:classconstant}{integer constant} value
 that represents the exponent of the base two scale factor to
 be applied to an instance of the type.  Zero scale puts the
@@ -219,7 +216,7 @@ bits on the left are not stored in an instance of the type.
 For 
 \hypertarget{chap:DWATsmallscalefactorforfixedpointtype}{}
 a data type with a non-decimal and non-binary scale factor,
-the fixed binary type entry has a \DWATsmall{} attribute which
+the fixed binary type entry has a \DWATsmallDEFN{} attribute which
 \addtoindexx{small attribute} references a 
 \DWTAGconstant{} entry. The scale factor value
 is interpreted in accordance with the value defined by the
@@ -244,7 +241,7 @@ exponent, such as that specified in IEEE 754R.
 
 \subsubsection{Decimal String Encodings}
 \label{chap:decimalstringencodings}
-The \DWATEpackeddecimal{} and \DWATEnumericstring{} 
+The \DWATEpackeddecimalDEFN{} and \DWATEnumericstringDEFN{} 
 base type encodings
 represent packed and unpacked decimal string numeric data
 types, respectively, either of which may be either 
@@ -253,10 +250,7 @@ signed
 \addtoindexx{decimal sign attribute}
 or 
 \addtoindexx{digit count attribute}
-unsigned. 
-\hypertarget{chap:DWATdecimalsigndecimalsignrepresentation}{}
-These 
-\hypertarget{chap:DWATdigitcountdigitcountforpackeddecimalornumericstringtype}{}
+unsigned. These 
 base types are used in combination with
 \DWATdecimalsign, 
 \DWATdigitcount{} and 
@@ -264,7 +258,8 @@ base types are used in combination with
 attributes.
 
 \needlines{5}
-A \DWATdecimalsign{} attribute 
+\hypertarget{chap:DWATdecimalsigndecimalsignrepresentation}{}
+A \DWATdecimalsignDEFN{} attribute 
 \addtoindexx{decimal sign attribute}
 is an \livelink{chap:classconstant}{integer constant} that
 conveys the representation of the sign of the decimal type
@@ -278,7 +273,7 @@ alternatively, no sign at all.
 \caption{Decimal sign attribute values}
 \label{tab:decimalsignattributevalues}
 \centering
-\begin{tabular}{l|p{9cm}}
+\begin{tabular}{l|P{9cm}}
 \hline
  Name & Meaning \\
 \hline
@@ -302,7 +297,7 @@ indicating positive or negative. \\
 
 \needlines{4}
 \hypertarget{chap:DWATdecimalscaledecimalscalefactor}{}
-The \DWATdecimalscale{}
+The \DWATdecimalscaleDEFN{}
 attribute 
 \addtoindexx{decimal scale attribute}
 is an integer constant value
@@ -316,8 +311,9 @@ decimal point to the left; if the absolute value of the scale
 is larger than the digit count, this implies additional zero
 digits on the left are not stored in an instance of the type.
 
-The \DWATdigitcount{} attribute 
+The \DWATdigitcountDEFN{} attribute 
 \addtoindexx{digit count attribute}
+\hypertarget{chap:DWATdigitcountdigitcountforpackeddecimalornumericstringtype}{}
 is an \livelink{chap:classconstant}{integer constant}
 value that represents the number of digits in an instance of
 the type.
@@ -326,7 +322,7 @@ The \DWATEedited{} base
 \hypertarget{chap:DWATpicturestringpicturestringfornumericstringtype}{}
 type is used to represent an edited
 numeric or alphanumeric data type. It is used in combination
-with a \DWATpicturestring{} attribute whose value is a 
+with a \DWATpicturestringDEFN{} attribute whose value is a 
 null\dash terminated string containing the target\dash dependent picture
 string associated with the type.
 
@@ -441,7 +437,7 @@ may
 have 
 \hypertarget{chap:DWATadressclasspointerorreferencetypes}{}
 a 
-\DWATaddressclass{}
+\DWATaddressclassDEFN{}
 attribute to describe how objects having the given pointer
 or reference type ought to be dereferenced.
 
@@ -481,7 +477,7 @@ presentation.
 \caption{Type modifier tags}
 \label{tab:typemodifiertags}
 \centering
-\begin{tabular}{l|p{9cm}}
+\begin{tabular}{l|P{9cm}}
 \hline
 Name&Meaning\\ \hline
 \DWTAGatomictypeTARG{} & C \addtoindex{\_Atomic} qualified type \\
@@ -609,7 +605,7 @@ The
 \hypertarget{chap:DWATorderingarrayrowcolumnordering}{}
 array type entry describing a multidimensional array may
 \addtoindexx{array!element ordering}
-have a \DWATordering{} attribute whose 
+have a \DWATorderingDEFN{} attribute whose 
 \livelink{chap:classconstant}{integer constant} value is
 interpreted to mean either row-major or column-major ordering
 of array elements. The set of values and their meanings
@@ -648,10 +644,10 @@ object of the
 indicated element type, then the array type
 \addtoindexx{bit stride attribute}
 entry has either a 
-\DWATbytestride{} 
+\DWATbytestrideDEFN{} 
 or 
 \addtoindexx{byte stride attribute}
-a \DWATbitstride{}
+a \DWATbitstrideDEFN{}
 attribute, 
 \addtoindexx{bit stride attribute}
 whose value 
@@ -812,8 +808,8 @@ corresponding structure type, union type, or class type entry
 and appear in the same order as the corresponding declarations
 in the source program.
 
-A structure, union, or class type may have a \DWATexportsymbolsNAME{}
-attribute 
+A structure, union, or class type may have a \DWATexportsymbolsDEFN{}
+attribute\addtoindexx{export symbols (of structure, class or union) attribute} 
 \livetarg{chap:DWATexportsymbolsofstructunionclass}{}
 which indicates that all member names defined within 
 the structure, union, or class may be referenced as if they were
@@ -847,10 +843,9 @@ a separate \addtoindex{type unit}
 an incomplete declaration 
 \addtoindexx{incomplete type}
 of that type in the compilation unit may provide
-the unique 64-bit signature of the type using 
+the unique 64-bit signature of the type using a
 \addtoindexx{type signature}
-a \DWATsignature{}
-attribute.
+\DWATsignatureDEFN{} attribute.
 
 If a structure, union or class entry represents the definition
 of a structure, union or class member corresponding to a prior
@@ -916,8 +911,8 @@ facilitate DWARF space compression
 
 \needlines{4}
 A structure type, union type or class type entry may have a
-\DWATcallingconvention{} attribute,
-\addtoindexx{calling convention attribute} 
+\DWATcallingconventionDEFN{} attribute,
+\addtoindexx{calling convention attribute!for types} 
 whose value indicates whether a value of the type should be passed by reference 
 or passed by value. The set of calling convention codes for use with types 
 \addtoindexx{calling convention codes!for types}
@@ -1015,11 +1010,10 @@ An inheritance entry
 \addtoindexx{inheritance entry}
 for a class that derives from or extends
 \hypertarget{chap:DWATdatamemberlocationinheritedmemberlocation}{}
-another class or struct also has 
+another class or struct also has a 
+\DWATdatamemberlocationDEFN{} attribute, 
 \addtoindexx{data member location attribute}
-a 
-\DWATdatamemberlocation{}
-attribute, whose value describes the location of the beginning
+whose value describes the location of the beginning
 of the inherited type relative to the beginning address of the
 instance of the derived class. If that value is a constant, it is the offset
 in bytes from the beginning of the class to the beginning of
@@ -1042,7 +1036,7 @@ inheritance entry
 may 
 \addtoindexx{accessibility attribute}
 have a
-\DWATaccessibility{}
+\DWATaccessibilityDEFN{}
 attribute. 
 If no accessibility attribute is present, private access 
 is assumed for an entry of a class and public access is 
@@ -1053,7 +1047,7 @@ the class referenced by the
 \addtoindexx{inheritance entry}
 inheritance entry serves
 as a \addtoindex{C++} virtual base class, the inheritance entry has a
-\DWATvirtuality{} attribute.
+\DWATvirtualityDEFN{} attribute.
 
 \textit{For a \addtoindex{C++} virtual base, the 
 \addtoindex{data member location attribute}
@@ -1089,7 +1083,7 @@ An access declaration entry
 \hypertarget{chap:DWATaccessibilitycppbaseclasses}{}
 also 
 has a 
-\DWATaccessibility{}
+\DWATaccessibilityDEFN{}
 attribute describing the declared accessibility of the named
 entities.
 
@@ -1105,7 +1099,7 @@ type may be represented by a debugging information entry
 that is a child of the structure, union or class type entry;
 the friend entry has the tag \DWTAGfriendTARG.
 
-A friend entry has a \DWATfriendNAME{} attribute,
+A friend entry has a \DWATfriendDEFN{} attribute,
 \addtoindexx{friend attribute} whose value is
 a reference to the debugging information entry describing
 the declaration of the friend.
@@ -1145,7 +1139,7 @@ entry
 \addtoindexx{member entry (data)}
 may 
 \addtoindexx{mutable attribute}
-have a \DWATmutable{} attribute,
+have a \DWATmutableDEFN{} attribute,
 which is a \livelink{chap:classflag}{flag}. 
 This attribute indicates whether the data
 member was declared with the mutable storage class specifier.
@@ -1167,16 +1161,15 @@ the target system.
 
 The member entry 
 \addtoindexx{member entry (data)}
-corresponding to a data member that is
+corresponding to a data member that is defined
 \hypertarget{chap:DWATdatabitoffsetdatamemberbitlocation}{}
-defined 
 \hypertarget{chap:DWATdatamemberlocationdatamemberlocation}{}
-in a structure, union or class may have either
+in a structure, union or class may have either a 
+\DWATdatamemberlocationDEFN{} attribute
 \addtoindexx{data member location attribute}
-a
-\DWATdatamemberlocation{} attribute or a
-\DWATdatabitoffset{}
-attribute. If the beginning of the data member is the same as
+or a \DWATdatabitoffsetDEFN{} attribute. 
+\addtoindexx{data bit offset attribute}
+If the beginning of the data member is the same as
 the beginning of the containing entity then neither attribute
 is required.
 
@@ -1185,7 +1178,8 @@ For a \DWATdatamemberlocation{} attribute
 \addtoindexx{data member location attribute}
 there are two cases:
 \begin{enumerate}[1. ]
-\item If the value is an \livelink{chap:classconstant}{integer constant}, 
+\item If the value is an 
+\livelink{chap:classconstant}{integer constant}, 
 it is the offset
 in bytes from the beginning of the containing entity. If
 the beginning of the containing entity has a non-zero bit
@@ -1277,7 +1271,7 @@ If
 \hypertarget{chap:DWATvirtualityvirtualityoffunction}{}
 the member function entry describes a virtual function,
 then that entry has a 
-\DWATvirtuality{} attribute.
+\DWATvirtualityDEFN{} attribute.
 
 If 
 \hypertarget{chap:DWATexplicitexplicitpropertyofmemberfunction}{}
@@ -1285,12 +1279,12 @@ the member function entry describes an explicit member
 function, then that entry has 
 \addtoindexx{explicit attribute}
 a 
-\DWATexplicit{} attribute.
+\DWATexplicitDEFN{} attribute.
 
 An 
 \hypertarget{chap:DWATvtableelemlocationvirtualfunctiontablevtableslot}{}
 entry for a virtual function also has a
-\DWATvtableelemlocation{}
+\DWATvtableelemlocationDEFN{}
 \addtoindexi{attribute}{vtable element location attribute} whose value contains
 a \addtoindex{location description} 
 yielding the address of the slot
@@ -1307,8 +1301,7 @@ function, then that entry
 \addtoindexx{self pointer attribute|see{object pointer attribute}}
 has 
 \addtoindexx{object pointer attribute}
-a \DWATobjectpointer{} 
-attribute
+a \DWATobjectpointerDEFN{} attribute
 whose value is a \livelink{chap:classreference}{reference} 
 to the formal parameter entry
 that corresponds to the object for which the function is
@@ -1343,10 +1336,10 @@ These do not change the type of the
 object values on which the function can be invoked.}
 
 \needlines{6}
-The member function entry may have an \DWATreferenceNAME{} attribute
+The member function entry may have an \DWATreferenceDEFN{} attribute
 \livetarg{chap:DWATreferenceofnonstaticmember}{}
 to indicate a non-static member function that can only be called on
-lvalue objects, or the \DWATrvaluereferenceNAME{} attribute 
+lvalue objects, or the \DWATrvaluereferenceDEFN{} attribute 
 \livetarg{chap:DWATrvaluereferenceofnonstaticmember}{}
 to indicate that it can only be called on prvalues and xvalues.
 
@@ -1386,7 +1379,7 @@ constructor or destructor, and can affect overload resolution
 when used on other member functions.}
 
 If the member function entry has been declared as deleted,
-then that entry has a \DWATdeletedNAME{}\livetarg{chap:DWATdeleteddef}{}
+then that entry has a \DWATdeletedDEFN{}\livetarg{chap:DWATdeleteddef}{}
 attribute.\addtoindexx{deleted attribute}
 
 \textit{In \addtoindex{C++}, a special member function may be 
@@ -1398,7 +1391,7 @@ whether the default declaration is made inside or outside the
 class.}
 
 If the member function has been declared as defaulted, 
-then the entry has a \DWATdefaultedNAME{}\livetarg{chap:DWATdefaulteddef}{}
+then the entry has a \DWATdefaultedDEFN{}\livetarg{chap:DWATdefaulteddef}{}
 attribute\addtoindexx{defaulted attribute}
 whose integer constant value indicates whether, and if so,
 how, that member is defaulted. The possible values and
@@ -1489,9 +1482,8 @@ is a child of the variant part entry. This entry has the form
 of a 
 \addtoindexx{member entry (data)!as discriminant}
 structure data member entry. The variant part entry will
-\addtoindexx{discriminant attribute}
 have a 
-\DWATdiscr{} attribute 
+\DWATdiscrDEFN{} attribute \addtoindexx{discriminant attribute}
 whose value is a \livelink{chap:classreference}{reference} to
 the member entry for the discriminant.
 
@@ -1508,7 +1500,8 @@ a debugging information entry\addtoindexx{variant entry} with the
 tag \DWTAGvariantTARG{}
 and is a child of the variant part entry. The value that
 selects a given variant may be represented in one of three
-ways. The variant entry may have a \DWATdiscrvalue{} attribute
+ways. The variant entry may have a \DWATdiscrvalueDEFN{} 
+attribute\addtoindexx{discriminant value attribute}
 whose value represents the discriminant value selecting 
 this variant. The value of this
 attribute is encoded as an LEB128 number. The number is signed
@@ -1521,7 +1514,7 @@ Alternatively,
 \hypertarget{chap:DWATdiscrlistlistofdiscriminantvalues}{}
 the variant entry may contain 
 \addtoindexx{discriminant list attribute}
-a \DWATdiscrlist{}
+a \DWATdiscrlistDEFN{}
 attribute, whose value represents a list of discriminant
 values. This list is represented by any of the 
 \livelink{chap:classblock}{block} forms and may contain a 
@@ -1660,7 +1653,7 @@ semantics such that
 
 then the \addtoindex{enumeration type entry} may 
 \addtoindexx{enum class|see{type-safe enumeration}}
-have a \DWATenumclass{}
+have a \DWATenumclassDEFN{}
 attribute, which is a \livelink{chap:classflag}{flag}. 
 In a language that offers only
 one kind of enumeration declaration, this attribute is not
@@ -1689,11 +1682,12 @@ of the enumeration literals in the source program.
 \needlines{4}
 Each \addtoindex{enumerator entry} has a \DWATname{} attribute, whose
 \addtoindexx{name attribute}
-value is a null\dash terminated string containing the name of the
+value is a null-terminated string containing the name of the
 \hypertarget{chap:DWATconstvalueenumerationliteralvalue}{}
 enumeration literal as it appears in the source program. 
 Each enumerator entry also has a 
-\DWATconstvalue{} attribute,
+\DWATconstvalueDEFN{} attribute,
+\addtoindexx{constant value attribute}
 whose value is the actual numeric value of the enumerator as
 represented on the target system.
 
@@ -1704,8 +1698,8 @@ dimension of an array type, and the stride for that dimension
 is different than what would otherwise be determined, then
 \hypertarget{chap:DWATbitstrideenumerationstridedimensionofarraytype}{}
 the enumeration type entry has either a 
-\DWATbytestride{}
-or \DWATbitstride{} attribute 
+\DWATbytestrideDEFN{}
+or \DWATbitstrideDEFN{} attribute 
 \addtoindexx{bit stride attribute}
 which specifies the separation
 between successive elements along the dimension as described
@@ -1770,7 +1764,7 @@ subroutine entry declared with a function prototype style
 declaration may have 
 \addtoindexx{prototyped attribute}
 a 
-\DWATprototyped{} attribute, which is
+\DWATprototypedDEFN{} attribute, which is
 a \livelink{chap:classflag}{flag}.
 
 \needlines{4}
@@ -1833,7 +1827,7 @@ whose value is
 a null\dash terminated string containing the string type name as
 it appears in the source program.
 
-A string type entry may have a \DWATtype{} 
+A string type entry may have a \DWATtypeDEFN{} 
 \livetargi{char:DWAATtypeofstringtype}{attribute}{type attribute!of string type entry}
 describing how each character is encoded and is to be interpreted.  
 The value of this attribute is a \CLASSreference{} to a 
@@ -1863,20 +1857,20 @@ storage needed to hold a value of the string type.
 The 
 \hypertarget{chap:DWATstringlengthstringlengthofstringtype}{}
 string type entry may also have a 
-\DWATstringlength{} attribute
+\DWATstringlengthDEFN{} attribute
 whose 
 \addtoindexx{string length attribute}
 value is a 
 \addtoindex{location description} yielding the location
 where the length of the string is stored in the program.
-If the \DWATstringlength{} attribute is not present, the size
+If the \DWATstringlengthNAME{} attribute is not present, the size
 of the string is assumed to be the amount of storage that is
 allocated for the string (as specified by the \DWATbytesize{}
 or \DWATbitsize{} attribute).
 
 The string type entry may also have a 
-\DWATstringlengthbytesizeNAME{} or
-\DWATstringlengthbitsizeNAME{} attribute,
+\DWATstringlengthbytesizeDEFN{} or
+\DWATstringlengthbitsizeDEFN{} attribute,
 \addtoindexx{string length size attribute}
 \addtoindexx{string length attribute!size of length data}
 whose value (see Section \refersec{chap:byteandbitsizes}) 
@@ -1976,7 +1970,7 @@ is the amount of storage needed to hold a value of the subrange type.
 The 
 \hypertarget{chap:DWATthreadsscaledupcarrayboundthreadsscalfactor}{}
 subrange entry may have a 
-\DWATthreadsscaled{} attribute\addtoindexx{threads scaled attribute},
+\DWATthreadsscaledDEFN{} attribute\addtoindexx{threads scaled attribute},
 which is a \livelink{chap:classflag}{flag}. 
 If present, this attribute indicates whether
 this subrange represents a \addtoindex{UPC} array bound which is scaled
@@ -1995,29 +1989,24 @@ The
 subrange 
 \hypertarget{chap:DWATupperboundupperboundofsubrange}{}
 entry may have the attributes 
-\DWATlowerbound{}
+\DWATlowerboundDEFN{}
 \addtoindexx{lower bound attribute}
-and \DWATupperbound{}
+and \DWATupperboundDEFN{}
 \addtoindexx{upper bound attribute} to specify, respectively, the lower
 and upper bound values of the subrange. The 
-\DWATupperbound{}
-attribute 
+\DWATupperboundNAME{} attribute 
 \hypertarget{chap:DWATcountelementsofsubrangetype}{}
-may 
-% FIXME: The following matches DWARF4: odd as there is no default count.
+may be replaced by a
 \addtoindexx{count attribute!default}
-be 
 \addtoindexx{count attribute}
-replaced by a 
-\DWATcount{} attribute, 
-whose
-value describes the number of elements in the subrange rather
-than the value of the last element. The value of each of
-these attributes is determined as described in 
+\DWATcountDEFN{} attribute, 
+whose value describes the number of elements in the subrange 
+rather than the value of the last element. The value of each 
+of these attributes is determined as described in 
 Section \refersec{chap:staticanddynamicvaluesofattributes}.
 
 If the lower bound value is missing, the value is assumed to
-be a language\dash dependent default constant as defined in
+be a language-dependent default constant as defined in
 Table \refersec{tab:languageencodings}.
 \addtoindexx{lower bound attribute!default}
 
@@ -2048,12 +2037,11 @@ different than what would otherwise be determined, then
 the subrange type entry has either 
 \addtoindexx{byte stride attribute}
 a 
-\DWATbytestride{} or
-\DWATbitstride{} attribute 
+\DWATbytestrideDEFN{} or
+\DWATbitstrideDEFN{} attribute 
 \addtoindexx{bit stride attribute}
 which specifies the separation
-between successive elements along the dimension as described
-in 
+between successive elements along the dimension as described in 
 Section \refersec{chap:byteandbitsizes}.
 
 \textit{Note that the stride can be negative.}
@@ -2088,16 +2076,16 @@ objects of this type may point.
 
 The \addtoindexx{pointer to member} entry also 
 \hypertarget{chap:DWATcontainingtypecontainingtypeofpointertomembertype}{}
-has a 
-\DWATcontainingtype{}
-attribute, whose value is a \livelink{chap:classreference}{reference} to a debugging
+has a \DWATcontainingtypeDEFN{} attribute, 
+\addtoindexx{containing type (of pointer) attribute}
+whose value is a \livelink{chap:classreference}{reference} to a debugging
 information entry for the class or structure to whose members
 objects of this type may point.
 
 The \addtoindex{pointer to member entry} 
 \hypertarget{chap:DWATuselocationmemberlocationforpointertomembertype}{}
 has a 
-\DWATuselocation{} attribute
+\DWATuselocationDEFN{} attribute
 \addtoindexx{use location attribute}
 whose value is a 
 \addtoindex{location description} that computes the
@@ -2242,13 +2230,12 @@ information, including a location and/or run\dash time parameters,
 about the data that represents the value for that object.}
 
 \hypertarget{chap:DWATdatalocationindirectiontoactualdata}{}
-The \DWATdatalocation{} 
-attribute may be used with any
-\addtoindexx{data location attribute}
-type that provides one or more levels of 
+The \DWATdatalocationDEFN{} attribute 
+\addtoindexx{data (indirect) location attribute}
+may be used with any type that provides one or more levels of 
 \addtoindexx{hidden indirection|see{data location attribute}}
 hidden indirection
-and/or run\dash time parameters in its representation. Its value
+and/or run-time parameters in its representation. Its value
 is a \addtoindex{location description}. 
 The result of evaluating this
 description yields the location of the data for an object.
@@ -2274,7 +2261,7 @@ may be dynamically allocated or associated with a variable
 under explicit program control.}
 
 \hypertarget{chap:DWATallocatedallocationstatusoftypes}{}
-The \DWATallocated{} attribute\addtoindexx{allocated attribute}
+The \DWATallocatedDEFN{} attribute\addtoindexx{allocated attribute}
 may be used with any
 type for which objects of the type can be explicitly allocated
 and deallocated. The presence of the attribute indicates that
@@ -2286,7 +2273,7 @@ currently allocated or not.
 \needlines{4}
 \hypertarget{chap:DWATassociatedassociationstatusoftypes}{}
 The 
-\DWATassociated{} attribute 
+\DWATassociatedDEFN{} attribute 
 may 
 \addtoindexx{associated attribute}
 optionally be used with
@@ -2336,7 +2323,7 @@ The presence of the
 \hypertarget{chap:DWATrankofdynamicarray}{\DWATrankINDX}
 attribute indicates that an array's rank
 (number of dimensions) is dynamic, and therefore unknown at compile
-time. The value of the \DWATrankNAME{} attribute is either an integer constant
+time. The value of the \DWATrankDEFN{} attribute is either an integer constant
 or a DWARF expression whose evaluation yields the dynamic rank.
 
 The bounds of an array with dynamic rank are described using a

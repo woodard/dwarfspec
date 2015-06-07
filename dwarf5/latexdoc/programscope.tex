@@ -120,15 +120,14 @@ location lists (see Section
 \addtoindexx{range list}
 (see Section \refersec{chap:noncontiguousaddressranges}).
 
-\item A \DWATname{} attribute 
+\item A \DWATnameDEFN{} attribute 
 \addtoindexx{name attribute}
-whose value is a null\dash terminated
-string 
+whose value is a null-terminated string 
 \hypertarget{chap:DWATnamepathnameofcompilationsource}{}
 containing the full or relative path name of the primary
 source file from which the compilation unit was derived.
 
-\item A \DWATlanguage{} attribute 
+\item A \DWATlanguageDEFN{} attribute 
 \addtoindexx{language attribute}
 whose constant value is an
 \hypertarget{chap:DWATlanguageprogramminglanguage}{}
@@ -192,10 +191,10 @@ in Table \refersec{tab:languagenames}.
 \end{centering}
 
 \needlines{6}
-\item A \DWATstmtlist{}\hypertarget{chap:DWATstmtlistlinenumberinformationforunit}{}
-attribute whose value is 
+\item A \DWATstmtlistDEFN{}
+\hypertarget{chap:DWATstmtlistlinenumberinformationforunit}{}
 \addtoindexx{statement list attribute}
-a
+attribute whose value is a 
 \addtoindexx{section offset!in statement list attribute}
 section offset to the line number information for this compilation
 unit.
@@ -207,7 +206,7 @@ value of the statement list attribute is the offset in the
 information for this compilation unit 
 (see Section \refersec{chap:linenumberinformation}).
 
-\item A \DWATmacros{}\hypertarget{chap:DWATmacrosmacroinformation}{}
+\item A \DWATmacrosDEFN{}\hypertarget{chap:DWATmacrosmacroinformation}{}
 attribute 
 \addtoindexx{macro information attribute}
 whose value is a 
@@ -221,29 +220,28 @@ the \dotdebugmacro{} section of the first byte of the macro
 information for this compilation unit 
 (see Section \refersec{chap:macroinformation}).
 
-\textit{The \DWATmacros{} attribute is new in \DWARFVersionV, 
+\textit{The \DWATmacrosNAME{} attribute is new in \DWARFVersionV, 
 and supersedes the 
-\DWATmacroinfo{} attribute of earlier DWARF versions.
+\DWATmacroinfoDEFN{} attribute of earlier DWARF versions.
 \livetarg{chap:DWATmacroinfomacroinformation}{}
-While \DWATmacros{} and \DWATmacroinfo{} attributes cannot both occur in the same
+While \DWATmacrosNAME{} and \DWATmacroinfoNAME{} attributes cannot both occur in the same
 compilation unit, both may be found in the set of units that make up an executable
 or shared object file. The two attributes have distinct encodings to facilitate such
 coexistence.}
 
 \needlines{6}
 \item  A 
-\DWATcompdir{} 
-attribute 
+\DWATcompdirDEFN{} attribute\addtoindexx{compilation directory attribute} 
 \hypertarget{chap:DWATcompdircompilationdirectory}{}
 whose value is a
-null\dash terminated string containing the current working directory
+null-terminated string containing the current working directory
 of the compilation command that produced this compilation
 unit in whatever form makes sense for the host system.
 
-\item  A \DWATproducer{} attribute 
+\item  A \DWATproducerDEFN{} attribute 
 \addtoindexx{producer attribute}
-whose value is a null\dash
-terminated string containing information about the compiler
+whose value is a null-terminated string containing 
+information about the compiler
 \hypertarget{chap:DWATproducercompileridentification}{}
 that produced the compilation unit. The actual contents of
 the string will be specific to each producer, but should
@@ -252,7 +250,7 @@ identifying character sequence that should avoid confusion
 with other producer values.
 
 \needlines{4}
-\item  A \DWATidentifiercase{} 
+\item  A \DWATidentifiercaseDEFN{} 
 attribute 
 \addtoindexx{identifier case attribute}
 whose integer
@@ -303,10 +301,8 @@ program but that a case insensitive lookup should be used to
 access those names.
 
 \needlines{5}
-\item A \DWATbasetypes{} attribute whose value is a 
-\livelink{chap:classreference}{reference}.
-
-This 
+\item A \DWATbasetypesDEFN{} attribute whose value is a 
+\livelink{chap:classreference}{reference}. This 
 \hypertarget{chap:DWATbasetypesprimitivedatatypesofcompilationunit}{}
 attribute 
 \addtoindexx{base types attribute}
@@ -325,7 +321,7 @@ to interpret a type conversion to a base type
 \hypertarget{chap:DWATuseUTF8compilationunitusesutf8strings}{}
 correctly.}
 
-\item A \DWATuseUTFeight{} attribute,
+\item A \DWATuseUTFeightDEFN{} attribute,
 \addtoindexx{use UTF8 attribute}\addtoindexx{UTF-8} 
 which is a \livelink{chap:classflag}{flag} whose
 presence indicates that all strings (such as the names of
@@ -333,7 +329,8 @@ declared entities in the source program, or filenames in the line number table)
 are represented using the UTF\dash 8 representation. 
 
 \needlines{4}
-\item A \DWATmainsubprogram{} attribute, which is a \livelink{chap:classflag}{flag}
+\item A \DWATmainsubprogramDEFN{} attribute, which is a 
+\livelink{chap:classflag}{flag}
 \addtoindexx{main subprogram attribute}
 whose presence indicates 
 \hypertarget{chap:DWATmainsubprogramunitcontainingmainorstartingsubprogram}{}
@@ -362,7 +359,7 @@ executable instruction of the unit (see
 Section \refersec{chap:entryaddress}).
 
 \needlines{8}
-\item A \DWATstroffsetsbaseNAME\addtoindexx{string offset base attribute}
+\item A \DWATstroffsetsbaseDEFN\addtoindexx{string offset base attribute}
 \hypertarget{chap:DWATstroffsetbaseforindirectstringtable}{} 
 attribute, whose value is a reference. 
 This attribute points to the first string
@@ -384,7 +381,7 @@ Indirect references (using \DWFORMaddrx, \DWOPaddrx,
 interpreted as indices relative to this base.
 
 \needlines{5}
-\item A \DWATrangesbaseNAME\addtoindexx{ranges table base attribute}
+\item A \DWATrangesbaseDEFN\addtoindexx{ranges table base attribute}
 \hypertarget{chap:DWATrangesbaseforrangelists}{}
 attribute, whose value is a reference.
 This attribute points to the beginning of the compilation
@@ -408,8 +405,8 @@ of that compilation unit is not valid.
 When generating a \splitDWARFobjectfile{} (see 
 Section \refersec{datarep:splitdwarfobjectfiles}), the
 compilation unit in the \dotdebuginfo{} section is a "skeleton"
-compilation unit, which contains \DWATdwoname{} and \DWATdwoid{}
-attributes as well as a subset of the
+compilation unit with the tag \DWTAGcompileunit, which contains 
+\DWATdwoname{} and \DWATdwoid{} attributes as well as a subset of the
 attributes of a full normal or partial compilation unit. In general, 
 it contains those attributes that are necessary for the consumer
 to locate the object file where the full compilation unit
@@ -436,14 +433,17 @@ compilation unit entries).
 
 \item
 \livetarg{chap:DWATdwonameforunit}{}
-A \DWATdwonameNAME{} attribute whose value is a
+A \DWATdwonameDEFN{} attribute
+\addtoindexx{split DWARF object file name attribute}
+whose value is a
 null-terminated string containing the full or relative
 path name of the object file that contains the full
 compilation unit.
 
 \item
 \livetarg{chap:DWATdwoidforunit}{}
-A \DWATdwoidNAME{} attribute whose value is an 8-byte
+A \DWATdwoidDEFN{} attribute\addtoindexx{unit signature attribute}
+whose value is an 8-byte
 unsigned hash of the full compilation unit.  This hash
 value is computed by the method described in 
 Section \refersec{datarep:typesignaturecomputation}.
@@ -483,6 +483,10 @@ unit entry do not need to be repeated in the full compilation
 unit entry, except for \DWATdwoid, which should appear in
 both entries so that the consumer can verify that it has
 found the correct object file.
+
+\textit{The \DWATaddrbase{}, \DWATrangesbase{} and \DWATstroffsetsbase{}
+attributes provide context that may be necessary to interpret the contents
+of the corresponding \splitDWARFobjectfile.}
 
 \needlines{6}
 \subsection{Type Unit Entries}
@@ -530,17 +534,22 @@ whose value of class \CLASSlineptr{} points to the line number
 information for this type unit.
 Because type units do not describe any code, they
 do not actually need a line number table, but the line number
-tables also contain a list of directories and file names that
-may be referenced by the \DWATdeclfile{} attribute. In a
+headers contain a list of directories and file names that
+may be referenced by the \DWATdeclfile{} attribute of the
+type or part of its description. 
+\begin{itemize}
+\item In a
 normal object file with a regular compilation unit entry, the
 type unit entries can simply refer to the line number table
-used by the compilation unit. In a \splitDWARFobjectfile, where
+used by the compilation unit. 
+\item In a \splitDWARFobjectfile, where
 the type units are located in a separate DWARF object file,
 the \DWATstmtlist{} attribute refers to a "specialized"
 line number table in the \dotdebuglinedwo{} section, which
 contains only the list of directories and file names. All
 type unit entries in a \splitDWARFobjectfile{} may (but are not
 required to) refer to the same \addtoindex{specialized line number table}.
+\end{itemize}
 
 \item A \DWATuseUTFeight{} attribute, which is a flag
 whose presence indicates that all strings referred to by this type
@@ -639,10 +648,9 @@ the first executable instruction of that initialization code
 
 If 
 \hypertarget{chap:DWATprioritymodulepriority}{}
-the module has been assigned a priority, it may have 
+the module has been assigned a priority, it may have a
 \addtoindexx{priority attribute}
-a
-\DWATpriority{} attribute. 
+\DWATpriorityDEFN{} attribute. 
 The value of this attribute is a
 reference to another debugging information entry describing
 a variable with a constant value. The value of this variable
@@ -664,14 +672,14 @@ tag \DWTAGnamespaceTARG.
 A namespace extension is
 \hypertarget{chap:DWATextensionpreviousnamespaceextensionororiginalnamespace}{}
 represented by a 
-\DWTAGnamespace{} entry 
+\DWTAGnamespaceNAME{} entry 
 with 
 \addtoindexx{extension attribute}
 a 
-\DWATextension{}
+\DWATextensionDEFN{}
 attribute referring to the previous extension, or if there
 is no previous extension, to the original 
-\DWTAGnamespace{}
+\DWTAGnamespaceNAME{}
 entry. A namespace extension entry does not need to duplicate
 information in a previous extension entry of the namespace
 nor need it duplicate information in the original namespace
@@ -679,7 +687,7 @@ entry. (Thus, for a namespace with a name,
 a \DWATname{} attribute 
 \addtoindexx{name attribute}
 need only be attached directly to the original
-\DWTAGnamespace{} entry.)
+\DWTAGnamespaceNAME{} entry.)
 
 \needlines{4}
 Namespace and namespace extension entries may own 
@@ -695,7 +703,7 @@ including certain declarations that are also object or
 function definitions.}
 
 A namespace may have a 
-\DWATexportsymbolsNAME{}\livetarg{chap:DWATexportsymbolsofnamespace}{}
+\DWATexportsymbolsDEFN{}\livetarg{chap:DWATexportsymbolsofnamespace}{}
 attribute\addtoindexx{export symbols attribute}
 \addtoindexx{inline namespace|see{\textit{also} export symbols attribute}}
 which indicates that all member names defined within the 
@@ -776,8 +784,7 @@ module or scope. An imported declaration may sometimes be
 given another name.
 }
 
-An 
-imported declaration is represented by one or
+An imported declaration is represented by one or
 \addtoindexx{imported declaration entry}
 more debugging information entries with the 
 tag \DWTAGimporteddeclarationTARG. 
@@ -788,7 +795,7 @@ is imported, there is one imported declaration entry for
 each overloading. 
 \addtoindexx{import attribute}
 Each imported declaration entry has a
-\DWATimport{} attribute,
+\DWATimportDEFN{} attribute,
 whose value is a \livelink{chap:classreference}{reference} to the
 debugging information entry representing the declaration that
 is being imported.
@@ -811,18 +818,20 @@ used as a general means to rename or provide an alias for
 an entity, regardless of the context in which the importing
 declaration or the imported entity occurs.
 
-\textit{A \addtoindex{C++} namespace alias may be represented by an imported
+\textit{A \addtoindex{C++} namespace alias may be represented 
+by an imported
 \hypertarget{chap:DWATimportnamespacealias}{}
 declaration entry 
 \addtoindexx{namespace (C++)!alias}
 with a name attribute whose value is
-a null\dash terminated string containing the alias name as it
-appears in the source program and an import attribute whose
-value is a \livelink{chap:classreference}{reference} to the applicable original namespace or
-namespace extension entry.
+a null-terminated string containing the alias name as it
+appears in the source program and a \DWATimportDEFN{} attribute 
+whose value is a \livelink{chap:classreference}{reference} to the 
+applicable original namespace or namespace extension entry.
 }
 
-\textit{A \addtoindex{C++} using declaration may be represented by one or more
+\textit{A \addtoindex{C++} using declaration may be represented 
+by one or more
 \hypertarget{chap:DWATimportnamespaceusingdeclaration}{}
 imported 
 \addtoindexx{namespace (C++)!using declaration}
@@ -830,7 +839,7 @@ declaration entries.  When the using declaration
 refers to an overloaded function, there is one imported
 declaration entry corresponding to each overloading. Each
 imported declaration entry has no name attribute but it does
-have an import attribute that refers to the entry for the
+have a \DWATimportDEFN{} attribute that refers to the entry for the
 entity being imported. (\addtoindex{C++} 
 provides no means to \doublequote{rename}
 an imported entity, other than a namespace).
@@ -885,7 +894,7 @@ module entry by the same name as it is declared in the module.
 \addtoindexx{using directive|see {namespace (C++), using directive}} 
 may be represented by an imported module
 \hypertarget{chap:DWATimportnamespaceusingdirective}{}
-entry, with an import attribute referring to the namespace
+entry, with a \DWATimportDEFN{} attribute referring to the namespace
 entry of the appropriate extension of the namespace (which
 might be the original namespace entry) and no owned entries.
 }
@@ -957,7 +966,7 @@ tag \DWTAGimportedunitTARG.
 An imported unit entry contains 
 \addtoindexx{import attribute}
 a
-\DWATimport{} attribute 
+\DWATimportDEFN{} attribute 
 whose value is a \livelink{chap:classreference}{reference} to the
 normal or partial compilation unit whose declarations logically
 belong at the place of the imported unit entry.
@@ -1009,7 +1018,7 @@ is visible outside of its containing
 compilation unit, that entry has 
 \addtoindexx{external attribute}
 a 
-\DWATexternalNAME{} attribute,
+\DWATexternalDEFN{} attribute,
 which is a \livelink{chap:classflag}{flag}.
 
 \textit{Additional attributes for functions that are members of a
@@ -1021,7 +1030,7 @@ A
 \hypertarget{chap:DWATmainsubprogrammainorstartingsubprogram}{}
 subroutine entry 
 may contain a 
-\DWATmainsubprogramNAME{}
+\DWATmainsubprogramDEFN{}
 attribute 
 \addtoindexx{main subprogram attribute}
 which is 
@@ -1041,8 +1050,8 @@ a program.
 A subroutine entry may 
 \hypertarget{chap:DWATcallingconventionforsubprograms}{}
 contain a 
-\DWATcallingconventionNAME{}
-\addtoindexx{calling convention attribute}
+\DWATcallingconventionDEFN{}
+\addtoindexx{calling convention attribute!for subprogram}
 attribute, whose value is an 
 \livelink{chap:classconstant}{integer constant}. The set of
 \addtoindexi{calling convention codes for subroutines}{calling convention codes!for subroutines}
@@ -1113,13 +1122,10 @@ as \addtoindex{C}
 where functions support recursion by default.
 }
 
-A subprogram entry 
+A subprogram entry may have a 
 \hypertarget{chap:DWATelementalelementalpropertyofasubroutine}{}
-may have 
-\addtoindexx{elemental attribute}
-a 
-\DWATelementalNAME{} attribute, which
-is a \livelink{chap:classflag}{flag}. 
+\DWATelementalDEFN{} attribute,\addtoindexx{elemental attribute} 
+which is a \livelink{chap:classflag}{flag}. 
 The attribute indicates whether the subroutine
 or entry point was declared with the \doublequote{elemental} keyword
 or property.
@@ -1129,7 +1135,7 @@ A
 subprogram entry may have 
 \addtoindexx{pure attribute}
 a 
-\DWATpureNAME{} attribute, which is
+\DWATpureDEFN{} attribute, which is
 a \livelink{chap:classflag}{flag}. 
 The attribute indicates whether the subroutine was
 declared with the \doublequote{pure} keyword or property.
@@ -1137,14 +1143,14 @@ declared with the \doublequote{pure} keyword or property.
 A 
 \hypertarget{chap:DWATrecursiverecursivepropertyofasubroutine}{}
 subprogram entry may have a 
-\DWATrecursiveNAME{} attribute, which
+\DWATrecursiveDEFN{} attribute, which
 is a \livelink{chap:classflag}{flag}. 
 The attribute indicates whether the subroutine
 or entry point was declared with the \doublequote{recursive} keyword
 or property.
 
 A subprogram entry may have a 
-\DWATnoreturnNAME
+\DWATnoreturnDEFN{}
 \livetargi{chap:DWATnoreturnofsubprogram}{ attribute}{noreturn attribute}, 
 which is a \CLASSflag. The attribute 
 indicates whether the subprogram was declared with the \doublequote{noreturn} keyword or property 
@@ -1156,16 +1162,17 @@ information about the subprogram and it's entry point(s) as a whole,
 the following attributes provide summary information about the calls
 that occur within a subprogram.}
 
-A subroutine entry may have \DWATcallalltailcalls, \DWATcallallcalls{} 
-and/or \DWATcallallsourcecalls{} attributes, each of which is a 
+A subroutine entry may have \DWATcallalltailcallsNAME, 
+\DWATcallallcallsNAME{} and/or \DWATcallallsourcecallsNAME{} 
+attributes, each of which is a 
 \livelink{chap:classflag}{flag}.
 \addtoindexx{call site summary information}
 \addtoindexx{subroutine call site summary attributes}
-These flags indicate the completeness of the call site information 
-provided by call site entries (see 
+These flags indicate the completeness of the call site 
+information provided by call site entries (see 
 Section \refersec{chap:callsiteentries}) within the subprogram.
 
-The \DWATcallalltailcallsNAME{}
+The \DWATcallalltailcallsDEFN{}
 \livetargi{chap:DWATcallalltailcallsofasubprogram}{attribute}{all tail calls summary attribute} 
 indicates that every tail call 
 that occurs in the code for the subprogram is described by a 
@@ -1173,13 +1180,13 @@ that occurs in the code for the subprogram is described by a
 (There may or may not be other non-tail calls to some of the same 
 target subprograms.)
 
-The \DWATcallallcallsNAME{}
+The \DWATcallallcallsDEFN{}
 \livetargi{chap:DWATcallallcallsofasubprogram}{attribute}{all calls summary attribute} 
 indicates that every non-inlined call
 (either a tail call or a normal call) that occurs in the code for the subprogram
 is described by a \DWTAGcallsite{} entry.
 
-The \DWATcallallsourcecallsNAME{}
+The \DWATcallallsourcecallsDEFN{}
 \livetargi{chap:DWATcallallsourcecallsofasubprogram}{attribute}{all source calls summary attribute} 
 indicates that every call that occurs in the
 code for the subprogram, including every call inlined into it, is described by either a 
@@ -1207,7 +1214,7 @@ the subroutine or entry point
 is a function that returns a
 value, then its debugging information entry has 
 \addtoindexx{type attribute}
-a \DWATtype{} attribute 
+a \DWATtypeDEFN{} attribute 
 to denote the type returned by that function.
 
 \textit{Debugging information entries for 
@@ -1275,7 +1282,7 @@ points
 may also have 
 \DWATsegment{} 
 and
-\DWATaddressclass{} attributes,
+\DWATaddressclassDEFN{} attributes,
 as appropriate, to specify
 which segments the code for the subroutine resides in and
 the addressing mode to be used in calling that subroutine.
@@ -1320,7 +1327,8 @@ tag \DWTAGcommoninclusionTARG.
 The
 \hypertarget{chap:commonreferencecommonblockusage}{}
 common inclusion entry has a 
-\DWATcommonreference{} attribute
+\DWATcommonreferenceDEFN{} attribute
+\addtoindexx{common block reference attribute}
 whose value is a \livelink{chap:classreference}{reference} 
 to the debugging information entry
 for the common \nolink{block} being included 
@@ -1331,10 +1339,9 @@ for the common \nolink{block} being included
 
 A 
 \hypertarget{chap:DWATreturnaddrsubroutinereturnaddresssavelocation}{}
-subroutine or entry point entry may have 
+subroutine or entry point entry may have a 
 \addtoindexx{return address attribute}
-a 
-\DWATreturnaddr{}
+\DWATreturnaddrDEFN{}
 attribute, whose value is a location description. The location
 specified is the place where the return address for the
 subroutine or entry point is stored.
@@ -1344,7 +1351,7 @@ A
 subroutine or entry point entry may also have 
 \addtoindexx{frame base attribute}
 a
-\DWATframebase{} attribute, whose value is a location
+\DWATframebaseDEFN{} attribute, whose value is a location
 description that describes the \doublequote{frame base} for the
 subroutine or entry point. If the location description is
 a simple register location description, the given register
@@ -1393,7 +1400,7 @@ a
 \addtoindexx{address!uplevel|see {static link attribute}}
 \addtoindexx{uplevel address|see {static link attribute}}
 subroutine or entry point is nested, it may have a
-\DWATstaticlink{}
+\DWATstaticlinkDEFN{}
 attribute, whose value is a location
 description that computes the frame base of the relevant
 instance of the subroutine that immediately encloses the
@@ -1500,7 +1507,7 @@ explicitly declared to be available for inline expansion or
 that was expanded inline implicitly by the compiler has 
 \addtoindexx{inline attribute}
 a
-\DWATinline{} attribute whose value is an 
+\DWATinlineDEFN{} attribute whose value is an 
 \livelink{chap:classconstant}{integer constant}. The
 set of values for the \DWATinline{} attribute is given in
 Table \refersec{tab:inlinecodes}.
@@ -1509,7 +1516,7 @@ Table \refersec{tab:inlinecodes}.
 \centering
 \caption{Inline codes}
 \label{tab:inlinecodes}
-\begin{tabular}{l|p{8cm}}
+\begin{tabular}{l|P{8cm}}
 \hline
 Name&Meaning\\ \hline
 \DWINLnotinlinedTARG{} & Not declared inline nor inlined by the
@@ -1534,7 +1541,7 @@ entry with the tag \DWTAGsubprogram. Such an entry has a
 \subsubsection{Abstract Instances}
 \label{chap:abstractinstances}
 Any subroutine entry that contains a
-\DWATinline{} attribute\addtoindexx{inline attribute} 
+\DWATinlineDEFN{} attribute\addtoindexx{inline attribute} 
 whose value is other than 
 \DWINLnotinlined{}
 is known as an
@@ -1667,8 +1674,9 @@ subroutine
 \hypertarget{chap:DWATcallcolumncolumnpositionofinlinedsubroutinecall}{}
 entry 
 \hypertarget{chap:DWATcallfilefilecontaininginlinedsubroutinecall}{}
-may also have \DWATcallfile,
-\DWATcallline{} and \DWATcallcolumn{} attributes, 
+may also have \DWATcallfileDEFN,
+\DWATcalllineDEFN{} and \DWATcallcolumnDEFN{} attributes,
+\addtoindexx{inlined call location attributes} 
 each of whose
 value is an \livelink{chap:classconstant}{integer constant}. 
 These attributes represent the
@@ -1688,8 +1696,8 @@ was inlined, rather they describe the coordinates of the call.
 An inlined subroutine entry 
 \hypertarget{chap:DWATconstexprcompiletimeconstantfunction}{}
 may have a 
-\DWATconstexpr{}
-attribute, which is a \livelink{chap:classflag}{flag} 
+\DWATconstexprDEFN{} attribute,\addtoindexx{constant expression attribute} 
+which is a \livelink{chap:classflag}{flag} 
 whose presence indicates that the
 subroutine has been evaluated as a compile\dash time constant. Such
 an entry may also have a \DWATconstvalue{} attribute,
@@ -1745,7 +1753,7 @@ abstract instance). In place of these omitted attributes, each
 concrete inlined instance entry 
 \addtoindexx{abstract origin attribute}
 has a 
-\DWATabstractorigin{}
+\DWATabstractoriginDEFN{}
 attribute that may be used to obtain the missing information
 (indirectly) from the associated abstract instance entry. The
 value of the abstract origin attribute is a reference to the
@@ -1838,18 +1846,18 @@ taking the address of a function declared
 to be inline can necessitate the generation of a concrete
 out\dash of\dash line instance of the given function.}
 
-The DWARF representation of a concrete out\dash of\dash line instance
+The DWARF representation of a concrete out-of-line instance
 of an inlined subroutine is essentially the same as for a
 concrete inlined instance of that subroutine (as described in
 the preceding section). The representation of such a concrete
 % It is critical that the hypertarget and livelink be
 % separated to avoid problems with latex.
-out\dash of\dash line 
+out-of-line 
 \addtoindexx{abstract origin attribute}
 instance 
 \hypertarget{chap:DWATabstractoriginoutoflineinstance}{}
 makes use of 
-\DWATabstractorigin{}
+\DWATabstractoriginDEFN{}
 attributes in exactly the same way as they are used for
 a concrete inlined instance (that is, as references to
 corresponding entries within the associated abstract instance
@@ -1941,7 +1949,7 @@ A trampoline is represented by a debugging information entry
 with the tag \DWTAGsubprogram{} or \DWTAGinlinedsubroutine{}
 that has 
 \addtoindexx{trampoline attribute}
-a \DWATtrampoline{} attribute. 
+a \DWATtrampolineDEFN{} attribute. 
 The value of that
 attribute indicates the target subroutine of the trampoline,
 that is, the subroutine to which the trampoline passes
@@ -2064,7 +2072,7 @@ while \DWTAGinlinedsubroutine{} entries describe inlined calls
 (see Section \refersec{chap:inlinedsubroutines}).
 
 The call site entry has a 
-\DWATcallreturnpcNAME{}
+\DWATcallreturnpcDEFN{}
 \livetargi{chap:DWATcallreturnpcofcallsite}{attribute}{call return pc attribute} 
 which is the return address after the call.  
 The value of this attribute corresponds to the return address computed by 
@@ -2076,17 +2084,17 @@ call instruction, but on architectures with delay slots it might
 be an address after the delay slot of the call.}
 
 The call site entry may have a 
-\DWATcallpcNAME{}
+\DWATcallpcDEFN{}
 \livetargi{chap:DWATcallpcofcallsite}{attribute}{call pc attribute} which is the
 address of the call instruction.
 
 If the call site entry corresponds to a tail call, it has the 
-\DWATcalltailcallNAME{}
+\DWATcalltailcallDEFN{}
 \livetargi{chap:DWATcalltailcallofcallsite}{attribute}{call tail call attribute},
 which is a \CLASSflag.
 
 The call site entry may have a 
-\DWATcalloriginNAME{}
+\DWATcalloriginDEFN{}
 \livetargi{chap:DWATcalloriginofcallsite}{attribute}{call origin attribute}
 which is a \CLASSreference.  For direct calls or jumps where the called subprogram is
 known it is a reference to the called subprogram's debugging
@@ -2096,7 +2104,7 @@ the subroutine pointer that is called.
 
 \needlines{4}
 The call site may have a 
-\DWATcalltargetNAME{}
+\DWATcalltargetDEFN{}
 \livetargi{chap:DWATcalltargetofcallsite}{attribute}{call target attribute} which is
 a DWARF expression.  For indirect calls or jumps where it is unknown at
 compile time which subprogram will be called the expression computes the
@@ -2105,14 +2113,14 @@ not use register or memory locations that might be clobbered by the call.
 
 \needlines{4}
 The call site entry may have a 
-\DWATcalltargetclobberedNAME{}
+\DWATcalltargetclobberedDEFN{}
 \livetargi{chap:DWATcalltargetclobberedofcallsite}{attribute}{call target clobbered attribute}
 which is a DWARF expression.  For indirect calls or jumps where the
 address is not computable without use of registers or memory locations that
 might be clobbered by the call the \DWATcalltargetclobberedNAME{}
 attribute is used instead of the \DWATcalltarget{} attribute.
 
-The call site entry may have a \DWATtypeNAME{}
+The call site entry may have a \DWATtypeDEFN{}
 \livetargi{chap:DWATtypeofcallsite}{attribute}{type attribute!of call site entry}
 referencing a debugging information entry for the type of the called function.  
 
@@ -2144,7 +2152,7 @@ This location expression describes where the parameter is passed
 contents of the stack register plus some offset).
 
 Each \DWTAGcallsiteparameter{} entry may have a 
-\DWATcallvalueNAME{}
+\DWATcallvalueDEFN{}
 \livetargi{chap:DWATcallvalueofcallparameter}{attribute}{call value attribute}
 which is a DWARF expression.  This expression computes the value
 passed for that parameter.  The expression should not use registers or memory
@@ -2168,17 +2176,19 @@ the \DWTAGcallsiteparameter{} entry may also have
 whose value is a location expression and a
 \DWATcalldatavalueNAME{}
 \livetargi{chap:DWATcalldatavalueofcallparameter}{attribute}{call data value attribute}
-whose value is a DWARF expression.  The \DWATcalldatalocationNAME{} attribute 
+whose value is a DWARF expression.  The \DWATcalldatalocationDEFN{} attribute
+\addtoindexx{call data location attribute} 
 describes where the referenced value lives during the call.  If it is just 
 \DWOPpushobjectaddress{}, it may be left out.  The 
-\DWATcalldatavalueNAME{} attribute describes the value in that location. 
+\DWATcalldatavalueNAME{} attribute\addtoindexx{call data value attribute}
+describes the value in that location. 
 The expression should not use registers or memory
 locations that might be clobbered by the call, as it might be evaluated after
 unwinding from the called function back to the caller.
 
 \needlines{4}
 Each call site parameter entry may also have a 
-\DWATcallparameter{}
+\DWATcallparameterDEFN{}
 \livetargi{chap:DWATcallparameterofcallparameter}{attribute}{call parameter attribute}
 which contains a reference to a \DWTAGformalparameter{} entry,
 \DWATtype{} attribute referencing the type of the parameter or \DWATname{}

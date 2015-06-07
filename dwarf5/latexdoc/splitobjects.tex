@@ -710,7 +710,8 @@ Figure \refersec{fig:splitobjectexamplestringtableslots}.
 
 \begin{figure}[H]
 \begin{center}
-\footnotesize
+\small
+%\footnotesize
 \begin{tabular}{cl|cl}
     Slot & String & Slot & String \\
     \hline
@@ -731,14 +732,24 @@ Figure \refersec{fig:splitobjectexamplestringtableslots}.
 \end{figure}
 
 Each entry in the table is the offset of the string, which is
-contained in the \dotdebugstrdwo{} section. In a split DWARF 
-object file, these offsets have no relocations, since they 
-are not part of the relocatable object file. When combined into a 
-DWARF package file, however, each slot must be adjusted to 
-refer to the appropriate offset within the merged string table.
+contained in the \dotdebugstrdwo{} section. 
+
+In a split DWARF object file, all references to
+strings go through this table (there are no
+other offsets to \dotdebugstrdwo{} in a split
+DWARF object file). That is, there
+is no use of \DWFORMstrp{} in a split DWARF object file.
+
+The offsets in these slots have no associated relocations, 
+because they are not part of a relocatable object file.
+
+When combined into a DWARF package file, however, each 
+slot must be adjusted to refer to the appropriate offset 
+within the merged string table (\dotdebugstrdwo{}).
 The tool that builds the DWARF package file must understand 
-the structure of the section in order to apply the necessary 
-adjustments. (See Section \refersec{app:dwarfpackagefileexample} 
+the structure of the \dotdebugstroffsetsdwo{} section in 
+order to apply the necessary adjustments. 
+(See Section \refersec{app:dwarfpackagefileexample} 
 for an example of a DWARF package file.)
 
 \needlines{4}

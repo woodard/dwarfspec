@@ -36,7 +36,7 @@ an \addtoindex{anonymous union}),
 the name attribute is omitted or its value consists of a single
 zero byte.
 
-\item A \DWATexternal{} attribute, 
+\item A \DWATexternalDEFN{} attribute, 
 \hypertarget{chap:DWATexternalexternalvariable}{}
 which 
 \addtoindexx{external attribute}
@@ -119,7 +119,7 @@ type of the data member whose definition they
 represent.
 
 \needlines{4}
-\item A \DWATvariableparameter{}
+\item A \DWATvariableparameterDEFN{}
 attribute\addtoindexx{variable parameter attribute}, 
 which is a \livelink{chap:classflag}{flag},
 if a formal parameter entry represents a parameter whose
@@ -127,14 +127,14 @@ value in the calling function may be modified by the callee.
 The absence of this attribute implies that the parameter\textquoteright s
 value in the calling function cannot be modified by the callee.
 
-\item A \DWATisoptional{} attribute, 
+\item A \DWATisoptionalDEFN{} attribute, 
 \hypertarget{chap:DWATisoptionaloptionalparameter}{}
 which 
 \addtoindexx{is optional attribute}
 is a \livelink{chap:classflag}{flag}, if a
 parameter entry represents an \addtoindex{optional parameter}.
 
-\item A \DWATdefaultvalue{} attribute 
+\item A \DWATdefaultvalueDEFN{} attribute 
 \addtoindexx{default value attribute}
 for 
 \addtoindexx{formal parameter entry!with default value}
@@ -157,10 +157,10 @@ parameter.
 \textit{For a constant form there is no way to 
 express the absence of a default value.}
 
-\item A \DWATconstvalue{} attribute 
-for 
+\item A \DWATconstvalueDEFN{} attribute
+\addtoindexx{constant value attribute}  
 \hypertarget{chap:DWATconstvalueconstantobject}{}
-an entry describing a
+for an entry describing a
 variable or formal parameter whose value is constant and not
 represented by an object in the address space of the program,
 or an entry describing a named constant. (Note that such
@@ -178,35 +178,35 @@ formal parameter of an inlined subprogram that corresponds
 to a constant actual parameter of a call that is inlined.
 }
 
-\item A \DWATstartscope{} 
-attribute if the scope of 
-\addtoindexx{start scope attribute}
-an
+\item A \DWATstartscopeDEFN{}\addtoindexx{start scope attribute}
 \hypertarget{chap:DWATstartscopeobjectdeclaration}{}
-object is smaller than (that is, is a subset of the addresses
-of) the scope most closely enclosing the object. There are
-two cases:
+attribute if the address range for the scope of an
+object is a subset of the address range for the
+the lexical scope most closely enclosing the object. 
+There are two cases:
 \begin{enumerate}[a) ]
-\item If the scope of the object entry includes all of the
-containing scope except for a contiguous sequence of bytes at
-the beginning of that containing scope, then the scope of the
-object is specified using a value of class constant. If the
-containing scope is contiguous, the value of this attribute
-is the offset in bytes of the beginning of the scope for the
-object from the low PC value of the debugging information
-entry that defines its scope. If the containing scope
-is non-contiguous 
+\item If address range for the scope of the object entry 
+includes all of addresses for the containing scope except 
+for a contiguous sequence of bytes at the beginning of the 
+address range for the containing scope, then the address is 
+specified using a value of class constant. If the address
+range for the containing scope is contiguous, the value of 
+this attribute is the offset in bytes of the beginning of 
+the address range for the scope of the object from the low 
+PC value of the debugging information entry that defines
+that containing scope. If the address range of the containing 
+scope is non-contiguous 
 (see \refersec{chap:noncontiguousaddressranges})
-the value of this
-attribute is the offset in bytes of the beginning of the scope
-for the object from the beginning of the first \addtoindex{range list} entry
-that is not a base selection entry, a default selection entry or an end-of-list entry.
+the value of this attribute is the offset in bytes of the 
+beginning of the address range for the scope of the object 
+from the beginning of the first \addtoindex{range list} entry
+for the containing scope that is not a base selection entry, 
+a default selection entry or an end-of-list entry.
 
 \needlines{4}
-\item Otherwise, the scope of the object is specified using
-a value of class \livelink{chap:classrangelistptr}{rangelistptr}. 
-This value indicates the
-beginning of a \addtoindex{range list}
+\item Otherwise, the set of addresses for the scope of the 
+object is specified using a value of class \CLASSrangelistptr{}. 
+This value indicates the beginning of a \addtoindex{range list}
 (see \ref{chap:noncontiguousaddressranges}).
 \end{enumerate}
 
@@ -240,17 +240,14 @@ the containing scope is contiguous. Conversely, the scope of
 an object may not require its own \addtoindex{range list} even when the
 containing scope is non\dash contiguous.}
 
-\item A \DWATendianity{} attribute, 
-whose value 
-\hypertarget{chap:DWATendianityendianityofdata}{}
-is a constant
+\item A \DWATendianityDEFN{} attribute,
 \addtoindexx{endianity attribute}
-that 
+\hypertarget{chap:DWATendianityendianityofdata}{}
+whose value is a constant that 
 \addtoindexx{big-endian encoding|see{endianity attribute}}
-specifies 
-the endianity of the object. The value of
-this attribute specifies an ABI\dash defined 
-byte ordering \addtoindexx{ordering attribute} for
+specifies the endianity of the object. The value of
+this attribute specifies an ABI-defined 
+\byteorder{ing} \addtoindexx{ordering attribute} for
 the value of the object. If omitted, the default endianity
 of data for the given type is assumed.  
 
@@ -262,7 +259,7 @@ Table \ref{tab:endianityattributevalues}.
 \caption{Endianity attribute values}
 \label{tab:endianityattributevalues}
 \centering
-\begin{tabular}{l|p{9cm}}
+\begin{tabular}{l|P{9cm}}
 \hline
 Name&Meaning\\ \hline
 \DWENDdefaultTARG{} &  Default endian encoding
@@ -281,10 +278,10 @@ exact definition of these formats may differ in subtle ways
 for different architectures.
 
 \needlines{6}
-\item A \DWATconstexpr{} attribute, 
-which 
+\item A \DWATconstexprDEFN{} attribute,
+\addtoindex{constant expression attribute}
 \hypertarget{chap:DWATconstexprcompiletimeconstantobject}{}
-is a \CLASSflag, if a
+which is a \CLASSflag, if a
 variable entry represents a \addtoindex{C++} object declared with the
 \texttt{constexpr} specifier. This attribute indicates that the
 variable can be evaluated as a compile\dash time constant.  
@@ -365,7 +362,7 @@ given namelist are ordered as were the list of names they
 correspond to in the source program.
 
 Each namelist item entry contains a 
-\DWATnamelistitem{} attribute
+\DWATnamelistitemDEFN{} attribute
 \addtoindexx{namelist item attribute}
 whose 
 \addtoindexx{namelist item entry}
