@@ -53,7 +53,7 @@ their descendants. This is the bulk of the debugging
 information for the compilation unit that is normally found
 in the \dotdebuginfo{} section.
 \item
-\dotdebugabbrevdwo{} - Contains the abbreviations tables used by
+\dotdebugabbrevdwo{} - Contains the abbreviations table(s) used by
 the \dotdebuginfodwo{} sections.
 \item
 \dotdebuglocdwo{} - Contains the location lists referenced by
@@ -83,17 +83,19 @@ information entries. Actual line number tables remain in the
 
 \end{itemize}
 
-In a .dwo file there is no benefit to having a separate string
+In a \texttt{.dwo} file there is no benefit to having a separate string
 section for directories and file names because the primary
 string table will never be stripped. Accordingly, no
-\texttt{.debug\_line\_str.dwo} is defined. Content descriptions corresponding
-to \DWFORMlinestrp{} in an executable file (for example, in the
-skeleton compilation unit) instead use \DWFORMstrx. This allows
+\texttt{.debug\_line\_str.dwo} section is defined. Content descriptions 
+corresponding to \DWFORMlinestrp{} in an executable file (for example, 
+in the skeleton compilation unit) instead use \DWFORMstrx. This allows
 directory and file name strings to be merged with general
 strings and across compilations in package files (which are not
 subject to potential stripping).
 
-
+In a \texttt{.dwo} file. referring to a string using \DWFORMstrp{}
+is valid, but such use may complicate incorporation of that file into a
+\texttt{.dwp} file due to changed string offsets as a result of string merging.
 
 In order for the consumer to locate and process the debug
 information, the compiler must produce a small amount of debug

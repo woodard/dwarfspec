@@ -170,8 +170,10 @@ relocation.
 These attributes refer to
 debugging information in other debugging information sections within
 the object file, and must be relocated during the linking process.
-Exception: attributes whose values are relative to a base offset given
-by \DWATrangesbase{} do not need relocation.
+
+However, if a \DWATrangesbase{} attribute is present, the offset in
+a \DWATranges{} attribute (which uses form \DWFORMsecoffset) is
+relative to the given base offset {no relocation is involved}.
 
 \item Debugging information entries may have attributes with the form
 \DWFORMrefone, \DWFORMreftwo, \DWFORMreffour, \DWFORMrefeight, or
@@ -214,7 +216,10 @@ emit any explicit relocation information for these offsets).
 A DWARF producer may partition the debugging
 information such that the majority of the debugging
 information can remain in individual object files without
-being processed by the linker. The first partition contains
+being processed by the linker. 
+
+\subsubsection{First Partition (with Skeleton Unit)}
+The first partition contains
 debugging information that must still be processed by the linker,
 and includes the following:
 \begin{itemize}
@@ -253,6 +258,7 @@ The attributes contained in the skeleton compilation
 unit can be used by a DWARF consumer to find the object file
 or DWARF object file that contains the second partition.
 
+\subsubsection{Second Partition (Unlinked or In \texttt{.dwo} File)}
 The second partition contains the debugging information that
 does not need to be processed by the linker. These sections
 may be left in the object files and ignored by the linker
@@ -262,13 +268,25 @@ file. This partition includes the following:
 \begin{itemize}
 \item
 The full compilation unit, in the \dotdebuginfodwo{} section.
-Attributes in debugging information entries may refer to
-machine addresses indirectly using the \DWFORMaddrx{} form,
-and location expressions may do so using the \DWOPaddrx{} and
-\DWOPconstx{} forms. Attributes may refer to range table
-entries with an offset relative to a base offset in the
-range table for the compilation unit.
-
+\begin{itemize}
+\item
+The full compilation unit entry includes a \DWATdwoid{} 
+attribute whose value is the same as that of the \DWATdwoid{} 
+attribute of the associated skeleton unit.
+\needlines{4}
+\item
+Attributes contained in the full compilation unit
+may refer to machine addresses indirectly using the \DWFORMaddrx{} 
+form, which accesses the table of addresses specified by the
+\DWATaddrbase{} attribute in the associated skeleton unit.
+Location expressions may similarly do so using the \DWOPaddrx{} and
+\DWOPconstx{} operations. 
+\item
+\DWATranges{} attributes contained in the full compilation unit
+may refer to range table entries with a \DWFORMsecoffset{} offset 
+relative to the base offset specified by the \DWATrangesbase{}
+attribute in the associated skeleton unit.
+\end{itemize}
 \item Separate type units, in the \dotdebuginfodwo{} section.
 
 \item
@@ -299,13 +317,15 @@ applies also to the corresponding split DWARF section (for example,
 
 Split DWARF object files do not get linked with any other files,
 therefore references between sections must not make use of
-normal object file relocation information. 
+normal object file relocation information. As a result, symbolic
+references within or between sections are not possible.
 
 \subsection{Executable Objects}
 \label{chap:executableobjects}
 The relocated addresses in the debugging information for an
 executable object are virtual addresses.
 
+\needlines{6}
 \subsection{Shared Object Files}
 \label{datarep:sharedobject Files}
 The relocated
@@ -339,7 +359,7 @@ A DWARF package file is itself an object file, using the
 \addtoindexx{DWARF package files}
 same object file format (including \byteorder) as the
 corresponding application binary. It consists only of a file
-header, section table, a number of DWARF debug information
+header, a section table, a number of DWARF debug information
 sections, and two index sections.
 
 \needlines{5}
@@ -359,9 +379,9 @@ files, and combined, section by section:
 The string table section in \dotdebugstrdwo{} contains all the
 strings referenced from DWARF attributes using the form
 \DWFORMstrx. Any attribute in a compilation unit or a type
-unit using this form will refer to an entry in that unit's
+unit using this form refers to an entry in that unit's
 contribution to the \dotdebugstroffsetsdwo{} section, which in turn
-will provide the offset of a string in the \dotdebugstrdwo{}
+provides the offset of a string in the \dotdebugstrdwo{}
 section.
 
 The DWARF package file also contains two index sections that
@@ -408,6 +428,15 @@ sections:
     \dotdebugstroffsetsdwo
 \end{alltt}
 
+\textit{Merging of type units with the same type signature
+across \texttt{.dwo} files when creating a \texttt{.dwp} file
+can be achieved using COMDAT-based techniques similar to those
+described in Appendix 
+\refersec{app:dwarfcompressionandduplicateeliminationinformative}.
+In fact, this is necessary in order to combine all \dotdebuginfodwo{}
+section contributions into a single \dotdebuginfodwo{} section in a
+\texttt{.dwp} file.}
+
 \subsubsection{Format of the CU and TU Index Sections}
 Both index sections have the same format, and serve to map a
 64-bit signature to a set of contributions to the debug sections.
@@ -430,7 +459,7 @@ and is independent of the DWARF version number.
 The version number is \versiondotdebugcuindex.
 
 \item \textit{padding} (\HFTuhalf) \\
-Reserved to DWARF.
+Reserved to DWARF (must be zero).
 
 \item \texttt{column\_count} (\HFTuword) \\
 The number of columns in the table of section counts that follows.
@@ -1050,12 +1079,11 @@ code 0 is reserved for null debugging information entries. The
 abbreviation code is followed by another unsigned LEB128\addtoindexx{LEB128!unsigned}
 number that encodes the entry\textquoteright s tag. The encodings for the
 tag names are given in 
-Table \refersec{tab:tagencodings}.
+Table \referfol{tab:tagencodings}.
 
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c}
-  \hline
   \caption{Tag encodings} \label{tab:tagencodings} \\
   \hline \bfseries Tag name&\bfseries Value\\ \hline
 \endfirsthead
@@ -1560,6 +1588,7 @@ the list of classes allowed by the applicable attribute in
 Table \refersec{tab:attributeencodings}
 determines the class of the form.
 
+\needlines{4}
 In the form descriptions that follow, some forms are said
 to depend in part on the value of an attribute of the
 \definition{\associatedcompilationunit}:
@@ -1620,27 +1649,24 @@ format, it is an 8-byte unsigned value (see Section
 \item \livelink{chap:classblock}{block} \\
 \livetarg{datarep:classblock}{}
 Blocks come in four forms:
-
-\begin{myindentpara}{1cm}
+\begin{itemize}
+\item
 A 1-byte length followed by 0 to 255 contiguous information
 bytes (\DWFORMblockoneTARG).
-\end{myindentpara}
 
-\begin{myindentpara}{1cm}
+\item
 A 2-byte length followed by 0 to 65,535 contiguous information
 bytes (\DWFORMblocktwoTARG).
-\end{myindentpara}
 
-\begin{myindentpara}{1cm}
+\item
 A 4-byte length followed by 0 to 4,294,967,295 contiguous
 information bytes (\DWFORMblockfourTARG).
-\end{myindentpara}
 
-\begin{myindentpara}{1cm}
+\item
 An unsigned LEB128\addtoindexx{LEB128!unsigned}
 length followed by the number of bytes
 specified by the length (\DWFORMblockTARG).
-\end{myindentpara}
+\end{itemize}
 
 In all forms, the length is the number of information bytes
 that follow. The information bytes may contain any mixture
@@ -1699,6 +1725,7 @@ The information bytes contain a DWARF expression
 or location description 
 (see Section \refersec{chap:locationdescriptions}).
 
+\needlines{4}
 \item \livelinki{chap:classflag}{flag}{flag class} \\
 \livetarg{datarep:classflag}{}
 A flag \addtoindexx{flag class}
@@ -1782,7 +1809,10 @@ to the beginning of the non\dash contiguous address ranges
 information for the referencing entity.  
 It is relocatable in
 a relocatable object file, and relocated in an executable or
-shared object file. In the \thirtytwobitdwarfformat, this offset
+shared object file. 
+However, if a \DWATrangesbase{} attribute applies, the offset
+is relative to the base offset given by \DWATrangesbase.
+In the \thirtytwobitdwarfformat, this offset
 is a 4-byte unsigned value; in the 64-bit DWARF
 format, it is an 8-byte unsigned value (see Section
 \refersec{datarep:32bitand64bitdwarfformats}).
@@ -1919,7 +1949,7 @@ value is a 4-byte unsigned offset; in the \sixtyfourbitdwarfformat,
 it is an 8-byte unsigned offset 
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
-\needlines{4}
+\needlines{6}
 \item as an indirect offset into the string table using an 
 index into a table of offsets contained in the 
 \dotdebugstroffsets{} section of the object file (\DWFORMstrxTARG).
@@ -3342,7 +3372,7 @@ The \DWATrangesbase{} attribute points to the first entry
 following the header. The entries are referenced by a byte
 offset relative to this base address.
 
-
+\needlines{12}
 \section{Location List Table}
 \label{datarep:locationlisttable}
 Each set of entries in the location list table contained in the
@@ -3479,12 +3509,14 @@ Table \ref{tab:integerrepresentationnames}.
 \section{Type Signature Computation}
 \label{datarep:typesignaturecomputation}
 
-A type signature is computed only by the DWARF producer;
-\addtoindexx{type signature!computation}
-it is used by a DWARF consumer to resolve type references to
-the type definitions that are contained in 
-\addtoindexx{type unit}
-type units.
+A \addtoindex{type signature} is used by a DWARF consumer 
+to resolve type references to the type definitions that 
+are contained in \addtoindex{type unit}s (see Section
+\refersec{chap:typeunitentries}).
+
+\textit{A type signature is computed only by a DWARF producer;
+\addtoindexx{type signature!computation} a consumer need
+compare two type signatures to check for equality.}
 
 \needlines{4}
 The type signature for a type T0 is formed from the 
@@ -3604,6 +3636,7 @@ encoding of x as the attribute value; otherwise, (b) use the letter 'T'
 as the marker, process the type T recursively by performing
 Steps 2 through 7, and use the result as the attribute value.
 
+\needlines{4}
 Other attribute values use the letter 'A' as the marker, and
 the value consists of the form code (encoded as an unsigned
 LEB128 value) followed by the encoding of the value according

@@ -185,13 +185,17 @@ and performance.
 
 DWARF Version 5 is compatible with DWARF Version 4 except as follows:
 \begin{itemize}
-\item The line number table header is substantially revised.
+\item The compilation unit header (in the \dotdebuginfo{} section) has
+a new \HFNunittype{} field.
+\needlines{4}
 \item New operand forms for attribute values are defined 
 (\DWFORMaddrxNAME, \DWFORMdatasixteenNAME, \DWFORMlinestrpNAME, 
-\DWFORMrefsupNAME, \DWFORMstrpsupNAME, \DWFORMstrxNAME).
+\DWFORMrefsupNAME, \DWFORMstrpsupNAME{} and \DWFORMstrxNAME).
 (Because a pre-DWARF Version 5 consumer will not be able to interpret 
 these even to ignore and skip over them, such new forms must be 
 considered incompatible.)
+\item The line number table header (in the \dotdebugline{} section) 
+is substantially revised.
 \needlines{4}
 \item A location list entry (see Section \refersec{chap:locationlists}) 
 with the address range \mbox{(0, \textit{maximum-address})} is defined 

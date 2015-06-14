@@ -361,7 +361,7 @@ Section \refersec{chap:entryaddress}).
 \needlines{8}
 \item A \DWATstroffsetsbaseDEFN\addtoindexx{string offset base attribute}
 \hypertarget{chap:DWATstroffsetbaseforindirectstringtable}{} 
-attribute, whose value is a reference. 
+attribute, whose value is of class \CLASSstroffsetsptr. 
 This attribute points to the first string
 offset of the compilation unit's contribution to the
 \dotdebugstroffsets{} (or \dotdebugstroffsetsdwo{}) section. 
@@ -370,9 +370,9 @@ Indirect string references
 interpreted as indices relative to this base.
 
 \needlines{6}
-\item A \DWATaddrbaseNAME\addtoindexx{address table base attribute}
+\item A \DWATaddrbaseTARG\addtoindexx{address table base attribute}
 \hypertarget{chap:DWATaddrbaseforaddresstable}{}
-attribute, whose value is a reference.
+attribute, whose value is of class \CLASSaddrptr.
 This attribute points to the beginning of the compilation
 unit's contribution to the \dotdebugaddr{} section.
 Indirect references (using \DWFORMaddrx, \DWOPaddrx, 
@@ -383,7 +383,7 @@ interpreted as indices relative to this base.
 \needlines{5}
 \item A \DWATrangesbaseDEFN\addtoindexx{ranges table base attribute}
 \hypertarget{chap:DWATrangesbaseforrangelists}{}
-attribute, whose value is a reference.
+attribute, whose value is of class \CLASSrangelistptr.
 This attribute points to the beginning of the compilation
 unit's contribution to the \dotdebugranges{} section.
 References to range lists (using \DWFORMsecoffset)
@@ -842,8 +842,8 @@ imported declaration entry has no name attribute but it does
 have a \DWATimportDEFN{} attribute that refers to the entry for the
 entity being imported. (\addtoindex{C++} 
 provides no means to \doublequote{rename}
-an imported entity, other than a namespace).
-}
+an imported entity, other than a namespace).}
+
 
 \textit{A \addtoindex{Fortran} use statement 
 \addtoindexx{Fortran!use statement}
@@ -921,6 +921,7 @@ series of individual imported declaration entries as described
 in Section \refersec{chap:importedorrenameddeclarationentries}.
 }
 
+\needlines{5}
 \textit{A \addtoindex{Fortran} use statement for an entity in a module that is
 \addtoindexx{Fortran!use statement}
 itself imported by a use statement without an explicit mention
@@ -2351,11 +2352,11 @@ handles exceptions thrown by an immediately preceding
 A catch \nolink{block} 
 designates the type of the exception that it can handle.}
 
-A \livetargi{chap:tryblock}{try block}{try block} is represented 
+A \livetarg{chap:tryblock}{try block} is represented 
 by a debugging information entry
 \addtoindexx{try block entry}
 with the tag \DWTAGtryblockTARG.  
-A \livetargi{chap:catchblock}{catch block} is represented by
+A \livetarg{chap:catchblock}{catch block} is represented by
 a debugging information entry
 \addtoindexx{catch block entry}
 with the tag \DWTAGcatchblockTARG.
