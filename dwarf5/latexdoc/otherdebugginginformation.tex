@@ -2098,7 +2098,7 @@ among many Frame Description Entries. There is at least one
 CIE in every non-empty \dotdebugframe{} section. A CIE contains
 the following fields, in order:
 \begin{enumerate}[1. ]
-\item \texttt{length} (\livelink{datarep:initiallengthvalues}{initial length})  \\
+\item \HFNlength{} (\livelink{datarep:initiallengthvalues}{initial length})  \\
 A constant that gives the number of bytes of the CIE structure,
 not including the length field itself 
 (see Section \refersec{datarep:initiallengthvalues}). 
@@ -2106,18 +2106,18 @@ The
 size of the \texttt{length} field plus the value of \texttt{length} must be an
 integral multiple of the address size.
 
-\item  \texttt{CIE\_id} (4 or 8 bytes, see Section \refersec{datarep:32bitand64bitdwarfformats}) \\
+\item  \HFNCIEid{} (4 or 8 bytes, see Section \refersec{datarep:32bitand64bitdwarfformats}) \\
 A constant that is used to distinguish CIEs from FDEs.
 
-\item  \texttt{version} (\HFTubyte) \\
+\item  \HFNversion{} (\HFTubyte) \\
 A version number\addtoindexx{version number!call frame information} 
 (see Section \refersec{datarep:callframeinformation}). 
 This number is specific to the call frame information
 and is independent of the DWARF version number.
 
 \needlines{8}
-\item  \texttt{augmentation} (\HFTaugstring) \\
-A null\dash terminated UTF\dash 8 string that identifies the augmentation
+\item  \HFNaugmentation{} (\HFTaugstring) \\
+A null-terminated UTF\dash 8 string that identifies the augmentation
 to this CIE or to the FDEs that use it. If a reader encounters
 an augmentation string that is unexpected, then only the
 following fields can be read:
@@ -2125,9 +2125,9 @@ following fields can be read:
 
 \begin{itemize}
 
-\item CIE: \texttt{length, CIE\_id, version, augmentation}
+\item CIE: \HFNlength, \HFNCIEid, \HFNversion, \HFNaugmentation
 
-\item FDE: \texttt{length, CIE\_pointer, initial\_location, address\_range}
+\item FDE: \HFNlength, \HFNCIEpointer, \HFNinitiallocation, \HFNaddressrange
 
 \end{itemize}
 If there is no augmentation, this value is a zero byte.
@@ -2144,10 +2144,8 @@ any \dotdebuginfo{} section, the augmentation string always uses
 UTF\dash 8 encoding.}
 
 \needlines{4}
-\item  \texttt{address\_size} (\HFTubyte) \\
-The size of a target address
-\addttindexx{address\_size}
-in this CIE and any FDEs that
+\item  \HFNaddresssize{} (\HFTubyte) \\
+The size of a target address in this CIE and any FDEs that
 use it, in bytes. If a compilation unit exists for this frame,
 its address size must match the address size here.
 
@@ -2155,7 +2153,7 @@ its address size must match the address size here.
 The size of a segment selector in this CIE and any FDEs that
 use it, in bytes.
 
-\item  \addttindex{code\_alignment\_factor} (unsigned LEB128) 
+\item  \HFNcodealignmentfactor{} (unsigned LEB128) 
 \addtoindexx{LEB128!unsigned}\addtoindexx{unsigned LEB128|see{LEB128, unsigned}}
 \addtoindexx{code alignment factor} \\
 A 
@@ -2165,23 +2163,23 @@ instructions (see
 Section \refersec{chap:rowcreationinstructions}).
 
 
-\item  \addttindex{data\_alignment\_factor} (signed LEB128)
+\item  \HFNdataalignmentfactor{} (signed LEB128)
 \addtoindexx{LEB128!signed}\addtoindexx{signed LEB128|see{LEB128, signed}} \\
 \addtoindexx{data alignment factor}
 A 
 \addtoindexx{\textless daf\textgreater|see{data alignment factor}}
 constant that is factored out of certain offset instructions
 (see below). The resulting value is  \textit{(operand} *
-\texttt{data\_alignment\_factor}).
+\HFNdataalignmentfactor).
 
-\item  \texttt{return\_address\_register} (unsigned LEB128)\addtoindexx{LEB128!unsigned} \\
+\item  \HFNreturnaddressregister{} (unsigned LEB128)\addtoindexx{LEB128!unsigned} \\
 An unsigned LEB128 constant that indicates which column in the
 rule table represents the return address of the function. Note
 that this column might not correspond to an actual machine
 register.
 
 \needlines{8}
-\item \texttt{initial\_instructions} (array of \HFTubyte) \\
+\item \HFNinitialinstructions{} (array of \HFTubyte) \\
 A sequence of rules that are interpreted to create the initial
 setting of each column in the table.  
 
@@ -2191,7 +2189,7 @@ is the undefined rule. However, an ABI authoring body or a
 compilation system authoring body may specify an alternate
 default value for any or all columns.
 
-\item \texttt{padding} (array of \HFTubyte) \\
+\item \HFNpadding{} (array of \HFTubyte) \\
 Enough \DWCFAnop{} instructions to make the size of this entry
 match the length value above.
 \end{enumerate}
@@ -2199,7 +2197,7 @@ match the length value above.
 \needlines{5}
 An FDE contains the following fields, in order:
 \begin{enumerate}[1. ]
-\item \texttt{length} (\livelink{datarep:initiallengthvalues}{initial length})  \\
+\item \HFNlength{} (\livelink{datarep:initiallengthvalues}{initial length})  \\
 A constant that gives the number of bytes of the header and
 instruction stream for this function, not including the length
 field itself 
@@ -2208,7 +2206,7 @@ The size of the \texttt{length} field
 plus the value of length must be an integral multiple of the
 address size.
 
-\item   CIE\_pointer (4 or 8 bytes, see Section \refersec{datarep:32bitand64bitdwarfformats}) \\
+\item \HFNCIEpointer{} (4 or 8 bytes, see Section \refersec{datarep:32bitand64bitdwarfformats}) \\
 A constant 
 \addtoindexx{section offset!in FDE header}
 offset into the \dotdebugframe{}
@@ -2216,28 +2214,24 @@ section that denotes
 the CIE that is associated with this FDE.
 
 \needlines{4}
-\item  \texttt{initial\_location} (segment selector and target address) \\
-The 
-\addttindexx{initial\_location}
-address of the first location associated with this table
+\item  \HFNinitiallocation{} (segment selector and target address) \\
+The address of the first location associated with this table
 entry. 
 If the \HFNsegmentselectorsize{} field of this FDE's CIE is non-zero,
 the initial location is preceded by a segment selector of
 the given length.
 
 \needlines{4}
-\item  \texttt{address\_range} (target address) \\
-The 
-\addttindexx{address\_range}
-number 
+\item  \HFNaddressrange{} (target address) \\
+The number 
 \addtoindexx{target address}
 of bytes of program instructions described by this entry.
 
-\item \texttt{instructions} (array of \HFTubyte) \\
+\item \HFNinstructions{} (array of \HFTubyte) \\
 A sequence of table defining instructions that are described below.
 
 \needlines{4}
-\item \texttt{padding} (array of \HFTubyte) \\
+\item \HFNpadding{} (array of \HFTubyte) \\
 Enough \DWCFAnop{} instructions 
 to make the size of this entry match the length value above.
 \end{enumerate}

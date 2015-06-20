@@ -5,7 +5,6 @@ This section describes the binary representation of the
 debugging information entry itself, of the attribute types
 and of other fundamental elements described above.
 
-
 \section{Vendor Extensibility}
 \label{datarep:vendorextensibility}
 \addtoindexx{vendor extensibility}
@@ -165,6 +164,11 @@ These attributes represent locations
 within the virtual address space of the program, and require
 relocation.
 
+\item A DWARF expression may contain a \DWOPaddr{} (see Section 
+\refersec{chap:literalencodings}) which contains a location within 
+the virtual address space of the program, and require relocation.
+
+\needlines{4}
 \item Debugging information entries may have attributes with the form
 \DWFORMsecoffset{} (see Section \refersec{datarep:attributeencodings}). 
 These attributes refer to
@@ -173,15 +177,7 @@ the object file, and must be relocated during the linking process.
 
 However, if a \DWATrangesbase{} attribute is present, the offset in
 a \DWATranges{} attribute (which uses form \DWFORMsecoffset) is
-relative to the given base offset {no relocation is involved}.
-
-\item Debugging information entries may have attributes with the form
-\DWFORMrefone, \DWFORMreftwo, \DWFORMreffour, \DWFORMrefeight, or
-\DWFORMrefudata{} (see Section \refersec{datarep:attributeencodings}). 
-These attributes refer to other
-debugging information entries within the same compilation unit, and
-are relative to the beginning of the current compilation unit. These
-values do not need relocation.
+relative to the given base offset--no relocation is involved.
 
 \item Debugging information entries may have attributes with the form
 \DWFORMrefaddr{} (see Section \refersec{datarep:attributeencodings}). 
@@ -195,7 +191,8 @@ relocation.
 These attributes refer to strings in
 the \dotdebugstr{} section. These values require relocation.
 
-\item Entries in the \dotdebugloc{}, \dotdebugranges{}, and \dotdebugaranges{}
+\item Entries in the \dotdebugaddr, \dotdebugloc{}, \dotdebugranges{} 
+and \dotdebugaranges{}
 sections contain references to locations within the virtual address
 space of the program, and require relocation.
 
@@ -208,7 +205,26 @@ each of which is an offset of a string in the \dotdebugstr{} section. Each
 of these offsets requires relocation. Depending on the implementation,
 these relocations may be implicit (that is, the producer may not need to
 emit any explicit relocation information for these offsets).
+
+\item The \HFNdebuginfooffset{} field in the \dotdebugaranges header and 
+the list of compilation units following the \dotdebugnames{} header contain 
+references to the \dotdebuginfo{} section.  These references require relocation 
+so that after linking they refer to the correct contribution in the combined 
+\dotdebuginfo{} section in the executable file.
+
+\item Frame descriptor entries in the \dotdebugframe{} section 
+(see Section \refersec{chap:structureofcallframeinformation}) contain an 
+\HFNinitiallocation{} field value within the virtual address 
+space of the program and require relocation. 
+
 \end{itemize}
+
+\textit{Note that operands of classes \CLASSblock, \CLASSconstant{} and 
+\CLASSflag{} do not require relocation. Attribute operands that use 
+form \DWFORMstring{} also do not require relocation. Further, 
+attribute operands that use form
+\DWFORMrefone, \DWFORMreftwo, \DWFORMreffour, \DWFORMrefeight, or
+\DWFORMrefudata{} do not need relocation.}
 
 \subsection{Split DWARF Object Files}
 \label{datarep:splitdwarfobjectfiles}
@@ -218,6 +234,7 @@ information such that the majority of the debugging
 information can remain in individual object files without
 being processed by the linker. 
 
+\needlines{6}
 \subsubsection{First Partition (with Skeleton Unit)}
 The first partition contains
 debugging information that must still be processed by the linker,
@@ -262,7 +279,7 @@ or DWARF object file that contains the second partition.
 The second partition contains the debugging information that
 does not need to be processed by the linker. These sections
 may be left in the object files and ignored by the linker
-(that is, not combined and copied to the executable object), or
+(that is, not combined and copied to the executable object file), or
 they may be placed by the producer in a separate DWARF object
 file. This partition includes the following:
 \begin{itemize}
@@ -1990,8 +2007,8 @@ beginning of the string offsets information for the
 referencing entity. It is relocatable in
 a relocatable object file, and relocated in an executable or
 shared object file. In the \thirtytwobitdwarfformat, this offset
-is a 4-byte unsigned value; in the 64-bit DWARF
-format, it is an 8-byte unsigned value (see Section
+is a 4-byte unsigned value; in the \sixtyfourbitdwarfformat,
+it is an 8-byte unsigned value (see Section
 \refersec{datarep:32bitand64bitdwarfformats}).
 
 \textit{This class is new in \DWARFVersionV.}
