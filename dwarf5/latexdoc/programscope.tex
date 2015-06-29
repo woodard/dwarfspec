@@ -106,9 +106,7 @@ of the machine instructions generated for the compilation
 unit (see Section \refersec{chap:codeaddressesandranges}).
   
 A \DWATlowpc{} attribute 
-may also
-be specified 
-in combination 
+may also be specified in combination 
 \addtoindexx{ranges attribute}
 with 
 \DWATranges{} to specify the
@@ -370,7 +368,7 @@ Indirect string references
 interpreted as indices relative to this base.
 
 \needlines{6}
-\item A \DWATaddrbaseTARG\addtoindexx{address table base attribute}
+\item A \DWATaddrbaseDEFN\addtoindexx{address table base attribute}
 \hypertarget{chap:DWATaddrbaseforaddresstable}{}
 attribute, whose value is of class \CLASSaddrptr.
 This attribute points to the beginning of the compilation
@@ -442,11 +440,14 @@ compilation unit.
 
 \item
 \livetarg{chap:DWATdwoidforunit}{}
-A \DWATdwoidDEFN{} attribute\addtoindexx{unit signature attribute}
-whose value is an 8-byte
-unsigned hash of the full compilation unit.  This hash
-value is computed by the method described in 
-Section \refersec{datarep:typesignaturecomputation}.
+A \DWATdwoidDEFN{} attribute\addtoindexx{unit identification attribute}
+whose implementation-defined integer constant value
+provides unique identification of this compilation unit
+as well as the associated compilation unit in the
+split DWARF object file named in the \DWATdwoname{}
+attribute. For simplicity, the skeleton compilation
+unit and the split DWARF object file must use the same
+form to encode this identification value.
 
 \needlines{6}
 \item
@@ -521,14 +522,6 @@ language used to define the type. The set of language names
 and their meanings are given in Table \refersec{tab:languagenames}.
 
 \needlines{4}
-\item A 
-\DWATstroffsetsbase\addtoindexx{string base offset attribute}
-attribute, whose value is a reference. This attribute points
-to the first string offset of the type unit's contribution to
-the \dotdebugstroffsets{} section. Indirect string references
-(using \DWFORMstrx) within the type unit are interpreted
-as indices relative to this base.
-
 \item A \DWATstmtlist{} attribute\addtoindexx{statement list attribute}
 whose value of class \CLASSlineptr{} points to the line number 
 information for this type unit.
@@ -544,11 +537,12 @@ type unit entries can simply refer to the line number table
 used by the compilation unit. 
 \item In a \splitDWARFobjectfile, where
 the type units are located in a separate DWARF object file,
-the \DWATstmtlist{} attribute refers to a "specialized"
+the \DWATstmtlistNAME{} attribute refers to a "specialized"
 line number table in the \dotdebuglinedwo{} section, which
 contains only the list of directories and file names. All
-type unit entries in a \splitDWARFobjectfile{} may (but are not
-required to) refer to the same \addtoindex{specialized line number table}.
+type unit entries in a \splitDWARFobjectfile{} may (but are 
+not required to) refer to the same 
+\addtoindex{specialized line number table}.
 \end{itemize}
 
 \item A \DWATuseUTFeight{} attribute, which is a flag
@@ -556,6 +550,14 @@ whose presence indicates that all strings referred to by this type
 unit entry, its children, and its associated 
 \addtoindex{specialized line number table}, 
 are represented using the UTF-8 representation.
+
+\item A 
+\DWATstroffsetsbase\addtoindexx{string base offset attribute}
+attribute, whose value is a reference. This attribute points
+to the first string offset of the type unit's contribution to
+the \dotdebugstroffsets{} section. Indirect string references
+(using \DWFORMstrx) within the type unit are interpreted
+as indices relative to this base.
 
 \end{enumerate}
 
@@ -2343,7 +2345,7 @@ the with statement.
 \needlines{6}
 \section{Try and Catch Block Entries}
 \label{chap:tryandcatchblockentries}
-\livetargi{chap:tryandcatchblockentries}{}
+\livetarg{chap:tryandcatchblockentries}{}
 \textit{In \addtoindex{C++}, a \livelink{chap:lexicalblock}{lexical block} may be 
 designated as a \doublequote{catch \nolink{block}.} 
 A catch \nolink{block} is an exception handler that 
@@ -2372,7 +2374,7 @@ a
 \DWATranges{} attribute 
 \addtoindexx{ranges attribute}
 whose values encode the contiguous
-or non\dash contiguous address ranges, respectively, of the
+or non-contiguous address ranges, respectively, of the
 machine instructions generated for the \nolink{block}
 (see Section \refersec{chap:codeaddressesandranges}).
 
@@ -2394,7 +2396,7 @@ that catch \nolink{block}.
 This child entry has one of the tags
 \DWTAGformalparameter{}\addtoindexx{formal parameter entry!in catch block}
 or
-\DWTAGunspecifiedparameters,\addtoindexx{unspecified parameters entry!in catch block}
+\DWTAGunspecifiedparameters{},\addtoindexx{unspecified parameters entry!in catch block}
 and will have the same form as other parameter entries.
 
 The siblings immediately following a try \nolink{block} 
