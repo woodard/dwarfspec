@@ -9,6 +9,132 @@ as bounded by ranges of text addresses within the program.
 
 \section{Unit Entries}
 \label{chap:unitentries}
+
+\ifthenelse{\boolean{Trial1ReUnits}}
+%%%%%%%%%%%%%%%%%%%%\then
+{
+\bb
+A DWARF object file is an object file that contains one or more 
+DWARF compilation units, of which there are these kinds:
+\addtoindexx{unit|see {compilation unit}} 
+\addtoindexx{compilation unit}
+\begin{itemize}
+\item A \definition{full compilation unit} describes
+a complete compilation, possibly in combination with
+related partial compilation units and/or type units.
+
+\item A \definition{partial compilation unit} describes
+a part of a compilation (generally corresponding to an
+included file) which is imported into one or more 
+related full compilation units.
+
+\item A \definition{type unit} is a specialized unit
+(similar to a compilation unit) that represents a type 
+whose description may be usefully shared by multiple 
+other units.
+\end{itemize}
+
+\index{conventional compilation unit|see{
+       full compilation unit, partial compilation unit, type unit}}
+
+\textit{These first three kinds of compilation unit are
+sometimes called \doublequote{conventional} compilation
+units--they are kinds of compilation units that were
+defined prior to \DWARFVersionV. Conventional compilation units
+are part of the same object file as the compiled code and
+data (whether relocatable, executable, shared and so on).
+The word \doublequote{conventional} is usually
+omitted in these names, unless needed to distinguish them
+from the similar split compilation units below.}
+
+\needlines{4}
+\begin{itemize}
+\item A \definition{skeleton compilation unit} represents
+the DWARF debugging information for a compilation using a
+minimal description that identifies a separate split
+compilation unit that provides the remainder (and most) 
+of the description.
+\end{itemize}
+
+\textit{A skeleton compilation acts as a minimal conventional full
+compilation (see above) that identifies and is paired with a 
+corresponding split full compilation (as described below). Like
+the conventional compilation units, a skeleton compilation unit
+is part of the same object file as the compiled code and data.}
+
+\begin{itemize}
+\item A \definition{split full compilation unit} describes
+a complete compilation, possibly in combination with
+related type compilation units. It corresponds 
+to a specific skeleton compilation unit.
+
+\item A \definition{split type compilation unit} is a specialized
+compilation unit that represents a type whose description may
+be usefully shared by multiple other units.
+
+\end{itemize}
+
+\textit{Split compilation units and type units may be in object
+files separate from those containing the program code and data.}
+
+\textit{Either a full compilation unit or a partial compilation 
+unit may be logically incorporated into another compilation unit 
+using an \addtoindex{imported unit entry}
+(see Section \refersec{chap:importedunitentries}).}
+
+\textit{Split compilation units and partial compilation units
+serve similar purposes as a means to promote sharing and
+compression of DWARF information; thus, a combined split partial
+compilation unit kind is not defined.}
+
+\textit{In the remainder of this document, the word 
+\doublequote{compilation} in the phrase \doublequote{compilation unit} 
+is generally omitted, unless it is deemed needed for clarity 
+or emphasis.}
+
+\subsection{Full and Partial Compilation Unit Entries}
+\label{chap:fullandpartialcompilationunitentries}
+A \addtoindex{full compilation unit}\addtoindexx{compilation unit!full} 
+is represented by a debugging information entry with the tag 
+\DWTAGcompileunitTARG. 
+A \addtoindex{partial compilation unit}\addtoindexx{compilation unit!partial} 
+is represented by a debugging information entry with the tag 
+\DWTAGpartialunitTARG.
+
+\needlines{6}
+In a simple compilation, a single compilation unit with
+the tag 
+\DWTAGcompileunit{} represents a complete object file
+and the tag 
+\DWTAGpartialunit{} (as well as tag \DWTAGtypeunit) is not used. 
+In a compilation
+employing the DWARF space compression and duplicate elimination
+techniques from 
+Appendix \refersec{app:usingcompilationunits}, 
+multiple compilation units using
+the tags 
+\DWTAGcompileunit{}, 
+\DWTAGpartialunit{} and/or 
+\DWTAGtypeunit{} 
+are used to represent portions of an object file.
+
+\textit{A full compilation unit typically represents the text and
+data contributed to an executable by a single relocatable
+object file. It may be derived from several source files,
+including pre-processed header files. 
+A \addtoindex{partial compilation unit} typically represents a part of the text
+and data of a relocatable object file, in a manner that can
+potentially be shared with the results of other compilations
+to save space. It may be derived from an \doublequote{include file,}
+template instantiation, or other implementation-dependent
+portion of a compilation. A full compilation unit can also
+function in a manner similar to a partial compilation unit
+in some cases.}
+
+\eb
+}
+%%%%%%%%%%%%%%%%%%%%\else
+{
 An object file may contain one or more compilation units,
 of which there are
 \addtoindexx{unit|see {compilation unit}} 
@@ -37,7 +163,6 @@ compilation unit using an
 
 \subsection[Normal and Partial CU Entries]{Normal and Partial Compilation Unit Entries}
 \label{chap:normalandpartialcompilationunitentries}
- 
 A \addtoindex{normal compilation unit}\addtoindexx{compilation unit!normal} 
 is represented by a debugging information entry with the tag 
 \DWTAGcompileunitTARG. 
@@ -73,6 +198,8 @@ template instantiation, or other implementation\dash dependent
 portion of a compilation. A normal compilation unit can also
 function in a manner similar to a partial compilation unit
 in some cases.}
+}
+%%%%%%%%%%%%%%%%%%%%%\endif
 
 A compilation unit entry owns debugging information
 entries that represent all or part of the declarations
@@ -82,7 +209,6 @@ declarations is indicated by imported unit entries in one
 or more other compilation unit entries that refer to that
 partial compilation unit (see 
 Section \refersec{chap:importedunitentries}).
-
 
 Compilation unit entries may have the following 
 attributes:
@@ -351,8 +477,7 @@ Section \refersec{chap:generalsubroutineandentrypointinformation}).}
 \item A \DWATentrypc{} attribute whose value is the address of the first
 \hypertarget{chap:DWATentrypcofcompileunit}{}
 \hypertarget{chap:DWATentrypcofpartialunit}{}
-\addtoindexx{entry pc attribute!for normal compilation unit}
-\addtoindexx{entry pc attribute!for partial compilation unit}
+\addtoindexx{entry pc attribute}
 executable instruction of the unit (see 
 Section \refersec{chap:entryaddress}).
 
@@ -396,6 +521,7 @@ it is undefined. If the base address is undefined, then any
 DWARF entry or structure defined in terms of the base address
 of that compilation unit is not valid.
 
+\needlines{6}
 \subsection{Skeleton Compilation Unit Entries}
 \label{chap:skeletoncompilationunitentries}
 \addtoindexx{compilation unit!skeleton}
@@ -411,23 +537,13 @@ to locate the object file where the full compilation unit
 can be found, and for the consumer to interpret references to
 addresses in the program. 
 
+\bb
+A skeleton compilation unit has no children.
+
 A skeleton compilation unit has \DWATdwoname{} and 
-\DWATdwoid{} attributes and no children; it may have additional
-attributes from among the following:
+\DWATdwoid{} attributes:
+\eb
 \begin{enumerate}[1. ]
-
-\item
-Either a \DWATlowpc{} and \DWAThighpc{} pair of attributes
-or a \DWATranges{} attribute (the same as for regular
-compilation unit entries).
-
-\item
-A \DWATstmtlist{} attribute (the same as for regular
-compilation unit entries).
-
-\item
-A \DWATcompdir{} attribute (the same as for regular
-compilation unit entries).
 
 \item
 \livetarg{chap:DWATdwonameforunit}{}
@@ -443,51 +559,155 @@ compilation unit.
 A \DWATdwoidDEFN{} attribute\addtoindexx{unit identification attribute}
 whose implementation-defined integer constant value
 provides unique identification of this compilation unit
-as well as the associated compilation unit in the
-split DWARF object file named in the \DWATdwoname{}
-attribute. For simplicity, the skeleton compilation
-unit and the split DWARF object file must use the same
-form to encode this identification value.
+as well as the associated split compilation unit in the
+\bb
+object file named in the \DWATdwoname{}
+attribute. For simplicity, the \DWATdwoidNAME{} attributes
+in the skeleton compilation unit and the corresponding
+split full compilation unit 
+(see Section \refersec{chap:splitfullcompilationunitentries})
+\eb
+must use the same form to encode this identification value.
+\end{enumerate}
+
+\bb
+A skeleton compilation unit may have additional
+attributes from among the following:
+\eb
+\begin{enumerate}[1. ]
+\addtocounter{enumi}{2}
+\item
+Either a \DWATlowpc{} and \DWAThighpc{} pair of attributes
+or a \DWATranges{} attribute (the same as for conventional
+compilation unit entries).
+
+\item
+A \DWATstmtlist{} attribute (the same as for conventional
+compilation unit entries).
+
+\item
+A \DWATcompdir{} attribute (the same as for conventional
+compilation unit entries).
 
 \needlines{6}
 \item
-A \DWATuseUTFeight{} attribute (the same as for regular compilation unit
-entries).
+A \DWATuseUTFeight{} attribute (the same as for conventional 
+compilation unit entries).
 
 \textit{This attribute applies to strings referred to by the skeleton
 compilation unit entry itself, and strings in the associated line
 number information.
 The representation for strings in the object file referenced 
 by the \DWATdwoname{} attribute is determined by the presence 
-of a \DWATuseUTFeight{} attribute in the full compilation unit.}
+of a \DWATuseUTFeight{} attribute in the skeleton compilation unit.}
 
 \item
 A \DWATstroffsetsbase{} attribute, for indirect strings references 
-from the skeleton compilation unit (the same as for regular 
+from the skeleton compilation unit (the same as for conventional 
 compilation unit entries).
 
 \item
-A \DWATaddrbase{} attribute (the same as for regular
+A \DWATaddrbase{} attribute (the same as for conventional
 compilation unit entries).
 
 \item
-A \DWATrangesbase{} attribute (the same as for regular
+A \DWATrangesbase{} attribute (the same as for conventional
 compilation unit entries).
 
 \end{enumerate}
 
 All other attributes of a compilation unit entry (described
-in Section \refersec{chap:normalandpartialcompilationunitentries}) 
-should be placed in the full compilation unit.
+in Section \refersec{chap:fullandpartialcompilationunitentries}) 
+should be placed in the split full compilation unit
+(see \refersec{chap:splitfullcompilationunitentries}).
 The attributes provided by the skeleton compilation
 unit entry do not need to be repeated in the full compilation
 unit entry, except for \DWATdwoid, which should appear in
 both entries so that the consumer can verify that it has
 found the correct object file.
 
-\textit{The \DWATaddrbase{}, \DWATrangesbase{} and \DWATstroffsetsbase{}
-attributes provide context that may be necessary to interpret the contents
+\textit{The \DWATaddrbase{}, \DWATrangesbase{} and 
+\DWATstroffsetsbase{} attributes provide context that may be 
+necessary to interpret the contents
 of the corresponding \splitDWARFobjectfile.}
+
+\bb
+\textit{The \DWATbasetypes{} attribute is not defined for a
+skeleton compilation unit.}
+\eb
+
+\ifthenelse{\boolean{Trial1ReUnits}}
+%%%%%%%%%%%%%%%%%%%%\then
+{
+\bb
+\subsection{Split Full Compilation Unit Entries}
+\label{chap:splitfullcompilationunitentries}
+A \definition{split full compilation unit} is represented by a 
+debugging information entry with tag \DWTAGcompileunit.
+It is very similar to a conventional full compilation unit but
+is logically paired with a specific skeleton compilation unit while
+being physically separate.
+
+A split full compilation unit has a \DWATdwoid{} attribute:
+\begin{enumerate}
+\item
+A \DWATdwoidDEFN{} attribute\addtoindexx{unit identification attribute}
+whose implementation-defined integer constant value
+provides unique identification of this compilation unit
+as well as the associated split compilation unit.
+For simplicity, the \DWATdwoidNAME{} attributes in the 
+skeleton compilation unit and the corresponding split 
+compilation unit must use the same form to encode the 
+identification value.
+\end{enumerate}
+
+A split full compilation unit may also have additional 
+attributes from among the following:
+\begin{enumerate}[1. ]
+\addtocounter{enumi}{1}
+\item A \DWATname{} attribute (the same as for conventional 
+compilation unit entries).
+
+\item A \DWATlanguage{} attribute (the same as for conventional 
+compilation unit entries)
+        
+\item A \DWATstmtlist{} attribute (the same as for conventional 
+compilation unit entries.
+
+\textit{The offset in the value of class \CLASSlineptr{} is 
+relative to the \dotdebuglinedwo{} section.}
+
+\item A \DWATmacros{} attribute (the same as for conventional 
+compilation unit entries).
+
+\textit{The offset in the value of class \CLASSmacptr{} is 
+relative to the \dotdebugmacrodwo{} section.}
+        
+\item A \DWATproducer{} attribute (the same as for conventional 
+compilation unit entries).
+        
+\item A \DWATidentifiercase{} attribute (the same as for 
+conventional compilation unit entries).
+        
+\item A \DWATmainsubprogram{} attribute (the same as for 
+conventional compilation unit entries).
+
+\item A \DWATentrypc{} attribute (the same as for conventional 
+compilation unit entries).
+        
+\end{enumerate}
+
+\textit{The following attributes are not part of a 
+split full compilation unit entry but instead are inherited 
+(if present) from the corresponding skeleton compilation unit: 
+\DWATlowpc, \DWAThighpc, \DWATranges, \DWATcompdir, 
+\DWATuseUTFeight, \DWATstroffsetsbase, \DWATaddrbase{} and 
+\DWATrangesbase.}
+
+\textit{The \DWATbasetypes{} attribute is not defined for a
+split full compilation unit.}
+\eb
+}{}
 
 \needlines{6}
 \subsection{Type Unit Entries}
@@ -502,6 +722,14 @@ Each \addtoindex{type unit} must be uniquely identified by
 a 64-bit signature, stored as part of the type unit, which
 can be used to reference the type definition from debugging
 information entries in other compilation units and type units.
+\ifthenelse{\boolean{Trial1ReUnits}}
+{\bb
+Conventional and split type units are identical except for
+the sections in which they are represented 
+(see \refersec{datarep:splitdwarfobjectfiles} for details.)
+\addtoindexx{conventional type unit}
+\addtoindexx{split type unit}
+\eb}{}
 
 A type unit is represented by a debugging information entry
 with the tag \DWTAGtypeunitTARG. 
@@ -510,6 +738,7 @@ information entries that represent the definition of a single
 type, plus additional debugging information entries that may
 be necessary to include as part of the definition of the type.
 
+\needlines{4}
 A type unit entry may have the following attributes:
 \begin{enumerate}[1. ]
 
@@ -525,25 +754,24 @@ and their meanings are given in Table \refersec{tab:languagenames}.
 \item A \DWATstmtlist{} attribute\addtoindexx{statement list attribute}
 whose value of class \CLASSlineptr{} points to the line number 
 information for this type unit.
-Because type units do not describe any code, they
+
+\textit{Because type units do not describe any code, they
 do not actually need a line number table, but the line number
 headers contain a list of directories and file names that
 may be referenced by the \DWATdeclfile{} attribute of the
-type or part of its description. 
-\begin{itemize}
-\item In a
-normal object file with a regular compilation unit entry, the
-type unit entries can simply refer to the line number table
-used by the compilation unit. 
-\item In a \splitDWARFobjectfile, where
-the type units are located in a separate DWARF object file,
+type or part of its description.} 
+
+\textit{In an object file with a conventional compilation unit entry, the
+type unit entries refer to the line number table
+used by the compilation unit. In a type unit located in a split 
+compilation unit,
 the \DWATstmtlistNAME{} attribute refers to a "specialized"
 line number table in the \dotdebuglinedwo{} section, which
-contains only the list of directories and file names. All
-type unit entries in a \splitDWARFobjectfile{} may (but are 
-not required to) refer to the same 
-\addtoindex{specialized line number table}.
-\end{itemize}
+contains only the list of directories and file names.}
+
+\textit{All type unit entries in a \splitDWARFobjectfile{} may 
+(but are not required to) refer to the same 
+\addtoindex{specialized line number table}.}
 
 \item A \DWATuseUTFeight{} attribute, which is a flag
 whose presence indicates that all strings referred to by this type
@@ -552,8 +780,9 @@ unit entry, its children, and its associated
 are represented using the UTF-8 representation.
 
 \item A 
-\DWATstroffsetsbase\addtoindexx{string base offset attribute}
-attribute, whose value is a reference. This attribute points
+\DWATstroffsetsbase\addtoindexx{string offsets base attribute}
+attribute, whose value is of class \CLASSstroffsetsptr. 
+This attribute points
 to the first string offset of the type unit's contribution to
 the \dotdebugstroffsets{} section. Indirect string references
 (using \DWFORMstrx) within the type unit are interpreted
@@ -590,7 +819,7 @@ for separate type units. Base types and other small types
 are not usually worth the overhead of placement in separate
 type units. Types that are unlikely to be replicated, such
 as those defined in the main source file, are also better
-left in the main compilation unit.}F
+left in the main compilation unit.}
 
 \section{Module, Namespace and Importing Entries}
 \textit{Modules and namespaces provide a means to collect related
@@ -648,8 +877,8 @@ have a
 the first executable instruction of that initialization code
 (see Section \refersec{chap:entryaddress}).
 
-If 
-\hypertarget{chap:DWATprioritymodulepriority}{}
+\needlines{4}
+If\hypertarget{chap:DWATprioritymodulepriority}{}
 the module has been assigned a priority, it may have a
 \addtoindexx{priority attribute}
 \DWATpriorityDEFN{} attribute. 
@@ -962,7 +1191,7 @@ for an example.
 \label{chap:importedunitentries}
 The 
 \hypertarget{chap:DWATimportimportedunit}{}
-place where a normal or partial unit is imported is
+place where a normal or partial compilation unit is imported is
 represented by a debugging information entry with the 
 \addtoindexx{imported unit entry}
 tag \DWTAGimportedunitTARG. 

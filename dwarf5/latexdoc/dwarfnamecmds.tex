@@ -15,11 +15,11 @@
 %
 \newcommand{\newdwfnamecommands}[2]{
 	\expandafter\def\csname #1LINK\endcsname{\index{#2}\hyperlink{chap:#1}{#2}}
-	\expandafter\def\csname #1TARG\endcsname{\index{#2}\hypertarget{chap:#1}{\definition{#2}}}
+	\expandafter\def\csname #1TARG\endcsname{\index{#2|definition}\hypertarget{chap:#1}{\definition{#2}}}
 	\expandafter\def\csname #1INDX\endcsname{\index{#2}}
 	\expandafter\def\csname #1MARK\endcsname{\index{#2}\hypertarget{chap:#1}{}}	
 	\expandafter\def\csname #1NAME\endcsname{\index{#2}{#2}}
-        \expandafter\def\csname #1DEFN\endcsname{\index{#2}{\definition{#2}}}
+        \expandafter\def\csname #1DEFN\endcsname{\index{#2|definition}{\definition{#2}}}
 	% The normal, most common use in running text...
 	\expandafter\def\csname #1\endcsname{\csname #1LINK\endcsname}
 	}
@@ -648,6 +648,10 @@
 \newdwfnamecommands{DWUTcompile}{DW\_UT\_compile}
 \newdwfnamecommands{DWUTtype}{DW\_UT\_type}
 \newdwfnamecommands{DWUTpartial}{DW\_UT\_partial}
+\newdwfnamecommands{DWUTskeleton}{DW\_UT\_skeleton}             % keep?
+\newdwfnamecommands{DWUTsplitcompile}{DW\_UT\_split\_compile}   % keep?
+\newdwfnamecommands{DWUTsplittype}{DW\_UT\_split\_type}         % keep?
+\newdwfnamecommands{DWUTsplitpartial}{DW\_UT\_split\_partial}   % keep?
 %
 % DW_VIRTUALITY
 %
@@ -805,7 +809,7 @@
 \newcommand{\HFTubyte}{\addtoindex{ubyte}}
 \newcommand{\HFTuhalf}{\addtoindex{uhalf}}
 \newcommand{\HFTuword}{\addtoindex{uword}}
-\newcommand{\HFTaugstring}{sequence of \addtoindex{UTF\dash{}8} characters\addtoindexx{augmentation string}}
+\newcommand{\HFTaugstring}{sequence of \addtoindex{UTF-8} characters\addtoindexx{augmentation string}}
 %
 % Miscellaneous
 %
@@ -818,21 +822,22 @@
 \newcommand{\typeunitset}{\addtoindex{type unit set}}
 \newcommand{\byteorder}{\addtoindex{byte order}}
 \newcommand{\associatedcompilationunit}{\addtoindex{associated compilation unit}}
+\newcommand{\chkmk}{{\small$\surd$}}             % Check mark
 %
 % Anti-ligature commands added because \/ and {} don't work for unknown reasons
 % nor does the microtext package DisableLigatures command...???
 %
-\newcommand{\xiiif}			{0x3\hspace{1pt}f}
-\newcommand{\xiiifff}			{0x3\hspace{1pt}f\hspace{2pt}f\hspace{2pt}f}
-\newcommand{\xff}			{0x\hspace{1pt}f\hspace{2pt}f}
-\newcommand{\xffff}			{0x\hspace{1pt}f\hspace{2pt}f\hspace{2pt}f\hspace{2pt}f}
+\newcommand{\xiiif}		{0x3\hspace{1pt}f}
+\newcommand{\xiiifff}		{0x3\hspace{1pt}f\hspace{2pt}f\hspace{2pt}f}
+\newcommand{\xff}		{0x\hspace{1pt}f\hspace{2pt}f}
+\newcommand{\xffff}		{0x\hspace{1pt}f\hspace{2pt}f\hspace{2pt}f\hspace{2pt}f}
 %
 % These are intended for use in running text...
 %
-\newcommand{\xffffffff}   		{\texttt{0xffffffff}}		% use with following punctutation
-\newcommand{\wffffffff}   		{\texttt{0xffffffff}\ }		% use as separate "word"
-\newcommand{\xfffffffzero}		{\texttt{0xfffffff0}}		% use with following punctutation
-\newcommand{\wfffffffzero}		{\texttt{0xfffffff0}\ }
-\newcommand{\xffffffffffffffff}	{\texttt{0xffffffffffffffff}}	        % use with following punctutation
+\newcommand{\xffffffff}   	{\texttt{0xffffffff}}		% use with following punctutation
+\newcommand{\wffffffff}   	{\texttt{0xffffffff}\ }		% use as separate "word"
+\newcommand{\xfffffffzero}	{\texttt{0xfffffff0}}		% use with following punctutation
+\newcommand{\wfffffffzero}	{\texttt{0xfffffff0}\ }
+\newcommand{\xffffffffffffffff}	{\texttt{0xffffffffffffffff}}	% use with following punctutation
 \newcommand{\wffffffffffffffff}	{\texttt{0xffffffffffffffff}\ }
 

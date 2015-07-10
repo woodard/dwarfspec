@@ -3,12 +3,14 @@
 % If draft is in the document class list, pix are just suggested
 % by an outline, the pic does not appear as a picture.
 %
-\newcommand{\docdate}{June 29, 2015}
+\newcommand{\docdate}{July 10, 2015}
 %
 \usepackage{ifthen}
-\newboolean{isdraft}
-\setboolean{isdraft}{true}
+\newcommand{\ifthen}[2]{\ifthenelse{#1}{#2}{}}
+\newboolean{isdraft}\setboolean{isdraft}{true}
 \newcommand{\draftmark}{\ifthenelse{\boolean{isdraft}}{*** DRAFT ***}{}}
+\newboolean{Trial1ReUnits}\setboolean{Trial1ReUnits}{true}
+\newboolean{Trial2ReGlossary}\setboolean{Trial2ReGlossary}{true}
 %
 \usepackage[T1]{fontenc}
 \usepackage{palatino}
@@ -66,13 +68,15 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \usepackage{tikz}	   % graphics (Appendix B)
 \usetikzlibrary{shapes.geometric}
 \usetikzlibrary{arrows,decorations.pathmorphing}
+\usepackage{changebar}     % For change bars in margin
+\usepackage{amssymb}       % For math symbols
 \usepackage{makeidx}       % For making an index
 % hyperref must be the last package listed.
 % The hyperref settings helps hypertext get links right in the 
 % pdf of the index. 
 % Also, allcolors lets us generate colored active links inside a pdf.
 % And breaklinks resolves truncation issues with very long link names.
-\usepackage[breaklinks,plainpages=false,pdfpagelabels,pagebackref,allcolors=blue,bookmarksnumbered=true]{hyperref} 
+\usepackage[breaklinks,plainpages=false,pdfpagelabels,pagebackref,allcolors=blue,bookmarksnumbered=true]{hyperref}
 \makeindex  % This and the makeidx package allow \index to create index entries.
 
 \newcommand{\dwf}{DWARF Debugging Information Format}
@@ -200,6 +204,13 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
         \end{center}
         \end{table}
         }
+
+% Complement of \isundefined
+\newcommand{\isdefined}[1]{\not{\isundefined{#1}}}
+
+% Preferred changebar asliases
+\newcommand{\bb}{\cbstart}      % Begin bar
+\newcommand{\eb}{\cbend}        % End bar
 
 % Define commands for all of the DWARF names (DW\_*, .debug_*, a few others)
 %
@@ -333,8 +344,12 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \include{splitobjects}			%\emptypage
 \include{sectionversionnumbers}         \emptypage
 \include{gnulicense}                    \emptypage
-%\include{selectedglossary}              %\emptypage
-%\include{unitattributecomparison}
+\ifthenelse{\boolean{Trial2ReGlossary}}
+    {
+    \include{selectedglossary}          %\emptypage
+    \clearpage
+    \include{unitattributecomparison}   %\emptypage
+    }{}
 
 \printindex
 
