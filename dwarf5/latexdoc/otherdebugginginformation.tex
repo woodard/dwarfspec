@@ -169,97 +169,117 @@ Figure \referfol{fig:nameindexlayout}.
     name in the name list.
 \end{enumerate}
 
-\begin{figure}[t]
+\begin{figure}[p]
+\bb
+\begin{center}
+\newcommand{\thisblue}{blue!10}
+\newcommand{\thisyellow}{yellow!20}
+\newcommand{\invispblu}{\textcolor{\thisblue}{p}}
+\newcommand{\invispyel}{\textcolor{\thisyellow}{p}}
   \begin{tikzpicture}[every node/.style={draw, anchor=text,
         node distance=2.5cm,
         text width=3.5cm, font=\normalsize},
         description/.style={
           draw=none,
-          font=\em\footnotesize,
+          font=\em\small,
           node distance=5cm,
           text width=5cm
         },
         table/.style={
-          font=\scriptsize,
+          font=\small,
           draw=black,
           rectangle split,
-          fill=yellow!10
+          fill=\thisyellow
         },
         caption/.style={
           anchor=south,
-          font=\scriptsize,
+          font=\small,
           draw=none
         }]
-    \node (header) [font=\footnotesize,
-                    fill=blue!10,
+    \node (header) [font=\small,
+                    fill=\thisblue,
                     rectangle split,
                     rectangle split allocate boxes=8,
-                    rectangle split parts=8]
-          {Header
+                    rectangle split parts=8] at (0, -1.3)
+          {Header\invispblu
             \nodepart{two}
-            CU list
+            CU list\invispblu
             \nodepart{three}
-            Local TU list
+            Local TU list\invispblu
             \nodepart{four}
-            Foreign TU list
+            Foreign TU list\invispblu
             \nodepart{five}
-            Hash table
+            Hash table\invispblu
             \nodepart{six}
-            Name table
+            Name table\invispblu
             \nodepart{seven}
-            Abbrev table
+            Abbrev table\invispblu
             \nodepart{eight}
-            Entry pool
+            Entry pool\invispblu
           };
+    \draw node [caption] at (header.north) {Name Index} ;
+
     \node (cuofs) [table,
                    rectangle split allocate boxes=4,
-                   rectangle split parts=4]  at (6,0)
-         {CU 0 offset
+                   rectangle split parts=4]  at (7.5,0)
+         {CU 0 offset\invispyel
           \nodepart{two}
-          CU 1 offset
+          CU 1 offset\invispyel
           \nodepart{three}
-          CU 2 offset
+          CU 2 offset\invispyel
           \nodepart{four}
           \dots
          };
-    \node (cusecofs) [description,right of=cuofs] {section offset of CU header} ;
+        \node (cusecofs) [description,right of=cuofs] {section offset \\ of CU header} ;
     \node (tuofs) [below of=cuofs,
                    table,
                    rectangle split allocate boxes=4,
                    rectangle split parts=4]
-         {TU 0 offset
+         {TU 0 offset\invispyel
           \nodepart{two}
-          TU 1 offset
+          TU 1 offset\invispyel
           \nodepart{three}
-          TU 2 offset
+          TU 2 offset\invispyel
           \nodepart{four}
           \dots
          };
-    \node (tusecofs) [description,right of=tuofs] {section offset of TU header} ;
-    \node (tusigs) [below of=tuofs, table,
+    \node (tusecofs) [description,right of=tuofs] {section offset \\ of TU header} ;
+    \node (tusigs) [below of=tuofs, 
+                    table,
                     rectangle split allocate boxes=4,
                     rectangle split parts=4]
-         {TU $n$ sig.
+         {TU $n$ sig.\invispyel
           \nodepart{two}
-          TU $n+1$ sig.
+          TU $n+1$ sig.\invispyel
           \nodepart{three}
-          TU $n+2$ sig.
+          TU $n+2$ sig.\invispyel
           \nodepart{four}
           \dots
          };
-   \node (typesigs) [description,right of=tusigs] {type signature of foreign TU} ;
-   \matrix (hashtable) [draw,style=dashed] at (2, -9)
+   \node (typesigs) [description,right of=tusigs] {type signature \\ of foreign TU} ;
+
+   \matrix (hashtable) [draw,style=dashed,column sep=8mm] at (0, -10)
            {\node (buckets) [style=solid, table, text width=3cm,
                              rectangle split allocate boxes=4,
                              rectangle split parts=4]
-                  {index to hashes} ;
-            \draw node [caption] at (buckets.north) {Buckets} ;
+                  {index to hashes\invispyel
+                  \nodepart{two}\invispyel
+                  \nodepart{three}\invispyel
+                  \nodepart{four}\dots
+                  } ;
+            \draw node [caption] at (buckets.north) {~Buckets} ;
             &
             \node (hashes) [style=solid, table, text width=3cm,
                             rectangle split allocate boxes=6,
                             rectangle split parts=6]
-                  {hash value} ;
-            \draw node [caption] at (hashes.north) {Hashes} ;
+                  {hash value\invispyel
+                  \nodepart{two}\invispyel
+                  \nodepart{three}\invispyel
+                  \nodepart{four}\invispyel
+                  \nodepart{five}\invispyel
+                  \nodepart{six}\invispyel
+                  } ;
+            \draw node [caption] at (hashes.north) {~Hashes} ;
             \\
            };
     \node (names) [right of=hashes, node distance=5cm,
@@ -267,34 +287,53 @@ Figure \referfol{fig:nameindexlayout}.
                    table,
                    rectangle split allocate boxes=6,
                    rectangle split parts=6]
-          {strp \hspace{4em} entry };
+          {strp \hspace{1cm} entry
+           \nodepart{two}\invispyel
+           \nodepart{three}\invispyel
+           \nodepart{four}\invispyel
+           \nodepart{five}\invispyel
+           \nodepart{six}\invispyel
+          };
     \draw node [caption] at (names.north) {Names} ;
     \path (names.north) edge (names.south) ;
 
-    \path[->]
-    (header.two east)    edge (cuofs.west)
-    (header.three east)  edge (tuofs.west)
-    (header.four east)   edge (tusigs.west)
-    (header.five east)   edge (hashtable)
-    (cuofs)              edge (cusecofs)
-    (tuofs)              edge (tusecofs)
-    (tusigs)             edge (typesigs)
-    (buckets.one east)   edge (hashes.one west)
-    (buckets.two east)   edge (hashes.three west)
-    (buckets.three east) edge (hashes.six west)
-    (hashes.one east)    edge (names.one west)
-    (hashes.two east)    edge (names.two west)
-    (hashes.three east)  edge (names.three west)
-    (hashes.four east)   edge (names.four west)
-    (hashes.five east)   edge (names.five west)
-    (hashes.six east)    edge (names.six west)
-    ;
-    \draw[->] (header.six east)
-      .. controls (buckets.north) and (tusigs.south west) ..
-      (names.north west) ;
+    \draw[thick, double distance=3pt, implies-space] (header.two east)   -- (cuofs.west) ;
+    \draw[thick, double distance=3pt, implies-space] (header.three east) -- (tuofs.west) ;
+    \draw[thick, double distance=3pt, implies-space] (header.four east)  -- (tusigs.west) ;
+
+    \path[-triangle 45]
+        (cuofs)              edge (cusecofs)
+        (tuofs)              edge (tusecofs)
+        (tusigs)             edge (typesigs)
+        (buckets.one east)   edge (hashes.one west)
+        (buckets.two east)   edge (hashes.three west)
+        (buckets.three east) edge (hashes.six west)
+        ;
+    \path[loosely dashed, thin, open triangle 45-open triangle 45]
+        (hashes.one east)    edge (names.one west)
+        (hashes.two east)    edge (names.two west)
+        (hashes.three east)  edge (names.three west)
+        (hashes.four east)   edge (names.four west)
+        (hashes.five east)   edge (names.five west)
+        (hashes.six east)    edge (names.six west)
+        ;
+    \draw[thick, double distance=3pt, implies-space] (header.five east) 
+        .. controls +(south east:2cm) .. (hashtable.north) ;
+    \draw[thick, double distance=3pt, implies-space] (header.six east)
+        .. controls (hashes.north) and (tusigs.south east) .. (names.north) ;
+    
+    \node [text width=9cm, draw=none] at (0,-15.5) {\textit{Notes:}} ;   
+    \draw [thick, double distance=3pt, implies- ] (0,-16) -- (1.3,-16)
+          node[right=2mm, text width=9cm, draw=none, node distance=1cm] 
+          {\textit{indicates an expanded view of the indicated part}} ;
+    \draw [loosely dashed, thin, open triangle 45-open triangle 45] (0,-16.5) -- (1.3,-16.5) 
+          node[right=2mm, text width=9cm, draw=none] {\textit{indicates correspondence}} ;
+          
   \end{tikzpicture}
+\end{center}
 \caption{Name Index Layout}
 \label{fig:nameindexlayout}
+\eb
 \end{figure}
 
 The formats of the header and the hash lookup table are described
@@ -339,6 +378,7 @@ The  abbreviation list for that code provides the DWARF tag value for
 the entry as well as the set of attributes provided by the entry and
 their forms.
 
+\needlines{4}
 The standard attributes are:
 \begin{itemize}
 \item Compilation Unit (CU), a reference to an entry in the list of
@@ -495,6 +535,7 @@ bytes, while in the DWARF-64 format, a section offset is 8 bytes.
 The total number of entries in the list is given by \texttt{comp\_unit\_count}.
 There must be at least one CU.
 
+\needlines{4}
 \subsubsubsection{List of Local TUs}
 The list of local TUs immediately follows the list of CUs. Each 
 entry in the list is an offset into the \dotdebuginfo{} section 
@@ -552,6 +593,7 @@ When a matching hash value is found in the hashes array, the index of
 that entry in the hashes array is used to find the corresponding entry
 in the name table.
 
+\needlines{6}
 \subsubsubsection{Name Table}
 The name table immediately follows the hash lookup table. The name
 table is laid out in column-major order (that is, the first column,
@@ -656,6 +698,7 @@ of sets of variable length entries, each set describing the
 portion of the program\textquoteright{}s address space that is covered by
 a single compilation unit.
 
+\needlines{4}
 Each set begins with a header containing five values:
 \begin{enumerate}[1. ]
 \item \texttt{unit\_length} (\livelink{datarep:initiallengthvalues}{initial length}) \\
@@ -775,7 +818,7 @@ room for expansion. In the future, columns can be added to the
 matrix to encode other things that are related to individual
 instruction addresses.}
 
-
+\needlines{10}
 \subsection{Definitions}
 \label{chap:definitions}
 The following terms are used in the description of the line
@@ -899,12 +942,15 @@ The \texttt{address} and \addttindex{op\_index} registers,
 taken together, form an \addtoindex{operation pointer} that can 
 reference any individual operation within the instruction stream.
 
-
-\clearpage      % Keep this sentence with the following table
 At the beginning  of each sequence within a line number
-program, the state of the registers is:
+program, the state of the registers is as show in Table
+\refersec{tab:linenumberprograminitiastate}.
+\begin{table}
+\caption{Line number program initial state}
+\label{tab:linenumberprograminitiastate}
 \begin{center}
-\begin{tabular}{lp{9.5cm}}
+\begin{tabular}{l|p{9.5cm}}
+\hline
 \texttt{address} & 0 \\
 \addttindex{op\_index} & 0 \\
 \texttt{file} & 1 \\
@@ -918,8 +964,10 @@ program, the state of the registers is:
 \addttindex{epilogue\_begin} & \doublequote{false} \\
 \addttindex{isa} & 0 \\
 \addttindex{discriminator} & 0 \\
+\hline
 \end{tabular}
 \end{center}
+\end{table}
 
 \textit{The 
 \addttindex{isa} value 0 specifies that the instruction set is the
@@ -973,6 +1021,7 @@ The size in bytes of the line number information for this
 compilation unit, not including the length field itself
 (see Section \refersec{datarep:initiallengthvalues}). 
 
+\needlines{4}
 \item \texttt{version} (\HFTuhalf) \\
 A version number\addtoindexx{version number!line number information} 
 (see Section \refersec{datarep:linenumberinformation}). 
@@ -1117,6 +1166,7 @@ just like standard opcodes.}
 \setcounter{saveenumi}{\value{enumi}}
 \end{enumerate}
 
+\needlines{6}
 \textit{The remaining fields provide information about the
 source files used in the compilation. These fields
 have been revised in \DWARFVersionV{} to support these
@@ -1298,7 +1348,8 @@ minimum size for the set of \addttindex{include\_index} fields) depends not only
 on the number of directories in the directories
 field, but potentially on the order in which those directories are
 listed and the number of times each is used in the \addttindex{file\_names} field.}
-   
+
+\needlines{4}
 \item \DWLNCTtimestampTARG \\
 \DWLNCTtimestampNAME{} indicates that the value is the implementation-defined 
 time of last modification of the file, or 0 if not available. 
@@ -1344,6 +1395,7 @@ Within a sequence, addresses and
 (Line numbers may decrease in cases of pipeline
 scheduling or other optimization.)
 
+\needlines{4}
 \subsubsection{Special Opcodes} 
 \label{chap:specialopcodes}
 Each \HFTubyte{} special opcode has the following effect on the state machine:
@@ -1724,6 +1776,8 @@ of the DWARF version number.
 \item \texttt{flags} (\HFTubyte) \\
 The bits of the \texttt{flags} field are interpreted as a set
 of flags, some of which may indicate that additional fields follow.
+
+\needlines{4}
 The following flags, beginning with the least significant bit, are defined:
 \begin{itemize}
 \item \HFNoffsetsizeflag \\
@@ -1946,6 +2000,7 @@ the entry marks the end of the current source file inclusion.
 
 \end{enumerate}
 
+\needlines{4}
 When providing macro information in an object file,
 a producer generates \DWMACROstartfile{} and
 \DWMACROendfile{} entries for the source file submitted to

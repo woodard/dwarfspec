@@ -83,7 +83,7 @@ information entries. Actual line number tables remain in the
 
 \end{itemize}
 
-In a \texttt{.dwo} file there is no benefit to having a separate string
+In a \texttt{.dwo} file, there is no benefit to having a separate string
 section for directories and file names because the primary
 string table will never be stripped. Accordingly, no
 \texttt{.debug\_line\_str.dwo} section is defined. Content descriptions 
@@ -93,7 +93,7 @@ directory and file name strings to be merged with general
 strings and across compilations in package files (which are not
 subject to potential stripping).
 
-In a \texttt{.dwo} file. referring to a string using \DWFORMstrp{}
+In a \texttt{.dwo} file, referring to a string using \DWFORMstrp{}
 is valid, but such use may complicate incorporation of that file into a
 \texttt{.dwp} file due to changed string offsets as a result of string merging.
 
@@ -122,7 +122,7 @@ but no children.
 \dotdebuginfo{} sections (via \DWFORMstrp{} or \DWFORMstrx{}).
 \item
 \dotdebugstroffsets{} - Contains the string offsets table for
-the strings in the \dotdebugstr{} section.
+the strings in the \dotdebugstr{} section (if \DWFORMstrx is used).
 \item
 \dotdebugaddr{} - Contains references to loadable sections,
 indexed by attributes of form \DWFORMaddrx{} or location
@@ -179,63 +179,78 @@ in both the skeleton DIE and the full DIE, so that a consumer
 can verify a match.
 
 \needlines{4}
-Because of other improvements in \DWARFVersionV, most of the
-relocations that would normally be found in the \dotdebuginfodwo{}
-sections are moved to the \dotdebugaddr{} and
-\dotdebugstroffsetsdwo{} sections. Those in the
-\dotdebugstroffsetsdwo{} sections are simply omitted because the
-DWARF information in those sections is not combined at link
-time, so no relocation is necessary. Similarly,
-many of the remaining relocations referring to range lists are
-eliminated. 
+\bb
+Relocations are neither necessary nor useful in .dwo files, because the
+.dwo files contain only debugging information that does not need to be
+processed by a linker. Relocations are rendered unnecessary via
+four strategies:
 
-The relocations that remain fall into the following categories:
-\begin{itemize}
-\item
-References from compilation unit and type unit headers to the
-\dotdebugabbrevdwo{} section. Because the new sections are not
-combined at link time, these references need no relocations.
-\item
-References from \DWTAGcompileunit{} DIEs to the
-\dotdebuglinedwo{} section, via \DWATstmtlist{}. This attribute
-remains in the skeleton \dotdebuginfo{} section, so no
-relocation in the \dotdebuginfodwo{} section is necessary.
-\item
-References from \DWTAGtypeunit{} DIEs to the 
-\dotdebuglinedwo{} section, via \DWATstmtlist{}. Because the new
-sections are not combined at link time, these references need
-no relocations.
-\item
-References from \DWTAGcompileunit{} and \DWTAGtypeunit{} DIEs
-to the \dotdebugstroffsetsdwo{} section, via
-\DWATstroffsetsbase{}. Because the new sections are not
-combined at link time, the \DWATstroffsetsbase{} attribute
-is not required in a \dotdebuginfodwo{}
-section.
-\item
-References from \DWTAGcompileunit{} DIEs to the \dotdebugaddr{}
-section, via \DWATaddrbase{}. This attribute remains in
-the skeleton \dotdebuginfo{} section, so no relocation in the
-\dotdebuginfodwo{} section is necessary.
-\needlines{4}
-\item
-References from \DWTAGcompileunit{} DIEs to the \dotdebugranges{}
-section, via \DWATrangesbase{}. This attribute remains in
-the skeleton \dotdebuginfo{} section, so no relocation in the
-\dotdebuginfodwo{} section is necessary.
-\item
-References from the \dotdebuglocdwo{} section to machine addresses
-via a location list entry or a base address selection entry.
-With a minor change to the location list entry format,
-described below, these relocations are also eliminated.
+\begin{enumerate}[1. ]
+\item Some values needing relocation are kept in the \texttt{.o} file
+(for example, references to the line number program from the skeleton
+compilation unit).
 
-\needlines{4}
-Each location list entry contains beginning and ending address
-offsets, which normally may be relocated addresses. In the
-\dotdebuglocdwo{} section, these offsets are replaced by indices
-into the \dotdebugaddr{} section (see Section 
-\refersec{chap:locationlistsinsplitobjectfiles} for details). 
-\end{itemize}
+\item Some values do not need a relocation because they refer from
+one \dotdwo{} section to another \dotdwo{} section. Because \texttt{.dwo} files are not
+combined by the linker, these references are known at compile time and
+do not need further relocation.
+
+\item Some values that need a relocation to refer to a
+relocatable program address use the \DWFORMaddrx{} form,
+referencing a relocatable value in the \dotdebugaddr{} section (which
+remains in the \texttt{.o} file).
+
+\item Some values that need a relocation to refer to the
+\dotdebugranges{} section in the \texttt{.o} file use a relocatable base
+specified by the \DWATrangesbase{} attribute (which is placed in the
+skeleton compilation unit in the \texttt{.o} file).
+
+\end{enumerate}
+\eb
+
+Table \refersec{tab:unitattributesbyunitkind} summarizes which
+attributes are defined for use in the various kind of compilation
+units.
+
+\bb
+
+\begin{table}[h]
+\caption{Unit Attributes by Unit Kind}
+\label{tab:unitattributesbyunitkind}
+\begin{tabular}{P{5.5cm}|ccccc}
+\hline
+                        & \multicolumn{5}{c}{\bfseries Unit Kind} \\
+\bfseries Attribute     &  Full \&   &  Type  &  Skeleton & Split Full & Split Type \\
+                        & Partial    \\
+\hline
+\parbox[c]{3cm}{\DWATlowpc, \DWAThighpc, \DWATranges} \parbox[c]{1cm}{\[ \Biggr\} \]}
+                        & \chkmk  &        &  \chkmk   &        &         \\
+\hline
+\DWATname               & \chkmk  &        &           & \chkmk &         \\
+\DWATlanguage           & \chkmk  & \chkmk &           & \chkmk & \chkmk  \\
+\DWATstmtlist           & \chkmk  & \chkmk &  \chkmk   &        & \chkmk  \\
+\hline
+\DWATmacros             & \chkmk  &        &           & \chkmk &         \\
+\DWATcompdir            & \chkmk  &        &  \chkmk   &        &         \\
+\DWATproducer           & \chkmk  &        &           & \chkmk &         \\
+\DWATidentifiercase     & \chkmk  &        &           & \chkmk &         \\
+\hline
+\DWATbasetypes          & \chkmk  &        &           &        &         \\
+\DWATuseUTFeight        & \chkmk  & \chkmk &  \chkmk   &        & \chkmk  \\
+\DWATmainsubprogram     & \chkmk  &        &           & \chkmk &         \\
+\DWATentrypc            & \chkmk  &        &           & \chkmk &         \\
+\hline
+\DWATstroffsetsbase     & \chkmk  & \chkmk &  \chkmk   &        &         \\
+\DWATaddrbase           & \chkmk  &        &  \chkmk   &        &         \\
+\DWATrangesbase         & \chkmk  &        &  \chkmk   &        &         \\
+\hline
+\DWATdwoname            &         &        &  \chkmk   &        &         \\
+\DWATdwoid              &         &        &  \chkmk   & \chkmk &         \\
+\hline
+\end{tabular}
+\end{table}
+
+\eb
 
 \needlines{8}
 The split dwarf object file design depends on having an index of 
@@ -260,7 +275,7 @@ Consider the example source code in
 Figure \refersec{fig:splitobjectexamplesourcefragment1}, 
 Figure \refersec{fig:splitobjectexamplesourcefragment2} and
 Figure \refersec{fig:splitobjectexamplesourcefragment3}.
-When compiled with split DWARF, we will have two object files,
+When compiled with split DWARF, we will have two DWARF object files,
 \texttt{demo1.o} and \texttt{demo2.o}, and two \splitDWARFobjectfile{s}, 
 \texttt{demo1.dwo} and \texttt{demo2.dwo}.
 
@@ -484,7 +499,7 @@ Slot & Location referenced \\
 The \dotdebugnames{}
 section contains the names defined by the debugging
 information in the \splitDWARFobjectfile{} 
-(see Section \refersec{chap:contentsofthenameindex}, 
+(see Section \refersec{chap:contentsofthenameindex}), 
 and references the skeleton compilation unit. 
 When linked together into a final executable,
 they can be used by a DWARF consumer to lookup a name to find one
@@ -795,9 +810,9 @@ Figure~\ref{fig:splitobjectexampledemo2dwodwarfdebuginfodwoexcerpts}: Split obje
 \end{figure}
 
 In Figure \refersec{fig:splitobjectexampledemo2dwodwarfdebuginfodwoexcerpts},
-The \DWTAGformalparameter{} entries at 4\$ and 5\$ refer to the
+The \DWTAGformalparameter{} entries at \texttt{4\$} and \texttt{5\$} refer to the
 location lists at offset \texttt{0x0} and \texttt{0x2a}, respectively, and the
-\DWTAGvariable{} entry for \texttt{slope} at 7\$ refers to the location
+\DWTAGvariable{} entry for \texttt{slope} at \texttt{7\$} refers to the location
 list at offset \texttt{0x49}. 
 Figure \refersec{fig:splitobjectexampledemo2dwodwarfdebuglocdwoexcerpts}
 shows a representation of the

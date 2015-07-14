@@ -74,8 +74,9 @@ be usefully shared by multiple other units.
 
 \end{itemize}
 
-\textit{Split compilation units and type units may be in object
-files separate from those containing the program code and data.}
+\textit{Split compilation units and split type units may be 
+contained in object files separate from those containing the 
+program code and data.}
 
 \textit{Either a full compilation unit or a partial compilation 
 unit may be logically incorporated into another compilation unit 
@@ -531,9 +532,11 @@ Section \refersec{datarep:splitdwarfobjectfiles}), the
 compilation unit in the \dotdebuginfo{} section is a "skeleton"
 compilation unit with the tag \DWTAGcompileunit, which contains 
 \DWATdwoname{} and \DWATdwoid{} attributes as well as a subset of the
-attributes of a full normal or partial compilation unit. In general, 
+\bb
+attributes of a full or partial compilation unit. In general,
 it contains those attributes that are necessary for the consumer
-to locate the object file where the full compilation unit
+to locate the object file where the split full compilation unit
+\eb
 can be found, and for the consumer to interpret references to
 addresses in the program. 
 
@@ -649,14 +652,14 @@ is logically paired with a specific skeleton compilation unit while
 being physically separate.
 
 A split full compilation unit has a \DWATdwoid{} attribute:
-\begin{enumerate}
+\begin{enumerate}[1. ]
 \item
 A \DWATdwoidDEFN{} attribute\addtoindexx{unit identification attribute}
 whose implementation-defined integer constant value
 provides unique identification of this compilation unit
-as well as the associated split compilation unit.
+as well as the associated skeleton compilation unit.
 For simplicity, the \DWATdwoidNAME{} attributes in the 
-skeleton compilation unit and the corresponding split 
+split compilation unit and the associated skeleton 
 compilation unit must use the same form to encode the 
 identification value.
 \end{enumerate}
@@ -671,12 +674,6 @@ compilation unit entries).
 \item A \DWATlanguage{} attribute (the same as for conventional 
 compilation unit entries)
         
-\item A \DWATstmtlist{} attribute (the same as for conventional 
-compilation unit entries.
-
-\textit{The offset in the value of class \CLASSlineptr{} is 
-relative to the \dotdebuglinedwo{} section.}
-
 \item A \DWATmacros{} attribute (the same as for conventional 
 compilation unit entries).
 
@@ -700,7 +697,7 @@ compilation unit entries).
 \textit{The following attributes are not part of a 
 split full compilation unit entry but instead are inherited 
 (if present) from the corresponding skeleton compilation unit: 
-\DWATlowpc, \DWAThighpc, \DWATranges, \DWATcompdir, 
+\DWATlowpc, \DWAThighpc, \DWATranges, \DWATstmtlist, \DWATcompdir, 
 \DWATuseUTFeight, \DWATstroffsetsbase, \DWATaddrbase{} and 
 \DWATrangesbase.}
 
@@ -726,7 +723,7 @@ information entries in other compilation units and type units.
 {\bb
 Conventional and split type units are identical except for
 the sections in which they are represented 
-(see \refersec{datarep:splitdwarfobjectfiles} for details.)
+(see \refersec{datarep:splitdwarfobjectfiles} for details).
 \addtoindexx{conventional type unit}
 \addtoindexx{split type unit}
 \eb}{}
@@ -761,10 +758,12 @@ headers contain a list of directories and file names that
 may be referenced by the \DWATdeclfile{} attribute of the
 type or part of its description.} 
 
-\textit{In an object file with a conventional compilation unit entry, the
-type unit entries refer to the line number table
-used by the compilation unit. In a type unit located in a split 
-compilation unit,
+\textit{In an object file with a conventional compilation 
+\bb
+unit entry, the type unit entries may refer to (share) the 
+\eb
+line number table used by the compilation unit. In a type 
+unit located in a split compilation unit,
 the \DWATstmtlistNAME{} attribute refers to a "specialized"
 line number table in the \dotdebuglinedwo{} section, which
 contains only the list of directories and file names.}
@@ -2259,6 +2258,7 @@ A call site is represented by a debugging information entry with the tag
 debugging information entry representing the scope within which the
 call is present in the source program.
 
+\needlines{4}
 \textit{A scope entry (for example, for a lexical block) that would not 
 otherwise be present in the debugging information of a subroutine
 need not be introduced solely to represent the immediately containing scope
@@ -2383,6 +2383,7 @@ This location expression describes where the parameter is passed
 (usually either some register, or a memory location expressible as the
 contents of the stack register plus some offset).
 
+\needlines{4}
 Each \DWTAGcallsiteparameter{} entry may have a 
 \DWATcallvalueDEFN{}
 \livetargi{chap:DWATcallvalueofcallparameter}{attribute}{call value attribute}

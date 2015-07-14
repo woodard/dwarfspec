@@ -219,6 +219,7 @@ space of the program and require relocation.
 
 \end{itemize}
 
+\needlines{4}
 \textit{Note that operands of classes \CLASSblock, \CLASSconstant{} and 
 \CLASSflag{} do not require relocation. Attribute operands that use 
 form \DWFORMstring{} also do not require relocation. Further, 
@@ -272,8 +273,11 @@ section. The string offsets table is necessary only if
 the skeleton compilation unit uses the \DWFORMstrx{} form.
 \end{itemize}
 The attributes contained in the skeleton compilation
-unit can be used by a DWARF consumer to find the object file
-or DWARF object file that contains the second partition.
+unit can be used by a DWARF consumer to find the 
+\bb
+split or hybrid 
+\eb
+DWARF object file that contains the second partition.
 
 \subsubsection{Second Partition (Unlinked or In \texttt{.dwo} File)}
 The second partition contains the debugging information that
@@ -332,6 +336,7 @@ to a debugging information section (for example, \dotdebuginfo),
 applies also to the corresponding split DWARF section (for example,
 \dotdebuginfodwo).
 
+\needlines{4}
 Split DWARF object files do not get linked with any other files,
 therefore references between sections must not make use of
 normal object file relocation information. As a result, symbolic
@@ -379,7 +384,7 @@ corresponding application binary. It consists only of a file
 header, a section table, a number of DWARF debug information
 sections, and two index sections.
 
-\needlines{5}
+\needlines{10}
 Each DWARF package file contains no more than one of each of the
 following sections, copied from a set of object or DWARF object
 files, and combined, section by section:
@@ -444,15 +449,6 @@ sections:
     \dotdebuglinedwo
     \dotdebugstroffsetsdwo
 \end{alltt}
-
-\textit{Merging of type units with the same type signature
-across \texttt{.dwo} files when creating a \texttt{.dwp} file
-can be achieved using COMDAT-based techniques similar to those
-described in Appendix 
-\refersec{app:dwarfcompressionandduplicateeliminationinformative}.
-In fact, this is necessary in order to combine all \dotdebuginfodwo{}
-section contributions into a single \dotdebuginfodwo{} section in a
-\texttt{.dwp} file.}
 
 \subsubsection{Format of the CU and TU Index Sections}
 Both index sections have the same format, and serve to map a
@@ -2095,8 +2091,8 @@ densely that exploits the assumption that most integers are
 small in magnitude.
 
 \textit{This encoding is equally suitable whether the target machine
-architecture represents data in big\dash\ endian or little\dash endian
-\byteorder. It is \doublequote{little\dash endian} only in the sense that it
+architecture represents data in big-endian or little-endian
+\byteorder. It is \doublequote{little-endian} only in the sense that it
 avoids using space to represent the \doublequote{big} end of an
 unsigned integer, when the big end is all zeroes or sign
 extension bits.}
