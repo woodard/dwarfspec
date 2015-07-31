@@ -3,14 +3,12 @@
 % If draft is in the document class list, pix are just suggested
 % by an outline, the pic does not appear as a picture.
 %
-\newcommand{\docdate}{July 14, 2015}
+\newcommand{\docdate}{July 29, 2015}
 %
 \usepackage{ifthen}
 \newcommand{\ifthen}[2]{\ifthenelse{#1}{#2}{}}
 \newboolean{isdraft}\setboolean{isdraft}{true}
 \newcommand{\draftmark}{\ifthenelse{\boolean{isdraft}}{*** DRAFT ***}{}}
-\newboolean{Trial1ReUnits}\setboolean{Trial1ReUnits}{true}
-\newboolean{Trial2ReGlossary}\setboolean{Trial2ReGlossary}{true}
 %
 \usepackage[T1]{fontenc}
 \usepackage{palatino}
@@ -210,12 +208,13 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \newcommand{\isdefined}[1]{\not{\isundefined{#1}}}
 
 % Preferred changebar asliases
-\newcommand{\bb}{\cbstart}      % Begin bar
-\newcommand{\eb}{\cbend}        % End bar
+\newcommand{\bb}{\cbstart}      % Begin (change) bar
+\newcommand{\eb}{\cbend}        % End (change) bar
 
 % Define commands for all of the DWARF names (DW\_*, .debug_*, a few others)
 %
 \newcommand{\definition}[1]{\textcolor{red!80!black}{#1}}
+\newcommand{\definitionx}[1]{\definition{\addtoindex{#1}}}
 \include{dwarfnamecmds}
 
 %--- Begin the document pages
@@ -345,10 +344,9 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \include{splitobjects}			%\emptypage
 \include{sectionversionnumbers}         \emptypage
 \include{gnulicense}                    \emptypage
-\ifthenelse{\boolean{Trial2ReGlossary}}
-    {
-    \include{selectedglossary}          %\emptypage
-    }{}
+
+% Maybe someday the selected glossary concept will be of interest...
+%\include{selectedglossary}             %\emptypage
 
 \printindex
 

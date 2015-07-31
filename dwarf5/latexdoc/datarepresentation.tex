@@ -274,9 +274,9 @@ the skeleton compilation unit uses the \DWFORMstrx{} form.
 \end{itemize}
 The attributes contained in the skeleton compilation
 unit can be used by a DWARF consumer to find the 
-\bb
+
 split or hybrid 
-\eb
+
 DWARF object file that contains the second partition.
 
 \subsubsection{Second Partition (Unlinked or In \texttt{.dwo} File)}
@@ -408,7 +408,10 @@ section.
 
 The DWARF package file also contains two index sections that
 provide a fast way to locate debug information by compilation
-unit signature (\DWATdwoid) for compilation units, or by type
+\bb
+unit ID 
+\eb
+(\DWATdwoid) for compilation units, or by type
 signature for type units:
 \begin{alltt}
     \dotdebugcuindex
@@ -417,7 +420,11 @@ signature for type units:
 
 \subsubsection{The Compilation Unit (CU) Index Section}
 The \dotdebugcuindex{} section is a hashed lookup table that maps a
-compilation unit signature to a set of contributions in the
+compilation unit
+\bb
+ID 
+\eb
+to a set of contributions in the
 various debug information sections. Each contribution is stored
 as an offset within its corresponding section and a size.
 
@@ -451,8 +458,8 @@ sections:
 \end{alltt}
 
 \subsubsection{Format of the CU and TU Index Sections}
-Both index sections have the same format, and serve to map a
-64-bit signature to a set of contributions to the debug sections.
+Both index sections have the same format, and serve to map an
+8-byte signature to a set of contributions to the debug sections.
 Each index section begins with a header, followed by a hash table of
 signatures, a parallel table of indexes, a table of offsets, and
 a table of sizes. The index sections are aligned at 8-byte
@@ -510,20 +517,29 @@ Unused slots in the hash table have 0 in both the hash table
 entry and the parallel table entry. While 0 is a valid hash
 value, the row index in a used slot will always be non-zero.
 
-Given a 64-bit compilation unit signature or a type signature $X$,
+\bb
+Given an 8-byte compilation unit ID
+\eb
+or type signature $X$,
 an entry in the hash table is located as follows:
 \begin{enumerate}[1. ]
-\item Calculate a primary hash $H = X\ \&\ MASK(k)$, where $MASK(k)$ is a
-    mask with the low-order $k$ bits all set to 1.
+\bb
+\item Define $REP(X)$ to be the value of $X$ interpreted as an 
+      unsigned 64-bit integer in the target byte order.
 
-\item Calculate a secondary hash $H' = (((X>>32)\ \&\ MASK(k))\ |\ 1)$.
+\item Calculate a primary hash $H = REP(X)\ \&\ MASK(k)$, where
+\eb 
+      $MASK(k)$ is a mask with the low-order $k$ bits all set to 1.
+\bb
+\item Calculate a secondary hash $H' = (((REP(X)>>32)\ \&\ MASK(k))\ |\ 1)$.
+\eb
 
 \item If the hash table entry at index $H$ matches the signature, use
-    that entry. If the hash table entry at index $H$ is unused (all
-    zeroes), terminate the search: the signature is not present
-    in the table.
+      that entry. If the hash table entry at index $H$ is unused (all
+      zeroes), terminate the search: the signature is not present
+      in the table.
 
-\item Let $H = (H + H')\ modulo\ S$. Repeat at Step 3.
+\item Let $H = (H + H')\ modulo\ S$. Repeat at Step 4.
 \end{enumerate}
 
 Because $S > U$, and $H'$ and $S$ are relatively prime, the search is
@@ -930,9 +946,9 @@ The value in this field is \versiondotdebuginfo.
 \addttindexx{unit\_type}
 A 1-byte unsigned integer identifying this unit as a compilation unit.
 The value of this field is 
-\DWUTcompile{} for a {normal compilation} unit or
-\DWUTpartial{} for a {partial compilation} unit
-(see Section \refersec{chap:normalandpartialcompilationunitentries}).
+\DWUTcompile{} for a full compilation unit or
+\DWUTpartial{} for a partial compilation unit
+(see Section \refersec{chap:fullandpartialcompilationunitentries}).
 
 \textit{This field is new in \DWARFVersionV.}
 
@@ -1024,7 +1040,7 @@ offset portion of an address.
 \item \texttt{type\_signature} (8-byte unsigned integer) \\
 \addttindexx{type\_signature}
 \addtoindexx{type signature}
-A unique 64-bit signature (see Section 
+A unique 8-byte signature (see Section 
 \refersec{datarep:typesignaturecomputation})
 of the type described in this type
 unit.  
@@ -1911,7 +1927,7 @@ information type entry that has been placed in its own
 \addtoindex{type unit}. This type of 
 reference (\DWFORMrefsigeightTARG) is the
 \addtoindexx{type signature}
-64-bit type signature 
+8-byte type signature 
 (see Section \refersec{datarep:typesignaturecomputation}) 
 that was computed for the type. 
 
@@ -2825,59 +2841,9 @@ Table \refersec{tab:discriminantdescriptorencodings}.
 \needlines{6}
 \section{Name Index Table}
 \label{datarep:nameindextable}
-Each name index table in the \dotdebugnames{} section 
-begins with a header consisting of:
-\begin{enumerate}[1. ]
-\item \texttt{unit\_length} (\livelink{datarep:initiallengthvalues}{initial length}) \\
-\addttindexx{unit\_length}
-A 4-byte or 12-byte initial length field that 
-contains the size in bytes of this contribution to the \dotdebugnames{} 
-section, not including the length field itself
-(see Section \refersec{datarep:initiallengthvalues}).
-
-\item \texttt{version} (\HFTuhalf) \\
-A 2-byte version number\addtoindexx{version number!name index table} 
+The \addtoindexi{version number}{version number!name index table}
+in the name index table header is \versiondotdebugnames{}
 (see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
-This number is specific to the name index table and is
-independent of the DWARF version number.
-
-The value in this field is \versiondotdebugnames.
-
-\item padding (\HFTuhalf) \\
-
-\item \texttt{comp\_unit\_count} (\HFTuword) \\
-The number of CUs in the CU list.
-
-\item \texttt{local\_type\_unit\_count} (\HFTuword) \\
-The number of TUs in the first TU list.
-
-\item \texttt{foreign\_type\_unit\_count} (\HFTuword) \\
-The number of TUs in the second TU list.
-
-\item \texttt{bucket\_count} (\HFTuword) \\
-The number of hash buckets in the hash lookup table. 
-If there is no hash lookup table, this field contains 0.
-
-\item \texttt{name\_count} (\HFTuword) \\
-The number of unique names in the index.
-
-\item \texttt{abbrev\_table\_size} (\HFTuword) \\
-The size in bytes of the abbreviations table.
-
-\item \texttt{augmentation\_string\_size} (\HFTuword) \\
-The size in bytes of the augmentation string. This value is 
-rounded up to a multiple of 4.
-
-\item \texttt{augmentation\_string} (\HFTaugstring) \\
-A vendor-specific augmentation string, which provides additional 
-information about the contents of this index. If provided, the string
-begins with a 4-character vendor ID. The remainder of the
-string is meant to be read by a cooperating consumer, and its
-contents and interpretation are not specified here. The
-string is padded with null characters to a multiple of
-four bytes in length.
-
-\end{enumerate}
 
 The name index attributes and their encodings are listed in Table \referfol{datarep:indexattributeencodings}.
 
@@ -3535,7 +3501,7 @@ compare two type signatures to check for equality.}
 The type signature for a type T0 is formed from the 
 \MDfive{}\footnote{\livetarg{def:MDfive}{MD5} Message Digest Algorithm, 
 R.L. Rivest, RFC 1321, April 1992}
-hash of a flattened description of the type. The flattened
+digest of a flattened description of the type. The flattened
 description of the type is a byte sequence derived from the
 DWARF encoding of the type as follows:
 \begin{enumerate}[1. ]
@@ -3754,8 +3720,8 @@ example, a constant value should be preferred to a location
 expression when possible.)
 
 Once the string S has been formed from the DWARF encoding,
-an \MDfive{} hash is computed for the string and the 
-least significant 64 bits are taken as the type signature.
+an 16-byte \MDfive{} digest is computed for the string and the 
+last eight bytes are taken as the type signature.
 
 \textit{The string S is intended to be a flattened representation of
 the type that uniquely identifies that type (that is, a different
@@ -3803,7 +3769,7 @@ declaration of the type.}
 \DWATdeclcolumn{} attributes are not included because they
 may vary from one source file to the next, and would prevent
 two otherwise identical type declarations from producing the
-same \MDfive{} hash.}
+same \MDfive{} digest.}
 
 \item \textit{The \DWATobjectpointer{} attribute is not included 
 because the information it provides is not necessary for the 
@@ -3826,7 +3792,7 @@ and replacing the function definition in the type with a non-defining
 declaration of the function (as if the function had been defined out of 
 line).}
 
-An example that illustrates the computation of an \MDfive{} hash may be found in 
+An example that illustrates the computation of an \MDfive{} digest may be found in 
 Appendix \refersec{app:usingtypeunits}.
 
 \section{Name Table Hash Function}

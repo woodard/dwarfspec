@@ -179,7 +179,7 @@ in both the skeleton DIE and the full DIE, so that a consumer
 can verify a match.
 
 \needlines{4}
-\bb
+
 Relocations are neither necessary nor useful in .dwo files, because the
 .dwo files contain only debugging information that does not need to be
 processed by a linker. Relocations are rendered unnecessary via
@@ -206,13 +206,13 @@ specified by the \DWATrangesbase{} attribute (which is placed in the
 skeleton compilation unit in the \texttt{.o} file).
 
 \end{enumerate}
-\eb
+
 
 Table \refersec{tab:unitattributesbyunitkind} summarizes which
 attributes are defined for use in the various kind of compilation
 units.
 
-\bb
+
 
 \begin{table}[h]
 \caption{Unit Attributes by Unit Kind}
@@ -250,7 +250,7 @@ units.
 \end{tabular}
 \end{table}
 
-\eb
+
 
 \needlines{8}
 The split dwarf object file design depends on having an index of 
@@ -861,4 +861,220 @@ address range.
 \section{DWARF Package File Example}
 \label{app:dwarfpackagefileexample}
 \addtoindexx{DWARF duplicate elimination!examples}
-[TBD]
+
+\bb
+A \definitionx{DWARF package file} is a collection of split 
+DWARF object files.
+In general, it will be much smaller than the sum of the split
+DWARF object files, because the packaging process removes duplicate
+type units and merges the string tables. Aside from those two
+optimizations, however, each compilation unit and each type unit
+from a split DWARF object file is copied verbatim into the package
+file.
+
+The package file contains the same set of sections as a split
+DWARF object file, plus two additional sections described below.
+
+The packaging utility, like a linker, combines sections of the
+same name by concatenation. While a split DWARF object may
+contain multiple \dotdebuginfodwo{} sections, one for the
+compilation unit, and one for each type unit, a package file
+contains a single \dotdebuginfodwo{} section. The combined
+\dotdebuginfodwo{} section contains each compilation unit and one
+copy of each type unit (discarding any duplicate type
+signatures).
+
+As part of merging the string tables, the packaging utility
+treats the \dotdebugstrdwo{} and \dotdebugstroffsetsdwo{}
+sections specially. Rather than
+combining them by simple concatenation, it instead builds a new
+string table consisting of the unique strings from each input
+string table. Because all references to these strings use the
+\DWFORMstrx{} form, the packaging utility only needs to adjust the
+string offsets in each \dotdebugstroffsetsdwo{} contribution after
+building the new \dotdebugstrdwo{} section.
+
+Each compilation unit or type unit consists of a set of
+inter-related contributions to each section in the package file.
+For example, a compilation unit may have contributions in
+\dotdebuginfodwo{}, \dotdebugabbrevdwo{}, \dotdebuglinedwo{},
+\dotdebugstroffsetsdwo{}, and so on. In order to maintain the ability 
+for a consumer to follow references between these sections, the
+package file contains two additional sections: a compilation unit
+(CU) index, and a type unit (TU) index. These indexes allow a
+consumer to look up a compilation unit (by its \CUsignature) or 
+a type unit (by its \TUsignature), and locate each contribution 
+that belongs to that unit.
+
+As an example, consider a package file, \texttt{demo.dwp}, formed by
+combining \texttt{demo1.dwo} and \texttt{demo2.dwo} from the previous example
+(see Appendix \refersec{app:splitdwarfobjectfileexample}). The
+resulting package file would contain the sections shown in Table
+\refersec{fig:sectionsandcontributionsinapackagefile}, 
+with contributions from each input file as shown.
+
+\begin{table}[h]
+\caption{Sections and contributions in a package file}
+\label{fig:sectionsandcontributionsinapackagefile}
+\begin{center}
+\begin{tabular}{P{4.7cm}|P{8cm}}
+\hline
+\bfseries Target \texttt{.dwp} section & \bfseries Source of section contributions \\
+\hline
+  \dotdebugabbrevdwo{}
+&    \dotdebugabbrevdwo{} from \texttt{demo1.dwo} \newline
+     \dotdebugabbrevdwo{} from \texttt{demo2.dwo} \\
+\hline \newline
+  \dotdebuginfodwo{} \newline (for the compilation units and type units)
+&    compilation unit from \texttt{demo1.dwo} \newline
+     compilation unit from \texttt{demo2.dwo} \newline
+     type unit for class \texttt{Box} from \texttt{demo1.dwo}   \newline
+     type unit for class \texttt{Point} from \texttt{demo1.dwo} \newline
+     type unit for class \texttt{Line} from \texttt{demo2.dwo}  \\
+\hline
+  \dotdebuglocdwo{}
+&    \dotdebuglocdwo{} from \texttt{demo1.dwo} \newline
+     \dotdebuglocdwo{} from \texttt{demo2.dwo} \\
+\hline
+  \dotdebuglinedwo{}
+&    \dotdebuglinedwo{} from \texttt{demo1.dwo} \newline
+     \dotdebuglinedwo{} from \texttt{demo2.dwo} \\
+\hline
+  \dotdebugstroffsetsdwo{}
+&    \dotdebugstroffsetsdwo{} from \texttt{demo1.dwo}, \hspace*{6mm}adjusted \newline
+     \dotdebugstroffsetsdwo{} from \texttt{demo2.dwo}, \hspace*{6mm}adjusted \\
+\hline
+  \dotdebugstrdwo{}
+&    new merged string table \\
+\hline
+  \dotdebugcuindex
+&    new CU index \\
+\hline
+  \dotdebugtuindex
+&    new TU index \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\needlines{4}
+The \dotdebugabbrevdwo{}, \dotdebuglocdwo{} and \dotdebuglinedwo{}
+sections have been copied over from the two \texttt{.dwo} files as
+individual contributions to the corresponding sections in the
+\texttt{.dwp} file. A record of the offset of each contribution within 
+the combined section, and the size of each contribution is recorded
+as part of the CU and TU index sections.
+
+The \dotdebuginfodwo{} sections corresponding to each compilation
+unit have been copied as individual contributions to the combined
+\dotdebuginfodwo{} section, and one copy of each type unit has also
+been copied. The type units for class \texttt{Box} and class 
+\texttt{Point}, for example, are contained in both \texttt{demo1.dwo} 
+and \texttt{demo2.dwo}, but only one instance of each is copied into 
+the package file.
+
+The \dotdebugstrdwo{} sections from each file have been merged to
+form a new string table with no duplicates, requiring the
+adjustment of all references to those strings. The
+\dotdebugstroffsetsdwo{} sections from the \texttt{.dwo} files have 
+been copied as individual contributions, but the string table offset
+in each slot of those contributions has been adjusted to point to
+the correct offset in the merged string table.
+
+The \dotdebugcuindex{} and \dotdebugtuindex{} sections provide a
+directory to these contributions. 
+Table \referfol{fig:examplecuindexsection} shows an example CU
+index section containing the two compilation units from 
+\texttt{demo1.dwo} and \texttt{demo2.dwo}. The CU index shows that 
+for the compilation unit from \texttt{demo1.dwo}, with \CUsignature{} 
+\texttt{0x044e413b8a2d1b8f}, its contribution to the \dotdebuginfodwo{} 
+section begins at offset 0, and is 325 bytes long. For the compilation 
+unit from \texttt{demo2.dwo}, with \CUsignature{} 
+\texttt{0xb5f0ecf455e7e97e}, its contribution to the \dotdebuginfodwo{}
+section begins at offset 325, and is 673 bytes long.
+
+Likewise, we can find the contributions to the related sections.
+In Figure \referfol{fig:splitobjectexampledemo2dwodwarfdebuglocdwoexcerpts}, 
+we see that the \DWTAGvariable{} DIE at \texttt{7\$} has a
+reference to a location list at offset 0x49 (decimal 73). Because
+this is part of the compilation unit for \texttt{demo2.dwo}, with 
+unit signature \texttt{0xb5f0ecf455e7e97e}, we see that its contribution 
+to \dotdebuglocdwo{} begins at offset 84, so the location list from
+Figure F.8 can be found in \texttt{demo.dwp} at offset 157 (84 + 73) in
+the combined \dotdebuglocdwo{} section.
+
+\begin{table}[h]
+\caption{Example CU index section}
+\label{fig:examplecuindexsection}
+\begin{center}
+\begin{tabular}{lrrrrrr}
+\hline \\
+  \multicolumn{2}{l}{Version:}&                 5 &&&&\\
+  \multicolumn{2}{l}{Number of columns:}&       5 &&&&\\
+  \multicolumn{2}{l}{Number of used entries:}&  2 &&&&\\
+  \multicolumn{2}{l}{Number of slots:}&         16 &&&&\\
+\\
+  \multicolumn{7}{c}{Offset table} \\
+  \hline
+  slot&  signature&             info&   abbrev&      loc&     line& str\_off \\
+    14& \texttt{0xb5f0ecf455e7e97e}&      325&      452&       84&       52&       72 \\
+    15& \texttt{0x044e413b8a2d1b8f}&        0&        0&        0&        0&        0 \\
+\\
+  \multicolumn{7}{c}{Size table} \\
+  \hline
+  slot&                    &     info&   abbrev&      loc&     line& str\_off \\
+    14&                    &      673&      593&       93&       52&      120 \\
+    15&                    &      325&      452&       84&       52&       72 \\
+\\ \hline 
+\end{tabular}
+\end{center}
+\end{table}
+
+\needlines{4}
+Table \referfol{fig:exampletuindexsection} 
+shows an example TU index section containing the
+three type units for classes \texttt{Box}, \texttt{Point}, and 
+\texttt{Line}. Each type unit
+contains contributions from \dotdebuginfodwo{}, \dotdebugabbrevdwo{},
+\dotdebuglinedwo{} and \dotdebugstroffsetsdwo{}. In this example, the
+type units for classes \texttt{Box} and \texttt{Point} come from 
+\texttt{demo1.dwo}, and
+share the abbreviations table, line number table, and string
+offsets table with the compilation unit from \texttt{demo1.dwo}. 
+Likewise, the type unit for class \texttt{Line} shares tables 
+from \texttt{demo2.dwo}. (The
+sharing of these tables between compilation units and type units
+is typical for some implementations, but is not required by the
+DWARF standard.)
+
+\begin{table}[h]
+\caption{Example TU index section}
+\label{fig:exampletuindexsection}
+\begin{center}
+\begin{tabular}{lrrrrr}
+\hline
+  \multicolumn{2}{l}{Version:}&                 5 \\
+  \multicolumn{2}{l}{Number of columns:}&       4 \\
+  \multicolumn{2}{l}{Number of used entries:}&  3 \\
+  \multicolumn{2}{l}{Number of slots:}&         32 \\
+\\
+  \multicolumn{6}{c}{Offset table} \\
+  \hline
+  slot&  signature&                    info&   abbrev&     line& str\_off \\
+  11& \texttt{0x2f33248f03ff18ab}&     1321&        0&        0&        0 \\
+  17& \texttt{0x79c7ef0eae7375d1}&     1488&      452&       52&       72 \\
+  27& \texttt{0xe97a3917c5a6529b}&      998&        0&        0&        0 \\
+\\
+  \multicolumn{6}{c}{Size table} \\
+  \hline
+  slot&                          &     info&   abbrev&     line& str\_off \\
+  11&                            &     167&      452&       52&       72 \\
+  17&                            &     217&      593&       52&      120 \\
+  27&                            &     323&      452&       52&       72 \\
+\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\eb

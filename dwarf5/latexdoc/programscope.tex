@@ -10,10 +10,6 @@ as bounded by ranges of text addresses within the program.
 \section{Unit Entries}
 \label{chap:unitentries}
 
-\ifthenelse{\boolean{Trial1ReUnits}}
-%%%%%%%%%%%%%%%%%%%%\then
-{
-\bb
 A DWARF object file is an object file that contains one or more 
 DWARF compilation units, of which there are these kinds:
 \addtoindexx{unit|see {compilation unit}} 
@@ -25,7 +21,10 @@ related partial compilation units and/or type units.
 
 \item A \definition{partial compilation unit} describes
 a part of a compilation (generally corresponding to an
-included file) which is imported into one or more 
+\bb
+imported module) 
+\eb
+which is imported into one or more 
 related full compilation units.
 
 \item A \definition{type unit} is a specialized unit
@@ -63,12 +62,15 @@ the conventional compilation units, a skeleton compilation unit
 is part of the same object file as the compiled code and data.}
 
 \begin{itemize}
-\item A \definition{split full compilation unit} describes
+\item A 
+\bb
+\definition{split compilation unit} describes
+\eb
 a complete compilation, possibly in combination with
 related type compilation units. It corresponds 
 to a specific skeleton compilation unit.
 
-\item A \definition{split type compilation unit} is a specialized
+\item A \definition{split type unit} is a specialized
 compilation unit that represents a type whose description may
 be usefully shared by multiple other units.
 
@@ -83,9 +85,10 @@ unit may be logically incorporated into another compilation unit
 using an \addtoindex{imported unit entry}
 (see Section \refersec{chap:importedunitentries}).}
 
-\textit{Split compilation units and partial compilation units
-serve similar purposes as a means to promote sharing and
-compression of DWARF information; thus, a combined split partial
+\textit{A
+\bb
+combined split and partial
+\eb
 compilation unit kind is not defined.}
 
 \textit{In the remainder of this document, the word 
@@ -131,76 +134,6 @@ template instantiation, or other implementation-dependent
 portion of a compilation. A full compilation unit can also
 function in a manner similar to a partial compilation unit
 in some cases.}
-
-\eb
-}
-%%%%%%%%%%%%%%%%%%%%\else
-{
-An object file may contain one or more compilation units,
-of which there are
-\addtoindexx{unit|see {compilation unit}} 
-\addtoindexx{compilation unit}
-these kinds:
-normal compilation units,
-partial compilation units, 
-type units,\addtoindexx{type unit} and
-skeleton units. A 
-\addtoindex{partial compilation unit}
-is related to one or more other compilation units that
-import it.  
-A skeleton unit contains only a subset of the attributes of 
-a full normal or partial compilation unit plus two attributes 
-used to locate the DWARF object file where the full 
-compilation unit can be found.
-A \addtoindex{type unit} represents a single complete type 
-in a compilation unit of its own.
-Either a normal compilation unit or a 
-\addtoindex{partial compilation unit}
-may be logically incorporated into another
-compilation unit using an 
-\addtoindex{imported unit entry}
-(see Section \refersec{chap:importedunitentries}).
-
-
-\subsection[Normal and Partial CU Entries]{Normal and Partial Compilation Unit Entries}
-\label{chap:normalandpartialcompilationunitentries}
-A \addtoindex{normal compilation unit}\addtoindexx{compilation unit!normal} 
-is represented by a debugging information entry with the tag 
-\DWTAGcompileunitTARG. 
-A \addtoindex{partial compilation unit}\addtoindexx{compilation unit!partial} 
-is represented by a debugging information entry with the tag 
-\DWTAGpartialunitTARG.
-
-\needlines{6}
-In a simple normal compilation, a single compilation unit with
-the tag 
-\DWTAGcompileunit{} represents a complete object file
-and the tag 
-\DWTAGpartialunit{} is not used. 
-In a compilation
-employing the DWARF space compression and duplicate elimination
-techniques from 
-Appendix \refersec{app:usingcompilationunits}, 
-multiple compilation units using
-the tags 
-\DWTAGcompileunit{} and/or 
-\DWTAGpartialunit{} are
-used to represent portions of an object file.
-
-\textit{A normal compilation unit typically represents the text and
-data contributed to an executable by a single relocatable
-object file. It may be derived from several source files,
-including pre-processed header files. 
-A \addtoindex{partial compilation unit} typically represents a part of the text
-and data of a relocatable object file, in a manner that can
-potentially be shared with the results of other compilations
-to save space. It may be derived from an \doublequote{include file,}
-template instantiation, or other implementation\dash dependent
-portion of a compilation. A normal compilation unit can also
-function in a manner similar to a partial compilation unit
-in some cases.}
-}
-%%%%%%%%%%%%%%%%%%%%%\endif
 
 A compilation unit entry owns debugging information
 entries that represent all or part of the declarations
@@ -532,20 +465,18 @@ Section \refersec{datarep:splitdwarfobjectfiles}), the
 compilation unit in the \dotdebuginfo{} section is a "skeleton"
 compilation unit with the tag \DWTAGcompileunit, which contains 
 \DWATdwoname{} and \DWATdwoid{} attributes as well as a subset of the
-\bb
 attributes of a full or partial compilation unit. In general,
 it contains those attributes that are necessary for the consumer
 to locate the object file where the split full compilation unit
-\eb
 can be found, and for the consumer to interpret references to
 addresses in the program. 
 
-\bb
+
 A skeleton compilation unit has no children.
 
 A skeleton compilation unit has \DWATdwoname{} and 
 \DWATdwoid{} attributes:
-\eb
+
 \begin{enumerate}[1. ]
 
 \item
@@ -560,23 +491,30 @@ compilation unit.
 \item
 \livetarg{chap:DWATdwoidforunit}{}
 A \DWATdwoidDEFN{} attribute\addtoindexx{unit identification attribute}
-whose implementation-defined integer constant value
+whose implementation-defined integer constant value,
+\bb
+known as the \CUsignature,
+\eb
 provides unique identification of this compilation unit
 as well as the associated split compilation unit in the
-\bb
 object file named in the \DWATdwoname{}
 attribute. For simplicity, the \DWATdwoidNAME{} attributes
 in the skeleton compilation unit and the corresponding
 split full compilation unit 
 (see Section \refersec{chap:splitfullcompilationunitentries})
-\eb
 must use the same form to encode this identification value.
-\end{enumerate}
 
 \bb
+\textit{The means of determining a \CUsignature{} does not 
+need to be similar or related to the means of determining a
+\TUsignature.}
+\eb 
+
+\end{enumerate}
+
 A skeleton compilation unit may have additional
 attributes from among the following:
-\eb
+
 \begin{enumerate}[1. ]
 \addtocounter{enumi}{2}
 \item
@@ -634,15 +572,10 @@ found the correct object file.
 necessary to interpret the contents
 of the corresponding \splitDWARFobjectfile.}
 
-\bb
 \textit{The \DWATbasetypes{} attribute is not defined for a
 skeleton compilation unit.}
-\eb
 
-\ifthenelse{\boolean{Trial1ReUnits}}
-%%%%%%%%%%%%%%%%%%%%\then
-{
-\bb
+
 \subsection{Split Full Compilation Unit Entries}
 \label{chap:splitfullcompilationunitentries}
 A \definition{split full compilation unit} is represented by a 
@@ -655,13 +588,23 @@ A split full compilation unit has a \DWATdwoid{} attribute:
 \begin{enumerate}[1. ]
 \item
 A \DWATdwoidDEFN{} attribute\addtoindexx{unit identification attribute}
-whose implementation-defined integer constant value
+whose implementation-defined integer constant value,
+\bb
+known as the \CUsignature,
+\eb
 provides unique identification of this compilation unit
 as well as the associated skeleton compilation unit.
 For simplicity, the \DWATdwoidNAME{} attributes in the 
 split compilation unit and the associated skeleton 
 compilation unit must use the same form to encode the 
 identification value.
+
+\bb
+\textit{The means of determining a \CUsignature{} does not 
+need to be similar or related to the means of determining a
+\TUsignature.}
+\eb 
+
 \end{enumerate}
 
 A split full compilation unit may also have additional 
@@ -703,8 +646,7 @@ split full compilation unit entry but instead are inherited
 
 \textit{The \DWATbasetypes{} attribute is not defined for a
 split full compilation unit.}
-\eb
-}{}
+
 
 \needlines{6}
 \subsection{Type Unit Entries}
@@ -716,17 +658,15 @@ An object file may contain any number of separate type
 unit entries, each representing a single complete type
 definition. 
 Each \addtoindex{type unit} must be uniquely identified by
-a 64-bit signature, stored as part of the type unit, which
+an 8-byte signature, stored as part of the type unit, which
 can be used to reference the type definition from debugging
 information entries in other compilation units and type units.
-\ifthenelse{\boolean{Trial1ReUnits}}
-{\bb
+
 Conventional and split type units are identical except for
 the sections in which they are represented 
 (see \refersec{datarep:splitdwarfobjectfiles} for details).
 \addtoindexx{conventional type unit}
 \addtoindexx{split type unit}
-\eb}{}
 
 A type unit is represented by a debugging information entry
 with the tag \DWTAGtypeunitTARG. 
@@ -759,12 +699,10 @@ may be referenced by the \DWATdeclfile{} attribute of the
 type or part of its description.} 
 
 \textit{In an object file with a conventional compilation 
-\bb
 unit entry, the type unit entries may refer to (share) the 
-\eb
 line number table used by the compilation unit. In a type 
-unit located in a split compilation unit,
-the \DWATstmtlistNAME{} attribute refers to a "specialized"
+unit located in a split compilation unit, the 
+\DWATstmtlistNAME{} attribute refers to a \doublequote{specialized}
 line number table in the \dotdebuglinedwo{} section, which
 contains only the list of directories and file names.}
 

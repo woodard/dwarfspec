@@ -90,6 +90,18 @@ declaration in the \dotdebuginfo{} section.
 The name index may also contain an optional hash table for faster
 lookup.
 
+\bb
+A relocatable object file may contain a "per-CU" index, which
+provides an index to the names defined in that compilation
+unit.
+
+An executable or shareable object file may contain either a collection of
+"per-CU" indexes, simply copied from each relocatable object
+file, or the linker may produce a "per-module" index by
+combining the per-CU indexes into a single index that covers
+the entire load module.
+\eb
+
 \subsubsection{Contents of the Name Index}
 \label{chap:contentsofthenameindex}
 The name index must contain an entry for each DIE that defines a
@@ -170,7 +182,7 @@ Figure \referfol{fig:nameindexlayout}.
 \end{enumerate}
 
 \begin{figure}[p]
-\bb
+
 \begin{center}
 \newcommand{\thisblue}{blue!10}
 \newcommand{\thisyellow}{yellow!20}
@@ -333,7 +345,7 @@ Figure \referfol{fig:nameindexlayout}.
 \end{center}
 \caption{Name Index Layout}
 \label{fig:nameindexlayout}
-\eb
+
 \end{figure}
 
 The formats of the header and the hash lookup table are described
@@ -415,17 +427,21 @@ attributes for both CU and (foreign) TU. For such entries, the CU
 attribute gives the consumer a reference to the CU that may be used to
 locate a \splitDWARFobjectfile{} that contains the type unit.
 
-The type hash attribute, not to be confused with the type signature
+\bb
+\textit{The type hash attribute, not to be confused with the type signature
 for a TU, may be provided for type entries whose declarations are not
 in a type unit, for the convenience of link-time or post-link
 utilities that wish to de-duplicate type declarations across
 compilation units. The type hash, however, is computed by the
-same method as specified for type signatures.
+same method as specified for type signatures.}
+\eb
 
 The last entry for each name is followed by a zero byte that
 terminates the list. There may be gaps between the lists.
 
-\subsubsection{Per-CU versus Per-Module Indexes \textit{(Non-Normative)}}
+\bb
+\subsubsection{Per-CU versus Per-Module Indexes}
+\eb
 \label{chap:percuvspermoduleindexes}
 \textit{In a per-CU index, the CU list may have only a single entry, 
 and index entries may omit the CU attribute. (Cross-module or link-time
@@ -548,7 +564,7 @@ The total number of entries in the list is given by
 
 \subsubsubsection{List of Foreign TUs}
 The list of foreign TUs immediately follows the list of local TUs.
-Each entry in the list is an 64-bit type signature (as described by
+Each entry in the list is a 8-byte type signature (as described by
 \DWFORMrefsigeight).
 
 The number of entries in the list is given by \texttt{foreign\_type\_unit\_count}.
@@ -577,7 +593,11 @@ Each bucket contains the index of an entry in the hashes array. The
 hashes array is indexed starting at 1, and an empty bucket is
 represented by the value 0.
 
-The hashes array contains a list of the full hash values for each
+The hashes array contains a 
+\bb
+sequence
+\eb
+of the full hash values for each
 symbol. All symbols that have the same index into the bucket list 
 follow one another in the hashes array, and the indexed entry in 
 the bucket list refers to the first symbol. 
