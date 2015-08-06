@@ -45,6 +45,7 @@ by name. As with the definition of global data objects, this
 would require a search of all the top level type definitions
 of all compilation units in a program.}
 
+\needlines{4}
 \textit{To find the debugging information associated with a subroutine,
 given an address, a debugger can use the low and high PC
 attributes of the compilation unit entries to quickly narrow
@@ -182,170 +183,326 @@ Figure \referfol{fig:nameindexlayout}.
 \end{enumerate}
 
 \begin{figure}[p]
-
+\bb
+\figurepart{1}{2}
 \begin{center}
-\newcommand{\thisblue}{blue!10}
-\newcommand{\thisyellow}{yellow!20}
-\newcommand{\invispblu}{\textcolor{\thisblue}{p}}
-\newcommand{\invispyel}{\textcolor{\thisyellow}{p}}
-  \begin{tikzpicture}[every node/.style={draw, anchor=text,
-        node distance=2.5cm,
-        text width=3.5cm, font=\normalsize},
-        description/.style={
-          draw=none,
-          font=\em\small,
-          node distance=5cm,
-          text width=5cm
-        },
-        table/.style={
-          font=\small,
-          draw=black,
-          rectangle split,
-          fill=\thisyellow
-        },
-        caption/.style={
-          anchor=south,
-          font=\small,
-          draw=none
-        }]
-    \node (header) [font=\small,
-                    fill=\thisblue,
-                    rectangle split,
-                    rectangle split allocate boxes=8,
-                    rectangle split parts=8] at (0, -1.3)
-          {Header\invispblu
-            \nodepart{two}
-            CU list\invispblu
-            \nodepart{three}
-            Local TU list\invispblu
-            \nodepart{four}
-            Foreign TU list\invispblu
-            \nodepart{five}
-            Hash table\invispblu
-            \nodepart{six}
-            Name table\invispblu
-            \nodepart{seven}
-            Abbrev table\invispblu
-            \nodepart{eight}
-            Entry pool\invispblu
-          };
-    \draw node [caption] at (header.north) {Name Index} ;
+%\includegraphics[keepaspectratio=true,scale=1.0]{name-index-drawings-6p1}
 
-    \node (cuofs) [table,
-                   rectangle split allocate boxes=4,
-                   rectangle split parts=4]  at (7.5,0)
-         {CU 0 offset\invispyel
-          \nodepart{two}
-          CU 1 offset\invispyel
-          \nodepart{three}
-          CU 2 offset\invispyel
-          \nodepart{four}
-          \dots
-         };
-        \node (cusecofs) [description,right of=cuofs] {section offset \\ of CU header} ;
-    \node (tuofs) [below of=cuofs,
-                   table,
-                   rectangle split allocate boxes=4,
-                   rectangle split parts=4]
-         {TU 0 offset\invispyel
-          \nodepart{two}
-          TU 1 offset\invispyel
-          \nodepart{three}
-          TU 2 offset\invispyel
-          \nodepart{four}
-          \dots
-         };
-    \node (tusecofs) [description,right of=tuofs] {section offset \\ of TU header} ;
-    \node (tusigs) [below of=tuofs, 
-                    table,
-                    rectangle split allocate boxes=4,
-                    rectangle split parts=4]
-         {TU $n$ sig.\invispyel
-          \nodepart{two}
-          TU $n+1$ sig.\invispyel
-          \nodepart{three}
-          TU $n+2$ sig.\invispyel
-          \nodepart{four}
-          \dots
-         };
-   \node (typesigs) [description,right of=tusigs] {type signature \\ of foreign TU} ;
+\begin{tikzpicture}[
+  every node/.style={node font=\small, anchor=north west, text height=.8em, text depth=.2em, inner sep=4pt, outer ysep=0},
+  caption/.style={node font=\small \bfseries, text width=90pt},
+  overview/.style={draw, node font=\small, minimum height=28pt, text width=80pt},
+  detail1/.style={draw, minimum height=14pt, text width=116pt},
+  detail2/.style={draw, minimum height=28pt, text width=116pt},
+  detail3/.style={draw, minimum height=48pt, text width=116pt},
+  detail4/.style={draw, minimum height=72pt, text width=116pt},
+  ellip/.style={draw, shape=broken rectangle, minimum height=14pt, text width=116pt},
+  explode/.style={draw=black!50, fill=black!20, line join=bevel},
+  header/.style={fill=headerblue},
+  culist/.style={fill=cutuyellow},
+  buckets/.style={fill=bucketsblue},
+  hashes/.style={fill=hashesgreen},
+  stroffsets/.style={fill=stroffsetspink},
+  entryoffsets/.style={fill=entryoffsetspink},
+  indexentries/.style={fill=indexentriesorange}
+]
 
-   \matrix (hashtable) [draw,style=dashed,column sep=8mm] at (0, -10)
-           {\node (buckets) [style=solid, table, text width=3cm,
-                             rectangle split allocate boxes=4,
-                             rectangle split parts=4]
-                  {index to hashes\invispyel
-                  \nodepart{two}\invispyel
-                  \nodepart{three}\invispyel
-                  \nodepart{four}\dots
-                  } ;
-            \draw node [caption] at (buckets.north) {~Buckets} ;
-            &
-            \node (hashes) [style=solid, table, text width=3cm,
-                            rectangle split allocate boxes=6,
-                            rectangle split parts=6]
-                  {hash value\invispyel
-                  \nodepart{two}\invispyel
-                  \nodepart{three}\invispyel
-                  \nodepart{four}\invispyel
-                  \nodepart{five}\invispyel
-                  \nodepart{six}\invispyel
-                  } ;
-            \draw node [caption] at (hashes.north) {~Hashes} ;
-            \\
-           };
-    \node (names) [right of=hashes, node distance=5cm,
-                   style=solid,
-                   table,
-                   rectangle split allocate boxes=6,
-                   rectangle split parts=6]
-          {strp \hspace{1cm} entry
-           \nodepart{two}\invispyel
-           \nodepart{three}\invispyel
-           \nodepart{four}\invispyel
-           \nodepart{five}\invispyel
-           \nodepart{six}\invispyel
-          };
-    \draw node [caption] at (names.north) {Names} ;
-    \path (names.north) edge (names.south) ;
+% Name Table Overview
 
-    \draw[thick, double distance=3pt, implies-space] (header.two east)   -- (cuofs.west) ;
-    \draw[thick, double distance=3pt, implies-space] (header.three east) -- (tuofs.west) ;
-    \draw[thick, double distance=3pt, implies-space] (header.four east)  -- (tusigs.west) ;
+\begin{scope}[start chain=going below, node distance=0]
+  \node           [on chain,caption]  {Name Index};
+  \node (header)  [on chain,overview,header] {Header};
+  \node (culist)  [on chain,overview,header] {CU List};
+  \node (ltulist) [on chain,overview,header] {Local TU List};
+  \node (ftulist) [on chain,overview,header] {Foreign TU List};
+  \node (hash)    [on chain,overview,header] {Hash Table};
+  \node (names)   [on chain,overview,header] {Name Table};
+  \node (abbrev)  [on chain,overview,header] {Abbrev Table};
+  \node (pool)    [on chain,overview,header] {Entry Pool};
+\end{scope}
 
-    \path[-triangle 45]
-        (cuofs)              edge (cusecofs)
-        (tuofs)              edge (tusecofs)
-        (tusigs)             edge (typesigs)
-        (buckets.one east)   edge (hashes.one west)
-        (buckets.two east)   edge (hashes.three west)
-        (buckets.three east) edge (hashes.six west)
-        ;
-    \path[loosely dashed, thin, open triangle 45-open triangle 45]
-        (hashes.one east)    edge (names.one west)
-        (hashes.two east)    edge (names.two west)
-        (hashes.three east)  edge (names.three west)
-        (hashes.four east)   edge (names.four west)
-        (hashes.five east)   edge (names.five west)
-        (hashes.six east)    edge (names.six west)
-        ;
-    \draw[thick, double distance=3pt, implies-space] (header.five east) 
-        .. controls +(south east:2cm) .. (hashtable.north) ;
-    \draw[thick, double distance=3pt, implies-space] (header.six east)
-        .. controls (hashes.north) and (tusigs.south east) .. (names.north) ;
-    
-    \node [text width=9cm, draw=none] at (0,-15.5) {\textit{Notes:}} ;   
-    \draw [thick, double distance=3pt, implies- ] (0,-16) -- (1.3,-16)
-          node[right=2mm, text width=9cm, draw=none, node distance=1cm] 
-          {\textit{indicates an expanded view of the indicated part}} ;
-    \draw [loosely dashed, thin, open triangle 45-open triangle 45] (0,-16.5) -- (1.3,-16.5) 
-          node[right=2mm, text width=9cm, draw=none] {\textit{indicates correspondence}} ;
-          
-  \end{tikzpicture}
-\end{center}
+% Exploded View of CU List
+
+\begin{scope}[start chain=going below, node distance=0, shift={($(header.north east) + (72pt,18pt)$)}]
+  \node (cu0) [on chain,detail1,culist] {offset to CU 0};
+  \node (cu1) [on chain,detail1,culist] {offset to CU 1};
+  \node (cu2) [on chain,ellip,culist]   {\dots};
+  \node (cu3) [on chain,detail1,culist] {offset to CU $k - 1$};
+\end{scope}
+
+\begin{scope}[on background layer]
+  \filldraw [explode] (culist.north east) -- (cu0.north west) -- (cu3.south west) -- (culist.south east) -- cycle;
+\end{scope}
+
+\path [decoration={brace,amplitude=6pt}] ([xshift=9pt]cu0.north east)
+      [draw,decorate] -- ([xshift=9pt]cu3.south east)
+      node [midway,right,inner xsep=9pt] {\texttt{comp\_unit\_count} $(= k)$};
+
+% Exploded View of Local TU List
+
+\begin{scope}[start chain=going below, node distance=0, shift={($(cu3.south west) + (0,-9pt)$)}]
+  \node (ltu0) [on chain,detail1,culist] {offset to TU 0};
+  \node (ltu1) [on chain,detail1,culist] {offset to TU 1};
+  \node (ltu2) [on chain,ellip,culist]   {\dots};
+  \node (ltu3) [on chain,detail1,culist] {offset to TU $t - 1$};
+\end{scope}
+
+\begin{scope}[on background layer]
+  \filldraw [explode] (ltulist.north east) -- (ltu0.north west) -- (ltu3.south west) -- (ltulist.south east) -- cycle;
+\end{scope}
+
+\path [decoration={brace,amplitude=6pt}] ([xshift=9pt]ltu0.north east)
+      [draw,decorate] -- ([xshift=9pt]ltu3.south east)
+      node [midway,right,inner xsep=9pt] {\texttt{local\_type\_unit\_count} $(= t)$};
+
+% Exploded View of Foreign TU List
+
+\begin{scope}[start chain=going below, node distance=0, shift={($(ltu3.south west) + (0,-9pt)$)}]
+  \node (ftu0) [on chain,detail1,culist] {signature of TU $t$};
+  \node (ftu1) [on chain,detail1,culist] {signature of TU $t + 1$};
+  \node (ftu2) [on chain,ellip,culist]   {\dots};
+  \node (ftu3) [on chain,detail1,culist] {signature of TU $t + f - 1$};
+\end{scope}
+
+\begin{scope}[on background layer]
+  \filldraw [explode] (ftulist.north east) -- (ftu0.north west) -- (ftu3.south west) -- (ftulist.south east) -- cycle;
+\end{scope}
+
+\path [decoration={brace,amplitude=6pt}] ([xshift=9pt]ftu0.north east)
+      [draw,decorate] -- ([xshift=9pt]ftu3.south east)
+      node [midway,right,inner xsep=9pt] {\texttt{foreign\_type\_unit\_count} $(= f)$};
+
+% Exploded View of Hash Table
+
+\begin{scope}[start chain=going below, node distance=0, shift={($(ftu3.south west) + (0,-9pt)$)}]
+  \node (hash0) [on chain,detail2,buckets] {Buckets};
+  \node (hash1) [on chain,detail3,hashes]  {Hashes};
+\end{scope}
+
+\begin{scope}[on background layer]
+  \filldraw [explode] (hash.north east) -- (hash0.north west) -- (hash1.south west) -- (hash.south east) -- cycle;
+\end{scope}
+
+% Exploded View of Name Table
+
+\begin{scope}[start chain=going below, node distance=0, shift={($(hash1.south west) + (0,-9pt)$)}]
+  \node (name0) [on chain,detail3,stroffsets]   {String Offsets};
+  \node (name1) [on chain,detail3,entryoffsets] {Entry Offsets};
+\end{scope}
+
+\begin{scope}[on background layer]
+  \filldraw [explode] (names.north east) -- (name0.north west) -- (name1.south west) -- (names.south east) -- cycle;
+\end{scope}
+
+% Exploded View of Entry Pool
+
+\begin{scope}[shift={($(name1.south west) + (0,-9pt)$)}]
+  \node (pool0) [detail4,indexentries] {Index Entries};
+\end{scope}
+
+\begin{scope}[on background layer]
+  \filldraw [explode] (pool.north east) -- (pool0.north west) -- (pool0.south west) -- (pool.south east) -- cycle;
+\end{scope}
+
+%
+\path [decoration={brace,amplitude=6pt}] ([xshift=9pt]hash0.north east)
+      [draw,decorate] -- ([xshift=9pt]pool0.south east)
+      node [midway,right,inner xsep=9pt] {\textit{see figure part 2 on next page}};
+
+% Arrows pointing to .debug_info
+
+\begin{scope}[shift={($(cu0.north east) + (15pt,27pt)$)}]
+  \node (debuginfo) {\textit{.debug\_info}};
+\end{scope}
+
+\path ([xshift=28pt]cu0.center) coordinate (p1);
+\path ([xshift=14pt]p1) coordinate (c1);
+\path ([yshift=2pt]debuginfo.west) coordinate (p2);
+\path ([xshift=-14pt]p2) coordinate (c2);
+\draw [dashed,{Circle[open]}-{Stealth[]}] (p1) .. controls (c1) and (c2) .. (p2);
+
+\path ([xshift=28pt]ltu0.center) coordinate (p3);
+\path ([xshift=60pt]p3) coordinate (c3);
+\path ([yshift=-2pt]debuginfo.west) coordinate (p4);
+\path ([shift={(-21pt,-7pt)}]p4) coordinate (c4);
+\draw [dashed,{Circle[open]}-{Stealth[]}] (p3) .. controls (c3) and (c4) .. (p4);
+
+\end{tikzpicture}
+
 \caption{Name Index Layout}
-\label{fig:nameindexlayout}
+\label{fig:nameindexlayoutpart1}
+\end{center}
+\eb
+\end{figure}
 
+\begin{figure}[p]
+\bb
+\figurepart{2}{2}
+\begin{center}
+%\includegraphics[keepaspectratio=true,scale=1.0]{name-index-drawings-6p2}
+
+\begin{tikzpicture}[
+  every node/.style={node font=\small, anchor=north west, text height=.8em, text depth=.2em, inner sep=4pt, outer ysep=0},
+  % This diagram has a couple of two-line captions, so set the text depth
+  % to make room for the second line.
+  caption1/.style={node font=\small \bfseries, text depth=1.2em, text width=90pt},
+  caption2/.style={node font=\small \bfseries, text depth=1.2em, text width=41pt},
+  detail1/.style={draw, minimum height=14pt, text width=90pt},
+  detail2/.style={draw, minimum height=14pt, text width=41pt},
+  ellip1/.style={draw, shape=broken rectangle, minimum height=14pt, text width=90pt},
+  ellip2/.style={draw, shape=broken rectangle, minimum height=14pt, text width=41pt},
+  buckets/.style={fill=bucketsblue},
+  hashes/.style={fill=hashesgreen},
+  stroffsets/.style={fill=stroffsetspink},
+  entryoffsets/.style={fill=entryoffsetspink}
+]
+
+% Buckets
+
+\begin{scope}[start chain=going below, node distance=0]
+  \node           [on chain,caption1]        {\\ Buckets};
+  \node (bucket0) [on chain,detail1,buckets] {bucket 0};
+  \node (bucket1) [on chain,detail1,buckets] {bucket 1};
+  \node (bucket2) [on chain,ellip1,buckets]  {\dots};
+  \node (bucket3) [on chain,detail1,buckets] {bucket $b - 1$};
+\end{scope}
+
+\path [decoration={brace,amplitude=6pt}] ([xshift=36pt]bucket0.north east)
+      [draw,decorate] -- ([xshift=36pt]bucket3.south east)
+      node [midway,right,inner xsep=9pt] {\texttt{bucket\_count} $(= b)$};
+
+% Hashes
+
+\begin{scope}[start chain=going below, node distance=0, shift={($(bucket3.south east) + (18pt,-24pt)$)}]
+  \node (hashes) [on chain,caption1]       {\\ Hashes};
+  \node (hash0)  [on chain,detail1,hashes] {hash value 0};
+  \node (hash1)  [on chain,detail1,hashes] {hash value 1};
+  \node (hash2)  [on chain,detail1,hashes] {hash value 2};
+  \node (hash3)  [on chain,detail1,hashes] {hash value 3};
+  \node (hash4)  [on chain,detail1,hashes] {hash value 4};
+  \node (hash5)  [on chain,ellip1,hashes]  {\dots};
+  \node (hash6)  [on chain,detail1,hashes] {hash value $n - 1$};
+\end{scope}
+
+% String Offsets
+
+\begin{scope}[start chain=going below, node distance=0, shift={($(hashes.north east)$)}]
+  \node (strs) [on chain,caption2]           {String \\ Offsets};
+  \node (str0) [on chain,detail2,stroffsets] {};
+  \node (str1) [on chain,detail2,stroffsets] {};
+  \node (str2) [on chain,detail2,stroffsets] {};
+  \node (str3) [on chain,detail2,stroffsets] {};
+  \node (str4) [on chain,detail2,stroffsets] {};
+  \node (str5) [on chain,ellip2,stroffsets]  {};
+  \node (str6) [on chain,detail2,stroffsets] {};
+\end{scope}
+
+% Entry Offsets
+
+\begin{scope}[start chain=going below, node distance=0, shift={($(strs.north east)$)}]
+  \node (entries) [on chain,caption2]             {Entry \\ Offsets};
+  \node (entry0)  [on chain,detail2,entryoffsets] {};
+  \node (entry1)  [on chain,detail2,entryoffsets] {};
+  \node (entry2)  [on chain,detail2,entryoffsets] {};
+  \node (entry3)  [on chain,detail2,entryoffsets] {};
+  \node (entry4)  [on chain,detail2,entryoffsets] {};
+  \node (entry5)  [on chain,ellip2,entryoffsets]  {};
+  \node (entry6)  [on chain,detail2,entryoffsets] {};
+\end{scope}
+
+\path [decoration={brace,amplitude=6pt}] ([xshift=9pt]entry0.north east)
+      [draw,decorate] -- ([xshift=9pt]entry6.south east)
+      node [midway,right,inner xsep=9pt] {\texttt{name\_count} $(= n)$};
+
+% Arrows pointing to .debug_str and entry pool
+
+\path (str0.center) coordinate (p1);
+\path ([xshift=18pt]p1) coordinate (c1);
+\path ([shift={(36pt,45pt)}]p1) coordinate (p2);
+\path ([xshift=-18pt]p2) coordinate (c2);
+\draw [dashed,{Circle[open]}-{Stealth[]}] (p1) .. controls (c1) and (c2) .. (p2) node [anchor=west] {$.debug\_str$};
+
+\path (entry0.center) coordinate (p3);
+\path ([xshift=18pt]p3) coordinate (c3);
+\path ([shift={(36pt,27pt)}]p3) coordinate (p4);
+\path ([xshift=-18pt]p4) coordinate (c4);
+\draw [dashed,{Circle[open]}-{Stealth[]}] (p3) .. controls (c3) and (c4) .. (p4) node [anchor=west] {$entry\ pool$};
+
+% Arrows from buckets to hashes
+
+\path ([xshift=24pt]bucket0.center) coordinate (p5);
+\path ([xshift=144pt]p5) coordinate (c5);
+\path ([xshift=-108pt]hash0.west) coordinate (c6);
+\draw [dashed,{Circle[open]}-{Stealth[]}] (p5) .. controls (c5) and (c6) .. (hash0.west);
+
+\path ([xshift=24pt]bucket1.center) coordinate (p7);
+\path ([xshift=162pt]p7) coordinate (c7);
+\path ([xshift=-144pt]hash3.west) coordinate (c8);
+\draw [dashed,{Circle[open]}-{Stealth[]}] (p7) .. controls (c7) and (c8) .. (hash3.west);
+
+\end{tikzpicture}
+
+\vspace{15mm}
+
+%\includegraphics[keepaspectratio=true,scale=1.0]{name-index-drawings-6p3}
+\begin{tikzpicture}[
+  every node/.style={node font=\small, anchor=north west, text height=.8em, text depth=.2em, inner sep=4pt, outer ysep=0},
+  caption/.style={node font=\small \bfseries, text width=120pt},
+  detail/.style={draw, node font=\small, minimum height=14pt, text width=120pt},
+  ellip/.style={draw, shape=broken rectangle, minimum height=14pt, text width=120pt},
+  explode/.style={draw=black!50, fill=black!20, line join=bevel},
+  indexentries/.style={fill=indexentriesorange}
+]
+
+% Entry Pool
+
+\begin{scope}[start chain=going below, node distance=0]
+  \node           [on chain,caption]             {Entry Pool};
+  \node (entry0)  [on chain,detail,indexentries] {index entry \#1 for ``a''};
+  \node (entry1)  [on chain,detail,indexentries] {index entry \#2 for ``a''};
+  \node (entry2)  [on chain,ellip,indexentries]  {\dots};
+  \node (entry3)  [on chain,detail,indexentries] {0 \textit{(end of entries for ``a'')}};
+  \node (entry4)  [on chain,detail,indexentries] {index entry \#1 for ``b''};
+  \node (entry5)  [on chain,detail,indexentries] {index entry \#2 for ``b''};
+  \node (entry6)  [on chain,ellip,indexentries]  {\dots};
+  \node (entry7)  [on chain,detail,indexentries] {0};
+  \node (entry8)  [on chain,detail,indexentries] {index entry \#1 for ``c''};
+  \node (entry9)  [on chain,ellip,indexentries]  {\dots};
+\end{scope}
+
+% Exploded Index Entry
+
+\begin{scope}[start chain=going below, node distance=0, shift={($(entry1.north east) + (60pt,30pt)$)}]
+  \node (abbrev) [on chain,detail,indexentries] {abbrev code};
+  \node (attr1)  [on chain,detail,indexentries] {attribute};
+  \node (attr2)  [on chain,detail,indexentries] {attribute};
+  \node (attr3)  [on chain,ellip,indexentries]  {\dots};
+  \node (attr4)  [on chain,detail,indexentries] {attribute};
+\end{scope}
+
+\begin{scope}[on background layer]
+  \filldraw [explode] (entry1.north east) -- (abbrev.north west) -- (attr4.south west) -- (entry1.south east) -- cycle;
+\end{scope}
+
+% Arrows
+
+\node (from1) [anchor=east] at ([xshift=-36pt]entry0.west) {\textit{(from name table)}};
+\draw [dashed,-{Stealth[]}] (from1) -- (entry0.west);
+
+\node (from2) [anchor=east] at ([xshift=-36pt]entry4.west) {\textit{(from name table)}};
+\draw [dashed,-{Stealth[]}] (from2) -- (entry4.west);
+
+\node (from2) [anchor=east] at ([xshift=-36pt]entry7.west) {\textit{(from name table)}};
+\draw [dashed,-{Stealth[]}] (from2) -- (entry7.west);
+
+\end{tikzpicture}
+
+\vspace{3mm}
+%\caption{Name Index Layout \textit{(concluded)}}
+Figure~\ref{fig:nameindexlayoutpart1}: Name Index Layout \textit{(concluded)}
+%\label{fig:nameindexlayoutpart2}
+\end{center}
+\eb
 \end{figure}
 
 The formats of the header and the hash lookup table are described
@@ -373,6 +530,7 @@ the index, and two columns. The first column contains a reference to
 the name, as a string. The second column contains the offset within
 the entry pool of the list of index entries for the name.
 
+\needlines{4}
 The abbreviations table describes the formats of the entries in the
 entry pool. Like the DWARF abbreviations table in the \dotdebugabbrev{}
 section, it defines one or more abbreviation codes. Each abbreviation
@@ -542,6 +700,7 @@ four bytes in length.
 
 \end{enumerate}
 
+\needlines{4}
 \subsubsubsection{List of CUs}
 The list of CUs immediately follows the header. Each entry in the 
 list is an offset into the \dotdebuginfo{} section of the corresponding 
@@ -593,6 +752,7 @@ Each bucket contains the index of an entry in the hashes array. The
 hashes array is indexed starting at 1, and an empty bucket is
 represented by the value 0.
 
+\needlines{4}
 The hashes array contains a 
 \bb
 sequence

@@ -1,0 +1,57 @@
+\definecolor {headerblue} {rgb}{.75,.75,.9}
+\definecolor {cutuyellow} {rgb}{1,1,.75}
+\definecolor {bucketsblue} {rgb}{.75,.875,1}
+\definecolor {hashesgreen} {rgb}{.8,1,.8}
+\definecolor {stroffsetspink} {rgb}{1,.8,.75}
+\definecolor {entryoffsetspink} {rgb}{1,.75,.8}
+\definecolor {indexentriesorange} {rgb}{1,.6,.6}
+
+% Define a "broken rectangle" shape to represent an ellipsis
+% in the drawing. The rectangle will have broken side borders
+% with hash marks to indicate that portions have been omitted.
+% FIXME: For more general use, the size and colors of the hash
+% marks should be parameterized with pgf keys.
+\makeatletter
+\pgfdeclareshape{broken rectangle}{
+  \inheritsavedanchors[from=rectangle]
+  \inheritanchorborder[from=rectangle]
+  \inheritanchor[from=rectangle]{center}
+  \inheritanchor[from=rectangle]{north}
+  \inheritanchor[from=rectangle]{south}
+  \inheritanchor[from=rectangle]{west}
+  \inheritanchor[from=rectangle]{east}
+  \inheritanchor[from=rectangle]{north west}
+  \inheritanchor[from=rectangle]{north east}
+  \inheritanchor[from=rectangle]{south west}
+  \inheritanchor[from=rectangle]{south east}
+  \inheritbackgroundpath[from=rectangle]
+  \beforebackgroundpath{
+    \pgfusepath{discard}
+    % Draw the two oblique rectangles and fill with white.
+    \pgfpathmoveto{\pgf@process{\pgfpointadd{\pgfpointlineattime{.4}{\southwest}{\southwest\pgf@xa=\pgf@x\northeast\pgf@x=\pgf@xa}}{\pgfpointpolar{10}{-3pt}}}}
+    \pgfpathlineto{\pgf@process{\pgfpointadd{\pgfpointlineattime{.4}{\southwest}{\southwest\pgf@xa=\pgf@x\northeast\pgf@x=\pgf@xa}}{\pgfpointpolar{10}{3pt}}}}
+    \pgfpathlineto{\pgf@process{\pgfpointadd{\pgfpointlineattime{.6}{\southwest}{\southwest\pgf@xa=\pgf@x\northeast\pgf@x=\pgf@xa}}{\pgfpointpolar{10}{3pt}}}}
+    \pgfpathlineto{\pgf@process{\pgfpointadd{\pgfpointlineattime{.6}{\southwest}{\southwest\pgf@xa=\pgf@x\northeast\pgf@x=\pgf@xa}}{\pgfpointpolar{10}{-3pt}}}}
+    \pgfclosepath
+    \pgfpathmoveto{\pgf@process{\pgfpointadd{\pgfpointlineattime{.4}{\northeast\pgf@xa=\pgf@x\southwest\pgf@x=\pgf@xa}{\northeast}}{\pgfpointpolar{10}{-3pt}}}}
+    \pgfpathlineto{\pgf@process{\pgfpointadd{\pgfpointlineattime{.4}{\northeast\pgf@xa=\pgf@x\southwest\pgf@x=\pgf@xa}{\northeast}}{\pgfpointpolar{10}{3pt}}}}
+    \pgfpathlineto{\pgf@process{\pgfpointadd{\pgfpointlineattime{.6}{\northeast\pgf@xa=\pgf@x\southwest\pgf@x=\pgf@xa}{\northeast}}{\pgfpointpolar{10}{3pt}}}}
+    \pgfpathlineto{\pgf@process{\pgfpointadd{\pgfpointlineattime{.6}{\northeast\pgf@xa=\pgf@x\southwest\pgf@x=\pgf@xa}{\northeast}}{\pgfpointpolar{10}{-3pt}}}}
+    \pgfclosepath
+    \pgfsetfillcolor{white}
+    \pgfusepath{fill}
+    % Now redraw the paths and stroke just the top and bottom edges of each rectangle.
+    \pgfpathmoveto{\pgf@process{\pgfpointadd{\pgfpointlineattime{.4}{\southwest}{\southwest\pgf@xa=\pgf@x\northeast\pgf@x=\pgf@xa}}{\pgfpointpolar{10}{-3pt}}}}
+    \pgfpathlineto{\pgf@process{\pgfpointadd{\pgfpointlineattime{.4}{\southwest}{\southwest\pgf@xa=\pgf@x\northeast\pgf@x=\pgf@xa}}{\pgfpointpolar{10}{3pt}}}}
+    \pgfpathmoveto{\pgf@process{\pgfpointadd{\pgfpointlineattime{.6}{\southwest}{\southwest\pgf@xa=\pgf@x\northeast\pgf@x=\pgf@xa}}{\pgfpointpolar{10}{-3pt}}}}
+    \pgfpathlineto{\pgf@process{\pgfpointadd{\pgfpointlineattime{.6}{\southwest}{\southwest\pgf@xa=\pgf@x\northeast\pgf@x=\pgf@xa}}{\pgfpointpolar{10}{3pt}}}}
+    \pgfpathmoveto{\pgf@process{\pgfpointadd{\pgfpointlineattime{.4}{\northeast\pgf@xa=\pgf@x\southwest\pgf@x=\pgf@xa}{\northeast}}{\pgfpointpolar{10}{-3pt}}}}
+    \pgfpathlineto{\pgf@process{\pgfpointadd{\pgfpointlineattime{.4}{\northeast\pgf@xa=\pgf@x\southwest\pgf@x=\pgf@xa}{\northeast}}{\pgfpointpolar{10}{3pt}}}}
+    \pgfpathmoveto{\pgf@process{\pgfpointadd{\pgfpointlineattime{.6}{\northeast\pgf@xa=\pgf@x\southwest\pgf@x=\pgf@xa}{\northeast}}{\pgfpointpolar{10}{-3pt}}}}
+    \pgfpathlineto{\pgf@process{\pgfpointadd{\pgfpointlineattime{.6}{\northeast\pgf@xa=\pgf@x\southwest\pgf@x=\pgf@xa}{\northeast}}{\pgfpointpolar{10}{3pt}}}}
+    \pgfsetlinewidth{0.5pt}
+    \pgfsetstrokecolor{black}
+    \pgfusepath{stroke}
+  }
+}
+\makeatother

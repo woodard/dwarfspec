@@ -3,7 +3,7 @@
 % If draft is in the document class list, pix are just suggested
 % by an outline, the pic does not appear as a picture.
 %
-\newcommand{\docdate}{July 29, 2015}
+\newcommand{\docdate}{August 6, 2015}
 %
 \usepackage{ifthen}
 \newcommand{\ifthen}[2]{\ifthenelse{#1}{#2}{}}
@@ -22,15 +22,16 @@
 %\renewcommand{\familydefault}{phv}  % font family helvetica
 %
 
-\usepackage{url} 	   % For color in letters. Links instead?
-\usepackage[usenames]{color} % For color in letters. Links instead?
-\usepackage{ellipsis} 	   % Provides ... as \dots
+\usepackage{url} 	   % for color in letters. Links instead?
+\usepackage[usenames]{color}%for color in letters. Links instead?
+\usepackage{ellipsis} 	   % provides ... as \dots
+\usepackage[utf8]{inputenc}% to type directly diacritic characters
 %\usepackage{color}
 \usepackage{listings}
 \usepackage{alltt}
 \lstset{ %
 language={},               % choose the language of the code
-basicstyle=\footnotesize\ttfamily,  % the size of the fonts that are used for the code
+basicstyle=\footnotesize\ttfamily, % the size of the fonts that are used for the code
 numbers=none,              % where to put the line-numbers
 numberstyle=\footnotesize, % the size of the fonts that are used for the line-numbers
 numberfirstline=true,
@@ -51,7 +52,10 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \usepackage{float}
 \restylefloat{figure}
 \usepackage{amsmath}       % Provides \nobreakdash
+\usepackage{amssymb}       % maths
 \usepackage{graphicx}      % For pictures
+\usepackage{epstopdf}      % Autoconvert .eps to .pdf
+\epstopdfsetup{suffix=-generated} % Mark generaed PDF as such
 \usepackage{longtable}     % For multipage tables
 \usepackage{hhline}        % Single column horizontal lines
 \usepackage{varioref}      % defines \vref
@@ -63,12 +67,17 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \usepackage{changepage}    % For odd/even page checks
 \usepackage[usenames,dvipsnames]{xcolor}
 \usepackage{lscape}        % For landscape mode (Appendix B)
-\usepackage{tikz}	   % graphics (Appendix B)
+\usepackage{tikz}	   % graphics (Name Index (Fig 6.1), Appendix B)
+\usetikzlibrary{arrows}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{calc}
+\usetikzlibrary{chains}
+\usetikzlibrary{decorations.pathreplacing}
 \usetikzlibrary{shapes.geometric}
 \usetikzlibrary{shapes.multipart}
-\usetikzlibrary{arrows,decorations.pathmorphing}
+\usetikzlibrary{shapes.symbols}
 \usepackage{changebar}     % For change bars in margin
-\usepackage{amssymb}       % For math symbols
 \usepackage{makeidx}       % For making an index
 % hyperref must be the last package listed.
 % The hyperref settings helps hypertext get links right in the 
@@ -86,9 +95,6 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
     \item[]%
   }
   {\end{list}}
-
-% broken somehow.
-%\newcommand{\myindent1}[1]{\begin{myindentpara}{1cm}#1\end{myindentpara}}
 
 \hypersetup{colorlinks=true,
   %bookmarks=true,
@@ -217,6 +223,10 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \newcommand{\definitionx}[1]{\definition{\addtoindex{#1}}}
 \include{dwarfnamecmds}
 
+% Define commands for pgf use in the name index figure (Fig 6.1)
+%
+\include{pgfcmdsfornameindexfig}
+
 %--- Begin the document pages
 %
 \begin{document}
@@ -330,8 +340,8 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \include{programscope}                  \emptypage
 \include{dataobject}                    %\emptypage
 \include{typeentries}                   %\emptypage
-\include{otherdebugginginformation} 	%\emptypage
-\include{datarepresentation}            \emptypage
+\include{otherdebugginginformation} 	\emptypage
+\include{datarepresentation}            %\emptypage
 
 %  The \appendix command toggles us into appendix chapters
 \appendix
@@ -341,7 +351,7 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \include{encodingdecoding}              \emptypage
 \include{examples}                      %\emptypage
 \include{compression}                   \emptypage
-\include{splitobjects}			%\emptypage
+\include{splitobjects}			\emptypage
 \include{sectionversionnumbers}         \emptypage
 \include{gnulicense}                    \emptypage
 

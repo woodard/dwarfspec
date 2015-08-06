@@ -215,7 +215,7 @@ units.
 
 
 \begin{table}[h]
-\caption{Unit Attributes by Unit Kind}
+\caption{Unit attributes by unit kind}
 \label{tab:unitattributesbyunitkind}
 \begin{tabular}{P{5.5cm}|ccccc}
 \hline
@@ -909,13 +909,13 @@ that belongs to that unit.
 As an example, consider a package file, \texttt{demo.dwp}, formed by
 combining \texttt{demo1.dwo} and \texttt{demo2.dwo} from the previous example
 (see Appendix \refersec{app:splitdwarfobjectfileexample}). The
-resulting package file would contain the sections shown in Table
+resulting package file would contain the sections shown in Figure
 \refersec{fig:sectionsandcontributionsinapackagefile}, 
 with contributions from each input file as shown.
+\eb
 
-\begin{table}[h]
-\caption{Sections and contributions in a package file}
-\label{fig:sectionsandcontributionsinapackagefile}
+\begin{figure}[h]
+\bb
 \begin{center}
 \begin{tabular}{P{4.7cm}|P{8cm}}
 \hline
@@ -955,9 +955,13 @@ with contributions from each input file as shown.
 \hline
 \end{tabular}
 \end{center}
-\end{table}
+\caption{Sections and contributions in a package file}
+\label{fig:sectionsandcontributionsinapackagefile}
+\eb
+\end{figure}
 
 \needlines{4}
+\bb
 The \dotdebugabbrevdwo{}, \dotdebuglocdwo{} and \dotdebuglinedwo{}
 sections have been copied over from the two \texttt{.dwo} files as
 individual contributions to the corresponding sections in the
@@ -983,7 +987,7 @@ the correct offset in the merged string table.
 
 The \dotdebugcuindex{} and \dotdebugtuindex{} sections provide a
 directory to these contributions. 
-Table \referfol{fig:examplecuindexsection} shows an example CU
+Figure \referfol{fig:examplecuindexsection} shows an example CU
 index section containing the two compilation units from 
 \texttt{demo1.dwo} and \texttt{demo2.dwo}. The CU index shows that 
 for the compilation unit from \texttt{demo1.dwo}, with \CUsignature{} 
@@ -994,18 +998,19 @@ unit from \texttt{demo2.dwo}, with \CUsignature{}
 section begins at offset 325, and is 673 bytes long.
 
 Likewise, we can find the contributions to the related sections.
-In Figure \referfol{fig:splitobjectexampledemo2dwodwarfdebuglocdwoexcerpts}, 
+In Figure \refersec{fig:splitobjectexampledemo2dwodwarfdebuglocdwoexcerpts}, 
 we see that the \DWTAGvariable{} DIE at \texttt{7\$} has a
 reference to a location list at offset 0x49 (decimal 73). Because
 this is part of the compilation unit for \texttt{demo2.dwo}, with 
 unit signature \texttt{0xb5f0ecf455e7e97e}, we see that its contribution 
 to \dotdebuglocdwo{} begins at offset 84, so the location list from
-Figure F.8 can be found in \texttt{demo.dwp} at offset 157 (84 + 73) in
+Figure {fig:splitobjectexampledemo2dwodwarfdebuglocdwoexcerpts} 
+can be found in \texttt{demo.dwp} at offset 157 (84 + 73) in
 the combined \dotdebuglocdwo{} section.
+\eb
 
-\begin{table}[h]
-\caption{Example CU index section}
-\label{fig:examplecuindexsection}
+\begin{figure}[h]
+\bb
 \begin{center}
 \begin{tabular}{lrrrrrr}
 \hline \\
@@ -1028,10 +1033,14 @@ the combined \dotdebuglocdwo{} section.
 \\ \hline 
 \end{tabular}
 \end{center}
-\end{table}
+\caption{Example CU index section}
+\label{fig:examplecuindexsection}
+\eb
+\end{figure}
 
 \needlines{4}
-Table \referfol{fig:exampletuindexsection} 
+\bb
+Figure \referfol{fig:exampletuindexsection} 
 shows an example TU index section containing the
 three type units for classes \texttt{Box}, \texttt{Point}, and 
 \texttt{Line}. Each type unit
@@ -1046,10 +1055,10 @@ from \texttt{demo2.dwo}. (The
 sharing of these tables between compilation units and type units
 is typical for some implementations, but is not required by the
 DWARF standard.)
+\eb
 
-\begin{table}[h]
-\caption{Example TU index section}
-\label{fig:exampletuindexsection}
+\begin{figure}[h]
+\bb
 \begin{center}
 \begin{tabular}{lrrrrr}
 \hline
@@ -1075,6 +1084,8 @@ DWARF standard.)
 \hline
 \end{tabular}
 \end{center}
-\end{table}
-
+\caption{Example TU index section}
+\label{fig:exampletuindexsection}
 \eb
+\end{figure}
+

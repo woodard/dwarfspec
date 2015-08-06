@@ -88,8 +88,72 @@ format definition itself. The several appendices consist only
 of explanatory or supplementary material, and are not part
 of the formal definition.
 
-\section{Vendor Extensibility}
+\bb
+\section{Objectives and Rationale}
 
+DWARF has had a set of objectives since its inception which have guided the design and evolution of the debugging format.  A discussion of these objectives and the rationale behind them may help with an understanding of the DWARF Debugging Format. 
+
+Although DWARF Version 1 was developed in the late 1980's as a format to support debugging C programs written for AT\&T hardware running SVR4, DWARF Version 2 and later has evolved far beyond this origin. One difference between DWARF and other object formats is that the latter are often specific to a particular language, architecture, and/or operating system. 
+
+\subsection{Language Independence}
+DWARF is applicable to a broad range of existing procedural languages and is designed to be extensible to future languages.  These languages may be considered to be "C-like" but the characteristics of C are not incorporated into DWARF Version 2 and later, unlike DWARF Version 1 and other debugging formats.  DWARF abstracts concepts as much as possible so that the description can be used to describe a program in any language. As an example, the DWARF descriptions used to describe C functions, Pascal subroutines, and Fortran subprograms are all the same, with different attributes used to specify the differences between these similar programming language features. 
+
+On occasion, there is a feature which is specific to one particular language and which doesn't appear to have more general application.  For these, DWARF has a description designed to meet the language requirements, although, to the extent possible, an effort is made to generalize the attribute. An example of this is the \DWTAGconditionNAME{} DIE, which is used to describe \addtoindex{COBOL} level 88 conditions, which is described in abstract terms rather than COBOL-specific terms.  Conceivably, this TAG might be used with a different language which had similar functionality. 
+
+\subsection{Architecture Independence}
+DWARF can be used with a wide range of processor architectures, whether byte or word oriented, linear or segmented, with any word or byte size.  DWARF can be used with Von Neumann architectures, using a single address space for both code and data; Harvard architectures, with 
+separate code and data address spaces; and potentially for other architectures such as DSPs with their idiosyncratic memory organizations.  DWARF can be used with common register-oriented architectures or with stack architectures. 
+
+DWARF assumes that memory has individual units (words or bytes) which have unique addresses which are ordered.  (Some architectures like the i386 can represent the same physical machine location with different segment/offset pairs.  Identifying aliases is an implementation issue.)
+
+\subsection{Operating System Independence}
+DWARF is widely associated with SVR4 Unix and similar operating systems like BSD and Linux.  DWARF fits well with the section organization of the ELF object file format. Nonetheless, DWARF attempts to be independent of either the OS or the object file format.  There have been implementations of DWARF debugging data in OMF or COFF object files. 
+
+DWARF assumes that any object file format will be able to distinguish the various DWARF data sections in some fashion, preferably by name. 
+
+DWARF makes a few assumptions about functionality provided by the underlying operating system.  DWARF data sections can be read sequentially and independently, for example, to read the \dotdebugabbrev{} section before the \dotdebuginfo{} section.  Each DWARF data section is a sequential sequence of 8-bit bytes, numbered starting with zero.  The presence of offsets from one DWARF data section into other data sections does not imply that the underlying OS must be able to position files randomly; a data section could be read sequentially and indexed using the offset. 
+
+\subsection{Compact Data Representation} 
+The DWARF description is designed to be a compact file-oriented representation. In most cases, it is anticipated that DWARF debug data will be read by a consumer (usually a debugger) and converted into a more efficiently accessed internal representation.  For the most part, the DWARF data in a section is not the same as this internal representation. 
+
+There are several encodings which achieve this goal, such as the TAG and attribute abbreviations or the line number encoding.  References from one section to another, especially to refer to strings, allow these sections to be compacted to eliminate duplicate data. 
+
+There are multiple schemes for eliminating duplicate data or reducing the size of the DWARF debug data associated with a given file.  These include COMDAT, used to eliminate duplicate function or data definitions, the split DWARF object files which allow a consumer to find DWARF data in files other than the executable, or the type units, which allow similar type definitions from multiple compilations to be combined. 
+
+There is a tension between this objective and the following objective. Every compaction scheme results in more processing which needs to be performed to process the DWARF debug data. 
+
+\subsection{Efficient Processing} 
+DWARF is designed to be processed efficiently, so that a producer (a compiler) can generate the debug descriptions incrementally and a consumer can read only the descriptions which it needs at a given time. The data formats are designed to be efficiently interpreted by a consumer.
+
+As mentioned, there is a tension between this objective and the preceding one.  A DWARF data representation which resembles an internal data representation may lead to faster processing, but at the expense of larger data files. This may also constrain the possible implementations.
+
+\subsection{Implementation Independence}
+DWARF attempts to allow developers the greatest flexibility in designing implementations, without mandating any particular design decisions.  We avoid issues which can be described as “Quality of Implementation”, where the decisions made by an implementer may affect performance or functionality.  
+
+\subsection{Explicit rather than Implicit Description}
+DWARF describes the source to object translation explicitly rather than using common practice or convention as an implicit understanding between producer and consumer.  For example, where other debugging formats assume that a debugger knows how to unwind the stack, moving from one stack frame to the next using implicit knowledge about the architecture or operating system, DWARF makes this explicit in the Call Frame Information description.
+
+\subsection{Avoid Duplication of Information}
+DWARF has a goal of describing characteristics of a program once, rather than repeating the same information multiple times.  The string sections can be compacted to eliminate duplicate strings, for example.  Other compaction schemes or references between sections support this.
+Whether a particular implementation is effective at eliminating duplicate data, or even attempts to, is a Quality of Implementation issue.  
+
+\subsection{Leverage Other Standards}
+Where another standard exists which describes how to interpret aspects of a program, DWARF defers to that standard rather than attempting to duplicate the description.  For example, C++ has specific rules for deciding which function to call depending name, scope, argument types, and other factors.  DWARF describes the functions and arguments, but doesn't attempt to describe how one would be selected by a consumer performing any particular operation.
+
+\subsection{Limited Dependence on Tools}
+DWARF data is designed so that it can be processed by commonly available assemblers, linkers, and other support programs, without requiring additional functionality specifically to support DWARF data.  This may require the implementer to be careful that they do not generate DWARF data which cannot be processed by these programs.  
+Conversely, an assembler which can generate LEB128 values may allow the compiler to generate more compact descriptions, and a linker which understands the format of string sections can merge these sections.  Whether or not an implementation includes these functions is a Quality of Implementation issue, not mandated by the DWARF specification.
+
+\subsection{Separate Description from Implementation}
+DWARF intends to describe the translation of a program from source to object, while neither mandating any particular design nor making any other design difficult.  For example, DWARF describes how the arguments and local variables in a function are to be described, but doesn't specify how this data is collected or organized by a producer.  
+Where a particular DWARF feature anticipates that it will be implemented in a certain fashion, non-normative text will suggest but not require this design.
+
+\subsection{Permissive rather than Prescriptive}
+The DWARF Standard specifies the meaning of DWARF descriptions.  It does not specify what a particular producer should generate for any source to object conversion, nor what a particular consumer should do with this description.  DWARF is permissive, allowing different producer to generate different descriptions for the same source to object conversion.  As long as the DWARF description follows this specification, the producer is generating valid DWARF.
+For example, DWARF allows producers to identify the end of a function prologue in the Line Information so that a debugger can stop at this location.  A producer which does this is generating valid DWARF, as is another which doesn't.  
+
+\subsection{Vendor Extensibility}
+\eb
 This document does not attempt to cover all interesting
 languages or even to cover all of the possible debugging
 information needs for its primary target languages. 
@@ -109,9 +173,9 @@ All
 names and values not reserved for vendor additions, however,
 are reserved for future versions of this document.
 
-DWARF is intended to be permissive rather than
-prescriptive. 
+\bb
 Where this specification provides a means for
+\eb
 describing the source language, implementors are expected
 to adhere to that specification. 
 For language features that
@@ -149,6 +213,7 @@ extensions. It also adds a string section specific to the line number table
 (\dotdebuglinestr)
 to properly support the common practice of stripping all DWARF sections
 except for line number information.
+\needlines{4}
 \item Add a split object file and package representations to allow most 
 DWARF information to be compacted and/or kept separate from an executable 
 or shared image. This includes new sections 
