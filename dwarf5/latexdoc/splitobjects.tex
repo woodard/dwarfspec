@@ -557,7 +557,7 @@ the new form code \DWFORMaddrx, referring to slots in the
 \DWATaddrbase{} in the skeleton compilation unit.
 \end{itemize}
 
-Figure \refersec{fig:splitobjectexampledemo1dwodwarfexcerpts} presents
+Figure \refersec{fig:splitobjectexampledemoonedwodwarfexcerpts} presents
 some excerpts from the \dotdebuginfodwo{} section for \texttt{demo1.dwo}.
 
 \begin{figure}[h]
@@ -602,7 +602,7 @@ some excerpts from the \dotdebuginfodwo{} section for \texttt{demo1.dwo}.
 \end{alltt}
 \end{dwflisting}
 \caption{Split object example: \texttt{demo1.dwo} excerpts}
-\label{fig:splitobjectexampledemo1dwodwarfexcerpts}
+\label{fig:splitobjectexampledemoonedwodwarfexcerpts}
 \end{figure}
         
 \begin{figure}
@@ -655,7 +655,7 @@ some excerpts from the \dotdebuginfodwo{} section for \texttt{demo1.dwo}.
 \end{dwflisting}
 \begin{center}
 \vspace{3mm}
-Figure~\ref{fig:splitobjectexampledemo1dwodwarfexcerpts}: Split object example: \texttt{demo1.dwo} DWARF excerpts \textit{(concluded)}
+Figure~\ref{fig:splitobjectexampledemoonedwodwarfexcerpts}: Split object example: \texttt{demo1.dwo} DWARF excerpts \textit{(concluded)}
 \end{center}
 \end{figure}
 
@@ -734,10 +734,10 @@ section has a similar format to the \dotdebugloc{} section in a
 non-split object, but it has some small differences as explained
 in Section \refersec{datarep:locationlistentriesinsplitobjects}. 
 In \texttt{demo2.dwo} as shown in 
-Figure \refersec{fig:splitobjectexampledemo2dwodwarfdebuginfodwoexcerpts}, 
+Figure \refersec{fig:splitobjectexampledemotwodwodwarfdebuginfodwoexcerpts}, 
 the debugging information for \texttt{Line::clip} describes a local 
 variable \texttt{slope} whose location varies based on the PC.
-Figure \refersec{fig:splitobjectexampledemo2dwodwarfdebuglocdwoexcerpts} 
+Figure \refersec{fig:splitobjectexampledemotwodwodwarfdebuglocdwoexcerpts} 
 presents some excerpts from the \dotdebuginfodwo{} section for 
 \texttt{demo2.dwo}.
 
@@ -764,7 +764,7 @@ presents some excerpts from the \dotdebuginfodwo{} section for
 \end{alltt}
 \end{dwflisting}
 \caption{Split object example: \texttt{demo2.dwo} DWARF \dotdebuginfodwo{} excerpts}
-\label{fig:splitobjectexampledemo2dwodwarfdebuginfodwoexcerpts}
+\label{fig:splitobjectexampledemotwodwodwarfdebuginfodwoexcerpts}
 \end{figure}
 
 \begin{figure}
@@ -805,16 +805,16 @@ presents some excerpts from the \dotdebuginfodwo{} section for
 \end{dwflisting}
 \begin{center}
 \vspace{3mm}
-Figure~\ref{fig:splitobjectexampledemo2dwodwarfdebuginfodwoexcerpts}: Split object example: \texttt{demo2.dwo} DWARF \dotdebuginfodwo{} excerpts \textit{(concluded)}
+Figure~\ref{fig:splitobjectexampledemotwodwodwarfdebuginfodwoexcerpts}: Split object example: \texttt{demo2.dwo} DWARF \dotdebuginfodwo{} excerpts \textit{(concluded)}
 \end{center}
 \end{figure}
 
-In Figure \refersec{fig:splitobjectexampledemo2dwodwarfdebuginfodwoexcerpts},
+In Figure \refersec{fig:splitobjectexampledemotwodwodwarfdebuginfodwoexcerpts},
 The \DWTAGformalparameter{} entries at \texttt{4\$} and \texttt{5\$} refer to the
 location lists at offset \texttt{0x0} and \texttt{0x2a}, respectively, and the
 \DWTAGvariable{} entry for \texttt{slope} at \texttt{7\$} refers to the location
 list at offset \texttt{0x49}. 
-Figure \refersec{fig:splitobjectexampledemo2dwodwarfdebuglocdwoexcerpts}
+Figure \refersec{fig:splitobjectexampledemotwodwodwarfdebuglocdwoexcerpts}
 shows a representation of the
 location lists at those offsets in the \dotdebuglocdwo{} section.
 
@@ -846,7 +846,7 @@ location lists at those offsets in the \dotdebuglocdwo{} section.
 \end{tabular}
 \end{dwflisting}
 \caption{Split object example: \texttt{demo2.dwo} DWARF \dotdebuglocdwo{} excerpts}
-\label{fig:splitobjectexampledemo2dwodwarfdebuglocdwoexcerpts}
+\label{fig:splitobjectexampledemotwodwodwarfdebuglocdwoexcerpts}
 \end{figure}
 
 In each \DWLLEstartlengthentry{}, the start field is the index
@@ -998,13 +998,13 @@ unit from \texttt{demo2.dwo}, with \CUsignature{}
 section begins at offset 325, and is 673 bytes long.
 
 Likewise, we can find the contributions to the related sections.
-In Figure \refersec{fig:splitobjectexampledemo2dwodwarfdebuglocdwoexcerpts}, 
+In Figure \refersec{fig:splitobjectexampledemotwodwodwarfdebuglocdwoexcerpts}, 
 we see that the \DWTAGvariable{} DIE at \texttt{7\$} has a
 reference to a location list at offset 0x49 (decimal 73). Because
 this is part of the compilation unit for \texttt{demo2.dwo}, with 
 unit signature \texttt{0xb5f0ecf455e7e97e}, we see that its contribution 
 to \dotdebuglocdwo{} begins at offset 84, so the location list from
-Figure {fig:splitobjectexampledemo2dwodwarfdebuglocdwoexcerpts} 
+Figure \refersec{fig:splitobjectexampledemotwodwodwarfdebuglocdwoexcerpts} 
 can be found in \texttt{demo.dwp} at offset 157 (84 + 73) in
 the combined \dotdebuglocdwo{} section.
 \eb
