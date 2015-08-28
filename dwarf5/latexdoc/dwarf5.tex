@@ -3,25 +3,18 @@
 % If draft is in the document class list, pix are just suggested
 % by an outline, the pic does not appear as a picture.
 %
-\newcommand{\docdate}{August 17, 2015}
+\newcommand{\docdate}{August 27, 2015}
 %
 \usepackage{ifthen}
-\newcommand{\ifthen}[2]{\ifthenelse{#1}{#2}{}}
-\newboolean{isdraft}\setboolean{isdraft}{true}
+    \newcommand{\ifthen}[2]{\ifthenelse{#1}{#2}{}}
+    \newboolean{isdraft}\setboolean{isdraft}{true}
+    \newboolean{uselinenos}\setboolean{uselinenos}{true}
 \newcommand{\draftmark}{\ifthenelse{\boolean{isdraft}}{*** DRAFT ***}{}}
 %
 \usepackage[T1]{fontenc}
 \usepackage{palatino}
 \usepackage{cmtt}
-\renewcommand{\ttdefault}{cmtt}	% Use Computer Modern Typewriter instead of Courier
-%\usepackage{ascii}
-%\renewcommand{\ttdefault}{ascii}
-%\renewcommand{\ttfamily}{\asciifamily}
-%\usepackage{microtype}
-%\DisableLigatures[f]{encoding=T1}
-%\renewcommand{\familydefault}{phv}  % font family helvetica
-%
-
+    \renewcommand{\ttdefault}{cmtt}	% Use Computer Modern Typewriter instead of Courier
 \usepackage{url} 	   % for color in letters. Links instead?
 \usepackage[usenames]{color}%for color in letters. Links instead?
 \usepackage{ellipsis} 	   % provides ... as \dots
@@ -50,33 +43,34 @@ breakatwhitespace=false,   % sets if automatic breaks should only happen at whit
 escapeinside={\%*}{*)}     % if you want to add a comment within your code
 }
 \usepackage{float}
-\restylefloat{figure}
+    \restylefloat{figure}
 \usepackage{amsmath}       % Provides \nobreakdash
 \usepackage{amssymb}       % maths
 \usepackage{graphicx}      % For pictures
 \usepackage{epstopdf}      % Autoconvert .eps to .pdf
-\epstopdfsetup{suffix=-generated} % Mark generaed PDF as such
+    \epstopdfsetup{suffix=-generated} % Mark generaed PDF as such
+\usepackage{lineno}        % line numbers
 \usepackage{longtable}     % For multipage tables
 \usepackage{hhline}        % Single column horizontal lines
 \usepackage{varioref}      % defines \vref
-% \textregistered is the trademark symbol
+%   \textregistered is the trademark symbol
 \usepackage[headheight=16pt,paper=letterpaper]{geometry}
-\setlength{\headheight}{15pt}  % avoids warning from latex
+    \setlength{\headheight}{15pt}  % avoids warning from latex
 \usepackage{needspace}     % For assuring space remaining on a page
 \usepackage{ifthen}        % For conditional processing
 \usepackage{changepage}    % For odd/even page checks
 \usepackage[usenames,dvipsnames]{xcolor}
 \usepackage{lscape}        % For landscape mode (Appendix B)
 \usepackage{tikz}	   % graphics (Name Index (Fig 6.1), Appendix B)
-\usetikzlibrary{arrows}
-\usetikzlibrary{arrows.meta}
-\usetikzlibrary{backgrounds}
-\usetikzlibrary{calc}
-\usetikzlibrary{chains}
-\usetikzlibrary{decorations.pathreplacing}
-\usetikzlibrary{shapes.geometric}
-\usetikzlibrary{shapes.multipart}
-\usetikzlibrary{shapes.symbols}
+    \usetikzlibrary{arrows}
+    \usetikzlibrary{arrows.meta}
+    \usetikzlibrary{backgrounds}
+    \usetikzlibrary{calc}
+    \usetikzlibrary{chains}
+    \usetikzlibrary{decorations.pathreplacing}
+    \usetikzlibrary{shapes.geometric}
+    \usetikzlibrary{shapes.multipart}
+    \usetikzlibrary{shapes.symbols}
 \usepackage{changebar}     % For change bars in margin
 \usepackage{makeidx}       % For making an index
 % hyperref must be the last package listed.
@@ -171,7 +165,7 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \newcommand{\needlines}[1]{\needspace{#1\baselineskip}}
 
 % Helper for item lists with bold subject markers
-\newcommand{\itembf}[1]{\item \textbf{#1}}
+\newcommand{\itembf}[1]{\needlines{4} \item \textbf{#1}}
 \newcommand{\itembfnl}[1]{\itembf{#1} \\}
 
 % And description lists with normal (not bold) text
@@ -181,7 +175,11 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \newcommand{\emptypage}{
     \clearpage
     \vspace*{4in}
-    \begin{center} \textit{(empty page)} \end{center}
+    \begin{nolinenumbers}
+    \begin{center} 
+        \textit{(empty page)} 
+    \end{center}
+    \end{nolinenumbers}
     }
 
 % Define a new column type P that is just like p except
@@ -213,9 +211,12 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 % Complement of \isundefined
 \newcommand{\isdefined}[1]{\not{\isundefined{#1}}}
 
+\newcommand{\uselinenos}{\ifthen{\boolean{uselinenos}}{\linenumbers*}}
+
 % Preferred changebar asliases
 \newcommand{\bb}{\cbstart}      % Begin (change) bar
 \newcommand{\eb}{\cbend}        % End (change) bar
+\newcommand{\bbpareb}{\bb~\eb\vspace{-1.5\baselineskip}} % Mark deleted paragraph
 
 % Define commands for all of the DWARF names (DW\_*, .debug_*, a few others)
 %
@@ -335,25 +336,26 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 % Define the levels of sectionality that are numbered.
 \setcounter{secnumdepth}{5}
 
-\include{introduction}                  %\emptypage
-\include{generaldescription}            \emptypage
-\include{programscope}                  \emptypage
-\include{dataobject}                    %\emptypage
-\include{typeentries}                   %\emptypage
-\include{otherdebugginginformation} 	\emptypage
-\include{datarepresentation}            %\emptypage
+\uselinenos\include{introduction}              %\emptypage
+\uselinenos\include{generaldescription}        %\emptypage
+\uselinenos\include{programscope}              \emptypage
+\uselinenos\include{dataobject}                %\emptypage
+\uselinenos\include{typeentries}               %\emptypage
+\uselinenos\include{otherdebugginginformation} \emptypage
+\uselinenos\include{datarepresentation}        %\emptypage
 
 %  The \appendix command toggles us into appendix chapters
 \appendix
 
-\include{attributesbytag}		%\emptypage
-\include{debugsectionrelationships}     \emptypage
-\include{encodingdecoding}              \emptypage
-\include{examples}                      %\emptypage
-\include{compression}                   \emptypage
-\include{splitobjects}			\emptypage
-\include{sectionversionnumbers}         \emptypage
-\include{gnulicense}                    \emptypage
+\uselinenos\include{attributesbytag}	       %\emptypage
+\uselinenos\include{debugsectionrelationships} \emptypage
+\uselinenos\include{encodingdecoding}          \emptypage
+\uselinenos\include{examples}                  %\emptypage
+\uselinenos\include{compression}               \emptypage
+\uselinenos\include{splitobjects}	       \emptypage
+\uselinenos\include{sectionversionnumbers}     \emptypage
+\nolinenumbers
+\include{gnulicense}                           \emptypage
 
 % Maybe someday the selected glossary concept will be of interest...
 %\include{selectedglossary}             %\emptypage

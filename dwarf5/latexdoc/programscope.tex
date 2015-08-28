@@ -4,8 +4,8 @@ This section describes debugging information entries that
 relate to different levels of program scope: compilation,
 module, subprogram, and so on. Except for separate type
 entries (see Section \refersec{chap:typeunitentries}), 
-these entries may be thought of
-as bounded by ranges of text addresses within the program.
+these entries may be thought of as
+\bb\eb ranges of text addresses within the program.
 
 \section{Unit Entries}
 \label{chap:unitentries}
@@ -21,10 +21,7 @@ related partial compilation units and/or type units.
 
 \item A \definition{partial compilation unit} describes
 a part of a compilation (generally corresponding to an
-\bb
-imported module) 
-\eb
-which is imported into one or more 
+imported module) which is imported into one or more 
 related full compilation units.
 
 \item A \definition{type unit} is a specialized unit
@@ -63,9 +60,7 @@ is part of the same object file as the compiled code and data.}
 
 \begin{itemize}
 \item A 
-\bb
 \definition{split compilation unit} describes
-\eb
 a complete compilation, possibly in combination with
 related type compilation units. It corresponds 
 to a specific skeleton compilation unit.
@@ -78,7 +73,11 @@ be usefully shared by multiple other units.
 
 \textit{Split compilation units and split type units may be 
 contained in object files separate from those containing the 
-program code and data.}
+program code and data.
+\bb
+These object files are not processed by a linker; thus,
+split units do not depend on underlying object file relocations.
+\eb}
 
 \textit{Either a full compilation unit or a partial compilation 
 unit may be logically incorporated into another compilation unit 
@@ -86,9 +85,7 @@ using an \addtoindex{imported unit entry}
 (see Section \refersec{chap:importedunitentries}).}
 
 \textit{A
-\bb
 combined split and partial
-\eb
 compilation unit kind is not defined.}
 
 \textit{In the remainder of this document, the word 
@@ -492,9 +489,7 @@ compilation unit.
 \livetarg{chap:DWATdwoidforunit}{}
 A \DWATdwoidDEFN{} attribute\addtoindexx{unit identification attribute}
 whose implementation-defined integer constant value,
-\bb
 known as the \CUsignature,
-\eb
 provides unique identification of this compilation unit
 as well as the associated split compilation unit in the
 object file named in the \DWATdwoname{}
@@ -504,11 +499,9 @@ split full compilation unit
 (see Section \refersec{chap:splitfullcompilationunitentries})
 must use the same form to encode this identification value.
 
-\bb
 \textit{The means of determining a \CUsignature{} does not 
 need to be similar or related to the means of determining a
 \TUsignature.}
-\eb 
 
 \end{enumerate}
 
@@ -589,9 +582,7 @@ A split full compilation unit has a \DWATdwoid{} attribute:
 \item
 A \DWATdwoidDEFN{} attribute\addtoindexx{unit identification attribute}
 whose implementation-defined integer constant value,
-\bb
 known as the \CUsignature,
-\eb
 provides unique identification of this compilation unit
 as well as the associated skeleton compilation unit.
 For simplicity, the \DWATdwoidNAME{} attributes in the 
@@ -599,11 +590,9 @@ split compilation unit and the associated skeleton
 compilation unit must use the same form to encode the 
 identification value.
 
-\bb
 \textit{The means of determining a \CUsignature{} does not 
 need to be similar or related to the means of determining a
 \TUsignature.}
-\eb 
 
 \end{enumerate}
 
@@ -919,7 +908,7 @@ attribute in any namespace extension entry of this namespace).
 \textit{A compiler emitting namespace information may choose to
 explicitly represent namespace extensions, or to represent the
 final namespace declaration of a compilation unit; this is a
-quality\dash of\dash implementation issue and no specific requirements
+quality-of-implementation issue and no specific requirements
 are given here. If only the final namespace is represented,
 \addtoindexx{namespace (C++)!using declaration}
 it is impossible for a debugger to interpret using declaration

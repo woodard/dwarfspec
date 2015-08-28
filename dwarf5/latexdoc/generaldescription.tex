@@ -100,8 +100,11 @@ described in Chapters 3, 4 and 5.
 \end{table}
 
 
-\textit{The debugging information entry descriptions 
-in Sections 3, 4 and 5 generally include mention of
+\textit{The debugging information entry descriptions in
+\bb
+Chapters
+\eb
+3, 4 and 5 generally include mention of
 most, but not necessarily all, of the attributes 
 that are normally or possibly used with the entry.
 Some attributes, whose applicability tends to be 
@@ -118,27 +121,21 @@ among others.}
 The debugging information entries are contained in the 
 \dotdebuginfo{} and/or \dotdebuginfodwo{} sections of an object file.
 
-\needlines{7}
+\needlines{4}
 Optionally, debugging information may be partitioned such
 that the majority of the debugging information can remain in
 individual object files without being processed by the
-linker. These debugging information entries are contained in
-the \dotdebuginfodwo{} sections. These
-sections may be placed in the object file but marked so that
-the linker ignores them, or they may be placed in a separate
-DWARF object file that resides alongside the normal object
-file. See Section \refersec{datarep:splitdwarfobjectfiles} and
+linker. 
+\bb\eb
+See Section \refersec{datarep:splitdwarfobjectfiles} and
 Appendix \refersec{app:splitdwarfobjectsinformative} for details.
 
+\needlines{4}
 As a further option, debugging information entries and other debugging
 information that are the same in multiple executable or shared object files 
 may be found in a separate \addtoindex{supplementary object file} that 
 contains supplementary debug sections.
-The executable or shared object file which contains references to
-those debugging information entries contain a \dotdebugsup{} section
-with information that identifies the \addtoindex{supplementary object file}; 
-the \addtoindex{supplementary object file} contains a variant of this same section
-that is used to unambiguously associate it with the referencing object.
+\bb\eb
 See Section \refersec{datarep:dwarfsupplemetaryobjectfiles} for
 further details.
  
@@ -239,10 +236,10 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 \DWATbitstrideTARG{} 
 &\livelinki{chap:DWATbitstridearrayelementstrideofarraytype}
            {Array element stride (of array type)}
-           {array element stride (of array type)} \\
+           {array element stride (of array type)} \\*
 &\livelinki{chap:DWATbitstridesubrangestridedimensionofarraytype}
            {Subrange stride (dimension of array type)}
-           {subrange stride (dimension of array type)} \\
+           {subrange stride (dimension of array type)} \\*
 &\livelinki{chap:DWATbitstrideenumerationstridedimensionofarraytype}
            {Enumeration stride (dimension of array type)}
            {enumeration stride (dimension of array type)} \\
@@ -791,6 +788,7 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 \addtoindexx{class of attribute value!string|see {string class}}
 \addtoindexx{class of attribute value!stroffsetsptr|see {stroffsetsptr class}}
 
+\needlines{6}
 The permissible values
 \addtoindexx{attribute value classes}
 for an attribute belong to one or more classes of attribute
@@ -801,8 +799,11 @@ of a single piece of constant data.
 \doublequote{Constant data}
 is the class of attribute value that those attributes may have. 
 There are several representations of constant data,
-however (one, two, four, or eight bytes, and variable length
-data). 
+\bb
+including fixed length data of one, two, four, eight or 16 bytes 
+in size, 
+\eb
+and variable length data). 
 The particular representation for any given instance
 of an attribute is encoded along with the attribute name as
 part of the information that guides the interpretation of a
@@ -832,10 +833,12 @@ to one of the classes shown in Table \referfol{tab:classesofattributevalue}.
 
 \hypertarget{chap:classaddrptr}{}
 \livelinki{datarep:classaddrptr}{addrptr}{addrptr class}
-&Refers to a base location in the DWARF section that holds
-a series of machine address values. Certain attributes \mbox{refer}
-one of these addresses by indexing relative to this base
-location.
+&
+\bb
+Specifies a location in the DWARF section that holds
+a series of machine address values. Certain attributes use
+one of these addresses by indexing relative to this location.
+\eb
 \\
 
 \hypertarget{chap:classblock}{}
@@ -845,15 +848,13 @@ location.
  
 \hypertarget{chap:classconstant}{}
 \livelinki{datarep:classconstant}{constant}{constant class}
-&One, two, four or eight bytes of uninterpreted data, or data
+&One, two, four, eight 
+\bb
+or sixteen 
+\eb
+bytes of uninterpreted data, or data
 encoded in the variable length format known as LEB128 
 (see Section \refersec{datarep:variablelengthdata}).
-
-\textit{Most constant values are integers of one kind or
-another (codes, offsets, counts, and so on); these are
-sometimes called \doublequote{integer constants} for emphasis.}
-\addtoindexx{integer constant}
-\addtoindexx{constant class!integer}
 \\
 
 \hypertarget{chap:classexprloc}{}
@@ -868,29 +869,45 @@ sometimes called \doublequote{integer constants} for emphasis.}
 
 \hypertarget{chap:classlineptr}{}
 \livelinki{datarep:classlineptr}{lineptr}{lineptr class}
-&Refers to a location in the DWARF section that holds line number information.
+&
+\bb
+Specifies
+\eb
+a location in the DWARF section that holds line number information.
 \\
 
 \hypertarget{chap:classloclistptr}{}
 \livelinki{datarep:classloclistptr}{loclistptr}{loclistptr class}
-&Refers to a location in the DWARF section that holds \mbox{location} lists, which
+&
+\bb
+Specifies
+\eb
+a location in the DWARF section that holds \mbox{location} lists, which
 describe objects whose location can change during their lifetime.
 \\
 
 \hypertarget{chap:classmacptr}{}
 \livelinki{datarep:classmacptr}{macptr}{macptr class}
-& Refers to a location in the DWARF section that holds macro definition
- information.
+&
+\bb
+Specifies 
+\eb
+a location in the DWARF section that holds macro definition
+information.
 \\
 
 \hypertarget{chap:classrangelistptr}{}
 \livelinki{datarep:classrangelistptr}{rangelistptr}{rangelistptr class}
-& Refers to a location in the DWARF section that holds non\dash contiguous address ranges.
+&
+\bb
+Specifies 
+\eb
+a location in the DWARF section that holds non-contiguous address ranges.
 \\
 
 \hypertarget{chap:classreference}{}
 \livelinki{datarep:classreference}{reference}{reference class}
-& Refers to one of the debugging information
+&Refers to one of the debugging information
 entries that \mbox{describe} the program.  There are four types of
 \mbox{reference}. The first is an offset relative to the beginning
 of the \mbox{compilation} unit in which the reference occurs and must
@@ -900,7 +917,11 @@ entry in any compilation unit, including one different from
 the unit containing the reference. The third type of reference
 is an indirect reference to a 
 \addtoindexx{type signature}
-type definition using a 8-byte \mbox{signature} 
+type definition using 
+\bb
+an 
+\eb
+8-byte \mbox{signature} 
 for that type. The fourth type of reference is a reference from within the 
 \dotdebuginfo{} section of the executable or shared object file to
 a debugging information entry in the \dotdebuginfo{} section of 
@@ -909,8 +930,8 @@ a \addtoindex{supplementary object file}.
 
 \hypertarget{chap:classstring}{}
 \livelinki{datarep:classstring}{string}{string class}
-& A null\dash terminated sequence of zero or more
-(non\dash null) bytes. Data in this class are generally
+& A null-terminated sequence of zero or more
+(non-null) bytes. Data in this class are generally
 printable strings. Strings may be represented directly in
 the debugging \mbox{information} entry or as an offset in a separate
 string table.
@@ -918,10 +939,22 @@ string table.
 
 \hypertarget{chap:classstroffsetsptr}{}
 \livelinki{datarep:classstroffsetsptr}{stroffsetsptr}{stroffsetsptr class}
-&Refers to a base location in the DWARF section that holds
-a series of offsets in the DWARF section that holds strings.
-Certain attributes refer to one of these offsets by indexing 
-\mbox{relative} to this base location. The resulting offset is then 
+&
+\bb
+Specifies a
+\eb
+location in the DWARF section that holds
+a series of offsets 
+\bb
+into 
+\eb
+the DWARF section that holds strings.
+Certain attributes 
+\bb
+use 
+\eb
+one of these offsets by indexing 
+\mbox{relative} to this location. The resulting offset is then 
 used to index into the DWARF string section.
 \\
 
@@ -951,11 +984,9 @@ The ownership relation
 \addtoindexx{debugging information entry!ownership relation}
 of debugging
 information entries is achieved naturally because the debugging
-information is represented as a tree. 
-The nodes of the tree
+information is represented as a tree. The nodes of the tree
 are the debugging information entries themselves. 
-The child
-entries of any node are exactly those debugging information
+The child entries of any node are exactly those debugging information
 entries owned by that node.  
 
 \needlines{4}
@@ -996,19 +1027,16 @@ to any debugging information entry.
 The value of this attribute is a reference to the sibling entry
 of the entry to which the attribute is attached.
 
-
-\section{Target Addressable Units and Addresses}
+\bb
+\section{Target Addresses}
 \label{chap:targetaddressableunitsandaddresses}
-The standard assumes that the smallest directly 
-\addtoindex{addressable unit} of memory on the
-target architecture is a byte consisting of eight bits.
-
 \label{chap:targetaddresses}
-Many places in this document refer to the size of an
+\eb
+\addtoindexx{size of an address}
 \addtoindexx{size of an address|see{\textit{also} \texttt{address\_size}}}
-\addtoindexi{address}{size of an address}
 \addtoindexx{address size|see{size of an address}}
 \addtoindexx{address size|see{\textit{also} \texttt{address\_size}}}
+Many places in this document refer to the size of an address
 on the target architecture (or equivalently, target machine)
 to which a DWARF description applies. For processors which
 can be configured to have different address sizes or different
@@ -1025,27 +1053,30 @@ code generated for one or the other of these
 \addtoindexx{size of an address}
 address sizes. In
 that case, the DWARF debugging information contained in this
-object file will use the same address size.
-}
+object file will use the same address size.}
 
-\textit{%
-Architectures which have multiple instruction sets are
-supported by the \texttt{isa} entry in the line number information
-(see Section \refersec{chap:statemachineregisters}).
-}
+\bbpareb
 
 \needlines{4}
 \section{DWARF Expressions}
 \label{chap:dwarfexpressions}
-DWARF expressions describe how to compute a value or name a
-location during debugging of a program. 
+DWARF expressions describe how to compute a value or 
+\bb
+specify a location.
+\eb
 They are expressed in
 terms of DWARF operations that operate on a stack of values.
 
-All DWARF operations are encoded as a stream of opcodes that
-are each followed by zero or more literal operands. 
-The number
-of operands is determined by the opcode.  
+\bb
+A DWARF expression is encoded as a stream of operations, 
+each consisting of an opcode
+\eb
+followed by zero or more literal operands. 
+The number of operands is 
+\bb
+implied 
+\eb
+by the opcode.  
 
 In addition to the
 general operations that are defined here, operations that are
@@ -1059,7 +1090,7 @@ a simple stack machine.
 Each element of the stack has a type and a value, and can represent
 a value of any supported base type of the target machine.  Instead of
 a base type, elements can have a 
-\livetarg{chap:specialaddresstype}{special address type},
+\definitionx{special address type}\livetarg{chap:specialaddresstype}{},
 which is an integral type that has the 
 \addtoindex{size of an address} on the target machine and 
 unspecified signedness. The value on the top of the stack after 
@@ -1071,25 +1102,7 @@ taken to be the result (the address of the object, the
 value of the array bound, the length of a dynamic string,
 the desired value itself, and so on).
 
-\needlines{4}
-\textit{While the abstract definition of the stack calls for variable-size entries
-able to hold any supported base type, in practice it is expected that each
-element of the stack can be represented as a fixed-size element large enough
-to hold a value of any type supported by the DWARF consumer for that target,
-plus a small identifier sufficient to encode the type of that element.
-Support for base types other than what is required to do address arithmetic
-is intended only for debugging of optimized code, and the completeness of the
-DWARF consumer's support for the full set of base types is a
-quality-of-implementation issue. If a consumer encounters a DWARF expression
-that uses a type it does not support, it should ignore the entire expression
-and report its inability to provide the requested information.}
-
-\textit{It should also be noted that floating-point arithmetic is highly dependent
-on the computational environment. It is not the intention of this expression
-evaluation facility to produce identical results to those produced by the
-program being debugged while executing on the target machine. Floating-point
-computations in this stack machine will be done with precision control and
-rounding modes as defined by the implementation.}
+\bbpareb
 
 \needlines{4}
 \subsubsection{Literal Encodings}
@@ -1123,6 +1136,7 @@ The single operand of a \DWOPconstnuNAME{} operation provides a 1,
 The single operand of a \DWOPconstnsNAME{} operation provides a 1,
 2, 4, or 8-byte signed integer constant, respectively.
 
+\needlines{4}
 \itembfnl{\DWOPconstuTARG}
 The single operand of the \DWOPconstuNAME{} operation provides
 an unsigned LEB128\addtoindexx{LEB128!unsigned} integer constant.
@@ -1163,8 +1177,11 @@ information entry in the current compilation unit, which must be a
 \DWTAGbasetype{} entry that provides the type of the constant provided. The
 second operand is 1-byte unsigned integer that specifies the size of the
 constant value, which is the same as the size of the base type referenced
-by the first operand. The third operand is a block of specified 
-size that is to be interpreted as a value of the referenced type.
+by the first operand. The third operand is a 
+\bb
+sequence of bytes of the given size that is 
+\eb
+interpreted as a value of the referenced type.
 
 \textit{While the size of the constant can be inferred from the base type
 definition, it is encoded explicitly into the operation so that the
@@ -1191,16 +1208,19 @@ signed offset together with the \specialaddresstype.
 The \DWOPfbregNAME{} operation provides a 
 signed LEB128\addtoindexx{LEB128!signed} offset
 from the address specified by the location description in the
-\DWATframebase{} attribute of the current function. (This
-is typically a \doublequote{stack pointer} register plus or minus
-some offset. On more sophisticated systems it might be a
-location list that adjusts the offset according to changes
-in the stack pointer as the PC changes.)
+\DWATframebase{} attribute of the current function.
+ 
+\bb
+\textit{This is typically a stack pointer register plus or minus some offset.}
+\eb
 
 \itembfnl{\DWOPbregzeroTARG, \DWOPbregoneTARG, \dots, \DWOPbregthirtyoneTARG}
 The single operand of the \DWOPbregnTARG{} 
 operations provides
 a signed LEB128\addtoindexx{LEB128!signed} offset from
+\bb
+the contents of
+\eb
 the specified register.
 
 \itembfnl{\DWOPbregxTARG}
@@ -1232,18 +1252,9 @@ operations manipulate the DWARF stack. Operations
 that index the stack assume that the top of the stack (most
 recently added entry) has index 0.
 
-The \DWOPdup{}, \DWOPdrop{}, \DWOPpick{}, \DWOPover{}, \DWOPswap{}
-and \DWOProt{} operations manipulate the elements of the stack as pairs
-consisting of the value together with its type identifier. 
-The \DWOPderef{}, \DWOPderefsize{}, \DWOPxderef{}, \DWOPxderefsize{} 
-and \DWOPformtlsaddress{}
-operations require the popped values to have an integral type, either the
-\specialaddresstype{} or some other integral base type, and push a 
-value with the \specialaddresstype.  
-\DWOPdereftype{} and \DWOPxdereftype{} operations have the
-same requirement on the popped values, but push a value together 
-with the same type as the popped values.
-All other operations push a value together with the \specialaddresstype.
+\bb
+Each entry on the stack has an associated type.
+\eb
 
 \needlines{4}
 \begin{enumerate}[1. ]
@@ -1285,21 +1296,25 @@ becomes the second entry.
 \itembfnl{\DWOPderefTARG}
 The \DWOPderefNAME{} operation pops the top stack entry and 
 treats it as an address. The popped value must have an integral type.
-The value retrieved from that address is pushed, together with the
-\specialaddresstype{} identifier. 
+The value retrieved from that address is pushed, 
+\bb
+and has the \specialaddresstype{}.
+\eb 
 The size of the data retrieved from the 
 \addtoindexi{dereferenced}{address!dereference operator}
 address is the \addtoindex{size of an address} on the target machine.
 
-\needlines{4}
+\needlines{6}
 \itembfnl{\DWOPderefsizeTARG}
 The \DWOPderefsizeNAME{} operation behaves like the 
 \DWOPderef{}
 operation: it pops the top stack entry and treats it as an
 address. The popped value must have an integral type.
-The value retrieved from that address is pushed, together with the
-\specialaddresstype{} identifier. In
-the \DWOPderefsizeNAME{} operation, however, the size in bytes
+The value retrieved from that address is pushed,
+\bb
+and has the \specialaddresstype{}.
+\eb 
+In the \DWOPderefsizeNAME{} operation, however, the size in bytes
 of the data retrieved from the dereferenced address is
 specified by the single operand. This operand is a 1-byte
 unsigned integral constant whose value may not be larger
@@ -1344,6 +1359,7 @@ The size of the data retrieved from the
 \addtoindexi{dereferenced}{address!dereference operator}
 address is the size of the \specialaddresstype.
 
+\needlines{4}
 \itembfnl{\DWOPxderefsizeTARG}
 The \DWOPxderefsizeNAME{} operation behaves like the
 \DWOPxderef{} operation. The entry at the top of the stack is
@@ -1459,14 +1475,18 @@ space efficient to reference that.}
 \textit{Examples illustrating many of these stack operations are
 found in Appendix \refersec{app:dwarfstackoperationexamples}.}
 
+\needlines{4}
 \subsubsection{Arithmetic and Logical Operations} 
 \addtoindexx{DWARF expression!arithmetic operations}
 \addtoindexx{DWARF expression!logical operations}
-The following provide arithmetic and logical operations.  If an operation
-pops two values from the stack, both values must have the same type,
+The following provide arithmetic and logical operations. 
+\bb
+Operands of an operation with two operands
+\eb
+must have the same type,
 either the same base type or both the \specialaddresstype.
 The result of the operation which is pushed back has the same type
-as the type of the operands.  
+as the type of the operand(s).  
 
 If the type of the operands is the \specialaddresstype, 
 except as otherwise specified, the arithmetic operations
@@ -1509,6 +1529,7 @@ calculation: former second stack entry modulo the former top of the stack.
 The \DWOPmulNAME{} operation pops the top two stack entries, multiplies them together, and
 pushes the result.
 
+\needlines{4}
 \itembfnl{\DWOPnegTARG}
 The \DWOPnegNAME{} operation pops the top stack entry, interprets
 it as a signed value and pushes its negation. If the negation
@@ -1530,7 +1551,12 @@ adds them together, and pushes the result.
 \itembfnl{\DWOPplusuconstTARG}
 The \DWOPplusuconstNAME{} operation pops the top stack entry,
 adds it to the unsigned LEB128\addtoindexx{LEB128!unsigned}
-constant operand and pushes the result.
+constant operand 
+\bb
+interpreted as the same type as the operand popped from the 
+top of the stack
+\eb
+and pushes the result.
 
 \textit{This operation is supplied specifically to be
 able to encode more field offsets in two bytes than can be
@@ -1574,7 +1600,7 @@ following operations provide simple control of the flow of a DWARF expression.
 \itembfnl{\DWOPleTARG, \DWOPgeTARG, \DWOPeqTARG, \DWOPltTARG, \DWOPgtTARG, \DWOPneTARG}
 The six relational operators each:
 \begin{itemize}
-\item pop the top two stack values, which should both have the same type,
+\item pop the top two stack values, which \bb\eb have the same type,
 either the same base type or both the \specialaddresstype, 
 
 \item compare the operands:
@@ -1589,9 +1615,6 @@ The pushed value has the \specialaddresstype.
 
 If the operands have the \specialaddresstype, the comparisons  
 are performed as signed operations.
-The six operators are \DWOPleNAME{} (less than or equal to), \DWOPgeNAME{}
-(greater than or equal to), \DWOPeqNAME{} (equal to), \DWOPltNAME{} (less
-than), \DWOPgtNAME{} (greater than) and \DWOPneNAME{} (not equal to).
 
 \needlines{6}
 \itembfnl{\DWOPskipTARG}
@@ -1638,11 +1661,9 @@ must be performed by the consumer.
 \DWOPcalltwo, \DWOPcallfour{} and \DWOPcallref{} is exactly like
 that for \DWFORMreftwo, \DWFORMreffour{} and \DWFORMrefaddr,
 respectively  
-(see Section  \refersec{datarep:attributeencodings}).  
-}
+(see Section  \refersec{datarep:attributeencodings}).}
 
-These operations transfer
-control of DWARF expression evaluation to 
+These operations transfer control of DWARF expression evaluation to 
 \addtoindexx{location attribute}
 the 
 \DWATlocation{}
@@ -1708,10 +1729,13 @@ in bytes of the block.  If the block contains a register location
 description, \DWOPentryvalueNAME{} pushes the value that register had upon
 entering the current subprogram.  If the block contains a DWARF expression,
 the DWARF expression is evaluated as if it has been evaluated upon entering
-the current subprogram.  The DWARF expression should not assume any values
-being present on the DWARF stack initially and should result in exactly one
-value being pushed on the DWARF stack when completed.  That value is the value
-being pushed by the \DWOPentryvalueNAME{} operation.  
+the current subprogram.  The DWARF expression 
+\bb
+assumes no values are present on the DWARF stack initially and results
+\eb
+in exactly one
+value being pushed on the DWARF stack when completed.
+\bb\eb 
 
 \DWOPpushobjectaddress{} is not meaningful inside of this DWARF operation.
 
@@ -1732,7 +1756,7 @@ register or memory values during \DWOPentryvalueNAME{} evaluation.}
 
 \end{enumerate}
 
-\needlines{5}
+\needlines{8}
 \section{Location Descriptions}
 \label{chap:locationdescriptions}
 \textit{Debugging information 
@@ -1767,22 +1791,7 @@ as its lifetime is either static or the same as the
 \livelink{chap:lexicalblock}{lexical block} that owns it, 
 and it does not move during its lifetime.
 
-Single location descriptions are of two kinds:
-\begin{enumerate}[a) ]
-\item Simple location descriptions, which describe the location
-\addtoindexx{location description!simple}
-of one contiguous piece (usually all) of an object. A simple
-location description may describe a location in addressable
-memory, or in a register, or the lack of a location (with or
-without a known value).
-
-\item  Composite location descriptions, which describe an
-\addtoindexx{location description!composite}
-object in terms of pieces each of which may be contained in
-part of a register or stored in a memory location unrelated
-to other pieces.
-
-\end{enumerate}
+\bbpareb
 
 \needlines{4}
 \item \textit{Location lists}, which are used to 
@@ -1809,7 +1818,6 @@ separate
 \addtoindexx{location list}
 location list table).
 
-\needlines{8}
 \subsection{Single Location Descriptions}
 A single location description is either:
 \begin{enumerate}[1. ]
@@ -1825,8 +1833,8 @@ one composition operation. Each simple location description
 describes the location of one piece of the object; each
 composition operation describes which part of the object is
 located there. Each simple location description that is a
-DWARF expression is evaluated independently of any others
-(as though on its own separate stack, if any). 
+DWARF expression is evaluated independently of any others.
+\bb\eb
 \end{enumerate}
 
 
@@ -1837,16 +1845,26 @@ A
 simple location description consists of one 
 contiguous piece or all of an object or value.
 
+\bb
+\needlines{4}
+\subsubsubsection{Empty Location Descriptions}
+An \addtoindex{empty location description}
+consists of a DWARF expression
+\addtoindexx{location description!empty}
+containing no operations. It represents a piece or all of an
+object that is present in the source but not in the object code
+(perhaps due to optimization).
+\eb
 
 \subsubsubsection{Memory Location Descriptions}
 A 
 \addtoindexx{location description!memory}
 memory location description 
 \addtoindexx{memory location description}
-consists of a non\dash empty DWARF
+consists of a non-empty DWARF
 expression (see 
-Section \refersec{chap:dwarfexpressions}
-), whose value is the address of
+Section \refersec{chap:dwarfexpressions}), 
+whose value is the address of
 a piece or all of an object or other entity in memory.
 
 \subsubsubsection{Register Location Descriptions}
@@ -1866,8 +1884,10 @@ register location description must stand alone as the entire
 description of an object or a piece of an object.
 }
 
-The following DWARF operations can be used to name a register.
-
+The following DWARF operations can be used to 
+\bb
+specify a register location.
+\eb
 
 \textit{Note that the register number represents a DWARF specific
 mapping of numbers onto the actual registers of a given
@@ -1908,14 +1928,12 @@ that has no location in the program but is a known constant
 or is computed from other locations and values in the program.
 \begin{enumerate}[1. ]
 \itembfnl{\DWOPimplicitvalueTARG}
-The \DWOPimplicitvalueNAME{} 
-operation specifies an immediate value
+The \DWOPimplicitvalueNAME{} operation specifies an immediate value
 using two operands: an unsigned LEB128\addtoindexx{LEB128!unsigned}
-length, followed by
-%FIXME: should this block be a reference? To what?
-a \nolink{block} representing the value in the memory representation
-of the target machine. The length operand gives the length
-in bytes of the \nolink{block}.
+length, followed by a 
+\bb
+sequence of bytes of the given length that contain the value.
+\eb
 
 \itembfnl{\DWOPstackvalueTARG}
 The \DWOPstackvalueNAME{} 
@@ -1928,6 +1946,12 @@ actual value of the object, rather than its location. The
 
 \needlines{4}
 \itembfnl{\DWOPimplicitpointerTARG}
+\bb
+\textit{An optimizing compiler may eliminate a pointer, while
+still retaining the value that the pointer addressed.  
+\DWOPimplicitpointerNAME{} allows a producer to describe this value.}
+\eb
+
 The \DWOPimplicitpointerNAME{} operation specifies that the object
 is a pointer that cannot be represented as a real pointer,
 even though the value it would point to can be described. In
@@ -1983,14 +2007,7 @@ register but not in memory. The operations in this section are
 used to describe values that exist neither in memory nor in a
 single register.}
 
-\needlines{4}
-\subsubsubsection{Empty Location Descriptions}
-An \addtoindex{empty location description}
-consists of a DWARF expression
-\addtoindexx{location description!empty}
-containing no operations. It represents a piece or all of an
-object that is present in the source but not in the object code
-(perhaps due to optimization).
+\bbpareb
 
 \needlines{6}
 \subsubsection{Composite Location Descriptions}
@@ -2021,8 +2038,9 @@ the piece within that register is defined by the ABI.
 or store a variable partially in memory and partially in
 registers. \DWOPpieceNAME{} provides a way of describing how large
 a part of a variable a particular DWARF location description
-refers to. }
+refers to.}
 
+\needlines{4}
 \itembfnl{\DWOPbitpieceTARG}
 The \DWOPbitpieceNAME{} 
 operation takes two operands. The first
@@ -2034,7 +2052,9 @@ gives the offset in bits from the location defined by the
 preceding DWARF location description.  
 
 Interpretation of the
-offset depends on the kind of location description. If the
+offset depends on the 
+\bb\eb
+location description. If the
 location description is empty, the offset doesn\textquoteright t matter and
 the \DWOPbitpieceNAME{} operation describes a piece consisting
 of the given number of bits whose values are undefined. If
@@ -2065,8 +2085,9 @@ while the second is intended for use in a \splitDWARFobjectfile{}
 (see Section \refersec{datarep:splitdwarfobjectfiles}). The two
 forms are otherwise equivalent.
 
-\textit{The form for \splitDWARFobjectfile{s} is new in \DWARFVersionV.}
+\bbpareb
 
+\needlines{4}
 \subsubsection{Location Lists in Non-split Objects}
 \label{chap:locationlistsinnonsplitobjects}
 Location lists 
@@ -2160,7 +2181,12 @@ A \addtoindex{default location list entry} consists of:
 \item The value 0.
 \item The value of the largest representable address offset (for
       example, \wffffffff when the size of an address is 32 bits).
-\item A simple location description describing the location of the
+\item 
+\bb
+An unsigned 2-byte length describing the length of the location 
+      description that follows.
+\eb
+\item A \bb single \eb location description describing the location of the
       object when there is no prior normal location list entry
       that applies in the same location list.
 \end{enumerate}
@@ -2173,7 +2199,7 @@ A default location list entry must be the last location list
 entry of a location list except for the terminating end-of-list
 entry.
 
-A \addtoindex{default location list entry} describes a simple 
+A \addtoindex{default location list entry} describes a \bb single \eb 
 location which applies to all addresses which are not included 
 in any range defined earlier in the same location list.
 
@@ -2281,6 +2307,7 @@ given by this type of entry are not relative to the
 compilation unit base address. A single location
 description follows the fields that define the address range.
 
+\needlines{5}
 \itembfnl{\DWLLEstartlengthentryTARG}
 This entry contains one unsigned LEB128\addtoindexx{LEB128!unsigned}
 value and a 4-byte
@@ -2293,7 +2320,11 @@ This index is relative to the value of the
 The starting address given by this
 type of entry is not relative to the compilation unit
 base address. The second value is the
-length of the range. A single location
+length of the range
+\bb
+in bytes. 
+\eb
+A single location
 description follows the fields that define the address range.
 
 \itembfnl{\DWLLEoffsetpairentryTARG}
@@ -2307,7 +2338,7 @@ description follows the fields that define the address range.
 
 \needlines{4}
 \textit{The \DWLLEbaseaddressselectionentry, \DWLLEstartendentry{}
-and \DWLLEstartlengthentry entries obtain addresses within the 
+and \DWLLEstartlengthentry{} entries obtain addresses within the 
 target program indirectly using an index (not an offset) into an 
 array of addresses. The base of that array is obtained using the 
 \DWATaddrbase{} attribute of the containing compilation unit. 
@@ -2329,11 +2360,13 @@ user-defined type, such as an array, structure or enumeration.
 Alternatively, the entry referenced may describe a type
 modifier, such as constant, packed, pointer, reference or
 volatile, which in turn will reference another entry describing
-a type or type modifier (using 
-\addtoindexx{type attribute}
-a \DWATtypeNAME{} attribute of its
+a type or type modifier (using a
+\DWATtypeNAME{} attribute\addtoindexx{type attribute} of its
 own). See 
-Section  \referfol{chap:typeentries} 
+\bb
+Chapter 
+\eb
+\referfol{chap:typeentries} 
 for descriptions of the entries describing
 base types, user-defined types and type modifiers.
 
@@ -2412,8 +2445,6 @@ Table \refersec{tab:virtualitycodes}.
 \textit{A compiler may wish to generate debugging information entries
 for objects or types that were not actually declared in the
 source of the application. An example is a formal parameter
-%FIXME: The word 'this' should be rendered like a variant italic,
-%FIXME: not as a quoted name. Changed to tt font--RB
 entry to represent the hidden 
 \texttt{this} parameter\index{this parameter@\texttt{this} parameter}
 that most \addtoindex{C++} implementations pass as the first argument 
@@ -2614,19 +2645,11 @@ entry
 \hypertarget{chap:DWATdecllinelinenumberofsourcedeclaration}{}
 representing 
 \hypertarget{chap:DWATdeclcolumncolumnpositionofsourcedeclaration}{}
-the
-\addtoindexx{line number of declaration}
-declaration of an object, module, subprogram or
-\addtoindex{declaration column attribute}
-type 
-\addtoindex{declaration file attribute}
-may 
-\addtoindex{declaration line attribute}
-have
-\DWATdeclfileDEFN, 
-\DWATdecllineDEFN{} and 
-\DWATdeclcolumnDEFN{}
-attributes each of whose value is an unsigned
+the declaration of an object, module, subprogram or type may have
+\DWATdeclfileDEFN,\addtoindexx{declaration file attribute} 
+\DWATdecllineDEFN\addtoindexx{declaration line attribute} and 
+\DWATdeclcolumnDEFN\addtoindexx{declaration column attribute}
+attributes, each of whose value is an unsigned
 \livelink{chap:classconstant}{integer constant}.
 
 The value of 
@@ -2667,6 +2690,9 @@ representing
 a program entity that has been given a name may have a 
 \DWATnameDEFN{} 
 attribute\addtoindexx{name attribute}, whose value of 
+\bb
+class 
+\eb
 \CLASSstring{} represents the name as it appears in
 the source program. A debugging information entry containing
 no name attribute, or containing a name attribute whose value
@@ -2705,7 +2731,8 @@ whose value is a location description
 A 
 \addtoindex{DWARF procedure}
 is represented by any
-kind of debugging information entry that has a
+\bb\eb
+debugging information entry that has a
 \addtoindexx{location attribute}
 \DWATlocationNAME{}
 attribute. 
@@ -2758,8 +2785,10 @@ for a non-contiguous range of addresses.
 
 In addition, a non-contiguous range of 
 addresses may also be specified for the
-\DWATstartscope{} attribute.
-\addtoindexx{start scope attribute}
+\DWATstartscope{} attribute\addtoindexx{start scope attribute}
+\bb
+(see Section \refersec{chap:dataobjectentries}).
+\eb
 
 If an entity has no associated machine code, 
 none of these attributes are specified.
@@ -2768,34 +2797,24 @@ none of these attributes are specified.
 When there is a single address associated with an entity,
 such as a label or alternate entry point of a subprogram,
 the entry has a \DWATlowpc{} attribute whose value is the
-relocated address for the entity.
+\bb\eb address for the entity.
 
-\textit{While the \DWATentrypc{}
-attribute might also seem appropriate for this purpose,
-historically the \DWATlowpc{} attribute was used before
-\DWATentrypc{} was introduced 
-(in \addtoindex{DWARF Version 3}). There is
-insufficient reason to change this;
-\DWATlowpc{} serves as a default entry PC address as described
-in Section \refersec{chap:entryaddress}.}
+\bbpareb
 
 \needlines{8}
-\subsection{Continuous Address Range}
+\bb
+\subsection{Contiguous Address Range}
+\eb
 \label{chap:contiguousaddressranges}
 When the set of addresses of a debugging information entry can
 be described as a single contiguous range, the entry 
 \addtoindexx{high PC attribute}
 may 
 \addtoindexx{low PC attribute}
-have
-a \DWATlowpc{} and 
-\DWAThighpc{} pair of attributes. 
-The value
-of the 
-\DWATlowpc{} attribute 
-is the relocated address of the
+have a \DWATlowpc{} and \DWAThighpc{} pair of attributes. 
+The value of the \DWATlowpc{} attribute is the \bb\eb address of the
 first instruction associated with the entity. If the value of
-the \DWAThighpc{} is of class address, it is the relocated
+the \DWAThighpc{} is of class address, it is the \bb\eb
 address of the first location past the last instruction
 associated with the entity; if it is of class constant, the
 value is an unsigned integer offset which when added to the
@@ -2809,30 +2828,37 @@ may be beyond the last valid instruction in the executable.}
 The presence of low and high PC attributes for an entity
 implies that the code generated for the entity is contiguous
 and exists totally within the boundaries specified by those
-two attributes. If that is not the case, no low and high PC
-attributes should be produced.
+two attributes.
+\bb\eb
 
 \subsection{Non-Contiguous Address Ranges}
 \label{chap:noncontiguousaddressranges}
 When the set of addresses of a debugging information entry
 \addtoindexx{non-contiguous address ranges}
-cannot be described as a single contiguous range, the entry has
-a \DWATranges{} attribute 
-\addtoindexx{ranges attribute}
+cannot be described as a single contiguous range, the entry 
+\bb
+may have
+\eb
+a \DWATranges{} attribute\addtoindexx{ranges attribute}
 whose value is of class \livelink{chap:classrangelistptr}{rangelistptr}
 and indicates the beginning of a \addtoindex{range list}.
 Similarly,
-a \DWATstartscope{} attribute 
-\addtoindexx{start scope attribute}
+a \DWATstartscope{} attribute\addtoindexx{start scope attribute}
+\bb
+(see Section \refersec{chap:dataobjectentries}).
+\eb
 may have a value of class
 \livelink{chap:classrangelistptr}{rangelistptr} for the same reason.  
 
-Range lists are contained in a separate object file section called 
-\dotdebugranges{}. A
-\addtoindex{range list} is indicated by a 
-\DWATranges{} attribute whose
-\addtoindexx{ranges attribute}
-value is represented as an offset from the beginning of the
+Range lists are contained in 
+\bb
+the \dotdebugranges{} section. 
+\eb
+A \addtoindex{range list} is indicated by a 
+\DWATranges{} attribute\addtoindexx{ranges attribute}
+whose value is 
+\bb\eb
+an offset from the beginning of the
 \dotdebugranges{} section to the beginning of the 
 \addtoindex{range list}.
 
@@ -2843,11 +2869,7 @@ offset within the \dotdebugranges{} section for the compilation
 unit. The offset given by the \DWATranges{} attribute is
 relative to that base.
 
-\textit{The \DWATrangesbase{} attribute is new in \DWARFVersionV.
-The advantage of this attribute is that it reduces the number of
-object language relocations needed for references to the \dotdebugranges{}
-section from one for each range entry to a single relocation that
-applies for the entire compilation unit.}
+\bbpareb
 
 The \addtoindex{applicable base address} of a \addtoindex{range list} 
 entry is determined
@@ -2910,7 +2932,11 @@ of subsequent entries of the location list.
 \end{enumerate}
 
 \textit{A base address selection entry affects only the 
-remainder of list in which it is contained.}
+remainder of 
+\bb
+the 
+\eb
+list in which it is contained.}
 
 \subsubsection{End-of-List Entry}
 The end of any given \addtoindex{range list} is marked by an 
@@ -2946,11 +2972,19 @@ module initialization, subroutines,
 \livelink{chap:tryandcatchblockentries}{try/catch \nolink{blocks}},
 and the like, may have a \DWATentrypcDEFN{} attribute 
 \addtoindexx{entry PC address}
-to indicate the first executable instruction within that 
+to indicate the 
+\bb
+instruction where execution should begin
+\eb
+within that 
 range\hypertarget{chap:entryaddressofscope}{}
-of addresses. The value of the \DWATentrypcNAME{} attribute is a
-relocated address if the
-value of \DWATentrypcNAME{} is of class \CLASSaddress; or if it is of class
+of addresses. 
+\bb
+If the value of the \DWATentrypcNAME{} attribute is of
+class \CLASSaddress{} that address is the entry address;
+or, 
+\eb
+if it is of class
 \CLASSconstant, the value is an unsigned integer offset which, when
 added to the base address of the function, gives the entry
 address. 
@@ -2975,28 +3009,31 @@ computed dynamically during execution.
 The value of these
 attributes is determined based on the class as follows:
 \begin{itemize}
-\item For a \livelink{chap:classconstant}{constant}, the value of the constant is the value of
-the attribute.
+\item For a \livelink{chap:classconstant}{constant}, the value 
+of the constant is the value of the attribute.
 
 \item For a \livelink{chap:classreference}{reference}, the
-value is a reference to another DIE.  This DIE may:
+value is a reference to another 
+\bb
+debugging information entry.  This entry may:
+\eb
 \begin{itemize}
 \renewcommand{\itemsep}{0cm}
 \item describe a constant which is the attribute value,
 \item describe a variable which contains the attribute value, or
-\item contain a DWARF expression which computes the attribute value
-      (for example, be a \DWTAGdwarfprocedure{} entry).
+\item 
+\bb
+      contain a \DWATlocation{} attribute whose value is a \eb
+      DWARF expression which computes the attribute value
+      (for example, \bb\eb a \DWTAGdwarfprocedure{} entry).
 \end{itemize}
 
-\item For an \livelink{chap:classexprloc}{exprloc}, the value is interpreted as a 
-DWARF expression; 
-evaluation of the expression yields the value of
-the attribute.
+\item For an \livelink{chap:classexprloc}{exprloc}, the value 
+is interpreted as a DWARF expression; evaluation of the expression 
+yields the value of the attribute.
 \end{itemize}
 
-\textit{Whether an attribute value can be dynamic depends on the
-rules of the applicable programming language.
-}
+\bbpareb
 
 \needlines{4}
 \section{Entity Descriptions}
@@ -3062,15 +3099,14 @@ associated distinct linkage name it may sometimes be useful
 for a producer to include this name in the DWARF description
 of the program to facilitate consumer access to and use of
 object file information about an entity and/or information
-\hypertarget{chap:DWATlinkagenameobjectfilelinkagenameofanentity}{}
 that is encoded in the linkage name itself.  
 }
 
 % Some trouble maybe with hbox full, so we try optional word breaks.
 A debugging information entry may have a
-\addtoindexx{linkage name attribute}
-\DWATlinkagenameDEFN{}
-attribute whose value is a null-terminated string containing the 
+\DWATlinkagenameDEFN{}\hypertarget{chap:DWATlinkagenameobjectfilelinkagenameofanentity}{}
+attribute\addtoindexx{linkage name attribute}
+whose value is a null-terminated string containing the 
 object file linkage name associated with the corresponding entity.
 
 
@@ -3141,13 +3177,12 @@ single location description for the run-time constant address.
 \livetarg{chap:DWATalignmentnondefault}{}
 A debugging information entry may have a 
 \DWATalignmentDEFN{} attribute\addtoindexx{alignment attribute}
-that describes the (non-default) alignment requirements of the entry.
-\DWATalignment{} has a positive, non-zero, integer constant value
-describing the strictest specified (non-default) alignment of the entity. 
-This constant describes the actual alignment used by the compiler.
-(If there are multiple alignments specified by the user, or if the 
-user specified an alignment the compiler could not satisfy, then 
-only the strictest alignment is added using this attribute.)
+\bb
+whose value of class \CLASSconstant{} is
+a positive, non-zero, integer describing the 
+\eb 
+alignment of the entity. 
+\bb\eb
 
 \textit{For example, an alignment attribute whose value is 8 indicates
 that the entity to which it applies occurs at an address that is a

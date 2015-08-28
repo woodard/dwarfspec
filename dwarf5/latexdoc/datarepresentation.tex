@@ -405,10 +405,7 @@ section.
 
 The DWARF package file also contains two index sections that
 provide a fast way to locate debug information by compilation
-\bb
-unit ID 
-\eb
-(\DWATdwoid) for compilation units, or by type
+unit ID (\DWATdwoid) for compilation units, or by type
 signature for type units:
 \begin{alltt}
     \dotdebugcuindex
@@ -417,11 +414,7 @@ signature for type units:
 
 \subsubsection{The Compilation Unit (CU) Index Section}
 The \dotdebugcuindex{} section is a hashed lookup table that maps a
-compilation unit
-\bb
-ID 
-\eb
-to a set of contributions in the
+compilation unit ID to a set of contributions in the
 various debug information sections. Each contribution is stored
 as an offset within its corresponding section and a size.
 
@@ -514,28 +507,18 @@ Unused slots in the hash table have 0 in both the hash table
 entry and the parallel table entry. While 0 is a valid hash
 value, the row index in a used slot will always be non-zero.
 
-\bb
-Given an 8-byte compilation unit ID
-\eb
-or type signature $X$,
+Given an 8-byte compilation unit ID or type signature $X$,
 an entry in the hash table is located as follows:
 \begin{enumerate}[1. ]
-\bb
 \item Define $REP(X)$ to be the value of $X$ interpreted as an 
       unsigned 64-bit integer in the target byte order.
-
 \item Calculate a primary hash $H = REP(X)\ \&\ MASK(k)$, where
-\eb 
       $MASK(k)$ is a mask with the low-order $k$ bits all set to 1.
-\bb
 \item Calculate a secondary hash $H' = (((REP(X)>>32)\ \&\ MASK(k))\ |\ 1)$.
-\eb
-
 \item If the hash table entry at index $H$ matches the signature, use
       that entry. If the hash table entry at index $H$ is unused (all
       zeroes), terminate the search: the signature is not present
       in the table.
-
 \item Let $H = (H + H')\ modulo\ S$. Repeat at Step 4.
 \end{enumerate}
 
@@ -2095,8 +2078,8 @@ Table \referfol{tab:attributeformencodings}.
 \label{datarep:variablelengthdata}
 \addtoindexx{variable length data|see {LEB128}}
 Integers may be 
-\addtoindexx{Little Endian Base 128|see{LEB128}}
-encoded using \doublequote{Little Endian Base 128}
+\addtoindexx{Little-Endian Base 128|see{LEB128}}
+encoded using \doublequote{Little-Endian Base 128}
 \addtoindexx{little-endian encoding|see{endian attribute}}
 (LEB128) numbers. 
 \addtoindexx{LEB128}
