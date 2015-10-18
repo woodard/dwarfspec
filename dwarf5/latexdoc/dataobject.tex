@@ -29,18 +29,16 @@ formal parameter or constant may have the following attributes:
 \item A \DWATname{} attribute,
 \addtoindexx{name attribute}
 whose value is a null-terminated string containing the data object 
-name as it appears in the source program.
+name.\bbeb
 
 If a variable entry describes an anonymous object (for example
 an \addtoindex{anonymous union}),
 the name attribute is omitted or its value consists of a single
 zero byte.
 
-\item A \DWATexternalDEFN{} attribute, 
-\hypertarget{chap:DWATexternalexternalvariable}{}
-which 
-\addtoindexx{external attribute}
-is a \livelink{chap:classflag}{flag}, if the name
+\item \hypertarget{chap:DWATexternalexternalvariable}{}
+A \DWATexternalDEFN{} attribute,\addtoindexx{external attribute} 
+which is a \livelink{chap:classflag}{flag}, if the name
 of a variable is visible outside of its enclosing compilation
 unit.  
 
@@ -112,14 +110,11 @@ the \DWATspecification{} attribute do not need to duplicate
 information provided by the declaration entry referenced by
 the specification attribute. In particular, such variable
 entries do not need to contain attributes for the name or
-type of the data member whose definition they 
-% Getting the link target in a good spot is tricky. So putting
-%this one a little early.
-\hypertarget{chap:DWATvariableparameternonconstantparameterflag}{}
-represent.
+type of the data member whose definition they represent.
 
 \needlines{4}
-\item A \DWATvariableparameterDEFN{}
+\item \hypertarget{chap:DWATvariableparameternonconstantparameterflag}{}
+A \DWATvariableparameterDEFN{}
 attribute\addtoindexx{variable parameter attribute}, 
 which is a \livelink{chap:classflag}{flag},
 if a formal parameter entry represents a parameter whose
@@ -127,24 +122,23 @@ value in the calling function may be modified by the callee.
 The absence of this attribute implies that the parameter\textquoteright s
 value in the calling function cannot be modified by the callee.
 
-\item A \DWATisoptionalDEFN{} attribute, 
-\hypertarget{chap:DWATisoptionaloptionalparameter}{}
-which 
-\addtoindexx{is optional attribute}
-is a \livelink{chap:classflag}{flag}, if a
+\item \hypertarget{chap:DWATisoptionaloptionalparameter}{}
+A \DWATisoptionalDEFN{} attribute,\addtoindexx{is optional attribute} 
+which is a \livelink{chap:classflag}{flag}, if a
 parameter entry represents an \addtoindex{optional parameter}.
 
-\item A \DWATdefaultvalueDEFN{} attribute 
-\addtoindexx{default value attribute}
-for 
-\addtoindexx{formal parameter entry!with default value}
-a formal parameter
-\hypertarget{chap:DWATdefaultvaluedefaultvalueofparameter}{}
-entry. The value of this attribute may be a constant, or a reference to the
+\item \hypertarget{chap:DWATdefaultvaluedefaultvalueofparameter}{}
+A \DWATdefaultvalueDEFN{} attribute\addtoindexx{default value attribute}
+for \addtoindexx{formal parameter entry!with default value}
+a formal parameter entry. 
+The value of this attribute may be a constant, or a reference to the
 debugging information entry for a variable, or a reference to a
 debugging information entry containing a DWARF procedure.  If the
 attribute form is of class constant, that constant is interpreted as
-a default value of the type of the formal parameter. If the attribute
+\bb
+a value whose type is the same as
+\eb
+the type of the formal parameter. If the attribute
 form is of class reference, and the referenced entry is for a
 variable, the default value of the parameter is the value of the
 referenced variable.  If the reference value is 0, no default value
@@ -157,9 +151,9 @@ parameter.
 \textit{For a constant form there is no way to 
 express the absence of a default value.}
 
-\item A \DWATconstvalueDEFN{} attribute
+\item \hypertarget{chap:DWATconstvalueconstantobject}{}
+A \DWATconstvalueDEFN{} attribute
 \addtoindexx{constant value attribute}  
-\hypertarget{chap:DWATconstvalueconstantobject}{}
 for an entry describing a
 variable or formal parameter whose value is constant and not
 represented by an object in the address space of the program,
@@ -178,14 +172,18 @@ formal parameter of an inlined subprogram that corresponds
 to a constant actual parameter of a call that is inlined.
 }
 
-\item A \DWATstartscopeDEFN{}\addtoindexx{start scope attribute}
-\hypertarget{chap:DWATstartscopeobjectdeclaration}{}
+\item \hypertarget{chap:DWATstartscopeobjectdeclaration}{}
+A \DWATstartscopeDEFN{}\addtoindexx{start scope attribute}
 attribute if the address range for the scope of an
 object is a subset of the address range for the
 the lexical scope most closely enclosing the object. 
 There are two cases:
 \begin{enumerate}[a) ]
-\item If address range for the scope of the object entry 
+\item If 
+\bb
+the
+\eb
+address range for the scope of the object entry 
 includes all of addresses for the containing scope except 
 for a contiguous sequence of bytes at the beginning of the 
 address range for the containing scope, then the address is 
@@ -238,11 +236,11 @@ the full declarator for the local x.}
 non-contiguous and require use of a \addtoindex{range list} even when
 the containing scope is contiguous. Conversely, the scope of
 an object may not require its own \addtoindex{range list} even when the
-containing scope is non\dash contiguous.}
+containing scope is non-contiguous.}
 
-\item A \DWATendianityDEFN{} attribute,
+\item \hypertarget{chap:DWATendianityendianityofdata}{}
+A \DWATendianityDEFN{} attribute,
 \addtoindexx{endianity attribute}
-\hypertarget{chap:DWATendianityendianityofdata}{}
 whose value is a constant that 
 \addtoindexx{big-endian encoding|see{endianity attribute}}
 specifies the endianity of the object. The value of
@@ -278,9 +276,9 @@ exact definition of these formats may differ in subtle ways
 for different architectures.
 
 \needlines{6}
-\item A \DWATconstexprDEFN{} attribute,
+\item \hypertarget{chap:DWATconstexprcompiletimeconstantobject}{}
+A \DWATconstexprDEFN{} attribute,
 \addtoindex{constant expression attribute}
-\hypertarget{chap:DWATconstexprcompiletimeconstantobject}{}
 which is a \CLASSflag, if a
 variable entry represents a \addtoindex{C++} object declared with the
 \texttt{constexpr} specifier. This attribute indicates that the
@@ -314,9 +312,10 @@ entry has a \DWATname{} attribute
 whose value is a null-terminated
 string containing the
 \livetargi{chap:commonblockreferenceattribute}{common block}{common block reference attribute} 
-name as it appears in the source program. It may also have a
-\DWATlinkagename{} attribute as described in 
-Section \refersec{chap:linkagenames}. 
+name.
+\bbeb
+It may also have a \DWATlinkagename{} attribute as described 
+in Section \refersec{chap:linkagenames}. 
 
 A common block entry also has a \DWATlocation{} attribute
 \addtoindexx{location attribute}
@@ -347,10 +346,10 @@ name, the namelist entry has a \DWATname{} attribute,
 \addtoindexx{name attribute}
 whose value is a null-terminated
 string containing the namelist\textquoteright{}s
-name as it appears in the source program.
+name.
+\bbeb
 
-Each 
-\hypertarget{chap:DWATnamelistitemnamelistitem}{}
+Each\hypertarget{chap:DWATnamelistitemnamelistitem}{}
 name that is part of the namelist is represented
 by a debugging information entry with the tag
 \DWTAGnamelistitemTARG. 

@@ -18,11 +18,11 @@ special labels are reserved for tag names, attribute names,
 base type encodings, location operations, language names,
 calling conventions and call frame instructions.
 
-The labels denoting the beginning and end of the reserved
-\hypertarget{chap:DWXXXlohiuser}{}
-value range for vendor specific extensions consist of the
+The labels denoting the beginning and end of the 
+\hypertarget{chap:DWXXXlohiuser}{reserved value range}
+for vendor specific extensions consist of the
 appropriate prefix 
-(\DWATlouserMARK{}\DWAThiuserMARK{}	DW\_AT,
+(\DWATlouserMARK{}\DWAThiuserMARK{}DW\_AT,
 \DWATElouserMARK{}\DWATEhiuserMARK{}	DW\_ATE, 
 \DWCClouserMARK{}\DWCChiuserMARK{}	DW\_CC,
 \DWCFAlouserMARK{}\DWCFAhiuserMARK{}	DW\_CFA 
@@ -119,8 +119,11 @@ In an \addtoindex{initial length} field, the values \wfffffffzero through
 \wffffffff are reserved by DWARF to indicate some form of
 extension relative to \DWARFVersionII; such values must not
 be interpreted as a length field. The use of one such value,
-\xffffffff, is defined below 
-(see Section \refersec{datarep:32bitand64bitdwarfformats}); 
+\xffffffff, is defined 
+\bb
+in
+\eb
+Section \refersec{datarep:32bitand64bitdwarfformats}); 
 the use of
 the other values is reserved for possible future extensions.
 
@@ -714,8 +717,8 @@ detect that a DWARF section contribution is using the 64-bit
 format and to adapt its processing accordingly.}
 
 \needlines{4}
-\item Section offset and section length
-\hypertarget{datarep:sectionoffsetlength}{} 
+\item \hypertarget{datarep:sectionoffsetlength}{}
+Section offset and section length
 \addtoindexx{section length!use in headers}
 fields that occur
 \addtoindexx{section offset!use in headers}
@@ -1693,10 +1696,12 @@ constant data forms for one-, two-, four-, eight- and sixteen-byte values
 \DWFORMdatafourTARG,
 \DWFORMdataeightTARG{} and
 \DWFORMdatasixteenTARG). 
-There are also variable length constant
-data forms encoded using LEB128 numbers (see below). 
-Both signed (\DWFORMsdataTARG) and unsigned 
-(\DWFORMudataTARG) variable length constants are available.
+There are variable length constant
+data forms encoded using 
+\bb
+signed LEB128 numbers (\DWFORMsdataTARG) and unsigned 
+LEB128 numbers (\DWFORMudataTARG).
+\eb
 There is also an implicit constant (\DWFORMimplicitconst),
 whose value is provided as part of the abbreviation
 declaration.
@@ -1744,7 +1749,7 @@ is represented explicitly as a single byte of data
 implicitly (\DWFORMflagpresentTARG). 
 In the
 first case, if the \nolink{flag} has value zero, it indicates the
-absence of the attribute; if the \nolink{flag} has a non\dash zero value,
+absence of the attribute; if the \nolink{flag} has a non-zero value,
 it indicates the presence of the attribute. In the second
 case, the attribute is implicitly indicated as present, and
 no value is encoded in the debugging information entry itself.
@@ -1815,7 +1820,7 @@ offset into the \dotdebugranges{} section
 It consists of an
 offset from the beginning of the 
 \dotdebugranges{} section
-to the beginning of the non\dash contiguous address ranges
+to the beginning of the non-contiguous address ranges
 information for the referencing entity.  
 It is relocatable in
 a relocatable object file, and relocated in an executable or
@@ -2392,9 +2397,8 @@ Table \refersec{tab:locationlistentryencodingvalues}.
 \section{Base Type Attribute Encodings}
 \label{datarep:basetypeattributeencodings}
 
-The encodings of the 
-\hypertarget{chap:DWATencodingencodingofbasetype}{}
-constants used in the 
+The\hypertarget{chap:DWATencodingencodingofbasetype}{}
+encodings of the constants used in the 
 \DWATencodingDEFN{} attribute\addtoindexx{encoding attribute} 
 are given in 
 Table \refersec{tab:basetypeencodingvalues}
@@ -2620,7 +2624,10 @@ defined language.
 \DWLANGCeightynine &0x0001 &0 \addtoindexx{C:1989 (ISO)}      \\
 \DWLANGC{} &0x0002 &0  \addtoindexx{C!non-standard} \\
 \DWLANGAdaeightythree{} \dag &0x0003 &1  \addtoindexx{Ada:1983 (ISO)}     \\
-\DWLANGCplusplus{} &0x0004 &0 \addtoindexx{C++:1998 (ISO)}      \\
+\bb
+\DWLANGCplusplus{} &0x0004 &0 \addtoindexx{C++98 (ISO)} 
+\eb
+\\
 \DWLANGCobolseventyfour{} \dag &0x0005 &1 \addtoindexx{COBOL:1974 (ISO)}      \\
 \DWLANGCoboleightyfive{} \dag &0x0006 &1 \addtoindexx{COBOL:1985 (ISO)}      \\
 \DWLANGFortranseventyseven &0x0007 &1 \addtoindexx{FORTRAN:1977 (ISO)}      \\
@@ -2641,15 +2648,21 @@ defined language.
 \DWLANGGo{} \dag \ddag &0x0016 &0 \addtoindexx{Go}\\
 \DWLANGModulathree{} \dag \ddag &0x0017 &1 \addtoindexx{Modula-3}\\
 \DWLANGHaskell{} \dag \ddag &0x0018 &0 \addtoindexx{Haskell}\\
-\DWLANGCpluspluszerothree{} \ddag &0x0019 &0 \addtoindexx{C++:2003 (ISO)}\\
-\DWLANGCpluspluseleven{} \ddag &0x001a &0 \addtoindexx{C++:2011 (ISO)}\\
+\bb
+\DWLANGCpluspluszerothree{} \ddag &0x0019 &0 \addtoindexx{C++03 (ISO)}\\
+\DWLANGCpluspluseleven{} \ddag &0x001a &0 \addtoindexx{C++11 (ISO)}
+\eb
+\\
 \DWLANGOCaml{} \ddag &0x001b &0	\addtoindexx{OCaml}\\
 \DWLANGRust{} \ddag &0x001c &0 \addtoindexx{Rust}\\
 \DWLANGCeleven{} \ddag &0x001d &0 \addtoindexx{C:2011 (ISO)}\\
 \DWLANGSwift{} \ddag &0x001e &0 \addtoindexx{Swift} \\
 \DWLANGJulia{} \ddag &0x001f &1 \addtoindexx{Julia} \\
 \DWLANGDylan{} \ddag &0x0020 &0 \addtoindexx{Dylan} \\
-\DWLANGCplusplusfourteen{}~\ddag &0x0021 &0 \addtoindexx{C++:2014 (ISO)}     \\
+\bb
+\DWLANGCplusplusfourteen{}~\ddag &0x0021 &0 \addtoindexx{C++14 (ISO)} 
+\eb
+\\
 \DWLANGFortranzerothree{}~\ddag  &0x0022 &1 \addtoindexx{Fortran:2004 (ISO)} \\
 \DWLANGFortranzeroeight{}~\ddag  &0x0023 &1 \addtoindexx{Fortran:2010 (ISO)} \\
 \DWLANGlouser{} &0x8000 & \\

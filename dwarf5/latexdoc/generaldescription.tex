@@ -155,7 +155,11 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 \addtoindexx{attributes!list of}
 \begin{longtable}{P{6.2cm}|P{8.5cm}}
   \caption{Attribute names} \label{tab:attributenames} \\
-  \hline \bfseries Attribute$^*$&\bfseries Identifies or Specifies \\ \hline
+  \hline \bfseries Attribute$^*$&\bfseries 
+\bb 
+Usage 
+\eb 
+\\ \hline
 \endfirsthead
   \bfseries Attribute$^*$&\bfseries Identifies or Specifies \\ \hline
 \endhead
@@ -182,12 +186,16 @@ The attributes are listed in Table \referfol{tab:attributenames}.
         {Out-of-line instances of inline subprograms}
         {out-of-line instances of inline subprograms} \\
 \DWATaccessibilityTARG
-&\livelink{chap:DWATaccessibilitycandadadeclarations}
-        {Accessibility of declarations} (\addtoindex{C++}, \addtoindex{Ada}) \\
-&\livelink{chap:DWATaccessibilitycppbaseclasses}
-        {Accessibility of base classes} (\addtoindex{C++}) \\
+\bb
+&\livelink{chap:DWATaccessdeclaration}
+        {Access declaration} (\addtoindex{C++}, \addtoindex{Ada}) \\
 &\livelink{chap:DWATaccessibilitycppinheritedmembers}
-        {Accessibility of inherited members} (\addtoindex{C++}) \\
+        {Accessibility of base or inherited class} (\addtoindex{C++}) \\
+&\livelinki{chap:DWATaccessibilityattribute}
+        {Accessibility of data member or member function}
+        {accessibility attribute} 
+\eb
+        \\
 \DWATaddressclassTARG
 &\livelinki{chap:DWATadressclasspointerorreferencetypes}
         {Pointer or reference types}
@@ -276,6 +284,10 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 &\livelinki{chap:DWATcallcolumncolumnpositionofinlinedsubroutinecall}
            {Column position of inlined subroutine call}
            {column position of inlined subroutine call} \\
+&\livelinki{chap:DWATcallcolumnofcallsite}
+           {Column position of call site of non-inlined call} 
+           {column position of call site of non-inlined call}
+\bbeb          \\
 \DWATcalldatalocationTARG{}
 &\livelinki{chap:DWATcalldatalocationofcallparameter}
            {Address of the value pointed to by an argument passed in a call}
@@ -289,11 +301,19 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 \DWATcallfileTARG
 &\livelinki{chap:DWATcallfilefilecontaininginlinedsubroutinecall}
            {File containing inlined subroutine call}
-           {file containing inlined subroutine call} \\
+           {file containing inlined subroutine call} 
+\bbeb          \\
+&\livelinki{chap:DWATcallfileofcallsite}
+           {File containing call site of non-inlined call} 
+           {file containing call site of non-inlined call} 
+\bbeb           \\
 \DWATcalllineTARG{} 
 &\livelinki{chap:DWATcalllinelinenumberofinlinedsubroutinecall}
            {Line number of inlined subroutine call}
            {line number of inlined subroutine call} \\
+&\livelinki{chap:DWATcalllineofcallsite}
+           {Line containing call site of non-inlined call} 
+           {line containing call site of non-inlined call} \\
 \DWATcallingconventionTARG{} 
 &\livelinki{chap:DWATcallingconventionforsubprograms}
            {Calling convention for subprograms}
@@ -556,7 +576,10 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 \DWATlowpcTARG
 &\livelinki{chap:DWATlowpccodeaddressorrangeofaddresses}
         {Code address or range of addresses}
-        {code address or range of addresses}\\
+        {code address or range of addresses}\\*
+&\livelinki{chap:DWATlowpcbaseaddressofscope}
+        {Base address of scope}
+        {base address of scope}\\
 \DWATlowerboundTARG
 &\livelinki{chap:DWATlowerboundlowerboundofsubrange}
         {Lower bound of subrange}
@@ -715,7 +738,7 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 &\livelinki{chap:DWATtypeofcallsite}
         {Type of call site}
         {type!of call site} \\
-&\livelinki{char:DWAATtypeofstringtype}
+&\livelinki{chap:DWAATtypeofstringtype}
         {Type of string type components}
         {type!of string type components} \\
 &\livelinki{chap:DWATtypetypeofsubroutinereturn}
@@ -741,15 +764,12 @@ The attributes are listed in Table \referfol{tab:attributenames}.
         {Non-constant parameter flag}
         {non-constant parameter flag}  \\
 \DWATvirtualityTARG
+\bb
 &\livelinki{chap:DWATvirtualityvirtualityindication}
-        {Virtuality indication}
-        {virtuality indication} \\
-&\livelinki{chap:DWATvirtualityvirtualityofbaseclass}
-        {Virtuality of base class}
-        {virtuality of base class} \\
-&\livelinki{chap:DWATvirtualityvirtualityoffunction}
-        {Virtuality of function}
-        {virtuality of function} \\
+        {virtuality attribute} 
+        {Virtuality of member function or base class}
+\eb
+        \\
 \DWATvisibilityTARG
 &\livelinki{chap:DWATvisibilityvisibilityofdeclaration}
         {Visibility of declaration}
@@ -1017,8 +1037,8 @@ children are represented as siblings of the first child.
 A chain of sibling entries is terminated by a null entry.
 
 In cases where a producer of debugging information feels that
-\hypertarget{chap:DWATsiblingdebugginginformationentryrelationship}{}
-it will be important for consumers of that information to
+it\hypertarget{chap:DWATsiblingdebugginginformationentryrelationship}{}
+will be important for consumers of that information to
 quickly scan chains of sibling entries, while ignoring the
 children of individual siblings, that producer may attach a
 \addtoindexx{sibling attribute}
@@ -1036,6 +1056,13 @@ of the entry to which the attribute is attached.
 \addtoindexx{size of an address|see{\textit{also} \texttt{address\_size}}}
 \addtoindexx{address size|see{size of an address}}
 \addtoindexx{address size|see{\textit{also} \texttt{address\_size}}}
+
+\bb
+Addresses, bytes and bits in DWARF use the numbering and direction
+conventions that are appropriate to the current language on
+the target system.
+\eb
+
 Many places in this document refer to the size of an address
 on the target architecture (or equivalently, target machine)
 to which a DWARF description applies. For processors which
@@ -1057,7 +1084,7 @@ object file will use the same address size.}
 
 \bbpareb
 
-\needlines{4}
+\needlines{6}
 \section{DWARF Expressions}
 \label{chap:dwarfexpressions}
 DWARF expressions describe how to compute a value or 
@@ -2380,14 +2407,12 @@ the accessibility of an object or of some other program
 entity. The accessibility specifies which classes of other
 program objects are permitted access to the object in question.}
 
-The accessibility of a declaration is 
-\hypertarget{chap:DWATaccessibilitycandadadeclarations}{}
+The accessibility of a declaration 
+is\hypertarget{chap:DWATaccessibilityattribute}{}
 represented by a 
-\DWATaccessibilityDEFN{} 
-attribute, whose
-\addtoindexx{accessibility attribute}
-value is a constant drawn from the set of codes listed in Table 
-\refersec{tab:accessibilitycodes}.
+\DWATaccessibilityDEFN{}\addtoindexx{accessibility attribute} 
+attribute, whose value is a constant drawn from the set of codes 
+listed in Table \refersec{tab:accessibilitycodes}.
 
 \begin{simplenametable}[1.9in]{Accessibility codes}{tab:accessibilitycodes}
 \DWACCESSpublicTARG{}          \\
@@ -2405,8 +2430,7 @@ visibility specifies which declarations are to be
 visible outside of the entity in which they are
 declared.}
 
-The 
-\hypertarget{chap:DWATvisibilityvisibilityofdeclaration}{}
+The\hypertarget{chap:DWATvisibilityvisibilityofdeclaration}{}
 visibility of a declaration is represented 
 by a \DWATvisibilityDEFN{}
 attribute\addtoindexx{visibility attribute}, whose value is a
@@ -2425,8 +2449,7 @@ Table \refersec{tab:visibilitycodes}.
 \textit{\addtoindex{C++} provides for virtual and pure virtual structure or class
 member functions and for virtual base classes.}
 
-The 
-\hypertarget{chap:DWATvirtualityvirtualityindication}{}
+The\hypertarget{chap:DWATvirtualityvirtualityindication}{}
 virtuality of a declaration is represented by a
 \DWATvirtualityDEFN{}
 attribute\addtoindexx{virtuality attribute}, whose value is a constant drawn
@@ -2453,8 +2476,8 @@ to non-static member functions.}
 Any debugging information entry representing the
 \addtoindexx{artificial attribute}
 declaration of an object or type artificially generated by
-a compiler and not explicitly declared by the source program
-\hypertarget{chap:DWATartificialobjectsortypesthat}{}
+a compiler and not explicitly declared by the source 
+program\hypertarget{chap:DWATartificialobjectsortypesthat}{}
 may have a 
 \DWATartificialDEFN{} attribute, 
 which is a \livelink{chap:classflag}{flag}.
@@ -2472,8 +2495,8 @@ rather than as locations within a single flat
 address space.}
 
 Any debugging information entry that contains a description
-\hypertarget{chap:DWATsegmentaddressinginformation}{}
-of the location of an object or subroutine may have a 
+of\hypertarget{chap:DWATsegmentaddressinginformation}{}
+the location of an object or subroutine may have a 
 \DWATsegmentDEFN{} attribute, 
 \addtoindexx{segment attribute}
 whose value is a location
@@ -2557,8 +2580,8 @@ entity. In certain contexts, however, a debugger might need
 information about a declaration of an entity that is not
 \addtoindexx{incomplete declaration}
 also a definition, or is otherwise incomplete, to evaluate
-\hypertarget{chap:DWATdeclarationincompletenondefiningorseparateentitydeclaration}{}
-an expression correctly.
+an\hypertarget{chap:DWATdeclarationincompletenondefiningorseparateentitydeclaration}{}
+expression correctly.
 
 \needlines{10}
 \textit{As an example, consider the following fragment of \addtoindex{C} code:}
@@ -2592,9 +2615,17 @@ of a program entity has a
 \DWATdeclarationDEFN{} attribute, which is a 
 \livelink{chap:classflag}{flag}.
 
+\textit{
+\bb
+A non-defining type declaration may nonetheless have 
+children as illustrated in Section
+\refersec{app:declarationscompletingnondefiningdeclarations}.
+\eb
+}
+
 \subsection{Declarations Completing Non-Defining Declarations}
-A debugging information entry that represents a 
-declaration\hypertarget{chap:DWATspecificationincompletenondefiningorseparatedeclaration}{}
+\hypertarget{chap:DWATspecificationincompletenondefiningorseparatedeclaration}{}
+A debugging information entry that represents a declaration
 that completes another (earlier) non-defining declaration may have a 
 \DWATspecificationDEFN{}
 attribute whose value is a \livelink{chap:classreference}{reference} to
@@ -2639,16 +2670,14 @@ entry.
 \textit{It is sometimes useful in a debugger to be able to associate
 a declaration with its occurrence in the program source.}
 
-Any debugging information 
-\hypertarget{chap:DWATdeclfilefilecontainingsourcedeclaration}{}
-entry 
-\hypertarget{chap:DWATdecllinelinenumberofsourcedeclaration}{}
-representing 
-\hypertarget{chap:DWATdeclcolumncolumnpositionofsourcedeclaration}{}
+Any debugging information entry representing 
 the declaration of an object, module, subprogram or type may have
-\DWATdeclfileDEFN,\addtoindexx{declaration file attribute} 
-\DWATdecllineDEFN\addtoindexx{declaration line attribute} and 
-\DWATdeclcolumnDEFN\addtoindexx{declaration column attribute}
+\DWATdeclfileDEFN,\hypertarget{chap:DWATdeclfilefilecontainingsourcedeclaration}{}
+\addtoindexx{declaration file attribute} 
+\DWATdecllineDEFN\hypertarget{chap:DWATdecllinelinenumberofsourcedeclaration}{}
+\addtoindexx{declaration line attribute} and 
+\DWATdeclcolumnDEFN\hypertarget{chap:DWATdeclcolumncolumnpositionofsourcedeclaration}{}
+\addtoindexx{declaration column attribute}
 attributes, each of whose value is an unsigned
 \livelink{chap:classconstant}{integer constant}.
 
@@ -2693,8 +2722,9 @@ attribute\addtoindexx{name attribute}, whose value of
 \bb
 class 
 \eb
-\CLASSstring{} represents the name as it appears in
-the source program. A debugging information entry containing
+\CLASSstring{} represents the name.
+\bbeb
+A debugging information entry containing
 no name attribute, or containing a name attribute whose value
 consists of a name containing a single null byte, represents
 a program entity for which no name was given in the source.
@@ -2715,14 +2745,11 @@ Section \referfol{chap:linkagenames} regarding the use of
 Sequences of multiple whitespace characters may be compressed.}
 
 \section{Data Locations and DWARF Procedures}
-Any debugging information entry describing a data object (which
 \hypertarget{chap:DWATlocationdataobjectlocation}{}
+Any debugging information entry describing a data object (which
 includes variables and parameters) or 
 \livelink{chap:commonblockentry}{common blocks}
-may have 
-\addtoindexx{location attribute}
-a
-\DWATlocationDEFN{} attribute,
+may have a \DWATlocationDEFN{} attribute,
 \addtoindexx{location attribute}
 whose value is a location description
 (see Section \refersec{chap:locationdescriptions}).
@@ -2769,23 +2796,17 @@ lexical
 try/catch \nolink{blocks} (see Section \refersec{chap:tryandcatchblockentries}), 
 labels and the like, may have
 \begin{itemize}
-\item A \DWATlowpcDEFN{} attribute for
-\hypertarget{chap:DWATlowpccodeaddressorrangeofaddresses}{}
-a single address,
+\item \hypertarget{chap:DWATlowpccodeaddressorrangeofaddresses}{}
+A \DWATlowpcDEFN{} attribute for a single address,
 
-\item A \DWATlowpcDEFN{}
-\addtoindexx{low PC attribute}
-and 
-\DWAThighpcDEFN{}
-\addtoindexx{high PC attribute}
-\hypertarget{chap:DWAThighpccontiguousrangeofcodeaddresses}{}
-pair of attributes for 
-a single contiguous range of
+\item \hypertarget{chap:DWAThighpccontiguousrangeofcodeaddresses}{}
+A \DWATlowpcDEFN{}\addtoindexx{low PC attribute}
+and \DWAThighpcDEFN{}\addtoindexx{high PC attribute}
+pair of attributes for a single contiguous range of
 addresses, or
 
-\item A \DWATrangesDEFN{} attribute 
-\addtoindexx{ranges attribute}
-\hypertarget{chap:DWATrangesnoncontiguousrangeofcodeaddresses}{}
+\item \hypertarget{chap:DWATrangesnoncontiguousrangeofcodeaddresses}{}
+A \DWATrangesDEFN{} attribute\addtoindexx{ranges attribute}
 for a non-contiguous range of addresses.
 \end{itemize}
 
@@ -2796,9 +2817,9 @@ none of these attributes are specified.
 
 \bb
 The \definitionx{base address} of the scope for any of the
-debugging information entries listed above is given 
-by either the \DWATlowpcNAME{} attribute or the first address
-in the first range entry 
+debugging information entries listed above is given by either the 
+\DWATlowpcNAME{}\livetargi{chap:DWATlowpcbaseaddressofscope}{}{base address of scope} 
+attribute or the first address in the first range entry 
 in the list of ranges given by the \DWATrangesNAME{} attribute.
 If there is no such attribute, the base address is undefined.
 \eb
@@ -2834,12 +2855,7 @@ instruction associated with the entity.
 \textit{The high PC value
 may be beyond the last valid instruction in the executable.}
 
-\needlines{5}
-The presence of low and high PC attributes for an entity
-implies that the code generated for the entity is contiguous
-and exists totally within the boundaries specified by those
-two attributes.
-\bb\eb
+\bbpareb
 
 \subsection{Non-Contiguous Address Ranges}
 \label{chap:noncontiguousaddressranges}
@@ -2882,9 +2898,12 @@ relative to that base.
 \bbpareb
 
 The \definitionx{applicable base address} of a \addtoindex{range list} 
-entry is determined
-by the closest preceding base address selection entry (see
-below) in the same range list. If there is no such selection
+entry is determined by the closest preceding base address 
+selection entry in the same range list (see
+\bb
+Section \refersec{chap:baseaddressselectionentry}). 
+\eb
+ If there is no such selection
 entry, then the applicable base address defaults to the base
 address of the compilation unit 
 (see Section \refersec{chap:fullandpartialcompilationunitentries}).
@@ -2931,6 +2950,7 @@ range covered by such an entry is zero.}
 
 \needlines{5}
 \subsubsection{Base Address Selection Entry}
+\label{chap:baseaddressselectionentry}
 A \addtoindex{base address selection entry} consists of:
 \begin{enumerate}[1. ]
 \item The value of the largest representable address offset 
@@ -2987,8 +3007,7 @@ to indicate the
 \definitionx{entry address} which is the address of the 
 instruction where execution should begin
 \eb
-within that 
-range\hypertarget{chap:entryaddressofscope}{}
+within that range\hypertarget{chap:entryaddressofscope}{}
 of addresses. 
 \bb
 If the value of the \DWATentrypcNAME{} attribute is of
@@ -3032,7 +3051,8 @@ debugging information entry.  This entry may:
 \item describe a variable which contains the attribute value, or
 \item 
 \bb
-      contain a \DWATlocation{} attribute whose value is a \eb
+      contain a \DWATlocation{} attribute whose value is a
+\eb
       DWARF expression which computes the attribute value
       (for example, \bb\eb a \DWTAGdwarfprocedure{} entry).
 \end{itemize}
@@ -3057,9 +3077,8 @@ type descriptions of the form \texttt{typename\textquoteright Class}, and
 \doublequote{\texttt{access} typename} parameters.}
 
 Generally, any debugging information entry that 
-\hypertarget{chap:DWATdescriptionartificialnameordescription}{}
-has, or may have, a \DWATname{} attribute, may
-also have a
+has,\hypertarget{chap:DWATdescriptionartificialnameordescription}{}
+or may have, a \DWATname{} attribute, may also have a
 \addtoindexx{description attribute}
 \DWATdescriptionDEFN{} attribute whose value is a
 null-terminated string providing a description of the entity.
@@ -3153,8 +3172,9 @@ source program.
 A type or value parameter entry may have a \DWATname{} attribute, 
 \addtoindexx{name attribute}
 whose value is a
-null\dash terminated string containing the name of the corresponding 
-formal parameter as it appears in the source program.
+null-terminated string containing the name of the corresponding 
+formal parameter.
+\bbeb
 The entry may also have a 
 \DWATdefaultvalue{} attribute, which is a flag indicating 
 that the value corresponds to the default argument for the 
