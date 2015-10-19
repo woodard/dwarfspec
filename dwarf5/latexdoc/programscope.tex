@@ -1111,7 +1111,7 @@ itself imported by a use statement without an explicit mention
 may be represented by an imported declaration entry that refers
 to the original debugging information entry. For example, given
 }
-
+\vspace{2mm}
 \begin{lstlisting}
 module A
 integer X, Y, Z
@@ -1124,8 +1124,8 @@ end module
 module C
 use B, only Q => X
 end module
-\end{lstlisting}
 
+\end{lstlisting}
 \textit{the imported declaration entry for Q within module C refers
 directly to the variable declaration entry for X in module A
 because there is no explicit representation for X in module B.
@@ -1282,12 +1282,11 @@ declared using function prototype style declarations and
 those declared using non-prototype declarations.}
 
 A subroutine entry declared with a function prototype style
-declaration may have 
+declaration may have a
 \addtoindexx{prototyped attribute}
-a 
-\DWATprototypedNAME{} attribute, which is
-a \CLASSflag. 
 \bb
+\DWATprototypedDEFN{} attribute, which is
+a \CLASSflag. 
 The attribute indicates whether a subroutine entry point corresponds
 to a function declaration that includes parameter prototype information.
 \eb 
@@ -1353,8 +1352,11 @@ entry point(s) as a whole,
 the following attributes provide summary information about the calls
 that occur within a subprogram.}
 
-A subroutine entry may have \DWATcallalltailcallsNAME, 
-\DWATcallallcallsNAME{} and/or \DWATcallallsourcecallsNAME{} 
+A subroutine entry may have 
+\bb
+\DWATcallalltailcalls, 
+\DWATcallallcalls{} and/or \DWATcallallsourcecalls{} 
+\eb
 attributes, each of which is a 
 \livelink{chap:classflag}{flag}.
 \addtoindexx{call site summary information}
@@ -2124,8 +2126,12 @@ and without regard to the fact that it is within an outer
 concrete instance tree.
 \end{enumerate}
 
+\textit{%
+\bb
 See Appendix \refersec{app:inliningexamples} 
 for discussion and examples.
+\eb
+}
 
 \subsection{Trampolines}
 \label{chap:trampolines}
@@ -2544,30 +2550,28 @@ with the tag \DWTAGwithstmtTARG.
 A with statement entry may have either a 
 \DWATlowpc{} and
 \DWAThighpc{} pair of attributes 
-\addtoindexx{high PC attribute}
-or 
 \addtoindexx{low PC attribute}
-a \DWATranges{} attribute
+\addtoindexx{high PC attribute}
+or a
+\DWATranges{} attribute
 \addtoindexx{ranges attribute}
 whose values encode the contiguous or non-contiguous address
 ranges, respectively, of the machine instructions generated
 for the with statement 
 (see Section \refersec{chap:codeaddressesandranges}).
 
-A 
-\hypertarget{chap:DWATentrypcofwithstmt}{}
-with statement entry may also have 
+A\hypertarget{chap:DWATentrypcofwithstmt}{}
+with statement entry may also have a
 \addtoindexx{entry PC attribute!for with statement}
-a 
 \DWATentrypc{} attribute
 whose value is the address of the first executable instruction
 of the with statement (see 
 Section \refersec{chap:entryaddress}).
 
 \needlines{5}
-The with statement entry has 
+The with statement entry has a
 \addtoindexx{type attribute}
-a \DWATtype{} attribute, denoting
+\DWATtype{} attribute, denoting
 the type of record whose fields may be referenced without full
 qualification within the body of the statement. It also has
 \addtoindexx{location attribute}
@@ -2596,14 +2600,12 @@ a debugging information entry
 \addtoindexx{catch block entry}
 with the tag \DWTAGcatchblockTARG.
 
-% nolink as we have links just above and do not have a combo link for both
 Both try and catch \nolink{block} entries may have either a
 \DWATlowpc{} and 
 \DWAThighpc{} pair of attributes 
-\addtoindexx{high PC attribute}
-or 
 \addtoindexx{low PC attribute}
-a
+\addtoindexx{high PC attribute}
+or a
 \DWATranges{} attribute 
 \addtoindexx{ranges attribute}
 whose values encode the contiguous
@@ -2628,9 +2630,85 @@ that catch \nolink{block}.
 This child entry has one of the tags
 \DWTAGformalparameter{}\addtoindexx{formal parameter entry!in catch block}
 or
-\DWTAGunspecifiedparameters{},\addtoindexx{unspecified parameters entry!in catch block}
+\DWTAGunspecifiedparameters{},
+\addtoindexx{unspecified parameters entry!in catch block}
 and will have the same form as other parameter entries.
 
 The siblings immediately following a try \nolink{block} 
 entry are its corresponding catch \nolink{block} entries.
 
+
+\bb
+\section{Declarations with Reduced Scope}
+\label{declarationswithreducedscope}
+\hypertarget{chap:DWATstartscopeofdeclaration}{}
+Any debugging information entry for a declaration 
+(including objects, subprograms, types and modules) whose scope 
+has an address range that is a subset of the address range for 
+the lexical scope most closely enclosing the declared entity 
+may have a 
+\DWATstartscopeDEFN{}\addtoindexx{start scope attribute}
+attribute to specify that reduced range of addresses. 
+
+There are two cases:
+\begin{enumerate}[1. ]
+\item If the address range for the scope of the entry 
+includes all of addresses for the containing scope except 
+for a contiguous sequence of bytes at the beginning of the 
+address range for the containing scope, then the address is 
+specified using a value of class \CLASSconstant. 
+
+\begin{enumerate}[a) ]
+\item If the address
+range of the containing scope is contiguous, the value of 
+this attribute is the offset in bytes of the beginning of 
+the address range for the scope of the object from the low 
+PC value of the debugging information entry that defines
+that containing scope. 
+\item If the address range of the containing 
+scope is non-contiguous 
+(see \refersec{chap:noncontiguousaddressranges})
+the value of this attribute is the offset in bytes of the 
+beginning of the address range for the scope of the entity 
+from the beginning of the first \addtoindex{range list} entry
+for the containing scope that is not a base selection entry, 
+a default selection entry or an end-of-list entry.
+\end{enumerate}
+
+\needlines{4}
+\item Otherwise, the set of addresses for the scope of the 
+entity is specified using a value of class \CLASSrangelistptr{}. 
+This value indicates the beginning of a \addtoindex{range list}
+(see Section \refersec{chap:noncontiguousaddressranges}).
+\end{enumerate}
+
+\textit{For example, the scope of a variable may begin somewhere 
+in the midst of a lexical \livelink{chap:lexicalblock}{block} in a 
+language that allows executable code in a
+\nolink{block} before a variable declaration, or where one declaration
+containing initialization code may change the scope of a
+subsequent declaration.  Consider the following example \addtoindex{C} code:}
+
+\vspace{3mm}
+\begin{lstlisting}
+float x = 99.99;
+int myfunc()
+{
+    float f = x;
+    float x = 88.99;
+    return 0;
+}
+\end{lstlisting}
+
+\textit{\addtoindex{C} scoping rules require that the value of the 
+variable \texttt{x} assigned to the variable \texttt{f} in the 
+initialization sequence is the value of the global variable \texttt{x}, 
+rather than the local \texttt{x}, because the scope of the local variable 
+\texttt{x} only starts after the full declarator for the local \texttt{x}.}
+
+\textit{Due to optimization, the scope of an object may be
+non-contiguous and require use of a \addtoindex{range list} even when
+the containing scope is contiguous. Conversely, the scope of
+an object may not require its own \addtoindex{range list} even when the
+containing scope is non-contiguous.}
+\eb

@@ -169,74 +169,9 @@ target architecture.
 \textit{One way in which a formal parameter
 with a constant value and no location can arise is for a
 formal parameter of an inlined subprogram that corresponds
-to a constant actual parameter of a call that is inlined.
-}
+to a constant actual parameter of a call that is inlined.}
 
-\item \hypertarget{chap:DWATstartscopeobjectdeclaration}{}
-A \DWATstartscopeDEFN{}\addtoindexx{start scope attribute}
-attribute if the address range for the scope of an
-object is a subset of the address range for the
-the lexical scope most closely enclosing the object. 
-There are two cases:
-\begin{enumerate}[a) ]
-\item If 
-\bb
-the
-\eb
-address range for the scope of the object entry 
-includes all of addresses for the containing scope except 
-for a contiguous sequence of bytes at the beginning of the 
-address range for the containing scope, then the address is 
-specified using a value of class constant. If the address
-range for the containing scope is contiguous, the value of 
-this attribute is the offset in bytes of the beginning of 
-the address range for the scope of the object from the low 
-PC value of the debugging information entry that defines
-that containing scope. If the address range of the containing 
-scope is non-contiguous 
-(see \refersec{chap:noncontiguousaddressranges})
-the value of this attribute is the offset in bytes of the 
-beginning of the address range for the scope of the object 
-from the beginning of the first \addtoindex{range list} entry
-for the containing scope that is not a base selection entry, 
-a default selection entry or an end-of-list entry.
-
-\needlines{4}
-\item Otherwise, the set of addresses for the scope of the 
-object is specified using a value of class \CLASSrangelistptr{}. 
-This value indicates the beginning of a \addtoindex{range list}
-(see \ref{chap:noncontiguousaddressranges}).
-\end{enumerate}
-
-
-\textit{The scope of a variable may begin somewhere in the middle of
-a lexical \livelink{chap:lexicalblock}{block} in a language 
-that allows executable code in a
-\nolink{block} before a variable declaration, or where one declaration
-containing initialization code may change the scope of a
-subsequent declaration.  For example, in the following \addtoindex{C} code:}
-
-\begin{lstlisting}
-float x = 99.99;
-int myfunc()
-{
-    float f = x;
-    float x = 88.99;
-    return 0;
-}
-\end{lstlisting}
-
-\textit{\addtoindex{C} scoping rules require that the value of the variable x
-assigned to the variable f in the initialization sequence is
-the value of the global variable x, rather than the local x,
-because the scope of the local variable x only starts after
-the full declarator for the local x.}
-
-\textit{Due to optimization, the scope of an object may be
-non-contiguous and require use of a \addtoindex{range list} even when
-the containing scope is contiguous. Conversely, the scope of
-an object may not require its own \addtoindex{range list} even when the
-containing scope is non-contiguous.}
+\bbpareb
 
 \item \hypertarget{chap:DWATendianityendianityofdata}{}
 A \DWATendianityDEFN{} attribute,
@@ -252,6 +187,11 @@ of data for the given type is assumed.
 The set of values
 and their meaning for this attribute is given in 
 Table \ref{tab:endianityattributevalues}.
+\bbeb
+These represent the default encoding formats as defined by
+the target architecture's ABI or processor definition. The
+exact definition of these formats may differ in subtle ways
+for different architectures.
 
 \begin{table}[h]
 \caption{Endianity attribute values}
@@ -269,11 +209,6 @@ Name&Meaning\\ \hline
 \end{tabular}
 \end{table}
 
-
-These represent the default encoding formats as defined by
-the target architecture's ABI or processor definition. The
-exact definition of these formats may differ in subtle ways
-for different architectures.
 
 \needlines{6}
 \item \hypertarget{chap:DWATconstexprcompiletimeconstantobject}{}
