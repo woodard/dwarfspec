@@ -733,13 +733,6 @@ by \DWATlocation{} attributes in the \dotdebuginfodwo{} section. This
 section has a similar format to the \dotdebugloc{} section in a
 non-split object, but it has some small differences as explained
 in Section \refersec{datarep:locationlistentriesinsplitobjects}. 
-In \texttt{demo2.dwo} as shown in 
-Figure \refersec{fig:splitobjectexampledemotwodwodwarfdebuginfodwoexcerpts}, 
-the debugging information for \texttt{Line::clip} describes a local 
-variable \texttt{slope} whose location varies based on the PC.
-Figure \refersec{fig:splitobjectexampledemotwodwodwarfdebuglocdwoexcerpts} 
-presents some excerpts from the \dotdebuginfodwo{} section for 
-\texttt{demo2.dwo}.
 
 \begin{figure}[b]
 \figurepart{1}{2}
@@ -767,7 +760,7 @@ presents some excerpts from the \dotdebuginfodwo{} section for
 \label{fig:splitobjectexampledemotwodwodwarfdebuginfodwoexcerpts}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[t]
 \figurepart{2}{2}
 \begin{dwflisting}
 \begin{alltt}
@@ -809,6 +802,17 @@ Figure~\ref{fig:splitobjectexampledemotwodwodwarfdebuginfodwoexcerpts}: Split ob
 \end{center}
 \end{figure}
 
+
+In \texttt{demo2.dwo} as shown in 
+Figure \refersec{fig:splitobjectexampledemotwodwodwarfdebuginfodwoexcerpts}, 
+the debugging information for \texttt{Line::clip} describes a local 
+variable \texttt{slope} whose location varies based on the PC.
+Figure \refersec{fig:splitobjectexampledemotwodwodwarfdebuglocdwoexcerpts} 
+presents some excerpts from the \dotdebuginfodwo{} section for 
+\texttt{demo2.dwo}.
+
+\clearpage
+
 In Figure \refersec{fig:splitobjectexampledemotwodwodwarfdebuginfodwoexcerpts},
 The \DWTAGformalparameter{} entries at \texttt{4\$} and \texttt{5\$} refer to the
 location lists at offset \texttt{0x0} and \texttt{0x2a}, respectively, and the
@@ -818,30 +822,42 @@ Figure \refersec{fig:splitobjectexampledemotwodwodwarfdebuglocdwoexcerpts}
 shows a representation of the
 location lists at those offsets in the \dotdebuglocdwo{} section.
 
-\begin{figure}
+% Special commands for use in the folloing table
+\newcommand{\XXLLEsl}{\hyperlink{chap:DWLLEstartlengthentry}{start\_length\_entry}
+                      \index{DW\_LLE\_start\_length\_entry}}
+\newcommand{\XXLLEeol}{\hyperlink{chap:DWLLEendoflistentry}{end\_of\_list\_entry}
+                       \index{DW\_LLE\_end\_of\_list\_entry}}
+
+\begin{figure}[h]
 \begin{dwflisting}
-\begin{tabular}{rlrrl}
-\texttt{offset} & entry type & start & length & expression \\
-\hline \\
-0x00 & \DWLLEstartlengthentry &  [9] & 0x002f & \DWOPregfive~(rdi) \\
-0x09 & \DWLLEstartlengthentry & [11] & 0x01b9 & \DWOPregthree~(rbx) \\
-0x12 & \DWLLEstartlengthentry & [29] & 0x0003 & \DWOPbregtwelve~(r12):\\
-&&&& -8; \DWOPstackvalue \\
-0x1d & \DWLLEstartlengthentry & [31] & 0x0001 & \DWOPentryvalue: \\
-&&&& (\DWOPregfive~(rdi)); \\
-&&&& \DWOPstackvalue \\
-0x29 & \DWLLEendoflistentry &&& \\
-\\   & \hhline{-} &&& \\
-0x2a & \DWLLEstartlengthentry &  [9] & 0x002f & \DWOPregfour~(rsi)) \\
-0x33 & \DWLLEstartlengthentry & [11] & 0x01ba & \DWOPregsix~(rbp)) \\
-0x3c & \DWLLEstartlengthentry & [30] & 0x0003 & \DWOPentryvalue: \\
-&&&& (\DWOPregfour~(rsi)); \\
-&&&& \DWOPstackvalue \\
-0x48 & \DWLLEendoflistentry &&& \\
-\\   & \hhline{-} &&& \\
-0x49 & \DWLLEstartlengthentry & [10] & 0x0004 & \DWOPregeighteen~(xmm1) \\
-0x52 & \DWLLEstartlengthentry & [11] & 0x01bd & \DWOPfbreg: -36 \\
-0x5c & \DWLLEendoflistentry &&& \\
+\begin{tabular}{rl|rr|rl}
+       &  entry type          & \multicolumn{2}{c}{range} 
+                                               & \multicolumn{2}{l}{\hspace{6mm}location} \\
+offset & (DW\_LLE\_*)         & start & length & length & expression \\
+\hline
+&&&&& \\
+
+0x00 & \XXLLEsl &  [9] & 0x002f & 0x0001 & \DWOPregfive~(rdi) \\
+0x09 & \XXLLEsl & [11] & 0x01b9 & 0x0001 & \DWOPregthree~(rbx) \\
+0x12 & \XXLLEsl & [29] & 0x0003 & 0x0003 & \DWOPbregtwelve~(r12):\\
+     &          &      &        &        & -8; \DWOPstackvalue \\
+0x1d & \XXLLEsl & [31] & 0x0001 & 0x0003 & \DWOPentryvalue: \\
+     &          &      &        &        & (\DWOPregfive~(rdi)); \\
+     &          &      &        &        & \DWOPstackvalue \\
+0x29 & \XXLLEeol &&&& \\
+------ &&&&& \\
+
+0x2a & \XXLLEsl &  [9] & 0x002f & 0x0001 & \DWOPregfour~(rsi)) \\
+0x33 & \XXLLEsl & [11] & 0x01ba & 0x0003 & \DWOPregsix~(rbp)) \\
+0x3c & \XXLLEsl & [30] & 0x0003 & 0x0003 & \DWOPentryvalue: \\
+     &          &      &        &        & (\DWOPregfour~(rsi)); \\
+     &          &      &        &        & \DWOPstackvalue \\
+0x48 & \XXLLEeol &&&& \\
+------ &&&&& \\
+
+0x49 & \XXLLEsl & [10] & 0x0004 & 0x0001 & \DWOPregeighteen~(xmm1) \\
+0x52 & \XXLLEsl & [11] & 0x01bd & 0x0002 & \DWOPfbreg: -36 \\
+0x5c & \XXLLEeol &&&& \\
 &&&& \\
 \end{tabular}
 \end{dwflisting}
@@ -854,8 +870,12 @@ of a slot in the \dotdebugaddr{} section, relative to the base
 offset defined by the compilations unit's \DWATaddrbase{}
 attribute. The \dotdebugaddr{} slots referenced by these entries give
 the relocated address of a label within the function where the
-address range begins. The length field gives the length of the
-address range.
+address range begins. 
+\bb
+The following length field gives the length of the
+address range. The location, consisting of its own length and
+a DWARF expression, is last.
+\eb 
 
 \clearpage
 \section{DWARF Package File Example}

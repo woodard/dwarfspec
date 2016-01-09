@@ -55,35 +55,22 @@ content of the debugging entries. The second piece is the
 way the debugging information is encoded and represented in
 an object file.
 
-The informational content is described in
-\bb 
-Chapters
-\eb
-\ref{chap:generaldescription} 
-through
-\ref{chap:otherdebugginginformation}. 
-Chapter \ref{chap:generaldescription}
+The informational content is described in Chapters
+\ref{chap:generaldescription} through
+\ref{chap:otherdebugginginformation}. Chapter 
+\ref{chap:generaldescription}
 describes the overall structure of the information
 and attributes that are common to many or all of the different
-debugging information entries. 
-\bb
-Chapters
-\eb \ref{chap:programscopeentries}, 
+debugging information entries. Chapters
+\ref{chap:programscopeentries}, 
 \ref{chap:dataobjectandobjectlistentries} and 
 \ref{chap:typeentries} describe
 the specific debugging information entries and how they
 communicate the necessary information about the source program
-to a debugger. 
-\bb
-Chapter
-\eb
-\ref{chap:otherdebugginginformation} 
+to a debugger. Chapter \ref{chap:otherdebugginginformation} 
 describes debugging information
 contained outside of the debugging information entries. The
-encoding of the DWARF information is presented in 
-\bb
-Chapter
-\eb
+encoding of the DWARF information is presented in Chapter
 \ref{datarep:datarepresentation}.
 
 This organization closely follows that used in the 
@@ -109,9 +96,7 @@ understanding of the DWARF Debugging Format.
 Although DWARF Version 1 was developed in the late 1980's as a 
 format to support debugging C programs written for AT\&T hardware 
 running SVR4, \DWARFVersionII{} and later has evolved far beyond 
-this origin. One difference between DWARF and other 
-\bb\eb
-formats 
+this origin. One difference between DWARF and other formats 
 is that the latter are often specific to a particular language, 
 architecture, and/or operating system. 
 
@@ -133,8 +118,8 @@ particular language and which doesn't appear to have more
 general application.  For these, DWARF has a description 
 designed to meet the language requirements, although, to the 
 extent possible, an effort is made to generalize the attribute. 
-An example of this is the \DWTAGconditionNAME{} DIE, 
-\bb\eb 
+An example of this is the \DWTAGconditionNAME{} 
+\bb debugging information entry,\eb 
 used to describe \addtoindex{COBOL} level 88 conditions, which 
 is described in abstract terms rather than COBOL-specific terms.  
 Conceivably, this TAG might be used with a different language 
@@ -162,10 +147,7 @@ systems like BSD and Linux.  DWARF fits well with the section
 organization of the ELF object file format. Nonetheless, DWARF 
 attempts to be independent of either the OS or the object file 
 format.  There have been implementations of DWARF debugging 
-data in 
-\bb
-COFF, Mach-O and other object file formats. 
-\eb
+data in COFF, Mach-O and other object file formats. 
 
 DWARF assumes that any object file format will be able to 
 distinguish the various DWARF data sections in some fashion, 
@@ -174,8 +156,7 @@ preferably by name.
 DWARF makes a few assumptions about functionality provided by 
 the underlying operating system.  DWARF data sections can be 
 read sequentially and independently.
-\bb\eb
-Each DWARF data section is a \bb\eb sequence of 8-bit bytes, 
+Each DWARF data section is a sequence of 8-bit bytes, 
 numbered starting with zero.  The presence of offsets from one 
 DWARF data section into other data sections does not imply that 
 the underlying OS must be able to position files randomly; a 
@@ -183,7 +164,7 @@ data section could be read sequentially and indexed using the offset.
 
 \subsection{Compact Data Representation} 
 The DWARF description is designed to be a compact file-oriented 
-representation.\bb\eb
+representation. 
 
 There are several encodings which achieve this goal, such as the 
 TAG and attribute abbreviations or the line number encoding.  
@@ -199,13 +180,12 @@ which allow a consumer to find DWARF data in files other than
 the executable, or the type units, which allow similar type 
 definitions from multiple compilations to be combined. 
 
-\bb
 In most cases, it is anticipated that DWARF 
 debug data will be read by a consumer (usually a debugger) and 
 converted into a more efficiently accessed internal representation.  
 For the most part, the DWARF data in a section is not the same as 
 this internal representation.
-\eb
+
 
 \subsection{Efficient Processing} 
 DWARF is designed to be processed efficiently, so that a 
@@ -224,14 +204,9 @@ the possible implementations.
 DWARF attempts to allow developers the greatest flexibility 
 in designing implementations, without mandating any particular 
 design decisions. Issues which can be described as 
-\bb
-quality-of-implementation
-\eb
-are avoided.
+quality-of-implementation are avoided.
 
-\bb
 \subsection{Explicit Rather Than Implicit Description}
-\eb
 DWARF describes the source to object translation explicitly 
 rather than using common practice or convention as an implicit 
 understanding between producer and consumer.  For example, where 
@@ -245,25 +220,15 @@ DWARF has a goal of describing characteristics of a program once,
 rather than repeating the same information multiple times.  The 
 string sections can be compacted to eliminate duplicate strings, 
 for example.  Other compaction schemes or references between 
-\bb
-sections 
-\eb
-support this. Whether a particular implementation is 
+sections support this. Whether a particular implementation is 
 effective at eliminating duplicate data, or even attempts to, 
-is a 
-\bb
-quality-of-implementation
-\eb
-issue.  
+is a quality-of-implementation issue.  
 
 \subsection{Leverage Other Standards}
 Where another standard exists which describes how to interpret 
 aspects of a program, DWARF defers to that standard rather than 
 attempting to duplicate the description.  For example, C++ has 
-\bb
-specific 
-\eb
-rules for deciding which function to call depending 
+specific rules for deciding which function to call depending 
 name, scope, argument types, and other factors.  DWARF describes 
 the functions and arguments, but doesn't attempt to describe 
 how one would be selected by a consumer performing any particular 
@@ -276,18 +241,13 @@ without requiring additional functionality specifically to
 support DWARF data.  This may require the implementer to be 
 careful that they do not generate DWARF data which cannot be 
 processed by these programs.  Conversely, an assembler which 
-can generate LEB128 
-\bb
-(Little-Endian Base 128) 
-\eb
+can generate LEB128 (Little-Endian Base 128) 
 values may allow the compiler to generate 
 more compact descriptions, and a linker which understands the 
 format of string sections can merge these sections.  Whether 
 or not an implementation includes these functions is a 
-\bb
-quality-of-implementation 
-\eb
-issue, not mandated by the DWARF specification.
+quality-of-implementation issue, not mandated by the DWARF 
+specification.
 
 \subsection{Separate Description From Implementation}
 DWARF intends to describe the translation of a program from 
@@ -297,31 +257,26 @@ describes how the arguments and local variables in a function
 are to be described, but doesn't specify how this data is 
 collected or organized by a producer.  Where a particular DWARF 
 feature anticipates that it will be implemented in a certain 
-fashion, 
-\bb
-informative 
-\eb
-text will suggest but not require this design.
+fashion, informative text will suggest but not require this design.
 
-\bb 
 \subsection{Permissive Rather Than Prescriptive}
-\eb
-The DWARF Standard specifies the meaning of DWARF descriptions.  
-It does not specify what a particular producer should generate 
-for any source to object conversion, nor what a particular 
-consumer should do with this description.  DWARF is permissive, 
-allowing different producer to generate different descriptions 
-for the same source to object conversion.  As long as the DWARF 
-description follows this specification, the producer is 
-generating valid DWARF.
-For example, DWARF allows 
 \bb
-a producer 
+The DWARF standard specifies the meaning of DWARF descriptions. It does
+not require that a particular producer describe any particular source
+construct or aspect of the source to object mapping; nor does it specify
+how a particular consumer should make use of this description.  DWARF is
+permissive, allowing different producers to generate different
+descriptions for the same source to object conversion.  As long as the
+content of the generated DWARF description follows this specification,
+the producer is conforming to the specification; as long as the consumer
+follows this specification when interpreting the generated description,
+the consumer is conforming to the specification.
+
+For example, DWARF allows a producer to identify the end of a function
+prologue in the Line Information so that a debugger can stop at this
+location. A producer which does this is generating valid DWARF, as is
+another which doesn't.
 \eb
-to identify the end of a 
-function prologue in the Line Information so that a debugger 
-can stop at this location.  A producer which does this is 
-generating valid DWARF, as is another which doesn't.  
 
 \subsection{Vendor Extensibility}
 This document does not attempt to cover all interesting
@@ -339,8 +294,7 @@ debugging information entries and attributes defined here in
 new situations. 
 Future versions of this document will not use
 names or values reserved for vendor specific additions. 
-All
-names and values not reserved for vendor additions, however,
+All names and values not reserved for vendor additions, however,
 are reserved for future versions of this document.
 
 Where this specification provides a means for
@@ -355,41 +309,28 @@ to be compatible with this specification in the absence of
 those extensions.
 
 The DWARF format is organized so that a consumer can skip over
-data which it does not recognize. 
-This may allow a consumer
+data which it does not recognize. This may allow a consumer
 to read and process files generated according to a later
 version of this standard or which contain vendor extensions,
 albeit possibly in a degraded manner.
 
-\bb
 \section{Changes From Version 4 to Version 5}
-\eb
 \addtoindexx{DWARF Version 5}
-The following is a list of the major changes made to the DWARF Debugging Information
-Format since Version 4 was published. The list is not meant to be exhaustive.
+The following is a list of the major changes made to the 
+DWARF Debugging Information Format since Version 4 was published. 
+The list is not meant to be exhaustive.
 \begin{itemize}
 \item The \dotdebugtypes{}
 %\addtoindexi{\texttt{.debug\_types}}{\texttt{.debug\_types} (Version 4)}
 section introduced in \DWARFVersionIV{} 
 is eliminated and its contents instead contained in \dotdebuginfo{} sections.
-\bb\eb
 \item Add support for collecting common DWARF information 
-\bb
-(debugging information entries 
-\eb
-and macro definitions)
+(debugging information entries and macro definitions)
 across multiple executable and shared files and keeping it in a single
 \addtoindex{supplementary object file}.
-\item A new line number program header 
-\bb
-format 
-\eb
-provides the ability to 
-use an MD5 hash to validate 
-\bb
-the
-\eb
-source file version in use, allows pooling 
+\item A new line number program header format 
+provides the ability to use an MD5 hash to validate 
+the source file version in use, allows pooling 
 of directory and file name strings and makes provision for vendor-defined
 extensions. It also adds a string section specific to the line number table 
 (\dotdebuglinestr)
@@ -397,55 +338,35 @@ to properly support the common practice of stripping all DWARF sections
 except for line number information.
 \needlines{4}
 \item Add a split object file and package representations to allow most 
-DWARF information to be 
-\bb\eb
-kept separate from an executable 
+DWARF information to be kept separate from an executable 
 or shared image. This includes new sections 
 \dotdebugaddr, \dotdebugstroffsets, \dotdebugabbrevdwo, \dotdebuginfodwo, 
 \dotdebuglinedwo, \dotdebuglocdwo, \dotdebugmacrodwo, \dotdebugstrdwo,
 \dotdebugstroffsetsdwo, \dotdebugcuindex{} and \dotdebugtuindex{} 
 together with new forms of attribute value for referencing these sections.
-This enhances DWARF support 
-\bb
-by reducing executable program size and
+This enhances DWARF support by reducing executable program size and
 by improving link times.
-\eb
 \item Replace the \dotdebugmacinfo{} macro information representation with
-\bb
 with a \dotdebugmacro{} representation that can potentially be much more compact.
-\eb
+
 \item Replace the \dotdebugpubnames{} and \dotdebugpubtypes{} sections
 with a single and more functional name index section, \dotdebugnames{}.
 \item Add a new debugging information entry (\DWTAGcallsiteNAME), related 
-\bb\eb
 attributes and DWARF expression operators to describe call site information, 
 including identification of tail calls and tail recursion.
-\bb\eb
 \item Add improved support for \addtoindex{FORTRAN} assumed rank arrays 
 (\DWTAGgenericsubrangeNAME), dynamic rank arrays (\DWATrankNAME)
 and co-arrays (\DWTAGcoarraytypeNAME{}).
-\item Add
-\bb
-new operations that allow support for 
-\eb
+\item Add new operations that allow support for 
 a DWARF expression stack containing typed values.
 \item Add improved support for the \addtoindex{C++}:
-\bb\eb
 \texttt{auto} return type, deleted member functions (\DWATdeletedNAME), 
 as well as defaulted constructors and destructors (\DWATdefaultedNAME).
-\item Add a new attribute 
-\bb
-(\DWATnoreturnNAME{}), 
-\eb
-to identify 
+\item Add a new attribute (\DWATnoreturnNAME{}), to identify 
 a subprogram that does not return to its caller.
 \item Add language codes for C 2011, C++ 2003, C++ 2011, C++ 2014,
 Dylan, Fortran 2003, Fortran 2008, Go, Haskell, 
-Julia, Modula 3, Ocaml, 
-\bb
-OpenCL, Rust 
-\eb
-and Swift.
+Julia, Modula 3, Ocaml, OpenCL, Rust and Swift.
 \item Numerous other more minor additions to improve functionality
 and performance.
 \end{itemize}
@@ -456,35 +377,22 @@ DWARF Version 5 is compatible with DWARF Version 4 except as follows:
 a new \HFNunittype{} field.
 \needlines{4}
 \item New operand forms for attribute values are defined 
-(\DWFORMaddrxNAME, \DWFORMdatasixteenNAME, 
-\bb
-\DWFORMimplicitconstNAME, 
-\eb
+(\DWFORMaddrxNAME, \DWFORMdatasixteenNAME, \DWFORMimplicitconstNAME, 
 \DWFORMlinestrpNAME, 
 \DWFORMrefsupNAME, \DWFORMstrpsupNAME{} and \DWFORMstrxNAME).
 
 \textit{Because a pre-DWARF Version 5 consumer will not be able to interpret 
 these even to ignore and skip over them, new forms must be 
 considered incompatible additions.}
-\item The line number table header 
-\bb\eb 
-is substantially revised.
+\item The line number table header is substantially revised.
 \needlines{4}
 \item A location list entry 
-\bb\eb
 with the address range \mbox{(0, \textit{maximum-address})} is defined 
 as the new default location list entry.
-\item In a string type,
-\bb 
-the \DWATbytesizeNAME{} attribute is re-defined 
-\eb
+\item In a string type, the \DWATbytesizeNAME{} attribute is re-defined 
 to always describe the size of the string type. 
 (Previously it described the size of the optional string length data 
-field if the \DWATstringlengthNAME{} attribute was 
-\bb
-also 
-\eb
-present.)
+field if the \DWATstringlengthNAME{} attribute was also present.)
 \end{itemize}
 
 While not strictly an incompatibility, the macro information 

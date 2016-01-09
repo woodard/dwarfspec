@@ -148,35 +148,24 @@ DWARF specification.}
 \subsubsection{Simple Encodings}
 \label{chap:simpleencodings}
 Types with simple encodings are widely supported in many
-programming languages and 
-\bb
-are not discussed further.
-\eb
+programming languages and are not discussed further.
 
 \needlines{6}
 \subsubsection{Character Encodings}
 \label{chap:characterencodings}
 \DWATEUTF{} 
-\bb
 specifies the \addtoindex{Unicode} string encoding
-\eb
 (see the Universal Character Set standard,
 ISO/IEC 10646\dash 1:1993).
 \addtoindexx{ISO 10646 character set standard}
 
-\textit{For
-\bb
-example, the \addtoindex{C++} type char16\_t is
+\textit{For example, the \addtoindex{C++} type char16\_t is
 represented by a base type entry with a name attribute whose
 value is \doublequote{char16\_t}, an encoding attribute whose value
-is \DWATEUTF{} and a byte size attribute whose value is 2.
-\eb
-}
+is \DWATEUTF{} and a byte size attribute whose value is 2.}
 
 \needlines{4}
-\bb
 \DWATEASCII{} and \DWATEUCS{} specify encodings for
-\eb
 the \addtoindex{Fortran 2003} string kinds 
 \texttt{ASCII}\index{ASCII@\texttt{ASCII} (Fortran string kind)} (ISO/IEC 646:1991) and
 \texttt{ISO\_10646}\index{ISO\_10646@\texttt{ISO\_10646} (Fortran string kind)} (UCS-4 in ISO/IEC 10646:2000).
@@ -236,17 +225,11 @@ entry for the type.
 Types with binary floating-point encodings 
 (\DWATEfloat{}, \DWATEcomplexfloat{} and \DWATEimaginaryfloat{})
 are supported in many
-programming languages and 
-\bb
-are not discussed further.
-\eb
+programming languages and are not discussed further.
 
-
-\bb
 \DWATEdecimalfloat{} specifies 
 floating-point representations that have a power-of-ten
 exponent, such as specified in IEEE 754R.
-\eb
 
 \subsubsection{Decimal String Encodings}
 \label{chap:decimalstringencodings}
@@ -444,11 +427,7 @@ may have
 a\hypertarget{chap:DWATadressclasspointerorreferencetypes}{}
 \DWATaddressclassDEFN{}\addtoindexx{address class attribute} 
 attribute to describe how objects having the given pointer
-or reference type 
-\bb
-are
-\eb
-dereferenced.
+or reference type are dereferenced.
 
 A modified type entry describing a \addtoindex{UPC} shared qualified type
 (using \DWTAGsharedtype) may have a
@@ -1034,9 +1013,7 @@ members
 An\hypertarget{chap:DWATaccessibilitycppinheritedmembers}{} 
 \addtoindexx{inheritance entry}
 inheritance entry may have a
-\bb
 \hyperlink{chap:DWATaccessibilityattribute}{\DWATaccessibilityNAME}
-\eb
 attribute.\addtoindexx{accessibility attribute}
 If no accessibility attribute is present, private access 
 is assumed for an entry of a class and public access is 
@@ -1045,9 +1022,7 @@ assumed for an entry of a struct, union or interface.
 If the class referenced by the \addtoindex{inheritance entry}
 serves as a \addtoindex{C++} virtual base class, the 
 inheritance entry has a 
-\bb
 \hyperlink{chap:DWATvirtualityvirtualityindication}{\DWATvirtualityNAME} 
-\eb
 attribute.
 
 \textit{For a \addtoindex{C++} virtual base, the 
@@ -1078,9 +1053,7 @@ including any class or structure qualifiers.
 
 An\hypertarget{chap:DWATaccessdeclaration}{} 
 access declaration entry also has a
-\bb 
 \hyperlink{chap:DWATaccessibilityattribute}{\DWATaccessibilityNAME}
-\eb
 \addtoindexx{accessibility attribute}
 attribute describing the declared accessibility of the named entities.
 
@@ -1122,15 +1095,11 @@ the name attribute is omitted or the value of the attribute
 consists of a single zero byte.
 
 The data member entry has a 
-\bb
 \DWATtype{} attribute\addtoindexx{type attribute} to denote
-\eb
 \addtoindexx{member entry (data)} the type of that member.
 
 A data member entry may have a 
-\bb
 \hyperlink{chap:DWATaccessibilityattribute}{\DWATaccessibilityNAME}
-\eb
 attribute.\addtoindexx{accessibility attribute} 
 If no accessibility attribute is present, private
 access is assumed for an member of a class and public access
@@ -1266,16 +1235,13 @@ is assumed for an entry of a structure, union or interface.
 
 If the member function entry describes a virtual function,
 then that entry has a
-\bb
 \hyperlink{chap:DWATvirtualityvirtualityindication}{\DWATvirtualityNAME} 
-\eb
 attribute.
 
 If\hypertarget{chap:DWATexplicitexplicitpropertyofmemberfunction}{}
 the member function entry describes an explicit member
-function, then that entry has 
+function, then that entry has a
 \addtoindexx{explicit attribute}
-a 
 \DWATexplicitDEFN{} attribute.
 
 An\hypertarget{chap:DWATvtableelemlocationvirtualfunctiontablevtableslot}{}
@@ -1322,11 +1288,7 @@ the entry describes a non-static member function whose
 object formal parameter has a type that has an equivalent
 const-volatile qualification.
 
-\textit{Beginning in 
-\bb
-\addtoindex{C++11}, 
-\eb
-non-static member 
+\textit{Beginning in \addtoindex{C++11}, non-static member 
 functions can also have one of the ref-qualifiers, \& and \&\&. 
 These do not change the type of the
 \doublequote{\texttt{this}}-pointer, but they do affect the types of 
@@ -1341,9 +1303,7 @@ lvalue objects, or the \DWATrvaluereferenceDEFN{} attribute
 to indicate that it can only be called on prvalues and xvalues.
 
 \textit{The lvalue, prvalue and xvalue concepts are defined in the
-\bb
 \addtoindex{C++11} and later standards.}
-\eb
 
 If a subroutine entry represents the defining declaration
 of a member function and that definition appears outside of
@@ -1627,12 +1587,20 @@ may have
 \addtoindexx{type attribute}
 a \DWATtype{} attribute
 which refers to the underlying data type used to implement
-the enumeration. The entry also may have a 
-\DWATbytesize{} attribute whose 
-\livelink{chap:classconstant}{integer constant} value is the number of bytes 
-required to hold an instance of the enumeration. If no \DWATbytesize{} attribute 
-is present, the size for holding an instance of the enumeration is given by the size 
-of the underlying data type.
+the enumeration. The entry also may have a
+\bb
+\DWATbytesize{} attribute or 
+\DWATbitsize{}
+attribute, whose value 
+(see Section \refersec{chap:byteandbitsizes}) 
+is the amount of storage 
+\eb
+required to hold an instance of the enumeration. If no \DWATbytesize{} 
+\bb
+or \DWATbitsize{}
+\eb
+attribute is present, the size for holding an instance of the 
+enumeration is given by the size of the underlying data type.
 
 \needlines{4}
 If an enumeration type has type safe 
@@ -1782,13 +1750,10 @@ tag \DWTAGunspecifiedparameters.
 \end{enumerate}
 
 \textit{\addtoindex{C++} const-volatile qualifiers are encoded as 
-part of the type of the
-\doublequote{\texttt{this}}-pointer.
-\bb 
-\addtoindex{C++11} 
-\eb
-reference and rvalue-reference qualifiers are encoded using
-the \DWATreference{} and \DWATrvaluereference{} attributes, respectively. 
+part of the type of the \doublequote{\texttt{this}}-pointer.
+\addtoindex{C++11} reference and rvalue-reference qualifiers are 
+encoded using the \DWATreference{} and \DWATrvaluereference{} attributes, 
+respectively. 
 See also Section \refersec{chap:memberfunctionentries}.}
 
 \needlines{4}

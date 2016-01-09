@@ -22,18 +22,24 @@ The labels denoting the beginning and end of the
 \hypertarget{chap:DWXXXlohiuser}{reserved value range}
 for vendor specific extensions consist of the
 appropriate prefix 
-(\DWATlouserMARK{}\DWAThiuserMARK{}DW\_AT,
-\DWATElouserMARK{}\DWATEhiuserMARK{}	DW\_ATE, 
-\DWCClouserMARK{}\DWCChiuserMARK{}	DW\_CC,
-\DWCFAlouserMARK{}\DWCFAhiuserMARK{}	DW\_CFA 
-\DWENDlouserMARK{}\DWENDhiuserMARK{}	DW\_END, 
-\DWLANGlouserMARK{}\DWLANGhiuserMARK{}  DW\_LANG, 
-\DWLNElouserMARK{}\DWLNEhiuserMARK{}	DW\_LNE, 
-\DWMACROlouserMARK{}\DWMACROhiuserMARK{}DW\_MACRO,
-\DWOPlouserMARK{}\DWOPhiuserMARK{}	DW\_OP or
-\DWTAGlouserMARK{}\DWTAGhiuserMARK{}	DW\_TAG, 
-respectively) followed by
-\_lo\_user or \_hi\_user. 
+(\DWATlouserMARK{}\DWAThiuserMARK{}DW\_AT, 
+\DWATElouserMARK{}\DWATEhiuserMARK{}DW\_ATE, 
+\DWCClouserMARK{}\DWCChiuserMARK{}DW\_CC, 
+\DWCFAlouserMARK{}\DWCFAhiuserMARK{}DW\_CFA, 
+\DWENDlouserMARK{}\DWENDhiuserMARK{}DW\_END, 
+\bb
+\DWIDXlouserMARK{}\DWIDXhiuserMARK{}DW\_IDX, 
+\eb
+\DWLANGlouserMARK{}\DWLANGhiuserMARK{}DW\_LANG, 
+\bb
+\DWLNCTlouserMARK{}\DWLNCThiuserMARK{}DW\_LNCT, 
+\eb
+\DWLNElouserMARK{}\DWLNEhiuserMARK{}DW\_LNE, 
+\DWMACROlouserMARK{}\DWMACROhiuserMARK{}DW\_MACRO, 
+\DWOPlouserMARK{}\DWOPhiuserMARK{}DW\_OP or 
+\DWTAGlouserMARK{}\DWTAGhiuserMARK{}DW\_TAG) 
+\bbeb 
+followed by \_lo\_user or \_hi\_user. 
 Values in the  range between \textit{prefix}\_lo\_user 
 and \textit{prefix}\_hi\_user inclusive,
 are reserved for vendor specific extensions. Vendors may
@@ -41,7 +47,11 @@ use values in this range without conflicting with current or
 future system\dash defined values. All other values are reserved
 for use by the system.
 
-\textit{For example, for DIE tags, the special
+\textit{For example, for 
+\bb
+debugging information entry
+\eb
+tags, the special
 labels are \DWTAGlouserNAME{} and \DWTAGhiuserNAME.}
 
 \textit{There may also be codes for vendor specific extensions
@@ -119,14 +129,10 @@ In an \addtoindex{initial length} field, the values \wfffffffzero through
 \wffffffff are reserved by DWARF to indicate some form of
 extension relative to \DWARFVersionII; such values must not
 be interpreted as a length field. The use of one such value,
-\xffffffff, is defined 
-\bb
-in
-\eb
+\xffffffff, is defined in
 Section \refersec{datarep:32bitand64bitdwarfformats}); 
 the use of
 the other values is reserved for possible future extensions.
-
 
 
 \section{Relocatable, Split, Executable, Shared and Package Object Files} 
@@ -223,12 +229,15 @@ space of the program and require relocation.
 \end{itemize}
 
 \needlines{4}
-\textit{Note that operands of classes \CLASSblock, \CLASSconstant{} and 
+\textit{Note that operands of classes 
+\bbeb
+\CLASSconstant{} and 
 \CLASSflag{} do not require relocation. Attribute operands that use 
-form \DWFORMstring{} also do not require relocation. Further, 
-attribute operands that use form
+\bb
+forms \DWFORMstring{},
+\eb 
 \DWFORMrefone, \DWFORMreftwo, \DWFORMreffour, \DWFORMrefeight, or
-\DWFORMrefudata{} do not need relocation.}
+\DWFORMrefudata{} also do not need relocation.}
 
 \subsection{Split DWARF Object Files}
 \label{datarep:splitdwarfobjectfiles}
@@ -237,6 +246,11 @@ A DWARF producer may partition the debugging
 information such that the majority of the debugging
 information can remain in individual object files without
 being processed by the linker. 
+
+\bb
+\textit{This reduces link time by reducing the amount of information
+the linker must process.}
+\eb
 
 \needlines{6}
 \subsubsection{First Partition (with Skeleton Unit)}
@@ -276,10 +290,13 @@ section. The string offsets table is necessary only if
 the skeleton compilation unit uses the \DWFORMstrx{} form.
 \end{itemize}
 The attributes contained in the skeleton compilation
-unit can be used by a DWARF consumer to find the split or 
-hybrid DWARF object file that contains the second partition.
+unit can be used by a DWARF consumer to find the 
+\bbeb
+DWARF object file that contains the second partition.
 
-\subsubsection{Second Partition (Unlinked or In \texttt{.dwo} File)}
+\bb
+\subsubsection{Second Partition (Unlinked or in a \texttt{.dwo} File)}
+\eb
 The second partition contains the debugging information that
 does not need to be processed by the linker. These sections
 may be left in the object files and ignored by the linker
@@ -333,7 +350,10 @@ section.
 
 Except where noted otherwise, all references in this document
 to a debugging information section (for example, \dotdebuginfo),
-applies also to the corresponding split DWARF section (for example,
+\bb
+apply 
+\eb
+also to the corresponding split DWARF section (for example,
 \dotdebuginfodwo).
 
 \needlines{4}
@@ -346,6 +366,22 @@ references within or between sections are not possible.
 \label{chap:executableobjects}
 The relocated addresses in the debugging information for an
 executable object are virtual addresses.
+
+\bb
+The sections containing the debugging information are typically
+not loaded as part of the memory image of the program (in ELF
+terminology, the sections are not "allocatable" and are not part
+of a loadable segment). Therefore, the debugging information
+sections described in this document are typically linked as if
+they were each to be loaded at virtual address 0, and references
+within the debugging information always implicitly indicate which
+section a particular offset refers to. (For example, a reference
+of form \DWFORMsecoffset{} may refer to one of several sections,
+depending on the class allowed by a particular attribute of a
+debugging information entry, as shown in 
+Table \refersec{tab:attributeencodings}.)
+
+\eb
 
 \needlines{6}
 \subsection{Shared Object Files}
@@ -361,6 +397,13 @@ shared object files position independent.  Virtual addresses in a
 shared object file may be calculated by adding the offset to the
 base address at which the object file was attached. This offset
 is available in the run\dash time linker\textquoteright s data structures.}
+
+\bb
+As with executable objects, the sections containing debugging
+information are typically not loaded as part of the memory image
+of the shared object, and are typically linked as if they were
+each to be loaded at virtual address 0.
+\eb
 
 \subsection{DWARF Package Files}
 \label{datarep:dwarfpackagefiles}
@@ -462,10 +505,10 @@ boundaries in the DWARF package file.
 The index section header contains the following fields:
 \begin{enumerate}[1. ]
 \item \texttt{version} (\HFTuhalf) \\
-A version number
+A version number.
 \addtoindexx{version number!CU index information} 
 \addtoindexx{version number!TU index information}
-(see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
+\bbeb 
 This number is specific to the CU and TU index information
 and is independent of the DWARF version number.
 
@@ -473,10 +516,11 @@ The version number is \versiondotdebugcuindex.
 
 \item \textit{padding} (\HFTuhalf) \\
 Reserved to DWARF (must be zero).
-
-\item \texttt{column\_count} (\HFTuword) \\
-The number of columns in the table of section counts that follows.
-For brevity, the contents of this field is referred to as $C$ below.
+\bb
+\item \texttt{section\_count} (\HFTuword) \\
+The number of entries in the table of section counts that follows.
+For brevity, the contents of this field is referred to as $N$ below.
+\eb
 
 \item \texttt{unit\_count} (\HFTuword) \\
 The number of compilation units or type units in the index.
@@ -532,14 +576,20 @@ guaranteed to stop at an unused slot or find the match.
 The table of offsets begins immediately following the parallel
 table (at offset \mbox{$16 + 12 * S$} from the beginning of the section).
 The table is a two-dimensional array of 4-byte words, 
-%(using the byte order of the application binary), 
-with $C$ columns and $U + 1$
+%(using the byte order of the application binary),
+\bb 
+with $N$ sections and $U + 1$
+\eb
 rows, in row-major order. Each row in the array is indexed
 starting from 0. The first row provides a key to the columns:
 each column in this row provides a section identifier for a debug
 section, and the offsets in the same column of subsequent rows
 refer to that section. The section identifiers are shown in
 Table \referfol{tab:dwarfpackagefilesectionidentifierencodings}.
+
+\bb
+\textit{Not all sections listed in the table need be included.}
+\eb
 
 \needlines{12}
 \begin{centering}
@@ -584,18 +634,37 @@ The table of sizes begins immediately following the table of
 offsets, and provides the sizes of the contributions made by each
 CU or TU to the corresponding section in the package file. Like
 the table of offsets, it is a two-dimensional array of 4-byte
-words, with $C$ columns and $U$ rows, in row-major order. Each row in
+words, with 
+\bb
+$N$ 
+\eb
+entries and $U$ rows, in row-major order. Each row in
 the array is indexed starting from 1 (row 0 of the table of
 offsets also serves as the key for the table of sizes).
 
+\bb
+For an example, see Figure \refersec{fig:examplecuindexsection}.
+\eb
+
 \subsection{DWARF Supplementary Object Files}
 \label{datarep:dwarfsupplemetaryobjectfiles}
-In order to minimize the size of debugging information, it is possible
-to move duplicate debug information entries, strings and macro entries from
-several executables or shared object files into a separate 
-\addtoindexi{\textit{supplementary object file}}{supplementary object file} by some
-post-linking utility; the moved entries and strings can be then referenced
-from the debugging information of each of those executable or shared object files.
+In order to minimize the size of debugging information, 
+it is possible to move duplicate debug information entries, 
+strings and macro entries from several executables or shared 
+object files into a separate 
+\addtoindexi{\textit{supplementary object file}}{supplementary object file} 
+by some post-linking utility; the moved entries and strings can 
+\bb
+then be
+\eb
+referenced
+from the debugging information of each of those executable or 
+shared object files.
+
+\bb
+This facilitates distribution of separate consolidated debug files in
+a simple manner.
+\eb
 
 \needlines{4}
 A DWARF \addtoindex{supplementary object file} is itself an object file, 
@@ -612,8 +681,10 @@ The \dotdebugsup{} section contains:
 \item \texttt{version} (\HFTuhalf) \\
 \addttindexx{version}
 A 2-byte unsigned integer representing the version of the DWARF
-information for the compilation unit (see Appendix G). The
-value in this field is \versiondotdebugsup.
+information for the compilation unit. 
+\bbeb
+
+The value in this field is \versiondotdebugsup.
 
 \item \texttt{is\_supplementary} (\HFTubyte) \\
 \addttindexx{is\_supplementary}
@@ -635,17 +706,15 @@ is not needed and must be an empty string (a single null byte).
 \item \texttt{sup\_checksum\_len} (unsigned LEB128) \\
 \addttindexx{sup\_checksum\_len}
 Length of the following \addttindex{sup\_checksum} field; 
-his value can be 0 if no checksum is provided.
-
+this value can be 0 if no checksum is provided.
 
 \item \texttt{sup\_checksum} (array of \HFTubyte) \\
 \addttindexx{sup\_checksum}
-Some checksum or cryptographic hash function of the \dotdebuginfo{}, 
-\dotdebugstr{} and \dotdebugmacro{} sections of the 
-\addtoindex{supplementary object file}, or some unique identifier
-which the implementation can choose to verify that the supplementary 
-section object file matches what the debug information in the executable 
-or shared object file expects.
+\bb
+An implementation-defined integer constant value that
+provides unique identification of the supplementary file.
+\eb
+
 \end{enumerate}
 
 Debug information entries that refer to an executable's or shared
@@ -682,7 +751,11 @@ the executable or shared object file.
 \hypertarget{datarep:xxbitdwffmt}{}
 \addtoindexx{32-bit DWARF format}
 \addtoindexx{64-bit DWARF format}
-There are two closely related file formats. In the 32-bit DWARF
+There are two 
+\bb
+closely-related DWARF
+\eb
+formats. In the 32-bit DWARF
 format, all values that represent lengths of DWARF sections
 and offsets relative to the beginning of DWARF sections are
 represented using four bytes. In the 64-bit DWARF format, all
@@ -692,6 +765,13 @@ using eight bytes. A special convention applies to the initial
 length field of certain DWARF sections, as well as the CIE and
 FDE structures, so that the 32-bit and 64-bit DWARF formats
 can coexist and be distinguished within a single linked object.
+
+\bb
+Except where noted otherwise, all references in this document
+to a debugging information section (for example, \dotdebuginfo),
+apply also to the corresponding split DWARF section (for example,
+\dotdebuginfodwo).
+\eb
 
 The differences between the 32- and 64-bit DWARF formats are
 detailed in the following:
@@ -790,7 +870,8 @@ section, depends on the DWARF format as follows: in the
 in the 64-bit DWARF format, it is a 8-byte unsigned integer.
 
 \needlines{4}
-\item In the body of the \dotdebugstroffsets{} and \dotdebugstroffsetsdwo{}
+\item In the body of the \dotdebugstroffsets{} 
+\bbeb
 sections, the size of entries in the body depend on the DWARF
 format as follows: in the 32-bit DWARF format, entries are 4-byte
 unsigned integer values; in the 64-bit DWARF format, they are
@@ -829,7 +910,6 @@ in this case, it is expected that only application supplied
 objects will need to be compiled using the 64-bit format;
 separate 32-bit format versions of system supplied shared
 executable libraries can still be used.}
-
 
 
 \section{Format of Debugging Information}
@@ -899,7 +979,9 @@ enumeration are shown in Table \refersec{tab:unitheaderunitkindencodings}.
 \end{centering}
 
 \needlines{5}
-\subsubsection{Compilation Unit Header}
+\bb
+\subsubsection{Compilation and Partial Unit Headers}
+\eb
 \label{datarep:compilationunitheader}
 \begin{enumerate}[1. ]
 
@@ -919,10 +1001,17 @@ integer that gives the actual length
 
 \item  \texttt{version} (\HFTuhalf) \\
 \addttindexx{version}
+\addtoindexx{version number!compilation unit}
 A 2-byte unsigned integer representing the version of the
-DWARF information for the compilation unit \addtoindexx{version number!compilation unit} 
-(see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
+DWARF information for the compilation unit.
+\bbeb
+ 
 The value in this field is \versiondotdebuginfo.
+
+\bb
+\textit{See also Appendix \refersec{app:dwarfsectionversionnumbersinformative}
+for a summary of all version numbers that apply to DWARF sections.}
+\eb
 
 \needlines{4}
 \item \texttt{unit\_type} (\HFTubyte) \\
@@ -936,6 +1025,16 @@ The value of this field is
 \textit{This field is new in \DWARFVersionV.}
 
 \needlines{4}
+\bb
+\item \texttt{address\_size} (\HFTubyte) \\
+\addttindexx{address\_size}
+A 1-byte unsigned integer representing the size in bytes of
+an address on the target architecture. If the system uses
+\addtoindexx{address space!segmented}
+segmented addressing, this value represents the size of the
+offset portion of an address.
+\eb
+
 \item \HFNdebugabbrevoffset{} (\livelink{datarep:sectionoffsetlength}{section offset}) \\
 A 
 \addtoindexx{section offset!in .debug\_info header}
@@ -947,13 +1046,7 @@ the \thirtytwobitdwarfformat, this is a 4-byte unsigned length;
 in the \sixtyfourbitdwarfformat, this is an 8-byte unsigned length
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
-\item \texttt{address\_size} (\HFTubyte) \\
-\addttindexx{address\_size}
-A 1-byte unsigned integer representing the size in bytes of
-an address on the target architecture. If the system uses
-\addtoindexx{address space!segmented}
-segmented addressing, this value represents the size of the
-offset portion of an address.
+\bbpareb
 
 \end{enumerate}
 
@@ -967,6 +1060,7 @@ placed in its own \addtoindex{type unit}, within the
 consists of the following information:
 \begin{enumerate}[1. ]
 
+\needlines{4}
 \item \texttt{unit\_length} (\livelink{datarep:initiallengthvalues}{initial length}) \\
 \addttindexx{unit\_length}
 A 4-byte or 12-byte unsigned integer 
@@ -983,10 +1077,11 @@ consists of the 4-byte value \wffffffff followed by an
 \needlines{4}
 \item  \texttt{version} (\HFTuhalf) \\
 \addttindexx{version}
+\addtoindexx{version number!type unit}
 A 2-byte unsigned integer representing the version of the
-DWARF information for the 
-type unit\addtoindexx{version number!type unit} 
-(see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
+DWARF information for the type unit.
+\bbeb
+ 
 The value in this field is \versiondotdebuginfo.
 
 \item \texttt{unit\_type} (\HFTubyte) \\
@@ -998,6 +1093,18 @@ The value of this field is \DWUTtype{} for a type unit
 \textit{This field is new in \DWARFVersionV.}
 
 \needlines{4}
+\bb
+\item \texttt{address\_size} (\HFTubyte) \\
+\addttindexx{address\_size}
+A 1-byte unsigned integer representing the size 
+\addtoindexx{size of an address}
+in bytes of
+an address on the target architecture. If the system uses
+\addtoindexx{address space!segmented}
+segmented addressing, this value represents the size of the
+offset portion of an address.
+\eb
+
 \item \HFNdebugabbrevoffset{} (\livelink{datarep:sectionoffsetlength}{section offset}) \\
 A 
 \addtoindexx{section offset!in .debug\_info header}
@@ -1009,16 +1116,7 @@ the \thirtytwobitdwarfformat, this is a 4-byte unsigned length;
 in the \sixtyfourbitdwarfformat, this is an 8-byte unsigned length
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
-\needlines{4}
-\item \texttt{address\_size} (\HFTubyte) \\
-\addttindexx{address\_size}
-A 1-byte unsigned integer representing the size 
-\addtoindexx{size of an address}
-in bytes of
-an address on the target architecture. If the system uses
-\addtoindexx{address space!segmented}
-segmented addressing, this value represents the size of the
-offset portion of an address.
+\bbpareb
 
 \item \texttt{type\_signature} (8-byte unsigned integer) \\
 \addttindexx{type\_signature}
@@ -1287,8 +1385,8 @@ Table \referfol{tab:attributeencodings}.
         \livelink{chap:classreference}{reference}
             \addtoindexx{byte size attribute} \\
 \textit{Reserved}&0x0c\footnote{Code 0x0c is reserved to allow backward compatible support of the 
-                                       DW\_AT\_bit\_offset \mbox{attribute} which was 
-                                       defined in \DWARFVersionIII{} and earlier.}
+             DW\_AT\_bit\_offset \mbox{attribute} which was 
+             defined in \DWARFVersionIII{} and earlier.}
        &\livelink{chap:classconstant}{constant}, 
         \livelink{chap:classexprloc}{exprloc}, 
         \livelink{chap:classreference}{reference}
@@ -1399,10 +1497,12 @@ Table \referfol{tab:attributeencodings}.
             \addtoindexx{friend attribute}  \\
 \DWATidentifiercase&0x42&\livelink{chap:classconstant}{constant} 
             \addtoindexx{identifier case attribute}  \\
-\DWATmacroinfo\footnote{\raggedright Not used in \DWARFVersionV. 
-                        Reserved for compatibility and coexistence
-                        with prior DWARF versions.}
-            &0x43&\livelink{chap:classmacptr}{macptr} 
+\bb
+\textit{Reserved}&0x43\footnote{Code 0x43 is reserved to allow backward compatible support of the 
+             DW\_AT\_macro\_info \mbox{attribute} which was 
+             defined in \DWARFVersionIV{} and earlier.}
+\eb
+            &\livelink{chap:classmacptr}{macptr} 
             \addtoindexx{macro information attribute (legacy)!encoding}  \\
 \DWATnamelistitem&0x44&\livelink{chap:classreference}{reference} 
             \addtoindexx{name list item attribute}  \\
@@ -1698,10 +1798,8 @@ constant data forms for one-, two-, four-, eight- and sixteen-byte values
 \DWFORMdatasixteenTARG). 
 There are variable length constant
 data forms encoded using 
-\bb
 signed LEB128 numbers (\DWFORMsdataTARG) and unsigned 
 LEB128 numbers (\DWFORMudataTARG).
-\eb
 There is also an implicit constant (\DWFORMimplicitconst),
 whose value is provided as part of the abbreviation
 declaration.
@@ -2624,10 +2722,7 @@ defined language.
 \DWLANGCeightynine &0x0001 &0 \addtoindexx{C:1989 (ISO)}      \\
 \DWLANGC{} &0x0002 &0  \addtoindexx{C!non-standard} \\
 \DWLANGAdaeightythree{} \dag &0x0003 &1  \addtoindexx{Ada:1983 (ISO)}     \\
-\bb
-\DWLANGCplusplus{} &0x0004 &0 \addtoindexx{C++98 (ISO)} 
-\eb
-\\
+\DWLANGCplusplus{} &0x0004 &0 \addtoindexx{C++98 (ISO)} \\
 \DWLANGCobolseventyfour{} \dag &0x0005 &1 \addtoindexx{COBOL:1974 (ISO)}      \\
 \DWLANGCoboleightyfive{} \dag &0x0006 &1 \addtoindexx{COBOL:1985 (ISO)}      \\
 \DWLANGFortranseventyseven &0x0007 &1 \addtoindexx{FORTRAN:1977 (ISO)}      \\
@@ -2648,21 +2743,15 @@ defined language.
 \DWLANGGo{} \dag \ddag &0x0016 &0 \addtoindexx{Go}\\
 \DWLANGModulathree{} \dag \ddag &0x0017 &1 \addtoindexx{Modula-3}\\
 \DWLANGHaskell{} \dag \ddag &0x0018 &0 \addtoindexx{Haskell}\\
-\bb
 \DWLANGCpluspluszerothree{} \ddag &0x0019 &0 \addtoindexx{C++03 (ISO)}\\
-\DWLANGCpluspluseleven{} \ddag &0x001a &0 \addtoindexx{C++11 (ISO)}
-\eb
-\\
+\DWLANGCpluspluseleven{} \ddag &0x001a &0 \addtoindexx{C++11 (ISO)} \\
 \DWLANGOCaml{} \ddag &0x001b &0	\addtoindexx{OCaml}\\
 \DWLANGRust{} \ddag &0x001c &0 \addtoindexx{Rust}\\
 \DWLANGCeleven{} \ddag &0x001d &0 \addtoindexx{C:2011 (ISO)}\\
 \DWLANGSwift{} \ddag &0x001e &0 \addtoindexx{Swift} \\
 \DWLANGJulia{} \ddag &0x001f &1 \addtoindexx{Julia} \\
 \DWLANGDylan{} \ddag &0x0020 &0 \addtoindexx{Dylan} \\
-\bb
-\DWLANGCplusplusfourteen{}~\ddag &0x0021 &0 \addtoindexx{C++14 (ISO)} 
-\eb
-\\
+\DWLANGCplusplusfourteen{}~\ddag &0x0021 &0 \addtoindexx{C++14 (ISO)} \\
 \DWLANGFortranzerothree{}~\ddag  &0x0022 &1 \addtoindexx{Fortran:2004 (ISO)} \\
 \DWLANGFortranzeroeight{}~\ddag  &0x0023 &1 \addtoindexx{Fortran:2010 (ISO)} \\
 \DWLANGlouser{} &0x8000 & \\
@@ -2834,8 +2923,8 @@ Table \refersec{tab:discriminantdescriptorencodings}.
 \section{Name Index Table}
 \label{datarep:nameindextable}
 The \addtoindexi{version number}{version number!name index table}
-in the name index table header is \versiondotdebugnames{}
-(see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
+in the name index table header is \versiondotdebugnames{}.
+\bbeb
 
 The name index attributes and their encodings are listed in Table \referfol{datarep:indexattributeencodings}.
 
@@ -2917,8 +3006,8 @@ the actual length
 
 \item version (\HFTuhalf) \\
 A 2-byte version identifier representing the version of the
-DWARF information for the address range table
-(see Appendix \refersec{app:dwarfsectionversionnumbersinformative}).
+DWARF information for the address range table.
+\bbeb
 
 This value in this field \addtoindexx{version number!address range table} is 2. 
  
@@ -2969,8 +3058,8 @@ the terminating tuple.
 \label{datarep:linenumberinformation}
 
 The \addtoindexi{version number}{version number!line number information}
-in the line number program header is \versiondotdebugline{}
-(see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
+in the line number program header is \versiondotdebugline{}.
+\bbeb
 
 The boolean values \doublequote{true} and \doublequote{false} 
 used by the line number information program are encoded
@@ -3072,8 +3161,8 @@ Table \refersec{tab:linenumberheaderentryformatencodings}.
 \section{Macro Information}
 \label{datarep:macroinformation}
 The \addtoindexi{version number}{version number!macro information}
-in the macro information header is \versiondotdebugmacro{}
-(see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
+in the macro information header is \versiondotdebugmacro{}.
+\bbeb
 
 The source line numbers and source file indices encoded in the
 macro information section are represented as 
@@ -3127,7 +3216,8 @@ CIE header is \xffffffff; in the \sixtyfourbitdwarfformat, the
 value is \xffffffffffffffff.
 
 The value of the CIE \addtoindexi{version number}{version number!call frame information}
-is 4 (see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
+is \versiondotdebugframe.
+\bbeb
 
 Call frame instructions are encoded in one or more bytes. The
 primary opcode is encoded in the high order two bits of
@@ -3232,11 +3322,15 @@ Section \refersec{datarep:32bitand64bitdwarfformats}).
 
 %\needlines{4}
 \item  \texttt{version} (\HFTuhalf) \\
+\addtoindexx{version number!string offsets table}
 A 2-byte version identifier containing the value
-\versiondotdebugstroffsets{} 
-(see Appendix \refersec{app:dwarfsectionversionnumbersinformative}).
+\versiondotdebugstroffsets{}.
+\bbeb 
 
-\item \texttt{padding} (\HFTuhalf) \\
+\item \textit{padding} (\HFTuhalf) \\
+\bb
+Reserved to DWARF (must be zero).
+\eb
 \end{enumerate}
 
 This header is followed by a series of string table offsets
@@ -3267,9 +3361,10 @@ Section \refersec{datarep:32bitand64bitdwarfformats}).
 
 \needlines{4}
 \item  \texttt{version} (\HFTuhalf) \\
+\addtoindexx{version number!address table}
 A 2-byte version identifier containing the value
-\versiondotdebugaddr{} 
-(see Appendix \refersec{app:dwarfsectionversionnumbersinformative}).
+\versiondotdebugaddr{}.
+\bbeb 
 
 \needlines{4}
 \item	\texttt{address\_size} (\HFTubyte) \\
@@ -3314,9 +3409,10 @@ Section \refersec{datarep:32bitand64bitdwarfformats}).
 
 \needlines{4}
 \item  \texttt{version} (\HFTuhalf) \\
+\addtoindexx{version number!range list table}
 A 2-byte version identifier containing the value
-\versiondotdebugranges{} 
-(see Appendix \refersec{app:dwarfsectionversionnumbersinformative}).
+\versiondotdebugranges{}. 
+\bbeb
 
 \needlines{4}
 \item	\texttt{address\_size} (\HFTubyte) \\
@@ -3363,9 +3459,10 @@ Section \refersec{datarep:32bitand64bitdwarfformats}).
 
 \needlines{4}
 \item  \texttt{version} (\HFTuhalf) \\
+\addtoindexx{version number!location list table}
 A 2-byte version identifier containing the value
-\versiondotdebugloc{} 
-(see Appendix \refersec{app:dwarfsectionversionnumbersinformative}).
+\versiondotdebugloc{}.
+\bbeb 
 
 \needlines{5}
 \item	\texttt{address\_size} (\HFTubyte) \\
@@ -3778,7 +3875,11 @@ of the type might not be available in all compilation units.}
 \textit{If a type definition contains the definition of a member function, 
 it cannot be moved as is into a type unit, because the member function 
 contains attributes that are unique to that compilation unit. 
-Such a type definition can be moved to a type unit by rewriting the DIE tree, 
+Such a type definition can be moved to a type unit by rewriting the 
+\bb
+debugging information entry
+\eb
+tree, 
 moving the member function declaration into a separate declaration tree, 
 and replacing the function definition in the type with a non-defining 
 declaration of the function (as if the function had been defined out of 
@@ -3792,20 +3893,24 @@ Appendix \refersec{app:usingtypeunits}.
 The hash function used for hashing name strings in the accelerated 
 access name index table (see Section \refersec{chap:acceleratedaccess})
 is defined in \addtoindex{C} as shown in 
-Figure \referfol{fig:nametablehashfunctiondefinition}.\footnote{
-This hash function is sometimes informally known as the 
-"\addtoindex{DJB hash function}" or the "\addtoindex{Berstein hash function}"
+Figure \referfol{fig:nametablehashfunctiondefinition}.\footnoteRR{
+This hash function is sometimes known as the 
+\bb
+"\addtoindex{Bernstein hash function}" or the
+\eb
+"\addtoindex{DJB hash function}"  
 (see, for example, 
 \hrefself{http://en.wikipedia.org/wiki/List\_of\_hash\_functions} or
 \hrefself{http://stackoverflow.com/questions/10696223/reason-for-5381-number-in-djb-hash-function)}.} 
 
 \begin{figure}[h]
+\bb
 \begin{lstlisting}
 
-unsigned long \* must be a 32-bit integer type *\
+uint32_t /* must be a 32-bit integer type */
     hash(unsigned char *str)
     {
-        unsigned long hash = 5381;
+        uint32_t hash = 5381;
         int c;
 
         while (c = *str++)
@@ -3815,6 +3920,7 @@ unsigned long \* must be a 32-bit integer type *\
     }
 
 \end{lstlisting}
+\eb
 \caption{Name Table Hash Function Definition}
 \label{fig:nametablehashfunctiondefinition}
 \end{figure}

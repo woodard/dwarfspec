@@ -3,7 +3,7 @@
 % If draft is in the document class list, pix are just suggested
 % by an outline, the pic does not appear as a picture.
 %
-\newcommand{\docdate}{October 19, 2015}
+\newcommand{\docdate}{January 9, 2016}
 %
 \usepackage{ifthen}
     \newcommand{\ifthen}[2]{\ifthenelse{#1}{#2}{}}
@@ -115,8 +115,8 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \newcommand{\refersec}[1]{\vref{#1}}  % beware possible rerun loop
 \newcommand{\referfol}[1]{\ref{#1} following}
 
-% Generate a live link in the document
-% use like \livelink{chap:DWOPdup}{DW\_OP\_dup}
+% Generate a live link in the document that gets indexed as well
+% Use like \livelink{chap:DWOPdup}{DW\_OP\_dup}
 \newcommand{\livelink}[2]{\hyperlink{#1}{#2}\index{#2}}
 % use when the index is different from the text and target.
 \newcommand{\livelinki}[3]{\hyperlink{#1}{#2}\index{#3}}
@@ -172,6 +172,12 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \renewcommand{\descriptionlabel}[1]{\hspace{\labelsep}\textnormal{#1}}
 \newcommand{\descriptionlabelnl}[1]{\item[#1] \mbox{}\\}
 
+% Define an alternate footnote command that creates ragged right text
+% (using \raggedright in the parameter does not work)
+\newcommand\footnoteRR[1]{\footnote{\raggedright#1}}
+
+% Emit an empty page
+%
 \newcommand{\emptypage}{
     \clearpage
     \vspace*{4in}
@@ -229,7 +235,9 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 %
 \include{pgfcmdsfornameindexfig}
 
-%--- Begin the document pages
+% --------------------------------
+% --- Begin the document pages ---
+% --------------------------------
 %
 \begin{document}
 \frontmatter
@@ -259,7 +267,9 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \url{http://www.dwarfstd.org}
 \\
 \vspace{2cm}
+\bb
 {\Large \textbf{\docdate}}
+\eb
 \\
 \ifthenelse{\boolean{isdraft}}{
 	\vspace{2cm}
@@ -337,8 +347,8 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 % Define the levels of sectionality that are numbered.
 \setcounter{secnumdepth}{5}
 
-\uselinenos\include{introduction}              %\emptypage
-\uselinenos\include{generaldescription}        %\emptypage
+\uselinenos\include{introduction}              \emptypage
+\uselinenos\include{generaldescription}        \emptypage
 \uselinenos\include{programscope}              %\emptypage
 \uselinenos\include{dataobject}                \emptypage
 \uselinenos\include{typeentries}               \emptypage

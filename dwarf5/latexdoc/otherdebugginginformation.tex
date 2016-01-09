@@ -103,24 +103,48 @@ the entire load module.
 
 \subsubsection{Contents of the Name Index}
 \label{chap:contentsofthenameindex}
-The name index must contain an entry for each DIE that defines a
+The name index must contain an entry for each 
+\bb
+debugging information entry
+\eb
+that defines a
 named subprogram, label, variable, type, or namespace, subject to
 the following rules:
 \begin{itemize}
 
-\item All non-defining declarations (that is, DIEs with a
+\item All non-defining declarations (that is, 
+      \bb
+      debugging information entries
+      \eb
+      with a
       \DWATdeclaration{} attribute) are excluded.
 
-\item \DWTAGnamespace{} DIEs without a \DWATname{} attribute are
+\item \DWTAGnamespace{} 
+      \bb
+      debugging information entries
+      \eb
+      without a \DWATname{} attribute are
       included with the name \doublequote{\texttt{(anonymous namespace)}}.
 
-\item All other DIEs without a \DWATname{} attribute are excluded.
+\item All other 
+      \bb
+      debugging information entries
+      \eb
+      without a \DWATname{} attribute are excluded.
 
 \item \DWTAGsubprogram{}, \DWTAGinlinedsubroutine{}, and
-      \DWTAGlabel{} DIEs without an address attribute (\DWATlowpc{},
+      \DWTAGlabel{} 
+      \bb
+      debugging information entries
+      \eb
+      without an address attribute (\DWATlowpc{},
       \DWAThighpc{}, \DWATranges{}, or \DWATentrypc{}) are excluded.
 
-\item \DWTAGvariable{} DIEs with a \DWATlocation{} attribute that
+\item \DWTAGvariable{} 
+      \bb
+      debugging information entries
+      \eb
+      with a \DWATlocation{} attribute that
       includes a \DWOPaddr{} or \DWOPformtlsaddress{} operator are
       included; otherwise, they are excluded.
 
@@ -130,14 +154,30 @@ the following rules:
       
 \end{itemize}
 
-For the purposes of determining whether a DIE has a particular
-attribute (such as \DWATname{}), if DIE A has a \DWATspecification{}
-or \DWATabstractorigin{} attribute pointing to another DIE B, any
-attributes of DIE B are considered to be part of DIE A.
+For the purposes of determining whether a 
+\bb
+debugging information entry
+\eb
+has a particular
+attribute (such as \DWATname{}), if 
+\bb
+debugging information entry
+\eb
+$A$ has a \DWATspecification{}
+or \DWATabstractorigin{} attribute pointing to another 
+\bb
+debugging information entry
+\eb
+$B$, any
+attributes of \bbeb $B$ are considered to be part of \bbeb $A$.
 
 \textit{The intent of the above rules is to provide the consumer with
 some assurance that looking up an unqualified name in the index
-will yield all relevant DIEs that provide a defining declaration
+will yield all relevant 
+\bb
+debugging information entries
+\eb
+that provide a defining declaration
 at global scope for that name.}
 
 \textit{A producer may choose to implement additional rules for what
@@ -149,7 +189,10 @@ below.}
 \label{chap:structureofthenametindex}
 Logically, the name index can be viewed as a list of names, with a
 list of index entries for each name. Each index entry corresponds to a
-DIE that matches the criteria given in the previous section. For
+\bb
+debugging information entry
+\eb
+that matches the criteria given in the previous section. For
 example, if one compilation unit has a function named \texttt{fred} and
 another has a struct named \texttt{fred}, a lookup for \doublequote{fred} will find the
 list containing those two index entries.
@@ -362,21 +405,21 @@ Figure \referfol{fig:nameindexlayoutpart1}.
   \node (bucket3) [on chain,detail1,buckets] {bucket $b - 1$};
 \end{scope}
 
-\path [decoration={brace,amplitude=6pt}] ([xshift=36pt]bucket0.north east)
-      [draw,decorate] -- ([xshift=36pt]bucket3.south east)
+\path [decoration={brace,amplitude=6pt}] ([xshift=40pt]bucket0.north east)
+      [draw,decorate] -- ([xshift=40pt]bucket3.south east)
       node [midway,right,inner xsep=9pt] {\texttt{bucket\_count} $(= b)$};
 
 % Hashes
 
 \begin{scope}[start chain=going below, node distance=0, shift={($(bucket3.south east) + (18pt,-24pt)$)}]
   \node (hashes) [on chain,caption1]       {\\ Hashes};
-  \node (hash0)  [on chain,detail1,hashes] {hash value 0};
-  \node (hash1)  [on chain,detail1,hashes] {hash value 1};
-  \node (hash2)  [on chain,detail1,hashes] {hash value 2};
-  \node (hash3)  [on chain,detail1,hashes] {hash value 3};
-  \node (hash4)  [on chain,detail1,hashes] {hash value 4};
+  \node (hash0)  [on chain,detail1,hashes] {hash value 1};
+  \node (hash1)  [on chain,detail1,hashes] {hash value 2};
+  \node (hash2)  [on chain,detail1,hashes] {hash value 3};
+  \node (hash3)  [on chain,detail1,hashes] {hash value 4};
+  \node (hash4)  [on chain,detail1,hashes] {hash value 5};
   \node (hash5)  [on chain,ellip1,hashes]  {\dots};
-  \node (hash6)  [on chain,detail1,hashes] {hash value $n - 1$};
+  \node (hash6)  [on chain,detail1,hashes] {hash value $n$};
 \end{scope}
 
 % String Offsets
@@ -407,7 +450,10 @@ Figure \referfol{fig:nameindexlayoutpart1}.
 
 \path [decoration={brace,amplitude=6pt}] ([xshift=9pt]entry0.north east)
       [draw,decorate] -- ([xshift=9pt]entry6.south east)
-      node [midway,right,inner xsep=9pt] {\texttt{name\_count} $(= n)$};
+      node [midway,right,inner xsep=9pt] {\begin{tabular}{c} 
+                                          \texttt{name\_count} \\ 
+                                                     $(= n)$ 
+                                          \end{tabular}};
 
 % Arrows pointing to .debug_str and entry pool
 
@@ -426,12 +472,12 @@ Figure \referfol{fig:nameindexlayoutpart1}.
 % Arrows from buckets to hashes
 
 \path ([xshift=24pt]bucket0.center) coordinate (p5);
-\path ([xshift=144pt]p5) coordinate (c5);
-\path ([xshift=-108pt]hash0.west) coordinate (c6);
+\path ([xshift=130pt]p5) coordinate (c5);
+\path ([xshift=-70pt]hash0.west) coordinate (c6);
 \draw [dashed,{Circle[open]}-{Stealth[]}] (p5) .. controls (c5) and (c6) .. (hash0.west);
 
 \path ([xshift=24pt]bucket1.center) coordinate (p7);
-\path ([xshift=162pt]p7) coordinate (c7);
+\path ([xshift=120pt]p7) coordinate (c7);
 \path ([xshift=-144pt]hash3.west) coordinate (c8);
 \draw [dashed,{Circle[open]}-{Stealth[]}] (p7) .. controls (c7) and (c8) .. (hash3.west);
 
@@ -553,9 +599,17 @@ The standard attributes are:
 \item Type Unit (TU), a reference to an entry in the list of local
     or foreign TUs.
 
-\item DIE offset within the CU or TU.
+\item
+    \bb
+    Debugging information entry
+    \eb
+    offset within the CU or TU.
 
-\item Parent DIE, a reference to the index entry for the parent.
+\item Parent 
+    \bb
+    debugging information entry,
+    \eb
+    a reference to the index entry for the parent.
     This is represented as the offset of the entry relative to
     the start of the entry pool.
 
@@ -563,7 +617,11 @@ The standard attributes are:
 \end{itemize}
 
 \needlines{6}
-It is possible that an indexed DIE has a parent that is not
+It is possible that an indexed 
+\bb
+debugging information entry
+\eb
+has a parent that is not
 indexed (for example, if its parent does not have a name attribute). In
 such a case, a parent attribute may point to a nameless index
 entry (that is, one that cannot be reached from any entry in the
@@ -638,10 +696,7 @@ declaration of that type.}
 \subsubsection{Data Representation of the Name Index}
 \label{chap:datarepresentationofthenameindex}
 The name index is placed in a section named \dotdebugnames, and
-consists of the eight parts described
-\bb
-in the following sections.
-\eb
+consists of the eight parts described in the following sections.
 
 \subsubsubsection{Section Header}
 The section header contains the following fields:
@@ -653,12 +708,17 @@ not including the length field itself.
 
 \item \texttt{version} (\HFTuhalf) \\
 A version number\addtoindexx{version number!name index table} 
-(see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
+\bb
+(see Section \refersec{datarep:nameindextable}).
+\eb 
 This number is specific to the name index table and is
 independent of the DWARF version number.
 
 \item \textit{padding} (\HFTuhalf) \\
-Reserved to DWARF.
+Reserved to DWARF
+\bb
+(must be zero).
+\eb
 
 \item \texttt{comp\_unit\_count} (\HFTuword) \\
 The number of CUs in the CU list.
@@ -697,9 +757,14 @@ four bytes in length.
 \needlines{4}
 \subsubsubsection{List of CUs}
 The list of CUs immediately follows the header. Each entry in the 
-list is an offset into the \dotdebuginfo{} section of the corresponding 
-compilation unit. In the DWARF-32 format, a section offset is 4
-bytes, while in the DWARF-64 format, a section offset is 8 bytes.
+list is an offset 
+\bbeb 
+of the corresponding compilation unit
+\bb
+in the \dotdebuginfo{} section.
+\eb
+In the DWARF-32 format, a section offset is 4 bytes, 
+while in the DWARF-64 format, a section offset is 8 bytes.
 
 The total number of entries in the list is given by \texttt{comp\_unit\_count}.
 There must be at least one CU.
@@ -707,10 +772,13 @@ There must be at least one CU.
 \needlines{4}
 \subsubsubsection{List of Local TUs}
 The list of local TUs immediately follows the list of CUs. Each 
-entry in the list is an offset into the \dotdebuginfo{} section 
-of the corresponding compilation unit. In the DWARF-32 format, a section
-offset is 4 bytes, while in the DWARF-64 format, a section offset is 8
-bytes.
+entry in the list is an offset 
+\bb
+of the corresponding type unit
+in the \dotdebuginfo{} section.
+\eb
+In the DWARF-32 format, a section offset is 4 bytes, 
+while in the DWARF-64 format, a section offset is 8 bytes.
 
 The total number of entries in the list is given by
 \texttt{local\_type\_unit\_count}. This list may be empty.
@@ -735,8 +803,10 @@ contains 4-byte unsigned integers.
 
 \needlines{4}
 Symbols are entered into the hash table by first computing a hash
-value from the symbol name. The hash is computed by the "TJB" hash function
-\addtoindexx{TJB hash function}
+value from the symbol name. The hash is computed 
+\bb
+using the "DJB" hash function\addtoindexx{DJB hash function}
+\eb
 described in Section \refersec{datarep:nametablehashfunction}.
 Given a hash value for the symbol,
 the symbol is entered into a bucket whose index is the hash value
@@ -776,12 +846,13 @@ indexed starting at 1 (to match the hashes array).
 
 The number of rows in the name table is given by \texttt{name\_count}.
 
-If there is a hash lookup table, the entries in the name table must be
-grouped by bucket: all names that fall into the same hash bucket must
-be grouped together. The row number of an entry in the name table must
+If there is a hash lookup table, the 
+\bbeb
+row number of an entry in the name table must
 match the row number of its corresponding entry in the hashes array.
 
-If there is no hash lookup table, there is no ordering or grouping
+If there is no hash lookup table, there is no ordering 
+\bbeb
 requirement for the name table.
 
 \subsubsubsection{Abbreviations Table}
@@ -827,8 +898,7 @@ Table \referfol{tab:indexattributeencodings}.
 \DWIDXdieoffsetTARG   & Offset of DIE within CU or TU                \\
 \DWIDXparentTARG      & Index of name \mbox{table} entry for parent  \\
 \DWIDXtypehashTARG    & Hash of type \mbox{declaration}              \\
-\DWIDXlouserTARG      & Start of user-defined range                  \\
-\DWIDXhiuserTARG      & End of user-defined range                    \\
+\bbeb
 \end{longtable}
 \end{centering}
 
@@ -877,8 +947,10 @@ The length of this contribution to the address lookup section,
 not including the length field itself.
 
 \item \texttt{version} (\HFTuhalf) \\
-A version number\addtoindexx{version number!address lookup table} 
-(see Appendix \refersec{app:dwarfsectionversionnumbersinformative}). 
+A version number\addtoindexx{version number!address lookup table}
+\bb 
+(see Section \refersec{datarep:addrssrangetable}). 
+\eb
 This number is specific to the address lookup table and is
 independent of the DWARF version number.
 
@@ -1159,9 +1231,7 @@ line number program are special opcodes.}
 These have a \HFTubyte{} opcode field which may be followed by zero or more
 \addtoindex{LEB128} operands (except for 
 \mbox{\DWLNSfixedadvancepc,} see 
-\bb
 Section \refersec{chap:standardopcodes}).
-\eb
 The opcode implies the number of operands and their meanings, but the
 line number program header also specifies the number of operands for
 each standard opcode.
@@ -1375,10 +1445,8 @@ goals:}
 \begin{itemize}
 \setlength{\itemsep}{0em}
 \item A content type code (see 
-\bb
 Sections \refersec{chap:standardcontentdescriptions} and
 \refersec{chap:vendordefinedcontentdescriptions}).
-\eb
 
 \item A form code using the attribute form codes
 \end{itemize}
@@ -1413,14 +1481,21 @@ of the directory entries in order, beginning with 0.
 \textit{Prior to \DWARFVersionV, the current directory was not
 represented in the directories field and a directory index
 of 0 implicitly referred to that directory as found in the
-\DWATcompdir{} attribute of the compilation unit DIE. In
-\DWARFVersionV, the current directory is explicitly present
+\DWATcompdir{} attribute of the compilation unit 
+\bb
+debugging information entry.
+\eb
+In \DWARFVersionV, the current directory is explicitly present
 in the directories field. This is needed to support the
 common practice of stripping all but the line number sections
 (\dotdebugline{} and \dotdebuglinestr) from an executable.}
 
 \textit{Note that if a \dotdebuglinestr{} section is present, 
-both the compilation unit DIE and the line number header can
+both the compilation unit 
+\bb
+debugging information entry
+\eb
+and the line number header can
 share a single copy of the current directory name string.}
 
 \item \texttt{file\_name\_entry\_format\_count} (\HFTubyte) \\
@@ -1459,7 +1534,11 @@ a declaration coordinate or a macro file inclusion.
  
 The first entry in the sequence is the primary source file 
 whose file name exactly matches that given in the 
-\DWATname{} attribute in the compilation unit DIE.
+\DWATname{} attribute in the compilation unit 
+\bb
+debugging information entry.
+\eb
+
    
 The line number program references file names in this 
 sequence beginning with 0, and uses those numbers instead 
@@ -1473,7 +1552,11 @@ the common practice of stripping all but the line number sections
 (\dotdebugline{} and \dotdebuglinestr) from an executable.}
 
 \textit{Note that if a \dotdebuglinestr{} section is present, 
-both the compilation unit DIE and the line number header can
+both the compilation unit 
+\bb
+debugging information entry
+\eb
+and the line number header can
 share a single copy of the current file name string.}
 
 \end{enumerate}
@@ -1553,7 +1636,7 @@ is found in Appendix \refersec{app:linenumberheaderexample}.}
 \subsubsection{Vendor-defined Content Descriptions}
 \label{chap:vendordefinedcontentdescriptions}
 Vendor-defined content descriptions may be defined using content
-type codes in the range \DWLNCTlouserTARG{} to \DWLNCThiuserTARG{}. Each
+type codes in the range \DWLNCTlouserNAME{} to \DWLNCThiuserNAME{}. Each
 such code may be combined with one or more forms from the set:
 \DWFORMblock, \DWFORMblockone, \DWFORMblocktwo, \DWFORMblockfour,
 \DWFORMdataone, \DWFORMdatatwo, \DWFORMdatafour, \DWFORMdataeight,
@@ -1942,6 +2025,12 @@ inclusion entries.  Each entry consists of an opcode followed by
 zero or more operands. Each macro unit ends with an entry
 containing an opcode of 0.
 
+\bb
+In all macro information entries,
+the line number of the entry is encoded as an
+unsigned LEB128 integer.
+\eb
+
 \needlines{6}
 \subsection{Macro Information Header}
 The macro information header contains the following fields:
@@ -2015,6 +2104,12 @@ order in which the directives were processed by the
 compiler (after taking into account the effect of the
 macro import directives).
 
+\bb
+\textit{The source file in which a macro information entry occurs
+can be derived by interpreting the sequence of entries from the
+beginning of the \dotdebugmacro{} section. \DWMACROstartfile{} and 
+\DWMACROendfile{} indicate changes in the containing file.}
+\eb
 
 \subsubsection{Define and Undefine Entries}
 \label{chap:defineandundefineentries}
@@ -2075,17 +2170,7 @@ The contents of the operands are described below (see Sections
 
 \end{enumerate}
 
-\subsubsection{Macro Source Line Number}
-\label{chap:macrosourcelinenumber}
-In all define and undefine macro information entries,
-as well as the \DWMACROstartfile{} entry,
-the line number of the entry occurs is encoded as an
-unsigned LEB128 integer.
-
-\textit{The source file in which a macro information entry occurs
-can be derived by interpreting the sequence of entries from the
-beginning of the \dotdebugmacro{} section. \DWMACROstartfile{} and 
-\DWMACROendfile{} indicate changes in the containing file.}
+\bbpareb
 
 \subsubsection{Macro Define String}
 \label{chap:macrodefinestring}
@@ -2162,8 +2247,8 @@ ending of an included file.
 \itembfnl{\DWMACROstartfileTARG{}}
 A \DWMACROstartfileNAME{} entry has two operands. The
 first operand encodes the line number of the source line on
-which the \texttt{\#include} macro directive occur
-(see Section \refersec{chap:macrosourcelinenumber}).
+which the \texttt{\#include} macro directive occurs.
+\bbeb
 The second operand encodes a source file name index. 
 
 The source file name index is the file number in the 
@@ -2518,10 +2603,8 @@ A
 constant that is factored out of all advance location
 instructions (see 
 Section \refersec{chap:rowcreationinstructions}).
-\bb
 The resulting value is  
 \mbox{\textit{(operand} * \HFNcodealignmentfactor)}.
-\eb
 
 \item  \HFNdataalignmentfactor{} (signed LEB128)
 \addtoindexx{LEB128!signed}\addtoindexx{signed LEB128|see{LEB128, signed}} \\
@@ -2529,11 +2612,8 @@ The resulting value is
 A 
 \addtoindexx{\textless daf\textgreater|see{data alignment factor}}
 constant that is factored out of certain offset instructions
-(see 
-\bb
-Sections \refersec{chap:cfadefinitioninstructions} and 
+(see Sections \refersec{chap:cfadefinitioninstructions} and 
 \refersec{chap:registerruleinstructions}).
-\eb
 The resulting value is  \textit{(operand} *
 \HFNdataalignmentfactor).
 
@@ -2594,9 +2674,7 @@ of bytes of program instructions described by this entry.
 
 \item \HFNinstructions{} (array of \HFTubyte) \\
 A sequence of table defining instructions that are described 
-\bb
 in Section \refersec{chap:callframeinstructions}.
-\eb
 
 \needlines{4}
 \item \HFNpadding{} (array of \HFTubyte) \\
@@ -2625,11 +2703,9 @@ operators cannot be used in such operands:
 
 \begin{itemize}
 \item
-\bb
 \DWOPaddrx, \DWOPcalltwo, \DWOPcallfour{}, \DWOPcallref, 
 \DWOPconsttype, \DWOPconstx, \DWOPconvert, \DWOPdereftype, 
 \DWOPregvaltype{} and \DWOPreinterpret{}
-\eb
 operators are 
 not allowed in an operand of these instructions because
 the call frame information must not depend on other
