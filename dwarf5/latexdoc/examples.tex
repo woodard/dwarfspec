@@ -36,6 +36,11 @@ typedef char* strp;
 
 % Ensures we get the following float out before we go on.
 \clearpage
+%%%
+%%% Be VERY careful about editing this figure! Both vertical
+%%% and horizontal spacing are critical to achieving the
+%%% desired effect. But this is very fragile!
+%%%
 \begin{figure}[h]
 %\centering
 %\setlength{\linewidth}{1.1\linewidth}
@@ -319,13 +324,24 @@ value consists of two parts, given in memory address order: the 4 byte
 value 1 followed by the four byte value computed from the sum of the
 contents of r3 and r4.
 
+\bb
+\descriptionitemnl{\DWOPentryvalue{} 1 \DWOPregone{} }
+The value register 1 contained upon entering the current subprogram is 
+pushed on the stack.
+
 \descriptionitemnl{\DWOPentryvalue{} 1 \DWOPregone{} \DWOPstackvalue }
-The value register 1 had upon entering the current subprogram.
+The value register 1 contained upon entering the current subprogram is 
+pushed on the stack. This value is the
+\doublequote{contents} of an otherwise anonymous location.
 
 \descriptionitemnl{\DWOPentryvalue{} 2 \DWOPbregone{} 0 \DWOPstackvalue }
-The value register 1 had upon entering the current subprogram (same as the previous example).
-%Both of these location descriptions evaluate to the value register 1 had upon
-%entering the current subprogram.
+The value register 1 contained upon entering the current subprogram 
+(same as the previous example) is pushed on the stack. This value is the
+\doublequote{contents} of an otherwise anonymous location.
+
+This and the previous location description are equivalent;
+the previous one is shorter, however.
+\eb
 
 %FIXME: The following gets an undefined control sequence error for reasons unknown... 
 %\descriptionitemnl{\DWOPentryvalue{} 1 \DWOPregthirtyone{} \DWOPregone{} \DWOPadd{} \DWOPstackvalue }
@@ -335,10 +351,12 @@ The value register 1 had upon entering the current subprogram (same as the previ
 \descriptionitemnl{\DWOPentryvalue{} 3 \DWOPbregfour{} 16 \DWOPderef{} \DWOPstackvalue }
 %FIXME: similar undefined as just above
 %\descriptionitemnl{\DWOPentryvalue{} 6 \DWOPentryvalue{} 1 \DWOPregfour{} \DWOPplusuconst{} 16 \DWOPderef{} \DWOPstackvalue }
-%These two location expressions do the same thing, p
 Add 16 to the value register 4 had upon entering the current subprogram
 to form an address and then push the value of the memory location at that address.
-
+\bb
+This value is the
+\doublequote{contents} of an otherwise anonymous location.
+\eb
 \end{description}
 
 \clearpage
@@ -357,26 +375,25 @@ Figure \referfol{fig:fortranarrayexamplesourcefragment}.
 
 \begin{figure}[h]
 \begin{lstlisting}
-        type array_ptr
-        real :: myvar
-        real, dimension (:), pointer :: ap
-        end type array_ptr
-        type(array_ptr), allocatable, dimension(:) :: arrayvar
-        allocate(arrayvar(20))
-        do i = 1, 20
-            allocate(arrayvar(i)%ap(i+10))
-        end do
+        TYPE array_ptr
+        REAL :: myvar
+        REAL, DIMENSION (:), POINTER :: ap
+        END TYPE array_ptr
+        TYPE(array_ptr), ALLOCATABLE, DIMENSION(:) :: arrayvar
+        ALLOCATE(arrayvar(20))
+        DO I = 1, 20
+            ALLOCATE(arrayvar(i)%ap(i+10))
+        END DO
 \end{lstlisting}
 \caption{Fortran array example: source fragment} 
 \label{fig:fortranarrayexamplesourcefragment}
 \end{figure}
 
 For allocatable and pointer arrays, it is essentially required
-by the \addtoindex{Fortran array} semantics that each array consist of 
-\addtoindexx{descriptor!array}
-two
-\addtoindexx{array!descriptor for}
-parts, which we here call 1) the descriptor and 2) the raw
+by the\addtoindex{Fortran array} semantics that each array 
+consist of two parts, which we here call 1) the 
+descriptor\addtoindexx{descriptor!array}\addtoindexx{array!descriptor for}
+and 2) the raw
 data. (A descriptor has often been called a dope vector in
 other contexts, although it is often a structure of some kind
 rather than a simple vector.) Because there are two parts,
@@ -443,15 +460,15 @@ object will have a
 attribute. If an object
 does not have a descriptor, then usually the DWARF type for the
 object will not have a 
-\DWATdatalocation. 
+\DWATdatalocation{} attribute. 
 (See the following
 \addtoindex{Ada} example for a case where the type for an object without
 a descriptor does have a 
 \DWATdatalocation{} attribute. In
 that case the object doubles as its own descriptor.)
 
-The \addtoindex{Fortran} derived type \texttt{array\_ptr} can now be redescribed
-in C\dash like terms that expose some of the representation as in
+The \addtoindex{Fortran} derived type \texttt{array\_ptr} can now be re-described
+in C-like terms that expose some of the representation as in
 
 \begin{lstlisting}[numbers=none]
 struct array_ptr {
@@ -592,7 +609,7 @@ Suppose
 the program is stopped immediately following completion
 of the do loop. Suppose further that the user enters the
 following debug command:
-
+\vspace{2mm}
 \begin{lstlisting}[numbers=none]
 debug> print arrayvar(5)%ap(2)
 \end{lstlisting}
@@ -660,7 +677,8 @@ begins at offset 4 from the beginning of the containing object.
 Component \texttt{ap} has the unnamed array type defined at 1\$ in the
 symbol table.
 
-\item  Find the second element of the array object found in step 3. To do array indexing requires
+\item  Find the second element of the array object found in step 3. 
+To do array indexing requires
 several pieces of information:
 \begin{enumerate}[a) ]
 \item  the address of the array storage
@@ -700,7 +718,7 @@ illustrated in Figure \refersec{fig:FortranscalarcoarrayDWARFdescription}.
 
 \begin{figure}[!h]
 \begin{lstlisting}
-        INTEGER X[*]
+        INTEGER x[*]
 \end{lstlisting}
 \caption{Fortran scalar coarray: source fragment}
 \label{fig:Fortranscalarcoarraysourcefragment}
@@ -710,13 +728,13 @@ illustrated in Figure \refersec{fig:FortranscalarcoarrayDWARFdescription}.
 \begin{dwflisting}
 \begin{alltt}
 10\$:  \DWTAGcoarraytype
-        \DWATtype(reference to INTEGER)
-        \DWTAGsubrangetype                ! Note omitted upper bound			
-            \DWATlowerbound(constant 1)
+          \DWATtype(reference to INTEGER)
+          \DWTAGsubrangetype                ! Note omitted upper bound			
+              \DWATlowerbound(constant 1)
 
 11\$:  \DWTAGvariable
-        \DWATname("X")
-        \DWATtype(reference to coarray type at 10\$)
+          \DWATname("x")
+          \DWATtype(reference to coarray type at 10\$)
 \end{alltt}
 \end{dwflisting}
 \caption{Fortran scalar coarray: DWARF description}
@@ -731,7 +749,7 @@ illustrated in Figure \refersec{fig:FortranarraycoarrayDWARFdescription}.
 
 \begin{figure}[h]
 \begin{lstlisting}
-        INTEGER X(10)[*]
+        INTEGER x(10)[*]
 \end{lstlisting}
 \caption{Fortran array coarray: source fragment}
 \label{fig:Fortranarraycoarraysourcefragment}
@@ -740,21 +758,21 @@ illustrated in Figure \refersec{fig:FortranarraycoarrayDWARFdescription}.
 \begin{figure}[h]
 \begin{dwflisting}
 \begin{alltt}
-10\$: \DWTAGarraytype
-        \DWATordering(\DWORDcolmajor)
-        \DWATtype(reference to INTEGER)
-11\$:    \DWTAGsubrangetype
-            \DWATlowerbound(constant 1)
-            \DWATupperbound(constant 10)
+10\$:  \DWTAGarraytype
+          \DWATordering(\DWORDcolmajor)
+          \DWATtype(reference to INTEGER)
+11\$:      \DWTAGsubrangetype
+              \DWATlowerbound(constant 1)
+              \DWATupperbound(constant 10)
 
-12\$: \DWTAGcoarraytype
-        \DWATtype(reference to array type at 10\$)
-13\$:    \DWTAGsubrangetype                ! Note omitted upper bound
-            \DWATlowerbound(constant 1)
+12\$:  \DWTAGcoarraytype
+          \DWATtype(reference to array type at 10\$)
+13\$:      \DWTAGsubrangetype                ! Note omitted upper bound
+              \DWATlowerbound(constant 1)
 
-14$: \DWTAGvariable
-        \DWATname("X")
-        \DWATtype(reference to coarray type at 12\$)
+14$:  \DWTAGvariable
+          \DWATname("x")
+          \DWATtype(reference to coarray type at 12\$)
 \end{alltt}
 \end{dwflisting}
 \caption{Fortran array coarray: DWARF description}
@@ -770,7 +788,7 @@ illustrated in Figure \referfol{fig:FortranmultidimensionalcoarrayDWARFdescripti
 
 \begin{figure}[h]
 \begin{lstlisting}
-        INTEGER X(10,11,12)[2,3,*]
+        INTEGER x(10,11,12)[2,3,*]
 \end{lstlisting}
 \caption{Fortran multidimensional coarray: source fragment}
 \label{fig:Fortranmultidimensionalcoarraysourcefragment}
@@ -778,34 +796,35 @@ illustrated in Figure \referfol{fig:FortranmultidimensionalcoarrayDWARFdescripti
 
 \begin{figure}[h]
 \begin{dwflisting}
+\bb
 \begin{alltt}
-10\$: \DWTAGarraytype
-        \DWATordering(\DWORDcolmajor)
-        \DWATtype(reference to INTEGER)
-11\$:    \DWTAGsubrangetype
-            \DWATlowerbound(constant 1)
-            \DWATupperbound(constant 10)
-12\$:    \DWTAGsubrangetype
-            \DWATlowerbound(constant  1)
-            \DWATupperbound(constant 11)
-13\$:    \DWTAGsubrangetype
-            \DWATlowerbound(constant  1)
-            \DWATupperbound(constant 12)
 
-14\$: \DWTAGcoarraytype
-        \DWATtype(reference to array_type at 10\$)
-15\$:    \DWTAGsubrangetype
-            \DWATlowerbound(constant 1)
-            \DWATupperbound(constant 2)
-16\$:    \DWTAGsubrangetype
-            \DWATlowerbound(constant 1)
-            \DWATupperbound(constant 3)
-17\$:    \DWTAGsubrangetype                ! Note omitted upper bound
-            \DWATlowerbound(constant 1)
+10\$:  \DWTAGarraytype                ! Note omitted lower bounds (default to 1)
+          \DWATordering(\DWORDcolmajor)
+          \DWATtype(reference to INTEGER)
+11\$:      \DWTAGsubrangetype
+              \DWATupperbound(constant 10)
+12\$:      \DWTAGsubrangetype
+              \DWATupperbound(constant 11)
+13\$:      \DWTAGsubrangetype
+              \DWATupperbound(constant 12)
+\end{alltt}\eb\vspace{-0.8\baselineskip}\begin{alltt}
 
-18\$: \DWTAGvariable
-        \DWATname("X")
-        \DWATtype(reference to coarray type at 14\$)
+14\$:  \DWTAGcoarraytype
+          \DWATtype(reference to array_type at 10\$)
+15\$:      \DWTAGsubrangetype
+              \DWATlowerbound(constant 1)
+              \DWATupperbound(constant 2)
+16\$:      \DWTAGsubrangetype
+              \DWATlowerbound(constant 1)
+              \DWATupperbound(constant 3)
+17\$:      \DWTAGsubrangetype            ! Note omitted upper bound
+              \DWATlowerbound(constant 1)
+
+18\$:  \DWTAGvariable
+          \DWATname("x")
+          \DWATtype(reference to coarray type at 14\$)
+        
 \end{alltt}
 \end{dwflisting}
 \caption{Fortran multidimensional coarray: DWARF description}
@@ -824,12 +843,12 @@ supplement~29113:\footnote{Technical Specification ISO/IEC TS
 
 \begin{figure}[!h]
 \begin{lstlisting}
-  subroutine foo(x)
-    real :: x(..)
+  SUBROUTINE Foo(x)
+    REAL :: x(..)
 
     ! x has n dimensions
   
-  end subroutine
+  END SUBROUTINE
 \end{lstlisting}
 \caption{Declaration of a Fortran 2008 assumed-rank array}
 \label{fig:assumedrankdecl}
@@ -865,48 +884,48 @@ Figure~\refersec{fig:assumedrankdwarf}.
 \begin{dwflisting}
 \begin{alltt}
 10\$:  \DWTAGarraytype
-         \DWATtype(reference to real)
-         \DWATrank(expression=
-             \DWOPpushobjectaddress
-             \DWOPlitn                        ! offset of rank in descriptor
-             \DWOPplus
-             \DWOPderef)
-         \DWATdatalocation(expression=
-             \DWOPpushobjectaddress
-             \DWOPlitn                        ! offset of data in descriptor
-             \DWOPplus
-             \DWOPderef)
-11\$:    \DWTAGgenericsubrange
-             \DWATtype(reference to integer)
-             \DWATlowerbound(expression=
-             !   Looks up the lower bound of dimension i.
-             !   Operation                       ! Stack effect
-             !   (implicit)                      ! i                                                                     
-                 \DWOPlitn                    ! i sizeof(dim)
-                 \DWOPmul                       ! dim[i]
-                 \DWOPlitn                    ! dim[i] offsetof(dim)
-                 \DWOPplus                      ! dim[i]+offset
-                 \DWOPpushobjectaddress       ! dim[i]+offsetof(dim) objptr
-                 \DWOPplus                      ! objptr.dim[i]
-                 \DWOPlitn                    ! objptr.dim[i] offsetof(lb)
-                 \DWOPplus                      ! objptr.dim[i].lowerbound
-                 \DWOPderef)                    ! *objptr.dim[i].lowerbound
-             \DWATupperbound(expression=
-             !   Looks up the upper bound of dimension i.
-                 \DWOPlitn                    ! sizeof(dim)
-                 \DWOPmul
-                 \DWOPlitn                    ! offsetof(dim)
-                 \DWOPplus
-                 \DWOPpushobjectaddress
-                 \DWOPplus
-                 \DWOPlitn                    ! offset of upperbound in dim
-                 \DWOPplus
-                 \DWOPderef)
-             \DWATbytestride(expression=
-             !   Looks up the byte stride of dimension i.
-                 ...
-             !   (analogous to \DWATupperboundNAME)
-                 )
+          \DWATtype(reference to real)
+          \DWATrank(expression=
+              \DWOPpushobjectaddress
+              \DWOPlitn                        ! offset of rank in descriptor
+              \DWOPplus
+              \DWOPderef)
+          \DWATdatalocation(expression=
+              \DWOPpushobjectaddress
+              \DWOPlitn                        ! offset of data in descriptor
+              \DWOPplus
+              \DWOPderef)
+11\$:     \DWTAGgenericsubrange
+              \DWATtype(reference to integer)
+              \DWATlowerbound(expression=
+              !   Looks up the lower bound of dimension i.
+              !   Operation                       ! Stack effect
+              !   (implicit)                      ! i
+                  \DWOPlitn                    ! i sizeof(dim)
+                  \DWOPmul                       ! dim[i]
+                  \DWOPlitn                    ! dim[i] offsetof(dim)
+                  \DWOPplus                      ! dim[i]+offset
+                  \DWOPpushobjectaddress       ! dim[i]+offsetof(dim) objptr
+                  \DWOPplus                      ! objptr.dim[i]
+                  \DWOPlitn                    ! objptr.dim[i] offsetof(lb)
+                  \DWOPplus                      ! objptr.dim[i].lowerbound
+                  \DWOPderef)                    ! *objptr.dim[i].lowerbound
+              \DWATupperbound(expression=
+              !   Looks up the upper bound of dimension i.
+                  \DWOPlitn                    ! sizeof(dim)
+                  \DWOPmul
+                  \DWOPlitn                    ! offsetof(dim)
+                  \DWOPplus
+                  \DWOPpushobjectaddress
+                  \DWOPplus
+                  \DWOPlitn                    ! offset of upperbound in dim
+                  \DWOPplus
+                  \DWOPderef)
+              \DWATbytestride(expression=
+              !   Looks up the byte stride of dimension i.
+                  ...
+              !   (analogous to \DWATupperboundNAME)
+                  )
 \end{alltt}
 \end{dwflisting}
 \caption{Sample DWARF for the array descriptor in Figure~\ref{fig:arraydesc}}
@@ -981,23 +1000,23 @@ several variables.
 
 \begin{figure}[h]
 \begin{lstlisting}
-	    program sample
+	PROGRAM Sample
      
-        type :: dt (l)
-            integer, len :: l
-            integer :: arr(l)
-        end type
+        TYPE :: dt (l)
+            INTEGER, LEN :: l
+            INTEGER :: arr(l)
+        END TYPE
 
-        integer :: n = 4
-        contains
+        INTEGER :: n = 4
+        CONTAINS
 
-        subroutine s()
-            type (dt(n))               :: t1
-            type (dt(n)), pointer      :: t2
-            type (dt(n)), allocatable  :: t3, t4
-        end subroutine
+        SUBROUTINE S()
+            TYPE (dt(n))               :: t1
+            TYPE (dt(n)), pointer      :: t2
+            TYPE (dt(n)), allocatable  :: t3, t4
+        END SUBROUTINE
      
-        end sample
+        END Sample
 \end{lstlisting}
 \caption{Fortran dynamic type example: source}
 \label{fig:fortrandynamictypeexamplesource}
@@ -1172,51 +1191,51 @@ of this example and therefore is not shown.
 \begin{figure}[p]
 \begin{dwflisting}
 \begin{alltt}
-11\$: \DWTAGvariable
-        \DWATname("M")
-        \DWATtype(reference to INTEGER)
-12\$: \DWTAGarraytype
-        ! No name, default (\addtoindex{Ada}) order, default stride
-        \DWATtype(reference to INTEGER)
-13\$:    \DWTAGsubrangetype
-            \DWATtype(reference to INTEGER)
-            \DWATlowerbound(constant 1)
-            \DWATupperbound(reference to variable M at 11\$)
-14\$: \DWTAGvariable
-        \DWATname("VEC1")
-        \DWATtype(reference to array type at 12\$)
-     . . .
-21\$: \DWTAGsubrangetype
-        \DWATname("TEENY")
-        \DWATtype(reference to INTEGER)
-        \DWATlowerbound(constant 1)
-        \DWATupperbound(constant 100)
-     . . .
-26\$: \DWTAGstructuretype
-        \DWATname("REC2")
-27\$:    \DWTAGmember
-            \DWATname("N")
-            \DWATtype(reference to subtype TEENY at 21\$)
-            \DWATdatamemberlocation(constant 0)
-28\$:    \DWTAGarraytype
-            ! No name, default (\addtoindex{Ada}) order, default stride
-            ! Default data location
-            \DWATtype(reference to INTEGER)
-29\$:        \DWTAGsubrangetype
-                \DWATtype(reference to subrange TEENY at 21\$)
-                \DWATlowerbound(constant 1)
-                \DWATupperbound(reference to member N at 27\$)
-30\$:    \DWTAGmember
-            \DWATname("VEC2")
-            \DWATtype(reference to array "subtype" at 28\$)
-            \DWATdatamemberlocation(machine=
-                \DWOPlitn                  ! where n == offset(REC2, VEC2)
-                \DWOPplus)
-     . . .
-41\$: \DWTAGvariable
-        \DWATname("OBJ2B")
-        \DWATtype(reference to REC2 at 26\$)
-        \DWATlocation(...as appropriate...)
+11\$:  \DWTAGvariable
+          \DWATname("M")
+          \DWATtype(reference to INTEGER)
+12\$:  \DWTAGarraytype
+          ! No name, default (\addtoindex{Ada}) order, default stride
+          \DWATtype(reference to INTEGER)
+13\$:      \DWTAGsubrangetype
+              \DWATtype(reference to INTEGER)
+              \DWATlowerbound(constant 1)
+              \DWATupperbound(reference to variable M at 11\$)
+14\$:  \DWTAGvariable
+          \DWATname("VEC1")
+          \DWATtype(reference to array type at 12\$)
+      . . .
+21\$:  \DWTAGsubrangetype
+          \DWATname("TEENY")
+          \DWATtype(reference to INTEGER)
+          \DWATlowerbound(constant 1)
+          \DWATupperbound(constant 100)
+      . . .
+26\$:  \DWTAGstructuretype
+          \DWATname("REC2")
+27\$:      \DWTAGmember
+              \DWATname("N")
+              \DWATtype(reference to subtype TEENY at 21\$)
+              \DWATdatamemberlocation(constant 0)
+28\$:      \DWTAGarraytype
+              ! No name, default (\addtoindex{Ada}) order, default stride
+              ! Default data location
+              \DWATtype(reference to INTEGER)
+29\$:          \DWTAGsubrangetype
+                  \DWATtype(reference to subrange TEENY at 21\$)
+                  \DWATlowerbound(constant 1)
+                  \DWATupperbound(reference to member N at 27\$)
+30\$:      \DWTAGmember
+              \DWATname("VEC2")
+              \DWATtype(reference to array "subtype" at 28\$)
+              \DWATdatamemberlocation(machine=
+                  \DWOPlitn                ! where n == offset(REC2, VEC2)
+                  \DWOPplus)
+      . . .
+41\$:  \DWTAGvariable
+          \DWATname("OBJ2B")
+          \DWATtype(reference to REC2 at 26\$)
+          \DWATlocation(...as appropriate...)
 \end{alltt}
 \end{dwflisting}
 \caption{Ada example: DWARF description}
@@ -1233,20 +1252,23 @@ is used to illustrate the representation of packed unaligned
 \addtoindex{bit fields}.
 
 \begin{figure}[h]
+\bb
 \begin{lstlisting}
-TYPE T : PACKED RECORD                  ! bit size is 2
-         F5 : BOOLEAN;                  ! bit offset is 0
-         F6 : BOOLEAN;                  ! bit offset is 1
+TYPE T : PACKED RECORD                  { bit size is 2   }
+         F5 : BOOLEAN;                  { bit offset is 0 }
+         F6 : BOOLEAN;                  { bit offset is 1 }
          END;
 VAR V :  PACKED RECORD
-         F1 : BOOLEAN;                  ! bit offset is 0
-         F2 : PACKED RECORD             ! bit offset is 1
-              F3 : INTEGER;             ! bit offset is 0 in F2, 1 in V
+         F1 : BOOLEAN;                  { bit offset is 0 }
+         F2 : PACKED RECORD             { bit offset is 1 }
+              F3 : INTEGER;             { bit offset is 0 in F2, 
+                                          1 in V }
               END;
-         F4 : PACKED ARRAY [0..1] OF T; ! bit offset is 33
-         F7 : T;                        ! bit offset is 37
+         F4 : PACKED ARRAY [0..1] OF T; { bit offset is 33 }
+         F7 : T;                        { bit offset is 37 }
          END;
 \end{lstlisting}
+\eb
 \caption{Packed record example: source fragment}
 \label{fig:packedrecordexamplesourcefragment}
 \end{figure}
@@ -1266,20 +1288,20 @@ Section \refersec{chap:datamemberentries}.
 \figurepart{1}{2}
 \begin{dwflisting}
 \begin{alltt}
-10\$: \DWTAGbasetype
-        \DWATname("BOOLEAN")
-            ...
-11\$: \DWTAGbasetype
-        \DWATname("INTEGER")
-            ...
-20\$: \DWTAGstructuretype
-        \DWATname("T")
-        \DWATbitsize(2)
-        \DWTAGmember
-            \DWATname("F5")
-            \DWATtype(reference to 10$)
-            \DWATdatabitoffset(0)        ! may be omitted
-            \DWATbitsize(1)
+10\$:  \DWTAGbasetype
+          \DWATname("BOOLEAN")
+              ...
+11\$:  \DWTAGbasetype
+          \DWATname("INTEGER")
+              ...
+20\$:  \DWTAGstructuretype
+          \DWATname("T")
+          \DWATbitsize(2)
+          \DWTAGmember
+              \DWATname("F5")
+              \DWATtype(reference to 10$)
+              \DWATdatabitoffset(0)        ! may be omitted
+              \DWATbitsize(1)
 \end{alltt}
 \end{dwflisting}
 \caption{Packed record example: DWARF description}
@@ -1290,50 +1312,50 @@ Section \refersec{chap:datamemberentries}.
 \figurepart{2}{2}
 \begin{dwflisting}
 \begin{alltt}
-        \DWTAGmember
-            \DWATname("F6")
-            \DWATtype(reference to 10$)
-            \DWATdatabitoffset(1)
-            \DWATbitsize(1)
-21\$: \DWTAGstructuretype                  ! anonymous type for F2
-        \DWTAGmember
-            \DWATname("F3")
-            \DWATtype(reference to 11\$)
-22\$: \DWTAGarraytype                      ! anonymous type for F4
-        \DWATtype(reference to 20\$)
-        \DWTAGsubrangetype
-            \DWATtype(reference to 11\$)
-            \DWATlowerbound(0)
-            \DWATupperbound(1)
-        \DWATbitstride(2)
-        \DWATbitsize(4) \addtoindexx{bit size attribute}
-23\$: \DWTAGstructuretype                  ! anonymous type for V
-        \DWATbitsize(39) \addtoindexx{bit size attribute}
-        \DWTAGmember
-            \DWATname("F1")
-            \DWATtype(reference to 10\$)
-            \DWATdatabitoffset(0)        ! may be omitted
-            \DWATbitsize(1) ! may be omitted
-        \DWTAGmember
-            \DWATname("F2")
-            \DWATtype(reference to 21\$)
-            \DWATdatabitoffset(1)
-            \DWATbitsize(32) ! may be omitted
-        \DWTAGmember
-            \DWATname("F4")
-            \DWATtype(reference to 22\$)
-            \DWATdatabitoffset(33)
-            \DWATbitsize(4) ! may be omitted
-        \DWTAGmember
-            \DWATname("F7")
-            \DWATtype(reference to 20\$)    ! type T
-            \DWATdatabitoffset(37)
-            \DWATbitsize(2) \addtoindexx{bit size attribute}              ! may be omitted
-     \DWTAGvariable
-        \DWATname("V")
-        \DWATtype(reference to 23\$)
-        \DWATlocation(...)
-        ...
+          \DWTAGmember
+              \DWATname("F6")
+              \DWATtype(reference to 10$)
+              \DWATdatabitoffset(1)
+              \DWATbitsize(1)
+21\$:  \DWTAGstructuretype                  ! anonymous type for F2
+          \DWTAGmember
+              \DWATname("F3")
+              \DWATtype(reference to 11\$)
+22\$:  \DWTAGarraytype                      ! anonymous type for F4
+          \DWATtype(reference to 20\$)
+          \DWTAGsubrangetype
+              \DWATtype(reference to 11\$)
+              \DWATlowerbound(0)
+              \DWATupperbound(1)
+          \DWATbitstride(2)
+          \DWATbitsize(4) \addtoindexx{bit size attribute}
+23\$:  \DWTAGstructuretype                  ! anonymous type for V
+          \DWATbitsize(39) \addtoindexx{bit size attribute}
+          \DWTAGmember
+              \DWATname("F1")
+              \DWATtype(reference to 10\$)
+              \DWATdatabitoffset(0)        ! may be omitted
+              \DWATbitsize(1) ! may be omitted
+          \DWTAGmember
+              \DWATname("F2")
+              \DWATtype(reference to 21\$)
+              \DWATdatabitoffset(1)
+              \DWATbitsize(32) ! may be omitted
+          \DWTAGmember
+              \DWATname("F4")
+              \DWATtype(reference to 22\$)
+              \DWATdatabitoffset(33)
+              \DWATbitsize(4) ! may be omitted
+          \DWTAGmember
+              \DWATname("F7")
+              \DWATtype(reference to 20\$)    ! type T
+              \DWATdatabitoffset(37)
+              \DWATbitsize(2) \addtoindexx{bit size attribute}              ! may be omitted
+       \DWTAGvariable
+          \DWATname("V")
+          \DWATtype(reference to 23\$)
+          \DWATlocation(...)
+          ...
 \end{alltt}
 \end{dwflisting}
 \begin{center}
@@ -1508,43 +1530,45 @@ int Foo::myfunc(int a)
 \begin{dwflisting}
 \begin{alltt}
 
-1\$:  \DWTAGbasetype
-        \DWATname("int")
-        ...
-2\$:  \DWTAGbasetype
-        \DWATname("float")
-        ...
-6\$:  \DWTAGnamespace
-        ! no \DWATname attribute
-7\$:
-        \DWTAGvariable
-            \DWATname("i")
-            \DWATtype(reference to 1\$)
-            \DWATlocation ...
-            ...
-10\$: \DWTAGnamespace
-        \DWATname("A")
-20\$:    \DWTAGnamespace
-            \DWATname("B")
-30\$:        \DWTAGvariable
-                \DWATname("j")
-                \DWATtype(reference to 1\$)
-                \DWATlocation ...
-                ...
-34\$:        \DWTAGsubprogram
-                \DWATname("myfunc")
-                \DWATtype(reference to 1\$)
-                ...
-36\$:        \DWTAGsubprogram
-                \DWATname("myfunc")
-                \DWATtype(reference to 2\$)
-                ...
-38\$:        \DWTAGsubprogram
-                \DWATname("myfunc2")
-                \DWATlowpc ...
-                \DWAThighpc ...
-                \DWATtype(reference to 1\$)
-                ...
+1\$:   \DWTAGbasetype
+          \DWATname("int")
+          ...
+2\$:   \DWTAGbasetype
+          \DWATname("float")
+          ...
+6\$:   \DWTAGnamespace
+          ! no \DWATname attribute
+\end{alltt}\bb\vspace{-0.8\baselineskip}\begin{alltt}
+          \DWATexportsymbols
+\end{alltt}\eb\vspace{-0.8\baselineskip}\begin{alltt}
+          \DWTAGvariable
+              \DWATname("i")
+              \DWATtype(reference to 1\$)
+              \DWATlocation ...
+              ...
+10\$:  \DWTAGnamespace
+          \DWATname("A")
+20\$:      \DWTAGnamespace
+              \DWATname("B")
+30\$:          \DWTAGvariable
+                  \DWATname("j")
+                  \DWATtype(reference to 1\$)
+                  \DWATlocation ...
+                  ...
+34\$:          \DWTAGsubprogram
+                  \DWATname("myfunc")
+                  \DWATtype(reference to 1\$)
+                  ...
+36\$:          \DWTAGsubprogram
+                  \DWATname("myfunc")
+                  \DWATtype(reference to 2\$)
+                  ...
+38\$:          \DWTAGsubprogram
+                  \DWATname("myfunc2")
+                  \DWATlowpc ...
+                  \DWAThighpc ...
+                  \DWATtype(reference to 1\$)
+                  ...
 \end{alltt}
 \end{dwflisting}
 \caption{Namespace example \#1: DWARF description}
@@ -1554,44 +1578,46 @@ int Foo::myfunc(int a)
 \begin{figure}
 \figurepart{2}{2}
 \begin{dwflisting}
+\bb
 \begin{alltt}
-40\$: \DWTAGnamespace
-        \DWATname("Y")
-        \DWTAGimporteddeclaration            ! (1) using-declaration
-            \DWATimport(reference to 30\$)
-        \DWTAGvariable
-            \DWATname("foo")
-            \DWATtype(reference to 1\$)
-            \DWATlocation ...
-            ...
-     \DWTAGimporteddeclaration               ! (2) using declaration
-        \DWATimport(reference to 30\$)
-        \DWTAGimporteddeclaration            ! (3) namespace alias
-            \DWATname("Foo")
-            \DWATimport(reference to 20\$)
-        \DWTAGimporteddeclaration            ! (4) using declaration
-            \DWATimport(reference to 34\$)     !     - part 1
-        \DWTAGimporteddeclaration            ! (4) using declaration
-            \DWATimport(reference to 36\$)     !     - part 2
-        \DWTAGimportedmodule                 ! (5) using directive
-            \DWATimport(reference to 20\$)
-        \DWTAGnamespace
-            \DWATextension(reference to 10\$)
-            \DWTAGnamespace
-                \DWATextension(reference to 20\$)
-                \DWTAGimportedmodule         ! (6) using directive
-                    \DWATimport(reference to 40\$)
-                \DWTAGvariable
-                    \DWATname("k")
-                    \DWATtype(reference to 1\$)
-                    \DWATlocation ...
-                    ...
-60\$: \DWTAGsubprogram
-        \DWATspecification(reference to 34\$)
-        \DWATlowpc ...
-        \DWAThighpc ...
-        ...
+40\$:  \DWTAGnamespace
+          \DWATname("Y")
+          \DWTAGimporteddeclaration            ! (1) using-declaration
+              \DWATimport(reference to 30\$)
+          \DWTAGvariable
+              \DWATname("foo")
+              \DWATtype(reference to 1\$)
+              \DWATlocation ...
+              ...
+      \DWTAGimporteddeclaration                ! (2) using declaration
+          \DWATimport(reference to 30\$)
+      \DWTAGimporteddeclaration                ! (3) namespace alias
+          \DWATname("Foo")
+          \DWATimport(reference to 20\$)
+      \DWTAGimporteddeclaration                ! (4) using declaration
+          \DWATimport(reference to 34\$)         !     - part 1
+      \DWTAGimporteddeclaration                ! (4) using declaration
+          \DWATimport(reference to 36\$)         !     - part 2
+      \DWTAGimportedmodule                     ! (5) using directive
+          \DWATimport(reference to 20\$)
+      \DWTAGnamespace
+          \DWATextension(reference to 10\$)
+          \DWTAGnamespace
+              \DWATextension(reference to 20\$)
+              \DWTAGimportedmodule             ! (6) using directive
+                  \DWATimport(reference to 40\$)
+              \DWTAGvariable
+                  \DWATname("k")
+                  \DWATtype(reference to 1\$)
+                  \DWATlocation ...
+                  ...
+60\$:  \DWTAGsubprogram
+          \DWATspecification(reference to 34\$)
+          \DWATlowpc ...
+          \DWAThighpc ...
+          ...
 \end{alltt}
+\eb
 \end{dwflisting}
 \begin{center}
 \vspace{3mm}
@@ -1844,8 +1870,11 @@ void g() {
 \label{app:linenumberheaderexample}
 
 The information found in a \DWARFVersionIV{} line number 
-header can be encoded as shown in 
-Figure \refersec{fig:preV5LNCTusingV5}.
+header can be encoded 
+\bb
+in a \DWARFVersionV{} header
+\eb
+as shown in Figure \refersec{fig:preV5LNCTusingV5}.
 
 \begin{figure}[h]
 \begin{dwflisting}
@@ -1879,22 +1908,32 @@ Figure \refersec{fig:preV5LNCTusingV5}.
 
 \subsection{Line Number Special Opcode Example}
 \label{app:linenumberspecialopcodeexample}
-Suppose that the opcode\_base is 13, 
-\addttindex{line\_base} is -3, 
-\addttindex{line\_range} is 12, 
-\addttindex{minimum\_instruction\_length} is 1
-and 
-\addttindex{maximum\_operations\_per\_instruction} is 1. 
+\bb
+Suppose the line number header includes the following 
+(header fields not needed are not shown):
+\begin{center}
+\begin{tabular}{lr}
+    \addttindex{opcode\_base} & 13 \\
+    \addttindex{line\_base}   & -3 \\
+    \addttindex{line\_range}  & 12 \\
+    \addttindex{minimum\_instruction\_length} &          1 \\
+    \addttindex{maximum\_operations\_per\_instruction} & 1 \\
+\end{tabular}
+\end{center}
+\eb
 This means that
 we can use a special opcode whenever two successive rows in
 the matrix have source line numbers differing by any value
-within the range [-3, 8] and (because of the limited number
+within the range \mbox{[-3, 8]} and (because of the limited number
 of opcodes available) when the difference between addresses
-is within the range [0, 20], but not all line advances are
-available for the maximum \addtoindex{operation advance} (see below).
-
+is within the range [0, 20].
+\bb
 The resulting opcode mapping is shown in
 Figure \refersec{fig:examplelinenumberspecialopcodemapping}.
+
+Note in the bottom row of the figure that not all line advances are 
+available for the maximum \addtoindex{operation advance}.
+\eb
 
 \begin{figure}[ht]
 \begin{alltt}
@@ -1968,30 +2007,16 @@ Figure \refersec{fig:linenumberprogramexamplemachinecode}.
 \label{fig:linenumberprogramexamplemachinecode}
 \end{figure}
 
-Suppose the line number program header includes the following
-(header fields not needed 
-\addttindexx{line\_base}
-below 
-\addttindexx{line\_range}
-are 
-\addttindexx{opcode\_base}
-not 
-\addttindexx{minimum\_instruction\_length}
-shown):
-\begin{alltt}
-    version                       4
-    minimum_instruction_length    1
-    opcode_base                  10   ! Opcodes 10-12 not needed
-    line_base                     1
-    line_range                   15
-\end{alltt}
-
+Suppose the line number program header includes the 
+\bb
+same values and resulting encoding illustrated in the 
+previous Section \refersec{app:linenumberspecialopcodeexample}.
+\eb
 
 Table \refersec{tab:linenumberprogramexampleoneencoding}
 shows one encoding of the line number program, which occupies
-12 bytes (the opcode SPECIAL(\textit{m},\textit{n}) indicates the special opcode
-generated for a line increment of \textit{m} and an address increment
-of \textit{n}).
+12 bytes.
+\bbeb
 
 \newpage
 \begin{centering}
@@ -2008,15 +2033,21 @@ of \textit{n}).
   \hline
 \endlastfoot
 \DWLNSadvancepc&LEB128(0x239)&0x2, 0xb9, 0x04 \\
-SPECIAL(2, 0)& &0xb  \\
-SPECIAL(2, 3)& &0x38 \\
-SPECIAL(1, 8)& &0x82 \\
-SPECIAL(1, 7)& &0x73 \\
+\bb
+SPECIAL\dag~(2, 0)& & 0x12~~(18$_{10}$)  \\
+SPECIAL\dag~(2, 3)& & 0x36~~(54$_{10}$) \\
+SPECIAL\dag~(1, 8)& & 0x71~~(113$_{10}$) \\
+\eb
+SPECIAL\dag~(1, 7)& & 0x65~~(101$_{10}$) \\
 \DWLNSadvancepc&LEB128(2)&0x2, 0x2 \\
 \DWLNEendsequence{} &&0x0, 0x1, 0x1 \\
 \end{longtable}
 \end{centering}
-
+\bb
+\dag~The opcode notation SPECIAL(\textit{m},\textit{n}) indicates 
+the special opcode generated for a line advance of \textit{m} 
+and an operation advance of \textit{n})
+\eb
 
 Table \refersec{tab:linenumberprogramexamplealternateencoding}
 shows an alternate 
@@ -2039,18 +2070,21 @@ this encoding occupies 22 bytes.
   \hline
 \endlastfoot
 \DWLNSfixedadvancepc&0x239&0x9, 0x39, 0x2        \\
-SPECIAL(2, 0)&& 0xb        \\
+\bb
+SPECIAL\ddag~(2, 0) && 0x12~~(18$_{10}$)        \\
 \DWLNSfixedadvancepc&0x3&0x9, 0x3, 0x0        \\
-SPECIAL(2, 0)&&0xb        \\
+SPECIAL\ddag~(2, 0) && 0x12~~(18$_{10}$)        \\
 \DWLNSfixedadvancepc&0x8&0x9, 0x8, 0x0        \\
-SPECIAL(1, 0)&& 0xa        \\
+SPECIAL\ddag~(1, 0) && 0x11~~(17$_{10}$)        \\
 \DWLNSfixedadvancepc&0x7&0x9, 0x7, 0x0        \\
-SPECIAL(1, 0) && 0xa        \\
+\eb
+SPECIAL\ddag~(1, 0) && 0x11~~(17$_{10}$)        \\
 \DWLNSfixedadvancepc&0x2&0x9, 0x2, 0x0        \\
 \DWLNEendsequence&&0x0, 0x1, 0x1        \\
 \end{longtable}
 \end{centering}
-
+\ddag~SPECIAL is defined the same as in the preceding Table
+\ref{tab:linenumberprogramexampleoneencoding}.
 \needlines{6}
 \section{Call Frame Information Example}
 \label{app:callframeinformationexample}
@@ -2359,8 +2393,8 @@ Figure \refersec{fig:inliningexample1abstractinstance}.
 Notice in 
 Figure \ref{fig:inliningexample1abstractinstance} 
 that the debugging information entry for
-\texttt{INNER} (labelled \texttt{INNER.AI.1.1}) is nested in (is a child of)
-that for \texttt{OUTER} (labelled \texttt{OUTER.AI.1.1}). Nonetheless, the
+\texttt{INNER} (labelled \texttt{INNER.AI.1.1\$}) is nested in (is a child of)
+that for \texttt{OUTER} (labelled \texttt{OUTER.AI.1.1\$}). Nonetheless, the
 abstract instance tree for \texttt{INNER} is considered to be separate
 and distinct from that for \texttt{OUTER}.
 
@@ -2376,17 +2410,17 @@ Figure \refersec{fig:inliningexample1concreteinstance}.
 \begin{alltt}
     ! Abstract instance for OUTER
     ! \addtoindexx{abstract instance!example}
-OUTER.AI.1.1:
+OUTER.AI.1.1\$:
     \DWTAGsubprogram
         \DWATname("OUTER")
         \DWATinline(\DWINLdeclaredinlined)
         ! No low/high PCs
-OUTER.AI.1.2:
+OUTER.AI.1.2\$:
         \DWTAGformalparameter
             \DWATname("OUTER\_FORMAL")
             \DWATtype(reference to integer)
             ! No location
-OUTER.AI.1.3:
+OUTER.AI.1.3\$:
         \DWTAGvariable
             \DWATname("OUTER\_LOCAL")
             \DWATtype(reference to integer)
@@ -2394,17 +2428,17 @@ OUTER.AI.1.3:
         !
         ! Abstract instance for INNER
         !
-INNER.AI.1.1:
+INNER.AI.1.1\$:
         \DWTAGsubprogram
             \DWATname("INNER")
             \DWATinline(\DWINLdeclaredinlined)
             ! No low/high PCs
-INNER.AI.1.2:
+INNER.AI.1.2\$:
             \DWTAGformalparameter
                 \DWATname("INNER\_FORMAL")
                 \DWATtype(reference to integer)
                 ! No location
-INNER.AI.1.3:
+INNER.AI.1.3\$:
             \DWTAGvariable
                 \DWATname("INNER\_LOCAL")
                 \DWATtype(reference to integer)
@@ -2426,43 +2460,43 @@ INNER.AI.1.3:
 \begin{alltt}
 ! Concrete instance for call "OUTER(7)"
 ! \addtoindexx{concrete instance!example}
-OUTER.CI.1.1:
+OUTER.CI.1.1\$:
     \DWTAGinlinedsubroutine
         ! No name
-        \DWATabstractorigin(reference to OUTER.AI.1.1)
+        \DWATabstractorigin(reference to OUTER.AI.1.1\$)
         \DWATlowpc(...)
         \DWAThighpc(...)
-OUTER.CI.1.2:
+OUTER.CI.1.2\$:
         \DWTAGformalparameter
             ! No name
-            \DWATabstractorigin(reference to OUTER.AI.1.2)
+            \DWATabstractorigin(reference to OUTER.AI.1.2\$)
             \DWATconstvalue(7)
-OUTER.CI.1.3:
+OUTER.CI.1.3\$:
         \DWTAGvariable
             ! No name
-            \DWATabstractorigin(reference to OUTER.AI.1.3)
+            \DWATabstractorigin(reference to OUTER.AI.1.3\$)
             \DWATlocation(...)
         !
         ! No \DWTAGsubprogram (abstract instance) for INNER
         !
         ! Concrete instance for call INNER(OUTER\_LOCAL)
         !
-INNER.CI.1.1:
+INNER.CI.1.1\$:
         \DWTAGinlinedsubroutine
             ! No name
-            \DWATabstractorigin(reference to INNER.AI.1.1)
+            \DWATabstractorigin(reference to INNER.AI.1.1\$)
             \DWATlowpc(...)
             \DWAThighpc(...)
             \DWATstaticlink(...)
-INNER.CI.1.2:
+INNER.CI.1.2\$:
             \DWTAGformalparameter
                 ! No name
-                \DWATabstractorigin(reference to INNER.AI.1.2)
+                \DWATabstractorigin(reference to INNER.AI.1.2\$)
                 \DWATlocation(...)
-INNER.CI.1.3:
+INNER.CI.1.3\$:
             \DWTAGvariable
                 ! No name
-                \DWATabstractorigin(reference to INNER.AI.1.3)
+                \DWATabstractorigin(reference to INNER.AI.1.3\$)
                 \DWATlocation(...)
             ...
             0
@@ -2534,17 +2568,17 @@ instance of \texttt{OUTER} that contains the calls.
 \begin{alltt}
     ! Abstract instance for OUTER
     ! \addtoindex{abstract instance}
-OUTER.AI.2.1:
+OUTER.AI.2.1\$:
     \DWTAGsubprogram
         \DWATname("OUTER")
         \DWATinline(\DWINLdeclaredinlined)
         ! No low/high PCs
-OUTER.AI.2.2:
+OUTER.AI.2.2\$:
         \DWTAGformalparameter
             \DWATname("OUTER\_FORMAL")
             \DWATtype(reference to integer)
             ! No location
-OUTER.AI.2.3:
+OUTER.AI.2.3\$:
         \DWTAGvariable
             \DWATname("OUTER\_LOCAL")
             \DWATtype(reference to integer)
@@ -2552,17 +2586,17 @@ OUTER.AI.2.3:
         !
         ! Nested out-of-line INNER subprogram
         !
-OUTER.AI.2.4:
+OUTER.AI.2.4\$:
         \DWTAGsubprogram
             \DWATname("INNER")
             ! No \DWATinline
             ! No low/high PCs, frame\_base, etc.
-OUTER.AI.2.5:
+OUTER.AI.2.5\$:
             \DWTAGformalparameter
                 \DWATname("INNER\_FORMAL")
                 \DWATtype(reference to integer)
                 ! No location
-OUTER.AI.2.6:
+OUTER.AI.2.6\$:
             \DWTAGvariable
                 \DWATname("INNER\_LOCAL")
                 \DWATtype(reference to integer)
@@ -2583,42 +2617,42 @@ OUTER.AI.2.6:
 
     ! Concrete instance for call "OUTER(7)"
     !
-OUTER.CI.2.1:
+OUTER.CI.2.1\$:
     \DWTAGinlinedsubroutine
         ! No name
-        \DWATabstractorigin(reference to OUTER.AI.2.1)
+        \DWATabstractorigin(reference to OUTER.AI.2.1\$)
         \DWATlowpc(...)
         \DWAThighpc(...)
-OUTER.CI.2.2:
+OUTER.CI.2.2\$:
         \DWTAGformalparameter
             ! No name
-            \DWATabstractorigin(reference to OUTER.AI.2.2)
+            \DWATabstractorigin(reference to OUTER.AI.2.2\$)
             \DWATlocation(...)
-OUTER.CI.2.3:
+OUTER.CI.2.3\$:
         \DWTAGvariable
             ! No name
-            \DWATabstractorigin(reference to OUTER.AI.2.3)
+            \DWATabstractorigin(reference to OUTER.AI.2.3\$)
             \DWATlocation(...)
         !
         ! Nested out-of-line INNER subprogram
         !
-OUTER.CI.2.4:
+OUTER.CI.2.4\$:
         \DWTAGsubprogram
             ! No name
-            \DWATabstractorigin(reference to OUTER.AI.2.4)
+            \DWATabstractorigin(reference to OUTER.AI.2.4\$)
             \DWATlowpc(...)
             \DWAThighpc(...)
             \DWATframebase(...)
             \DWATstaticlink(...)
-OUTER.CI.2.5:
+OUTER.CI.2.5\$:
             \DWTAGformalparameter
                 ! No name
-                \DWATabstractorigin(reference to OUTER.AI.2.5)
+                \DWATabstractorigin(reference to OUTER.AI.2.5\$)
                 \DWATlocation(...)
-OUTER.CI.2.6:
+OUTER.CI.2.6\$:
             \DWTAGvariable
                 ! No name
-                \DWATabstractorigin(reference to OUTER.AT.2.6)
+                \DWATabstractorigin(reference to OUTER.AT.2.6\$)
                 \DWATlocation(...)
             ...
             0
@@ -2709,17 +2743,17 @@ for accessing purposes.)
 \begin{alltt}
     ! Abstract instance for OUTER
     ! \addtoindexx{abstract instance!example}
-OUTER.AI.3.1:
+OUTER.AI.3.1\$:
     \DWTAGsubprogram
         \DWATname("OUTER")
         \DWATinline(\DWINLdeclaredinlined)
         ! No low/high PCs
-OUTER.AI.3.2:
+OUTER.AI.3.2\$:
         \DWTAGformalparameter
             \DWATname("OUTER\_FORMAL")
             \DWATtype(reference to integer)
             ! No location
-OUTER.AI.3.3:
+OUTER.AI.3.3\$:
         \DWTAGvariable
             \DWATname("OUTER\_LOCAL")
             \DWATtype(reference to integer)
@@ -2727,19 +2761,19 @@ OUTER.AI.3.3:
         !
         ! Normal INNER
         !
-OUTER.AI.3.4:
+OUTER.AI.3.4\$:
         \DWTAGsubprogram
             \DWATname("INNER")
             \DWATlowpc(...)
             \DWAThighpc(...)
             \DWATframebase(...)
             \DWATstaticlink(...)
-OUTER.AI.3.5:
+OUTER.AI.3.5\$:
             \DWTAGformalparameter
                 \DWATname("INNER\_FORMAL")
                 \DWATtype(reference to integer)
                 \DWATlocation(...)
-OUTER.AI.3.6:
+OUTER.AI.3.6\$:
             \DWTAGvariable
                 \DWATname("INNER\_LOCAL")
                 \DWATtype(reference to integer)
@@ -2754,28 +2788,29 @@ OUTER.AI.3.6:
 \label{fig:inliningexample3abstractinstance}
 \end{figure}
 
+\clearpage
 \begin{figure}[t]
 \begin{dwflisting}
 \begin{alltt}
     ! Concrete instance for call "OUTER(7)"
     ! \addtoindexx{concrete instance!example}
-OUTER.CI.3.1:
+OUTER.CI.3.1\$:
     \DWTAGinlinedsubroutine
         ! No name
-        \DWATabstractorigin(reference to OUTER.AI.3.1)
+        \DWATabstractorigin(reference to OUTER.AI.3.1\$)
         \DWATlowpc(...)
         \DWAThighpc(...)
         \DWATframebase(...)
-OUTER.CI.3.2:
+OUTER.CI.3.2\$:
         \DWTAGformalparameter
             ! No name
-            \DWATabstractorigin(reference to OUTER.AI.3.2)
+            \DWATabstractorigin(reference to OUTER.AI.3.2\$)
             ! No type
             \DWATlocation(...)
-OUTER.CI.3.3:
+OUTER.CI.3.3\$:
         \DWTAGvariable
             ! No name
-            \DWATabstractorigin(reference to OUTER.AI.3.3)
+            \DWATabstractorigin(reference to OUTER.AI.3.3\$)
             ! No type
             \DWATlocation(...)
         ! No \DWTAGsubprogram for "INNER"
@@ -2787,7 +2822,6 @@ OUTER.CI.3.3:
 \label{fig:inliningexample3concreteinstance}
 \end{figure}
 
-\clearpage
 \section{Constant Expression Example}
 \label{app:constantexpressionexample}
 \addtoindex{C++} generalizes the notion of constant expressions to include
@@ -2795,7 +2829,6 @@ constant expression user-defined literals and functions.
 The constant declarations in Figure \refersec{fig:constantexpressionscsource}
 can be represented as illustrated in 
 Figure \refersec{fig:constantexpressionsdwarfdescription}.
-
 
 \begin{figure}[h]
 \begin{lstlisting}[numbers=none]
@@ -2805,7 +2838,6 @@ float arr[square(9)]; // square() called and inlined
 \end{lstlisting}
 \caption{Constant expressions: C++ source} \label{fig:constantexpressionscsource}
 \end{figure}
-
 
 \begin{figure}[!h]
 \begin{dwflisting}
@@ -2856,6 +2888,7 @@ float arr[square(9)]; // square() called and inlined
 \label{fig:constantexpressionsdwarfdescription}
 \end{figure}
 
+\clearpage
 \section{Unicode Character Example}
 \label{app:unicodecharacterexample}
 \addtoindexx{Unicode|see {\textit{also} UTF-8}}
@@ -2901,7 +2934,7 @@ char32_t chr_b = U'h';
 \label{fig:unicodecharacterexampledwarfdescription}
 \end{figure}
 
-
+\clearpage
 \section{Type-Safe Enumeration Example}
 \label{app:typesafeenumerationexample}
 
@@ -2910,8 +2943,6 @@ The \addtoindex{C++} type\dash safe enumerations in
 Figure \refersec{fig:ctypesafeenumerationexamplesource}
 can be described in DWARF as illustrated in 
 Figure \refersec{fig:ctypesafeenumerationexampledwarf}.
-
-\clearpage	% Get following source and DWARF on same page
 
 \begin{figure}[H]
 \begin{lstlisting}[numbers=none]
@@ -2940,8 +2971,8 @@ E e1;
               \DWATname("E2")
               \DWATconstvalue(100)
 14\$:  \DWTAGvariable
-         \DWATname("e1")
-         \DWATtype(reference to 11\$)
+          \DWATname("e1")
+          \DWATtype(reference to 11\$)
 \end{alltt}
 \end{dwflisting}
 \caption{Type-safe enumeration example: DWARF description}
@@ -2977,17 +3008,17 @@ wrapper<int> obj;
 \begin{alltt}
 ! DWARF description
 !
-11\$: \DWTAGstructuretype
-        \DWATname("wrapper")
-12\$:    \DWTAGtemplatetypeparameter
-            \DWATname("T")
-            \DWATtype(reference to "int")
-13\$:    \DWTAGmember
-            \DWATname("comp")
-            \DWATtype(reference to 12\$)
-14\$: \DWTAGvariable
-        \DWATname("obj")
-        \DWATtype(reference to 11\$)
+11\$:  \DWTAGstructuretype
+          \DWATname("wrapper")
+12\$:      \DWTAGtemplatetypeparameter
+              \DWATname("T")
+              \DWATtype(reference to "int")
+13\$:      \DWTAGmember
+              \DWATname("comp")
+              \DWATtype(reference to 12\$)
+14\$:  \DWTAGvariable
+          \DWATname("obj")
+          \DWATtype(reference to 11\$)
 \end{alltt}
 \end{dwflisting}
 \caption{C++ template example \#1: DWARF description}
@@ -3267,38 +3298,41 @@ int main ()
 \addtoindexx{implicit pointer example}
 \begin{dwflisting}
 \begin{alltt}
-1\$: \DWTAGstructuretype
-        \DWATname("S")
-        \DWATbytesize(4)
-10\$:    \DWTAGmember
-            \DWATname("a")
-            \DWATtype(reference to "short int")
-            \DWATdatamemberlocation(constant 0)
-11\$:    \DWTAGmember
-            \DWATname("b")
-            \DWATtype(reference to "char")
-            \DWATdatamemberlocation(constant 2)
-12\$:    \DWTAGmember
-            \DWATname("c")
-            \DWATtype(reference to "char")
-            \DWATdatamemberlocation(constant 3)
-2\$: \DWTAGsubprogram
-        \DWATname("foo")
-20\$:    \DWTAGformalparameter
-            \DWATname("x")
-            \DWATtype(reference to "int")
-            \DWATlocation(\DWOPregfive)
-21\$:    \DWTAGvariable
-            \DWATname("s")
-            \DWATlocation(expression=
-                \DWOPbregfive(1) \DWOPstackvalue \DWOPpiece(2)
-                \DWOPbregfive(2) \DWOPstackvalue \DWOPpiece(1)
-                \DWOPbregfive(3) \DWOPstackvalue \DWOPpiece(1))
-22\$:    \DWTAGvariable
-            \DWATname("p")
-            \DWATtype(reference to "char *")
-            \DWATlocation(expression=
-                \DWOPimplicitpointer(reference to 21\$, 2))
+1\$:   \DWTAGstructuretype
+          \DWATname("S")
+          \DWATbytesize(4)
+10\$:      \DWTAGmember
+              \DWATname("a")
+              \DWATtype(reference to "short int")
+              \DWATdatamemberlocation(constant 0)
+11\$:      \DWTAGmember
+              \DWATname("b")
+              \DWATtype(reference to "char")
+              \DWATdatamemberlocation(constant 2)
+12\$:      \DWTAGmember
+              \DWATname("c")
+              \DWATtype(reference to "char")
+              \DWATdatamemberlocation(constant 3)
+2\$:   \DWTAGsubprogram
+          \DWATname("foo")
+20\$:      \DWTAGformalparameter
+              \DWATname("x")
+              \DWATtype(reference to "int")
+              \DWATlocation(\DWOPregfive)
+21\$:      \DWTAGvariable
+              \DWATname("s")
+\end{alltt}\bb\vspace{-0.8\baselineskip}\begin{alltt}
+              \DWATtype(reference to S at1\$)
+\end{alltt}\eb\vspace{-0.8\baselineskip}\begin{alltt}
+              \DWATlocation(expression=
+                  \DWOPbregfive(1) \DWOPstackvalue \DWOPpiece(2)
+                  \DWOPbregfive(2) \DWOPstackvalue \DWOPpiece(1)
+                  \DWOPbregfive(3) \DWOPstackvalue \DWOPpiece(1))
+22\$:      \DWTAGvariable
+              \DWATname("p")
+              \DWATtype(reference to "char *")
+              \DWATlocation(expression=
+                  \DWOPimplicitpointer(reference to 21\$, 2))
 \end{alltt}
 \end{dwflisting}
 \caption{C implicit pointer example \#1: DWARF description}
@@ -3363,48 +3397,48 @@ int main ()
 \addtoindexx{implicit pointer example}
 \begin{dwflisting}
 \begin{alltt}
-1\$: \DWTAGvariable
-        \DWATname("b")
-        \DWATtype(reference to "const char *")
-        \DWATlocation(expression=
-            \DWOPimplicitpointer(reference to 2$, 0))
-2\$: \DWTAGdwarfprocedure
-        \DWATlocation(expression=
-            \DWOPimplicitvalue(4, \{'o', 'p', 'q', '\slash0'\}))
-3\$: \DWTAGsubprogram
-        \DWATname("foo")
-        \DWATinline(\DWINLdeclaredinlined)
-30\$:    \DWTAGformalparameter
-            \DWATname("p")
-            \DWATtype(reference to "int *")
-4\$: \DWTAGsubprogram
-        \DWATname("main")
-40\$:   	\DWTAGvariable
-            \DWATname("a")
-            \DWATtype(reference to "int[2]")
-            \DWATlocation(location list 98$)
-41\$:    \DWTAGinlinedsubroutine
-            \DWATabstractorigin(reference to 3$)
-42\$:        \DWTAGformalparameter
-                \DWATabstractorigin(reference to 30$)
-                \DWATlocation(location list 99$)
+1\$:   \DWTAGvariable
+          \DWATname("b")
+          \DWATtype(reference to "const char *")
+          \DWATlocation(expression=
+              \DWOPimplicitpointer(reference to 2$, 0))
+2\$:   \DWTAGdwarfprocedure
+          \DWATlocation(expression=
+              \DWOPimplicitvalue(4, \{'o', 'p', 'q', '\textbackslash{}0'\}))
+3\$:   \DWTAGsubprogram
+          \DWATname("foo")
+          \DWATinline(\DWINLdeclaredinlined)
+30\$:      \DWTAGformalparameter
+              \DWATname("p")
+              \DWATtype(reference to "int *")
+4\$:   \DWTAGsubprogram
+          \DWATname("main")
+40\$:     	\DWTAGvariable
+              \DWATname("a")
+              \DWATtype(reference to "int[2]")
+              \DWATlocation(location list 98$)
+41\$:      \DWTAGinlinedsubroutine
+              \DWATabstractorigin(reference to 3$)
+42\$:          \DWTAGformalparameter
+                  \DWATabstractorigin(reference to 30$)
+                  \DWATlocation(location list 99$)
 
 ! .debug_loc section
-98\$:<label0 in main> .. <label1 in main>
-        \DWOPlitone \DWOPstackvalue \DWOPpiece(4)
-        \DWOPlittwo \DWOPstackvalue \DWOPpiece(4)
-    <label1 in main> .. <label2 in main>
-        \DWOPlittwo \DWOPstackvalue \DWOPpiece(4)
-        \DWOPlittwo \DWOPstackvalue \DWOPpiece(4)
-    <label2 in main> .. <label3 in main>
-        \DWOPlittwo \DWOPstackvalue \DWOPpiece(4)
-        \DWOPlitthree \DWOPstackvalue \DWOPpiece(4)
-    0 .. 0
-99\$:<label1 in main> .. <label2 in main>
-        \DWOPimplicitpointer(reference to 40\$, 0)
-    <label2 in main> .. <label3 in main>
-        \DWOPimplicitpointer(reference to 40\$, 4)
-    0 .. 0
+98\$:  \textit{Range}[<label0 in main> .. <label1 in main>)
+          \DWOPlitone \DWOPstackvalue \DWOPpiece(4)
+          \DWOPlittwo \DWOPstackvalue \DWOPpiece(4)
+      \textit{Range}[<label1 in main> .. <label2 in main>)
+          \DWOPlittwo \DWOPstackvalue \DWOPpiece(4)
+          \DWOPlittwo \DWOPstackvalue \DWOPpiece(4)
+      \textit{Range}[<label2 in main> .. <label3 in main>)
+          \DWOPlittwo \DWOPstackvalue \DWOPpiece(4)
+          \DWOPlitthree \DWOPstackvalue \DWOPpiece(4)
+      \textit{End-of-list}
+99\$:  \textit{Range}[<label1 in main> .. <label2 in main>)
+          \DWOPimplicitpointer(reference to 40\$, 0)
+      \textit{Range}[<label2 in main> .. <label3 in main>)
+          \DWOPimplicitpointer(reference to 40\$, 4)
+      \textit{End-of-list}
 \end{alltt}
 \end{dwflisting}
 \caption{C implicit pointer example \#2: DWARF description}
@@ -3604,41 +3638,58 @@ L8:
 
 \clearpage
 The location list for variable \texttt{a} in function \texttt{fn2}
-might look like:
+might look like
+\bb
+the following 
+(where the notation \doublequote{\textit{Range} [\texttt{m .. n)}} 
+specifies the range of addresses from \texttt{m} through but not 
+including \texttt{n} over which the following
+location description applies):
+\eb
 %\begin{figure}[h]
-\begin{lstlisting}
+\begin{dwflisting}
+\bb
+\begin{alltt}
 
-! Before the call to fn1 the argument a is live in the register 0
-!
-<L1, L2> DW_OP_reg0
+    ! Before the call to fn1 the argument a is live in register 0
+    !
+    \textit{Range} [L1 .. L2) 
+        \DWOPregzero
 
-! Afterwards it is not, the call could have clobbered the register,
-! and it is not saved in the fn2 function stack frame either, but 
-! perhaps can be looked up in the caller
-!
-<L2, L3> DW_OP_entry_value 1 DW_OP_reg0 DW_OP_stack_value
-<0, 0>
+    ! Afterwards it is not, the call could have clobbered the register,
+    ! and it is not saved in the fn2 function stack frame either, but 
+    ! perhaps can be looked up in the caller
+    !
+    \textit{Range} [L2 .. L3) 
+        \DWOPentryvalue 1 \DWOPregzero \DWOPstackvalue
+    \textit{End-of-list}
 
-\end{lstlisting}
+\end{alltt}
+\eb
+\end{dwflisting}
 %\end{figure}
-(where the notation \doublequote{\texttt{<m, n>}} specifies the address
-range over which the following location description applies).
 
-Similarly, the variable q in fn2 then might have location list:
-\begin{lstlisting}
+Similarly, the variable \texttt{q} in \texttt{fn2} then might have this location list:
+\begin{dwflisting}
+\bb
+\begin{alltt}
 
-! Before the call to fn1 the value of q can be computed as two times
-! the value of register 0
-!
-<L1, L2> DW_OP_lit2 DW_OP_breg0 0 DW_OP_mul DW_OP_stack_value
+    ! Before the call to fn1 the value of q can be computed as two times
+    ! the value of register 0
+    !
+    \textit{Range} [L1 .. L2)
+        \DWOPlittwo \DWOPbregzero 0 \DWOPmul \DWOPstackvalue
 
-! Afterwards it can be computed from the original value of the first
-! parameter, multiplied by two
-!
-<L2, L3> DW_OP_lit2 DW_OP_entry_value 1 DW_OP_reg0 DW_OP_mul DW_OP_stack_value
-<0, 0>
+    ! Afterwards it can be computed from the original value of the first
+    ! parameter, multiplied by two
+    !
+    \textit{Range} [L2 .. L3)
+        \DWOPlittwo \DWOPentryvalue 1 \DWOPregzero \DWOPmul \DWOPstackvalue
+    \textit{End-of-list}
 
-\end{lstlisting}
+\end{alltt}
+\eb
+\end{dwflisting}
 
 Variables \texttt{b} and \texttt{c} each have a location list similar to 
 that for variable \texttt{a},
@@ -3770,6 +3821,7 @@ end subroutine fn5
 \label{fig:callsiteexample2source}
 \end{figure}
 
+\clearpage
 Possible generated code for this source is shown using a suggestive 
 pseudo-\linebreak[0]assembly notation in Figure \refersec{fig:callsiteexample2code}.
 \begin{figure}[h]
@@ -3801,9 +3853,9 @@ L10:
 \end{figure}
 
 The location description for variable \texttt{x} in function 
-\texttt{f}n4 might be:
+\texttt{fn4} might be:
 \begin{lstlisting}
-DW_OP_entry_value 4 DW_OP_breg0 0 DW_OP_deref_size 4 DW_OP_stack_value
+    DW_OP_entry_value 4 DW_OP_breg0 0 DW_OP_deref_size 4 DW_OP_stack_value
 \end{lstlisting}
 
 The call sites in (just) function \texttt{fn5} might be as shown in 
@@ -3814,7 +3866,7 @@ Figure \refersec{fig:callsiteexample2dwarf}.
 \begin{alltt}
 
 \DWTAGcallsite
-    \DWATcallreturnpc(L9) ! First call to fn4
+    \DWATcallreturnpc(L9)                       ! First call to fn4
     \DWATcallorigin(reference to subprogram fn4)
     \DWTAGcallsiteparameter
         \DWATcallparameter(reference to formal parameter n in subprogram fn4)
@@ -3828,7 +3880,7 @@ Figure \refersec{fig:callsiteexample2dwarf}.
         \DWATcalldatavalue(\DWOPentryvalue{} 4 \DWOPbregzero{} 0 \DWOPderefsize 4)
         
 \DWTAGcallsite
-    \DWATcallreturnpc(L10) ! Second call to fn4
+    \DWATcallreturnpc(L10)                      ! Second call to fn4
     \DWATcallorigin(reference to subprogram fn4)
     \DWTAGcallsiteparameter
         \DWATcallparameter(reference to formal parameter n in subprogram fn4)
@@ -3905,45 +3957,7 @@ imported for each \texttt{\#include} directive.
 The combined size of the three macro units and their referenced
 strings is 129 bytes.
 
-\needlines{4}
-A number of observations are worth mentioning:
-\begin{itemize}
-\item
-Strings that are the same size as a reference or less are
-better represented as immediate operands. Strings longer
-than twice the size of a reference are better stored in the
-string table if there are at least two references.
-
-\item
-There is a trade-off between the size of the macro information
-of a file and the number of times it is included when evaluating
-whether to create a separate macro unit. However, the amount
-of overhead (the size of a macro header) needed to represent a
-unit as well as the size of the operation to import a macro unit
-are both small.
-
-\item
-A macro unit need not describe all of the macro information in
-a file. For example, in Figure \ref{fig:macroexampledsharablewarfencoding}
-the second macro unit (beginning at \texttt{i\$1h}) includes macros
-from just the first two lines of file \texttt{a.h}.
-
-\item
-An implementation may be able to share macro units across object
-files (not shown in this example). To support this, it may be
-advantageous to create macro units in cases where they do not
-offer an advantage in a single compilation of itself.
-
-\needlines{6}
-\item
-The header of a macro unit that contains a \DWMACROstartfile{}
-operation must include a reference to the compilation line number 
-header to allow interpretation of the file number operands in
-those commands. However, the presence of those offsets complicates
-or may preclude sharing across compilations.
-
-\end{itemize}
-
+\bbpareb
 
 \begin{figure}
 \begin{dwflisting}
@@ -4044,3 +4058,44 @@ s$2:    String: "LONGER\_MACRO 1"
 \caption{Macro example: sharable DWARF encoding}
 \label{fig:macroexampledsharablewarfencoding}
 \end{figure}
+
+\bb
+\needlines{4}
+A number of observations are worth mentioning:
+\begin{itemize}
+\item
+Strings that are the same size as a reference or less are
+better represented as immediate operands. Strings longer
+than twice the size of a reference are better stored in the
+string table if there are at least two references.
+
+\item
+There is a trade-off between the size of the macro information
+of a file and the number of times it is included when evaluating
+whether to create a separate macro unit. However, the amount
+of overhead (the size of a macro header) needed to represent a
+unit as well as the size of the operation to import a macro unit
+are both small.
+
+\item
+A macro unit need not describe all of the macro information in
+a file. For example, in Figure \ref{fig:macroexampledsharablewarfencoding}
+the second macro unit (beginning at \texttt{i\$1h}) includes macros
+from just the first two lines of file \texttt{a.h}.
+
+\item
+An implementation may be able to share macro units across object
+files (not shown in this example). To support this, it may be
+advantageous to create macro units in cases where they do not
+offer an advantage in a single compilation of itself.
+
+\needlines{6}
+\item
+The header of a macro unit that contains a \DWMACROstartfile{}
+operation must include a reference to the compilation line number 
+header to allow interpretation of the file number operands in
+those commands. However, the presence of those offsets complicates
+or may preclude sharing across compilations.
+
+\end{itemize}
+\eb

@@ -3,7 +3,7 @@
 % If draft is in the document class list, pix are just suggested
 % by an outline, the pic does not appear as a picture.
 %
-\newcommand{\docdate}{January 9, 2016}
+\newcommand{\docdate}{January 30, 2016}
 %
 \usepackage{ifthen}
     \newcommand{\ifthen}[2]{\ifthenelse{#1}{#2}{}}
@@ -156,12 +156,9 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 
 % Better naming for the lowest level section header
 \newcommand{\subsubsubsection}[1]{\paragraph{#1}~\newline}
-%\newcommand{\subsubsubsubsection}[1]{\subparagraph{#1}.~}  %% Huh?
 \newcommand{\subsubsubsubsection}[1]{\textbf{#1}.~~}
-%\newcommand{\subsubsubsection}         %% Has to be in a style file--ugh...
-%   {\@startsection{subsubsubsection}{4}{0mm}{-\baselineskip}{\baselineskip}{\normalfont\normalsize\itshap}}
 
-% Issue \clearpage if less than n lines remain on page
+% Start new page if less than n lines remain on current page
 \newcommand{\needlines}[1]{\needspace{#1\baselineskip}}
 
 % Helper for item lists with bold subject markers
@@ -223,7 +220,12 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \newcommand{\bb}{\cbstart}      % Begin (change) bar
 \newcommand{\eb}{\cbend}        % End (change) bar
 \newcommand{\bbeb}{\bb\eb}      % Mark deleted word or phrase
-\newcommand{\bbpareb}{\vspace{-0.6\baselineskip}\bb~\eb\vspace{-0.6\baselineskip}} % Mark deleted paragraph
+% Mark deleted paragraph
+\newcommand{\bbpareb}{\vspace{-0.6\baselineskip}\bb~\eb\vspace{-0.6\baselineskip}} 
+% Variations for use inside an alltt environment--But don't work!
+%\newcommand(\bballtt){\end{alltt}\bb\vspace{-0.8\baselineskip}\begin{alltt}}
+%\newcommand{\eballtt}{\end{alltt}\eb\vspace{-0.8\baselineskip}\begin{alltt}}
+%\newcommand(\bbeballtt){\end{alltt}\bb\eb\vspace{-0.8\baselineskip}\begin{alltt}}
 
 % Define commands for all of the DWARF names (DW\_*, .debug_*, a few others)
 %
@@ -318,7 +320,7 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \listoftables
 
 \ifthenelse{\boolean{isdraft}}
-	{	%\emptypage
+	{	\emptypage
 		{% Environment to keep the following header change local
 		\clearpage
 		\makeevenhead{plain}{}{Change Summary}{}
@@ -347,9 +349,9 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 % Define the levels of sectionality that are numbered.
 \setcounter{secnumdepth}{5}
 
-\uselinenos\include{introduction}              \emptypage
+\uselinenos\include{introduction}              %\emptypage
 \uselinenos\include{generaldescription}        \emptypage
-\uselinenos\include{programscope}              %\emptypage
+\uselinenos\include{programscope}              \emptypage
 \uselinenos\include{dataobject}                \emptypage
 \uselinenos\include{typeentries}               \emptypage
 \uselinenos\include{otherdebugginginformation} \emptypage
@@ -361,16 +363,13 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \uselinenos\include{attributesbytag}	       %\emptypage
 \uselinenos\include{debugsectionrelationships} \emptypage
 \uselinenos\include{encodingdecoding}          \emptypage
-\uselinenos\include{examples}                  %\emptypage
+\uselinenos\include{examples}                  \emptypage
 \uselinenos\include{compression}               \emptypage
 \uselinenos\include{splitobjects}	       \emptypage
 \uselinenos\include{sectionversionnumbers}     \emptypage
 \nolinenumbers
 \include{gnulicense}                           \emptypage
-
 % Maybe someday the selected glossary concept will be of interest...
-%\include{selectedglossary}             %\emptypage
-
+%\include{selectedglossary}                    %\emptypage
 \printindex
-
 \end{document}

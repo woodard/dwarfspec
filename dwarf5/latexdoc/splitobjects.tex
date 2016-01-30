@@ -59,9 +59,9 @@ the \dotdebuginfodwo{} section.
 \dotdebuglocdwo{} - Contains the location lists referenced by
 the debugging information entries in the \dotdebuginfodwo{}
 section. This contains the location lists normally found in 
-the \dotdebugloc{} section,
-with a slightly modified format to eliminate the need for
-relocations.
+the \dotdebugloc{} section, with a 
+\bbeb 
+modified format to eliminate the need for relocations.
 \item
 \dotdebugstrdwo{} - Contains the string table for all indirect
 strings referenced by the debugging information in the
@@ -126,7 +126,10 @@ the strings in the \dotdebugstr{} section (if \DWFORMstrx is used).
 \item
 \dotdebugaddr{} - Contains references to loadable sections,
 indexed by attributes of form \DWFORMaddrx{} or location
-expression \DWOPaddrx{} opcodes.
+\bb
+expression 
+\eb
+\DWOPaddrx{} opcodes.
 \item
 \dotdebugline{} - Contains the line number tables, unaffected by
 this design. (These could be moved to the .dwo file, but in
@@ -135,6 +138,11 @@ be replaced by a new opcode that referenced an entry in the
 \dotdebugaddr{} section. Furthermore, leaving this section in the
 .o file allows many debug info consumers to remain unaware of
 .dwo files.)
+\bb
+\item
+\dotdebuglinestr{} - Contains strings for file names used in
+combination with the \dotdebugline{} section.
+\eb
 \item
 \dotdebugframe{} - Contains the frame tables, unaffected by this
 design.

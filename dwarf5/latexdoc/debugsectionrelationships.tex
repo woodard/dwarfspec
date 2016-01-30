@@ -6,6 +6,17 @@ cases, information in one section refers to information in one
 or more of the others. These relationships are illustrated by 
 the diagrams and associated notes on the following pages.
 
+\bb
+In the figures, a section is shown as a shaded oval with the
+name of the section inside. References from one section to
+another are shown by an arrow. In the first figure, the arrow
+is annotated with an unshaded box which contains an indication
+of the construct (such as an attribute or form) that encodes
+the reference. In the second figure, this box is left out
+for reasons of space in favor of a label annotation that is
+explained in the subsequent notes.
+\eb
+
 \section{Normal DWARF Section Relationships}
 Figure \referfol{fig:debugsectionrelationships} illustrates
 the DWARF section relations without split DWARF object files
@@ -25,10 +36,11 @@ or shareable file and a related \addtoindex{supplementary object file}.
 \scriptsize
 \begin{tikzpicture}
     [sect/.style={rectangle, rounded corners=10pt, draw, fill=blue!15, 
-        inner sep=.2cm, minimum width=4.0cm},
+         inner sep=.2cm, minimum width=4.0cm},
      link/.style={rectangle,                       draw,
-        inner sep=.2cm, minimum width=4.5cm},
-     circ/.style={circle,                          draw, minimum size=0.5cm}]
+         inner sep=.2cm, minimum width=4.5cm},
+     circ/.style={circle,                          draw, fill=yellow!25,
+         minimum size=0.5cm}]
      
 % The first (leftmost) column, first sections, then links, from top to bottom
 %
@@ -39,9 +51,9 @@ or shareable file and a related \addtoindex{supplementary object file}.
 				      \dotdebuginfo\\
                                         ~
 				      \end{tabular}};
-\node(zcircs)   at (-1,  5  ) [circ] {(s)};
+\node(zcircs)   at (-1.8,4.0) [circ] {(s)};
 \node(zlinkb)   at ( 0,  1.5) [link] {To compilation unit~~(b)};
-\node(zsectpub) at ( 0,  0.0) [sect] {\begin{tabular}{c} 
+\node(zsectpub) at ( 0,-0.25) [sect] {\begin{tabular}{c} 
 				      \dotdebugnames  
 				      \end{tabular}};
                                       
@@ -146,16 +158,17 @@ or shareable file and a related \addtoindex{supplementary object file}.
                                         \DWMACROimport \\
                                         (q)
                                         \end{tabular}};
-\node(zlinkx)   at (15.6,  3.8) [link]  {\DWFORMlinestrp~(r)};
-\node(zsectlns) at (15.6,  2.0) [sect]  {\dotdebuglinestr};
-\node(zcircsp)  at (15.6,  0.5) [circ]  {(s)'};             
+\node(zcircsp)  at (17.4,  4.0) [circ]  {(s)'};
+\node(zlinkx)   at (15.6,  2.0) [link]  {\DWFORMlinestrp~(r)};
+\node(zsectlns) at (15.6,-0.25) [sect]  {\dotdebuglinestr};
+             
              
 \draw[thin,to reversed-]       (zsectmac.east) -- (zlinky);
 \draw[thin,-triangle 45]       (zlinky) -- (zsectstr.east);
 \draw[triangle 45-triangle 45] (zsectmac.east) -- (zlinkz);
+\draw[thin,to reversed-]       (zcircsp) -- (zlinkx);
 \draw[thin,to reversed-]       (zsectlin.east) -- (zlinkx);
 \draw[thin,-triangle 45]       (zlinkx) -- (zsectlns);
-\draw[thin,-triangle 45]       (zcircsp) -- (zsectlns);
 
 \end{tikzpicture}
 \vspace{5mm}
