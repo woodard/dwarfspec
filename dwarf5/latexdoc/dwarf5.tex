@@ -3,7 +3,7 @@
 % If draft is in the document class list, pix are just suggested
 % by an outline, the pic does not appear as a picture.
 %
-\newcommand{\docdate}{January 30, 2016}
+\newcommand{\docdate}{March 5, 2016}
 %
 \usepackage{ifthen}
     \newcommand{\ifthen}[2]{\ifthenelse{#1}{#2}{}}
@@ -72,13 +72,15 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
     \usetikzlibrary{shapes.multipart}
     \usetikzlibrary{shapes.symbols}
 \usepackage{changebar}     % For change bars in margin
+\usepackage{xspace}
 \usepackage{makeidx}       % For making an index
 % hyperref must be the last package listed.
 % The hyperref settings helps hypertext get links right in the 
 % pdf of the index. 
 % Also, allcolors lets us generate colored active links inside a pdf.
 % And breaklinks resolves truncation issues with very long link names.
-\usepackage[breaklinks,plainpages=false,pdfpagelabels,pagebackref,allcolors=blue,bookmarksnumbered=true]{hyperref}
+\usepackage[breaklinks,plainpages=false,pdfpagelabels,pagebackref,
+            allcolors=blue!75!black,bookmarksnumbered=true]{hyperref}
 \makeindex  % This and the makeidx package allow \index to create index entries.
 
 \newcommand{\dwf}{DWARF Debugging Information Format}
@@ -216,7 +218,7 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 
 \newcommand{\uselinenos}{\ifthen{\boolean{uselinenos}}{\linenumbers*}}
 
-% Preferred changebar asliases
+% Preferred changebar aliases
 \newcommand{\bb}{\cbstart}      % Begin (change) bar
 \newcommand{\eb}{\cbend}        % End (change) bar
 \newcommand{\bbeb}{\bb\eb}      % Mark deleted word or phrase
@@ -229,7 +231,8 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 
 % Define commands for all of the DWARF names (DW\_*, .debug_*, a few others)
 %
-\newcommand{\definition}[1]{\textcolor{red!80!black}{#1}}
+%\newcommand{\definition}[1]{\textcolor{red!80!black}{#1}}
+\newcommand{\definition}[1]{\textcolor{red!50!black}{#1}}
 \newcommand{\definitionx}[1]{\definition{\addtoindex{#1}}}
 \include{dwarfnamecmds}
 

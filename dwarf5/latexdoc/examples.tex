@@ -729,8 +729,10 @@ illustrated in Figure \refersec{fig:FortranscalarcoarrayDWARFdescription}.
 \begin{alltt}
 10\$:  \DWTAGcoarraytype
           \DWATtype(reference to INTEGER)
-          \DWTAGsubrangetype                ! Note omitted upper bound			
-              \DWATlowerbound(constant 1)
+          \DWTAGsubrangetype                ! Note omitted upper bound
+\end{alltt}\bb\vspace{-0.8\baselineskip}\begin{alltt}
+          \DWATlowerbound(constant 1)       ! Can be omitted (default is 1)
+\end{alltt}\eb\vspace{-0.8\baselineskip}\begin{alltt}
 
 11\$:  \DWTAGvariable
           \DWATname("x")
@@ -762,13 +764,16 @@ illustrated in Figure \refersec{fig:FortranarraycoarrayDWARFdescription}.
           \DWATordering(\DWORDcolmajor)
           \DWATtype(reference to INTEGER)
 11\$:      \DWTAGsubrangetype
-              \DWATlowerbound(constant 1)
+\end{alltt}\bb\vspace{-0.8\baselineskip}\begin{alltt}
+            ! \textit{DW\_AT\_lower\_bound(constant 1)}   ! Omitted (default is 1)
+\end{alltt}\eb\vspace{-0.8\baselineskip}\begin{alltt}
               \DWATupperbound(constant 10)
 
 12\$:  \DWTAGcoarraytype
           \DWATtype(reference to array type at 10\$)
-13\$:      \DWTAGsubrangetype                ! Note omitted upper bound
-              \DWATlowerbound(constant 1)
+\end{alltt}\bb\vspace{-0.8\baselineskip}\begin{alltt}
+13\$:      \DWTAGsubrangetype                ! Note omitted upper \& lower bounds
+\end{alltt}\eb\vspace{-0.8\baselineskip}\begin{alltt}
 
 14$:  \DWTAGvariable
           \DWATname("x")
@@ -796,8 +801,8 @@ illustrated in Figure \referfol{fig:FortranmultidimensionalcoarrayDWARFdescripti
 
 \begin{figure}[h]
 \begin{dwflisting}
-\bb
 \begin{alltt}
+\end{alltt}\bb\vspace{-0.8\baselineskip}\begin{alltt}
 
 10\$:  \DWTAGarraytype                ! Note omitted lower bounds (default to 1)
           \DWATordering(\DWORDcolmajor)
@@ -808,18 +813,15 @@ illustrated in Figure \referfol{fig:FortranmultidimensionalcoarrayDWARFdescripti
               \DWATupperbound(constant 11)
 13\$:      \DWTAGsubrangetype
               \DWATupperbound(constant 12)
-\end{alltt}\eb\vspace{-0.8\baselineskip}\begin{alltt}
 
-14\$:  \DWTAGcoarraytype
+14\$:  \DWTAGcoarraytype              ! Note omitted lower bounds (default to 1)
           \DWATtype(reference to array_type at 10\$)
 15\$:      \DWTAGsubrangetype
-              \DWATlowerbound(constant 1)
               \DWATupperbound(constant 2)
 16\$:      \DWTAGsubrangetype
-              \DWATlowerbound(constant 1)
               \DWATupperbound(constant 3)
-17\$:      \DWTAGsubrangetype            ! Note omitted upper bound
-              \DWATlowerbound(constant 1)
+17\$:      \DWTAGsubrangetype         ! Note omitted upper (\& lower) bound
+\end{alltt}\eb\vspace{-0.8\baselineskip}\begin{alltt}
 
 18\$:  \DWTAGvariable
           \DWATname("x")
@@ -1539,7 +1541,7 @@ int Foo::myfunc(int a)
 6\$:   \DWTAGnamespace
           ! no \DWATname attribute
 \end{alltt}\bb\vspace{-0.8\baselineskip}\begin{alltt}
-          \DWATexportsymbols
+          \DWATexportsymbols              ! Implied by C++, but can be explicit
 \end{alltt}\eb\vspace{-0.8\baselineskip}\begin{alltt}
           \DWTAGvariable
               \DWATname("i")
@@ -2822,6 +2824,7 @@ OUTER.CI.3.3\$:
 \label{fig:inliningexample3concreteinstance}
 \end{figure}
 
+\vspace*{0.4\baselineskip}
 \section{Constant Expression Example}
 \label{app:constantexpressionexample}
 \addtoindex{C++} generalizes the notion of constant expressions to include
@@ -3138,7 +3141,8 @@ Beta<long> b;
 \label{fig:ctemplatealiasexample1source}
 \end{figure}
 
-\begin{figure}[h]
+\clearpage
+\begin{figure}[ht]
 \addtoindexx{template alias example 1}
 \begin{dwflisting}
 \begin{alltt}
@@ -3173,6 +3177,7 @@ Beta<long> b;
 \label{fig:ctemplatealiasexample1dwarf}
 \end{figure}
 
+\vspace*{0.7\baselineskip}
 Similarly, the \addtoindex{C++} template alias shown in
 Figure \refersec{fig:ctemplatealiasexample2source}
 can be described in DWARF as illustrated 
@@ -3322,7 +3327,7 @@ int main ()
 21\$:      \DWTAGvariable
               \DWATname("s")
 \end{alltt}\bb\vspace{-0.8\baselineskip}\begin{alltt}
-              \DWATtype(reference to S at1\$)
+              \DWATtype(reference to S at 1\$)
 \end{alltt}\eb\vspace{-0.8\baselineskip}\begin{alltt}
               \DWATlocation(expression=
                   \DWOPbregfive(1) \DWOPstackvalue \DWOPpiece(2)
@@ -3370,25 +3375,36 @@ Given these assumptions a possible DWARF description is shown in
 Figure \refersec{fig:cimplicitpointerexample2dwarf}.
 
 \begin{figure}[h]
-\begin{lstlisting}
+\begin{dwflisting}
+\begin{alltt}
+
 static const char *b = "opq";
 volatile int v;
 static inline void foo (int *p)
-{
+\{
     (*p)++;
     v++;
     p++;
     (*p)++;
     v++;
-}
+\}
+
 int main ()
-{
+\{
+\end{alltt}\bb\vspace{-0.8\baselineskip}\begin{alltt}
+label0:
     int a[2] = { 1, 2 };
     v++;
+label1:
     foo (a);
+label2:
     return a[0] + a[1] - 5;
-}
-\end{lstlisting}
+label3:
+\end{alltt}\eb\vspace{-0.8\baselineskip}\begin{alltt}
+\}
+
+\end{alltt}
+\end{dwflisting}
 \caption{C implicit pointer example \#2: source}
 \label{fig:cimplicitpointerexample2source}
 \end{figure}
@@ -3646,19 +3662,18 @@ specifies the range of addresses from \texttt{m} through but not
 including \texttt{n} over which the following
 location description applies):
 \eb
+
 %\begin{figure}[h]
 \begin{dwflisting}
 \bb
 \begin{alltt}
 
-    ! Before the call to fn1 the argument a is live in register 0
+    ! Before the assignment to register 0, the argument a is live in register 0
     !
     \textit{Range} [L1 .. L2) 
         \DWOPregzero
 
-    ! Afterwards it is not, the call could have clobbered the register,
-    ! and it is not saved in the fn2 function stack frame either, but 
-    ! perhaps can be looked up in the caller
+    ! Afterwards, it is not. The value can perhaps be looked up in the caller
     !
     \textit{Range} [L2 .. L3) 
         \DWOPentryvalue 1 \DWOPregzero \DWOPstackvalue
@@ -3669,19 +3684,21 @@ location description applies):
 \end{dwflisting}
 %\end{figure}
 
+\vspace*{0.7\baselineskip}
 Similarly, the variable \texttt{q} in \texttt{fn2} then might have this location list:
+
 \begin{dwflisting}
 \bb
 \begin{alltt}
 
-    ! Before the call to fn1 the value of q can be computed as two times
-    ! the value of register 0
+    ! Before the assignment to register 0, the value of q can be computed as 
+    ! two times the contents of register 0
     !
     \textit{Range} [L1 .. L2)
         \DWOPlittwo \DWOPbregzero 0 \DWOPmul \DWOPstackvalue
 
-    ! Afterwards it can be computed from the original value of the first
-    ! parameter, multiplied by two
+    ! Afterwards. it is not. It can be computed from the original value of 
+    ! the first parameter, multiplied by two
     !
     \textit{Range} [L2 .. L3)
         \DWOPlittwo \DWOPentryvalue 1 \DWOPregzero \DWOPmul \DWOPstackvalue
@@ -3691,6 +3708,7 @@ Similarly, the variable \texttt{q} in \texttt{fn2} then might have this location
 \eb
 \end{dwflisting}
 
+\vspace*{0.7\baselineskip}
 Variables \texttt{b} and \texttt{c} each have a location list similar to 
 that for variable \texttt{a},
 except for a different label between the two ranges and they
