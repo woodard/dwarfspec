@@ -123,15 +123,7 @@ output binary include the following:
 \item
 \dotdebugabbrev{} - Contains the abbreviation codes used by the
 skeleton \dotdebuginfo{} section.
-\item
-\dotdebuginfo{} - Contains a skeleton \DWTAGcompileunit{} DIE,
-but no children.
-\item
-\dotdebugstr{} - Contains any strings referenced by the skeleton
-\dotdebuginfo{} sections (via \DWFORMstrp{} or \DWFORMstrx{}).
-\item
-\dotdebugstroffsets{} - Contains the string offsets table for
-the strings in the \dotdebugstr{} section (if \DWFORMstrx is used).
+\bb
 \item
 \dotdebugaddr{} - Contains references to loadable sections,
 indexed by attributes of form \DWFORMaddrx{} or location
@@ -140,8 +132,16 @@ expression
 \eb
 \DWOPaddrx{} opcodes.
 \item
-\dotdebugline{} - Contains the line number tables, unaffected by
-this design. (These could be moved to the .dwo file, but in
+\dotdebugaranges{} - Contains the accelerated range lookup table
+for the compilation unit.
+\item
+\dotdebugframe{} - Contains the frame tables.
+\item
+\dotdebuginfo{} - Contains a skeleton \DWTAGcompileunit{} DIE,
+but no children.
+\item
+\dotdebugline{} - Contains the line number tables.
+(These could be moved to the .dwo file, but in
 order to do so, each \DWLNEsetaddress{} opcode would need to
 be replaced by a new opcode that referenced an entry in the
 \dotdebugaddr{} section. Furthermore, leaving this section in the
@@ -153,12 +153,6 @@ be replaced by a new opcode that referenced an entry in the
 combination with the \dotdebugline{} section.
 \eb
 \item
-\dotdebugframe{} - Contains the frame tables, unaffected by this
-design.
-\item
-\dotdebugranges{} - Contains the range lists, unaffected by this
-design.
-\item
 \dotdebugnames{} - Contains the names for use in
 building an index section. 
 \bbeb
@@ -166,8 +160,14 @@ The section header refers to a
 compilation unit offset, which is the offset of the
 skeleton compilation unit in the \dotdebuginfo{} section.
 \item
-\dotdebugaranges{} - Contains the accelerated range lookup table
-for the compilation unit, unaffected by this design.
+\dotdebugranges{} - Contains the range lists.
+\item
+\dotdebugstr{} - Contains any strings referenced by the skeleton
+\dotdebuginfo{} sections (via \DWFORMstrp{} or \DWFORMstrx{}).
+\item
+\dotdebugstroffsets{} - Contains the string offsets table for
+the strings in the \dotdebugstr{} section (if form \DWFORMstrx{} is used).
+\eb
 \end{itemize}
 
 \needlines{6}
@@ -240,7 +240,7 @@ kinds.
 \eb
 
 
-\begin{table}[h]
+\begin{table}[ht]
 \caption{Unit attributes by unit kind}
 \label{tab:unitattributesbyunitkind}
 \begin{tabular}{P{5.5cm}|cc|ccc}
@@ -322,7 +322,7 @@ When compiled with split DWARF, we will have two DWARF object files,
 \texttt{demo1.dwo} and \texttt{demo2.dwo}.
 
 \vspace{2cm}
-\begin{figure}[h]
+\begin{figure}[ht]
 \textit{File demo1.cc}
 \begin{lstlisting}
 #include "demo.h"
@@ -337,7 +337,7 @@ bool Box::contains(const Point& p) const
 \label{fig:splitobjectexamplesourcefragment1}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \textit{File demo2.cc}
 \begin{lstlisting}
 #include "demo.h"
@@ -382,7 +382,7 @@ bool Line::clip(const Box& b)
 \label{fig:splitobjectexamplesourcefragment2}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \textit{File demo.h}
 \begin{lstlisting}
 class A {
@@ -448,19 +448,19 @@ contains just a single DIE, the skeleton compilation unit,
 which may look like 
 Figure \referfol{fig:splitdwafexampleskeletondwarfdescription}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{dwflisting}
 \begin{alltt}
 
     \DWTAGcompileunit
-      \DWATcompdir: (reference to directory name in .debug_str)
-      \DWATdwoname: (reference to "demo1.dwo" in .debug_str)
-      \DWATdwoid: 0x44e413b8a2d1b8f
-      \DWATaddrbase: (reference to .debug_addr section)
-      \DWATrangesbase: (reference to range list in .debug_ranges section)
-      \DWATranges: (offset of range list in .debug_ranges section)
-      \DWATstmtlist: (reference to .debug_line section)
-      \DWATlowpc: 0
+        \DWATcompdir: (reference to directory name in .debug_str)
+        \DWATdwoname: (reference to "demo1.dwo" in .debug_str)
+        \DWATdwoid: 0x44e413b8a2d1b8f
+        \DWATaddrbase: (reference to .debug_addr section)
+        \DWATrangesbase: (reference to range list in .debug_ranges section)
+        \DWATranges: (offset of range list in .debug_ranges section)
+        \DWATstmtlist: (reference to .debug_line section)
+        \DWATlowpc: 0
       
 \end{alltt}
 \end{dwflisting}
@@ -593,11 +593,13 @@ compilation unit.
 form code \DWFORMstrx, referring to slots in the
 \dotdebugstroffsetsdwo{} section.
 
-\needlines{4}
+\bbpareb
+
 \item References to range lists in the \dotdebugranges{} section are
 all relative to the base offset given by \DWATrangesbase{}
 in the skeleton compilation unit.
 
+\needlines{4}
 \item References to relocatable addresses in the object file use the 
 \bbeb 
 form code \DWFORMaddrx, referring to slots in the
@@ -605,11 +607,13 @@ form code \DWFORMaddrx, referring to slots in the
 \DWATaddrbase{} in the skeleton compilation unit.
 \end{itemize}
 
-Figure \refersec{fig:splitobjectexampledemoonedwodwarfexcerpts} presents
+\vspace*{1mm}
+Figure \referfol{fig:splitobjectexampledemoonedwodwarfexcerpts} presents
 \bbeb
 excerpts from the \dotdebuginfodwo{} section for \texttt{demo1.dwo}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
+\vspace{1mm}
 \figurepart{1}{2}
 \begin{dwflisting}
 \begin{alltt}
@@ -620,34 +624,35 @@ excerpts from the \dotdebuginfodwo{} section for \texttt{demo1.dwo}.
         \DWATname [\DWFORMstrx]: (slot 7) "demo1.cc"
         \DWATcompdir [\DWFORMstrx]: (slot 4) (directory name)
         \DWATdwoid [\DWFORMdataeight]: 0x44e413b8a2d1b8f
-1$:   \DWTAGclasstype
-          \DWATname [\DWFORMstrx]: (slot 12) "Point"
-          \DWATsignature [\DWFORMrefsigeight]: 0x2f33248f03ff18ab
-          \DWATdeclaration: true
-2$:     \DWTAGsubprogram
-          \DWATexternal: true
-          \DWATname [\DWFORMstrx]: (slot 12) "Point"
-          \DWATdeclfile: 1
-          \DWATdeclline: 5
-          \DWATlinkagename [\DWFORMstrx]: (slot 16): "_ZN5PointC4Eff"
-          \DWATaccessibility: \DWACCESSpublic
-          \DWATdeclaration: true
-        ...
-3$:   \DWTAGclasstype
-          \DWATname [\DWFORMstring]: "Box"
-          \DWATsignature [\DWFORMrefsigeight]: 0xe97a3917c5a6529b
-          \DWATdeclaration: true
-        ...
-4$:     \DWTAGsubprogram
-            \DWATexternal: true
-            \DWATname [\DWFORMstrx]: (slot 0) "contains"
-            \DWATdeclfile: 1
-            \DWATdeclline: 28
-            \DWATlinkagename [\DWFORMstrx]: (slot 8) "_ZNK3Box8containsERK5Point"
-            \DWATtype: (reference to 7$)
-            \DWATaccessibility: \DWACCESSpublic
+1$:     \DWTAGclasstype
+            \DWATname [\DWFORMstrx]: (slot 12) "Point"
+            \DWATsignature [\DWFORMrefsigeight]: 0x2f33248f03ff18ab
             \DWATdeclaration: true
-        ...
+2$:         \DWTAGsubprogram
+                \DWATexternal: true
+                \DWATname [\DWFORMstrx]: (slot 12) "Point"
+                \DWATdeclfile: 1
+                \DWATdeclline: 5
+                \DWATlinkagename [\DWFORMstrx]: (slot 16): "_ZN5PointC4Eff"
+                \DWATaccessibility: \DWACCESSpublic
+                \DWATdeclaration: true
+            ...
+3$:     \DWTAGclasstype
+            \DWATname [\DWFORMstring]: "Box"
+            \DWATsignature [\DWFORMrefsigeight{}]: 0xe97a3917c5a6529b
+            \DWATdeclaration: true
+          ...
+4$:         \DWTAGsubprogram
+                \DWATexternal: true
+                \DWATname [\DWFORMstrx]: (slot 0) "contains"
+                \DWATdeclfile: 1
+                \DWATdeclline: 28
+                \DWATlinkagename [\DWFORMstrx: (slot 8) "_ZNK3Box8containsERK5Point"
+                \DWATtype: (reference to 7$)
+                \DWATaccessibility: \DWACCESSpublic
+                \DWATdeclaration: true
+          ...
+
 \end{alltt}
 \end{dwflisting}
 \caption{Split object example: \texttt{demo1.dwo} excerpts}
@@ -667,17 +672,17 @@ excerpts from the \dotdebuginfodwo{} section for \texttt{demo1.dwo}.
           \DWAThighpc [\DWFORMdataeight]: 0xbb
           \DWATframebase: \DWOPcallframecfa
           \DWATobjectpointer: (reference to 6$)
-6$:     \DWTAGformalparameter
-            \DWATname [\DWFORMstrx]: (slot 13): "this"
-            \DWATtype: (reference to 8$)
-            \DWATartificial: true
-            \DWATlocation: \DWOPfbreg(-24)
-        \DWTAGformalparameter
-            \DWATname [\DWFORMstring]: "p"
-            \DWATdeclfile: 2
-            \DWATdeclline: 3
-            \DWATtype: (reference to 11$)
-            \DWATlocation: \DWOPfbreg(-32)
+6$:       \DWTAGformalparameter
+              \DWATname [\DWFORMstrx]: (slot 13): "this"
+              \DWATtype: (reference to 8$)
+              \DWATartificial: true
+              \DWATlocation: \DWOPfbreg(-24)
+          \DWTAGformalparameter
+              \DWATname [\DWFORMstring]: "p"
+              \DWATdeclfile: 2
+              \DWATdeclline: 3
+              \DWATtype: (reference to 11$)
+              \DWATlocation: \DWOPfbreg(-32)
       ...
 7$:   \DWTAGbasetype
           \DWATbytesize: 1
@@ -708,6 +713,7 @@ Figure~\ref{fig:splitobjectexampledemoonedwodwarfexcerpts}: Split object example
 \end{center}
 \end{figure}
 
+\needlines{4}
 In the defining declaration for \texttt{Box::contains} at 5\$, the
 \DWATlowpc{} attribute is represented with \DWFORMaddrx,
 referring to slot 0 in the \dotdebugaddr{} table from \texttt{demo1.o}.
@@ -750,9 +756,9 @@ The tool that builds the DWARF package file must understand
 the structure of the \dotdebugstroffsetsdwo{} section in 
 order to apply the necessary adjustments. 
 \bb
-(Section \refersec{app:dwarfpackagefileexample} presents
+Section \refersec{app:dwarfpackagefileexample} presents
+an example of a DWARF package file.
 \eb
-an example of a DWARF package file.)
 
 \needlines{4}
 The \dotdebuglocdwo{} section contains the location lists referenced
@@ -770,17 +776,18 @@ in Section \refersec{datarep:locationlistentriesinsplitobjects}.
         \DWATname [\DWFORMstrx]: (slot 20) "Line"
         \DWATsignature [\DWFORMrefsigeight]: 0x79c7ef0eae7375d1
         \DWATdeclaration: true
-    ...
-2$:   \DWTAGsubprogram
-          \DWATexternal: true
-          \DWATname [\DWFORMstrx]: (slot 19) "clip"
-          \DWATdeclfile: 2
-          \DWATdeclline: 16
-          \DWATlinkagename [\DWFORMstrx]: (slot 2) "_ZN4Line4clipERK3Box"
-          \DWATtype: (reference to DIE for bool)
-          \DWATaccessibility: \DWACCESSpublic
-          \DWATdeclaration: true
-      ...
+        ...
+2$:     \DWTAGsubprogram
+            \DWATexternal: true
+            \DWATname [\DWFORMstrx]: (slot 19) "clip"
+            \DWATdeclfile: 2
+            \DWATdeclline: 16
+            \DWATlinkagename [\DWFORMstrx]: (slot 2) "_ZN4Line4clipERK3Box"
+            \DWATtype: (reference to DIE for bool)
+            \DWATaccessibility: \DWACCESSpublic
+            \DWATdeclaration: true
+        ...
+
 \end{alltt}
 \end{dwflisting}
 \caption{Split object example: \texttt{demo2.dwo} DWARF \dotdebuginfodwo{} excerpts}
@@ -800,26 +807,26 @@ in Section \refersec{datarep:locationlistentriesinsplitobjects}.
           \DWAThighpc [\DWFORMdataeight]: 0x1ec
           \DWATframebase: \DWOPcallframecfa
           \DWATobjectpointer: (reference to 4$)
-4$:     \DWTAGformalparameter
-            \DWATname: (indexed string: 0x11): this
-            \DWATtype: (reference to DIE for type const Point* const)
-            \DWATartificial: 1
-            \DWATlocation: 0x0 (location list)
-5$:     \DWTAGformalparameter
-            \DWATname: b
-            \DWATdeclfile: 1
-            \DWATdeclline: 3
-            \DWATtype: (reference to DIE for type const Box& const)
-            \DWATlocation [\DWFORMsecoffset]: 0x2a
-6$:     \DWTAGlexicalblock
-            \DWATlowpc [\DWFORMaddrx]: (slot 17)
-            \DWAThighpc: 0x1d5
-7$:       \DWTAGvariable
-              \DWATname [\DWFORMstrx]: (slot 28): "slope"
+4$:       \DWTAGformalparameter
+              \DWATname: (indexed string: 0x11): this
+              \DWATtype: (reference to DIE for type const Point* const)
+              \DWATartificial: 1
+              \DWATlocation: 0x0 (location list)
+5$:       \DWTAGformalparameter
+              \DWATname: b
               \DWATdeclfile: 1
-              \DWATdeclline: 5
-              \DWATtype: (reference to DIE for type float)
-              \DWATlocation [\DWFORMsecoffset]: 0x49
+              \DWATdeclline: 3
+              \DWATtype: (reference to DIE for type const Box& const)
+              \DWATlocation [\DWFORMsecoffset]: 0x2a
+6$:       \DWTAGlexicalblock
+              \DWATlowpc [\DWFORMaddrx]: (slot 17)
+              \DWAThighpc: 0x1d5
+7$:           \DWTAGvariable
+                  \DWATname [\DWFORMstrx]: (slot 28): "slope"
+                  \DWATdeclfile: 1
+                  \DWATdeclline: 5
+                  \DWATtype: (reference to DIE for type float)
+                  \DWATlocation [\DWFORMsecoffset]: 0x49
 
 \end{alltt}
 \end{dwflisting}
@@ -864,7 +871,7 @@ location lists at those offsets in the \dotdebuglocdwo{} section.
 \newcommand{\XXLLEeol}{\hyperlink{chap:DWLLEendoflistentry}{end\_of\_list\_entry}
                        \index{DW\_LLE\_end\_of\_list\_entry}}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{dwflisting}
 \begin{tabular}{rl|rr|rl}
        &  entry type          & \multicolumn{2}{c}{range} 
@@ -975,7 +982,7 @@ resulting package file would contain the sections shown in Figure
 \refersec{fig:sectionsandcontributionsinapackagefile}, 
 with contributions from each input file as shown.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{center}
 \begin{tabular}{P{4.7cm}|P{8cm}}
 \hline
@@ -1005,13 +1012,13 @@ with contributions from each input file as shown.
      \dotdebugstroffsetsdwo{} from \texttt{demo2.dwo}, \hspace*{6mm}adjusted \\
 \hline
   \dotdebugstrdwo{}
-&    \bbeb merged string table \\
+&    \bbeb merged string table generated by package utility \\
 \hline
   \dotdebugcuindex
-&    \bbeb CU index \\
+&    \bbeb CU index generated by package utility \\
 \hline
   \dotdebugtuindex
-&    \bbeb TU index \\
+&    \bbeb TU index generated by package utility \\
 \hline
 \end{tabular}
 \end{center}
@@ -1092,7 +1099,7 @@ Figure \refersec{fig:splitobjectexampledemotwodwodwarfdebuglocdwoexcerpts}
 can be found in \texttt{demo.dwp} at offset 157 (84 + 73) in
 the combined \dotdebuglocdwo{} section.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{center}
 \begin{tabular}{lrrrrrr}
 \\
@@ -1139,7 +1146,7 @@ The sharing of these tables between compilation units and type units
 is typical for some implementations, but is not required by the
 DWARF standard.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{center}
 \begin{tabular}{lrrrrr}
 \\

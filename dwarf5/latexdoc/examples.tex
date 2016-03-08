@@ -41,7 +41,7 @@ typedef char* strp;
 %%% and horizontal spacing are critical to achieving the
 %%% desired effect. But this is very fragile!
 %%%
-\begin{figure}[h]
+\begin{figure}[ht]
 %\centering
 %\setlength{\linewidth}{1.1\linewidth}
 \begin{minipage}[t]{0.03\linewidth}
@@ -373,7 +373,7 @@ Consider the \addtoindex{Fortran array}\addtoindexx{Fortran 90} source fragment 
 \addtoindexx{array type entry!examples}
 Figure \referfol{fig:fortranarrayexamplesourcefragment}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{lstlisting}
         TYPE array_ptr
         REAL :: myvar
@@ -412,7 +412,7 @@ knowledge of this structure and 2) there does not need to
 be an explicit representation of this structure in the DWARF
 input to the debugger.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{lstlisting}
 struct desc {
     long el_len;       // Element length
@@ -497,7 +497,7 @@ The DWARF description is shown
 \addtoindexx{Fortran 90}
 in Figure \refersec{fig:fortranarrayexampledwarfdescription}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \figurepart{1}{2}
 \begin{dwflisting}
 \begin{alltt}
@@ -716,7 +716,7 @@ The \addtoindex{Fortran} scalar coarray example
 in Figure \refersec{fig:Fortranscalarcoarraysourcefragment} can be described as 
 illustrated in Figure \refersec{fig:FortranscalarcoarrayDWARFdescription}.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \begin{lstlisting}
         INTEGER x[*]
 \end{lstlisting}
@@ -724,7 +724,7 @@ illustrated in Figure \refersec{fig:FortranscalarcoarrayDWARFdescription}.
 \label{fig:Fortranscalarcoarraysourcefragment}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \begin{dwflisting}
 \begin{alltt}
 10\$:  \DWTAGcoarraytype
@@ -749,7 +749,7 @@ The \addtoindex{Fortran} (simple) array coarray example
 in Figure \refersec{fig:Fortranarraycoarraysourcefragment} can be described as 
 illustrated in Figure \refersec{fig:FortranarraycoarrayDWARFdescription}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{lstlisting}
         INTEGER x(10)[*]
 \end{lstlisting}
@@ -757,7 +757,7 @@ illustrated in Figure \refersec{fig:FortranarraycoarrayDWARFdescription}.
 \label{fig:Fortranarraycoarraysourcefragment}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{dwflisting}
 \begin{alltt}
 10\$:  \DWTAGarraytype
@@ -791,7 +791,7 @@ The \addtoindex{Fortran} multidimensional coarray of a multidimensional array ex
 in Figure \refersec{fig:Fortranmultidimensionalcoarraysourcefragment} can be described as 
 illustrated in Figure \referfol{fig:FortranmultidimensionalcoarrayDWARFdescription}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{lstlisting}
         INTEGER x(10,11,12)[2,3,*]
 \end{lstlisting}
@@ -799,7 +799,7 @@ illustrated in Figure \referfol{fig:FortranmultidimensionalcoarrayDWARFdescripti
 \label{fig:Fortranmultidimensionalcoarraysourcefragment}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{dwflisting}
 \begin{alltt}
 \end{alltt}\bb\vspace{-0.8\baselineskip}\begin{alltt}
@@ -843,7 +843,7 @@ an assumed-rank array in Fortran~2008 with
 supplement~29113:\footnote{Technical Specification ISO/IEC TS
   29113:2012 \emph{Further Interoperability of Fortran with C}}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \begin{lstlisting}
   SUBROUTINE Foo(x)
     REAL :: x(..)
@@ -860,7 +860,7 @@ Let's assume the Fortran compiler used an array descriptor that
 (in \addtoindex{C}) looks
 like the one shown in Figure~\ref{fig:arraydesc}.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \begin{lstlisting}
   struct array_descriptor {
     void *base_addr;
@@ -882,7 +882,7 @@ like the one shown in Figure~\ref{fig:arraydesc}.
 The DWARF type for the array \emph{x} can be described as shown in
 Figure~\refersec{fig:assumedrankdwarf}.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \begin{dwflisting}
 \begin{alltt}
 10\$:  \DWTAGarraytype
@@ -942,7 +942,7 @@ entry need to be evaluated for each of the
 \DWATrank{} dimensions as shown by the pseudocode in
 Figure~\refersec{fig:assumedrankdwarfparser}.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \begin{lstlisting}
     typedef struct {
         int lower, upper, stride;
@@ -1000,7 +1000,7 @@ Note that unnamed dynamic types are used to avoid replicating
 the full description of the underlying type \texttt{dt} that is shared by
 several variables.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{lstlisting}
 	PROGRAM Sample
      
@@ -1024,7 +1024,7 @@ several variables.
 \label{fig:fortrandynamictypeexamplesource}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{dwflisting}
 \begin{alltt}
 11$:    \DWTAGstructuretype
@@ -1080,7 +1080,7 @@ Figure \ref{fig:anonymousstructureexampledwarfdescription}
 is appropriate. In this example, \texttt{b} is referenced as if it 
 were defined in the enclosing structure \texttt{foo}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{lstlisting}
 struct foo {
     int a;
@@ -1101,7 +1101,7 @@ void bar(void)
 \label{fig:anonymousstructureexamplesourcefragment}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{dwflisting}
 \begin{alltt}
 1$:   \DWTAGstructuretype  
@@ -1124,7 +1124,7 @@ Figure \refersec{fig:adaexamplesourcefragment}
 illustrates two kinds of \addtoindex{Ada} 
 parameterized array, one embedded in a record.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{lstlisting}
 M : INTEGER := <exp>;
 VEC1 : array (1..M) of INTEGER;
@@ -1253,7 +1253,7 @@ Figure \referfol{fig:packedrecordexamplesourcefragment}
 is used to illustrate the representation of packed unaligned
 \addtoindex{bit fields}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \bb
 \begin{lstlisting}
 TYPE T : PACKED RECORD                  { bit size is 2   }
@@ -1286,7 +1286,7 @@ little-endian
 architectures using the conventions described in 
 Section \refersec{chap:datamemberentries}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \figurepart{1}{2}
 \begin{dwflisting}
 \begin{alltt}
@@ -1310,7 +1310,7 @@ Section \refersec{chap:datamemberentries}.
 \label{fig:packedrecordexampledwarfdescription}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \figurepart{2}{2}
 \begin{dwflisting}
 \begin{alltt}
@@ -1418,7 +1418,7 @@ that begins at address A and whose size is four bytes. Also,
 high order bits are to the left and low order bits are to
 the right.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{dwflisting}
 \begin{verbatim}
 
@@ -1443,7 +1443,7 @@ the right.
 \label{fig:bigendiandatabitoffsets}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{dwflisting}
 \begin{verbatim}
 
@@ -1488,7 +1488,7 @@ The DWARF representation in
 Figure \refersec{fig:namespaceexample1dwarfdescription}
 is appropriate.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{lstlisting}
 namespace {
     int i;
@@ -1635,7 +1635,7 @@ is appropriate. In this example, \texttt{a} may be referenced either as a member
 the fully qualified namespace \texttt{A::B}, or as if it were defined
 in the enclosing namespace, \texttt{A}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{lstlisting}
 namespace A {
     inline namespace B {   // (1) inline namespace
@@ -1659,7 +1659,7 @@ void bar (void)
 \label{fig:namespaceexample2sourcefragment}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{dwflisting}
 \begin{alltt}
 1$:   \DWTAGnamespace
@@ -1685,7 +1685,7 @@ The DWARF representation in
 Figure \refersec{fig:memberfunctionexampledwarfdescription}
 is appropriate.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{lstlisting}
 class A
 {
@@ -1699,7 +1699,7 @@ void A::func1(int x) {}
 \label{fig:memberfunctionexamplesourcefragment}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \figurepart{1}{2}
 \begin{dwflisting}
 \begin{alltt}
@@ -1795,7 +1795,7 @@ The DWARF representation in
 Figure \refersec{fig:memberfunctionrefqualexampledwarfdescription}
 is appropriate.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{lstlisting}
 class A {
 public:
@@ -1812,7 +1812,7 @@ void g() {
 \label{fig:memberfunctionrefqualexamplesourcefragment}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 %\figurepart{1}{2}
 \begin{dwflisting}
 \begin{alltt}
@@ -1878,7 +1878,7 @@ in a \DWARFVersionV{} header
 \eb
 as shown in Figure \refersec{fig:preV5LNCTusingV5}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{dwflisting}
 \begin{alltt}
   Field           Field Name                      Value(s)
@@ -1983,7 +1983,7 @@ Consider the simple source file and the resulting machine
 code for the Intel 8086 processor in 
 Figure \refersec{fig:linenumberprogramexamplemachinecode}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{lstlisting}
 1: int
 2: main()
@@ -2132,7 +2132,7 @@ pointer). The first column values are byte addresses.
 \textless fs\textgreater\ denotes the stack frame size in bytes, namely 12.
 
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{lstlisting}
        ;; start prologue
 foo    sub   R7, R7, <fs>        ; Allocate frame
@@ -2310,7 +2310,7 @@ example involves a nested subprogram \texttt{INNER} that makes uplevel
 references to the formal parameter and local variable of the
 containing subprogram \texttt{OUTER}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{lstlisting}
 inline procedure OUTER (OUTER_FORMAL : integer) =
     begin
@@ -2833,7 +2833,7 @@ The constant declarations in Figure \refersec{fig:constantexpressionscsource}
 can be represented as illustrated in 
 Figure \refersec{fig:constantexpressionsdwarfdescription}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{lstlisting}[numbers=none]
 constexpr double mass = 9.8;
 constexpr int square (int x) { return x * x; }
@@ -2842,7 +2842,7 @@ float arr[square(9)]; // square() called and inlined
 \caption{Constant expressions: C++ source} \label{fig:constantexpressionscsource}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \begin{dwflisting}
 \begin{alltt}
         ! For variable mass
@@ -2900,7 +2900,7 @@ Figure \refersec{fig:unicodecharacterexamplesource}
 can be described in DWARF as illustrated in 
 Figure \refersec{fig:unicodecharacterexampledwarfdescription}.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \begin{lstlisting}[numbers=none]
 // C++ source
 //
@@ -2911,7 +2911,7 @@ char32_t chr_b = U'h';
 \label{fig:unicodecharacterexamplesource}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{dwflisting}
 \begin{alltt}
 
@@ -2947,7 +2947,7 @@ Figure \refersec{fig:ctypesafeenumerationexamplesource}
 can be described in DWARF as illustrated in 
 Figure \refersec{fig:ctypesafeenumerationexampledwarf}.
 
-\begin{figure}[H]
+\begin{figure}[ht]
 \begin{lstlisting}[numbers=none]
 // C++ source
 //
@@ -2958,7 +2958,7 @@ E e1;
 \label{fig:ctypesafeenumerationexamplesource}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[ht]
 \begin{dwflisting}
 \begin{alltt}
 ! DWARF description
@@ -2992,7 +2992,7 @@ Figure \refersec{fig:ctemplateexample1source}
 can be described in DWARF as illustrated in 
 Figure \refersec{fig:ctemplateexample1dwarf}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{lstlisting}
 // C++ source
 //
@@ -3006,7 +3006,7 @@ wrapper<int> obj;
 \label{fig:ctemplateexample1source}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{dwflisting}
 \begin{alltt}
 ! DWARF description
@@ -3044,7 +3044,7 @@ Figure \refersec{fig:ctemplateexample2source}
 and the DWARF that can describe it in
 Figure \refersec{fig:ctemplateexample2dwarf}.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \begin{lstlisting}
 // C++ source
 //
@@ -3064,7 +3064,7 @@ Figure \refersec{fig:ctemplateexample2dwarf}.
 \label{fig:ctemplateexample2source}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{dwflisting}
 \begin{alltt}
 ! DWARF description
@@ -3125,7 +3125,7 @@ can be described in DWARF as illustrated
 \addtoindexx{template alias example} in 
 Figure \refersec{fig:ctemplatealiasexample1dwarf}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{lstlisting}
 // C++ source, template alias example 1
 //
@@ -3184,7 +3184,7 @@ can be described in DWARF as illustrated
 \addtoindexx{template alias example} in 
 Figure \refersec{fig:ctemplatealiasexample2dwarf}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{lstlisting}
 // C++ source, template alias example 2
 //
@@ -3198,7 +3198,7 @@ X<Z<int>> z;
 \label{fig:ctemplatealiasexample2source}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \addtoindexx{template alias example 2}
 \begin{dwflisting}
 \begin{alltt}
@@ -3278,7 +3278,7 @@ an increment of the volatile variable \texttt{v}. Given these
 assumptions a possible DWARF description is shown in
 Figure \refersec{fig:cimplicitpointerexample1dwarf}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{lstlisting}
 struct S { short a; char b, c; };
 volatile int v;
@@ -3299,7 +3299,7 @@ int main ()
 \label{fig:cimplicitpointerexample1source}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \addtoindexx{implicit pointer example}
 \begin{dwflisting}
 \begin{alltt}
@@ -3374,7 +3374,7 @@ function, \texttt{label1} follows the first \texttt{v++} block,
 Given these assumptions a possible DWARF description is shown in
 Figure \refersec{fig:cimplicitpointerexample2dwarf}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{dwflisting}
 \begin{alltt}
 
@@ -3409,7 +3409,7 @@ label3:
 \label{fig:cimplicitpointerexample2source}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \addtoindexx{implicit pointer example}
 \begin{dwflisting}
 \begin{alltt}
@@ -3468,7 +3468,7 @@ Consider the \addtoindex{Fortran 2003} string type example source in
 Figure \referfol{fig:stringtypeexamplesource}. The DWARF representation in
 Figure \refersec{fig:stringtypeexampledwarf} is appropriate.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \addtoindexx{ISO 10646 character set standard}
 \begin{lstlisting}
         program character_kind
@@ -3498,7 +3498,7 @@ Figure \refersec{fig:stringtypeexampledwarf} is appropriate.
 \label{fig:stringtypeexamplesource}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{dwflisting}
 \begin{alltt}
 
@@ -3566,7 +3566,7 @@ Returns a function value in register 0.
 \subsection{Call Site Example \#1 (C)}
 Consider the \addtoindex{C} source in Figure \referfol{fig:callsiteexample1source}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{lstlisting}
 
 extern void fn1 (long int, long int, long int);
@@ -3663,7 +3663,7 @@ including \texttt{n} over which the following
 location description applies):
 \eb
 
-%\begin{figure}[h]
+%\begin{figure}[ht]
 \begin{dwflisting}
 \bb
 \begin{alltt}
@@ -3720,7 +3720,7 @@ The call sites for all the calls in function \texttt{fn3} are children of the
 if there is any for the whole function). 
 This is shown in Figure \refersec{fig:callsiteexample1dwarf}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \figurepart{1}{2}
 \begin{dwflisting}
 \begin{alltt}
@@ -3815,7 +3815,7 @@ Figure \refersec{fig:callsiteexample2source}
 which is used to illustrate how Fortran's \doublequote{pass by reference}
 parameters can be handled.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{lstlisting}
 subroutine fn4 (n)
     integer :: n, x
@@ -3842,7 +3842,7 @@ end subroutine fn5
 \clearpage
 Possible generated code for this source is shown using a suggestive 
 pseudo-\linebreak[0]assembly notation in Figure \refersec{fig:callsiteexample2code}.
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{lstlisting}
 
 fn4:
@@ -3879,7 +3879,7 @@ The location description for variable \texttt{x} in function
 The call sites in (just) function \texttt{fn5} might be as shown in 
 Figure \refersec{fig:callsiteexample2dwarf}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{dwflisting}
 \begin{alltt}
 
@@ -3924,7 +3924,7 @@ Consider the \addtoindex{C} source in Figure
 \referfol{ref:macroexamplesource} which is used to illustrate the
 DWARF encoding of macro information (see Section \refersec{chap:macroinformation}).
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \textit{File a.c}
 \begin{lstlisting}
 #include "a.h"

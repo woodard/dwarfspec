@@ -3,7 +3,7 @@
 % If draft is in the document class list, pix are just suggested
 % by an outline, the pic does not appear as a picture.
 %
-\newcommand{\docdate}{March 5, 2016}
+\newcommand{\docdate}{March 7, 2016}
 %
 \usepackage{ifthen}
     \newcommand{\ifthen}[2]{\ifthenelse{#1}{#2}{}}
@@ -58,6 +58,7 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
     \setlength{\headheight}{15pt}  % avoids warning from latex
 \usepackage{needspace}     % For assuring space remaining on a page
 \usepackage{ifthen}        % For conditional processing
+\include{dwarfchangebarpatch} % Patch needed for package changebar
 \usepackage{changepage}    % For odd/even page checks
 \usepackage[usenames,dvipsnames]{xcolor}
 \usepackage{lscape}        % For landscape mode (Appendix B)
@@ -80,7 +81,7 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 % Also, allcolors lets us generate colored active links inside a pdf.
 % And breaklinks resolves truncation issues with very long link names.
 \usepackage[breaklinks,plainpages=false,pdfpagelabels,pagebackref,
-            allcolors=blue!75!black,bookmarksnumbered=true]{hyperref}
+            allcolors=blue!80!black,bookmarksnumbered=true]{hyperref}
 \makeindex  % This and the makeidx package allow \index to create index entries.
 
 \newcommand{\dwf}{DWARF Debugging Information Format}
@@ -200,7 +201,7 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 % A simple one column table of names; default width is 2 inches
 \newcommand{\simplenametablerule}{\simplerule[2in]}
 \newenvironment{simplenametable}[3][2in]
-    {   \begin{table}[h] \caption{#2} \label{#3}
+    {   \begin{table}[ht] \caption{#2} \label{#3}
         \begin{center}
         \renewcommand{\simplenametablerule}{\simplerule[#1]}
         \simplenametablerule \\
@@ -232,7 +233,7 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 % Define commands for all of the DWARF names (DW\_*, .debug_*, a few others)
 %
 %\newcommand{\definition}[1]{\textcolor{red!80!black}{#1}}
-\newcommand{\definition}[1]{\textcolor{red!50!black}{#1}}
+\newcommand{\definition}[1]{\textcolor{red!65!black}{#1}}
 \newcommand{\definitionx}[1]{\definition{\addtoindex{#1}}}
 \include{dwarfnamecmds}
 
@@ -323,7 +324,7 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \listoftables
 
 \ifthenelse{\boolean{isdraft}}
-	{	\emptypage
+	{	%\emptypage
 		{% Environment to keep the following header change local
 		\clearpage
 		\makeevenhead{plain}{}{Change Summary}{}
@@ -374,5 +375,5 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \include{gnulicense}                           \emptypage
 % Maybe someday the selected glossary concept will be of interest...
 %\include{selectedglossary}                    %\emptypage
-\printindex
+\printindex                                    \clearpage
 \end{document}

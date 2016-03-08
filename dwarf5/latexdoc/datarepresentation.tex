@@ -1058,17 +1058,15 @@ in the \sixtyfourbitdwarfformat, this is an 8-byte unsigned length
 
 \end{enumerate}
 
+\needlines{8}
 \subsubsection{Type Unit Header}
 \label{datarep:typeunitheader}
-
 The header for the series of debugging information entries
 contributing to the description of a type that has been
 placed in its own \addtoindex{type unit}, within the 
 \dotdebuginfo{} section,
 consists of the following information:
 \begin{enumerate}[1. ]
-
-\needlines{4}
 \item \texttt{unit\_length} (\livelink{datarep:initiallengthvalues}{initial length}) \\
 \addttindexx{unit\_length}
 A 4-byte or 12-byte unsigned integer 
@@ -1139,6 +1137,7 @@ unit.
 the primary type contained in this 
 \addtoindex{type unit} uses this value.}
 
+\needlines{4}
 \item \texttt{type\_offset} (\livelink{datarep:sectionoffsetlength}{section offset}) \\
 \addttindexx{type\_offset}
 A 4-byte or 8-byte unsigned offset 
@@ -1197,8 +1196,9 @@ code 0 is reserved for null debugging information entries. The
 abbreviation code is followed by another unsigned LEB128\addtoindexx{LEB128!unsigned}
 number that encodes the entry\textquoteright s tag. The encodings for the
 tag names are given in 
-Table \referfol{tab:tagencodings}.
+Table \refersec{tab:tagencodings}.
 
+\needlines{6}
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c}
@@ -1333,6 +1333,7 @@ number representing the attribute\textquoteright s form.
 The series of attribute specifications ends with an
 entry containing 0 for the name and 0 for the form.
 
+\needlines{4}
 The attribute form 
 \DWFORMindirectTARG{} is a special case. For
 attributes with this form, the attribute value itself in the
@@ -1860,6 +1861,7 @@ it indicates the presence of the attribute. In the second
 case, the attribute is implicitly indicated as present, and
 no value is encoded in the debugging information entry itself.
 
+\needlines{4}
 \item \livelinki{chap:classlineptr}{lineptr}{lineptr class} \\
 \livetarg{datarep:classlineptr}{}
 This is an offset into 
@@ -1949,7 +1951,7 @@ format, it is an 8-byte unsigned value (see Section
 share a common representation, it is not possible for an
 attribute to allow more than one of these classes}
 
-
+\needlines{4}
 \begin{itemize}
 \item \livelinki{chap:classreference}{reference}{reference class} \\
 \livetarg{datarep:classreference}{}
@@ -3725,7 +3727,6 @@ to the following:
 \DWFORMexprloc,
 and \DWFORMblock.
 
-\needlines{4}
 \item If the tag in Step 3 is one of \DWTAGpointertype,
 \DWTAGreferencetype, 
 \DWTAGrvaluereferencetype,
@@ -3742,7 +3743,7 @@ entry is a \DWTAGsubprogram, the context is omitted and the
 name to be used is the ABI-specific name of the subprogram
 (for example, the mangled linker name).
 
-
+\needlines{6}
 \item If the tag in Step 3 is not one of \DWTAGpointertype,
 \DWTAGreferencetype, 
 \DWTAGrvaluereferencetype,
@@ -3886,7 +3887,7 @@ information entry are encoded by name rather than by recursively
 encoding the type to allow for cases where a complete definition 
 of the type might not be available in all compilation units.}
 
-\needlines{4}
+%\needlines{4}
 \textit{If a type definition contains the definition of a member function, 
 it cannot be moved as is into a type unit, because the member function 
 contains attributes that are unique to that compilation unit. 
@@ -3918,7 +3919,7 @@ This hash function is sometimes known as the
 \hrefself{http://en.wikipedia.org/wiki/List\_of\_hash\_functions} or
 \hrefself{http://stackoverflow.com/questions/10696223/reason-for-5381-number-in-djb-hash-function)}.} 
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \bb
 \begin{lstlisting}
 
