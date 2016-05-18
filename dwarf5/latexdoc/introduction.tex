@@ -119,7 +119,7 @@ general application.  For these, DWARF has a description
 designed to meet the language requirements, although, to the 
 extent possible, an effort is made to generalize the attribute. 
 An example of this is the \DWTAGconditionNAME{} 
-\bb debugging information entry,\eb 
+debugging information entry, 
 used to describe \addtoindex{COBOL} level 88 conditions, which 
 is described in abstract terms rather than COBOL-specific terms.  
 Conceivably, this TAG might be used with a different language 
@@ -262,21 +262,36 @@ fashion, informative text will suggest but not require this design.
 
 \subsection{Permissive Rather Than Prescriptive}
 \bb
-The DWARF standard specifies the meaning of DWARF descriptions. It does
-not require that a particular producer describe any particular source
-construct or aspect of the source to object mapping; nor does it specify
-how a particular consumer should make use of this description.  DWARF is
-permissive, allowing different producers to generate different
-descriptions for the same source to object conversion.  As long as the
-content of the generated DWARF description follows this specification,
-the producer is conforming to the specification; as long as the consumer
-follows this specification when interpreting the generated description,
-the consumer is conforming to the specification.
+The DWARF Standard specifies the meaning of DWARF descriptions. It does not
+specify in detail what a particular producer should generate for any source to
+object conversion.  One producer may generate a more complete description
+than another, it may describe features in a different order (unless the 
+standard explicitly requires a particular order), or it may use
+different abbreviations or compression methods.  Similarly, DWARF does not
+specify exactly what a particular consumer should do with each part of the
+description, although we believe that the potential uses for each description
+should be evident.
 
+DWARF is permissive, allowing different producers to generate different
+descriptions for the same source to object conversion, and permitting
+different consumers to provide more or less functionality or information
+to the user.  This may result in debugging information being larger or
+smaller, compilers or debuggers which are faster or slower, and more or
+less functional.  These are described as differences in "Quality of
+Implementation".
+
+Each producer conforming to the DWARF standard must follow the format and
+meaning as specified in the standard.  As long as the DWARF description
+generated follows this specification, the producer is generating valid DWARF.
 For example, DWARF allows a producer to identify the end of a function
-prologue in the Line Information so that a debugger can stop at this
-location. A producer which does this is generating valid DWARF, as is
-another which doesn't.
+prologue in the Line Information so that a debugger can stop at this location.
+A producer which does this is generating valid DWARF, as is another which
+doesn't.  As another example, one producer may generate descriptions
+for variables which are moved from memory to a register in a certain range,
+while another may only describe the variable's location in memory.  Both are
+valid DWARF descriptions, while a consumer using the former would be able
+to provide more accurate values for the variable while executing in that
+range than a consumer using the latter.
 \eb
 
 \subsection{Vendor Extensibility}

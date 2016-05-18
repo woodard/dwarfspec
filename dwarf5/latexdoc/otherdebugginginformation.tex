@@ -104,48 +104,32 @@ the entire load module.
 \subsubsection{Contents of the Name Index}
 \label{chap:contentsofthenameindex}
 The name index must contain an entry for each 
-\bb
-debugging information entry
-\eb
-that defines a
-named subprogram, label, variable, type, or namespace, subject to
-the following rules:
+debugging information entry that defines a
+named subprogram, label, variable, type, or namespace, 
+subject to the following rules:
 \begin{itemize}
 
 \item All non-defining declarations (that is, 
-      \bb
-      debugging information entries
-      \eb
-      with a
+      debugging information entries with a
       \DWATdeclaration{} attribute) are excluded.
 
-\item \DWTAGnamespace{} 
-      \bb
-      debugging information entries
-      \eb
+\item \DWTAGnamespace{} debugging information entries 
       without a \DWATname{} attribute are
-      included with the name \doublequote{\texttt{(anonymous namespace)}}.
+      included with the name 
+      \doublequote{\texttt{(anonymous namespace)}}.
 
-\item All other 
-      \bb
-      debugging information entries
-      \eb
+\item All other debugging information entries 
       without a \DWATname{} attribute are excluded.
 
 \item \DWTAGsubprogram{}, \DWTAGinlinedsubroutine{}, and
-      \DWTAGlabel{} 
-      \bb
-      debugging information entries
-      \eb
+      \DWTAGlabel{} debugging information entries 
       without an address attribute (\DWATlowpc{},
-      \DWAThighpc{}, \DWATranges{}, or \DWATentrypc{}) are excluded.
+      \DWAThighpc{}, \DWATranges{}, or \DWATentrypc{}) 
+      are excluded.
 
-\item \DWTAGvariable{} 
-      \bb
-      debugging information entries
-      \eb
-      with a \DWATlocation{} attribute that
-      includes a \DWOPaddr{} or \DWOPformtlsaddress{} operator are
+\item \DWTAGvariable{} debugging information entries 
+      with a \DWATlocation{} attribute that includes a 
+      \DWOPaddr{} or \DWOPformtlsaddress{} operator are
       included; otherwise, they are excluded.
 
 \item If a subprogram or inlined subroutine is included, and has a
@@ -155,28 +139,16 @@ the following rules:
 \end{itemize}
 
 For the purposes of determining whether a 
-\bb
-debugging information entry
-\eb
-has a particular
+debugging information entry has a particular
 attribute (such as \DWATname{}), if 
-\bb
-debugging information entry
-\eb
-$A$ has a \DWATspecification{}
+debugging information entry $A$ has a \DWATspecification{}
 or \DWATabstractorigin{} attribute pointing to another 
-\bb
-debugging information entry
-\eb
-$B$, any
-attributes of \bbeb $B$ are considered to be part of \bbeb $A$.
+debugging information entry $B$, any
+attributes of $B$ are considered to be part of $A$.
 
 \textit{The intent of the above rules is to provide the consumer with
 some assurance that looking up an unqualified name in the index
-will yield all relevant 
-\bb
-debugging information entries
-\eb
+will yield all relevant debugging information entries
 that provide a defining declaration
 at global scope for that name.}
 
@@ -188,15 +160,14 @@ below.}
 \needlines{4}
 \subsubsection{Structure of the Name Index}
 \label{chap:structureofthenametindex}
-Logically, the name index can be viewed as a list of names, with a
-list of index entries for each name. Each index entry corresponds to a
-\bb
-debugging information entry
-\eb
+Logically, the name index can be viewed as a list of names, 
+with a list of index entries for each name. Each index entry 
+corresponds to a debugging information entry 
 that matches the criteria given in the previous section. For
-example, if one compilation unit has a function named \texttt{fred} and
-another has a struct named \texttt{fred}, a lookup for \doublequote{fred} will find the
-list containing those two index entries.
+example, if one compilation unit has a function named \texttt{fred} 
+and another has a struct named \texttt{fred}, a lookup for 
+\doublequote{fred} will find the list containing those two index 
+entries.
 
 The index section contains eight individual parts, as illustrated in 
 Figure \referfol{fig:nameindexlayoutpart1}.
@@ -547,7 +518,6 @@ Figure~\ref{fig:nameindexlayoutpart1}: Name Index Layout \textit{(concluded)}
 \end{figure}
 
 The formats of the header and the hash lookup table are described
-\bbeb
 in Section \refersec{chap:datarepresentationofthenameindex}.
 
 The list of CUs and the list of local TUs are each an array of
@@ -600,31 +570,22 @@ The standard attributes are:
 \item Type Unit (TU), a reference to an entry in the list of local
     or foreign TUs.
 
-\item
-    \bb
-    Debugging information entry
-    \eb
-    offset within the CU or TU.
+\item Debugging information entry offset within the CU or TU.
 
-\item Parent 
-    \bb
-    debugging information entry,
-    \eb
+\item Parent debugging information entry, 
     a reference to the index entry for the parent.
     This is represented as the offset of the entry relative to
     the start of the entry pool.
 
 \item Type hash, an 8-byte hash of the type declaration.
+
 \end{itemize}
 
 \needlines{6}
-It is possible that an indexed 
-\bb
-debugging information entry
-\eb
+It is possible that an indexed debugging information entry
 has a parent that is not
-indexed (for example, if its parent does not have a name attribute). In
-such a case, a parent attribute may point to a nameless index
+indexed (for example, if its parent does not have a name attribute). 
+In such a case, a parent attribute may point to a nameless index
 entry (that is, one that cannot be reached from any entry in the
 name table), or it may point to the nearest ancestor that does
 have an index entry.
@@ -709,17 +670,12 @@ not including the length field itself.
 
 \item \texttt{version} (\HFTuhalf) \\
 A version number\addtoindexx{version number!name index table} 
-\bb
-(see Section \refersec{datarep:nameindextable}).
-\eb 
+(see Section \refersec{datarep:nameindextable}). 
 This number is specific to the name index table and is
 independent of the DWARF version number.
 
 \item \textit{padding} (\HFTuhalf) \\
-Reserved to DWARF
-\bb
-(must be zero).
-\eb
+Reserved to DWARF (must be zero). 
 
 \item \texttt{comp\_unit\_count} (\HFTuword) \\
 The number of CUs in the CU list.
@@ -753,17 +709,19 @@ contents and interpretation are not specified here. The
 string is padded with null characters to a multiple of
 four bytes in length.
 
+\textit{The
+\bb
+presence of an unrecognised augmentation string may make it impossible
+for a consumer to process data in the \dotdebugnames{} section.
+\eb}
+
 \end{enumerate}
 
 \needlines{4}
 \subsubsubsection{List of CUs}
 The list of CUs immediately follows the header. Each entry in the 
-list is an offset 
-\bbeb 
-of the corresponding compilation unit
-\bb
+list is an offset of the corresponding compilation unit
 in the \dotdebuginfo{} section.
-\eb
 In the DWARF-32 format, a section offset is 4 bytes, 
 while in the DWARF-64 format, a section offset is 8 bytes.
 
@@ -773,11 +731,8 @@ There must be at least one CU.
 \needlines{4}
 \subsubsubsection{List of Local TUs}
 The list of local TUs immediately follows the list of CUs. Each 
-entry in the list is an offset 
-\bb
-of the corresponding type unit
-in the \dotdebuginfo{} section.
-\eb
+entry in the list is an offset of the corresponding type unit
+in the \dotdebuginfo{} section. 
 In the DWARF-32 format, a section offset is 4 bytes, 
 while in the DWARF-64 format, a section offset is 8 bytes.
 
@@ -805,9 +760,7 @@ contains 4-byte unsigned integers.
 \needlines{4}
 Symbols are entered into the hash table by first computing a hash
 value from the symbol name. The hash is computed 
-\bb
-using the "DJB" hash function\addtoindexx{DJB hash function}
-\eb
+using the "DJB" hash function\addtoindexx{DJB hash function} 
 described in Section \refersec{datarep:nametablehashfunction}.
 Given a hash value for the symbol,
 the symbol is entered into a bucket whose index is the hash value
@@ -848,12 +801,10 @@ indexed starting at 1 (to match the hashes array).
 The number of rows in the name table is given by \texttt{name\_count}.
 
 If there is a hash lookup table, the 
-\bbeb
 row number of an entry in the name table must
 match the row number of its corresponding entry in the hashes array.
 
 If there is no hash lookup table, there is no ordering 
-\bbeb
 requirement for the name table.
 
 \needlines{6}
@@ -900,7 +851,6 @@ Table \referfol{tab:indexattributeencodings}.
 \DWIDXdieoffsetTARG   & Offset of DIE within CU or TU                \\
 \DWIDXparentTARG      & Index of name \mbox{table} entry for parent  \\
 \DWIDXtypehashTARG    & Hash of type \mbox{declaration}              \\
-\bbeb
 \end{longtable}
 \end{centering}
 
@@ -951,9 +901,7 @@ not including the length field itself.
 
 \item \texttt{version} (\HFTuhalf) \\
 A version number\addtoindexx{version number!address lookup table}
-\bb 
 (see Section \refersec{datarep:addrssrangetable}). 
-\eb
 This number is specific to the address lookup table and is
 independent of the DWARF version number.
 
@@ -1488,19 +1436,14 @@ of the directory entries in order, beginning with 0.
 represented in the directories field and a directory index
 of 0 implicitly referred to that directory as found in the
 \DWATcompdir{} attribute of the compilation unit 
-\bb
-debugging information entry.
-\eb
+debugging information entry. 
 In \DWARFVersionV, the current directory is explicitly present
 in the directories field. This is needed to support the
 common practice of stripping all but the line number sections
 (\dotdebugline{} and \dotdebuglinestr) from an executable.}
 
 \textit{Note that if a \dotdebuglinestr{} section is present, 
-both the compilation unit 
-\bb
-debugging information entry
-\eb
+both the compilation unit debugging information entry 
 and the line number header can
 share a single copy of the current directory name string.}
 
@@ -1541,10 +1484,7 @@ a declaration coordinate or a macro file inclusion.
 The first entry in the sequence is the primary source file 
 whose file name exactly matches that given in the 
 \DWATname{} attribute in the compilation unit 
-\bb
 debugging information entry.
-\eb
-
    
 The line number program references file names in this 
 sequence beginning with 0, and uses those numbers instead 
@@ -1558,10 +1498,7 @@ the common practice of stripping all but the line number sections
 (\dotdebugline{} and \dotdebuglinestr) from an executable.}
 
 \textit{Note that if a \dotdebuglinestr{} section is present, 
-both the compilation unit 
-\bb
-debugging information entry
-\eb
+both the compilation unit debugging information entry 
 and the line number header can
 share a single copy of the current file name string.}
 
@@ -2031,11 +1968,9 @@ inclusion entries.  Each entry consists of an opcode followed by
 zero or more operands. Each macro unit ends with an entry
 containing an opcode of 0.
 
-\bb
 In all macro information entries,
 the line number of the entry is encoded as an
 unsigned LEB128 integer.
-\eb
 
 \needlines{6}
 \subsection{Macro Information Header}
@@ -2110,12 +2045,10 @@ order in which the directives were processed by the
 compiler (after taking into account the effect of the
 macro import directives).
 
-\bb
 \textit{The source file in which a macro information entry occurs
 can be derived by interpreting the sequence of entries from the
 beginning of the \dotdebugmacro{} section. \DWMACROstartfile{} and 
-\DWMACROendfile{} indicate changes in the containing file.}
-\eb
+\DWMACROendfile{} indicate changes in the containing file.} 
 
 \subsubsection{Define and Undefine Entries}
 \label{chap:defineandundefineentries}
@@ -2176,7 +2109,6 @@ The contents of the operands are described below (see Sections
 
 \end{enumerate}
 
-\bbpareb
 
 \subsubsection{Macro Define String}
 \label{chap:macrodefinestring}
@@ -2253,8 +2185,7 @@ ending of an included file.
 \itembfnl{\DWMACROstartfileTARG{}}
 A \DWMACROstartfileNAME{} entry has two operands. The
 first operand encodes the line number of the source line on
-which the \texttt{\#include} macro directive occurs.
-\bbeb
+which the \texttt{\#include} macro directive occurs. 
 The second operand encodes a source file name index. 
 
 The source file name index is the file number in the 

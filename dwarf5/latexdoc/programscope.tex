@@ -2045,11 +2045,8 @@ a trampoline will result in stepping into or setting the
 breakpoint in the target subroutine instead. This helps to
 hide the compiler generated subprogram from the user. }
 
-\bb
 \section{Call Site Entries and Parameters}
-\eb
 \label{chap:callsiteentriesandparameters}
-\bb
 \textit{
 A call site entry describes a call from one subprogram to another in the
 source program. It provides information about the actual parameters of
@@ -2072,29 +2069,25 @@ may "virtually unwind" the subprogram activation
 (see Section \refersec{chap:callframeinformation}). Any
 register or memory location that cannot be recovered is referred to as
 "clobbered by the call."}
-\eb
-
-\bbpareb
 
 A source call can be compiled into different types of machine code:
 \begin{itemize}
 \item
 A \textit{normal call} uses a call-like instruction which transfers 
 control to the start of some subprogram and preserves the call site 
-\bb
 location for use by the callee.
-\eb  
+
 \item
 A \textit{tail call} uses a jump-like instruction which
 transfers control to the start of some subprogram, but 
-\bb
 there is no call site location address to preserve
 (and thus none is available using the unwind information). 
-\eb 
+
 \item
 A \textit{tail recursion call} is a call
 to the current subroutine which is compiled as a jump 
 to the current subroutine.
+
 \needlines{4}
 \item
 An \textit{inline (or inlined) call} is a call to an inlined subprogram,
@@ -2119,11 +2112,8 @@ instructions are given a location in the caller.
 \DWTAGcallsite{} entries describe normal and tail calls but not tail recursion calls,
 while \DWTAGinlinedsubroutine{} entries describe inlined calls 
 (see Section \refersec{chap:inlinedsubroutines}).
-\bb
 Call site entries cannot describe tail recursion or optimized out calls.
-\eb
 
-\bb
 \subsection{Call Site Entries}
 \label{chap:callsiteentries}
 A call site is represented by a debugging information entry with the tag
@@ -2137,7 +2127,6 @@ call is present in the source program.
 otherwise be present in the debugging information of a subroutine
 need not be introduced solely to represent the immediately containing scope
 of a call.}
-\eb
 
 The call site entry may have a
 \DWATcallreturnpcDEFN{}\addtoindexx{call site return pc attribute}
@@ -2154,12 +2143,10 @@ be an address after the delay slot of the call.}
 
 The call site entry may have a 
 \DWATcallpcDEFN{}\addtoindexx{call pc attribute}
-\livetargi{chap:DWATcallpcofcallsite}{attribute}{call pc attribute} which is the
-address of the 
-\bb
+\livetargi{chap:DWATcallpcofcallsite}{attribute}{call pc attribute} 
+which is the address of the 
 call-like instruction for a normal call or the jump-like 
 instruction for a tail call.
-\eb 
 
 If the call site entry corresponds to a tail call, it has the 
 \DWATcalltailcallDEFN{}\addtoindexx{call tail call attribute}
@@ -2217,33 +2204,24 @@ interpreted in the same way as the declaration file, declaration
 line, and declaration column attributes, respectively 
 (see Section \refersec{chap:declarationcoordinates}).
 
-\textit{The call file, call line and call column coordinates do not describe the
-coordinates of the subroutine declaration that was called, rather they describe
-the coordinates of the call.}
+\textit{The call file, call line and call column coordinates do 
+not describe the coordinates of the subroutine declaration that 
+was called, rather they describe the coordinates of the call.}
 
 \needlines{5}
-\bb
 \subsection{Call Site Parameters}
-\eb
 \label{chap:callsiteparameters}
 The call site entry may own 
 \DWTAGcallsiteparameterTARG{}\index{call site parameter entry} 
-debugging information entries representing the parameters passed to the call.
-\bb
-Call site parameter entries occur in the same order as the corresponding
-parameters in the source.
-\eb
+debugging information entries representing the parameters passed 
+to the call.
+Call site parameter entries occur in the same order as the 
+corresponding parameters in the source.
 Each such entry has a \DWATlocation{} attribute which is a location 
-\bb
-description.
-\eb
-This location 
-\bb
-description 
-\eb
+description. This location description 
 describes where the parameter is passed
-(usually either some register, or a memory location expressible as the
-contents of the stack register plus some offset).
+(usually either some register, or a memory location expressible as 
+the contents of the stack register plus some offset).
 
 \needlines{4}
 Each \DWTAGcallsiteparameter{} entry may have a 
@@ -2268,18 +2246,10 @@ use the values at all.}
 For parameters passed by reference, where the code passes a pointer to
 a location which contains the parameter, or for reference type parameters,
 the \DWTAGcallsiteparameter{} entry may also have a
-\bb
 \DWATcalldatalocationDEFN{}\addtoindexx{call data location attribute}
-\eb
 \livetargi{chap:DWATcalldatalocationofcallparameter}{attribute}{call data location attribute}
-whose value is a location 
-\bb
-description 
-\eb
-and a
-\bb
+whose value is a location description and a
 \DWATcalldatavalueDEFN{}\addtoindexx{call data value attribute}
-\eb
 \livetargi{chap:DWATcalldatavalueofcallparameter}{attribute}{call data value attribute}
 whose value is a DWARF expression.  The \DWATcalldatalocationNAME{} attribute
 \addtoindexx{call data location attribute} 

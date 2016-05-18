@@ -836,12 +836,10 @@ one of these addresses by indexing relative to this location.
 \hypertarget{chap:classblock}{}
 \livelinki{datarep:classblock}{block}{block class}
 & An arbitrary number of uninterpreted bytes of data.
-\bb
 The number of data bytes may be implicit from context
 or explicitly specified by an initial unsigned LEB128 value
 (see Section \refersec{datarep:variablelengthdata}) 
 that precedes that number of data bytes.
-\eb
 \\
  
 \hypertarget{chap:classconstant}{}
@@ -856,11 +854,9 @@ encoded in the variable length format known as LEB128
 \livelinki{datarep:classexprloc}{exprloc}{exprloc class}
 &A DWARF expression for a value or a location in the 
 address space of the described program.
-\bb
 A leading unsigned LEB128 value 
 (see Section \refersec{datarep:variablelengthdata})
 specifies the number of bytes in the expression.
-\eb
 \\
 
 \hypertarget{chap:classflag}{}
@@ -1664,7 +1660,10 @@ The \DWOPnopTARG{} operation is a place holder. It has no effect
 on the location stack or any of its values.
 
 \itembfnl{\DWOPentryvalueNAME}
-The \DWOPentryvalueTARG{} operation pushes a value that had a known location
+The \DWOPentryvalueTARG{} operation pushes 
+\bb
+the value that the described location held
+\eb
 upon entering the current subprogram.  It has two operands: an 
 unsigned LEB128\addtoindexx{LEB128!unsigned} length, followed by 
 a block containing a DWARF expression or a register location description 
@@ -1680,7 +1679,6 @@ in exactly one value being pushed on the DWARF stack when completed.
 
 \DWOPpushobjectaddress{} is not meaningful inside of this DWARF operation.
 
-\bb
 \textit{
 The values needed to evaluate \DWOPentryvalueNAME{} could be obtained in
 several ways. The consumer could suspend execution on entry to the
@@ -1692,7 +1690,6 @@ values.  Or, when evaluating \DWOPentryvalueNAME{}, the consumer could
 (see Section \refersec{chap:callframeinformation}) 
 to recover register values that might have been clobbered since the
 subprogram entry point.}
-\eb
 
 \end{enumerate}
 
@@ -1926,10 +1923,7 @@ containing the \DWOPimplicitpointer{} operation.}
 
 \end{enumerate}
 
-\textit{DWARF location 
-\bb
-descriptions 
-\eb
+\textit{DWARF location descriptions 
 are intended to yield the \textbf{location}
 of a value rather than the value itself. An optimizing compiler
 may perform a number of code transformations where it becomes
@@ -2023,10 +2017,7 @@ forms are otherwise equivalent.
 \label{chap:locationlistsinnonsplitobjects}
 Location lists 
 \addtoindexx{location list}
-are used in place of location 
-\bb
-descriptions
-\eb
+are used in place of location descriptions
 whenever the object whose location is being described
 can change location during its lifetime. 
 Location lists
@@ -2633,11 +2624,9 @@ Section \referfol{chap:linkagenames} regarding the use of
 \addtoindex{mangled names}.
 Sequences of multiple whitespace characters may be compressed.}
 
-\bb
 \textit{For additional discussion, see the Best Practices section 
 of the DWARF Wiki 
 (\url{http://wiki.dwarfstd.org/index.php?title=Best_Practices}.)}
-\eb
 
 \section{Data Locations and DWARF Procedures}
 \hypertarget{chap:DWATlocationdataobjectlocation}{}
@@ -2908,11 +2897,8 @@ yields the value of the attribute.
 in the program that are artificial, or which otherwise have a 
 \doublequote{name} that is not a valid identifier in the
 programming language. 
-\bb
 This attribute provides a means for the producer to indicate
-the purpose or usage of the containing debugging information entry.
-\eb
-}
+the purpose or usage of the containing debugging infor}
 
 Generally, any debugging information entry that 
 has,\hypertarget{chap:DWATdescriptionartificialnameordescription}{}
@@ -2922,13 +2908,8 @@ or may have, a \DWATname{} attribute, may also have a
 null-terminated string providing a description of the entity.
 
 \textit{It is expected that a debugger will 
-\bbeb
-display these
-descriptions as part of 
-\bb
-displaying other properties of an entity.
-\eb
-}
+display these descriptions as part of 
+displaying other properties of an entity.}
 
 \needlines{4}
 \section{Byte and Bit Sizes}

@@ -269,7 +269,7 @@ examples illustrate their behavior graphically.}
 Following are examples of DWARF operations used to form location descriptions:
 
 \newcommand{\descriptionitemnl}[1]
-        {\vspace{0.5\baselineskip}\item[#1]\mbox{}\\\vspace{0.5\baselineskip}}
+        {\vspace{0.3\baselineskip}\item[#1]\mbox{}\\\vspace{0.5\baselineskip}}
 \begin{description}
 \descriptionitemnl{\DWOPregthree}
 The value is in register 3.
@@ -324,7 +324,6 @@ value consists of two parts, given in memory address order: the 4 byte
 value 1 followed by the four byte value computed from the sum of the
 contents of r3 and r4.
 
-\bb
 \descriptionitemnl{\DWOPentryvalue{} 1 \DWOPregone{} }
 The value register 1 contained upon entering the current subprogram is 
 pushed on the stack.
@@ -340,26 +339,37 @@ The value register 1 contained upon entering the current subprogram
 \doublequote{contents} of an otherwise anonymous location.
 
 This and the previous location description are equivalent;
-the previous one is shorter, however.
-\eb
+the previous one is shorter, however. 
 
 %FIXME: The following gets an undefined control sequence error for reasons unknown... 
 %\descriptionitemnl{\DWOPentryvalue{} 1 \DWOPregthirtyone{} \DWOPregone{} \DWOPadd{} \DWOPstackvalue }
 %The value register 31 had upon entering the current subprogram
 %plus the value register 1 currently has.
 
+% Is the following example really interesting enough (not just complicated) to keep?
+\ifthen{\boolean{true}}{
 \descriptionitemnl{\DWOPentryvalue{} 3 \DWOPbregfour{} 16 \DWOPderef{} \DWOPstackvalue }
 %FIXME: similar undefined as just above
 %\descriptionitemnl{\DWOPentryvalue{} 6 \DWOPentryvalue{} 1 \DWOPregfour{} \DWOPplusuconst{} 16 \DWOPderef{} \DWOPstackvalue }
 Add 16 to the value register 4 had upon entering the current subprogram
 to form an address and then push the value of the memory location at that address.
-\bb
 This value is the
 \doublequote{contents} of an otherwise anonymous location.
+}
+
+\needlines{6}
+\bb
+\descriptionitemnl{\DWOPentryvalue{} 1 \DWOPregfive{} \DWOPplusuconst{} 16 }
+The address of the memory location is calculated by adding 16 to the value
+contained in register 5 upon entering the current subprogram.
+
+\textit{Note that unlike the previous \DWOPentryvalue{} examples, this one does not end
+with \DWOPstackvalue.{}}
 \eb
+
 \end{description}
 
-\clearpage
+%\clearpage
 \section{Aggregate Examples}
 \label{app:aggregateexamples}
 
@@ -467,6 +477,7 @@ a descriptor does have a
 \DWATdatalocation{} attribute. In
 that case the object doubles as its own descriptor.)
 
+\needlines{6}
 The \addtoindex{Fortran} derived type \texttt{array\_ptr} can now be re-described
 in C-like terms that expose some of the representation as in
 
@@ -482,10 +493,14 @@ Similarly for variable \texttt{arrayvar}:
 desc<1> arrayvar;
 \end{lstlisting}
 
-(Recall that \texttt{desc\textless 1\textgreater} 
-indicates the 1\dash dimensional version of \texttt{desc}.)
+\textit{
+\bb
+Recall that \texttt{desc\textless 1\textgreater} 
+indicates the 1\dash dimensional version of \texttt{desc}.
+\eb
+}
 
-\newpage
+%\newpage
 Finally, the following notation is useful:
 \begin{enumerate}[1. ]
 \item  sizeof(type): size in bytes of entities of the given type
@@ -730,9 +745,7 @@ illustrated in Figure \refersec{fig:FortranscalarcoarrayDWARFdescription}.
 10\$:  \DWTAGcoarraytype
           \DWATtype(reference to INTEGER)
           \DWTAGsubrangetype                ! Note omitted upper bound
-\end{alltt}\bb\vspace{-0.8\baselineskip}\begin{alltt}
           \DWATlowerbound(constant 1)       ! Can be omitted (default is 1)
-\end{alltt}\eb\vspace{-0.8\baselineskip}\begin{alltt}
 
 11\$:  \DWTAGvariable
           \DWATname("x")
@@ -764,16 +777,12 @@ illustrated in Figure \refersec{fig:FortranarraycoarrayDWARFdescription}.
           \DWATordering(\DWORDcolmajor)
           \DWATtype(reference to INTEGER)
 11\$:      \DWTAGsubrangetype
-\end{alltt}\bb\vspace{-0.8\baselineskip}\begin{alltt}
             ! \textit{DW\_AT\_lower\_bound(constant 1)}   ! Omitted (default is 1)
-\end{alltt}\eb\vspace{-0.8\baselineskip}\begin{alltt}
               \DWATupperbound(constant 10)
 
 12\$:  \DWTAGcoarraytype
           \DWATtype(reference to array type at 10\$)
-\end{alltt}\bb\vspace{-0.8\baselineskip}\begin{alltt}
 13\$:      \DWTAGsubrangetype                ! Note omitted upper \& lower bounds
-\end{alltt}\eb\vspace{-0.8\baselineskip}\begin{alltt}
 
 14$:  \DWTAGvariable
           \DWATname("x")
@@ -802,7 +811,6 @@ illustrated in Figure \referfol{fig:FortranmultidimensionalcoarrayDWARFdescripti
 \begin{figure}[ht]
 \begin{dwflisting}
 \begin{alltt}
-\end{alltt}\bb\vspace{-0.8\baselineskip}\begin{alltt}
 
 10\$:  \DWTAGarraytype                ! Note omitted lower bounds (default to 1)
           \DWATordering(\DWORDcolmajor)
@@ -821,7 +829,6 @@ illustrated in Figure \referfol{fig:FortranmultidimensionalcoarrayDWARFdescripti
 16\$:      \DWTAGsubrangetype
               \DWATupperbound(constant 3)
 17\$:      \DWTAGsubrangetype         ! Note omitted upper (\& lower) bound
-\end{alltt}\eb\vspace{-0.8\baselineskip}\begin{alltt}
 
 18\$:  \DWTAGvariable
           \DWATname("x")
@@ -1254,7 +1261,6 @@ is used to illustrate the representation of packed unaligned
 \addtoindex{bit fields}.
 
 \begin{figure}[ht]
-\bb
 \begin{lstlisting}
 TYPE T : PACKED RECORD                  { bit size is 2   }
          F5 : BOOLEAN;                  { bit offset is 0 }
@@ -1270,7 +1276,6 @@ VAR V :  PACKED RECORD
          F7 : T;                        { bit offset is 37 }
          END;
 \end{lstlisting}
-\eb
 \caption{Packed record example: source fragment}
 \label{fig:packedrecordexamplesourcefragment}
 \end{figure}
@@ -1540,9 +1545,7 @@ int Foo::myfunc(int a)
           ...
 6\$:   \DWTAGnamespace
           ! no \DWATname attribute
-\end{alltt}\bb\vspace{-0.8\baselineskip}\begin{alltt}
           \DWATexportsymbols              ! Implied by C++, but can be explicit
-\end{alltt}\eb\vspace{-0.8\baselineskip}\begin{alltt}
           \DWTAGvariable
               \DWATname("i")
               \DWATtype(reference to 1\$)
@@ -1580,7 +1583,6 @@ int Foo::myfunc(int a)
 \begin{figure}
 \figurepart{2}{2}
 \begin{dwflisting}
-\bb
 \begin{alltt}
 40\$:  \DWTAGnamespace
           \DWATname("Y")
@@ -1619,7 +1621,6 @@ int Foo::myfunc(int a)
           \DWAThighpc ...
           ...
 \end{alltt}
-\eb
 \end{dwflisting}
 \begin{center}
 \vspace{3mm}
@@ -1872,10 +1873,7 @@ void g() {
 \label{app:linenumberheaderexample}
 
 The information found in a \DWARFVersionIV{} line number 
-header can be encoded 
-\bb
-in a \DWARFVersionV{} header
-\eb
+header can be encoded in a \DWARFVersionV{} header
 as shown in Figure \refersec{fig:preV5LNCTusingV5}.
 
 \begin{figure}[ht]
@@ -1910,7 +1908,6 @@ as shown in Figure \refersec{fig:preV5LNCTusingV5}.
 
 \subsection{Line Number Special Opcode Example}
 \label{app:linenumberspecialopcodeexample}
-\bb
 Suppose the line number header includes the following 
 (header fields not needed are not shown):
 \begin{center}
@@ -1922,20 +1919,17 @@ Suppose the line number header includes the following
     \addttindex{maximum\_operations\_per\_instruction} & 1 \\
 \end{tabular}
 \end{center}
-\eb
 This means that
 we can use a special opcode whenever two successive rows in
 the matrix have source line numbers differing by any value
 within the range \mbox{[-3, 8]} and (because of the limited number
 of opcodes available) when the difference between addresses
 is within the range [0, 20].
-\bb
 The resulting opcode mapping is shown in
 Figure \refersec{fig:examplelinenumberspecialopcodemapping}.
 
 Note in the bottom row of the figure that not all line advances are 
 available for the maximum \addtoindex{operation advance}.
-\eb
 
 \begin{figure}[ht]
 \begin{alltt}
@@ -2010,15 +2004,12 @@ Figure \refersec{fig:linenumberprogramexamplemachinecode}.
 \end{figure}
 
 Suppose the line number program header includes the 
-\bb
 same values and resulting encoding illustrated in the 
 previous Section \refersec{app:linenumberspecialopcodeexample}.
-\eb
 
 Table \refersec{tab:linenumberprogramexampleoneencoding}
 shows one encoding of the line number program, which occupies
 12 bytes.
-\bbeb
 
 \newpage
 \begin{centering}
@@ -2035,21 +2026,17 @@ shows one encoding of the line number program, which occupies
   \hline
 \endlastfoot
 \DWLNSadvancepc&LEB128(0x239)&0x2, 0xb9, 0x04 \\
-\bb
 SPECIAL\dag~(2, 0)& & 0x12~~(18$_{10}$)  \\
 SPECIAL\dag~(2, 3)& & 0x36~~(54$_{10}$) \\
 SPECIAL\dag~(1, 8)& & 0x71~~(113$_{10}$) \\
-\eb
 SPECIAL\dag~(1, 7)& & 0x65~~(101$_{10}$) \\
 \DWLNSadvancepc&LEB128(2)&0x2, 0x2 \\
 \DWLNEendsequence{} &&0x0, 0x1, 0x1 \\
 \end{longtable}
 \end{centering}
-\bb
 \dag~The opcode notation SPECIAL(\textit{m},\textit{n}) indicates 
 the special opcode generated for a line advance of \textit{m} 
 and an operation advance of \textit{n})
-\eb
 
 Table \refersec{tab:linenumberprogramexamplealternateencoding}
 shows an alternate 
@@ -2072,14 +2059,12 @@ this encoding occupies 22 bytes.
   \hline
 \endlastfoot
 \DWLNSfixedadvancepc&0x239&0x9, 0x39, 0x2        \\
-\bb
 SPECIAL\ddag~(2, 0) && 0x12~~(18$_{10}$)        \\
 \DWLNSfixedadvancepc&0x3&0x9, 0x3, 0x0        \\
 SPECIAL\ddag~(2, 0) && 0x12~~(18$_{10}$)        \\
 \DWLNSfixedadvancepc&0x8&0x9, 0x8, 0x0        \\
 SPECIAL\ddag~(1, 0) && 0x11~~(17$_{10}$)        \\
 \DWLNSfixedadvancepc&0x7&0x9, 0x7, 0x0        \\
-\eb
 SPECIAL\ddag~(1, 0) && 0x11~~(17$_{10}$)        \\
 \DWLNSfixedadvancepc&0x2&0x9, 0x2, 0x0        \\
 \DWLNEendsequence&&0x0, 0x1, 0x1        \\
@@ -3326,9 +3311,7 @@ int main ()
               \DWATlocation(\DWOPregfive)
 21\$:      \DWTAGvariable
               \DWATname("s")
-\end{alltt}\bb\vspace{-0.8\baselineskip}\begin{alltt}
               \DWATtype(reference to S at 1\$)
-\end{alltt}\eb\vspace{-0.8\baselineskip}\begin{alltt}
               \DWATlocation(expression=
                   \DWOPbregfive(1) \DWOPstackvalue \DWOPpiece(2)
                   \DWOPbregfive(2) \DWOPstackvalue \DWOPpiece(1)
@@ -3391,7 +3374,6 @@ static inline void foo (int *p)
 
 int main ()
 \{
-\end{alltt}\bb\vspace{-0.8\baselineskip}\begin{alltt}
 label0:
     int a[2] = { 1, 2 };
     v++;
@@ -3400,7 +3382,6 @@ label1:
 label2:
     return a[0] + a[1] - 5;
 label3:
-\end{alltt}\eb\vspace{-0.8\baselineskip}\begin{alltt}
 \}
 
 \end{alltt}
@@ -3654,18 +3635,14 @@ L8:
 
 \clearpage
 The location list for variable \texttt{a} in function \texttt{fn2}
-might look like
-\bb
-the following 
+might look like the following 
 (where the notation \doublequote{\textit{Range} [\texttt{m .. n)}} 
 specifies the range of addresses from \texttt{m} through but not 
 including \texttt{n} over which the following
 location description applies):
-\eb
 
 %\begin{figure}[ht]
 \begin{dwflisting}
-\bb
 \begin{alltt}
 
     ! Before the assignment to register 0, the argument a is live in register 0
@@ -3680,7 +3657,6 @@ location description applies):
     \textit{End-of-list}
 
 \end{alltt}
-\eb
 \end{dwflisting}
 %\end{figure}
 
@@ -3688,7 +3664,6 @@ location description applies):
 Similarly, the variable \texttt{q} in \texttt{fn2} then might have this location list:
 
 \begin{dwflisting}
-\bb
 \begin{alltt}
 
     ! Before the assignment to register 0, the value of q can be computed as 
@@ -3705,7 +3680,6 @@ Similarly, the variable \texttt{q} in \texttt{fn2} then might have this location
     \textit{End-of-list}
 
 \end{alltt}
-\eb
 \end{dwflisting}
 
 \vspace*{0.7\baselineskip}
@@ -3975,8 +3949,6 @@ imported for each \texttt{\#include} directive.
 The combined size of the three macro units and their referenced
 strings is 129 bytes.
 
-\bbpareb
-
 \begin{figure}
 \begin{dwflisting}
 \begin{alltt}
@@ -4077,7 +4049,6 @@ s$2:    String: "LONGER\_MACRO 1"
 \label{fig:macroexampledsharablewarfencoding}
 \end{figure}
 
-\bb
 \needlines{4}
 A number of observations are worth mentioning:
 \begin{itemize}
@@ -4116,4 +4087,3 @@ those commands. However, the presence of those offsets complicates
 or may preclude sharing across compilations.
 
 \end{itemize}
-\eb
