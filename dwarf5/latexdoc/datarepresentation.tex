@@ -289,12 +289,7 @@ file. This partition includes the following:
 \item
 The full compilation unit, in the \dotdebuginfodwo{} section.
 \begin{itemize}
-\item
-The full compilation unit entry includes a \DWATdwoid{} 
-attribute whose form and value is the same as that of the \DWATdwoid{} 
-attribute of the associated skeleton unit.
-
-\needlines{4}
+\bbeb
 \item
 Attributes contained in the full compilation unit
 may refer to machine addresses indirectly using the \DWFORMaddrx{} 
@@ -396,6 +391,7 @@ produced during the compilation of an application.}
 application, and is given the same name with a \doublequote{\texttt{.dwp}}
 extension.\addtoindexx{\texttt{.dwp} file extension}}
 
+\needlines{4}
 A DWARF package file is itself an object file, using the
 \addtoindexx{package files}
 \addtoindexx{DWARF package files}
@@ -428,7 +424,9 @@ section.
 
 The DWARF package file also contains two index sections that
 provide a fast way to locate debug information by compilation
-unit ID (\DWATdwoid) for compilation units, or by type
+unit ID 
+\bbeb 
+for compilation units, or by type
 signature for type units:
 \begin{alltt}
     \dotdebugcuindex
@@ -882,7 +880,7 @@ contribution may also be made to the
 section of the object file. Each
 such contribution consists of a 
 \addtoindex{type unit} header 
-(see Section \refersec{datarep:typeunitheader}) 
+(see Section \refersec{datarep:typeunitheaders}) 
 followed by a \DWTAGtypeunit{} entry, together with
 its children.
 
@@ -925,9 +923,24 @@ enumeration are shown in Table \refersec{tab:unitheaderunitkindencodings}.
 \endlastfoot
 \DWUTcompileTARG~\ddag    &0x01 \\ 
 \DWUTtypeTARG~\ddag       &0x02 \\ 
-\DWUTpartialTARG~\ddag    &0x03 \\ \hline
+\DWUTpartialTARG~\ddag    &0x03 \\ 
+\bb
+\DWUTskeletonTARG~\ddag       &0x04 \\
+\DWUTsplitcompileTARG~\ddag   &0x05 \\
+\DWUTsplittypeTARG~\ddag      &0x06 \\
+\DWUTlouserTARG~\ddag         &0x80 \\
+\DWUThiuserTARG~\ddag         &\xff 
+\eb
+\\
+\hline
 \end{longtable}
 \end{centering}
+
+\bb
+\textit{All unit headers in a compilation have the same size. 
+Some header types include padding bytes to achieve this.}
+\eb
+
 
 \needlines{5}
 \subsubsection{Compilation and Partial Unit Headers}
@@ -990,11 +1003,100 @@ the \thirtytwobitdwarfformat, this is a 4-byte unsigned length;
 in the \sixtyfourbitdwarfformat, this is an 8-byte unsigned length
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
+\bb
+\item \HFNunitpaddingONE{} (8 bytes) \\
+Reserved to DWARF (must be zero).
+
+\needlines{4}
+\item \HFNunitpaddingTWO{} (4 or 8 bytes) \\
+Reserved to DWARF (must be zero). In the \thirtytwobitdwarfformat,
+this is 4 bytes in length; in the \sixtyfourbitdwarfformat this
+is 8 bytes in length.
+\eb
 \end{enumerate}
 
 \needlines{8}
-\subsubsection{Type Unit Header}
-\label{datarep:typeunitheader}
+\bb
+\subsubsection{Skeleton and Split Compilation Unit Headers}
+\label{datarep:skeletonandfullcompilationunitheaders}
+\begin{enumerate}[1. ]
+
+\item \texttt{unit\_length} (\livelink{datarep:initiallengthvalues}{initial length}) \\
+\addttindexx{unit\_length}
+A 4-byte or 12-byte 
+\addtoindexx{initial length}
+unsigned integer representing the length
+of the \dotdebuginfo{}
+contribution for that compilation unit,
+not including the length field itself. In the \thirtytwobitdwarfformat,
+this is a 4-byte unsigned integer (which must be less
+than \xfffffffzero); in the \sixtyfourbitdwarfformat, this consists
+of the 4-byte value \wffffffff followed by an 8-byte unsigned
+integer that gives the actual length 
+(see Section \refersec{datarep:32bitand64bitdwarfformats}).
+
+\item  \texttt{version} (\HFTuhalf) \\
+\addttindexx{version}
+\addtoindexx{version number!compilation unit}
+A 2-byte unsigned integer representing the version of the
+DWARF information for the compilation unit.
+ 
+The value in this field is \versiondotdebuginfo.
+
+\textit{See also Appendix \refersec{app:dwarfsectionversionnumbersinformative}
+for a summary of all version numbers that apply to DWARF sections.}
+
+\needlines{4}
+\item \texttt{unit\_type} (\HFTubyte) \\
+\addttindexx{unit\_type}
+A 1-byte unsigned integer identifying this unit as a compilation unit.
+The value of this field is 
+\DWUTskeleton{} for a skeleton compilation unit or
+\DWUTsplitcompile{} for a split compilation unit
+(see Section \refersec{chap:skeletoncompilationunitentries}).
+
+\textit{This field is new in \DWARFVersionV.}
+
+\needlines{4}
+\item \texttt{address\_size} (\HFTubyte) \\
+\addttindexx{address\_size}
+A 1-byte unsigned integer representing the size in bytes of
+an address on the target architecture. If the system uses
+\addtoindexx{address space!segmented}
+segmented addressing, this value represents the size of the
+offset portion of an address.
+
+\item \HFNdebugabbrevoffset{} (\livelink{datarep:sectionoffsetlength}{section offset}) \\
+A 
+\addtoindexx{section offset!in .debug\_info header}
+4-byte or 8-byte unsigned offset into the 
+\dotdebugabbrev{}
+section. This offset associates the compilation unit with a
+particular set of debugging information entry abbreviations. In
+the \thirtytwobitdwarfformat, this is a 4-byte unsigned length;
+in the \sixtyfourbitdwarfformat, this is an 8-byte unsigned length
+(see Section \refersec{datarep:32bitand64bitdwarfformats}).
+
+\needlines{6}
+\item \HFNdwoid{} (unit ID) \\
+An 8-byte implementation-defined integer constant value, 
+known as the compilation unit ID, that provides 
+unique identification of a skeleton compilation 
+unit and its associated split compilation unit in 
+the object file named in the \DWATdwoname{} attribute
+of the skeleton compilation.
+
+\needlines{4}
+\item \HFNunitpaddingTWO{} (4 or 8 bytes) \\
+Reserved to DWARF (must be zero). In the \thirtytwobitdwarfformat,
+this is 4 bytes in length; in the \sixtyfourbitdwarfformat this
+is 8 bytes in length.
+\eb
+\end{enumerate}
+
+\needlines{8}
+\subsubsection{Type Unit Headers}
+\label{datarep:typeunitheaders}
 The header for the series of debugging information entries
 contributing to the description of a type that has been
 placed in its own \addtoindex{type unit}, within the 
@@ -1026,8 +1128,15 @@ The value in this field is \versiondotdebuginfo.
 \item \texttt{unit\_type} (\HFTubyte) \\
 \addttindexx{unit\_type}
 A 1-byte unsigned integer identifying this unit as a type unit.
-The value of this field is \DWUTtype{} for a type unit
-(see Section \refersec{chap:typeunitentries}).
+The value of this field is \DWUTtype{} for a 
+\bb
+non-split
+\eb
+type unit
+(see Section \refersec{chap:typeunitentries})
+\bb
+or \DWUTsplittype{} for a split type unit.
+\eb
 
 \textit{This field is new in \DWARFVersionV.}
 
@@ -1042,6 +1151,7 @@ an address on the target architecture. If the system uses
 segmented addressing, this value represents the size of the
 offset portion of an address.
 
+\needlines{6}
 \item \HFNdebugabbrevoffset{} (\livelink{datarep:sectionoffsetlength}{section offset}) \\
 A 
 \addtoindexx{section offset!in .debug\_info header}
@@ -1066,7 +1176,7 @@ unit.
 the primary type contained in this 
 \addtoindex{type unit} uses this value.}
 
-\needlines{4}
+\needlines{8}
 \item \texttt{type\_offset} (\livelink{datarep:sectionoffsetlength}{section offset}) \\
 \addttindexx{type\_offset}
 A 4-byte or 8-byte unsigned offset 
@@ -1195,6 +1305,11 @@ Table \refersec{tab:tagencodings}.
 \DWTAGunspecifiedtype&0x3b      \\
 \DWTAGpartialunit&0x3c      \\
 \DWTAGimportedunit&0x3d      \\
+\bb
+\textit{Reserved}&0x3e\footnote{Code 0x3e is reserved to allow backward compatible support of the
+DW\_TAG\_mutable\_type DIE that was defined (only) in \DWARFVersionIII.}
+\eb
+\\
 \DWTAGcondition&\xiiif      \\
 \DWTAGsharedtype&0x40      \\
 \DWTAGtypeunit & 0x41      \\
@@ -1206,6 +1321,10 @@ Table \refersec{tab:tagencodings}.
 \DWTAGatomictype~\ddag & 0x47 \\
 \DWTAGcallsite~\ddag & 0x48 \\
 \DWTAGcallsiteparameter~\ddag & 0x49 \\
+\bb
+\DWTAGskeletonunit~\ddag & 0x4a
+\eb
+\\
 \DWTAGlouser&0x4080      \\
 \DWTAGhiuser&\xffff      \\
 \end{longtable}
@@ -1559,9 +1678,10 @@ Table \referfol{tab:attributeencodings}.
 \DWATrangesbase~\ddag&0x74&
 		\livelinki{chap:classrangelistptr}{rangelistptr}{rangelistptr class}
             \addtoindexx{ranges base!encoding} \\
-\DWATdwoid~\ddag &0x75&
-		\livelink{chap:classconstant}{constant}
-            \addtoindexx{split DWARF object file id!encoding} \\
+\bb
+\textit{Reserved} &0x75& \textit{Unused}
+\eb
+\\
 \DWATdwoname~\ddag &0x76&
 		\livelink{chap:classstring}{string}
             \addtoindexx{split DWARF object file name!encoding} \\
@@ -1569,7 +1689,7 @@ Table \referfol{tab:attributeencodings}.
         \livelink{chap:classflag}{flag} \\
 \DWATrvaluereference~\ddag &0x78&
         \livelink{chap:classflag}{flag} \\
-\DWATmacros~\ddag &0x79&\livelink{chap:classmacptr}{macptr} 
+\DWATmacros~\ddag &0x79&\livelink{chap:classmacptr}{macptr}
         \addtoindexx{macro information attribute}  \\
 \DWATcallallcalls~\ddag &0x7a&\CLASSflag
         \addtoindexx{all calls summary attribute} \\
@@ -2691,6 +2811,10 @@ defined language.
 \DWLANGCplusplusfourteen{}~\ddag &0x0021 &0 \addtoindexx{C++14 (ISO)} \\
 \DWLANGFortranzerothree{}~\ddag  &0x0022 &1 \addtoindexx{Fortran:2004 (ISO)} \\
 \DWLANGFortranzeroeight{}~\ddag  &0x0023 &1 \addtoindexx{Fortran:2010 (ISO)} \\
+\bb
+\DWLANGRenderScript{}~\ddag       &0x0024 &0 \addtoindexx{RenderScript Kernel Language}
+\eb
+\\
 \DWLANGlouser{} &0x8000 & \\
 \DWLANGhiuser{} &\xffff & \\
 

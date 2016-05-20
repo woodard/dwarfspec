@@ -1391,7 +1391,8 @@ goals:}
 \addttindexx{directory\_entry\_format\_count}
     A count of the number of entries that occur in the
     following \addttindex{directory\_entry\_format} field.
-   
+
+\needlines{8}
 \item \texttt{directory\_entry\_format} (sequence of ULEB128 pairs) \\
 \addttindexx{directory\_entry\_format}
     A sequence of directory entry format descriptions.
@@ -1454,6 +1455,7 @@ occur in the following \addttindex{file\_name\_entry\_format} field.
 If this field is zero, then the \addttindex{file\_names\_count} field 
 (see below) must also be zero.
 
+\needlines{6}
 \item \texttt{file\_name\_entry\_format} (sequence of ULEB128 pairs) \\
 \addttindexx{file\_name\_entry\_format}
 A sequence of file entry format descriptions.
@@ -1504,6 +1506,7 @@ share a single copy of the current file name string.}
 
 \end{enumerate}
 
+\needlines{8}
 \subsubsection{Standard Content Descriptions}
 \label{chap:standardcontentdescriptions}
 DWARF-defined content type codes are used to indicate
@@ -2263,6 +2266,7 @@ similarly, \DWMACROimport{} entries refer to the
 \needlines{6}
 \section{Call Frame Information}
 \label{chap:callframeinformation}
+\addtoindexx{unwind|see{virtual unwind}}\addtoindexx{virtual unwind}
 
 \textit{Debuggers often need to be able to view and modify the 
 state of any subroutine activation that is
@@ -2294,7 +2298,7 @@ across a call. If a callee wishes to use such a register, it
 saves the value that the register had at entry time in its call
 frame and restores it on exit. The code that allocates space
 on the call frame stack and performs the save operation is
-called the subroutine\textquoteright s \addtoindex{prologue}, and the code that performs
+called the subroutine\textquoteright{s} \addtoindex{prologue}, and the code that performs
 the restore operation and deallocates the frame is called its
 \addtoindex{epilogue}. Typically, the 
 \addtoindex{prologue} code is physically at the
@@ -2303,19 +2307,30 @@ beginning of a subroutine and the
 
 \textit{To be able to view or modify an activation that is not
 on the top of the call frame stack, the debugger must
-\doublequote{virtually unwind} the stack of activations until
-it finds the activation of interest.  A debugger unwinds
+\bb
+virtually unwind 
+\eb
+the stack of activations until
+it finds the activation of interest.  A debugger 
+\bb
+virtually 
+\eb
+unwinds
 a stack in steps. Starting with the current activation it
 virtually restores any registers that were preserved by the
-current activation and computes the predecessor\textquoteright s CFA and
+current activation and computes the predecessor\textquoteright{s} CFA and
 code location. This has the logical effect of returning from
 the current subroutine to its predecessor. We say that the
 debugger virtually unwinds the stack because the actual state
 of the target process is unchanged.}
 
 \needlines{4}
-\textit{The unwinding operation needs to know where registers are
-saved and how to compute the predecessor\textquoteright s CFA and code
+\textit{The 
+\bb
+virtual unwind 
+\eb
+operation needs to know where registers are
+saved and how to compute the predecessor\textquoteright{s} CFA and code
 location. When considering an architecture-independent way
 of encoding this information one has to consider a number of
 special things:}
@@ -2514,7 +2529,11 @@ If there is no augmentation, this value is a zero byte.
 \needlines{5}
 \textit{The augmentation string allows users to indicate that there
 is additional target\dash specific information in the CIE or FDE
-which is needed to unwind a stack frame. For example, this
+which is needed to 
+\bb
+virtually 
+\eb
+unwind a stack frame. For example, this
 might be information about dynamically allocated data which
 needs to be freed on exit from the routine.}
 
@@ -2979,7 +2998,11 @@ Appendix \refersec{app:callframeinformationexample}.}
 \subsection{Call Frame Calling Address}
 \label{chap:callframecallingaddress}
 
-\textit{When unwinding frames, consumers frequently wish to obtain the
+\textit{When 
+\bb
+virtually 
+\eb
+unwinding frames, consumers frequently wish to obtain the
 address of the instruction which called a subroutine. This
 information is not always provided. Typically, however,
 one of the registers in the virtual unwind table is the
@@ -2999,7 +3022,11 @@ context of the 'return address' might be on a different line,
 in a different lexical \livelink{chap:lexicalblock}{block}, 
 or past the end of the calling
 subroutine. If a consumer were to assume that it was in the
-same context as the calling address, the unwind might fail.}
+same context as the calling address, the 
+\bb
+virtual 
+\eb
+unwind might fail.}
 
 \needlines{5}
 \textit{For architectures with constant-length instructions where

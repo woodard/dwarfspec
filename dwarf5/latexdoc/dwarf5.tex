@@ -3,7 +3,7 @@
 % If draft is in the document class list, pix are just suggested
 % by an outline, the pic does not appear as a picture.
 %
-\newcommand{\docdate}{May 2, 2016}
+\newcommand{\docdate}{May 20, 2016}
 %
 \usepackage{ifthen}
     \newcommand{\ifthen}[2]{\ifthenelse{#1}{#2}{}}
@@ -144,13 +144,17 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 
 % For index entries. The tt-variant of each pair is designed to
 % allow a word to appear in tt font in the main test and the index
-% but to collate in the index in its non-tt order. (LaTex normally
-% sorts all tt words before all non-tt words.)
+% but to collate in the index in its non-tt order. Similarly for
+% the it-variant using italics font. 
+% (LaTex normally % sorts all tt words before all non-tt words.)
 \newcommand{\addtoindex}[1]{#1\index{#1}}
+\newcommand{\additindex}[1]{\textit{#1}\index{#1@\textit{#1}}}
 \newcommand{\addttindex}[1]{\texttt{#1}\index{#1@\texttt{#1}}}
 \newcommand{\addtoindexi}[2]{#1\index{#2}}
+\newcommand{\additindexi}[2]{\textit{#1}\index{#2@\textit{#2}}}
 \newcommand{\addttindexi}[2]{\texttt{#1}\index{#2@\texttt{#2}}}
 \newcommand{\addtoindexx}[1]{\index{#1}}
+\newcommand{\additindexx}[1]{\index{#1@\textit{#1}}}
 \newcommand{\addttindexx}[1]{\index{#1@\texttt{#1}}}
 
 % Quote commands that avoid need for inline UTF-8 in these sources
@@ -353,11 +357,11 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 
 \uselinenos\include{introduction}              %\emptypage
 \uselinenos\include{generaldescription}        \emptypage
-\uselinenos\include{programscope}              \emptypage
+\uselinenos\include{programscope}              %\emptypage
 \uselinenos\include{dataobject}                \emptypage
 \uselinenos\include{typeentries}               \emptypage
-\uselinenos\include{otherdebugginginformation} \emptypage
-\uselinenos\include{datarepresentation}        %\emptypage
+\uselinenos\include{otherdebugginginformation} %\emptypage
+\uselinenos\include{datarepresentation}        \emptypage
 
 %  The \appendix command toggles us into appendix chapters
 \appendix
@@ -365,9 +369,9 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \uselinenos\include{attributesbytag}	       %\emptypage
 \uselinenos\include{debugsectionrelationships} \emptypage
 \uselinenos\include{encodingdecoding}          \emptypage
-\uselinenos\include{examples}                  \emptypage
+\uselinenos\include{examples}                  %\emptypage
 \uselinenos\include{compression}               \emptypage
-\uselinenos\include{splitobjects}	       \emptypage
+\uselinenos\include{splitobjects}	           \emptypage
 \uselinenos\include{sectionversionnumbers}     \emptypage
 \nolinenumbers
 \include{gnulicense}                           \emptypage

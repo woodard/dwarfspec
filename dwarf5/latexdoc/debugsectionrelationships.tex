@@ -428,9 +428,15 @@ The circled (s) connects to the circled
 The \texttt{debug\_info\_offset} field in the header is the 
 offset in the \dotdebuginfo{} section of the corresponding 
 compilation unit header of the skeleton \dotdebuginfo{} section 
-(not the compilation unit entry).  The \DWATdwoid{} and 
-\DWATdwoname{} attributes in the \dotdebuginfo{} skeleton 
-connect the ranges to the full compilation unit in \dotdebuginfodwo.
+(not the compilation unit entry).  The 
+\bb
+\DWATdwoname{} attribute 
+\eb
+in the \dotdebuginfo{} skeleton 
+\bb
+connects 
+\eb
+the ranges to the full compilation unit in \dotdebuginfodwo.
 
 \itembfnl{(b) \dotdebugnames{} to \dotdebuginfo}
 The \dotdebugnames{} section  offsets lists provide an offset
@@ -457,13 +463,11 @@ whose value is an offset in the
 \dotdebugstr{} section of the corresponding string.
 
 \itembfnl{(did) \dotdebuginfo{} to \dotdebuginfodwo}
-The \DWATdwoname{} and \DWATdwoid{} are the file name 
-and hash which identify the file with 
-the \texttt{.dwo} data. Both \dotdebuginfo{} and 
-\dotdebuginfodwo{} compilation units should contain 
-\DWATdwoid{} so the two can be matched.  \DWATdwoname{} 
-is only needed in the \dotdebuginfo{} 
-skeleton compilation unit. 
+The \DWATdwoname{}
+\bb
+attribute in a skeleton unit identifies the file containing 
+the corresponding \texttt{.dwo} (split) data. 
+\eb
 
 \itembfnl{(do) \dotdebuginfodwo{} to \dotdebugstrdwo}
 Attribute values of class string may have form 

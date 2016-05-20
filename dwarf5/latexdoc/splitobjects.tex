@@ -161,7 +161,7 @@ may have the following attributes:
 \DWATaddrbase{},
 \DWATcompdir{},
 \DWATdwoname{},
-\DWATdwoid{},
+\bbeb %\DWATdwoid{},
 \DWAThighpc{},
 \DWATlowpc{},
 \DWATranges{},
@@ -172,12 +172,14 @@ may have the following attributes:
 
 All other attributes of the compilation unit DIE are moved to
 the full DIE in the \dotdebuginfodwo{} section.
-The \DWATdwoid{} attribute is present
-in both the skeleton DIE and the full DIE, so that a consumer
+
+\bb
+The \HFNdwoid{} field is present in headers of the skeleton DIE 
+and the header of the full DIE, so that a consumer
 can verify a match.
+\eb
 
 \needlines{4}
-
 Relocations are neither necessary nor useful in 
 \texttt{.dwo} files, because the \texttt{.dwo}  
 files contain only debugging information that does not need to be
@@ -229,8 +231,8 @@ kinds.
 \hline
 \DWATcompdir            & \chkmk  &        &  \chkmk   &        &         \\
 \hline
-\DWATdwoid              &         &        &  \chkmk   & \chkmk &         \\
-\hline
+\bbeb %\DWATdwoid       &         &        &  \chkmk   & \chkmk &         \\
+%\hline
 \DWATdwoname            &         &        &  \chkmk   &        &         \\
 \hline
 \DWATentrypc            & \chkmk  &        &           & \chkmk &         \\
@@ -422,10 +424,9 @@ Figure \referfol{fig:splitdwafexampleskeletondwarfdescription}.
 \begin{dwflisting}
 \begin{alltt}
 
-    \DWTAGcompileunit
+    \DWTAGskeletonunit
         \DWATcompdir: (reference to directory name in .debug_str)
         \DWATdwoname: (reference to "demo1.dwo" in .debug_str)
-        \DWATdwoid: 0x44e413b8a2d1b8f
         \DWATaddrbase: (reference to .debug_addr section)
         \DWATrangesbase: (reference to range list in .debug_ranges section)
         \DWATranges: (offset of range list in .debug_ranges section)
@@ -443,8 +444,12 @@ location of the corresponding \splitDWARFobjectfile{} that
 contains the full debug information; that file is normally
 expected to be in the same directory as the object file itself.
 
-The \DWATdwoid{} attribute provides a hash of the debug
-information contained in the \splitDWARFobjectfile. This hash serves
+The 
+\bb 
+\HFNdwoid{} field in the header of the skeleton unit provides 
+an ID or key for the debug information contained in the 
+DWARF object file. This ID serves
+\eb
 two purposes: it can be used to verify that the debug information
 in the \splitDWARFobjectfile{} matches the information in the object
 file, and it can be used to find the debug information in a DWARF
@@ -578,7 +583,6 @@ excerpts from the \dotdebuginfodwo{} section for \texttt{demo1.dwo}.
         \DWATlanguage: \DWLANGCplusplus
         \DWATname [\DWFORMstrx]: (slot 7) "demo1.cc"
         \DWATcompdir [\DWFORMstrx]: (slot 4) (directory name)
-        \DWATdwoid [\DWFORMdataeight]: 0x44e413b8a2d1b8f
 1$:     \DWTAGclasstype
             \DWATname [\DWFORMstrx]: (slot 12) "Point"
             \DWATsignature [\DWFORMrefsigeight]: 0x2f33248f03ff18ab
@@ -588,7 +592,7 @@ excerpts from the \dotdebuginfodwo{} section for \texttt{demo1.dwo}.
                 \DWATname [\DWFORMstrx]: (slot 12) "Point"
                 \DWATdeclfile: 1
                 \DWATdeclline: 5
-                \DWATlinkagename [\DWFORMstrx]: (slot 16): "_ZN5PointC4Eff"
+                \DWATlinkagename [\DWFORMstrx]: (slot 16) "_ZN5PointC4Eff"
                 \DWATaccessibility: \DWACCESSpublic
                 \DWATdeclaration: true
             ...
@@ -602,7 +606,8 @@ excerpts from the \dotdebuginfodwo{} section for \texttt{demo1.dwo}.
                 \DWATname [\DWFORMstrx]: (slot 0) "contains"
                 \DWATdeclfile: 1
                 \DWATdeclline: 28
-                \DWATlinkagename [\DWFORMstrx: (slot 8) "_ZNK3Box8containsERK5Point"
+                \DWATlinkagename [\DWFORMstrx: (slot 8) 
+                                                  "_ZNK3Box8containsERK5Point"
                 \DWATtype: (reference to 7$)
                 \DWATaccessibility: \DWACCESSpublic
                 \DWATdeclaration: true

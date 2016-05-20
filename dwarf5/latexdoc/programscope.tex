@@ -233,6 +233,10 @@ in Table \refersec{tab:languagenames}.
 \DWLANGPascaleightythreeTARG & ISO Pascal:1983 \addtoindexx{Pascal:1983 (ISO)} \\
 \DWLANGPLITARG{}~\dag & ANSI PL/I:1976 \addtoindexx{PL/I:1976 (ANSI)} \\
 \DWLANGPythonTARG{}~\dag & \addtoindex{Python} \\
+\bb
+\DWLANGRenderScriptTARG~\dag & \addtoindex{RenderScript Kernal Language}
+\eb
+\\
 \DWLANGRustTARG{}~\dag & \addtoindex{Rust} \\
 \DWLANGSwiftTARG{}
  & \addtoindex{Swift} \\
@@ -451,8 +455,12 @@ of that compilation unit is not valid.
 When generating a \splitDWARFobjectfile{} (see 
 Section \refersec{datarep:splitdwarfobjectfiles}), the
 compilation unit in the \dotdebuginfo{} section is a "skeleton"
-compilation unit with the tag \DWTAGcompileunit, which contains 
-\DWATdwoname{} and \DWATdwoid{} attributes as well as a subset of the
+compilation unit with the tag 
+\bb
+\DWTAGskeletonunitTARG, which contains a
+\DWATdwoname{} attribute 
+\eb
+as well as a subset of the
 attributes of a full or partial compilation unit. In general,
 it contains those attributes that are necessary for the consumer
 to locate the object file where the split full compilation unit
@@ -462,8 +470,10 @@ addresses in the program.
 
 A skeleton compilation unit has no children.
 
-A skeleton compilation unit has \DWATdwoname{} and 
-\DWATdwoid{} attributes:
+A skeleton compilation unit has 
+\bb
+a \DWATdwoname{} attribute:
+\eb
 
 \begin{enumerate}[1. ]
 
@@ -476,22 +486,20 @@ path name (relative to the value of the \DWATcompdir{} attribute,
 see below) of the object file that contains the full
 compilation unit.
 
-\item \livetarg{chap:DWATdwoidforunit}{}
-A \DWATdwoidDEFN{} attribute\addtoindexx{unit identification attribute}
-whose implementation-defined integer constant value,
-known as the \CUsignature,
-provides unique identification of this compilation unit
-as well as the associated split compilation unit in the
-object file named in the \DWATdwoname{}
-attribute. For simplicity, the \DWATdwoidNAME{} attributes
-in the skeleton compilation unit and the corresponding
-split full compilation unit 
-(see Section \refersec{chap:splitfullcompilationunitentries})
-must use the same form to encode this identification value.
-
-\textit{The means of determining a \CUsignature{} does not 
-need to be similar or related to the means of determining a
-\TUsignature.}
+\bb
+The value in the \HFNdwoid{} field of the unit header for 
+this unit is the same as the value in the \HFNdwoid{} field 
+of the unit header of the corresponding full compilation 
+unit (see Section \refersec{datarep:unitheaders}).
+        
+\textit{The means of determining a compilation unit ID does 
+not need to be similar or related to the means of 
+determining a \TUsignature. However, it should 
+be suitable for detecting file version skew or other 
+kinds of mismatched files and for looking up a full
+split unit in a DWARF package file 
+(see Section \refersec{datarep:dwarfpackagefiles}).}
+\eb
 
 \end{enumerate}
 
@@ -499,7 +507,7 @@ A skeleton compilation unit may have additional attributes,
 which are the same as for conventional compilation unit entries 
 except as noted, from among the following:
 \begin{enumerate}[1. ]
-\addtocounter{enumi}{2}
+\addtocounter{enumi}{1}
 \item Either a \DWATlowpc{} and \DWAThighpc{} pair of attributes
 or a \DWATranges{} attribute.
 \item A \DWATstmtlist{} attribute.
@@ -529,9 +537,8 @@ should be placed in the split full compilation unit
 (see \refersec{chap:splitfullcompilationunitentries}).
 The attributes provided by the skeleton compilation
 unit entry do not need to be repeated in the full compilation
-unit entry, except for \DWATdwoid, which should appear in
-both entries so that the consumer can verify that it has
-found the correct object file.
+unit entry.
+\bbeb
 
 \textit{The \DWATaddrbase{}, \DWATrangesbase{} and 
 \DWATstroffsetsbase{} attributes provide context that may be 
@@ -550,27 +557,13 @@ It is very similar to a conventional full compilation unit but
 is logically paired with a specific skeleton compilation unit while
 being physically separate.
 
-A split full compilation unit has a \DWATdwoid{} attribute:
-\begin{enumerate}[1. ]
-\item
-A \DWATdwoidDEFN{} attribute\addtoindexx{unit identification attribute}
-whose implementation-defined integer constant value,
-known as the \CUsignature,
-provides unique identification of this compilation unit
-as well as the associated skeleton compilation unit.
-For simplicity, the \DWATdwoidNAME{} attributes in the 
-split compilation unit and the associated skeleton 
-compilation unit must use the same form to encode the 
-identification value.
-
-\end{enumerate}
-
-\needlines{4}
-A split full compilation unit may also have additional attributes, 
+A split full compilation unit 
+\bb
+may have the following attributes, 
 which are the same as for conventional compilation unit entries 
-except as noted, from among the following:
+except as noted:
+\eb
 \begin{enumerate}[1. ]
-\addtocounter{enumi}{1}
 \item A \DWATname{} attribute.
 \item A \DWATlanguage{} attribute.
 \item A \DWATmacros{} attribute.
@@ -717,6 +710,7 @@ left in the main compilation unit.}
 entities into a single entity and to manage the names of
 those entities.}
 
+\needlines{8}
 \subsection{Module Entries}
 \label{chap:moduleentries}
 \textit{Several languages have the concept of a \doublequote{module.}
@@ -882,6 +876,7 @@ making accessible in a given unit certain declarations that occur
 in a different module or scope. An imported declaration may 
 sometimes be given another name.}
 
+\needlines{6}
 An imported declaration is represented by one or
 \addtoindexx{imported declaration entry}
 more debugging information entries with the 
@@ -1613,6 +1608,7 @@ nested within another abstract instance tree, the entries in the
 tree are not considered to be entries in the outer abstract
 instance tree.
 
+\needlines{6}
 Each abstract instance root is either part of a larger
 \addtoindexx{abstract instance!root}
 tree (which gives a context for the root) or 
@@ -2065,7 +2061,11 @@ call is executed. After the called subprogram has been entered, these
 registers and memory locations might have been modified.  In order to
 recover the values that existed at the point of the call (to allow
 evaluation of the DWARF expression for the actual parameter), a debugger
-may "virtually unwind" the subprogram activation 
+may 
+\bb
+virtually unwind 
+\eb
+the subprogram activation 
 (see Section \refersec{chap:callframeinformation}). Any
 register or memory location that cannot be recovered is referred to as
 "clobbered by the call."}
@@ -2081,7 +2081,11 @@ location for use by the callee.
 A \textit{tail call} uses a jump-like instruction which
 transfers control to the start of some subprogram, but 
 there is no call site location address to preserve
-(and thus none is available using the unwind information). 
+(and thus none is available using the 
+\bb
+virtual 
+\eb
+unwind information). 
 
 \item
 A \textit{tail recursion call} is a call
@@ -2231,7 +2235,10 @@ which is a DWARF expression
 which when evaluated yields the value of the parameter at the time of the call.
 
 \textit{The expression should not use registers or memory
-locations that might be clobbered by the call, as it might be evaluated after
+locations that might be clobbered by the call, as it might be evaluated after 
+\bb
+virtually 
+\eb
 unwinding from the called function back to the caller.  If it is not
 possible to avoid registers or memory locations that might be clobbered by
 the call in the expression, then the \DWATcallvalueNAME{} attribute should
@@ -2257,7 +2264,10 @@ describes where the referenced value lives during the call.  If it is just
 \DWOPpushobjectaddress{}, it may be left out.  The 
 \DWATcalldatavalueNAME{} attribute describes the value in that location. 
 The expression should not use registers or memory
-locations that might be clobbered by the call, as it might be evaluated after
+locations that might be clobbered by the call, as it might be evaluated after 
+\bb
+virtually 
+\eb
 unwinding from the called function back to the caller.
 
 \needlines{4}

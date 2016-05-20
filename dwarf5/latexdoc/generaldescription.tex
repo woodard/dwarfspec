@@ -73,6 +73,9 @@ described in Chapters 3, 4 and 5.
 \DWTAGrvaluereferencetype,
 \DWTAGsettype,
 \DWTAGsharedtype,
+\bb
+\DWTAGskeletonunit,
+\eb
 \DWTAGstringtype,
 \DWTAGstructuretype,
 \DWTAGsubprogram,
@@ -451,10 +454,7 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 &\livelinki{chap:DWATdiscrvaluediscriminantvalue}
         {Discriminant value}
         {discriminant value} \\
-\DWATdwoidTARG
-&\livelinki{chap:DWATdwoidforunit}
-        {Signature for compilation unit}
-        {split DWARF object file!unit ID} \\
+\bbeb
 \DWATdwonameTARG
 &\livelinki{chap:DWATdwonameforunit}
         {Name of split DWARF object file}
@@ -1686,7 +1686,10 @@ subprogram, record values needed by \DWOPentryvalueNAME{} expressions within
 the subprogram, and then continue; when evaluating \DWOPentryvalueNAME{},
 the consumer would use these recorded values rather than the current
 values.  Or, when evaluating \DWOPentryvalueNAME{}, the consumer could
-"virtually unwind" using the Call Frame Information 
+\bb
+virtually unwind 
+\eb
+using the Call Frame Information 
 (see Section \refersec{chap:callframeinformation}) 
 to recover register values that might have been clobbered since the
 subprogram entry point.}
@@ -2742,6 +2745,7 @@ offset within the \dotdebugranges{} section for the compilation
 unit. The offset given by the \DWATranges{} attribute is
 relative to that base.
 
+\needlines{4}
 The \definitionx{applicable base address} of a \addtoindex{range list} 
 entry is determined by the closest preceding base address 
 selection entry in the same range list (see
@@ -2866,7 +2870,7 @@ as the lower bound of an array) that is an integer value,
 where the value may be known during compilation or may be
 computed dynamically during execution.
 
-\needlines{5}
+\needlines{8}
 The value of these
 attributes is determined based on the class as follows:
 \begin{itemize}
