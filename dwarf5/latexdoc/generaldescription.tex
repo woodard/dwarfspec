@@ -73,9 +73,7 @@ described in Chapters 3, 4 and 5.
 \DWTAGrvaluereferencetype,
 \DWTAGsettype,
 \DWTAGsharedtype,
-\bb
 \DWTAGskeletonunit,
-\eb
 \DWTAGstringtype,
 \DWTAGstructuretype,
 \DWTAGsubprogram,
@@ -454,7 +452,6 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 &\livelinki{chap:DWATdiscrvaluediscriminantvalue}
         {Discriminant value}
         {discriminant value} \\
-\bbeb
 \DWATdwonameTARG
 &\livelinki{chap:DWATdwonameforunit}
         {Name of split DWARF object file}
@@ -1050,7 +1047,7 @@ a simple stack machine.
 Each element of the stack has a type and a value, and can represent
 a value of any supported base type of the target machine.  Instead of
 a base type, elements can have a 
-\definitionx{special address type}\livetarg{chap:specialaddresstype}{},
+\definitionx{generic type}\livetarg{chap:generictype}{},
 which is an integral type that has the 
 \addtoindex{size of an address} on the target machine and 
 unspecified signedness. The value on the top of the stack after 
@@ -1062,6 +1059,12 @@ taken to be the result (the address of the object, the
 value of the array bound, the length of a dynamic string,
 the desired value itself, and so on).
 
+\textit{The
+\bb
+\generictype{} is the same as the unspecified type used for stack operations
+defined in \DWARFVersionIV{} and before.
+\eb
+}
 
 \needlines{4}
 \subsubsection{Literal Encodings}
@@ -1072,7 +1075,7 @@ following operations all push a value onto the DWARF
 stack. 
 \addtoindexx{DWARF expression!stack operations}
 Operations other than \DWOPconsttype{} push a value with the 
-\specialaddresstype, and if the value of a constant in one of these 
+\generictype, and if the value of a constant in one of these 
 operations is larger than can be stored in a single stack element, 
 the value is truncated to the element size and the low-order bits
 are pushed on the stack.
@@ -1157,7 +1160,7 @@ to a given signed offset.
 \DWOPregvaltype{} pushes the contents
 of the register together with the given base type, while the other operations
 push the result of adding the contents of a register to a given
-signed offset together with the \specialaddresstype.
+signed offset together with the \generictype.
 
 \needlines{8}
 \begin{enumerate}[1. ]
@@ -1247,7 +1250,7 @@ becomes the second entry.
 The \DWOPderefNAME{} operation pops the top stack entry and 
 treats it as an address. The popped value must have an integral type.
 The value retrieved from that address is pushed, 
-and has the \specialaddresstype{}.
+and has the \generictype{}.
 The size of the data retrieved from the 
 \addtoindexi{dereferenced}{address!dereference operator}
 address is the \addtoindex{size of an address} on the target machine.
@@ -1259,12 +1262,12 @@ The \DWOPderefsizeNAME{} operation behaves like the
 operation: it pops the top stack entry and treats it as an
 address. The popped value must have an integral type.
 The value retrieved from that address is pushed,
-and has the \specialaddresstype{}.
+and has the \generictype{}.
 In the \DWOPderefsizeNAME{} operation, however, the size in bytes
 of the data retrieved from the dereferenced address is
 specified by the single operand. This operand is a 1-byte
 unsigned integral constant whose value may not be larger
-than the size of the \specialaddresstype. The data
+than the size of the \generictype. The data
 retrieved is zero extended to the size of an address on the
 target machine before being pushed onto the expression stack.
 
@@ -1300,10 +1303,10 @@ Both of these entries must have integral type identifiers.
 The top two stack elements are popped,
 and a data item is retrieved through an implementation-defined
 address calculation and pushed as the new stack top together with the
-\specialaddresstype{} identifier.
+\generictype{} identifier.
 The size of the data retrieved from the 
 \addtoindexi{dereferenced}{address!dereference operator}
-address is the size of the \specialaddresstype.
+address is the size of the \generictype.
 
 \needlines{4}
 \itembfnl{\DWOPxderefsizeTARG}
@@ -1326,7 +1329,7 @@ address is specified by the single operand. This operand is a
 than the \addtoindex{size of an address} on the target machine. The data
 retrieved is zero extended to the \addtoindex{size of an address} on the
 target machine before being pushed onto the expression stack together
-with the \specialaddresstype{} identifier.
+with the \generictype{} identifier.
 
 \itembfnl{\DWOPxdereftypeTARG}
 The \DWOPxdereftypeNAME{} operation behaves like the \DWOPxderefsize{}
@@ -1370,7 +1373,7 @@ integral type identifier, translates this
 value into an address in the 
 \addtoindex{thread-local storage}
 for a thread, and pushes the address 
-onto the stack together with the \specialaddresstype{} identifier. 
+onto the stack together with the \generictype{} identifier. 
 The meaning of the value on the top of the stack prior to this 
 operation is defined by the run-time environment.  If the run-time 
 environment supports multiple thread-local storage 
@@ -1428,11 +1431,13 @@ found in Appendix \refersec{app:dwarfstackoperationexamples}.}
 The following provide arithmetic and logical operations. 
 Operands of an operation with two operands
 must have the same type,
-either the same base type or both the \specialaddresstype.
+either the same base type or 
+\bbeb 
+the \generictype.
 The result of the operation which is pushed back has the same type
 as the type of the operand(s).  
 
-If the type of the operands is the \specialaddresstype, 
+If the type of the operands is the \generictype, 
 except as otherwise specified, the arithmetic operations
 perform addressing arithmetic, that is, unsigned arithmetic that is performed
 modulo one plus the largest representable address (for example, 0x100000000
@@ -1441,7 +1446,7 @@ when the \addtoindex{size of an address} is 32 bits).
 Operations other than \DWOPabs{},
 \DWOPdiv{}, \DWOPminus{}, \DWOPmul{}, \DWOPneg{} and \DWOPplus{} 
 require integral types of the operand (either integral base type 
-or the \specialaddresstype).  Operations do not cause an exception 
+or the \generictype).  Operations do not cause an exception 
 on overflow.
 
 \needlines{4}
@@ -1542,7 +1547,9 @@ following operations provide simple control of the flow of a DWARF expression.
 The six relational operators each:
 \begin{itemize}
 \item pop the top two stack values, which have the same type,
-either the same base type or both the \specialaddresstype, 
+either the same base type or 
+\bbeb 
+the \generictype, 
 
 \item compare the operands:
 \linebreak
@@ -1551,10 +1558,10 @@ either the same base type or both the \specialaddresstype,
 \item push the constant value 1 onto the stack 
 if the result of the operation is true or the
 constant value 0 if the result of the operation is false.
-The pushed value has the \specialaddresstype.
+The pushed value has the \generictype.
 \end{itemize}
 
-If the operands have the \specialaddresstype, the comparisons  
+If the operands have the \generictype, the comparisons  
 are performed as signed operations.
 
 \needlines{6}
@@ -1632,7 +1639,7 @@ The \DWOPconvertNAME{} operation pops the top stack entry, converts it to a
 different type, then pushes the result. It takes one operand, which is an
 unsigned LEB128 integer that represents the offset of a debugging
 information entry in the current compilation unit, or value 0 which
-represents the \specialaddresstype. If the operand is non-zero, the
+represents the \generictype. If the operand is non-zero, the
 referenced entry must be a \DWTAGbasetype{} entry that provides the type
 to which the value is converted.
 
@@ -1641,7 +1648,7 @@ The \DWOPreinterpretNAME{} operation pops the top stack entry, reinterprets
 the bits in its value as a value of a different type, then pushes the
 result. It takes one operand, which is an unsigned LEB128 integer that
 represents the offset of a debugging information entry in the current
-compilation unit, or value 0 which represents the \specialaddresstype.
+compilation unit, or value 0 which represents the \generictype.
 If the operand is non-zero, the referenced entry must be a
 \DWTAGbasetype{} entry that provides the type to which the value is converted.
 The type of the operand and result type should have the same size in bits.
@@ -1661,9 +1668,7 @@ on the location stack or any of its values.
 
 \itembfnl{\DWOPentryvalueNAME}
 The \DWOPentryvalueTARG{} operation pushes 
-\bb
 the value that the described location held
-\eb
 upon entering the current subprogram.  It has two operands: an 
 unsigned LEB128\addtoindexx{LEB128!unsigned} length, followed by 
 a block containing a DWARF expression or a register location description 
@@ -1686,10 +1691,7 @@ subprogram, record values needed by \DWOPentryvalueNAME{} expressions within
 the subprogram, and then continue; when evaluating \DWOPentryvalueNAME{},
 the consumer would use these recorded values rather than the current
 values.  Or, when evaluating \DWOPentryvalueNAME{}, the consumer could
-\bb
-virtually unwind 
-\eb
-using the Call Frame Information 
+virtually unwind using the Call Frame Information 
 (see Section \refersec{chap:callframeinformation}) 
 to recover register values that might have been clobbered since the
 subprogram entry point.}
@@ -2186,6 +2188,11 @@ in interpretation and representation.}
 \needlines{5}
 \subsubsection{Location Lists in Split Object Files}
 \label{chap:locationlistsinsplitobjectfiles}
+\bb
+\textit{Location lists in split units use a format that 
+eliminates the need for relocations in the containing file.}
+\eb
+
 In a \splitDWARFobjectfile{} (see 
 Section \refersec{datarep:splitdwarfobjectfiles}), 
 location lists are contained in the \dotdebuglocdwo{} section.

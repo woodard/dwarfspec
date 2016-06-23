@@ -709,11 +709,8 @@ contents and interpretation are not specified here. The
 string is padded with null characters to a multiple of
 four bytes in length.
 
-\textit{The
-\bb
-presence of an unrecognised augmentation string may make it impossible
-for a consumer to process data in the \dotdebugnames{} section.
-\eb}
+\textit{The presence of an unrecognised augmentation string may make it impossible
+for a consumer to process data in the \dotdebugnames{} section.}
 
 \end{enumerate}
 
@@ -2307,15 +2304,8 @@ beginning of a subroutine and the
 
 \textit{To be able to view or modify an activation that is not
 on the top of the call frame stack, the debugger must
-\bb
-virtually unwind 
-\eb
-the stack of activations until
-it finds the activation of interest.  A debugger 
-\bb
-virtually 
-\eb
-unwinds
+virtually unwind the stack of activations until
+it finds the activation of interest.  A debugger virtually unwinds
 a stack in steps. Starting with the current activation it
 virtually restores any registers that were preserved by the
 current activation and computes the predecessor\textquoteright{s} CFA and
@@ -2325,10 +2315,7 @@ debugger virtually unwinds the stack because the actual state
 of the target process is unchanged.}
 
 \needlines{4}
-\textit{The 
-\bb
-virtual unwind 
-\eb
+\textit{The virtual unwind 
 operation needs to know where registers are
 saved and how to compute the predecessor\textquoteright{s} CFA and code
 location. When considering an architecture-independent way
@@ -2529,10 +2516,7 @@ If there is no augmentation, this value is a zero byte.
 \needlines{5}
 \textit{The augmentation string allows users to indicate that there
 is additional target\dash specific information in the CIE or FDE
-which is needed to 
-\bb
-virtually 
-\eb
+which is needed to virtually 
 unwind a stack frame. For example, this
 might be information about dynamically allocated data which
 needs to be freed on exit from the routine.}
@@ -2962,15 +2946,23 @@ appropriate size.
 \label{chap:callframeinstructionusage}
 
 \textit{To determine the virtual unwind rule set for a given location
-(L1), one searches through the FDE headers looking at the
-\addttindex{initial\_location} and \addttindex{address\_range} values to see if L1 is
+(L1), 
+\bb
+search 
+\eb
+through the FDE headers looking at the
+\HFNinitiallocation{} and \HFNaddressrange{} values to see if L1 is
 contained in the FDE. If so, then:}
 \begin{enumerate}[1. ]
 
 \item \textit{Initialize a register set by reading the
-\texttt{initial\_instructions} field of the associated CIE.}
+\HFNinitialinstructions{} field of the associated CIE.
+\bb
+Set L2 to the value of the \HFNinitiallocation{} field from the FDE header.
+\eb}
 
-\item \textit{Read and process the FDE\textquoteright s instruction
+
+\item \textit{Read and process the FDE's instruction
 sequence until a \DWCFAadvanceloc, 
 \DWCFAsetloc, or the
 end of the instruction stream is encountered.}
@@ -2999,11 +2991,8 @@ Appendix \refersec{app:callframeinformationexample}.}
 \label{chap:callframecallingaddress}
 
 \textit{When 
-\bb
-virtually 
-\eb
-unwinding frames, consumers frequently wish to obtain the
-address of the instruction which called a subroutine. This
+virtually unwinding frames, consumers frequently wish to obtain 
+the address of the instruction which called a subroutine. This
 information is not always provided. Typically, however,
 one of the registers in the virtual unwind table is the
 Return Address.}
@@ -3023,10 +3012,7 @@ in a different lexical \livelink{chap:lexicalblock}{block},
 or past the end of the calling
 subroutine. If a consumer were to assume that it was in the
 same context as the calling address, the 
-\bb
-virtual 
-\eb
-unwind might fail.}
+virtual unwind might fail.}
 
 \needlines{5}
 \textit{For architectures with constant-length instructions where

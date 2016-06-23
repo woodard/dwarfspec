@@ -233,9 +233,7 @@ in Table \refersec{tab:languagenames}.
 \DWLANGPascaleightythreeTARG & ISO Pascal:1983 \addtoindexx{Pascal:1983 (ISO)} \\
 \DWLANGPLITARG{}~\dag & ANSI PL/I:1976 \addtoindexx{PL/I:1976 (ANSI)} \\
 \DWLANGPythonTARG{}~\dag & \addtoindex{Python} \\
-\bb
 \DWLANGRenderScriptTARG~\dag & \addtoindex{RenderScript Kernal Language}
-\eb
 \\
 \DWLANGRustTARG{}~\dag & \addtoindex{Rust} \\
 \DWLANGSwiftTARG{}
@@ -456,11 +454,8 @@ When generating a \splitDWARFobjectfile{} (see
 Section \refersec{datarep:splitdwarfobjectfiles}), the
 compilation unit in the \dotdebuginfo{} section is a "skeleton"
 compilation unit with the tag 
-\bb
 \DWTAGskeletonunitTARG, which contains a
-\DWATdwoname{} attribute 
-\eb
-as well as a subset of the
+\DWATdwoname{} attribute as well as a subset of the
 attributes of a full or partial compilation unit. In general,
 it contains those attributes that are necessary for the consumer
 to locate the object file where the split full compilation unit
@@ -470,10 +465,7 @@ addresses in the program.
 
 A skeleton compilation unit has no children.
 
-A skeleton compilation unit has 
-\bb
-a \DWATdwoname{} attribute:
-\eb
+A skeleton compilation unit has a \DWATdwoname{} attribute:
 
 \begin{enumerate}[1. ]
 
@@ -486,7 +478,6 @@ path name (relative to the value of the \DWATcompdir{} attribute,
 see below) of the object file that contains the full
 compilation unit.
 
-\bb
 The value in the \HFNdwoid{} field of the unit header for 
 this unit is the same as the value in the \HFNdwoid{} field 
 of the unit header of the corresponding full compilation 
@@ -499,7 +490,6 @@ be suitable for detecting file version skew or other
 kinds of mismatched files and for looking up a full
 split unit in a DWARF package file 
 (see Section \refersec{datarep:dwarfpackagefiles}).}
-\eb
 
 \end{enumerate}
 
@@ -538,7 +528,6 @@ should be placed in the split full compilation unit
 The attributes provided by the skeleton compilation
 unit entry do not need to be repeated in the full compilation
 unit entry.
-\bbeb
 
 \textit{The \DWATaddrbase{}, \DWATrangesbase{} and 
 \DWATstroffsetsbase{} attributes provide context that may be 
@@ -558,11 +547,9 @@ is logically paired with a specific skeleton compilation unit while
 being physically separate.
 
 A split full compilation unit 
-\bb
 may have the following attributes, 
 which are the same as for conventional compilation unit entries 
 except as noted:
-\eb
 \begin{enumerate}[1. ]
 \item A \DWATname{} attribute.
 \item A \DWATlanguage{} attribute.
@@ -851,6 +838,13 @@ compilation unit specific \doublequote{unnamed namespace} may
 be represented by a namespace entry with no name attribute in
 the original namespace declaration entry (and therefore no name
 attribute in any namespace extension entry of this namespace).
+\bb
+C++ states that declarations in the unnamed namespace are
+implicitly available in the containing scope; a producer
+should make this effect explicit with the \DWATexportsymbols{}
+attribute, or by using a \DWTAGimportedmodule{} that is a
+sibling of the namespace entry and references it.
+\eb
 }
 
 \textit{A compiler emitting namespace information may choose to
@@ -2061,11 +2055,7 @@ call is executed. After the called subprogram has been entered, these
 registers and memory locations might have been modified.  In order to
 recover the values that existed at the point of the call (to allow
 evaluation of the DWARF expression for the actual parameter), a debugger
-may 
-\bb
-virtually unwind 
-\eb
-the subprogram activation 
+may virtually unwind the subprogram activation 
 (see Section \refersec{chap:callframeinformation}). Any
 register or memory location that cannot be recovered is referred to as
 "clobbered by the call."}
@@ -2082,10 +2072,7 @@ A \textit{tail call} uses a jump-like instruction which
 transfers control to the start of some subprogram, but 
 there is no call site location address to preserve
 (and thus none is available using the 
-\bb
-virtual 
-\eb
-unwind information). 
+virtual unwind information). 
 
 \item
 A \textit{tail recursion call} is a call
@@ -2236,10 +2223,7 @@ which when evaluated yields the value of the parameter at the time of the call.
 
 \textit{The expression should not use registers or memory
 locations that might be clobbered by the call, as it might be evaluated after 
-\bb
-virtually 
-\eb
-unwinding from the called function back to the caller.  If it is not
+virtually unwinding from the called function back to the caller.  If it is not
 possible to avoid registers or memory locations that might be clobbered by
 the call in the expression, then the \DWATcallvalueNAME{} attribute should
 not be provided.}
@@ -2265,10 +2249,7 @@ describes where the referenced value lives during the call.  If it is just
 \DWATcalldatavalueNAME{} attribute describes the value in that location. 
 The expression should not use registers or memory
 locations that might be clobbered by the call, as it might be evaluated after 
-\bb
-virtually 
-\eb
-unwinding from the called function back to the caller.
+virtually unwinding from the called function back to the caller.
 
 \needlines{4}
 Each call site parameter entry may also have a 

@@ -263,7 +263,11 @@ A skeleton compilation unit, as described in Section
 in the \dotdebuginfo{} section.
 \item
 An abbreviations table for the skeleton compilation unit,
-in the \dotdebugabbrev{} section.
+in the \dotdebugabbrev{} section
+\bb
+used by the \dotdebuginfo{} section.
+\eb
+
 \item
 A string table, in the \dotdebugstr{} section. The string
 table is necessary only if the skeleton compilation unit
@@ -271,7 +275,11 @@ uses either indirect string form, \DWFORMstrp{} or
 \DWFORMstrx.
 \item
 A string offsets table, in the \dotdebugstroffsets{}
-section. The string offsets table is necessary only if
+section
+\bb
+for strings in the \dotdebugstr{} section. 
+\eb
+The string offsets table is necessary only if
 the skeleton compilation unit uses the \DWFORMstrx{} form.
 \end{itemize}
 The attributes contained in the skeleton compilation
@@ -289,7 +297,6 @@ file. This partition includes the following:
 \item
 The full compilation unit, in the \dotdebuginfodwo{} section.
 \begin{itemize}
-\bbeb
 \item
 Attributes contained in the full compilation unit
 may refer to machine addresses indirectly using the \DWFORMaddrx{} 
@@ -309,7 +316,10 @@ attribute in the associated skeleton unit.
 
 \item
 Abbreviations table(s) for the compilation unit and type
-units, in the \dotdebugabbrevdwo{} section.
+units, in the \dotdebugabbrevdwo{} section
+\bb
+used by the \dotdebuginfodwo{} section.
+\eb
 
 \item Location lists, in the \dotdebuglocdwo{} section.
 
@@ -325,7 +335,10 @@ information entries.
 \item A string table, in the \dotdebugstrdwo{} section.
 
 \item A string offsets table, in the \dotdebugstroffsetsdwo{}
-section.
+section
+\bb
+for the strings in the \dotdebugstrdwo{} section.
+\eb
 \end{itemize}
 
 Except where noted otherwise, all references in this document
@@ -424,9 +437,7 @@ section.
 
 The DWARF package file also contains two index sections that
 provide a fast way to locate debug information by compilation
-unit ID 
-\bbeb 
-for compilation units, or by type
+unit ID for compilation units, or by type
 signature for type units:
 \begin{alltt}
     \dotdebugcuindex
@@ -924,23 +935,18 @@ enumeration are shown in Table \refersec{tab:unitheaderunitkindencodings}.
 \DWUTcompileTARG~\ddag    &0x01 \\ 
 \DWUTtypeTARG~\ddag       &0x02 \\ 
 \DWUTpartialTARG~\ddag    &0x03 \\ 
-\bb
 \DWUTskeletonTARG~\ddag       &0x04 \\
 \DWUTsplitcompileTARG~\ddag   &0x05 \\
 \DWUTsplittypeTARG~\ddag      &0x06 \\
 \DWUTlouserTARG~\ddag         &0x80 \\
 \DWUThiuserTARG~\ddag         &\xff 
-\eb
 \\
 \hline
 \end{longtable}
 \end{centering}
 
-\bb
 \textit{All unit headers in a compilation have the same size. 
 Some header types include padding bytes to achieve this.}
-\eb
-
 
 \needlines{5}
 \subsubsection{Compilation and Partial Unit Headers}
@@ -952,10 +958,9 @@ Some header types include padding bytes to achieve this.}
 A 4-byte or 12-byte 
 \addtoindexx{initial length}
 unsigned integer representing the length
-of the \dotdebuginfo{}
-contribution for that compilation unit,
+of the \dotdebuginfo{} contribution for that compilation unit,
 not including the length field itself. In the \thirtytwobitdwarfformat,
- this is a 4-byte unsigned integer (which must be less
+this is a 4-byte unsigned integer (which must be less
 than \xfffffffzero); in the \sixtyfourbitdwarfformat, this consists
 of the 4-byte value \wffffffff followed by an 8-byte unsigned
 integer that gives the actual length 
@@ -1003,7 +1008,6 @@ the \thirtytwobitdwarfformat, this is a 4-byte unsigned length;
 in the \sixtyfourbitdwarfformat, this is an 8-byte unsigned length
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
-\bb
 \item \HFNunitpaddingONE{} (8 bytes) \\
 Reserved to DWARF (must be zero).
 
@@ -1012,11 +1016,9 @@ Reserved to DWARF (must be zero).
 Reserved to DWARF (must be zero). In the \thirtytwobitdwarfformat,
 this is 4 bytes in length; in the \sixtyfourbitdwarfformat this
 is 8 bytes in length.
-\eb
 \end{enumerate}
 
 \needlines{8}
-\bb
 \subsubsection{Skeleton and Split Compilation Unit Headers}
 \label{datarep:skeletonandfullcompilationunitheaders}
 \begin{enumerate}[1. ]
@@ -1091,7 +1093,6 @@ of the skeleton compilation.
 Reserved to DWARF (must be zero). In the \thirtytwobitdwarfformat,
 this is 4 bytes in length; in the \sixtyfourbitdwarfformat this
 is 8 bytes in length.
-\eb
 \end{enumerate}
 
 \needlines{8}
@@ -1128,15 +1129,9 @@ The value in this field is \versiondotdebuginfo.
 \item \texttt{unit\_type} (\HFTubyte) \\
 \addttindexx{unit\_type}
 A 1-byte unsigned integer identifying this unit as a type unit.
-The value of this field is \DWUTtype{} for a 
-\bb
-non-split
-\eb
-type unit
+The value of this field is \DWUTtype{} for a non-split type unit
 (see Section \refersec{chap:typeunitentries})
-\bb
 or \DWUTsplittype{} for a split type unit.
-\eb
 
 \textit{This field is new in \DWARFVersionV.}
 
@@ -1305,10 +1300,8 @@ Table \refersec{tab:tagencodings}.
 \DWTAGunspecifiedtype&0x3b      \\
 \DWTAGpartialunit&0x3c      \\
 \DWTAGimportedunit&0x3d      \\
-\bb
 \textit{Reserved}&0x3e\footnote{Code 0x3e is reserved to allow backward compatible support of the
 DW\_TAG\_mutable\_type DIE that was defined (only) in \DWARFVersionIII.}
-\eb
 \\
 \DWTAGcondition&\xiiif      \\
 \DWTAGsharedtype&0x40      \\
@@ -1321,9 +1314,7 @@ DW\_TAG\_mutable\_type DIE that was defined (only) in \DWARFVersionIII.}
 \DWTAGatomictype~\ddag & 0x47 \\
 \DWTAGcallsite~\ddag & 0x48 \\
 \DWTAGcallsiteparameter~\ddag & 0x49 \\
-\bb
 \DWTAGskeletonunit~\ddag & 0x4a
-\eb
 \\
 \DWTAGlouser&0x4080      \\
 \DWTAGhiuser&\xffff      \\
@@ -1678,10 +1669,7 @@ Table \referfol{tab:attributeencodings}.
 \DWATrangesbase~\ddag&0x74&
 		\livelinki{chap:classrangelistptr}{rangelistptr}{rangelistptr class}
             \addtoindexx{ranges base!encoding} \\
-\bb
-\textit{Reserved} &0x75& \textit{Unused}
-\eb
-\\
+\textit{Reserved} &0x75& \textit{Unused} \\
 \DWATdwoname~\ddag &0x76&
 		\livelink{chap:classstring}{string}
             \addtoindexx{split DWARF object file name!encoding} \\
@@ -2811,9 +2799,7 @@ defined language.
 \DWLANGCplusplusfourteen{}~\ddag &0x0021 &0 \addtoindexx{C++14 (ISO)} \\
 \DWLANGFortranzerothree{}~\ddag  &0x0022 &1 \addtoindexx{Fortran:2004 (ISO)} \\
 \DWLANGFortranzeroeight{}~\ddag  &0x0023 &1 \addtoindexx{Fortran:2010 (ISO)} \\
-\bb
 \DWLANGRenderScript{}~\ddag       &0x0024 &0 \addtoindexx{RenderScript Kernel Language}
-\eb
 \\
 \DWLANGlouser{} &0x8000 & \\
 \DWLANGhiuser{} &\xffff & \\
@@ -3634,10 +3620,7 @@ are contained in \addtoindex{type unit}s (see Section
 
 \textit{A type signature is computed only by a DWARF producer;
 \addtoindexx{type signature!computation} a consumer need
-\bb
-only
-\eb
-compare two type signatures to check for equality.}
+only compare two type signatures to check for equality.}
 
 \needlines{4}
 The type signature for a type T0 is formed from the 
@@ -3754,17 +3737,12 @@ An attribute that refers to another type entry T is processed
 as follows: 
 \begin{enumerate}[ a)]
 \item
-\bb
-If 
-\eb
-T is in the list V at some V[x], use the
+If T is in the list V at some V[x], use the
 letter 'R' as the marker and use the unsigned LEB128\addtoindexx{LEB128!unsigned}
 encoding of x as the attribute value.
 
 \item
-\bb
 Otherwise, append type T to the list V, then
-\eb
 use the letter 'T'
 as the marker, process the type T recursively by performing
 Steps 2 through 7, and use the result as the attribute value.
