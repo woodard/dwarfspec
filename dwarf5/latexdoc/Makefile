@@ -27,6 +27,7 @@ clean:
 	-rm -f *.lot
 	-rm -f *.out
 	-rm -f *.ps
+    -rm -f *.cb
 	-rm -f p2.txt
 archive:
 	sh bldtar.sh
