@@ -661,6 +661,7 @@ The name index is placed in a section named \dotdebugnames, and
 consists of the eight parts described in the following sections.
 
 \subsubsubsection{Section Header}
+\label{chap:sectionheader}
 The section header contains the following fields:
 \begin{enumerate}[1. ]
 \item \texttt{unit\_length} (\livelink{datarep:initiallengthvalues}{initial length}) \\
@@ -786,23 +787,29 @@ in the name table.
 
 \needlines{6}
 \subsubsubsection{Name Table}
-The name table immediately follows the hash lookup table. The name
-table is laid out in column-major order (that is, the first column,
-followed by the second column). Each entry in the first column
-contains the string table offset (\DWFORMstrp) of the name in the
-\dotdebugstr{} (or \dotdebugstrdwo) section. Each entry in the second
-column contains the offset (as a section offset) within the entry pool
-of the list of index entries for the name. Rows in the name table are
-indexed starting at 1 (to match the hashes array).
+\label{chap:nametable}
+\bb
+The name table immediately follows the hash lookup table. It
+consists of two arrays: an array of string offsets, followed
+immediately by an array of entry offsets. The items in both
+arrays are section offsets: 4-byte unsigned integers for the
+DWARF-32 format or 8-byte unsigned integers for the DWARF-64
+format. The string offsets in the first array refer to names in
+the \dotdebugstr{} (or \dotdebugstrdwo) section. The entry offsets
+in the second array refer to index entries, and are relative to
+the start of the entry pool area.
 
-The number of rows in the name table is given by \texttt{name\_count}.
+These two arrays are indexed starting at 1, and correspond 
+one-to-one with each other. The length of each array is
+given by \texttt{name\_count}.
 
-If there is a hash lookup table, the 
-row number of an entry in the name table must
-match the row number of its corresponding entry in the hashes array.
+If there is a hash lookup table, the hashes array corresponds on
+a one-to-one basis with the string offsets array and with the
+entry offsets array.
 
-If there is no hash lookup table, there is no ordering 
-requirement for the name table.
+\textit{If there is no hash lookup table, there is no ordering
+requirement for the name table.}
+\eb
 
 \needlines{6}
 \subsubsubsection{Abbreviations Table}
@@ -857,9 +864,13 @@ byte for the abbreviation code. The size of the table given by
 terminating 0 byte.
 
 \subsubsubsection{Entry Pool}
-The entry pool immediately follows the abbreviations table. The second
-column of each row of the name table points to an offset in the entry
-pool, where a series of index entries for that name is located.
+\bb
+The entry pool immediately follows the abbreviations table. 
+Each entry in the entry offsets array in the name table (see 
+Section \ref{chap:nametable})
+\eb
+points to an offset in the entry pool, where a series
+of index entries for that name is located.
 
 \needlines{4}
 Each index entry in the series begins with an abbreviation code, and is

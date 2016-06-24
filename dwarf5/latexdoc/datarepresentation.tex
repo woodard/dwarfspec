@@ -558,15 +558,19 @@ guaranteed to stop at an unused slot or find the match.
 \needlines{4}
 The table of offsets begins immediately following the parallel
 table (at offset \mbox{$16 + 12 * S$} from the beginning of the section).
-The table is a two-dimensional array of 4-byte words, 
-%(using the byte order of the application binary),
-with $N$ sections and $U + 1$
-rows, in row-major order. Each row in the array is indexed
-starting from 0. The first row provides a key to the columns:
-each column in this row provides a section identifier for a debug
-section, and the offsets in the same column of subsequent rows
-refer to that section. The section identifiers are shown in
-Table \referfol{tab:dwarfpackagefilesectionidentifierencodings}.
+\bb
+This table consists of a single header row containing $N$ fields,
+each a 4-byte unsigned integer, followed by $U$ data rows, each
+also containing $N$ fields of 4-byte unsigned integers. The fields
+in the header row provide a section identifier referring to a
+debug section; the available section identifiers are shown in
+Table \referfol{tab:dwarfpackagefilesectionidentifierencodings}. 
+Each data row corresponds to a specific CU
+or TU in the package file. In the data rows, each field provides
+an offset to the debug section whose identifier appears in the
+corresponding field of the header row. The data rows are indexed
+starting at 1.
+\eb
 
 \textit{Not all sections listed in the table need be included.}
 
@@ -611,12 +615,18 @@ interpreted as relative to the corresponding base offset.
 
 The table of sizes begins immediately following the table of
 offsets, and provides the sizes of the contributions made by each
-CU or TU to the corresponding section in the package file. Like
-the table of offsets, it is a two-dimensional array of 4-byte
-words, with $N$ 
-entries and $U$ rows, in row-major order. Each row in
-the array is indexed starting from 1 (row 0 of the table of
-offsets also serves as the key for the table of sizes).
+CU or TU to the corresponding section in the package file. 
+\bb
+This
+table consists of U data rows, each with N fields of 4-byte
+unsigned integers. Each data row corresponds to the same CU or TU
+as the corresponding data row in the table of offsets described
+above. Within each data row, the N fields also correspond
+one-to-one with the fields in the corresponding data row of the
+table of offsets. Each field provides the size of the
+contribution made by a CU or TU to the corresponding section in
+the package file.
+\eb
 
 For an example, see Figure \refersec{fig:examplecuindexsection}.
 
