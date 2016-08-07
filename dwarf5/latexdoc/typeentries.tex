@@ -463,33 +463,63 @@ presentation.
 \begin{tabular}{l|P{9cm}}
 \hline
 Name&Meaning\\ \hline
-\DWTAGatomictypeTARG{} & C \addtoindex{\_Atomic} qualified type \\
-\DWTAGconsttypeTARG{} &  C or C++ const qualified type
-\addtoindexx{const qualified type entry} \addtoindexx{C} \addtoindexx{C++} \\
-\DWTAGpackedtypeTARG& \addtoindex{Pascal} or Ada packed type\addtoindexx{packed type entry}
-\addtoindexx{packed qualified type entry} \addtoindexx{Ada} \addtoindexx{Pascal} \\
-\DWTAGpointertypeTARG{} & Pointer to an object of
-the type being modified \addtoindexx{pointer qualified type entry} \\
-\DWTAGreferencetypeTARG& \addtoindex{C++} (lvalue) reference 
-to an object of the type 
-\addtoindexx{reference type entry}
-\mbox{being} modified
-\addtoindexx{reference qualified type entry} \\
-\DWTAGrestricttypeTARG& \addtoindex{C} 
-restrict 
-\addtoindexx{restricted type entry}
-qualified type
-\addtoindexx{restrict qualified type} \\
-\DWTAGrvaluereferencetypeTARG{} & \addtoindex{C++}
-\addtoindexx{rvalue reference type entry}
-rvalue 
-\addtoindexx{restricted type entry}
-reference to an object of the type \mbox{being} modified 
-\addtoindexx{rvalue reference qualified type entry} \\
-\DWTAGsharedtypeTARG&\addtoindex{UPC} shared qualified type 
-\addtoindexx{shared qualified type entry} \\
-\DWTAGvolatiletypeTARG&\addtoindex{C} or \addtoindex{C++} volatile qualified type 
-\addtoindexx{volatile qualified type entry} \\
+\DWTAGatomictypeTARG{} & 
+    atomic qualified type 
+\bb
+    (for example, in C) 
+\eb
+    \addtoindexx{atomic qualified type entry} \addtoindexx{C} \\
+\DWTAGconsttypeTARG{} &  
+    const qualified type 
+\bb
+    (for example in C, C++)
+\eb
+    \addtoindexx{const qualified type entry} \addtoindexx{C} \addtoindexx{C++} \\
+    \bb
+\DWTAGimmutabletypeTARG &
+    immutable type 
+    (for example, in \addtoindex{D})
+\eb
+    \addtoindexx{immutable type} \\
+\DWTAGpackedtypeTARG & 
+    packed type\addtoindexx{packed type entry} 
+\bb 
+    (for example in Ada, Pascal)
+\eb
+    \addtoindexx{packed qualified type entry} \addtoindexx{Ada} \addtoindexx{Pascal} \\
+\DWTAGpointertypeTARG{} & 
+    pointer to an object of the type being modified 
+    \addtoindexx{pointer qualified type entry} \\
+\DWTAGreferencetypeTARG & 
+\bb
+    reference to (lvalue of) an object of the type \mbox{being} modified 
+\eb
+    \addtoindexx{reference type entry}
+    \addtoindexx{reference qualified type entry} \\
+\DWTAGrestricttypeTARG &  
+    restrict qualified type
+    \addtoindexx{restricted type entry}
+    \addtoindexx{restrict qualified type} \addtoindexx{C} \\
+\DWTAGrvaluereferencetypeTARG{} &
+    rvalue reference to an object of the type \mbox{being} modified 
+\bb 
+    (for example, in \addtoindex{C++}) 
+\eb
+    \addtoindexx{rvalue reference type entry}
+    \addtoindexx{restricted type entry}
+    \addtoindexx{rvalue reference qualified type entry} \\
+\DWTAGsharedtypeTARG &
+    shared qualified type 
+\bb 
+    (for example, in \addtoindex{UPC}) 
+\eb
+    \addtoindexx{shared qualified type entry} \\
+\DWTAGvolatiletypeTARG & 
+    volatile qualified type 
+\bb
+    (for example, in \addtoindex{C}, \addtoindex{C++}) 
+\eb
+    \addtoindexx{volatile qualified type entry} \\
 \hline
 \end{tabular}
 \end{table}
@@ -884,7 +914,11 @@ facilitate DWARF space compression
 A structure type, union type or class type entry may have a
 \DWATcallingconventionDEFN{} attribute,
 \addtoindexx{calling convention attribute!for types} 
-whose value indicates whether a value of the type should be passed by reference 
+whose value indicates whether a value of the type 
+\bb
+is
+\eb
+passed by reference 
 or passed by value. The set of calling convention codes for use with types 
 \addtoindexx{calling convention codes!for types}
 is\hypertarget{chap:DWATcallingconventionfortypes}{}
@@ -1396,12 +1430,17 @@ template instantiation and that special compilation
 unit has a different name from the compilation unit containing
 the template definition, the name attribute for the debugging
 information entry representing the special compilation unit
-should be empty or omitted.
+\bb
+is
+\eb
+empty or omitted.
 
 %\needlines{4}
 \item If the class type entry representing the template
 instantiation or any of its child entries contains declaration
-coordinate attributes, those attributes should refer to
+coordinate attributes, those attributes 
+\bbeb 
+refer to
 the source for the template definition, not to any source
 generated artificially by the compiler.
 \end{enumerate}
@@ -1530,12 +1569,13 @@ The condition entry owns \DWTAGconstant{} and/or
 \DWTAGsubrangetype{} entries that describe the constant
 values associated with the condition. If any child entry 
 \addtoindexx{type attribute}
-has
-a \DWATtype{} attribute,
-that attribute should describe a type
-compatible with the comparison type (according to the source
-language); otherwise the child\textquoteright s type is the same as the
-comparison type.
+has a \DWATtype{} attribute, that attribute 
+\bb
+describes
+\eb
+a type compatible with the comparison type (according to the 
+source language); otherwise the child\textquoteright{}s type 
+is the same as the comparison type.
 
 \textit{For conditional variables with alphanumeric types, COBOL
 permits a source program to provide ranges of alphanumeric

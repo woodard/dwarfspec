@@ -553,6 +553,13 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 &\livelinki{chap:DWATlocationdataobjectlocation}
         {Data object location}
         {data object location}\\
+\bb
+\DWATloclistsbaseTARG
+&\livelinki{chap:DWATloclistsbaseinlocationlist}
+        {Location lists base}
+        {location lists base}
+\eb
+\\
 \DWATlowpcTARG
 &\livelinki{chap:DWATlowpccodeaddressorrangeofaddresses}
         {Code address or range of addresses}
@@ -633,8 +640,10 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 &\livelinki{chap:DWATrangesnoncontiguousrangeofcodeaddresses}
         {Non-contiguous range of code addresses}
         {non-contiguous range of code addresses} \\
-\DWATrangesbaseTARG
-&\livelinki{chap:DWATrangesbaseforrangelists}
+\bb
+\DWATrnglistsbaseTARG
+\eb
+&\livelinki{chap:DWATrnglistsbase}
         {Base offset for range lists}
         {ranges lists} \\
 \DWATrankTARG
@@ -706,7 +715,8 @@ The attributes are listed in Table \referfol{tab:attributenames}.
         {string offsets table} \\
 \DWATthreadsscaledTARG
 &\livelink{chap:DWATthreadsscaledupcarrayboundthreadsscalfactor}
-        {UPC array bound THREADS scale factor}\\
+        {Array bound THREADS scale factor} 
+\bbeb  (\addtoindex{UPC}) \\
 \DWATtrampolineTARG
 &\livelinki{chap:DWATtrampolinetargetsubroutine}
         {Target subroutine}
@@ -761,9 +771,11 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 \addtoindexx{exprloc|see {\textit{also} exprloc class}}
 \addtoindexx{flag|see {\textit{also} flag class}}
 \addtoindexx{lineptr|see {\textit{also} lineptr class}}
-\addtoindexx{loclistptr|see {\textit{also} loclistptr class}}
+\addtoindexx{loclistsptr|see {\textit{also} loclistsptr class}}
+\addtoindexx{loclist|see {\textit{also} loclist class}}
 \addtoindexx{macptr|see {\textit{also} macptr class}}
-\addtoindexx{rangelistptr|see {\textit{also} rangelistptr class}}
+\addtoindexx{rnglistsptr|see {\textit{also} rnglistsptr class}}
+\addtoindexx{rnglist|see {\textit{also} rnglist class}}
 \addtoindexx{reference|see {\textit{also} reference class}}
 \addtoindexx{string|see {\textit{also} string class}}
 \addtoindexx{stroffsetsptr|see {\textit{also} stroffsetsptr class}}
@@ -775,9 +787,11 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 \addtoindexx{class of attribute value!exprloc|see {exprloc class}}
 \addtoindexx{class of attribute value!flag|see {flag class}}
 \addtoindexx{class of attribute value!lineptr|see {lineptr class}}
-\addtoindexx{class of attribute value!loclistptr|see {loclistptr class}}
+\addtoindexx{class of attribute value!loclistsptr|see {loclistsptr class}}
+\addtoindexx{class of attribute value!loclist|see {loclist class}}
 \addtoindexx{class of attribute value!macptr|see {macptr class}}
-\addtoindexx{class of attribute value!rangelistptr|see {rangelistptr class}}
+\addtoindexx{class of attribute value!rnglistsptr|see {rnglistsptr class}}
+\addtoindexx{class of attribute value!rnglist|see {rnglist class}}
 \addtoindexx{class of attribute value!reference|see {reference class}}
 \addtoindexx{class of attribute value!string|see {string class}}
 \addtoindexx{class of attribute value!stroffsetsptr|see {stroffsetsptr class}}
@@ -868,8 +882,12 @@ of an attribute.
 number information.
 \\
 
-\hypertarget{chap:classloclistptr}{}
-\livelinki{datarep:classloclistptr}{loclistptr}{loclistptr class}
+\bb
+\hypertarget{chap:classloclist}{}
+\livelinki{datarep:classloclist}{loclist}{loclist class}, 
+\hypertarget{chap:classloclistsptr}{}
+\livelinki{datarep:classloclistsptr}{loclistsptr}{loclistsptr class}
+\eb
 &Specifies a location in the DWARF section that holds location 
 lists, which describe objects whose location can change during 
 their lifetime.
@@ -882,8 +900,12 @@ a location in the DWARF section that holds macro definition
 information.
 \\
 
-\hypertarget{chap:classrangelistptr}{}
-\livelinki{datarep:classrangelistptr}{rangelistptr}{rangelistptr class}
+\bb
+\hypertarget{chap:classrnglist}{}
+\livelinki{datarep:classrnglist}{rnglist}{rnglist class}, 
+\hypertarget{chap:classrnglistsptr}{}
+\livelinki{datarep:classrnglistsptr}{rnglistsptr}{rnglistsptr class}
+\eb
 &Specifies a location in the DWARF section that holds 
 non-contiguous address ranges.
 \\
@@ -1651,7 +1673,11 @@ represents the offset of a debugging information entry in the current
 compilation unit, or value 0 which represents the \generictype.
 If the operand is non-zero, the referenced entry must be a
 \DWTAGbasetype{} entry that provides the type to which the value is converted.
-The type of the operand and result type should have the same size in bits.
+The type of the operand and result type 
+\bb
+must 
+\eb
+have the same size in bits.
 
 \end{enumerate}
 
@@ -1662,12 +1688,12 @@ There
 \addtoindexx{DWARF expression!special operations}
 are these special operations currently defined:
 \begin{enumerate}[1. ]
-\itembfnl{\DWOPnopNAME}
-The \DWOPnopTARG{} operation is a place holder. It has no effect
+\itembfnl{\DWOPnopTARG}
+The \DWOPnopNAME{} operation is a place holder. It has no effect
 on the location stack or any of its values.
 
-\itembfnl{\DWOPentryvalueNAME}
-The \DWOPentryvalueTARG{} operation pushes 
+\itembfnl{\DWOPentryvalueTARG}
+The \DWOPentryvalueNAME{} operation pushes 
 the value that the described location held
 upon entering the current subprogram.  It has two operands: an 
 unsigned LEB128\addtoindexx{LEB128!unsigned} length, followed by 
@@ -1747,20 +1773,16 @@ Section \refersec{chap:locationlists} below.
 
 Location descriptions are distinguished in a context sensitive
 manner. As the value of an attribute, a location description
-is encoded using 
-\addtoindexx{exprloc class}
-class \livelink{chap:classexprloc}{exprloc}  
-and a location list is encoded
-using class \livelink{chap:classloclistptr}{loclistptr}
-(which 
-\addtoindex{loclistptr}
-serves as an offset into a
-separate 
-\addtoindexx{location list}
-location list table).
+is encoded using class \CLASSexprloc{}
+and a \addtoindex{location list} is encoded
+\bb 
+using class \CLASSloclist{} (which serves as an 
+index into a separate section containing location lists).
+\eb
 
 \needlines{4}
 \subsection{Single Location Descriptions}
+\label{chap:singlelocationdescriptions}
 A single location description is either:
 \begin{enumerate}[1. ]
 \item A simple location description, representing an object
@@ -1975,9 +1997,8 @@ refers to.}
 
 \needlines{4}
 \itembfnl{\DWOPbitpieceTARG}
-The \DWOPbitpieceNAME{} 
-operation takes two operands. The first
-is an unsigned LEB128\addtoindexx{LEB128!unsigned} 
+The \DWOPbitpieceNAME{} operation takes two operands. 
+The first is an unsigned LEB128\addtoindexx{LEB128!unsigned} 
 number that gives the size in bits
 of the piece. The second is an 
 unsigned LEB128\addtoindexx{LEB128!unsigned} number that
@@ -2010,268 +2031,178 @@ unit of memory.}
 \needlines{6}
 \subsection{Location Lists}
 \label{chap:locationlists}
-There are two forms of location lists. The first form 
-is intended for use in other than a \splitDWARFobjectfile,
-while the second is intended for use in a \splitDWARFobjectfile{} 
-(see Section \refersec{datarep:splitdwarfobjectfiles}). The two
-forms are otherwise equivalent.
+\bb
+Location lists are used in place of location descriptions whenever
+the object whose location is being described can change location
+during its lifetime. Location lists are contained in a separate
+object file section called \dotdebugloclists{} or \dotdebugloclistsdwo{}
+(for split DWARF object files).
 
+A location list is indicated by a location or other attribute
+whose value is of class \bbeb\CLASSloclist{} 
+(see Section \refersec{datarep:classesandforms}).
+   
+\textit{This location list representation, the \bbeb\CLASSloclist{} class, and the
+related \DWATloclistsbase{} attribute are new in \DWARFVersionV.
+Together they eliminate most or all of the object language relocations
+previously needed for location lists.}
 
-\needlines{4}
-\subsubsection{Location Lists in Non-split Objects}
-\label{chap:locationlistsinnonsplitobjects}
-Location lists 
-\addtoindexx{location list}
-are used in place of location descriptions
-whenever the object whose location is being described
-can change location during its lifetime. 
-Location lists
-\addtoindexx{location list}
-are contained in a separate object file section called
-\dotdebugloc{}. A location list is indicated by a location
-attribute whose value is an offset from the beginning of
-the \dotdebugloc{} section to the first byte of the list for the
-object in question.
-
-The \definitionx{applicable base address} of a normal
-location list entry (see following) is
-\addtoindexx{location list!base address selection entry}
-determined by the closest preceding base address selection
-entry in the same location list. If there is
-no such selection entry, then the applicable base address
-defaults to the base address of the compilation unit (see
-Section \refersec{chap:fullandpartialcompilationunitentries}).  
-
-\textit{In the case of a compilation unit where all of
-the machine code is contained in a single contiguous section,
-no base address selection entry is needed.}
-
-Each entry in a location list is either a location 
-\addtoindexi{list}{address selection|see{base address selection}} 
-entry,
-a 
-\addtoindexi{base}{base address selection entry!in location list} 
-address selection entry, 
-\addtoindexx{location list!base address selection entry}
-or an 
-\addtoindexx{end-of-list entry!in location list}
-end-of-list entry.
-
-\subsubsubsection{Location List Entry}
-A location list entry has two forms:
-a normal location list entry and a default location list entry.
-
-\needlines{4}
-\subsubsubsubsection{Normal Location List Entry}
-A\addtoindexx{location list!normal entry}
-\addtoindex{normal location list entry} consists of:
-\begin{enumerate}[1. ]
-\item A beginning address offset. 
-This address offset has the \addtoindex{size of an address} and is
-relative to the applicable base address of the compilation
-unit referencing this location list. It marks the beginning
-of the address 
-\addtoindexi{range}{address range!in location list} 
-over which the location is valid.
-
-\item An ending address offset.  This address offset again
-has the \addtoindex{size of an address} and is relative to the applicable
-base address of the compilation unit referencing this location
-list. It marks the first address past the end of the address
-range over which the location is valid. The ending address
-must be greater than or equal to the beginning address.
-
-\textit{A location list entry (but not a base address selection or 
-end-of-list entry) whose beginning
-and ending addresses are equal has no effect 
-because the size of the range covered by such
-an entry is zero.}
-
-\item An unsigned 2-byte length describing the length of the location 
-description that follows.
-
-\item A \addtoindex{single location description} 
-describing the location of the object over the range specified by
-the beginning and end addresses.
-\end{enumerate}
-
-Address ranges defined by normal location list entries
-may overlap. When they do, they describe a
+A location list consists of a series of location list entries.
+Each location list entry is one of the following kinds:
+\begin{itemize}
+\item \definition{Bounded location description}.\addtoindexx{bounded location description} 
+This kind of entry provides a
+location description that specifies the location of
+an object that is valid over a lifetime bounded
+by a starting and ending address. The starting address is the
+lowest address of the address range over which the location
+is valid. The ending address is the address of the first
+location past the highest address of the address range.
+When the current PC is within the given range, the location
+description may be used to locate the specified object.
+        
+There are several kinds of bounded location description
+entries which differ in the way that they specify the
+starting and ending addresses.
+        
+The address ranges defined by the bounded location descriptions
+of a location list may overlap. When they do, they describe a
 situation in which an object exists simultaneously in more than
 one place. If all of the address ranges in a given location
 list do not collectively cover the entire range over which the
-object in question is defined, it is assumed that the object is
-not available for the portion of the range that is not covered.
+object in question is defined, and there is no following default
+location description, it is assumed that the object is not
+available for the portion of the range that is not covered.
 
-\needlines{4}
-\subsubsubsubsection{Default Location List Entry}
-A \addtoindex{default location list entry} consists of:
-\addtoindexx{location list!default entry}
-\begin{enumerate}[1. ]
-\item The value 0.
-\item The value of the largest representable address offset (for
-      example, \wffffffff when the size of an address is 32 bits).
-\item An unsigned 2-byte length describing the length of the location 
-      description that follows.
-\item A single location description describing the location of the
-      object when there is no prior normal location list entry
-      that applies in the same location list.
-\end{enumerate}
+\item \definition{Default location description}.\addtoindexx{default location description}
+This kind of entry provides a
+location description that specifies the location of
+an object that is valid when no bounded location description
+applies.
 
-A default location list entry is independent of any applicable
-base address (except to the extent to which base addresses
-affect prior normal location list entries).
-
-A default location list entry must be the last location list
-entry of a location list except for the terminating end-of-list
-entry.
-
-A \addtoindex{default location list entry} describes a single 
-location which applies to all addresses which are not included 
-in any range defined earlier in the same location list.
-
-\needlines{5}
-\subsubsubsection{Base Address Selection Entry}
-A base 
-\addtoindexi{address}{address selection|see{base address selection}}
-\addtoindexx{location list!base address selection entry}
-selection 
-\addtoindexi{entry}{base address selection entry!in location list}
-consists of:
-\begin{enumerate}[1. ]
-\item The value of the largest representable 
-address offset (for example, \wffffffff when the size of
-an address is 32 bits).
-\item An address, which defines the 
-appropriate base address for use in interpreting the beginning
-and ending address offsets of subsequent entries of the location list.
-\end{enumerate}
-
-\textit{A base address selection entry 
-affects only the remainder of the list in which it is contained.}
-
-\needlines{5}
-\subsubsubsection{End-of-List Entry}
-The end of any given location list is marked by an 
-\addtoindexx{location list!end-of-list entry}
-end-of-list entry, which consists of a 0 for the beginning address
-offset and a 0 for the ending address offset. A location list
-containing only an 
-\addtoindexx{end-of-list entry!in location list}
-end-of-list entry describes an object that
-exists in the source code but not in the executable program.
-
-Neither a base address selection entry nor an end-of-list
-entry includes a location description.
-
-\needlines{4}
-\textit{When a DWARF consumer is parsing and decoding a location
-list, it must recognize the beginning and ending address
-offsets of (0, 0) for an end-of-list entry and 
-\mbox{(0, \texttt{maximum-address})} for
-a default location list entry prior to applying any base
-address. Any other pair of offsets beginning with 0 is a
-valid normal location list entry. Next, it must recognize the
-beginning address offset of \texttt{maximum-address} for a base address selection
-entry prior to applying any base address. The current base
-address is not applied to the subsequent value (although there
-may be an underlying object language relocation that affects
-that value).}
-
-\textit{A base address selection entry and an end-of-list
-entry for a location list are identical to a base address
-selection entry and end-of-list entry, respectively, for a
-\addtoindex{range list}
-(see Section \refersec{chap:noncontiguousaddressranges}) 
-in interpretation and representation.}
-
-\needlines{5}
-\subsubsection{Location Lists in Split Object Files}
-\label{chap:locationlistsinsplitobjectfiles}
-\bb
-\textit{Location lists in split units use a format that 
-eliminates the need for relocations in the containing file.}
-\eb
-
-In a \splitDWARFobjectfile{} (see 
-Section \refersec{datarep:splitdwarfobjectfiles}), 
-location lists are contained in the \dotdebuglocdwo{} section.
-
-The \addtoindex{applicable base address} of a split
-location list entry (see following) is
-\addtoindexx{location list!base address selection entry}
-determined by the closest preceding base address selection
-entry (\DWLLEbaseaddressselectionentry) in the same location list. If there is
-no such selection entry, then the applicable base address
+\item \definition{Base address}.\addtoindexx{base address!of location list}
+This kind of entry provides an address to be
+used as the base address for beginning and ending address
+offsets given in certain kinds of bounded location description.
+The applicable base address of a bounded location description
+entry is the address specified by the closest preceding base
+address entry in the same location list. If there is no
+preceding base address entry, then the applicable base address
 defaults to the base address of the compilation unit (see
 Section \refersec{chap:fullandpartialcompilationunitentries}).
 
-Each entry in the split location list
-begins with a type code, which is a single unsigned byte that
-identifies the type of entry. There are five types of entries:
-\begin{enumerate}
-\itembfnl{\DWLLEendoflistentryTARG}
-This entry indicates the end of a location list, and
-contains no further data.
+In the case of a compilation unit where all of the machine
+code is contained in a single contiguous section, no base
+address entry is needed.
 
-\needlines{6}
-\itembfnl{\DWLLEbaseaddressselectionentryTARG}
-This entry contains an 
-unsigned LEB128\addtoindexx{LEB128!unsigned} value immediately
-following the type code. This value is the index of an
-address in the \dotdebugaddr{} section, which is then used as
-the base address when interpreting offsets in subsequent
-location list entries of type \DWLLEoffsetpairentry.
-This index is relative to the value of the 
-\DWATaddrbase{} attribute of the associated compilation unit.
+\item  \definition{End-of-list}.\addtoindexx{end-of-list!of location list}
+This kind of entry marks the end of the location list.
 
-\itembfnl{\DWLLEstartendentryTARG}
-This entry contains two unsigned LEB128\addtoindexx{LEB128!unsigned}
-values immediately following the type code. These values are the
-indices of two addresses in the \dotdebugaddr{} section.
-These indices are relative to the value of the 
-\DWATaddrbase{} attribute of the associated compilation unit
-(see Section \refersec{chap:unitentries}).
-These indicate the starting and ending addresses,
-respectively, that define the address range for which
-this location is valid. The starting and ending addresses
-given by this type of entry are not relative to the
-compilation unit base address. A single location
-description follows the fields that define the address range.
+\end{itemize}
 
-\needlines{5}
-\itembfnl{\DWLLEstartlengthentryTARG}
-This entry contains one unsigned LEB128\addtoindexx{LEB128!unsigned}
-value and a 4-byte
-unsigned value immediately following the type code. The
-first value is the index of an address in the \dotdebugaddr{}
-section, which marks the beginning of the address range
-over which the location is valid.
-This index is relative to the value of the 
-\DWATaddrbase{} attribute of the associated compilation unit.
-The starting address given by this
-type of entry is not relative to the compilation unit
-base address. The second value is the
-length of the range in bytes. A single location
-description follows the fields that define the address range.
+A location list consists of a sequence of zero or more bounded
+location description or base address entries, optionally followed
+by a default location entry, and terminated by an end-of-list
+entry.
 
-\itembfnl{\DWLLEoffsetpairentryTARG}
-This entry contains two 4-byte unsigned values
-immediately following the type code. These values are the
-starting and ending offsets, respectively, relative to
-the applicable base address, that define the address
-range for which this location is valid. A single location
-description follows the fields that define the address range.
+Each location list entry begins with a single byte identifying
+the kind of that entry, followed by zero or more operands depending
+on the kind.   
+   
+In the descriptions that follow, these terms are used for operands:
+   
+\begin{itemize}
+\item A \definitionx{counted location description} operand consists 
+of a two-byte unsigned integer giving the length of the location
+description (see Section \refersec{chap:singlelocationdescriptions}) 
+that immediately follows.
+
+\item An \definitionx{address index} operand is the index of an address
+in the \dotdebugaddr{} section. This index is relative to the
+value of the \DWATaddrbase{} attribute of the associated
+compilation unit. The address given by this kind
+of operand is *not* relative to the compilation unit base address.
+   
+\item A \definition{target address} operand is an address on the target
+machine. (Its size is the same as used for attribute values of
+class \CLASSaddress, specifically, \DWFORMaddr.)
+
+\end{itemize}
+ 
+The following entry kinds are defined for use in both
+split or non-split units:
+   
+\begin{enumerate}[1. ]
+\itembfnl{\DWLLEendoflistTARG}
+An end-of-list entry contains no further data.
+       
+\textit{A series of this kind of entry may be used for padding or
+alignment purposes.}
+
+\itembfnl{\DWLLEbaseaddressxTARG}
+This is a form of base address entry that has one unsigned
+LEB128 operand. The operand value is an address index that
+indicates the applicable base address used by \DWLLEoffsetpair{}
+entries.
+
+\itembfnl{\DWLLEstartxendxTARG}
+This is a form of bounded location description entry that
+has two unsigned LEB128 operands. The operand values are
+address indices. These indicate the
+starting and ending addresses, respectively, that define
+the address range for which this location is valid.
+These operands are followed by a counted location description.
+
+\itembfnl{\DWLLEstartxlengthTARG}
+This is a form of bounded location description that has two
+unsigned ULEB operands. The first value is an address index
+that indicates the beginning of the address range over
+which the location is valid.
+The second value is the length of the range.
+These operands are followed by a counted location description.
+
+\itembfnl{\DWLLEoffsetpairTARG}
+This is a form of bounded location description entry that
+has two unsigned LEB128 operands. The values of these
+operands are the starting and ending offsets, respectively,
+relative to the applicable base address, that define the
+address range for which this location is valid.
+These operands are followed by a counted location description.
+       
+\itembfnl{\DWLLEdefaultlocationTARG}
+This entry has no range operands that express a range of
+addresses. The only operand is a counted location description.
+
 \end{enumerate}
+      
+The following kinds of location list entries are defined for
+use only in non-split DWARF units:
+   
+\begin{enumerate}[1. ]
+\addtocounter{enumi}{6}
+\itembfnl{\DWLLEbaseaddressTARG}
+A base address entry has one target address operand.
+This address is used as the base address when interpreting
+offsets in subsequent location list entries of kind
+\DWLLEoffsetpair.
 
-\needlines{4}
-\textit{The \DWLLEbaseaddressselectionentry, \DWLLEstartendentry{}
-and \DWLLEstartlengthentry{} entries obtain addresses within the 
-target program indirectly using an index (not an offset) into an 
-array of addresses. The base of that array is obtained using the 
-\DWATaddrbase{} attribute of the containing compilation unit. 
-The value of that attribute is the offset of the base of the array 
-in the \dotdebugaddr{} section of the unit.}
+\itembfnl{\DWLLEstartendTARG}
+This is a form of bounded location description entry that
+has two target address operands. These indicate the
+starting and ending addresses, respectively, that define
+the address range for which the location is valid.
+These operands are followed by a counted location description.
+       
+\itembfnl{\DWLLEstartlengthTARG}
+This is a form of bounded location description entry that
+has one target address operand value and an unsigned LEB128
+integer operand value. The address is the beginning address
+of the range over which the location description is valid, and
+the length is the number of bytes in that range.
+These operands are followed by a counted location description.
+
+\end{enumerate}
+\eb
 
 \needlines{10}
 \section{Types of Program Entities}
@@ -2726,116 +2657,144 @@ may be beyond the last valid instruction in the executable.}
 
 \subsection{Non-Contiguous Address Ranges}
 \label{chap:noncontiguousaddressranges}
-When the set of addresses of a debugging information entry
-\addtoindexx{non-contiguous address ranges}
-cannot be described as a single contiguous range, the entry 
-may have a \DWATranges{} attribute\addtoindexx{ranges attribute}
-whose value is of class \livelink{chap:classrangelistptr}{rangelistptr}
-and indicates the beginning of a \addtoindex{range list}.
-Similarly,
-a \DWATstartscope{} attribute\addtoindexx{start scope attribute}
-(see Section \refersec{chap:dataobjectentries}).
-may have a value of class
-\livelink{chap:classrangelistptr}{rangelistptr} for the same reason.  
+\bb
+Range lists are used when the set of addresses for a debugging
+information entry cannot be described as a single contiguous 
+range.\addtoindexx{non-contiguous address ranges}
+Range lists are contained in a separate object file section
+called \dotdebugrnglists or \dotdebugrnglistsdwo (in split units).
+ 
+A range list is identified by a \DWATranges{}\addtoindexx{ranges attribute} 
+or other attribute whose value is of class \bbeb\CLASSrnglist{} 
+(see Section \refersec{datarep:classesandforms}).
+ 
+\textit{This range list representation, the \bbeb\CLASSrnglist{} class, and the
+related \DWATrnglistsbase{} attribute are new in \DWARFVersionV.
+Together they eliminate most or all of the object language relocations
+previously needed for range lists.}
 
-Range lists are contained in the \dotdebugranges{} section. 
-A \addtoindex{range list} is indicated by a 
-\DWATranges{} attribute\addtoindexx{ranges attribute}
-whose value is an offset from the beginning of the
-\dotdebugranges{} section to the beginning of the 
-\addtoindex{range list}.
+Each range list entry is one of the following kinds:
+\begin{itemize}
+\item \definition{Bounded range}.\addtoindexx{bounded range} 
+This kind of entry defines an address range
+that is included in the range list. The starting address is
+the lowest address of the address range. The ending address
+is the address of the first location past the highest address
+of the address range.
+       
+There are several kinds of bounded range entries which specify
+the starting and ending addresses in different ways.
 
-\needlines{4}
-If the current compilation unit contains a \DWATrangesbase{}
-attribute, the value of that attribute establishes a base
-offset within the \dotdebugranges{} section for the compilation
-unit. The offset given by the \DWATranges{} attribute is
-relative to that base.
+\item \definition{Base address}.\addtoindexx{base address!of range list}
+This kind of entry provides an address to be
+used as the base address for the beginning and ending
+address offsets given in certain bounded range entries. The
+applicable base address of a range list entry is
+determined by the closest preceding base address
+entry in the same range list. If there is no preceding
+base address entry, then the applicable base address
+defaults to the base address of the compilation unit (see 
+Section \refersec{chap:fullandpartialcompilationunitentries}).
 
-\needlines{4}
-The \definitionx{applicable base address} of a \addtoindex{range list} 
-entry is determined by the closest preceding base address 
-selection entry in the same range list (see
-Section \ref{chap:baseaddressselectionentry}). 
-If there is no such selection
-entry, then the applicable base address defaults to the base
-address of the compilation unit 
-(see Section \refersec{chap:fullandpartialcompilationunitentries}).
-
-\textit{In the case of a compilation unit where all of the machine
+In the case of a compilation unit where all of the machine
 code is contained in a single contiguous section, no base
-address selection entry is needed.}
+address entry is needed.
 
-Address range entries in a \addtoindex{range list} may not overlap.
-There is no requirement that the entries be ordered in any particular way.
+\item \definition{End-of-list}.\addtoindexx{end-of-list!of range list} 
+This kind of entry marks the end of the range list.
 
-Each entry in a \addtoindex{range list} is either a 
-\addtoindex{range list entry},
-\addtoindexx{base address selection entry!in range list}
-a base address selection entry, or an 
-\addtoindexx{end-of-list entry!in range list}
-end-of-list entry.
+\end{itemize}
 
-\needlines{5}
-\subsubsection{Range List Entry}
-A \addtoindex{range list entry} consists of:
+Each range list consists of a sequence of zero or more bounded
+range or base address entries, terminated by an end-of-list entry.
+
+A range list containing only an end-of-list entry describes an
+empty scope (which contains no instructions).
+   
+Bounded range entries in a range list may not overlap. There is
+no requirement that the entries be ordered in any particular way.
+
+A bounded range entry whose beginning and ending address offsets
+are equal (including zero) indicates an empty range and may be
+ignored.
+   
+Each range list entry begins with a single byte identifying the kind
+of that entry, followed by zero or more operands depending on the
+kind.
+
+In the descriptions that follow, the term \definitionx{address index}
+means the index of an address in the \dotdebugaddr{} section. This
+index is relative to the value of the \DWATaddrbase{} attribute
+of the associated compilation unit. The address given by this kind
+of operand is \emph{not} relative to the compilation unit base 
+address.
+    
+The following entry kinds are defined for use in both
+split or non-split units:
 \begin{enumerate}[1. ]
-\item A beginning address offset. This address offset has the 
-\addtoindex{size of an address} and is relative to
-the \addtoindex{applicable base address} of the compilation unit referencing this 
-\addtoindex{range list}. 
-It marks the beginning of an 
-\addtoindexi{address range}{address range!in range list}. 
+\itembfnl{\DWRLEendoflistTARG}
+An end-of-list entry contains no further data.
 
-\item An ending address offset. This address offset again has the 
-\addtoindex{size of an address} and is relative
-to the \addtoindex{applicable base address} of the compilation unit referencing 
-this \addtoindex{range list}.
-It marks the first address past the end of the address range.
-The ending address must be greater than or
-equal to the beginning address.
+\textit{A series of this kind of entry may be used for padding or
+alignment purposes.}
+      
+\itembfnl{\DWRLEbaseaddressxTARG}
+A base address entry has one unsigned LEB128 operand.
+The operand value is an address index that indicates
+the applicable base address used by following \DWRLEoffsetpair{}
+entries.
+    
+\itembfnl{\DWRLEstartxendxTARG}
+This is a form of bounded range entry that
+has two unsigned LEB128 operands. The operand values are
+address indices that indicate the
+starting and ending addresses, respectively, that define
+the address range.
 
-\needlines{4}
-\textit{A \addtoindex{range list} entry (but not a base address 
-selection or end-of-list entry) whose beginning and
-ending addresses are equal has no effect because the size of the 
-range covered by such an entry is zero.}
-\end{enumerate}
+\itembfnl{\DWRLEstartxlengthTARG}
+This is a form of bounded location description that
+has two unsigned ULEB operands. The first value is an address index
+that indicates the beginning of the address range.
+The second value is the length of the range.
+       
+\itembfnl{\DWRLEoffsetpairTARG}
+This is a form of bounded range entry that
+has two unsigned LEB128 operands. The values of these
+operands are the starting and ending offsets, respectively,
+relative to the applicable base address, that define the
+address range.
 
-\needlines{5}
-\subsubsection{Base Address Selection Entry}
-\label{chap:baseaddressselectionentry}
-A \addtoindex{base address selection entry} consists of:
+\end{enumerate} 
+
+The following kinds of range entry may be used only in non-split 
+units:
+ 
 \begin{enumerate}[1. ]
-\item The value of the largest representable address offset 
-(for example, \wffffffff when the size of an address is 32 bits).
+\addtocounter{enumi}{5}
+\itembfnl{\DWRLEbaseaddressTARG}
+A base address entry has one target address operand.
+This operand is the same size as used in \DWFORMaddr.
+This address is used as the base address when interpreting
+offsets in subsequent location list entries of kind
+\DWRLEoffsetpair.
 
-\item An address, which defines the appropriate base address 
-for use in interpreting the beginning and ending address offsets 
-of subsequent entries of the location list.
+\itembfnl{\DWRLEstartendTARG}
+This is a form of bounded range entry that
+has two target address operands. Each
+operand is the same size as used in \DWFORMaddr.
+These indicate the starting and ending addresses,
+respectively, that define the address range for which
+the following location is valid.
+       
+\itembfnl{\DWRLEstartlengthTARG}
+This is a form of bounded range entry that
+has one target address operand value and an unsigned LEB128
+integer length operand value. The address is the beginning address
+of the range over which the location description is valid, and
+the length is the number of bytes in that range.
+
 \end{enumerate}
-
-\textit{A base address selection entry affects only the 
-remainder of the list in which it is contained.}
-
-\subsubsection{End-of-List Entry}
-The end of any given \addtoindex{range list} is marked by an 
-\addtoindexx{end-of-list entry!in range list}
-end-of-list entry, 
-which consists of a 0 for the beginning address
-offset and a 0 for the ending address offset. 
-A \addtoindex{range list}
-containing only an end-of-list entry describes an empty scope
-(which contains no instructions).
-
-\textit{A base address selection entry and an 
-\addtoindexx{end-of-list entry!in range list}
-end-of-list entry for
-a \addtoindex{range list} 
-are identical to a base address selection entry
-and end-of-list entry, respectively, for a location list
-(see Section \refersec{chap:locationlists}) 
-in interpretation and representation.}
+\eb
 
 
 \section{Entry Address}
@@ -2853,7 +2812,10 @@ module initialization, subroutines,
 and the like, may have a \DWATentrypcDEFN{} attribute 
 \addtoindexx{entry PC address} to indicate the 
 \definitionx{entry address} which is the address of the 
-instruction where execution should begin
+instruction where execution 
+\bb
+begins 
+\eb
 within that range\hypertarget{chap:entryaddressofscope}{}
 of addresses. 
 If the value of the \DWATentrypcNAME{} attribute is of

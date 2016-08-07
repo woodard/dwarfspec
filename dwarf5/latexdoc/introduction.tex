@@ -262,7 +262,11 @@ fashion, informative text will suggest but not require this design.
 
 \subsection{Permissive Rather Than Prescriptive}
 The DWARF Standard specifies the meaning of DWARF descriptions. It does not
-specify in detail what a particular producer should generate for any source to
+specify in detail what a particular producer 
+\bb
+must
+\eb
+generate for any source to
 object conversion.  One producer may generate a more complete description
 than another, it may describe features in a different order (unless the 
 standard explicitly requires a particular order), or it may use
@@ -291,6 +295,13 @@ while another may only describe the variable's location in memory.  Both are
 valid DWARF descriptions, while a consumer using the former would be able
 to provide more accurate values for the variable while executing in that
 range than a consumer using the latter.
+
+\bb
+In this document, where the word \doublequote{may} is used, the producer has 
+the option to follow the description or not.  Where the text says 
+\doublequote{may not}, this is prohibited.  Where the text says \doublequote{should}, 
+this is advice about best practice, but is not a requirement.
+\eb
 
 \subsection{Vendor Extensibility}
 This document does not attempt to cover all interesting
@@ -356,7 +367,7 @@ except for line number information.
 DWARF information to be kept separate from an executable 
 or shared image. This includes new sections 
 \dotdebugaddr, \dotdebugstroffsets, \dotdebugabbrevdwo, \dotdebuginfodwo, 
-\dotdebuglinedwo, \dotdebuglocdwo, \dotdebugmacrodwo, \dotdebugstrdwo,
+\dotdebuglinedwo, \dotdebugloclistsdwo, \dotdebugmacrodwo, \dotdebugstrdwo,
 \dotdebugstroffsetsdwo, \dotdebugcuindex{} and \dotdebugtuindex{} 
 together with new forms of attribute value for referencing these sections.
 This enhances DWARF support by reducing executable program size and
@@ -366,6 +377,13 @@ with a \dotdebugmacro{} representation that can potentially be much more compact
 
 \item Replace the \dotdebugpubnames{} and \dotdebugpubtypes{} sections
 with a single and more functional name index section, \dotdebugnames{}.
+\bb
+\item Replace the location list and range list sections (\texttt{.debug\_loc} 
+and \texttt{.debug\_ranges}, respectively) with new sections (\dotdebugloclists{} 
+and \dotdebugrnglists) and new representations that
+save space and processing time by eliminating most related
+object file relocations.
+\eb
 \item Add a new debugging information entry (\DWTAGcallsiteNAME), related 
 attributes and DWARF expression operators to describe call site information, 
 including identification of tail calls and tail recursion.
@@ -393,8 +411,12 @@ a new \HFNunittype{} field.
 \needlines{4}
 \item New operand forms for attribute values are defined 
 (\DWFORMaddrxNAME, \DWFORMdatasixteenNAME, \DWFORMimplicitconstNAME, 
-\DWFORMlinestrpNAME, 
+\DWFORMlinestrpNAME,
+\bb
+\DWFORMloclistxNAME, \DWFORMrnglistxNAME,
+\eb 
 \DWFORMrefsupNAME, \DWFORMstrpsupNAME{} and \DWFORMstrxNAME).
+\eb
 
 \textit{Because a pre-DWARF Version 5 consumer will not be able to interpret 
 these even to ignore and skip over them, new forms must be 

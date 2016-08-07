@@ -56,10 +56,10 @@ their descendants. This is the bulk of the debugging
 information for the compilation unit that is normally found
 in the \dotdebuginfo{} section.
 \item
-\dotdebuglocdwo{} - Contains the location lists referenced by
+\dotdebugloclistsdwo{} - Contains the location lists referenced by
 the debugging information entries in the \dotdebuginfodwo{}
 section. This contains the location lists normally found in 
-the \dotdebugloc{} section, with a 
+the \dotdebugloclists{} section, with a 
 modified format to eliminate the need for relocations.
 \item
 \dotdebugstrdwo{} - Contains the string table for all indirect
@@ -144,8 +144,7 @@ building an index section.
 The section header refers to a
 compilation unit offset, which is the offset of the
 skeleton compilation unit in the \dotdebuginfo{} section.
-\item
-\dotdebugranges{} - Contains the range lists.
+\bbeb
 \item
 \dotdebugstr{} - Contains any strings referenced by the skeleton
 \dotdebuginfo{} sections (via \DWFORMstrp{} or \DWFORMstrx{}).
@@ -165,7 +164,7 @@ may have the following attributes:
 \DWAThighpc{},
 \DWATlowpc{},
 \DWATranges{},
-\DWATrangesbase{},
+\bbeb
 \DWATstmtlist{},
 \DWATstroffsetsbase{}
 }
@@ -193,16 +192,11 @@ compilation unit).
 one \dotdwo{} section to another \dotdwo{} section
 in the same compilation unit. 
 
-\item Some values that need a relocation to refer to a
-relocatable program address use the \DWFORMaddrx{} form,
-referencing a relocatable value in the \dotdebugaddr{} section (which
-remains in the \texttt{.o} file).
+\item Some values that need a relocation to refer to a relocatable 
+program address use the \DWFORMaddrx{} form, referencing a relocatable 
+value in the \dotdebugaddr{} section (which remains in the .o file).
 
-\item Some values that need a relocation to refer to the
-\dotdebugranges{} section in the \texttt{.o} file use a relocatable base
-specified by the \DWATrangesbase{} attribute (which is placed in the
-skeleton compilation unit in the \texttt{.o} file).
-
+\bbpareb
 \end{enumerate}
 
 
@@ -241,6 +235,11 @@ kinds.
 \hline
 \DWATlanguage           & \chkmk  & \chkmk &           & \chkmk & \chkmk  \\
 \hline
+\bb
+\DWATloclistsbase       & \chkmk  &        &           &        &         
+\eb
+\\
+\hline
 \DWATlowpc              & \chkmk  &        &  \chkmk   &        &         \\
 \hline
 \DWATmacros             & \chkmk  &        &           & \chkmk &         \\
@@ -251,9 +250,11 @@ kinds.
 \hline
 \DWATproducer           & \chkmk  &        &           & \chkmk &         \\
 \hline
-\DWATranges             & \chkmk  &        &  \chkmk   &        &         \\
+\bb
+\DWATranges \eb         & \chkmk  &        &           & \chkmk &         \\
 \hline
-\DWATrangesbase         & \chkmk  &        &  \chkmk   &        &         \\
+\bb
+\DWATrnglistsbase \eb   & \chkmk  &        &           &        &         \\
 \hline
 \DWATstmtlist           & \chkmk  & \chkmk &  \chkmk   &        & \chkmk  \\
 \hline
@@ -402,7 +403,6 @@ information:
 \begin{alltt}
   \dotdebugabbrev
   \dotdebuginfo
-  \dotdebugranges
   \dotdebugline
   \dotdebugstr
   \dotdebugaddr
@@ -426,8 +426,6 @@ Figure \referfol{fig:splitdwafexampleskeletondwarfdescription}.
         \DWATcompdir: (reference to directory name in .debug_str)
         \DWATdwoname: (reference to "demo1.dwo" in .debug_str)
         \DWATaddrbase: (reference to .debug_addr section)
-        \DWATrangesbase: (reference to range list in .debug_ranges section)
-        \DWATranges: (offset of range list in .debug_ranges section)
         \DWATstmtlist: (reference to .debug_line section)
         \DWATlowpc: 0
       
@@ -450,34 +448,16 @@ in the \splitDWARFobjectfile{} matches the information in the object
 file, and it can be used to find the debug information in a DWARF
 package file.
 
-\needlines{4}
 The \DWATaddrbase{} attribute contains the relocatable offset of
-this object file's contribution to the \dotdebugaddr{} section, and
-the \DWATrangesbase{} attribute contains the relocatable offset
-of this object file's contribution to the \dotdebugranges{} section.
-The \DWATranges{} attribute refers to a specific range list within
-that contribution, and its value is a (non-relocatable) offset
-relative to the base. In a compilation unit with a single
-contiguous range of code, the \DWATranges{} attribute might be
-omitted, and instead replaced by the pair \DWATlowpc{} and
-\DWAThighpc.
+this object file's contribution to the \dotdebugaddr{} section.
+\bbeb
 
 The \DWATstmtlist{} attribute contains the relocatable offset of
 this file's contribution to the \dotdebugline{} table.
 
-There is both a \DWATranges{} attribute as well as a \DWATlowpc{} 
-attribute which 
-provides a default base address for the range list entries in the
-\dotdebugranges{} section. 
+\bbpareb
 
-The \dotdebugranges{} section contains the range list referenced by
-the \DWATranges{} attribute in the skeleton compilation unit DIE,
-plus any range lists referenced by \DWATranges{} attributes in the
-split DWARF object. In this example, \texttt{demo1.o} contains range
-list entries for the function \texttt{Box::contains}, as well as for
-out-of-line copies of the inline functions \texttt{Point::x} and 
-\texttt{Point::y}.
-
+\needlines{6}
 The \dotdebugline{} section contains the full line number table for
 the compiled code in the object file. As shown in
 Figure \refersec{fig:splitobjectexamplesourcefragment1}, the line
@@ -528,9 +508,10 @@ The \splitDWARFobjectfile{s} each contain the following sections:
   \dotdebugabbrevdwo
   \dotdebuginfodwo{} (for the compilation unit)
   \dotdebuginfodwo{} (one COMDAT section for each type unit)
-  \dotdebuglocdwo
+  \dotdebugloclistsdwo
   \dotdebuglinedwo
   \dotdebugmacrodwo
+  \dotdebugrnglistsdwo
   \dotdebugstroffsetsdwo
   \dotdebugstrdwo
 \end{alltt}
@@ -552,9 +533,7 @@ compilation unit.
 form code \DWFORMstrx, referring to slots in the
 \dotdebugstroffsetsdwo{} section.
 
-\item References to range lists in the \dotdebugranges{} section are
-all relative to the base offset given by \DWATrangesbase{}
-in the skeleton compilation unit.
+\bbpareb
 
 \needlines{4}
 \item References to relocatable addresses in the object file 
@@ -713,11 +692,11 @@ Section \refersec{app:dwarfpackagefileexample} presents
 an example of a DWARF package file.
 
 \needlines{4}
-The \dotdebuglocdwo{} section contains the location lists referenced
+The \dotdebugloclistsdwo{} section contains the location lists referenced
 by \DWATlocation{} attributes in the \dotdebuginfodwo{} section. This
-section has a similar format to the \dotdebugloc{} section in a
+section has a similar format to the \bbeb\dotdebugloclists{} section in a
 non-split object, but it has some small differences as explained
-in Section \refersec{datarep:locationlistentriesinsplitobjects}. 
+in Section \refersec{datarep:locationlists}. 
 
 \begin{figure}[b]
 \figurepart{1}{2}
@@ -808,20 +787,23 @@ location lists at offset \texttt{0x0} and \texttt{0x2a}, respectively, and the
 refers to the location list at offset \texttt{0x49}. 
 Figure \refersec{fig:splitobjectexampledemotwodwodwarfdebuglocdwoexcerpts}
 shows a representation of the
-location lists at those offsets in the \dotdebuglocdwo{} section.
+location lists at those offsets in the \dotdebugloclistsdwo{} section.
 
 % Special commands for use in the folloing table
-\newcommand{\XXLLEsl}{\hyperlink{chap:DWLLEstartlengthentry}{start\_length\_entry}
-                      \index{DW\_LLE\_start\_length\_entry}}
-\newcommand{\XXLLEeol}{\hyperlink{chap:DWLLEendoflistentry}{end\_of\_list\_entry}
-                       \index{DW\_LLE\_end\_of\_list\_entry}}
+\newcommand{\XXLLEsl}{\hyperlink{chap:DWLLEstartlength}{start\_length}
+                      \index{DW\_LLE\_start\_length}}
+\newcommand{\XXLLEeol}{\hyperlink{chap:DWLLEendoflist}{end\_of\_list}
+                       \index{DW\_LLE\_end\_of\_list}}
 
 \begin{figure}[ht]
 \begin{dwflisting}
+\begin{center}
 \begin{tabular}{rl|rr|rl}
-       &  entry type          & \multicolumn{2}{c}{range} 
-                                               & \multicolumn{2}{l}{\hspace{6mm}location} \\
-offset & (DW\_LLE\_*)         & start & length & length & expression \\
+   \multicolumn{2}{c}{\textbf{Entry type}}
+                & \multicolumn{2}{c}{\textbf{Range}} 
+                                & \multicolumn{2}{l}{\hspace{6mm}\textbf{Counted Location Description}} \\
+offset& (DW\_LLE\_*)   
+                & start& length & length & expression \\
 \hline
 &&&&& \\
 
@@ -848,12 +830,16 @@ offset & (DW\_LLE\_*)         & start & length & length & expression \\
 0x5c & \XXLLEeol &&&& \\
 &&&& \\
 \end{tabular}
+\end{center}
 \end{dwflisting}
-\caption{Split object example: \texttt{demo2.dwo} DWARF \dotdebuglocdwo{} excerpts}
+\caption{Split object example: \texttt{demo2.dwo} DWARF \dotdebugloclistsdwo{} excerpts}
 \label{fig:splitobjectexampledemotwodwodwarfdebuglocdwoexcerpts}
 \end{figure}
 
-In each \DWLLEstartlengthentry{}, the start field is the index
+\bb
+In each \DWLLEstartlength{} entry, 
+\eb
+the start field is the index
 of a slot in the \dotdebugaddr{} section, relative to the base
 offset defined by the compilations unit's \DWATaddrbase{}
 attribute. The \dotdebugaddr{} slots referenced by these entries give
@@ -937,9 +923,9 @@ with contributions from each input file as shown.
      type unit for class \texttt{Point} from \texttt{demo1.dwo} \newline
      type unit for class \texttt{Line} from \texttt{demo2.dwo}  \\
 \hline
-  \dotdebuglocdwo{}
-&    \dotdebuglocdwo{} from \texttt{demo1.dwo} \newline
-     \dotdebuglocdwo{} from \texttt{demo2.dwo} \\
+  \dotdebugloclistsdwo{}
+&    \dotdebugloclistsdwo{} from \texttt{demo1.dwo} \newline
+     \dotdebugloclistsdwo{} from \texttt{demo2.dwo} \\
 \hline
   \dotdebuglinedwo{}
 &    \dotdebuglinedwo{} from \texttt{demo1.dwo} \newline
@@ -965,7 +951,7 @@ with contributions from each input file as shown.
 \end{figure}
 
 \needlines{4}
-The \dotdebugabbrevdwo{}, \dotdebuglocdwo{} and \dotdebuglinedwo{}
+The \dotdebugabbrevdwo{}, \dotdebugloclistsdwo{} and \dotdebuglinedwo{}
 sections are copied over from the two \texttt{.dwo} files as
 individual contributions to the corresponding sections in the
 \texttt{.dwp} file. 
@@ -1008,10 +994,10 @@ we see that the \DWTAGvariable{} DIE at \texttt{7\$} has a
 reference to a location list at offset 0x49 (decimal 73). Because
 this is part of the compilation unit for \texttt{demo2.dwo}, with 
 unit signature \texttt{0xb5f0ecf455e7e97e}, we see that its contribution 
-to \dotdebuglocdwo{} begins at offset 84, so the location list from
+to \dotdebugloclistsdwo{} begins at offset 84, so the location list from
 Figure \refersec{fig:splitobjectexampledemotwodwodwarfdebuglocdwoexcerpts} 
 can be found in \texttt{demo.dwp} at offset 157 (84 + 73) in
-the combined \dotdebuglocdwo{} section.
+the combined \dotdebugloclistsdwo{} section.
 
 \begin{figure}[ht]
 \begin{center}

@@ -78,7 +78,7 @@ or shareable file and a related \addtoindex{supplementary object file}.
 \node(zlinkj)   at (5,  5.4)  [link] {\DWATstmtlist{}~~(h)};
 \node(zlinkh)   at (5,  3.9)  [link] {\begin{tabular}{c}
                                       \DWATranges{}~~~~(i) \\
-                                      \DWATrangesbase
+                                      \DWATrnglistsbase
                                       \end{tabular}};
 \node(zlinkg)   at (5,  2.4)  [link] {\DWATlocation{}, etc.~~(j)};
 \node(zlinkk)	at (5,  0.5)  [link] {\begin{tabular}(c)
@@ -117,8 +117,8 @@ or shareable file and a related \addtoindex{supplementary object file}.
                                       \DWMACROstartfile
                                       \end{tabular}};
 \node(zsectlin)	at (10,  5.00) [sect] {\dotdebugline};
-\node(zsectran)	at (10,  3.85) [sect] {\dotdebugranges};
-\node(zsectloc)	at (10,  2.70) [sect] {\dotdebugloc{}};
+\node(zsectran)	at (10,  3.85) [sect] {\dotdebugrnglists};
+\node(zsectloc)	at (10,  2.70) [sect] {\dotdebugloclists{}};
 \node(zlinko)   at (10,  1.20) [link] {\begin{tabular}{c}
                                        \DWOPaddrx \\
                                        \DWOPconstx
@@ -248,21 +248,22 @@ beginning of the line number information for the referencing unit.
 
 %i
 \needlines{5}
-\itembfnl{(i) \dotdebuginfo{} to \dotdebugranges}
-An attribute value of class \livelink{chap:classrangelistptr}{rangelistptr} 
-(specifically form
-\DWFORMsecoffset) 
-is an offset within the \dotdebugranges{} section of
-a range list.
+\bb
+\itembfnl{(i) \dotdebuginfo{} to \dotdebugrnglists}
+An attribute value of class \CLASSrnglist{} 
+(specifically form \DWFORMrnglistx{} or \DWFORMsecoffset) 
+is an index or offset within the \dotdebugrnglists{} 
+\eb
+section of a \addtoindex{range list}.
 
 %j
-\itembfnl{(j) \dotdebuginfo{} to \dotdebugloc}
-An attribute value of class \livelink{chap:classloclistptr}{loclistptr} 
-(specifically form
-\DWFORMsecoffset) 
-is an offset within the \dotdebugloc{} 
-section of a
-\addtoindex{location list}.
+\bb
+\itembfnl{(j) \dotdebuginfo{} to \dotdebugloclists}
+An attribute value of class \CLASSloclist{} 
+(specifically form \DWFORMloclistx or \DWFORMsecoffset) 
+is an index or offset within the \dotdebugloclists{}
+\eb
+section of a \addtoindex{location list}.
 
 %k
 \itembfnl{(k) \dotdebuginfo{} to \dotdebugaddr}
@@ -295,9 +296,9 @@ The second operand of
 of that section given in the macro information header.
 
 %o
-\itembfnl{(o) \dotdebugloc{} to \dotdebugaddr}
+\itembfnl{(o) \dotdebugloclists{} to \dotdebugaddr}
 \DWOPaddrx{} and \DWOPconstx{} operators that occur in the 
-\dotdebugloc{} section refer indirectly to the 
+\dotdebugloclists{} section refer indirectly to the 
 \dotdebugaddr{} section by way of the 
 \DWATaddrbase{} attribute in the associated \dotdebuginfo{} 
 section.
@@ -350,25 +351,26 @@ The circled (s) connects to the circled
 
 \fill[yellow!25] (7.5,-1) -- (7.5,14.5) -- (19,14.5) -- (19,-1) -- cycle;
 
+% First column
+%
 \node(ysectabb)    at ( 5, 13.5) [sect] {\dotdebugabbrev};
 \node(ysectadd)    at ( 2, 12.0) [sect] {\dotdebugaddr};
 \node(ysectara)    at ( 0, 10.5) [sect] {\dotdebugaranges};
 \node(ysectfra)    at ( 0,  9.0) [sect] {\dotdebugframe};
 \node(ysectlin)    at ( 0,  7.5) [sect] {\dotdebugline};
-\node(ysectlis)    at ( 0,  6.0) [sect] {\dotdebuglinestr};
-\node(ysectnam)    at ( 0,  4.5) [sect] {\dotdebugnames};
-\node(ysectran)    at ( 0,  3.0) [sect] {\dotdebugranges};
-\node(ysectstr)    at ( 2,  1.5) [sect] {\dotdebugstr};
+\node(ysectlis)    at ( 0,  5.7) [sect] {\dotdebuglinestr};
+\node(ysectnam)    at ( 0,  4.0) [sect] {\dotdebugnames};
+\node(ysectstr)    at ( 2,  2.0) [sect] {\dotdebugstr};
 \node(ysectsto)    at ( 5,  0.0) [sect] {\dotdebugstroffsets};
 
-\node(ysectinf)    at ( 5,  7) [sect] {\begin{tabular}{c}
+\node(ysectinf)    at ( 5,  7)   [sect] {\begin{tabular}{c}
                                          ~\\
                                          \dotdebuginfo \\
                                          (skeleton CU)\\
                                          ~
                                          \end{tabular}};
 
-\node(ysectinfdwo) at (10.5,7) [sect] {\begin{tabular}{c}
+\node(ysectinfdwo) at (10.5,7)   [sect] {\begin{tabular}{c}
                                          \dotdebuginfodwo \\
                                          (one CU, possibly \\
                                          multiple COMDAT \\
@@ -376,10 +378,11 @@ The circled (s) connects to the circled
                                          \end{tabular}};
 
 \node(ysectabbdwo) at (10.5, 13.5) [sect] {\dotdebugabbrevdwo};
-\node(ysectlindwo) at (16.0,  7.5) [sect] {\dotdebuglinedwo};
-\node(ysectlocdwo) at (16.0, 11.0) [sect] {\dotdebuglocdwo};
+\node(ysectlocdwo) at (14.0, 11.5) [sect] {\dotdebugloclistsdwo};
+\node(ysectrandwo) at (15.8,  9.5) [sect] {\dotdebugrnglistsdwo};
+\node(ysectlindwo) at (16.0,  7.0) [sect] {\dotdebuglinedwo};
 \node(ysectmacdwo) at (16.0,  4.5) [sect] {\dotdebugmacrodwo};
-\node(ysectstrdwo) at (13.0,  2.0) [sect] {\dotdebugstrdwo};
+\node(ysectstrdwo) at (13.5,  2.0) [sect] {\dotdebugstrdwo};
 \node(ysectstodwo) at (10.5,  0.0) [sect] {\dotdebugstroffsetsdwo};
 
 \draw[thin,-triangle 45]	(ysectinf) -- (ysectabb) node[midway, right] {(c)};
@@ -388,7 +391,6 @@ The circled (s) connects to the circled
 \draw[thin,-triangle 45]	(ysectinf) -- (ysectlin.east) node[midway, above] {(h)};
 \draw[thin,-triangle 45]	(ysectlin) -- (ysectlis) node[midway, right] {(l)};
 \draw[thin,-triangle 45]	(ysectnam.east) -- (ysectinf) node[midway, left] {(b)};
-\draw[thin,-triangle 45]	(ysectinf) -- (ysectran.east) node[left, near end] {(i)};
 \draw[thin,-triangle 45]	(ysectinf) -- (ysectstr) node[midway, right] {(d)};
 \draw[thin,-triangle 45]	(ysectinf) -- (ysectsto) node[midway, right] {(e)};
 \draw[thin,-triangle 45]	(ysectsto) -- (ysectstr) node[midway, right] {(l)};
@@ -396,17 +398,18 @@ The circled (s) connects to the circled
 \draw[dashed, thick,-triangle 45]  (ysectinf) .. controls (7.5, 11) ..(ysectinfdwo) 
                                                        node[midway, above] {(did)};
 
-\draw[thin,-triangle 45]  (ysectinfdwo) -- (ysectabbdwo) node[midway, right] {(co)};
+\draw[thin,-triangle 45]  (ysectinfdwo) -- (ysectabbdwo) node[midway, left] {(co)};
 \draw[thin,-triangle 45]  (ysectinfdwo) -- (ysectlindwo.west) node[midway, above] {(ho)};
-\draw[thin,-triangle 45]  (ysectinfdwo) -- (ysectlocdwo.west) node[midway, below] {(jo)};
-\draw[thin,-triangle 45]  (ysectinfdwo) -- (ysectmacdwo.west) node[near end, above] {(go)};
+\draw[thin,-triangle 45]  (ysectinfdwo) -- (ysectrandwo.west) node[midway, above] {(io)};
+\draw[thin,-triangle 45]  (ysectinfdwo) -- (ysectlocdwo.west) node[midway, right] {(jo)};
+\draw[thin,-triangle 45]  (ysectinfdwo) -- (ysectmacdwo.west) node[midway, above] {(go)};
 \draw[thin,-triangle 45]  (ysectinfdwo) -- (ysectstrdwo) node[midway, right] {(do)};
 \draw[thin,-triangle 45]  (ysectinfdwo) -- (ysectstodwo) node[midway, left] {(eo)};
 
 \draw[thin,-triangle 45]  (ysectstodwo) -- (ysectstrdwo) node[near end, below] {(lo)};
 \draw[thin,-triangle 45]  (ysectmacdwo) -- (ysectstrdwo) node[midway, left] {(po)};
-\draw[thin,-triangle 45]  (ysectmacdwo) .. controls (16.5, 1) .. (ysectstodwo.east)
-                                                       node[near start, left] {(mo)};
+\draw[thin,-triangle 45]  (ysectmacdwo) .. controls (16.2, 1) .. (ysectstodwo.east)
+                                                       node[very near start, right] {(mo)};
 \draw[thin,-triangle 45]  (ysectlindwo.east) .. controls (19,4) and (18, 0) .. (ysectstodwo.east)
                                                        node[very near start, left] {(lmo)};
 
@@ -507,28 +510,28 @@ for the referencing unit (the line table details are not in
 \dotdebuglinedwo{} but the line header with its list 
 of file names is present).
 
-\itembfnl{(i) \dotdebuginfo{} to \dotdebugranges}
-An attribute value of class \CLASSrangelistptr{} 
-(specifically \DWATranges{} with form 
-\DWFORMsecoffset) is an offset within the \dotdebugranges{} 
-section of a range list.
+\bb
+\itembfnl{(io) \dotdebuginfodwo{} to \dotdebugrnglistsdwo}
+An attribute value of class \CLASSrnglist{} (specifically 
+\DWATranges{} with form \DWFORMrnglistx{} or \DWFORMsecoffset) 
+is an index or offset within the \dotdebugrnglistsdwo{}
+section of a \addtoindex{range list}.
+The format of \dotdebugrnglistsdwo{} location list entries 
+is restricted to a subset of those in \dotdebugrnglists.
+See Section \refersec{chap:noncontiguousaddressranges} for details.
+\eb 
 
-\itembfnl{(jo) \dotdebuginfodwo{} to \dotdebuglocdwo}
-An attribute value of class \CLASSloclistptr{} (specifically 
-\DWATdatamemberlocation,
-\DWATframebase,
-\DWATlocation, 
-\DWATreturnaddr, 
-\DWATsegment, 
-\DWATstaticlink,
-\DWATstringlength, 
-\DWATuselocation{} or 
-\DWATvtableelemlocation{}
-with form \DWFORMsecoffset) is an offset within the 
-\dotdebuglocdwo{} section of a location list.  The format of
-\dotdebuglocdwo{} location list entries is slightly different 
-than that in \dotdebugloc. 
-See Section \refersec{chap:locationlistsinsplitobjectfiles} for details.
+\itembfnl{(jo) \dotdebuginfodwo{} to \dotdebugloclistsdwo}
+An attribute value of class 
+\bb
+\CLASSloclist{} (specifically with form \DWFORMloclistx
+or \DWFORMsecoffset) 
+is an index or offset within the \dotdebugloclistsdwo{} 
+section of a \addtoindex{location list.}
+The format of \dotdebugloclistsdwo{} location list entries 
+is restricted to a subset of those in \dotdebugloclists.
+\eb
+See Section \refersec{chap:locationlists} for details.
 
 \needlines{4}
 \itembfnl{(k) \dotdebuginfo{} to \dotdebugaddr}

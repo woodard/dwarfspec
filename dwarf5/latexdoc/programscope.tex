@@ -294,12 +294,15 @@ unit in whatever form makes sense for the host system.
 \item  \hypertarget{chap:DWATproducercompileridentification}{}
 A \DWATproducerDEFN{} attribute\addtoindexx{producer attribute}
 whose value is a null-terminated string containing 
-information about the compiler
-that produced the compilation unit. The actual contents of
+information about the compiler that produced the compilation unit. 
+
+\bb
+\textit{The actual contents of
 the string will be specific to each producer, but should
 begin with the name of the compiler vendor or some other
-identifying character sequence that should avoid confusion
-with other producer values.
+identifying character sequence that will avoid confusion
+with other producer values.}
+\eb
 
 \needlines{4}
 \item  \hypertarget{chap:DWATidentifiercaseidentifiercaserule}{}
@@ -323,32 +326,45 @@ as the values of \DWATname{} attributes
 \addtoindexx{name attribute}
 in debugging information
 entries for the compilation unit reflect the names as they
-appear in the source program. The debugger should be sensitive
+appear in the source program. 
+
+\bb
+\textit{A debugger should be sensitive
 to the case of \addtoindex{identifier names} when doing identifier 
-lookups.
+lookups.}
+\eb
 
 \needlines{4}
 \DWIDupcaseTARG{} means that the 
 producer of the debugging
 information for this compilation unit converted all source
 names to upper case. The values of the name attributes may not
-reflect the names as they appear in the source program. The
-debugger should convert all names to upper case when doing
-lookups.
+reflect the names as they appear in the source program. 
 
-\DWIDdowncaseTARG{} means that 
-the producer of the debugging
+\bb
+\textit{A debugger should convert all names to upper case 
+when doing lookups.}
+\eb
+
+\DWIDdowncaseTARG{} means that the producer of the debugging
 information for this compilation unit converted all source
 names to lower case. The values of the name attributes may not
-reflect the names as they appear in the source program. The
-debugger should convert all names to lower case when doing
-lookups.
+reflect the names as they appear in the source program. 
+
+\bb
+\textit{A debugger should convert all names to lower case 
+when doing lookups.}
+\eb
 
 \needlines{4}
 \DWIDcaseinsensitiveTARG{} means that the values of the name
 attributes reflect the names as they appear in the source
-program but that a case insensitive lookup should be used to
-access those names.
+program but that case is not significant.
+
+\bb
+\textit{A debugger should ignore case when doing lookups.}
+\eb
+
 
 \needlines{5}
 \item \hypertarget{chap:DWATbasetypesprimitivedatatypesofcompilationunit}{}
@@ -422,21 +438,34 @@ attribute, whose value is of class \CLASSaddrptr.
 This attribute points to the beginning of the compilation
 unit's contribution to the \dotdebugaddr{} section.
 Indirect references (using \DWFORMaddrx, \DWOPaddrx, 
-\DWOPconstx, \DWLLEbaseaddressselectionentry{}, 
-\DWLLEstartendentry{} or \DWLLEstartlengthentry) 
+\bb
+\DWOPconstx, \DWLLEbaseaddressx{}, 
+\DWLLEstartxendx{} or \DWLLEstartxlength) 
+\eb
 within the compilation unit are interpreted as indices 
 relative to this base.
 
 \needlines{5}
-\item \hypertarget{chap:DWATrangesbaseforrangelists}{}
-A \DWATrangesbaseDEFN\addtoindexx{ranges table base attribute}
-attribute, whose value is of class \CLASSrangelistptr.
-This attribute points to the beginning of the compilation
-unit's contribution to the \dotdebugranges{} section.
-References to range lists (using \DWFORMsecoffset)
+\item \hypertarget{chap:DWATrnglistsbaseforrnglists}{}
+\bb 
+A \DWATrnglistsbaseDEFN\addtoindexx{ranges table base attribute}
+attribute, whose value is of class \CLASSrnglistsptr.
+This attribute points to the base of the compilation
+unit's contribution to the \dotdebugrnglists{} section.
+References to range lists (using \DWFORMrnglistx)
 within the compilation unit are
-interpreted as offsets relative to this base.
+interpreted relative to this base.
+\eb
 
+\item \hypertarget{chap:DWATloclistsbaseinlocationlist}{}
+\bb
+A \DWATloclistsbase{}\addtoindexx{location table base attribute} 
+attribute, whose value is of class \CLASSloclistsptr. 
+This attribute points to the base of the compilation 
+unit’s contribution to the \dotdebugloclists{} section. References 
+to location lists (using \DWFORMloclistx) within the compilation 
+unit are interpreted relative to this base.
+\eb
 \end{enumerate}
 
 The  base address of a compilation unit is defined as the
@@ -517,20 +546,25 @@ of a \DWATuseUTFeight{} attribute in the full compilation unit
 \item A \DWATstroffsetsbase{} attribute, for indirect strings references 
 from the skeleton compilation unit.
 \item A \DWATaddrbase{} attribute.
-\item A \DWATrangesbase{} attribute.
+
+\bbpareb
 
 \end{enumerate}
 
 All other attributes of a compilation unit entry (described
-in Section \refersec{chap:fullandpartialcompilationunitentries}) 
-should be placed in the split full compilation unit
+in Section \refersec{chap:fullandpartialcompilationunitentries})
+\bb
+are
+\eb 
+placed in the split full compilation unit
 (see \refersec{chap:splitfullcompilationunitentries}).
 The attributes provided by the skeleton compilation
 unit entry do not need to be repeated in the full compilation
 unit entry.
 
-\textit{The \DWATaddrbase{}, \DWATrangesbase{} and 
-\DWATstroffsetsbase{} attributes provide context that may be 
+\textit{The \DWATaddrbase{} 
+\bbeb
+and \DWATstroffsetsbase{} attributes provide context that may be 
 necessary to interpret the contents
 of the corresponding \splitDWARFobjectfile.}
 
@@ -570,7 +604,8 @@ split full compilation unit entry but instead are inherited
 (if present) from the corresponding skeleton compilation unit: 
 \DWATlowpc, \DWAThighpc, \DWATranges, \DWATstmtlist, \DWATcompdir, 
 \DWATstroffsetsbase, \DWATaddrbase{} and 
-\DWATrangesbase.}
+\bb
+\DWATrnglistsbase.\eb}
 
 \textit{The \DWATbasetypes{} attribute is not defined for a
 split full compilation unit.}
@@ -1450,17 +1485,33 @@ instance of the subroutine that immediately encloses the
 subroutine or entry point.
 
 In the context of supporting nested subroutines, the
-\DWATframebase{} attribute value should obey the following
-constraints:
+\DWATframebase{} attribute value 
+\bb
+obeys
+\eb
+the following constraints:
 
 \begin{enumerate}[1. ]
-\item It should compute a value that does not change during the
+\item 
+\bb
+It computes
+\eb
+a value that does not change during the
 life of the subprogram, and
 
-\item The computed value should be unique among instances of
-the same subroutine. (For typical \DWATframebase{} use, this
+\item The computed value 
+\bb
+is
+\eb
+unique among instances of
+the same subroutine. 
+
+\bb
+\textit{For typical \DWATframebase{} use, this
 means that a recursive subroutine\textquoteright s stack frame must have
-non-zero size.)
+non-zero size.}
+\eb
+
 \end{enumerate}
 
 \textit{If a debugger is attempting to resolve an up\dash level reference
@@ -1621,36 +1672,29 @@ Attributes and children in an abstract instance are shared
 by all concrete instances (see Section \refersec{chap:concreteinstances}).
 
 A debugging information entry that is a member of an abstract
-instance tree should not contain any attributes which describe
+instance tree 
+\bb
+may
+\eb
+not contain any attributes which describe
 aspects of the subroutine which vary between distinct inlined
-expansions or distinct out-of-line expansions. For example,
+expansions or distinct out-of-line expansions. 
+
+\bb
+\textit{For example,
 \addtoindexx{entry pc attribute!and abstract instance}
-the \DWATlowpc,
-\DWAThighpc, 
-\DWATranges, 
-\DWATentrypc, 
-\DWATlocation,
-\DWATreturnaddr, 
-\DWATstartscope, 
+the \DWATlowpc,\addtoindexx{low PC attribute!and abstract instance}
+\DWAThighpc,\addtoindexx{high PC attribute!and abstract instance} 
+\DWATranges,\addtoindexx{ranges attribute!and abstract instance} 
+\DWATentrypc,\addtoindexx{entry PC attribute!and abstract instance} 
+\DWATlocation,\addtoindexx{location attribute!and abstract instance}
+\DWATreturnaddr,\addtoindexx{return address attribute!and abstract instance} 
+\DWATstartscope,\addtoindexx{start scope attribute!and abstract instance} 
 and 
-\DWATsegment{}
-attributes 
-\addtoindexx{location attribute!and abstract instance}
-typically 
-\addtoindexx{ranges attribute!and abstract instance}
-should 
-\addtoindexx{high PC attribute!and abstract instance}
-be 
-\addtoindexx{low PC attribute!and abstract instance}
-omitted; 
-\addtoindexx{segment attribute!and abstract instance}
-however, 
-\addtoindexx{return address attribute!and abstract instance}
-this 
-\addtoindexx{segment attribute!and abstract instance}
-list
-\addtoindexx{start scope attribute!and abstract instance}
-is not exhaustive.
+\DWATsegment{}\addtoindexx{segment attribute!and abstract instance}
+attributes typically should be omitted; however, this list is not 
+exhaustive.}
+\eb
 
 \needlines{5}
 \textit{It would not make sense normally to put these attributes into
@@ -1677,7 +1721,11 @@ or not a given entry is abstract.
 Each inline expansion of a subroutine is represented
 by a debugging information entry with the 
 tag \DWTAGinlinedsubroutineTARG. 
-Each such entry should be a direct
+Each such entry 
+\bb
+is
+\eb
+be a direct
 child of the entry that represents the scope within which
 the inlining occurs.
 
@@ -1796,7 +1844,9 @@ If an entry within a concrete inlined instance tree contains
 attributes describing the 
 \addtoindexx{declaration coordinates!in concrete instance}
 \livelink{chap:declarationcoordinates}{declaration coordinates} 
-of that entry, then those attributes should refer to the file, line
+of that entry, then those attributes 
+\bbeb
+refer to the file, line
 and column of the original declaration of the subroutine,
 not to the point at which it was inlined. As a consequence,
 they may usually be omitted from any entry that has an abstract
@@ -1832,7 +1882,11 @@ union, class, and interface types; and members of types. If any
 entry within a concrete inlined instance tree needs to refer
 to an entity declared within the scope of the relevant inlined
 subroutine and for which no concrete instance entry exists,
-the reference should refer to the abstract instance entry.
+the reference 
+\bb
+refers 
+\eb
+to the abstract instance entry.
 
 \needlines{4}
 \item Entries in the concrete instance tree which are associated
@@ -1855,7 +1909,11 @@ for that separate debugging information entry.
 not correspond to entries in the abstract instance tree
 to describe new entities that are specific to a particular
 inlined expansion. In that case, they will not have associated
-entries in the abstract instance tree, should not contain
+entries in the abstract instance tree, 
+\bb
+do 
+\eb
+not contain
 \addtoindexx{abstract origin attribute}
 \DWATabstractorigin{} attributes, and must contain all their
 own attributes directly. This allows an abstract instance tree
@@ -2159,8 +2217,12 @@ The call site may have a
 \livetargi{chap:DWATcalltargetofcallsite}{attribute}{call target attribute} which is
 a DWARF expression.  For indirect calls or jumps where it is unknown at
 compile time which subprogram will be called the expression computes the
-address of the subprogram that will be called.  The DWARF expression should
-not use register or memory locations that might be clobbered by the call.
+address of the subprogram that will be called.  
+
+\bb
+\textit{The DWARF expression should
+not use register or memory locations that might be clobbered by the call.}
+\eb
 
 \needlines{4}
 The call site entry may have a 
@@ -2221,14 +2283,10 @@ Each \DWTAGcallsiteparameter{} entry may have a
 which is a DWARF expression 
 which when evaluated yields the value of the parameter at the time of the call.
 
-\textit{The expression should not use registers or memory
-locations that might be clobbered by the call, as it might be evaluated after 
-virtually unwinding from the called function back to the caller.  If it is not
+\textit{\bbeb If it is not
 possible to avoid registers or memory locations that might be clobbered by
 the call in the expression, then the \DWATcallvalueNAME{} attribute should
-not be provided.}
-
-\textit{The reason for the restriction is that the value of the parameter may be
+not be provided. The reason for the restriction is that the value of the parameter may be
 needed in the midst of the callee, where the call clobbered registers or
 memory might be already clobbered, and if the consumer is not assured by
 the producer it can safely use those values, the consumer can not safely
@@ -2331,9 +2389,12 @@ A labeled statement is usually the target of one or more
 
 \needlines{4}
 A label is represented by a debugging information entry with
-\addtoindexx{label entry}
-the tag \DWTAGlabelTARG. 
-The entry for a label should be owned by
+\addtoindexx{label entry} the tag \DWTAGlabelTARG. 
+The entry for a label 
+\bb
+is
+\eb
+owned by
 the debugging information entry representing the scope within
 which the name of the label could be legally referenced within
 the source program.
@@ -2486,13 +2547,16 @@ scope is non-contiguous
 the value of this attribute is the offset in bytes of the 
 beginning of the address range for the scope of the entity 
 from the beginning of the first \addtoindex{range list} entry
-for the containing scope that is not a base selection entry, 
-a default selection entry or an end-of-list entry.
+for the containing scope that is not a base 
+\bb
+address entry, a default location
+\eb
+entry or an end-of-list entry.
 \end{enumerate}
 
 \needlines{4}
 \item Otherwise, the set of addresses for the scope of the 
-entity is specified using a value of class \CLASSrangelistptr{}. 
+entity is specified using a value of class \CLASSrnglistsptr{}. 
 This value indicates the beginning of a \addtoindex{range list}
 (see Section \refersec{chap:noncontiguousaddressranges}).
 \end{enumerate}
