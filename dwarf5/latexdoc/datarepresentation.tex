@@ -130,7 +130,7 @@ the use of
 the other values is reserved for possible future extensions.
 
 
-\section{Relocatable, Split, Executable, Shared and Package Object Files} 
+\section{Relocatable, Split, Executable, Shared, Package and Supplementary Object Files} 
 \label{datarep:executableobjectsandsharedobjects}
 
 \subsection{Relocatable Object Files}
@@ -661,18 +661,16 @@ For an example, see Figure \refersec{fig:examplecuindexsection}.
 
 \subsection{DWARF Supplementary Object Files}
 \label{datarep:dwarfsupplemetaryobjectfiles}
-In order to minimize the size of debugging information, 
-it is possible to move duplicate debug information entries, 
-strings and macro entries from several executables or shared 
-object files into a separate 
-\addtoindexi{\textit{supplementary object file}}{supplementary object file} 
-by some post-linking utility; the moved entries and strings can 
-then be referenced
-from the debugging information of each of those executable or 
-shared object files.
-
-This facilitates distribution of separate consolidated debug files in
-a simple manner.
+\bb
+\textit{In contrast to split DWARF object files, which allow the compiler to
+split the debugging information between to files in order to reduce
+link time and executable size, a supplementary object file permits a
+post-link utility to analyze many executable and shared object files,
+and collect any duplicate debugging information into a single file
+that can be referenced by each of the original files. This facility
+can be useful for building integrated operating system packages
+and distributions.}
+\eb
 
 \needlines{4}
 A DWARF \addtoindex{supplementary object file} is itself an object file, 
