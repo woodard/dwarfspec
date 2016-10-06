@@ -788,7 +788,6 @@ in the name table.
 \needlines{6}
 \subsubsubsection{Name Table}
 \label{chap:nametable}
-\bb
 The name table immediately follows the hash lookup table. It
 consists of two arrays: an array of string offsets, followed
 immediately by an array of entry offsets. The items in both
@@ -809,7 +808,6 @@ entry offsets array.
 
 \textit{If there is no hash lookup table, there is no ordering
 requirement for the name table.}
-\eb
 
 \needlines{6}
 \subsubsubsection{Abbreviations Table}
@@ -864,11 +862,9 @@ byte for the abbreviation code. The size of the table given by
 terminating 0 byte.
 
 \subsubsubsection{Entry Pool}
-\bb
 The entry pool immediately follows the abbreviations table. 
 Each entry in the entry offsets array in the name table (see 
 Section \ref{chap:nametable})
-\eb
 points to an offset in the entry pool, where a series
 of index entries for that name is located.
 
@@ -1598,11 +1594,9 @@ such code may be combined with one or more forms from the set:
 \DWFORMflag, \DWFORMlinestrp, \DWFORMsdata, \DWFORMsecoffset,
 \DWFORMstring, \DWFORMstrp, \DWFORMstrx{}  and \DWFORMudata.
 
-\bb
 \textit{If a consumer encounters a vendor-defined content type that
 it does not understand, it should skip the content data as though
 it were not present.}
-\eb
 
 \needlines{6}
 \subsection{The Line Number Program}
@@ -2959,20 +2953,14 @@ appropriate size.
 \label{chap:callframeinstructionusage}
 
 \textit{To determine the virtual unwind rule set for a given location
-(L1), 
-\bb
-search 
-\eb
-through the FDE headers looking at the
+(L1), search through the FDE headers looking at the
 \HFNinitiallocation{} and \HFNaddressrange{} values to see if L1 is
 contained in the FDE. If so, then:}
 \begin{enumerate}[1. ]
 
 \item \textit{Initialize a register set by reading the
 \HFNinitialinstructions{} field of the associated CIE.
-\bb
-Set L2 to the value of the \HFNinitiallocation{} field from the FDE header.
-\eb}
+Set L2 to the value of the \HFNinitiallocation{} field from the FDE header.}
 
 
 \item \textit{Read and process the FDE's instruction

@@ -263,11 +263,7 @@ fashion, informative text will suggest but not require this design.
 
 \subsection{Permissive Rather Than Prescriptive}
 The DWARF Standard specifies the meaning of DWARF descriptions. It does not
-specify in detail what a particular producer 
-\bb
-must
-\eb
-generate for any source to
+specify in detail what a particular producer must generate for any source to
 object conversion.  One producer may generate a more complete description
 than another, it may describe features in a different order (unless the 
 standard explicitly requires a particular order), or it may use
@@ -281,8 +277,8 @@ descriptions for the same source to object conversion, and permitting
 different consumers to provide more or less functionality or information
 to the user.  This may result in debugging information being larger or
 smaller, compilers or debuggers which are faster or slower, and more or
-less functional.  These are described as differences in "Quality of
-Implementation".
+less functional.  These are described as differences in 
+quality-of-implementation.
 
 Each producer conforming to the DWARF standard must follow the format and
 meaning as specified in the standard.  As long as the DWARF description
@@ -297,12 +293,10 @@ valid DWARF descriptions, while a consumer using the former would be able
 to provide more accurate values for the variable while executing in that
 range than a consumer using the latter.
 
-\bb
 In this document, where the word \doublequote{may} is used, the producer has 
 the option to follow the description or not.  Where the text says 
 \doublequote{may not}, this is prohibited.  Where the text says \doublequote{should}, 
 this is advice about best practice, but is not a requirement.
-\eb
 
 \subsection{Vendor Extensibility}
 This document does not attempt to cover all interesting
@@ -348,20 +342,20 @@ The following is a list of the major changes made to the
 DWARF Debugging Information Format since Version 4 was published. 
 The list is not meant to be exhaustive.
 \begin{itemize}
-\item The \dotdebugtypes{}
-%\addtoindexi{\texttt{.debug\_types}}{\texttt{.debug\_types} (Version 4)}
+\item Eliminate the \dotdebugtypes{}
 section introduced in \DWARFVersionIV{} 
-is eliminated and its contents instead contained in \dotdebuginfo{} sections.
+and move its contents into the \dotdebuginfo{} section.
 \item Add support for collecting common DWARF information 
 (debugging information entries and macro definitions)
 across multiple executable and shared files and keeping it in a single
 \addtoindex{supplementary object file}.
 \needlines{6}
-\item A new line number program header format 
+\item Replace the line number program header format with a new 
+format that 
 provides the ability to use an MD5 hash to validate 
 the source file version in use, allows pooling 
 of directory and file name strings and makes provision for vendor-defined
-extensions. It also adds a string section specific to the line number table 
+extensions. Also add a string section specific to the line number table 
 (\dotdebuglinestr)
 to properly support the common practice of stripping all DWARF sections
 except for line number information.
@@ -380,13 +374,13 @@ with a \dotdebugmacro{} representation that can potentially be much more compact
 \item Replace the \dotdebugpubnames{} and \dotdebugpubtypes{} sections
 with a single and more functional name index section, \dotdebugnames{}.
 \needlines{4}
-\bb
+
 \item Replace the location list and range list sections (\texttt{.debug\_loc} 
 and \texttt{.debug\_ranges}, respectively) with new sections (\dotdebugloclists{} 
 and \dotdebugrnglists) and new representations that
 save space and processing time by eliminating most related
 object file relocations.
-\eb
+
 \item Add a new debugging information entry (\DWTAGcallsiteNAME), related 
 attributes and DWARF expression operators to describe call site information, 
 including identification of tail calls and tail recursion.
@@ -415,11 +409,8 @@ a new \HFNunittype{} field.
 \item New operand forms for attribute values are defined 
 (\DWFORMaddrxNAME, \DWFORMdatasixteenNAME, \DWFORMimplicitconstNAME, 
 \DWFORMlinestrpNAME,
-\bb
 \DWFORMloclistxNAME, \DWFORMrnglistxNAME,
-\eb 
 \DWFORMrefsupNAME, \DWFORMstrpsupNAME{} and \DWFORMstrxNAME).
-\eb
 
 \textit{Because a pre-DWARF Version 5 consumer will not be able to interpret 
 these even to ignore and skip over them, new forms must be 
@@ -444,7 +435,8 @@ executable or shared images.
 
 Similar comments apply to replacement of the \dotdebugpubnames{} 
 and \dotdebugpubtypes{} sections with the new \dotdebugnames{} 
-section.
+section, as well as \dotdebugloc{} and \dotdebugranges{} with 
+\dotdebugloclists{} and \dotdebugrnglists{}, respectively.
 
 \needlines{4}
 \section{Changes from Version 3 to Version 4}

@@ -548,25 +548,22 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 \DWATlinkagenameTARG
 &\livelinki{chap:DWATlinkagenameobjectfilelinkagenameofanentity}
         {Object file linkage name of an entity}
-        {object file linkage name of an entity}\\
+        {object file linkage name of an entity} \\
 \DWATlocationTARG
 &\livelinki{chap:DWATlocationdataobjectlocation}
         {Data object location}
-        {data object location}\\
-\bb
+        {data object location} \\
 \DWATloclistsbaseTARG
 &\livelinki{chap:DWATloclistsbaseinlocationlist}
         {Location lists base}
-        {location lists base}
-\eb
-\\
+        {location lists base} \\
 \DWATlowpcTARG
 &\livelinki{chap:DWATlowpccodeaddressorrangeofaddresses}
         {Code address or range of addresses}
-        {code address or range of addresses}\\*
+        {code address or range of addresses} \\*
 &\livelinki{chap:DWATlowpcbaseaddressofscope}
         {Base address of scope}
-        {base address of scope}\\
+        {base address of scope} \\
 \DWATlowerboundTARG
 &\livelinki{chap:DWATlowerboundlowerboundofsubrange}
         {Lower bound of subrange}
@@ -640,9 +637,7 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 &\livelinki{chap:DWATrangesnoncontiguousrangeofcodeaddresses}
         {Non-contiguous range of code addresses}
         {non-contiguous range of code addresses} \\
-\bb
 \DWATrnglistsbaseTARG
-\eb
 &\livelinki{chap:DWATrnglistsbase}
         {Base offset for range lists}
         {ranges lists} \\
@@ -716,7 +711,7 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 \DWATthreadsscaledTARG
 &\livelink{chap:DWATthreadsscaledupcarrayboundthreadsscalfactor}
         {Array bound THREADS scale factor} 
-\bbeb  (\addtoindex{UPC}) \\
+       (\addtoindex{UPC}) \\
 \DWATtrampolineTARG
 &\livelinki{chap:DWATtrampolinetargetsubroutine}
         {Target subroutine}
@@ -882,12 +877,10 @@ of an attribute.
 number information.
 \\
 
-\bb
 \hypertarget{chap:classloclist}{}
 \livelinki{datarep:classloclist}{loclist}{loclist class}, 
 \hypertarget{chap:classloclistsptr}{}
 \livelinki{datarep:classloclistsptr}{loclistsptr}{loclistsptr class}
-\eb
 &Specifies a location in the DWARF section that holds location 
 lists, which describe objects whose location can change during 
 their lifetime.
@@ -900,12 +893,10 @@ a location in the DWARF section that holds macro definition
 information.
 \\
 
-\bb
 \hypertarget{chap:classrnglist}{}
 \livelinki{datarep:classrnglist}{rnglist}{rnglist class}, 
 \hypertarget{chap:classrnglistsptr}{}
 \livelinki{datarep:classrnglistsptr}{rnglistsptr}{rnglistsptr class}
-\eb
 &Specifies a location in the DWARF section that holds 
 non-contiguous address ranges.
 \\
@@ -1082,10 +1073,8 @@ value of the array bound, the length of a dynamic string,
 the desired value itself, and so on).
 
 \textit{The
-\bb
 \generictype{} is the same as the unspecified type used for stack operations
 defined in \DWARFVersionIV{} and before.
-\eb
 }
 
 \needlines{4}
@@ -1453,17 +1442,14 @@ found in Appendix \refersec{app:dwarfstackoperationexamples}.}
 The following provide arithmetic and logical operations. 
 Operands of an operation with two operands
 must have the same type,
-either the same base type or 
-\bbeb 
-the \generictype.
+either the same base type or the \generictype.
 The result of the operation which is pushed back has the same type
 as the type of the operand(s).  
 
 If the type of the operands is the \generictype, 
 except as otherwise specified, the arithmetic operations
 perform addressing arithmetic, that is, unsigned arithmetic that is performed
-modulo one plus the largest representable address (for example, 0x100000000
-when the \addtoindex{size of an address} is 32 bits). 
+modulo one plus the largest representable address. 
 
 Operations other than \DWOPabs{},
 \DWOPdiv{}, \DWOPminus{}, \DWOPmul{}, \DWOPneg{} and \DWOPplus{} 
@@ -1569,9 +1555,7 @@ following operations provide simple control of the flow of a DWARF expression.
 The six relational operators each:
 \begin{itemize}
 \item pop the top two stack values, which have the same type,
-either the same base type or 
-\bbeb 
-the \generictype, 
+either the same base type or the \generictype, 
 
 \item compare the operands:
 \linebreak
@@ -1673,11 +1657,7 @@ represents the offset of a debugging information entry in the current
 compilation unit, or value 0 which represents the \generictype.
 If the operand is non-zero, the referenced entry must be a
 \DWTAGbasetype{} entry that provides the type to which the value is converted.
-The type of the operand and result type 
-\bb
-must 
-\eb
-have the same size in bits.
+The type of the operand and result type must have the same size in bits.
 
 \end{enumerate}
 
@@ -1774,10 +1754,8 @@ Location descriptions are distinguished in a context sensitive
 manner. As the value of an attribute, a location description
 is encoded using class \CLASSexprloc{}
 and a \addtoindex{location list} is encoded
-\bb 
 using class \CLASSloclist{} (which serves as an 
 index into a separate section containing location lists).
-\eb
 
 \needlines{8}
 \subsection{Single Location Descriptions}
@@ -2031,7 +2009,6 @@ unit of memory.}
 \needlines{6}
 \subsection{Location Lists}
 \label{chap:locationlists}
-\bb
 Location lists are used in place of location descriptions whenever
 the object whose location is being described can change location
 during its lifetime. Location lists are contained in a separate
@@ -2039,10 +2016,10 @@ object file section called \dotdebugloclists{} or \dotdebugloclistsdwo{}
 (for split DWARF object files).
 
 A location list is indicated by a location or other attribute
-whose value is of class \bbeb\CLASSloclist{} 
+whose value is of class \CLASSloclist{} 
 (see Section \refersec{datarep:classesandforms}).
    
-\textit{This location list representation, the \bbeb\CLASSloclist{} class, and the
+\textit{This location list representation, the \CLASSloclist{} class, and the
 related \DWATloclistsbase{} attribute are new in \DWARFVersionV.
 Together they eliminate most or all of the object language relocations
 previously needed for location lists.}
@@ -2122,7 +2099,7 @@ that immediately follows.
 in the \dotdebugaddr{} section. This index is relative to the
 value of the \DWATaddrbase{} attribute of the associated
 compilation unit. The address given by this kind
-of operand is *not* relative to the compilation unit base address.
+of operand is not relative to the compilation unit base address.
    
 \item A \definition{target address} operand is an address on the target
 machine. (Its size is the same as used for attribute values of
@@ -2142,21 +2119,22 @@ alignment purposes.}
 
 \itembfnl{\DWLLEbaseaddressxTARG}
 This is a form of base address entry that has one unsigned
-LEB128 operand. The operand value is an address index that
-indicates the applicable base address used by \DWLLEoffsetpair{}
-entries.
+LEB128 operand. The operand value is an address index (into the 
+\dotdebugaddr{} section) that indicates the applicable base address 
+used by subsequent \DWLLEoffsetpair{} entries.
 
 \itembfnl{\DWLLEstartxendxTARG}
 This is a form of bounded location description entry that
 has two unsigned LEB128 operands. The operand values are
-address indices. These indicate the
+address indices (into the \dotdebugaddr{} section). These indicate the
 starting and ending addresses, respectively, that define
 the address range for which this location is valid.
 These operands are followed by a counted location description.
 
 \itembfnl{\DWLLEstartxlengthTARG}
 This is a form of bounded location description that has two
-unsigned ULEB operands. The first value is an address index
+unsigned ULEB operands. The first value is an address index 
+(into the \dotdebugaddr{} section)
 that indicates the beginning of the address range over
 which the location is valid.
 The second value is the length of the range.
@@ -2171,8 +2149,9 @@ address range for which this location is valid.
 These operands are followed by a counted location description.
        
 \itembfnl{\DWLLEdefaultlocationTARG}
-This entry has no range operands that express a range of
-addresses. The only operand is a counted location description.
+The operand is a counted location description which defines 
+where an object is located if no prior location description 
+is valid.
 
 \end{enumerate}
       
@@ -2203,7 +2182,6 @@ the length is the number of bytes in that range.
 These operands are followed by a counted location description.
 
 \end{enumerate}
-\eb
 
 \needlines{10}
 \section{Types of Program Entities}
@@ -2658,18 +2636,17 @@ may be beyond the last valid instruction in the executable.}
 
 \subsection{Non-Contiguous Address Ranges}
 \label{chap:noncontiguousaddressranges}
-\bb
 Range lists are used when the set of addresses for a debugging
 information entry cannot be described as a single contiguous 
 range.\addtoindexx{non-contiguous address ranges}
 Range lists are contained in a separate object file section
-called \dotdebugrnglists or \dotdebugrnglistsdwo (in split units).
+called \dotdebugrnglists{} or \dotdebugrnglistsdwo{} (in split units).
  
 A range list is identified by a \DWATranges{}\addtoindexx{ranges attribute} 
-or other attribute whose value is of class \bbeb\CLASSrnglist{} 
+or other attribute whose value is of class \CLASSrnglist{} 
 (see Section \refersec{datarep:classesandforms}).
  
-\textit{This range list representation, the \bbeb\CLASSrnglist{} class, and the
+\textit{This range list representation, the \CLASSrnglist{} class, and the
 related \DWATrnglistsbase{} attribute are new in \DWARFVersionV.
 Together they eliminate most or all of the object language relocations
 previously needed for range lists.}
@@ -2741,22 +2718,22 @@ alignment purposes.}
       
 \itembfnl{\DWRLEbaseaddressxTARG}
 A base address entry has one unsigned LEB128 operand.
-The operand value is an address index that indicates
-the applicable base address used by following \DWRLEoffsetpair{}
-entries.
+The operand value is an address index (into the \dotdebugaddr{} 
+section) that indicates the applicable base address used by 
+following \DWRLEoffsetpair{} entries.
     
 \itembfnl{\DWRLEstartxendxTARG}
 This is a form of bounded range entry that
 has two unsigned LEB128 operands. The operand values are
-address indices that indicate the
+address indices (into the \dotdebugaddr{} section) that indicate the
 starting and ending addresses, respectively, that define
 the address range.
 
 \itembfnl{\DWRLEstartxlengthTARG}
 This is a form of bounded location description that
 has two unsigned ULEB operands. The first value is an address index
-that indicates the beginning of the address range.
-The second value is the length of the range.
+(into the \dotdebugaddr{} section) that indicates the beginning of 
+the address range. The second value is the length of the range.
        
 \itembfnl{\DWRLEoffsetpairTARG}
 This is a form of bounded range entry that
@@ -2795,7 +2772,6 @@ of the range over which the location description is valid, and
 the length is the number of bytes in that range.
 
 \end{enumerate}
-\eb
 
 \needlines{12}
 \section{Entry Address}
@@ -2813,10 +2789,7 @@ module initialization, subroutines,
 and the like, may have a \DWATentrypcDEFN{} attribute 
 \addtoindexx{entry PC address} to indicate the 
 \definitionx{entry address} which is the address of the 
-instruction where execution 
-\bb
-begins 
-\eb
+instruction where execution begins 
 within that range\hypertarget{chap:entryaddressofscope}{}
 of addresses. 
 If the value of the \DWATentrypcNAME{} attribute is of

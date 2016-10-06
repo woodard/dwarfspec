@@ -3,13 +3,14 @@
 % If draft is in the document class list, pix are just suggested
 % by an outline, the pic does not appear as a picture.
 %
-\newcommand{\docdate}{September 13, 2016}
+\newcommand{\docdate}{October 6, 2016}
 %
 \usepackage{ifthen}
     \newcommand{\ifthen}[2]{\ifthenelse{#1}{#2}{}}
     \newboolean{isdraft}\setboolean{isdraft}{true}
-    \newboolean{uselinenos}\setboolean{uselinenos}{true}
-\newcommand{\draftmark}{\ifthenelse{\boolean{isdraft}}{*** Pre-PUBLIC REVIEW DRAFT ***}{}}
+    \newboolean{uselinenos}\setboolean{uselinenos}{false}
+    \newboolean{usechangesummary}\setboolean{usechangesummary}{false}
+\newcommand{\draftmark}{\ifthenelse{\boolean{isdraft}}{*** PUBLIC REVIEW DRAFT ***}{}}
 %
 \usepackage[T1]{fontenc}
 \usepackage{palatino}
@@ -325,7 +326,7 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \clearpage
 \listoftables
 
-\ifthenelse{\boolean{isdraft}}
+\ifthenelse{\boolean{usechangesummary}}
 	{	\emptypage
 		{% Environment to keep the following header change local
 		\clearpage
@@ -334,7 +335,7 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 		\include{changesummary}
                 %\emptypage
 		}
-	}{}
+	}{\emptypage}
 %\cleardoublepage
 \flushleft
 \raggedbottom

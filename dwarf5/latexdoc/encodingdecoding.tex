@@ -7,7 +7,18 @@ Here are algorithms expressed in a C-like pseudo-code to
 encode and decode signed and unsigned numbers in LEB128
 representation.
 
-\begin{figure}[ht]
+The encode and decode algorithms given here do not take account of C/C++ rules
+that mean that in \texttt{E1}$ << $\texttt{E2} the type of \texttt{E1} should be
+a sufficiently large unsigned type to hold the correct mathematical result.
+The decode algorithms do not take account of
+or protect from possibly invalid LEB values, such as values
+that are too large to fit in the target type or that
+lack a proper terminator byte.
+Implementation languages may have additional or different rules.
+
+\vspace{2cm}
+
+\begin{figure}[hb]
 \begin{lstlisting}
 do
 {
