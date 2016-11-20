@@ -154,6 +154,8 @@ the strings in the \dotdebugstr{} section (if form \DWFORMstrx{} is used).
 
 \needlines{6}
 The skeleton compilation unit DIE may have the following attributes:
+\par
+\begin{nolinenumbersenv}
 \autocols[0pt]{c}{3}{l}{
 \DWATaddrbase{},
 \DWATcompdir{},
@@ -165,6 +167,7 @@ The skeleton compilation unit DIE may have the following attributes:
 \DWATstmtlist{},
 \DWATstroffsetsbase{}
 }
+\end{nolinenumbersenv}
 
 All other attributes of the compilation unit DIE are moved to
 the full DIE in the \dotdebuginfodwo{} section.
@@ -294,7 +297,7 @@ package file.
 \vspace{2cm}
 \begin{figure}[ht]
 \textit{File demo1.cc}
-\begin{lstlisting}
+\begin{nlnlisting}
 #include "demo.h"
 
 bool Box::contains(const Point& p) const
@@ -302,14 +305,14 @@ bool Box::contains(const Point& p) const
     return (p.x() >= ll_.x() && p.x() <= ur_.x() &&
             p.y() >= ll_.y() && p.y() <= ur_.y());
 }
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Split object example: source fragment \#1}
 \label{fig:splitobjectexamplesourcefragment1}
 \end{figure}
 
 \begin{figure}[ht]
 \textit{File demo2.cc}
-\begin{lstlisting}
+\begin{nlnlisting}
 #include "demo.h"
 
 bool Line::clip(const Box& b)
@@ -347,14 +350,14 @@ bool Line::clip(const Box& b)
                      b.t());
   }
 }
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Split object example: source fragment \#2}
 \label{fig:splitobjectexamplesourcefragment2}
 \end{figure}
 
 \begin{figure}[ht]
 \textit{File demo.h}
-\begin{lstlisting}
+\begin{nlnlisting}
 class A {
   public:
     Point(float x, float y) : x_(x), y_(y){}
@@ -390,7 +393,7 @@ class Box {
     Point ur_;
 };
 
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Split object example: source fragment \#3}
 \label{fig:splitobjectexamplesourcefragment3}
 \end{figure}
@@ -468,8 +471,9 @@ locations in the loadable text and data that are referenced by
 debugging information entries in the split DWARF object. In the
 example in \refersec{fig:splitobjectexamplesourcefragment3}, 
 \texttt{demo1.o} may have three entries:
+\par
+\begin{nolinenumbersenv}
 \begin{center}
-%\footnotesize
 \begin{tabular}{cl}
 Slot & Location referenced \\
 \hline
@@ -478,6 +482,7 @@ Slot & Location referenced \\
    2   &  low PC value for \texttt{Point::y}       \\
 \end{tabular}
 \end{center}
+\end{nolinenumbersenv}
 
 \needlines{4}
 The \dotdebugnames{}

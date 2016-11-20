@@ -458,20 +458,20 @@ representation intended to allow duplicate elimination.
 
 \begin{figure}[ht]
 \textit{File wa.h}
-\begin{lstlisting}[numbers=none]
+\begin{nlnlisting}
 struct A {
    int i;
 };
-\end{lstlisting}
+\end{nlnlisting}
 \textit{File wa.c}
-\begin{lstlisting}[numbers=none]
+\begin{nlnlisting}
 #include "wa.h";
 int
 f(A &a)
 {
     return a.i + 2;
 }
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Duplicate elimination example \#1: C++ Source}
 \label{fig:duplicateeliminationexample1csource}
 \end{figure}
@@ -581,20 +581,20 @@ Figure \refersec{fig:duplicateeliminationexample2fortransource}.
 \begin{figure}[ht]
 \textit{File CommonStuff.f\hspace{1pt}h}
 \addtoindexx{Fortran}
-\begin{lstlisting}[numbers=none]
+\begin{nlnlisting}
 IMPLICIT INTEGER(A-Z)
 COMMON /Common1/ C(100)
 PARAMETER(SEVEN = 7)
-\end{lstlisting}
+\end{nlnlisting}
 
 \textit{File Func.f}
-\begin{lstlisting}[numbers=none]
+\begin{nlnlisting}
 FUNCTION FOO (N)
 INCLUDE 'CommonStuff.fh'
 FOO = C(N + SEVEN)
 RETURN
 END
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Duplicate elimination example \#2: Fortran source} 
 \label{fig:duplicateeliminationexample2fortransource}
 \end{figure}
@@ -689,12 +689,12 @@ Figure \refersec{fig:duplicateeliminationexample2companionsource}
 
 \begin{figure}
 \textit{File Main.f} 
-\begin{lstlisting}[numbers=none]
+\begin{nlnlisting}
 INCLUDE 'CommonStuff.fh'
 C(50) = 8
 PRINT *, 'Result = ', FOO(50 - SEVEN)
 END
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Duplicate elimination example \#2: companion source }
 \label{fig:duplicateeliminationexample2companionsource}
 \end{figure}
@@ -794,7 +794,7 @@ containing the type definitions shown
 in Figure \refersec{fig:typesignatureexamplescsource}.
 
 \begin{figure}[ht]
-\begin{lstlisting}
+\begin{nlnlisting}
 namespace N {
 
     struct B;
@@ -815,7 +815,7 @@ namespace N {
         struct C c;
     };
 }
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Type signature examples: C++ source}
 \label{fig:typesignatureexamplescsource}
 \end{figure}

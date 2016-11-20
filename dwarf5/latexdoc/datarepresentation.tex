@@ -765,6 +765,7 @@ fields) are listed following. In the 32-bit DWARF format these
 are 4-byte unsigned integer values; in the 64-bit DWARF format,
 they are 8-byte unsigned integer values.
 
+\begin{nolinenumbersenv}
 \begin{center}
 \begin{tabular}{lll}
 Section &Name & Role  \\ \hline
@@ -777,6 +778,7 @@ Section &Name & Role  \\ \hline
                      & or local TUs                       & \\
 \end{tabular}
 \end{center}
+\end{nolinenumbersenv}
 
 \needlines{4}
 The \texttt{CIE\_id} field in a CIE structure must be 64 bits because
@@ -790,7 +792,9 @@ section, certain forms of attribute value depend on the choice
 of DWARF format as follows. For the 32-bit DWARF format,
 the value is a 4-byte unsigned integer; for the 64-bit DWARF
 format, the value is an 8-byte unsigned integer.
+
 \begin{center}
+\begin{nolinenumbersenv}
 \begin{tabular}{lp{6cm}}
 Form             & Role  \\ \hline
 \DWFORMlinestrp  & offset in \dotdebuglinestr \\
@@ -803,6 +807,7 @@ Form             & Role  \\ \hline
 \DWFORMstrpsup   & offset in \dotdebugstr{} section of a \mbox{supplementary} object file \\
 \DWOPcallref     & offset in \dotdebuginfo{} \\
 \end{tabular}
+\end{nolinenumbersenv}
 \end{center}
 
 \needlines{5}
@@ -810,11 +815,14 @@ Form             & Role  \\ \hline
 description depend on the choice of DWARF format as follows: for the
 32-bit DWARF format, the value is a 4-byte unsigned integer; for the
 64-bit DWARF format, the value is a 8-byte unsigned integer.
+
 \begin{center}
+\begin{nolinenumbersenv}
 \begin{tabular}{lp{6cm}}
 Form             & Role  \\ \hline
 \DWFORMlinestrp  & offset in \dotdebuglinestr
 \end{tabular}
+\end{nolinenumbersenv}
 \end{center}
 
 \item Within the body of the \dotdebugnames{} 
@@ -1984,10 +1992,12 @@ in the section, not the first byte of the section). The contents of
 that location is then added to the base to determine the location of 
 the target range list of entries.
 \item
-An offset into the \dotdebugloclists{} section (\DWFORMsecoffset). 
+\bb
+An offset into the \dotdebugrnglists{} section (\DWFORMsecoffset). 
 The operand consists of a byte 
-offset\addtoindexx{section offset!in class loclist value}
-from the beginning of the \dotdebugloclists{} section.
+offset\addtoindexx{section offset!in class rnglist value}
+\eb
+from the beginning of the \dotdebugrnglists{} section.
 It is relocatable in a relocatable object file, and
 relocated in an executable or shared object file. In the 
 \thirtytwobitdwarfformat, this offset is a 4-byte unsigned value;
@@ -2130,7 +2140,11 @@ or as an offset into a string table contained in the
 section of a \addtoindex{supplementary object file}
 refer to the local \dotdebugstr{} section of that same file.
 In the \thirtytwobitdwarfformat, the representation of a 
-\DWFORMstrpNAME{}, \DWFORMstrpNAME{} or \DWFORMstrpsupNAME{}
+\DWFORMstrpNAME{}, 
+\bb
+\DWFORMlinestrpNAME{} 
+\eb
+or \DWFORMstrpsupNAME{}
 value is a 4-byte unsigned offset; in the \sixtyfourbitdwarfformat,
 it is an 8-byte unsigned offset 
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
@@ -3503,11 +3517,23 @@ that follow the header.
 
 Immediately following the header is an array of offsets.
 This array is followed by a series of range lists. 
-    
-There is one offset for each range list. The contents
-of the $i$\textsuperscript{th} offset is the offset from the
+
+There is one offset for each range list. 
+The contents
+of the $i$\textsuperscript{th} offset is the offset 
+\bb
+(an unsigned integer)
+\eb
+from the
 beginning of the offset array to the location of the 
-$i$\textsuperscript{th} range list. Range lists are
+$i$\textsuperscript{th} range list.
+\bb
+In the 32-bit DWARF format, each offset is 4-bytes in size; 
+in the 64-bit DWARF format, each offset is 8-bytes in size 
+(see Section \refersec{datarep:32bitand64bitdwarfformats}).
+\eb
+
+Range lists are
 described in Section \refersec{chap:noncontiguousaddressranges}.
     
 The segment size is given by the
@@ -3567,9 +3593,21 @@ Immediately following the header is an array of offsets.
 This array is followed by a series of location lists. 
     
 There is one offset for each location list. The contents
-of the $i$\textsuperscript{th} offset is the offset from the
+of the $i$\textsuperscript{th} offset is the offset 
+\bb
+(an unsigned integer)
+\eb
+from the
 beginning of the offset array to the location of the 
-$i$\textsuperscript{th} location list. Location lists are
+$i$\textsuperscript{th} location list. 
+\bb
+In the 32-bit DWARF format, each offset is 4-bytes in size; 
+in the 64-bit DWARF format, each offset is 8-bytes in size 
+(see Section \refersec{datarep:32bitand64bitdwarfformats}).
+\eb
+
+
+Location lists are
 described in Section \refersec{chap:locationlists}.
 
 The segment size is given by the
@@ -4004,7 +4042,7 @@ This hash function is sometimes known as the
 \hrefself{http://stackoverflow.com/questions/10696223/reason-for-5381-number-in-djb-hash-function)}.} 
 
 \begin{figure}[ht]
-\begin{lstlisting}
+\begin{nlnlisting}
 
 uint32_t /* must be a 32-bit integer type */
     hash(unsigned char *str)
@@ -4018,7 +4056,7 @@ uint32_t /* must be a 32-bit integer type */
         return hash;
     }
 
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Name Table Hash Function Definition}
 \label{fig:nametablehashfunctiondefinition}
 \end{figure}

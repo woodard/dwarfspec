@@ -10,7 +10,7 @@ compiler or debugger.
 Instead, the goal is to create a method
 of communicating an accurate picture of the source program
 to any debugger in a form that is extensible to different
-languages while retaining compatibility.
+languages while retaining compatibility.unittype
   
 The design of the
 debugging information format is open-ended, allowing for
@@ -405,6 +405,9 @@ DWARF Version 5 is compatible with DWARF Version 4 except as follows:
 \begin{itemize}
 \item The compilation unit header (in the \dotdebuginfo{} section) has
 a new \HFNunittype{} field.
+\bb
+In addition, the \HFNdebugabbrevoffset{} and \HFNaddresssize{} fields are reordered.
+\eb
 \needlines{4}
 \item New operand forms for attribute values are defined 
 (\DWFORMaddrxNAME, \DWFORMdatasixteenNAME, \DWFORMimplicitconstNAME, 
@@ -417,9 +420,16 @@ these even to ignore and skip over them, new forms must be
 considered incompatible additions.}
 \item The line number table header is substantially revised.
 \needlines{4}
-\item A location list entry 
-with the address range \mbox{(0, \textit{maximum-address})} is defined 
-as the new default location list entry.
+\item 
+\bb
+The \dotdebugloc{} and \dotdebugranges{} sections are replaced
+by new \dotdebugloclists{} and \dotdebugrnglists{} sections, respectively.
+These new sections have a new (and more efficient) list structure.
+Attributes that reference the predecessor sections must be interpreted
+differently to access the new sections. The new sections encode the same
+information as their predecessors, except that a new default location 
+list entry is added. 
+\eb
 \item In a string type, the \DWATbytesizeNAME{} attribute is re-defined 
 to always describe the size of the string type. 
 (Previously it described the size of the optional string length data 
@@ -435,8 +445,8 @@ executable or shared images.
 
 Similar comments apply to replacement of the \dotdebugpubnames{} 
 and \dotdebugpubtypes{} sections with the new \dotdebugnames{} 
-section, as well as \dotdebugloc{} and \dotdebugranges{} with 
-\dotdebugloclists{} and \dotdebugrnglists{}, respectively.
+section.
+\bbeb
 
 \needlines{4}
 \section{Changes from Version 3 to Version 4}

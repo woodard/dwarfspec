@@ -19,7 +19,7 @@ Implementation languages may have additional or different rules.
 \vspace{2cm}
 
 \begin{figure}[hb]
-\begin{lstlisting}
+\begin{nlnlisting}
 do
 {
     byte = low order 7 bits of value;
@@ -28,13 +28,13 @@ do
         set high order bit of byte;
     emit byte;
 } while (value != 0);
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Algorithm to encode an unsigned integer}
 \addtoindexx{LEB128!unsigned, encoding as}
 \end{figure}
 
 \begin{figure}[ht]
-\begin{lstlisting}
+\begin{nlnlisting}
 more = 1;
 negative = (value < 0);
 size = no. of bits in signed integer;
@@ -57,13 +57,13 @@ while(more)
         set high order bit of byte;
     emit byte;
 }
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Algorithm to encode a signed integer}
 \addtoindexx{LEB128!signed, encoding as}
 \end{figure}
 
 \begin{figure}[ht]
-\begin{lstlisting}
+\begin{nlnlisting}
 result = 0;
 shift = 0;
 while(true)
@@ -74,13 +74,13 @@ while(true)
         break;
     shift += 7;
 }
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Algorithm to decode an unsigned LEB128 integer}
 \addtoindexx{LEB128!unsigned, decoding of}
 \end{figure}
 
 \begin{figure}[ht]
-\begin{lstlisting}
+\begin{nlnlisting}
 result = 0;
 shift = 0;
 size = number of bits in signed integer;
@@ -96,7 +96,7 @@ while(true)
 if ((shift <size) && (sign bit of byte is set))
     /* sign extend */
     result |= - (1 << shift);
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Algorithm to decode a signed LEB128 integer}
 \addtoindexx{LEB128!signed, decoding of}
 \end{figure}

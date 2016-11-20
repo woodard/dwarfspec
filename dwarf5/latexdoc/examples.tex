@@ -26,13 +26,13 @@ where possible.
 The figure corresponds to the following two trivial source files:
 
 File myfile.c
-\begin{lstlisting}[numbers=none]
+\begin{nlnlisting}
 typedef char* POINTER;
-\end{lstlisting}
+\end{nlnlisting}
 File myfile2.c
-\begin{lstlisting}[numbers=none]
+\begin{nlnlisting}
 typedef char* strp;
-\end{lstlisting}
+\end{nlnlisting}
 
 % Ensures we get the following float out before we go on.
 \clearpage
@@ -114,8 +114,8 @@ Compilation Unit \#1: \dotdebuginfo{}
 4
 "POINTER"
 \textit{e2  (debug info offset)}
-\vspace{0.01cm}
 \hrule
+\vspace{0.01cm}
 0
 \end{alltt}
 %
@@ -382,7 +382,7 @@ Consider the \addtoindex{Fortran array}\addtoindexx{Fortran 90} source fragment 
 Figure \referfol{fig:fortranarrayexamplesourcefragment}.
 
 \begin{figure}[ht]
-\begin{lstlisting}
+\begin{nlnlisting}
         TYPE array_ptr
         REAL :: myvar
         REAL, DIMENSION (:), POINTER :: ap
@@ -392,7 +392,7 @@ Figure \referfol{fig:fortranarrayexamplesourcefragment}.
         DO I = 1, 20
             ALLOCATE(arrayvar(i)%ap(i+10))
         END DO
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Fortran array example: source fragment} 
 \label{fig:fortranarrayexamplesourcefragment}
 \end{figure}
@@ -421,7 +421,7 @@ be an explicit representation of this structure in the DWARF
 input to the debugger.
 
 \begin{figure}[ht]
-\begin{lstlisting}
+\begin{nlnlisting}
 struct desc {
     long el_len;       // Element length
     void * base;       // Address of raw data
@@ -434,7 +434,7 @@ struct desc {
         long stride;
     } dims[63];
 };
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Fortran array example: descriptor representation}
 \label{fig:fortranarrayexampledescriptorrepresentation}
 \end{figure}
@@ -478,25 +478,25 @@ that case the object doubles as its own descriptor.)
 \needlines{6}
 The \addtoindex{Fortran} derived type \texttt{array\_ptr} can now be re-described
 in C-like terms that expose some of the representation as in
-
-\begin{lstlisting}[numbers=none]
+\par % Needed to end paragraph before listing so that it gets a line number
+\begin{nlnlisting}
 struct array_ptr {
     float myvar;
     desc<1> ap;
 };
-\end{lstlisting}
+\end{nlnlisting}
 
 Similarly for variable \texttt{arrayvar}:
-\begin{lstlisting}[numbers=none]
+\par % Needed to end paragraph before listing so that it gets a line number
+\begin{nlnlisting}
 desc<1> arrayvar;
-\end{lstlisting}
+\end{nlnlisting}
 
 \textit{
 Recall that \texttt{desc\textless 1\textgreater} 
 indicates the 1\dash dimensional version of \texttt{desc}.
 }
 
-%\newpage
 Finally, the following notation is useful:
 \begin{enumerate}[1. ]
 \item  sizeof(type): size in bytes of entities of the given type
@@ -620,10 +620,11 @@ Suppose
 the program is stopped immediately following completion
 of the do loop. Suppose further that the user enters the
 following debug command:
+\par % Needed to end paragraph before listing so that it gets a line number
 \vspace{2mm}
-\begin{lstlisting}[numbers=none]
+\begin{nlnlisting}
 debug> print arrayvar(5)%ap(2)
-\end{lstlisting}
+\end{nlnlisting}
 
 Interpretation of this expression proceeds as follows:
 \begin{enumerate}[1. ]
@@ -728,9 +729,9 @@ in Figure \refersec{fig:Fortranscalarcoarraysourcefragment} can be described as
 illustrated in Figure \refersec{fig:FortranscalarcoarrayDWARFdescription}.
 
 \begin{figure}[!ht]
-\begin{lstlisting}
+\begin{nlnlisting}
         INTEGER x[*]
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Fortran scalar coarray: source fragment}
 \label{fig:Fortranscalarcoarraysourcefragment}
 \end{figure}
@@ -759,9 +760,9 @@ in Figure \refersec{fig:Fortranarraycoarraysourcefragment} can be described as
 illustrated in Figure \refersec{fig:FortranarraycoarrayDWARFdescription}.
 
 \begin{figure}[ht]
-\begin{lstlisting}
+\begin{nlnlisting}
         INTEGER x(10)[*]
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Fortran array coarray: source fragment}
 \label{fig:Fortranarraycoarraysourcefragment}
 \end{figure}
@@ -797,9 +798,9 @@ in Figure \refersec{fig:Fortranmultidimensionalcoarraysourcefragment} can be des
 illustrated in Figure \referfol{fig:FortranmultidimensionalcoarrayDWARFdescription}.
 
 \begin{figure}[ht]
-\begin{lstlisting}
+\begin{nlnlisting}
         INTEGER x(10,11,12)[2,3,*]
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Fortran multidimensional coarray: source fragment}
 \label{fig:Fortranmultidimensionalcoarraysourcefragment}
 \end{figure}
@@ -847,14 +848,14 @@ supplement~29113:\footnote{Technical Specification ISO/IEC TS
   29113:2012 \emph{Further Interoperability of Fortran with C}}
 
 \begin{figure}[!ht]
-\begin{lstlisting}
+\begin{nlnlisting}
   SUBROUTINE Foo(x)
     REAL :: x(..)
 
     ! x has n dimensions
   
   END SUBROUTINE
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Declaration of a Fortran 2008 assumed-rank array}
 \label{fig:assumedrankdecl}
 \end{figure}
@@ -864,7 +865,7 @@ Let's assume the Fortran compiler used an array descriptor that
 like the one shown in Figure~\ref{fig:arraydesc}.
 
 \begin{figure}[!ht]
-\begin{lstlisting}
+\begin{nlnlisting}
   struct array_descriptor {
     void *base_addr;
     int rank;
@@ -877,7 +878,7 @@ like the one shown in Figure~\ref{fig:arraydesc}.
      int stride;
      int flags;
   }
-\end{lstlisting}
+\end{nlnlisting}
 \caption{One of many possible layouts for an array descriptor}
 \label{fig:arraydesc}
 \end{figure}
@@ -946,7 +947,7 @@ entry need to be evaluated for each of the
 Figure~\refersec{fig:assumedrankdwarfparser}.
 
 \begin{figure}[!ht]
-\begin{lstlisting}
+\begin{nlnlisting}
     typedef struct {
         int lower, upper, stride;
     } dims_t;
@@ -986,7 +987,7 @@ Figure~\refersec{fig:assumedrankdwarfparser}.
       }
       return result;
     }
-\end{lstlisting}
+\end{nlnlisting}
 \caption{How to interpret the DWARF from Figure~\ref{fig:assumedrankdwarf}}
 \label{fig:assumedrankdwarfparser}
 \end{figure}
@@ -1004,7 +1005,7 @@ the full description of the underlying type \texttt{dt} that is shared by
 several variables.
 
 \begin{figure}[ht]
-\begin{lstlisting}
+\begin{nlnlisting}
 	PROGRAM Sample
      
         TYPE :: dt (l)
@@ -1022,7 +1023,7 @@ several variables.
         END SUBROUTINE
      
         END Sample
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Fortran dynamic type example: source}
 \label{fig:fortrandynamictypeexamplesource}
 \end{figure}
@@ -1084,7 +1085,7 @@ is appropriate. In this example, \texttt{b} is referenced as if it
 were defined in the enclosing structure \texttt{foo}.
 
 \begin{figure}[ht]
-\begin{lstlisting}
+\begin{nlnlisting}
 struct foo {
     int a;
     struct {
@@ -1099,7 +1100,7 @@ void bar(void)
     t.b = 2;
 }
 
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Anonymous structure example: source fragment}
 \label{fig:anonymousstructureexamplesourcefragment}
 \end{figure}
@@ -1128,7 +1129,7 @@ illustrates two kinds of \addtoindex{Ada}
 parameterized array, one embedded in a record.
 
 \begin{figure}[ht]
-\begin{lstlisting}
+\begin{nlnlisting}
 M : INTEGER := <exp>;
 VEC1 : array (1..M) of INTEGER;
 subtype TEENY is INTEGER range 1..100;
@@ -1138,7 +1139,7 @@ type REC2(N : TEENY := 100) is record
 end record;
 
 OBJ2B : REC2;
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Ada example: source fragment}
 \label{fig:adaexamplesourcefragment}
 \end{figure}
@@ -1257,7 +1258,7 @@ is used to illustrate the representation of packed unaligned
 \addtoindex{bit fields}.
 
 \begin{figure}[ht]
-\begin{lstlisting}
+\begin{nlnlisting}
 TYPE T : PACKED RECORD                  { bit size is 2   }
          F5 : BOOLEAN;                  { bit offset is 0 }
          F6 : BOOLEAN;                  { bit offset is 1 }
@@ -1271,7 +1272,7 @@ VAR V :  PACKED RECORD
          F4 : PACKED ARRAY [0..1] OF T; { bit offset is 33 }
          F7 : T;                        { bit offset is 37 }
          END;
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Packed record example: source fragment}
 \label{fig:packedrecordexamplesourcefragment}
 \end{figure}
@@ -1400,15 +1401,15 @@ beginning of the object.}
 This section illustrates one possible representation of the 
 following \addtoindex{C} structure definition in both big- 
 and little-endian \byteorder{s}:
-
-\begin{lstlisting}
+\par % Needed to end paragraph before listing so that it gets a line number
+\begin{nlnlisting}
 struct S {
     int j:5;
     int k:6;
     int m:5;
     int n:8;
 };
-\end{lstlisting}
+\end{nlnlisting}
 
 Figures \ref{fig:bigendiandatabitoffsets} and
 \refersec{fig:littleendiandatabitoffsets}
@@ -1490,7 +1491,7 @@ Figure \refersec{fig:namespaceexample1dwarfdescription}
 is appropriate.
 
 \begin{figure}[ht]
-\begin{lstlisting}
+\begin{nlnlisting}
 namespace {
     int i;
 }
@@ -1522,7 +1523,7 @@ int Foo::myfunc(int a)
     j = 4;
     return myfunc2(3) + j + i + a + 2;
 }
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Namespace example \#1: source fragment}
 \label{fig:namespaceexample1sourcefragment}
 \end{figure}
@@ -1633,7 +1634,7 @@ the fully qualified namespace \texttt{A::B}, or as if it were defined
 in the enclosing namespace, \texttt{A}.
 
 \begin{figure}[ht]
-\begin{lstlisting}
+\begin{nlnlisting}
 namespace A {
     inline namespace B {   // (1) inline namespace
         int a;
@@ -1651,7 +1652,7 @@ void bar (void)
     using A::a;
     a = 2;
 }
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Namespace example \#2: source fragment}
 \label{fig:namespaceexample2sourcefragment}
 \end{figure}
@@ -1683,7 +1684,7 @@ Figure \refersec{fig:memberfunctionexampledwarfdescription}
 is appropriate.
 
 \begin{figure}[ht]
-\begin{lstlisting}
+\begin{nlnlisting}
 class A
 {
     void func1(int x1);
@@ -1691,7 +1692,7 @@ class A
     static void func3(int x3);
 };
 void A::func1(int x) {}
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Member function example: source fragment}
 \label{fig:memberfunctionexamplesourcefragment}
 \end{figure}
@@ -1793,7 +1794,7 @@ Figure \refersec{fig:memberfunctionrefqualexampledwarfdescription}
 is appropriate.
 
 \begin{figure}[ht]
-\begin{lstlisting}
+\begin{nlnlisting}
 class A {
 public:
     void f() const &&;
@@ -1804,7 +1805,7 @@ void g() {
     // The type of pointer is "void (A::*)() const &&".
     auto pointer_to_member_function = &A::f;
 }
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Reference- and rvalue-reference-qualification example: source \mbox{fragment}}
 \label{fig:memberfunctionrefqualexamplesourcefragment}
 \end{figure}
@@ -1907,6 +1908,7 @@ as shown in Figure \refersec{fig:preV5LNCTusingV5}.
 Suppose the line number header includes the following 
 (header fields not needed are not shown):
 \begin{center}
+\begin{nolinenumbersenv}
 \begin{tabular}{lr}
     \addttindex{opcode\_base} & 13 \\
     \addttindex{line\_base}   & -3 \\
@@ -1914,6 +1916,7 @@ Suppose the line number header includes the following
     \addttindex{minimum\_instruction\_length} &          1 \\
     \addttindex{maximum\_operations\_per\_instruction} & 1 \\
 \end{tabular}
+\end{nolinenumbersenv}
 \end{center}
 This means that
 we can use a special opcode whenever two successive rows in
@@ -1974,7 +1977,7 @@ code for the Intel 8086 processor in
 Figure \refersec{fig:linenumberprogramexamplemachinecode}.
 
 \begin{figure}[ht]
-\begin{lstlisting}
+\begin{nlnlisting}
 1: int
 2: main()
     0x239: push pb
@@ -1994,7 +1997,7 @@ Figure \refersec{fig:linenumberprogramexamplemachinecode}.
     0x24b: pop bp
     0x24c: ret
 7: 0x24d:
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Line number program example: machine code}
 \label{fig:linenumberprogramexamplemachinecode}
 \end{figure}
@@ -2089,7 +2092,8 @@ by adding the contents of the
 source register with the constant.
 
 \item There are eight 4-byte registers:
-\newline
+\par
+\begin{nolinenumbersenv}
 \begin{tabular}{p{5mm}l}
    & R0 always 0 \\
    & R1 holds return address on call \\
@@ -2097,6 +2101,7 @@ source register with the constant.
    & R4-R6 preserved on call \\
    & R7 stack pointer \\
 \end{tabular}
+\end{nolinenumbersenv}
 
 \item  The stack grows in the negative direction.
 
@@ -2114,7 +2119,7 @@ pointer). The first column values are byte addresses.
 
 
 \begin{figure}[ht]
-\begin{lstlisting}
+\begin{nlnlisting}
        ;; start prologue
 foo    sub   R7, R7, <fs>        ; Allocate frame
 foo+4  store R1, R7, (<fs>-4)    ; Save the return address
@@ -2130,7 +2135,7 @@ foo+72 load  R1, R7, (<fs>-4)    ; Restore return address
 foo+76 add   R7, R7, <fs>        ; Deallocate frame
 foo+80 jump  R1                  ; Return
 foo+84
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Call frame information example: machine code fragments}
 \label{fig:callframeinformationexamplemachinecodefragments}
 \end{figure}
@@ -2146,7 +2151,8 @@ Table \refersec{tab:callframeinformationexamplecommoninformationentryencoding}.
 
 The following notations apply in 
 Table \refersec{tab:callframeinformationexampleconceptualmatrix}:
-\newline
+\par
+\begin{nolinenumbersenv}
 \begin{tabular}{p{5mm}l}
 &1.  R8 is the return address \\
 &2.  s = same\_value rule \\
@@ -2155,6 +2161,7 @@ Table \refersec{tab:callframeinformationexampleconceptualmatrix}:
 &5.  cN = offset(N) rule \\
 &6.  a = architectural rule \\
 \end{tabular}
+\end{nolinenumbersenv}
 
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
@@ -2226,25 +2233,17 @@ cie+40 &&  \\
 \end{longtable}
 \end{centering}
 
+\bbeb
 
-The following notations apply in 
-Table \refersec{tab:callframeinformationexampleframedescriptionentryencoding}:
-\newline
-\begin{tabular}{p{5mm}l}
-&\texttt{<fs>  =} frame size \\
-&\texttt{<caf> =} code alignment factor \\
-&\texttt{<daf> =} data alignment factor \\
-\end{tabular}
-
-
+\needlines{10}
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|ll}
   \caption{Call frame information example: frame description entry encoding} 
   \label{tab:callframeinformationexampleframedescriptionentryencoding} \\
-  \hline \bfseries Address &\bfseries Value &\bfseries Comment \\ \hline
+  \hline \bfseries Address &\bfseries Value &\bfseries Comment\dag \\ \hline
 \endfirsthead
-  \bfseries Address &\bfseries Value &\bfseries Comment \\ \hline
+  \bfseries Address &\bfseries Value &\bfseries Comment\dag \\ \hline
 \endhead
   \hline \emph{Continued on next page}
 \endfoot
@@ -2277,6 +2276,12 @@ fde+42&\DWCFAnop&padding \\
 fde+43&\DWCFAnop&padding \\
 fde+44 && \\
 \end{longtable}
+\bb
+\dag The following notations apply:
+\texttt{<fs> =} frame size,
+\texttt{<caf> =} code alignment factor, and 
+\texttt{<daf> =} data alignment factor.
+\eb
 \end{centering}
 
 \needlines{6}
@@ -2292,7 +2297,7 @@ references to the formal parameter and local variable of the
 containing subprogram \texttt{OUTER}.
 
 \begin{figure}[ht]
-\begin{lstlisting}
+\begin{nlnlisting}
 inline procedure OUTER (OUTER_FORMAL : integer) =
     begin
     OUTER_LOCAL : integer;
@@ -2308,7 +2313,7 @@ inline procedure OUTER (OUTER_FORMAL : integer) =
 ! Call OUTER
 !
 OUTER(7);
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Inlining examples: pseudo-source fragmment} 
 \label{fig:inliningexamplespseudosourcefragment}
 \end{figure}
@@ -2815,11 +2820,11 @@ can be represented as illustrated in
 Figure \refersec{fig:constantexpressionsdwarfdescription}.
 
 \begin{figure}[ht]
-\begin{lstlisting}[numbers=none]
+\begin{nlnlisting}
 constexpr double mass = 9.8;
 constexpr int square (int x) { return x * x; }
 float arr[square(9)]; // square() called and inlined
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Constant expressions: C++ source} \label{fig:constantexpressionscsource}
 \end{figure}
 
@@ -2882,12 +2887,12 @@ can be described in DWARF as illustrated in
 Figure \refersec{fig:unicodecharacterexampledwarfdescription}.
 
 \begin{figure}[!ht]
-\begin{lstlisting}[numbers=none]
+\begin{nlnlisting}
 // C++ source
 //
 char16_t chr_a = u'h';
 char32_t chr_b = U'h';
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Unicode character example: source}
 \label{fig:unicodecharacterexamplesource}
 \end{figure}
@@ -2929,12 +2934,12 @@ can be described in DWARF as illustrated in
 Figure \refersec{fig:ctypesafeenumerationexampledwarf}.
 
 \begin{figure}[ht]
-\begin{lstlisting}[numbers=none]
+\begin{nlnlisting}
 // C++ source
 //
 enum class E { E1, E2=100 };
 E e1;
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Type-safe enumeration example: source}
 \label{fig:ctypesafeenumerationexamplesource}
 \end{figure}
@@ -2974,7 +2979,7 @@ can be described in DWARF as illustrated in
 Figure \refersec{fig:ctemplateexample1dwarf}.
 
 \begin{figure}[ht]
-\begin{lstlisting}
+\begin{nlnlisting}
 // C++ source
 //
 template<class T>
@@ -2982,7 +2987,7 @@ struct wrapper {
     T comp;
 };
 wrapper<int> obj;
-\end{lstlisting}
+\end{nlnlisting}
 \caption{C++ template example \#1: source}
 \label{fig:ctemplateexample1source}
 \end{figure}
@@ -3026,7 +3031,7 @@ and the DWARF that can describe it in
 Figure \refersec{fig:ctemplateexample2dwarf}.
 
 \begin{figure}[!ht]
-\begin{lstlisting}
+\begin{nlnlisting}
 // C++ source
 //
     template<class T>
@@ -3040,7 +3045,7 @@ Figure \refersec{fig:ctemplateexample2dwarf}.
     }
     wrapper<int> obj;
     consume(obj);
-\end{lstlisting}
+\end{nlnlisting}
 \caption{C++ template example \#2: source}
 \label{fig:ctemplateexample2source}
 \end{figure}
@@ -3107,7 +3112,7 @@ can be described in DWARF as illustrated
 Figure \refersec{fig:ctemplatealiasexample1dwarf}.
 
 \begin{figure}[ht]
-\begin{lstlisting}
+\begin{nlnlisting}
 // C++ source, template alias example 1
 //
 template<typename T, typename U>
@@ -3117,7 +3122,7 @@ struct Alpha {
 };
 template<typename V> using Beta = Alpha<V,V>;
 Beta<long> b;
-\end{lstlisting}
+\end{nlnlisting}
 \caption{C++ template alias example \#1: source}
 \label{fig:ctemplatealiasexample1source}
 \end{figure}
@@ -3166,7 +3171,7 @@ can be described in DWARF as illustrated
 Figure \refersec{fig:ctemplatealiasexample2dwarf}.
 
 \begin{figure}[ht]
-\begin{lstlisting}
+\begin{nlnlisting}
 // C++ source, template alias example 2
 //
 template<class TX> struct X { };
@@ -3174,7 +3179,7 @@ template<class TY> struct Y { };
 template<class T> using Z = Y<T>;
 X<Y<int>> y;
 X<Z<int>> z;
-\end{lstlisting}
+\end{nlnlisting}
 \caption{C++ template alias example \#2: source}
 \label{fig:ctemplatealiasexample2source}
 \end{figure}
@@ -3260,7 +3265,7 @@ assumptions a possible DWARF description is shown in
 Figure \refersec{fig:cimplicitpointerexample1dwarf}.
 
 \begin{figure}[ht]
-\begin{lstlisting}
+\begin{nlnlisting}
 struct S { short a; char b, c; };
 volatile int v;
 void foo (int x)
@@ -3275,7 +3280,7 @@ int main ()
     foo (v+1);
     return 0;
 }
-\end{lstlisting}
+\end{nlnlisting}
 \caption{C implicit pointer example \#1: source}
 \label{fig:cimplicitpointerexample1source}
 \end{figure}
@@ -3447,7 +3452,7 @@ Figure \refersec{fig:stringtypeexampledwarf} is appropriate.
 
 \begin{figure}[ht]
 \addtoindexx{ISO 10646 character set standard}
-\begin{lstlisting}
+\begin{nlnlisting}
         program character_kind
             use iso_fortran_env
             implicit none
@@ -3470,7 +3475,7 @@ Figure \refersec{fig:stringtypeexampledwarf} is appropriate.
             open (output_unit, encoding='UTF-8')
             write (*,*) trim (hello_world)
         end program character_kind
-\end{lstlisting}
+\end{nlnlisting}
 \caption{String type example: source}
 \label{fig:stringtypeexamplesource}
 \end{figure}
@@ -3544,7 +3549,7 @@ Returns a function value in register 0.
 Consider the \addtoindex{C} source in Figure \referfol{fig:callsiteexample1source}.
 
 \begin{figure}[ht]
-\begin{lstlisting}
+\begin{nlnlisting}
 
 extern void fn1 (long int, long int, long int);
 
@@ -3569,7 +3574,7 @@ fn3 (long int x, long int (*fn4) (long int *))
     }
     return z;
 }
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Call Site Example \#1: Source}
 \label{fig:callsiteexample1source}
 \end{figure}
@@ -3578,7 +3583,7 @@ Possible generated code for this source is shown using a suggestive
 pseudo-\linebreak[0]assembly notation in Figure \refersec{fig:callsiteexample1code}.
 
 \begin{figure}[ht]
-\begin{lstlisting}
+\begin{nlnlisting}
 fn2:
 L1:
     %reg2 = 7   ! Load the 3rd argument to fn1
@@ -3624,7 +3629,7 @@ L8:
                           !   register
     %reg3 = %reg3 + 32    ! Leave stack frame
     return
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Call Site Example \#1: Code}
 \label{fig:callsiteexample1code}
 \end{figure}
@@ -3637,7 +3642,7 @@ specifies the range of addresses from \texttt{m} through but not
 including \texttt{n} over which the following
 location description applies):
 
-%\begin{figure}[ht]
+\nolinenumbers
 \begin{dwflisting}
 \begin{alltt}
 
@@ -3654,11 +3659,11 @@ location description applies):
 
 \end{alltt}
 \end{dwflisting}
-%\end{figure}
 
 \vspace*{0.7\baselineskip}
+\condlinenumbers
 Similarly, the variable \texttt{q} in \texttt{fn2} then might have this location list:
-
+\par\nolinenumbers
 \begin{dwflisting}
 \begin{alltt}
 
@@ -3679,6 +3684,7 @@ Similarly, the variable \texttt{q} in \texttt{fn2} then might have this location
 \end{dwflisting}
 
 \vspace*{0.7\baselineskip}
+\condlinenumbers
 Variables \texttt{b} and \texttt{c} each have a location list similar to 
 that for variable \texttt{a},
 except for a different label between the two ranges and they
@@ -3786,7 +3792,7 @@ which is used to illustrate how Fortran's \doublequote{pass by reference}
 parameters can be handled.
 
 \begin{figure}[ht]
-\begin{lstlisting}
+\begin{nlnlisting}
 subroutine fn4 (n)
     integer :: n, x
     x = n
@@ -3804,7 +3810,7 @@ subroutine fn5 (n)
     x = 5
     call fn4 (x)
 end subroutine fn5
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Call site example \#2: source}
 \label{fig:callsiteexample2source}
 \end{figure}
@@ -3812,8 +3818,9 @@ end subroutine fn5
 \clearpage
 Possible generated code for this source is shown using a suggestive 
 pseudo-\linebreak[0]assembly notation in Figure \refersec{fig:callsiteexample2code}.
+\par % Needed to end paragraph before listing so that it gets a line number
 \begin{figure}[ht]
-\begin{lstlisting}
+\begin{nlnlisting}
 
 fn4:
     %reg2 = [%reg0]   ! Load value of n (passed by reference)
@@ -3835,16 +3842,17 @@ L10:
     %reg3 = %reg3 + 8 ! Leave stack frame
     return
     
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Call site example \#2: code}
 \label{fig:callsiteexample2code}
 \end{figure}
 
 The location description for variable \texttt{x} in function 
 \texttt{fn4} might be:
-\begin{lstlisting}
+\par % Needed to end paragraph before listing so that it gets a line number
+\begin{nlnlisting}
     DW_OP_entry_value 4 DW_OP_breg0 0 DW_OP_deref_size 4 DW_OP_stack_value
-\end{lstlisting}
+\end{nlnlisting}
 
 The call sites in (just) function \texttt{fn5} might be as shown in 
 Figure \refersec{fig:callsiteexample2dwarf}.
@@ -3896,26 +3904,26 @@ DWARF encoding of macro information (see Section \refersec{chap:macroinformation
 
 \begin{figure}[ht]
 \textit{File a.c}
-\begin{lstlisting}
+\begin{nlnlisting}
 #include "a.h"
 #define FUNCTION_LIKE_MACRO(x) 4+x
 #include "b.h"
-\end{lstlisting}
+\end{nlnlisting}
 \vspace{7mm}
 \textit{File a.h}
-\begin{lstlisting}
+\begin{nlnlisting}
 #define LONGER_MACRO 1
 #define B 2
 #include "b.h"
 #define B 3
-\end{lstlisting}
+\end{nlnlisting}
 \vspace{7mm}
 \textit{File b.h}
-\begin{lstlisting}
+\begin{nlnlisting}
 #undef B
 #define D 3
 #define FUNCTION_LIKE_MACRO(x) 4+x
-\end{lstlisting}
+\end{nlnlisting}
 \caption{Macro example: source}
 \label{ref:macroexamplesource}
 \end{figure}

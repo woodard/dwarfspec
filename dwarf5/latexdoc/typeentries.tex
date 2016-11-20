@@ -511,12 +511,15 @@ Name&Meaning\\ \hline
 \needlines{6}
 \textit{As examples of how type modifiers are ordered, consider the following
 \addtoindex{C} declarations:}
-\begin{lstlisting}[numbers=none]
+\par % Needed to end paragraph before listing so that it gets a line number
+\begin{nlnlisting}
    const unsigned char * volatile p;
-\end{lstlisting}
-\textit{which represents a volatile pointer to a constant
-character. This is encoded in DWARF as:}
+\end{nlnlisting}
 
+\textit{This represents a volatile pointer to a constant
+character. It is encoded in DWARF as:}
+\par % Needed to end paragraph before listing so that it gets a line number
+\nolinenumbers
 \begin{dwflisting}
 \begin{alltt}
         \DWTAGvariable(p) -->
@@ -527,14 +530,16 @@ character. This is encoded in DWARF as:}
 \end{alltt}
 \end{dwflisting}
 
-%\needlines{5}
+\condlinenumbers
 \textit{On the other hand}
-\begin{lstlisting}[numbers=none]                        
+\par % Needed to end paragraph before listing so that it gets a line number
+\begin{nlnlisting}                        
    volatile unsigned char * const restrict p;
-\end{lstlisting}
+\end{nlnlisting}
 \textit{represents a restricted constant
 pointer to a volatile character. This is encoded as:}
-
+\par % Needed to end paragraph before listing so that it gets a line number
+\nolinenumbers
 \begin{dwflisting}
 \begin{alltt}
         \DWTAGvariable(p) -->
@@ -546,6 +551,7 @@ pointer to a volatile character. This is encoded as:}
 \end{alltt}
 \end{dwflisting}
 
+\condlinenumbers
 \section{Typedef Entries}
 \label{chap:typedefentries}
 A named type that is defined in terms of another type
@@ -882,12 +888,12 @@ and will have a \DWATdeclaration{} attribute.
 \textit{Consider a nested class whose 
 definition occurs outside of the containing class definition, as in:}
 
-\begin{lstlisting}[numbers=none]
+\begin{nlnlisting}
 struct A {
     struct B;
 };
 struct A::B { ... };
-\end{lstlisting}
+\end{nlnlisting}
 
 \textit{The two different structs can be described in 
 different compilation units to 
@@ -1923,9 +1929,9 @@ this execution of the program).
 
 \textit{This allows the representation of a \addtoindex{UPC} shared array such as}
 
-\begin{lstlisting}[numbers=none]
+\begin{nlnlisting}
 int shared foo[34*THREADS][10][20];
-\end{lstlisting}
+\end{nlnlisting}
 
 \needlines{4}
 The\hypertarget{chap:DWATlowerboundlowerboundofsubrange}{}
@@ -2058,9 +2064,9 @@ whose address is being calculated.
 \needlines{6}
 \textit{For an expression such as}
 
-\begin{lstlisting}[numbers=none]
+\begin{nlnlisting}
     object.*mbr_ptr
-\end{lstlisting}
+\end{nlnlisting}
 \textit{where \texttt{mbr\_ptr} has some \addtoindex{pointer to member type}, a debugger should:}
 \begin{enumerate}[1. ]
 \item \textit{Push the value of \texttt{mbr\_ptr} onto the DWARF expression stack.}

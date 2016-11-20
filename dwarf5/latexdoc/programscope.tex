@@ -428,8 +428,11 @@ attribute, whose value is of class \CLASSaddrptr.
 This attribute points to the beginning of the compilation
 unit's contribution to the \dotdebugaddr{} section.
 Indirect references (using \DWFORMaddrx, \DWOPaddrx, 
-\DWOPconstx, \DWLLEbaseaddressx{}, 
-\DWLLEstartxendx{} or \DWLLEstartxlength) 
+\DWOPconstx, 
+\bb
+\DWLLEbaseaddressx{}, \DWLLEstartxendx{}, \DWLLEstartxlength{},
+\DWRLEbaseaddressx{}, \DWRLEstartxendx{} or \DWRLEstartxlength) 
+\eb
 within the compilation unit are interpreted as indices 
 relative to this base.
 
@@ -437,16 +440,24 @@ relative to this base.
 \item \hypertarget{chap:DWATrnglistsbaseforrnglists}{}
 A \DWATrnglistsbaseDEFN\addtoindexx{ranges table base attribute}
 attribute, whose value is of class \CLASSrnglistsptr.
-This attribute points to the base of the compilation
+This attribute points to the 
+\bb
+beginning of the offsets table (immediately following the header) 
+\eb
+of the compilation
 unit's contribution to the \dotdebugrnglists{} section.
 References to range lists (using \DWFORMrnglistx)
 within the compilation unit are
 interpreted relative to this base.
 
 \item \hypertarget{chap:DWATloclistsbaseinlocationlist}{}
-A \DWATloclistsbase{}\addtoindexx{location table base attribute} 
+A \DWATloclistsbaseDEFN{}\addtoindexx{location table base attribute} 
 attribute, whose value is of class \CLASSloclistsptr. 
-This attribute points to the base of the compilation 
+This attribute points to the 
+\bb
+beginning of the offsets table (immediately following the header) 
+\eb
+of the compilation 
 unit's contribution to the \dotdebugloclists{} section. References 
 to location lists (using \DWFORMloclistx) within the compilation 
 unit are interpreted relative to this base.
@@ -1014,10 +1025,10 @@ in Section \refersec{chap:importedorrenameddeclarationentries}.
 \addtoindexx{Fortran!use statement}
 itself imported by a use statement without an explicit mention
 may be represented by an imported declaration entry that refers
-to the original debugging information entry. For example, given
-}
+to the original debugging information entry. For example, given}
+\par % Needed to end paragraph before listing so that it gets a line number
 \vspace{2mm}
-\begin{lstlisting}
+\begin{nlnlisting}
 module A
 integer X, Y, Z
 end module
@@ -1030,7 +1041,7 @@ module C
 use B, only Q => X
 end module
 
-\end{lstlisting}
+\end{nlnlisting}
 \textit{the imported declaration entry for Q within module C refers
 directly to the variable declaration entry for X in module A
 because there is no explicit representation for X in module B.
@@ -1078,6 +1089,7 @@ and entry
 \addtoindexx{entry point entry}
 points:
 
+\nolinenumbers
 \begin{tabular}{lp{9.0cm}}
 \DWTAGsubprogramTARG{} & A subroutine or function \\
 \DWTAGinlinedsubroutine{} & A particular inlined 
@@ -1085,7 +1097,7 @@ points:
 instance of a subroutine or function \\
 \DWTAGentrypointTARG{} & An alternate entry point \\
 \end{tabular}
-
+\par\condlinenumbers
 
 \needlines{6}
 \subsection{General Subroutine and Entry Point Information}
@@ -2504,8 +2516,8 @@ subsequent declaration.}
 
 \needlines{4}
 \textit{Consider the following example \addtoindex{C} code:}
-\vspace{3mm}
-\begin{lstlisting}
+\par % Needed to end paragraph before listing so that it gets a line number
+\begin{nlnlisting}
 float x = 99.99;
 int myfunc()
 {
@@ -2513,7 +2525,7 @@ int myfunc()
     float x = 88.99;
     return 0;
 }
-\end{lstlisting}
+\end{nlnlisting}
 
 \textit{\addtoindex{C} scoping rules require that the value of the 
 variable \texttt{x} assigned to the variable \texttt{f} in the 

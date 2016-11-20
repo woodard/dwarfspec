@@ -51,6 +51,9 @@ described in Chapters 3, 4 and 5.
 \DWTAGformalparameter,
 \DWTAGfriend,
 \DWTAGgenericsubrange,
+\bb
+\DWTAGimmutabletype,
+\eb
 \DWTAGimporteddeclaration,
 \DWTAGimportedmodule,
 \DWTAGimportedunit,
@@ -59,8 +62,10 @@ described in Chapters 3, 4 and 5.
 \DWTAGinterfacetype,
 \DWTAGlabel,
 \DWTAGlexicalblock,
-\DWTAGmodule,
+\bb
 \DWTAGmember,
+\DWTAGmodule,
+\eb
 \DWTAGnamelist,
 \DWTAGnamelistitem,
 \DWTAGnamespace,
@@ -637,10 +642,7 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 &\livelinki{chap:DWATrangesnoncontiguousrangeofcodeaddresses}
         {Non-contiguous range of code addresses}
         {non-contiguous range of code addresses} \\
-\DWATrnglistsbaseTARG
-&\livelinki{chap:DWATrnglistsbase}
-        {Base offset for range lists}
-        {ranges lists} \\
+\bbeb
 \DWATrankTARG
 &\livelinki{chap:DWATrankofdynamicarray}
         {Dynamic number of array dimensions}
@@ -651,11 +653,18 @@ The attributes are listed in Table \referfol{tab:attributenames}.
         {recursive property of a subroutine} \\
 \DWATreferenceTARG
 &\livelink{chap:DWATreferenceofnonstaticmember}
-          {\&-qualified non-static member function} \textit{(\addtoindex{C++})} \\
+        {\&-qualified non-static member function} \textit{(\addtoindex{C++})} \\
 \DWATreturnaddrTARG
 &\livelinki{chap:DWATreturnaddrsubroutinereturnaddresssavelocation}
-           {Subroutine return address save location}
-           {subroutine return address save location} \\
+        {Subroutine return address save location}
+        {subroutine return address save location} \\
+\bb
+\DWATrnglistsbaseTARG
+&\livelinki{chap:DWATrnglistsbase}
+        {Base offset for range lists}
+        {ranges lists} 
+\eb     
+        \\
 \DWATrvaluereferenceTARG
 &\livelink{chap:DWATrvaluereferenceofnonstaticmember}
           {\&\&-qualified non-static member function} \textit{(\addtoindex{C++})} \\
@@ -769,9 +778,9 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 \addtoindexx{loclistsptr|see {\textit{also} loclistsptr class}}
 \addtoindexx{loclist|see {\textit{also} loclist class}}
 \addtoindexx{macptr|see {\textit{also} macptr class}}
+\addtoindexx{reference|see {\textit{also} reference class}}
 \addtoindexx{rnglistsptr|see {\textit{also} rnglistsptr class}}
 \addtoindexx{rnglist|see {\textit{also} rnglist class}}
-\addtoindexx{reference|see {\textit{also} reference class}}
 \addtoindexx{string|see {\textit{also} string class}}
 \addtoindexx{stroffsetsptr|see {\textit{also} stroffsetsptr class}}
 
@@ -893,17 +902,10 @@ a location in the DWARF section that holds macro definition
 information.
 \\
 
-\hypertarget{chap:classrnglist}{}
-\livelinki{datarep:classrnglist}{rnglist}{rnglist class}, 
-\hypertarget{chap:classrnglistsptr}{}
-\livelinki{datarep:classrnglistsptr}{rnglistsptr}{rnglistsptr class}
-&Specifies a location in the DWARF section that holds 
-non-contiguous address ranges.
-\\
-
 \hypertarget{chap:classreference}{}
 \livelinki{datarep:classreference}{reference}{reference class}
-&Refers to one of the debugging information
+&\bbeb
+Refers to one of the debugging information
 entries that \mbox{describe} the program.  There are four types of
 \mbox{reference}. The first is an offset relative to the beginning
 of the \mbox{compilation} unit in which the reference occurs and must
@@ -918,6 +920,16 @@ for that type. The fourth type of reference is a reference from within the
 \dotdebuginfo{} section of the executable or shared object file to
 a debugging information entry in the \dotdebuginfo{} section of 
 a \addtoindex{supplementary object file}.
+\\
+
+\bb
+\hypertarget{chap:classrnglist}{}
+\livelinki{datarep:classrnglist}{rnglist}{rnglist class}, 
+\hypertarget{chap:classrnglistsptr}{}
+\livelinki{datarep:classrnglistsptr}{rnglistsptr}{rnglistsptr class}
+&Specifies a location in the DWARF section that holds 
+non-contiguous address ranges.
+\eb
 \\
 
 \hypertarget{chap:classstring}{}
@@ -2393,7 +2405,7 @@ expression correctly.
 \needlines{10}
 \textit{As an example, consider the following fragment of \addtoindex{C} code:}
 
-\begin{lstlisting}
+\begin{nlnlisting}
 void myfunc()
 {
   int x;
@@ -2402,7 +2414,7 @@ void myfunc()
     g(x);
   }
 }
-\end{lstlisting}
+\end{nlnlisting}
 
 
 \textit{\addtoindex{C} scoping rules require that the 
