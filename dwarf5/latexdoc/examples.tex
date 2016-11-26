@@ -270,6 +270,8 @@ Following are examples of DWARF operations used to form location descriptions:
 
 \newcommand{\descriptionitemnl}[1]
         {\vspace{0.3\baselineskip}\item[#1]\mbox{}\\\vspace{0.5\baselineskip}}
+
+
 \begin{description}
 \descriptionitemnl{\DWOPregthree}
 The value is in register 3.
@@ -305,8 +307,9 @@ A variable whose first four bytes reside in register 3 and whose next
 two bytes reside in register 10.
 
 \needlines{4}
-\descriptionitemnl{\DWOPregzero{} \DWOPpiece{} 4 \DWOPpiece{} 4 \DWOPfbreg{} -12 \DWOPpiece{} 4}
-\vspace{-2\parsep}A twelve byte value whose first four bytes reside in register zero,
+\descriptionitemnl{\DWOPregzero{} \DWOPpiece{} 4 \DWOPpiece{} 4 \DWOPfbreg{} -12 \DWOPpiece{} 4 }
+\vspace{-2\parsep}
+A twelve byte value whose first four bytes reside in register zero,
 whose middle four bytes are unavailable (perhaps due to optimization),
 and whose last four bytes are in memory, 12 bytes before the frame
 base.
@@ -324,40 +327,39 @@ value consists of two parts, given in memory address order: the 4 byte
 value 1 followed by the four byte value computed from the sum of the
 contents of r3 and r4.
 
-\descriptionitemnl{\DWOPentryvalue{} 1 \DWOPregone{} }
+\bb
+\descriptionitemnl{\DWOPentryvalue{} 2 \DWOPbregone{} 0 }
 The value register 1 contained upon entering the current subprogram is 
 pushed on the stack.
+\eb
 
-\descriptionitemnl{\DWOPentryvalue{} 1 \DWOPregone{} \DWOPstackvalue }
+\descriptionitemnl{\DWOPentryvalue{} 1 \DWOPregone{} }
+\bb
+Same as the previous example
+(push the value register 1 contained upon entering the current subprogram)
+but use the more compact register location description.
+\eb
+
+\bb
+\descriptionitemnl{\DWOPentryvalue{} 2 \DWOPbregone{} 0 \DWOPstackvalue }
+\eb
 The value register 1 contained upon entering the current subprogram is 
 pushed on the stack. This value is the
 \doublequote{contents} of an otherwise anonymous location.
 
-\descriptionitemnl{\DWOPentryvalue{} 2 \DWOPbregone{} 0 \DWOPstackvalue }
-The value register 1 contained upon entering the current subprogram 
-(same as the previous example) is pushed on the stack. This value is the
-\doublequote{contents} of an otherwise anonymous location.
-
-This and the previous location description are equivalent;
-the previous one is shorter, however. 
-
-%FIXME: The following gets an undefined control sequence error for reasons unknown... 
-%\descriptionitemnl{\DWOPentryvalue{} 1 \DWOPregthirtyone{} \DWOPregone{} \DWOPadd{} \DWOPstackvalue }
-%The value register 31 had upon entering the current subprogram
-%plus the value register 1 currently has.
-
-% Is the following example really interesting enough (not just complicated) to keep?
-\ifthen{\boolean{true}}{
-\descriptionitemnl{\DWOPentryvalue{} 3 \DWOPbregfour{} 16 \DWOPderef{} \DWOPstackvalue }
-%FIXME: similar undefined as just above
-%\descriptionitemnl{\DWOPentryvalue{} 6 \DWOPentryvalue{} 1 \DWOPregfour{} \DWOPplusuconst{} 16 \DWOPderef{} \DWOPstackvalue }
-Add 16 to the value register 4 had upon entering the current subprogram
-to form an address and then push the value of the memory location at that address.
-This value is the
-\doublequote{contents} of an otherwise anonymous location.
-}
+\bb
+\descriptionitemnl{\DWOPentryvalue{} 1 \DWOPregone{} \DWOPstackvalue }
+Same as the previous example (push the value register 1 contained
+upon entering the current subprogram) but use the more compact
+register location description.
+\eb
 
 \needlines{6}
+\descriptionitemnl{\DWOPentryvalue{} 3 \DWOPbregfour{} 16 \DWOPderef{} \DWOPstackvalue }
+Add 16 to the value register 4 had upon entering the current subprogram
+to form an address and then push the value of the memory location at that address.
+This value is the \doublequote{contents} of an otherwise anonymous location.
+
 \descriptionitemnl{\DWOPentryvalue{} 1 \DWOPregfive{} \DWOPplusuconst{} 16 }
 The address of the memory location is calculated by adding 16 to the value
 contained in register 5 upon entering the current subprogram.
@@ -1821,7 +1823,7 @@ void g() {
                 \DWATname("f")
                 \DWATrvaluereference(0x01)
                 \DWTAGformalparameter
-                    \DWATtype({ref to 200$})    ! to const A*
+                    \DWATtype({ref to 200$})     ! to const A*
                     \DWATartificial(0x01)
 
 200$:   ! const A*
@@ -1834,7 +1836,7 @@ void g() {
 
 400$:   ! mfptr
         \DWTAGptrtomembertype
-            \DWATtype({ref to 400$})             ! to functype
+            \DWATtype({ref to 500$})             ! to functype
             \DWATcontainingtype({ref to 100$})  ! to class A
 
 500$:   ! functype
@@ -1851,7 +1853,7 @@ void g() {
                 \DWATtype({ref to 100$})         ! to class A
             \DWTAGvariable
                 \DWATname("pointer_to_member_function")
-                \DWATtype({ref to 300$})
+                \DWATtype({ref to 400$})
          
 \end{alltt}
 \end{dwflisting}

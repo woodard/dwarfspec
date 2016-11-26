@@ -303,13 +303,7 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 &\livelinki{chap:DWATcalllineofcallsite}
            {Line containing call site of non-inlined call} 
            {line containing call site of non-inlined call} \\
-\DWATcallingconventionTARG{} 
-&\livelinki{chap:DWATcallingconventionforsubprograms}
-           {Calling convention for subprograms}
-           {Calling convention!for subprograms} \\
-&\livelinki{chap:DWATcallingconventionfortypes}
-           {Calling convention for types}
-           {Calling convention!for types} \\
+\bbeb
 \DWATcalloriginTARG{}
 &\livelinki{chap:DWATcalloriginofcallsite}
            {Subprogram called in a call}
@@ -350,6 +344,16 @@ The attributes are listed in Table \referfol{tab:attributenames}.
            {Argument value passed in a call}
            {argument value passed}
            \index{call site!argument value passed} \\
+\bb
+\DWATcallingconventionTARG{} 
+&\livelinki{chap:DWATcallingconventionforsubprograms}
+           {Calling convention for subprograms}
+           {Calling convention!for subprograms} \\
+&\livelinki{chap:DWATcallingconventionfortypes}
+           {Calling convention for types}
+           {Calling convention!for types}
+\eb
+\\
 \DWATcommonreferenceTARG
 &\livelinki{chap:commonreferencecommonblockusage}
         {Common block usage}
@@ -660,7 +664,7 @@ The attributes are listed in Table \referfol{tab:attributenames}.
         {subroutine return address save location} \\
 \bb
 \DWATrnglistsbaseTARG
-&\livelinki{chap:DWATrnglistsbase}
+&\livelinki{chap:DWATrnglistsbaseforrnglists}
         {Base offset for range lists}
         {ranges lists} 
 \eb     
@@ -1691,16 +1695,24 @@ upon entering the current subprogram.  It has two operands: an
 unsigned LEB128\addtoindexx{LEB128!unsigned} length, followed by 
 a block containing a DWARF expression or a register location description 
 (see Section \refersec{chap:registerlocationdescriptions}).  
-The length operand specifies the length
-in bytes of the block.  If the block contains a register location
-description, \DWOPentryvalueNAME{} pushes the value that register had upon
-entering the current subprogram.  If the block contains a DWARF expression,
+The length operand specifies the length in bytes of the block.  
+\bb
+If the block contains a DWARF expression,
 the DWARF expression is evaluated as if it has been evaluated upon entering
 the current subprogram.  The DWARF expression 
 assumes no values are present on the DWARF stack initially and results
 in exactly one value being pushed on the DWARF stack when completed.
+If the block contains a register location
+description, \DWOPentryvalueNAME{} pushes the value that register had upon
+entering the current subprogram. 
+\eb
 
 \DWOPpushobjectaddress{} is not meaningful inside of this DWARF operation.
+
+\textit{\bb 
+The register location description provides a more compact form for the
+case where the value was in a register on entry to the subprogram.
+\eb}
 
 \textit{The values needed to evaluate \DWOPentryvalueNAME{} could be obtained in
 several ways. The consumer could suspend execution on entry to the
@@ -2069,6 +2081,7 @@ location description that specifies the location of
 an object that is valid when no bounded location description
 applies.
 
+\needlines{6}
 \item \definition{Base address}.\addtoindexx{base address!of location list}
 This kind of entry provides an address to be
 used as the base address for beginning and ending address
