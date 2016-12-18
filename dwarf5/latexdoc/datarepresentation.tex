@@ -686,12 +686,22 @@ entries referenced from within location descriptions or using loclistsptr
 form attributes must not be moved to a \addtoindex{supplementary object file}.
 
 Executable or shared object file compilation units can use
-\DWTAGimportedunit{} with \DWFORMrefsup{} form \DWATimport{} attribute
-to import entries from the \addtoindex{supplementary object file}, other \DWFORMrefsup{}
+\DWTAGimportedunit{} with 
+\bb
+an \DWATimport{} attribute that uses \DWFORMrefsupfour{} or \DWFORMrefsupeight{} 
+\eb
+to import entries from the \addtoindex{supplementary object file}, other 
+\bb
+\DWFORMrefsupfour{} or \DWFORMrefsupeight{}
+\eb
 attributes to refer to them and \DWFORMstrpsup{} form attributes to
 refer to strings that are used by debug information of multiple
 executables or shared object files.  Within the \addtoindex{supplementary object file}'s
-debugging sections, form \DWFORMrefsup{} or \DWFORMstrpsup{} are
+debugging sections, form 
+\bb
+\DWFORMrefsupfour{}, \DWFORMrefsupeight{} 
+\eb
+or \DWFORMstrpsup{} are
 not used, and all reference forms referring to some other sections
 refer to the local sections in the \addtoindex{supplementary object file}.
 
@@ -799,8 +809,7 @@ format, the value is an 8-byte unsigned integer.
 Form             & Role  \\ \hline
 \DWFORMlinestrp  & offset in \dotdebuglinestr \\
 \DWFORMrefaddr   & offset in \dotdebuginfo{} \\
-\DWFORMrefsup    & offset in \dotdebuginfo{} section of a \mbox{supplementary} object file \\
-                   \addtoindexx{supplementary object file}
+\bbeb
 \DWFORMsecoffset & offset in a section other than \\
                  & \dotdebuginfo{} or \dotdebugstr{} \\
 \DWFORMstrp      & offset in \dotdebugstr{} \\
@@ -1258,15 +1267,21 @@ Table \refersec{tab:tagencodings}.
 \DWTAGentrypoint&0x03 \\
 \DWTAGenumerationtype&0x04 \\
 \DWTAGformalparameter&0x05 \\
+\bbeb\textit{Reserved}&0x06 \\
+\bbeb\textit{Reserved}&0x07 \\
 \DWTAGimporteddeclaration&0x08 \\
+\bbeb\textit{Reserved}&0x09 \\
 \DWTAGlabel&0x0a \\
 \DWTAGlexicalblock&0x0b \\
+\bbeb\textit{Reserved}&0x0c \\
 \DWTAGmember&0x0d \\
+\bbeb\textit{Reserved}&0x0e \\
 \DWTAGpointertype&0x0f \\
 \DWTAGreferencetype&0x10 \\
 \DWTAGcompileunit&0x11 \\
 \DWTAGstringtype&0x12 \\
 \DWTAGstructuretype&0x13 \\
+\bbeb\textit{Reserved}&0x14 \\
 \DWTAGsubroutinetype&0x15 \\
 \DWTAGtypedef&0x16 \\
 \DWTAGuniontype&0x17 \\
@@ -1434,8 +1449,14 @@ Table \referfol{tab:attributeencodings}.
             \addtoindexx{location attribute}   \\
 \DWATname&0x03&\livelink{chap:classstring}{string} 
             \addtoindexx{name attribute} \\
+\bbeb\textit{Reserved}&0x04&\textit{not applicable} \\
+\bbeb\textit{Reserved}&0x05&\textit{not applicable} \\
+\bbeb\textit{Reserved}&0x06&\textit{not applicable} \\
+\bbeb\textit{Reserved}&0x07&\textit{not applicable} \\
+\bbeb\textit{Reserved}&0x08&\textit{not applicable} \\
 \DWATordering&0x09&\livelink{chap:classconstant}{constant} 
             \addtoindexx{ordering attribute}  \\
+\bbeb\textit{Reserved}&0x0a&\textit{not applicable} \\
 \DWATbytesize&0x0b&\livelink{chap:classconstant}{constant}, 
         \livelink{chap:classexprloc}{exprloc}, 
         \livelink{chap:classreference}{reference}
@@ -1452,6 +1473,8 @@ Table \referfol{tab:attributeencodings}.
         \livelink{chap:classexprloc}{exprloc}, 
         \livelink{chap:classreference}{reference}   
             \addtoindexx{bit size attribute} \\
+\bbeb\textit{Reserved}&0x0e&\textit{not applicable} \\
+\bbeb\textit{Reserved}&0x0f&\textit{not applicable} \\
 \DWATstmtlist&0x10&\livelink{chap:classlineptr}{lineptr} 
             \addtoindexx{statement list attribute} \\
 \DWATlowpc&0x11&\livelink{chap:classaddress}{address} 
@@ -1461,6 +1484,7 @@ Table \referfol{tab:attributeencodings}.
             \addtoindexx{high PC attribute}  \\
 \DWATlanguage&0x13&\livelink{chap:classconstant}{constant} 
             \addtoindexx{language attribute}  \\
+\bbeb\textit{Reserved}&0x14&\textit{not applicable} \\
 \DWATdiscr&0x15&\livelink{chap:classreference}{reference} 
             \addtoindexx{discriminant attribute}  \\
 \DWATdiscrvalue&0x16&\livelink{chap:classconstant}{constant} 
@@ -1470,8 +1494,9 @@ Table \referfol{tab:attributeencodings}.
 \DWATimport&0x18&\livelink{chap:classreference}{reference} 
             \addtoindexx{import attribute}  \\
 \DWATstringlength&0x19&\livelink{chap:classexprloc}{exprloc},
-        \CLASSloclist
-            \addtoindexx{string length attribute}  \\
+        \CLASSloclist,
+\bbeb   \CLASSreference
+        \addtoindexx{string length attribute}  \\
 \DWATcommonreference&0x1a&\livelink{chap:classreference}{reference} 
             \addtoindexx{common reference attribute}  \\
 \DWATcompdir&0x1b&\livelink{chap:classstring}{string} 
@@ -1486,6 +1511,7 @@ Table \referfol{tab:attributeencodings}.
         \livelink{chap:classreference}{reference}, 
         \livelink{chap:classflag}{flag}
             \addtoindexx{default value attribute} \\
+\bbeb\textit{Reserved}&0x1f&\textit{not applicable} \\
 \DWATinline&0x20&\livelink{chap:classconstant}{constant} 
             \addtoindexx{inline attribute}  \\
 \DWATisoptional&0x21&\livelink{chap:classflag}{flag} 
@@ -1494,17 +1520,24 @@ Table \referfol{tab:attributeencodings}.
         \livelink{chap:classexprloc}{exprloc}, 
         \livelink{chap:classreference}{reference}
             \addtoindexx{lower bound attribute}  \\
+\bbeb\textit{Reserved}&0x23&\textit{not applicable} \\
+\bbeb\textit{Reserved}&0x24&\textit{not applicable} \\
 \DWATproducer&0x25&\livelink{chap:classstring}{string}
             \addtoindexx{producer attribute}  \\
+\bbeb\textit{Reserved}&0x26&\textit{not applicable} \\
 \DWATprototyped&0x27&\livelink{chap:classflag}{flag}
             \addtoindexx{prototyped attribute}  \\
+\bbeb\textit{Reserved}&0x28&\textit{not applicable} \\
+\bbeb\textit{Reserved}&0x29&\textit{not applicable} \\
 \DWATreturnaddr&0x2a&\livelink{chap:classexprloc}{exprloc},
         \CLASSloclist
             \addtoindexx{return address attribute} \\            
+\bbeb\textit{Reserved}&0x2b&\textit{not applicable} \\
 \DWATstartscope&0x2c&
         \livelink{chap:classconstant}{constant},
         \CLASSrnglist
             \addtoindexx{start scope attribute}  \\
+\bbeb\textit{Reserved}&0x2d&\textit{not applicable} \\
 \DWATbitstride&0x2e&\livelink{chap:classconstant}{constant},
         \livelink{chap:classexprloc}{exprloc}, 
         \livelink{chap:classreference}{reference}
@@ -1513,6 +1546,7 @@ Table \referfol{tab:attributeencodings}.
         \livelink{chap:classexprloc}{exprloc}, 
         \livelink{chap:classreference}{reference}
             \addtoindexx{upper bound attribute}  \\
+\bbeb\textit{Reserved}&0x30&\textit{not applicable} \\
 \DWATabstractorigin&0x31&\livelink{chap:classreference}{reference} 
             \addtoindexx{abstract origin attribute}  \\
 \DWATaccessibility&0x32&\livelink{chap:classconstant}{constant} 
@@ -2101,8 +2135,11 @@ The fourth type of reference is a reference from within the
 \dotdebuginfo{} section of the executable or shared object file to
 a debugging information entry in the \dotdebuginfo{} section of 
 a \addtoindex{supplementary object file}.
-This type of reference (\DWFORMrefsupTARG) is an offset from the 
-beginning of the \dotdebuginfo{} section in the 
+This type of reference (\DWFORMrefsupfourTARG{}
+\bb
+or \DWFORMrefsupeightTARG{}) is a 4- or 8-byte offset (respectively) 
+\eb
+from the beginning of the \dotdebuginfo{} section in the 
 \addtoindex{supplementary object file}.
 
 \textit{The use of compilation unit relative references will reduce the
@@ -2256,7 +2293,7 @@ Table \referfol{tab:attributeformencodings}.
 \DWFORMflagpresent{} &0x19&\livelink{chap:classflag}{flag} \\
 \DWFORMstrx{} \ddag &0x1a&\livelink{chap:classstring}{string} \\
 \DWFORMaddrx{} \ddag &0x1b&\livelink{chap:classaddress}{address} \\
-\DWFORMrefsup{}~\ddag &0x1c &\livelink{chap:classreference}{reference} \\
+\DWFORMrefsupfour{}~\ddag &0x1c &\livelink{chap:classreference}{reference} \\
 \DWFORMstrpsup{}~\ddag &0x1d &\livelink{chap:classstring}{string} \\
 \DWFORMdatasixteen~\ddag &0x1e &\CLASSconstant \\
 \DWFORMlinestrp~\ddag &0x1f &\CLASSstring \\
@@ -2264,6 +2301,7 @@ Table \referfol{tab:attributeformencodings}.
 \DWFORMimplicitconst~\ddag &0x21 &\CLASSconstant \\
 \DWFORMloclistx~\ddag &0x22 &\CLASSloclist \\
 \DWFORMrnglistx~\ddag &0x23 &\CLASSrnglist \\
+\DWFORMrefsupeight{}~\ddag &0x24 &\CLASSreference \\
 \end{longtable}
 \end{centering}
 
@@ -2416,11 +2454,14 @@ Table \refersec{tab:dwarfoperationencodings}.
   \hline \ddag\ \textit{New in DWARF Version 5}
 \endlastfoot
 
+\bbeb\textit{Reserved}&0x01&-& \\
+\bbeb\textit{Reserved}&0x02&-& \\
 \DWOPaddr&0x03&1 & constant address  \\ 
 & & &(size is target specific) \\
-
+\bbeb\textit{Reserved}&0x04&-& \\
+\bbeb\textit{Reserved}&0x05&-& \\
 \DWOPderef&0x06&0 & \\
-
+\bbeb\textit{Reserved}&0x07&-& \\
 \DWOPconstoneu&0x08&1&1-byte constant  \\
 \DWOPconstones&0x09&1&1-byte constant   \\
 \DWOPconsttwou&0x0a&1&2-byte constant   \\
@@ -3513,12 +3554,18 @@ bytes of a segment selector on the target system.
 \item   \HFNoffsetentrycount{} (\HFTuword) \\
 A 4-byte count of the number of offsets
 that follow the header.
+\bb
+This count may be zero.
+\eb
 \end{enumerate}
 
 Immediately following the header is an array of offsets.
 This array is followed by a series of range lists. 
 
-There is one offset for each range list. 
+\bb
+If the \HFNoffsetentrycount{} is non-zero, there 
+\eb
+is one offset for each range list. 
 The contents
 of the $i$\textsuperscript{th} offset is the offset 
 \bb
@@ -3533,9 +3580,19 @@ in the 64-bit DWARF format, each offset is 8-bytes in size
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 \eb
 
+\textit{\bb
+If the \HFNoffsetentrycount{} is zero, then \DWFORMrnglistx{} cannot 
+be used to access a range list; \DWFORMsecoffset{} must be used 
+instead. If the \HFNoffsetentrycount{} is non-zero, then \DWFORMrnglistx{} 
+may be used to access a range list; this is necessary in split units and
+otherwise may be more compact than using \DWFORMsecoffset.
+\eb
+}
+
 Range lists are
 described in Section \refersec{chap:noncontiguousaddressranges}.
-    
+
+\needlines{4}
 The segment size is given by the
 \HFNsegmentselectorsize{} field of the header, and the address size is
 given by the \addttindex{address\_size} field of the header. If the
@@ -3587,12 +3644,18 @@ bytes of a segment selector on the target system.
 \item   \HFNoffsetentrycount{} (\HFTuword) \\
 A 4-byte count of the number of offsets
 that follow the header.
+\bb
+This count may be zero.
+\eb
 \end{enumerate}
 
 Immediately following the header is an array of offsets.
 This array is followed by a series of location lists. 
     
-There is one offset for each location list. The contents
+\bb
+If the \HFNoffsetentrycount{} is non-zero, there 
+\eb
+is one offset for each location list. The contents
 of the $i$\textsuperscript{th} offset is the offset 
 \bb
 (an unsigned integer)
@@ -3606,6 +3669,14 @@ in the 64-bit DWARF format, each offset is 8-bytes in size
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 \eb
 
+\textit{\bb
+If the \HFNoffsetentrycount{} is zero, then \DWFORMloclistx{} cannot 
+be used to access a location list; \DWFORMsecoffset{} must be used 
+instead. If the \HFNoffsetentrycount{} is non-zero, then \DWFORMloclistx{} 
+may be used to access a location list; this is necessary in split units and
+otherwise may be more compact than using \DWFORMsecoffset.
+\eb
+}
 
 Location lists are
 described in Section \refersec{chap:locationlists}.
