@@ -31,9 +31,12 @@ appropriate prefix
 \DWLANGlouserMARK{}\DWLANGhiuserMARK{}DW\_LANG, 
 \DWLNCTlouserMARK{}\DWLNCThiuserMARK{}DW\_LNCT, 
 \DWLNElouserMARK{}\DWLNEhiuserMARK{}DW\_LNE, 
-\DWMACROlouserMARK{}\DWMACROhiuserMARK{}DW\_MACRO, 
-\DWOPlouserMARK{}\DWOPhiuserMARK{}DW\_OP or 
-\DWTAGlouserMARK{}\DWTAGhiuserMARK{}DW\_TAG) 
+\DWMACROlouserMARK{}\DWMACROhiuserMARK{}DW\_MACRO,
+\bb 
+\DWOPlouserMARK{}\DWOPhiuserMARK{}DW\_OP,
+\DWTAGlouserMARK{}\DWTAGhiuserMARK{}DW\_TAG,
+\DWUTlouserMARK{}\DWUThiuserMARK{}DW\_UT)
+\eb 
 followed by \_lo\_user or \_hi\_user. 
 Values in the  range between \textit{prefix}\_lo\_user 
 and \textit{prefix}\_hi\_user inclusive,
@@ -932,7 +935,11 @@ units may share the same table.
 \subsection{Unit Headers}
 \label{datarep:unitheaders}
 Unit headers contain a field, \addttindex{unit\_type}, whose value indicates the kind of
-compilation unit that follows. The encodings for the unit type 
+compilation unit 
+\bb
+(see Section \ref{chap:unitentries})
+\eb
+that follows. The encodings for the unit type 
 enumeration are shown in Table \refersec{tab:unitheaderunitkindencodings}.
 
 \needlines{6}
@@ -962,11 +969,15 @@ enumeration are shown in Table \refersec{tab:unitheaderunitkindencodings}.
 \end{longtable}
 \end{centering}
 
-\textit{All unit headers in a compilation have the same size. 
-Some header types include padding bytes to achieve this.}
+\bb
+All unit headers have the same initial three fields.
+\eb
+
 
 \needlines{5}
-\subsubsection{Compilation and Partial Unit Headers}
+\bb
+\subsubsection{Full and Partial Compilation Unit Headers}
+\eb
 \label{datarep:compilationunitheader}
 \begin{enumerate}[1. ]
 
@@ -999,9 +1010,18 @@ for a summary of all version numbers that apply to DWARF sections.}
 \addttindexx{unit\_type}
 A 1-byte unsigned integer identifying this unit as a compilation unit.
 The value of this field is 
-\DWUTcompile{} for a full compilation unit or
-\DWUTpartial{} for a partial compilation unit
+\DWUTcompile{} for a 
+\bb
+(non-split) full compilation unit or
+\DWUTpartial{} for a (non-split) partial compilation unit
+\eb
 (see Section \refersec{chap:fullandpartialcompilationunitentries}).
+
+\textit{See 
+\bb
+Section \ref{datarep:skeletonandfullcompilationunitheaders} 
+regarding a split full compilation unit.
+\eb}
 
 \textit{This field is new in \DWARFVersionV.}
 
@@ -1025,14 +1045,7 @@ the \thirtytwobitdwarfformat, this is a 4-byte unsigned length;
 in the \sixtyfourbitdwarfformat, this is an 8-byte unsigned length
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
-\item \HFNunitpaddingONE{} (8 bytes) \\
-Reserved to DWARF (must be zero).
-
-\needlines{4}
-\item \HFNunitpaddingTWO{} (4 or 8 bytes) \\
-Reserved to DWARF (must be zero). In the \thirtytwobitdwarfformat,
-this is 4 bytes in length; in the \sixtyfourbitdwarfformat, this
-is 8 bytes in length.
+\bbpareb
 \end{enumerate}
 
 \needlines{8}
@@ -1071,8 +1084,17 @@ for a summary of all version numbers that apply to DWARF sections.}
 A 1-byte unsigned integer identifying this unit as a compilation unit.
 The value of this field is 
 \DWUTskeleton{} for a skeleton compilation unit or
-\DWUTsplitcompile{} for a split compilation unit
+\DWUTsplitcompile{} for a split 
+\bb
+(full)
+\eb
+compilation unit
 (see Section \refersec{chap:skeletoncompilationunitentries}).
+
+\textit{There
+\bb
+is no split analog to the partial compilation unit.
+\eb}
 
 \textit{This field is new in \DWARFVersionV.}
 
@@ -1105,11 +1127,7 @@ unit and its associated split compilation unit in
 the object file named in the \DWATdwoname{} attribute
 of the skeleton compilation.
 
-\needlines{4}
-\item \HFNunitpaddingTWO{} (4 or 8 bytes) \\
-Reserved to DWARF (must be zero). In the \thirtytwobitdwarfformat,
-this is 4 bytes in length; in the \sixtyfourbitdwarfformat{}, this
-is 8 bytes in length.
+\bbpareb
 \end{enumerate}
 
 \needlines{8}
@@ -2869,7 +2887,10 @@ defined language.
 \DWLANGCplusplusfourteen{}~\ddag &0x0021 &0 \addtoindexx{C++14 (ISO)} \\
 \DWLANGFortranzerothree{}~\ddag  &0x0022 &1 \addtoindexx{Fortran:2004 (ISO)} \\
 \DWLANGFortranzeroeight{}~\ddag  &0x0023 &1 \addtoindexx{Fortran:2010 (ISO)} \\
-\DWLANGRenderScript{}~\ddag       &0x0024 &0 \addtoindexx{RenderScript Kernel Language}
+\DWLANGRenderScript{}~\ddag       &0x0024 &0 \addtoindexx{RenderScript Kernel Language} \\
+\bb
+\DWLANGBLISS{} \ddag &0x0025 &0 \addtoindexx{BLISS} 
+\eb
 \\
 \DWLANGlouser{} &0x8000 & \\
 \DWLANGhiuser{} &\xffff & \\

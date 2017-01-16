@@ -764,6 +764,26 @@ Given a hash value for the symbol,
 the symbol is entered into a bucket whose index is the hash value
 modulo \texttt{bucket\_count}. The buckets array is indexed starting at 0.
 
+\bb
+For the purposes of the hash computation, each symbol name should be
+folded according to the simple case folding algorithm defined in the
+"Caseless Matching" subsection of Section 5.18 ("Case Mappings") of
+the \addtoindex{Unicode} Standard, Version 9.0.0. The original symbol 
+name, as it appears in the source code, should be stored in the name 
+table.
+
+\textit{Thus, two symbols that differ only by case will hash to
+the same slot, but the consumer will be able to distinguish the names
+when appropriate.}
+
+\textit{The simple case folding algorithm is further described
+in the CaseFolding.txt file distributed with the \addtoindex{Unicode} 
+Character Database. That file defines four classes of mappings: 
+Common (C), Simple (S), Full (F), and Turkish (T). 
+The hash computation specified here uses the C + S mappings only, 
+which do not affect the total length of the string.}
+\eb
+
 Each bucket contains the index of an entry in the hashes array. The
 hashes array is indexed starting at 1, and an empty bucket is
 represented by the value 0.
