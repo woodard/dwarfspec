@@ -277,13 +277,19 @@ used by the \dotdebuginfo{} section.
 \item
 A string table, in the \dotdebugstr{} section. The string
 table is necessary only if the skeleton compilation unit
-uses either indirect string form, \DWFORMstrp{} or
-\DWFORMstrx.
+\bb
+uses one of the indirect string forms (\DWFORMstrp{}, 
+\DWFORMstrxXNor).
+\eb
 \item
 A string offsets table, in the \dotdebugstroffsets{}
 section for strings in the \dotdebugstr{} section. 
 The string offsets table is necessary only if
-the skeleton compilation unit uses the \DWFORMstrx{} form.
+the skeleton compilation unit uses 
+\bb
+one of the indexed string forms 
+\eb
+(\DWFORMstrxXN).
 \end{itemize}
 The attributes contained in the skeleton compilation
 unit can be used by a DWARF consumer to find the 
@@ -425,8 +431,11 @@ files, and combined, section by section:
 \end{alltt}
 
 The string table section in \dotdebugstrdwo{} contains all the
-strings referenced from DWARF attributes using the form
-\DWFORMstrx. Any attribute in a compilation unit or a type
+strings referenced from DWARF attributes using 
+\bb
+any of the forms
+\eb
+\DWFORMstrxXNor. Any attribute in a compilation unit or a type
 unit using this form refers to an entry in that unit's
 contribution to the \dotdebugstroffsetsdwo{} section, which in turn
 provides the offset of a string in the \dotdebugstrdwo{}
@@ -1244,7 +1253,6 @@ null entries.
 
 \subsection{Abbreviations Tables}
 \label{datarep:abbreviationstables}
-
 The abbreviations tables for all compilation units
 are contained in a separate object file section called
 \dotdebugabbrev{}.
@@ -1267,7 +1275,7 @@ number that encodes the entry\textquoteright s tag. The encodings for the
 tag names are given in 
 Table \refersec{tab:tagencodings}.
 
-\needlines{6}
+\needlines{10}
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c}
@@ -2207,10 +2215,19 @@ it is an 8-byte unsigned offset
 \needlines{6}
 \item as an indirect offset into the string table using an 
 index into a table of offsets contained in the 
-\dotdebugstroffsets{} section of the object file (\DWFORMstrxTARG).
+\dotdebugstroffsets{} section of the object file 
+\bb
+(\DWFORMstrxTARG, \DWFORMstrxoneTARG, \DWFORMstrxtwoTARG, \DWFORMstrxthreeTARG{} and \DWFORMstrxfourTARG).
+\eb
 The representation of a \DWFORMstrxNAME{} value is an unsigned 
 \addtoindex{LEB128} value, which is interpreted as a zero-based 
-index into an array of offsets in the \dotdebugstroffsets{} section. 
+index into an array of offsets in the \dotdebugstroffsets{} section.
+\bb
+The representation of a \DWFORMstrxoneNAME, \DWFORMstrxtwoNAME, 
+\DWFORMstrxthreeNAME{} or \DWFORMstrxfourNAME{} value is a 
+1-, 2-, 3- or 4-byte unsigned integer value, respectively,
+which is similarly interpretated.
+\eb 
 The offset entries in the \dotdebugstroffsets{} section have the 
 same representation as \DWFORMstrp{} values.
 \end{itemize}
@@ -2320,6 +2337,12 @@ Table \referfol{tab:attributeformencodings}.
 \DWFORMloclistx~\ddag &0x22 &\CLASSloclist \\
 \DWFORMrnglistx~\ddag &0x23 &\CLASSrnglist \\
 \DWFORMrefsupeight{}~\ddag &0x24 &\CLASSreference \\
+\bb
+\DWFORMstrxone{}~\ddag   &0x25 &\CLASSstring \\
+\DWFORMstrxtwo{}~\ddag   &0x26 &\CLASSstring \\
+\DWFORMstrxthree{}~\ddag &0x27 &\CLASSstring \\
+\eb
+\DWFORMstrxfour{}~\ddag  &0x28 &\CLASSstring \\
 \end{longtable}
 \end{centering}
 
@@ -2933,6 +2956,7 @@ Table \refersec{tab:identifiercaseencodings}.
 \end{longtable}
 \end{centering}
 
+\needlines{8}
 \section{Calling Convention Encodings}
 \label{datarep:callingconventionencodings}
 The encodings of the constants used in the 
@@ -2998,6 +3022,7 @@ Table \refersec{tab:inlineencodings}.
 % this clearpage is ugly, but the following table came
 % out oddly without it.
 
+\needlines{10}
 \section{Array Ordering}
 \label{datarep:arrayordering}
 
@@ -3063,8 +3088,9 @@ Table \refersec{tab:discriminantdescriptorencodings}.
 The \addtoindexi{version number}{version number!name index table}
 in the name index table header is \versiondotdebugnames{}.
 
-The name index attributes and their encodings are listed in Table \referfol{datarep:indexattributeencodings}.
+The name index attributes and their encodings are listed in Table \refersec{datarep:indexattributeencodings}.
 
+\needlines{14}
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c|l}

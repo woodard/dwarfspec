@@ -433,7 +433,7 @@ This attribute points to the first string
 offset of the compilation unit's contribution to the
 \dotdebugstroffsets{} (or \dotdebugstroffsetsdwo{}) section. 
 Indirect string references
-(using \DWFORMstrx) within the compilation unit are
+(using \DWFORMstrxXNor) within the compilation unit are
 interpreted as indices relative to this base.
 
 \needlines{6}
@@ -636,6 +636,7 @@ the sections in which they are represented
 Moreover, the \DWATstroffsetsbase{} attribute (see below) is not 
 used in a split type unit.
 
+\needlines{4}
 A type unit is represented by a debugging information entry
 with the tag \DWTAGtypeunitTARG. 
 A \addtoindex{type unit entry} owns debugging
@@ -690,7 +691,7 @@ attribute, whose value is of class \CLASSstroffsetsptr.
 This attribute points
 to the first string offset of the type unit's contribution to
 the \dotdebugstroffsets{} section. Indirect string references
-(using \DWFORMstrx) within the type unit are interpreted
+(using \DWFORMstrxXNor) within the type unit are interpreted
 as indices relative to this base.
 
 \end{enumerate}
@@ -702,6 +703,7 @@ namespaces, the debugging information entry for T is nested
 within debugging information entries describing its containers;
 otherwise, T is a direct child of the type unit entry.
 
+\needlines{4}
 A type unit entry may also own additional debugging information
 entries that represent declarations of additional types that
 are referenced by type T and have not themselves been placed in
@@ -765,6 +767,7 @@ If the module has a name, the module entry has a
 whose value is a null\dash terminated string containing
 the module name.
 
+\needlines{4}
 The \addtoindex{module entry} may have either a 
 \DWATlowpc{} and
 \DWAThighpc{} 
@@ -1299,6 +1302,7 @@ that has neither a \DWATcallpc{} nor \DWATcallreturnpc{} attribute.
 \textit{The \DWATcallallsourcecallsNAME{} attribute is intended for debugging 
 information format consumers that analyze call graphs.}
 
+\needlines{4}
 If the the \DWATcallallsourcecalls{} attribute is present then the 
 \DWATcallallcalls{} and \DWATcallalltailcalls{} attributes are 
 also implicitly present. Similarly, if the 

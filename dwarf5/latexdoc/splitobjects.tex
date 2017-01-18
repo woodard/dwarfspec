@@ -87,7 +87,11 @@ section for directories and file names because the primary
 string table will never be stripped. Accordingly, no
 \texttt{.debug\_line\_str.dwo} section is defined. Content descriptions 
 corresponding to \DWFORMlinestrp{} in an executable file (for example, 
-in the skeleton compilation unit) instead use \DWFORMstrx. This allows
+in the skeleton compilation unit) instead use 
+\bb
+one of the forms
+\eb
+\DWFORMstrxXNor. This allows
 directory and file name strings to be merged with general
 strings and across compilations in package files 
 (where they are not subject to potential stripping).
@@ -146,10 +150,14 @@ skeleton compilation unit in the \dotdebuginfo{} section.
 
 \item
 \dotdebugstr{} - Contains any strings referenced by the skeleton
-\dotdebuginfo{} sections (via \DWFORMstrp{} or \DWFORMstrx{}).
+\dotdebuginfo{} sections (via \DWFORMstrp{}, \DWFORMstrxXNor{}).
 \item
 \dotdebugstroffsets{} - Contains the string offsets table for
-the strings in the \dotdebugstr{} section (if form \DWFORMstrx{} is used).
+the strings in the \dotdebugstr{} section (if 
+\bb
+one of the forms
+\eb
+\DWFORMstrxXNor{} is used).
 \end{itemize}
 
 \needlines{6}
@@ -590,7 +598,7 @@ object file, with the following exceptions:
 compilation unit.
 
 \item References to strings in the string table use the 
-form code \DWFORMstrx, referring to slots in the
+form code \DWFORMstrxXNor, referring to slots in the
 \dotdebugstroffsetsdwo{} section.
 
 \needlines{4}
