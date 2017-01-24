@@ -643,6 +643,7 @@ only needs to find one declaration. Likewise, a per-module index needs
 to list only a single copy of a type declaration contained in a type
 unit.}
 
+\needlines{4}
 \textit{For the benefit of link-time or post-link utilities that consume
 per-CU indexes and produce a per-module index, the per-CU index
 entries provide the tag encoding for the original debugging
@@ -710,8 +711,13 @@ contents and interpretation are not specified here. The
 string is padded with null characters to a multiple of
 four bytes in length.
 
-\textit{The presence of an unrecognised augmentation string may make it impossible
-for a consumer to process data in the \dotdebugnames{} section.}
+\textit{The presence of an unrecognised augmentation string 
+\bb
+does not make it
+impossible for a consumer to process data in the \dotdebugnames{} section.
+The augmentation string only provides hints to the consumer regarding
+the completeness of the set of names in the index.
+\eb}
 
 \end{enumerate}
 
@@ -776,12 +782,12 @@ table.
 the same slot, but the consumer will be able to distinguish the names
 when appropriate.}
 
-\textit{The simple case folding algorithm is further described
+The simple case folding algorithm is further described
 in the CaseFolding.txt file distributed with the \addtoindex{Unicode} 
 Character Database. That file defines four classes of mappings: 
 Common (C), Simple (S), Full (F), and Turkish (T). 
 The hash computation specified here uses the C + S mappings only, 
-which do not affect the total length of the string.}
+which do not affect the total length of the string.
 \eb
 
 Each bucket contains the index of an entry in the hashes array. The
@@ -854,8 +860,9 @@ specifications ends with an entry containing 0 for the attribute and
 0 for the form.
 
 The index attributes and their meanings are listed in 
-Table \referfol{tab:indexattributeencodings}.
+Table \refersec{tab:indexattributeencodings}.
 
+\begin{table}
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|l}
@@ -875,12 +882,14 @@ Table \referfol{tab:indexattributeencodings}.
 \DWIDXtypehashTARG    & Hash of type \mbox{declaration}              \\
 \end{longtable}
 \end{centering}
+\end{table}
 
 The abbreviations table ends with an entry consisting of a single 0
 byte for the abbreviation code. The size of the table given by
 \texttt{abbrev\_table\_size} may include optional padding following the
 terminating 0 byte.
 
+\needlines{4}
 \subsubsubsection{Entry Pool}
 The entry pool immediately follows the abbreviations table. 
 Each entry in the entry offsets array in the name table (see 
@@ -1233,6 +1242,7 @@ consumers in decoding the line number program instructions for
 a particular compilation unit and also provides information
 used throughout the rest of the line number program.
 
+\needlines{4}
 The line number program for each compilation unit begins with
 a header containing the following fields in order:
 
@@ -1749,6 +1759,7 @@ field is 1,
 \texttt{op\_index} is always 0 and these calculations simplify to 
 those given for addresses in \DWARFVersionIII{} and earlier.}
 
+\needlines{4}
 The amount to increment the line register is the 
 \addttindex{line\_base} plus
 the result of the 
@@ -1825,6 +1836,7 @@ takes no operands.
 It sets the \addttindex{basic\_block} register of the
 state machine to \doublequote{true.}
 
+\needlines{4}
 \item \textbf{\DWLNSconstaddpcTARG} \\
 The \DWLNSconstaddpcNAME{} opcode takes
 no operands. It advances the \texttt{address} and \addttindex{op\_index} registers
@@ -1885,7 +1897,7 @@ it must be determined in combination with the subroutine
 information entries of the compilation (including inlined
 subroutines).}
 
-
+\needlines{4}
 \item \textbf{\DWLNSsetepiloguebeginTARG} \\
 The \DWLNSsetepiloguebeginNAME{} opcode takes no operands. It
 sets the \addttindex{epilogue\_begin} register to \doublequote{true.}
@@ -1949,6 +1961,7 @@ sets the \addttindex{op\_index} register to 0.
 affect the \texttt{address} register add a delta to it. This instruction
 stores a relocatable value into it instead.}
 
+\needlines{4}
 \item \textbf{\DWLNEsetdiscriminatorTARG} \\
 The \DWLNEsetdiscriminatorNAME{}
 opcode takes a single

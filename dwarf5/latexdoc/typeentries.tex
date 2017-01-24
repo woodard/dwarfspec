@@ -313,6 +313,7 @@ with a \DWATpicturestringDEFN{} attribute whose value is a
 null\dash terminated string containing the target\dash dependent picture
 string associated with the type.
 
+\needlines{4}
 If the edited base type entry describes an edited numeric
 data type, the edited type entry has a \DWATdigitcount{} and a
 \DWATdecimalscale{} attribute.\addtoindexx{decimal scale attribute}
@@ -395,68 +396,7 @@ in different languages. A type modifier is represented in
 DWARF by a debugging information entry with one of the tags
 given in Table \refersec{tab:typemodifiertags}.
 
-If a name has been given to the modified type in the source
-program, then the corresponding modified type entry has
-a \DWATname{} attribute 
-\addtoindexx{name attribute}
-whose value is a null\dash terminated
-string containing the modified type name. 
-
-Each of the type modifier entries has 
-\addtoindexx{type attribute}
-a 
-\DWATtype{} attribute,
-whose value is a \livelink{chap:classreference}{reference} 
-to a debugging information entry
-describing a base type, a user-defined type or another type
-modifier.
-
-A modified type entry describing a 
-\addtoindexx{pointer type entry}
-pointer or \addtoindex{reference type}
-(using \DWTAGpointertype,
-\DWTAGreferencetype{} or
-\DWTAGrvaluereferencetype) 
-% Another instance of no-good-place-to-put-index entry.
-may have
-a\hypertarget{chap:DWATadressclasspointerorreferencetypes}{}
-\DWATaddressclassDEFN{}\addtoindexx{address class attribute} 
-attribute to describe how objects having the given pointer
-or reference type are dereferenced.
-
-A modified type entry describing a \addtoindex{UPC} shared qualified type
-(using \DWTAGsharedtype) may have a
-\DWATcount{} attribute
-\addtoindexx{count attribute}
-whose value is a constant expressing the (explicit or implied) blocksize specified for the
-type in the source. If no count attribute is present, then the \doublequote{infinite}
-blocksize is assumed.
-
-When multiple type modifiers are chained together to modify
-a base or user-defined type, the tree ordering reflects the
-semantics of the 
-\addtoindexx{reference type entry, lvalue|see{reference type entry}}
-applicable language 
-\addtoindexx{reference type entry, rvalue|see{rvalue reference type entry}}
-rather 
-\addtoindexx{parameter|see{macro formal parameter list}}
-than 
-\addtoindexx{parameter|see{\textit{this} parameter}}
-the 
-\addtoindexx{parameter|see{variable parameter attribute}}
-textual
-\addtoindexx{parameter|see{optional parameter attribute}}
-order 
-\addtoindexx{parameter|see{unspecified parameters entry}}
-in 
-\addtoindexx{parameter|see{template value parameter entry}}
-the 
-\addtoindexx{parameter|see{template type parameter entry}}
-source 
-\addtoindexx{parameter|see{formal parameter entry}}
-presentation.
-
-\begin{table}[ht]
+\begin{table}[h]
 \caption{Type modifier tags}
 \label{tab:typemodifiertags}
 \centering
@@ -508,16 +448,78 @@ Name&Meaning\\ \hline
 \end{tabular}
 \end{table}
 
-\needlines{6}
+If a name has been given to the modified type in the source
+program, then the corresponding modified type entry has
+a \DWATname{} attribute\addtoindexx{name attribute}
+whose value is a null-terminated string containing
+the name of the modified type. 
+
+Each of the type modifier entries has a 
+\DWATtype{} attribute\addtoindexx{type attribute},
+whose value is a \livelink{chap:classreference}{reference} 
+to a debugging information entry
+describing a base type, a user-defined type or another type
+modifier.
+
+A modified type entry describing a 
+\addtoindexx{pointer type entry}
+pointer or \addtoindex{reference type}
+(using \DWTAGpointertype,
+\DWTAGreferencetype{} or
+\DWTAGrvaluereferencetype) 
+% Another instance of no-good-place-to-put-index entry.
+may have
+a\hypertarget{chap:DWATadressclasspointerorreferencetypes}{}
+\DWATaddressclassDEFN{}\addtoindexx{address class attribute} 
+attribute to describe how objects having the given pointer
+or reference type are dereferenced.
+
+A modified type entry describing a \addtoindex{UPC} shared qualified type
+(using \DWTAGsharedtype) may have a
+\DWATcount{} attribute
+\addtoindexx{count attribute}
+whose value is a constant expressing the (explicit or implied) blocksize specified for the
+type in the source. If no count attribute is present, then the \doublequote{infinite}
+blocksize is assumed.
+
+When multiple type modifiers are chained together to modify
+a base or user-defined type, the tree ordering reflects the
+semantics of the 
+\addtoindexx{reference type entry, lvalue|see{reference type entry}}
+applicable language 
+\addtoindexx{reference type entry, rvalue|see{rvalue reference type entry}}
+rather 
+\addtoindexx{parameter|see{macro formal parameter list}}
+than 
+\addtoindexx{parameter|see{\textit{this} parameter}}
+the 
+\addtoindexx{parameter|see{variable parameter attribute}}
+textual
+\addtoindexx{parameter|see{optional parameter attribute}}
+order 
+\addtoindexx{parameter|see{unspecified parameters entry}}
+in 
+\addtoindexx{parameter|see{template value parameter entry}}
+the 
+\addtoindexx{parameter|see{template type parameter entry}}
+source 
+\addtoindexx{parameter|see{formal parameter entry}}
+presentation.
+
+\bb
+Examples of modified types are shown in Figure \refersec{fig:typemidifierexamples}.
+\eb
+
+\begin{figure}[t]
 \textit{As examples of how type modifiers are ordered, consider the following
 \addtoindex{C} declarations:}
 \par % Needed to end paragraph before listing so that it gets a line number
 \begin{nlnlisting}
-   const unsigned char * volatile p;
+    const unsigned char * volatile p;
 \end{nlnlisting}
 
 \textit{This represents a volatile pointer to a constant
-character. It is encoded in DWARF as:}
+character. It is encoded in DWARF as}
 \par % Needed to end paragraph before listing so that it gets a line number
 \nolinenumbers
 \begin{dwflisting}
@@ -530,16 +532,12 @@ character. It is encoded in DWARF as:}
 \end{alltt}
 \end{dwflisting}
 
-\condlinenumbers
 \textit{On the other hand}
-\par % Needed to end paragraph before listing so that it gets a line number
 \begin{nlnlisting}                        
-   volatile unsigned char * const restrict p;
+    volatile unsigned char * const restrict p;
 \end{nlnlisting}
 \textit{represents a restricted constant
-pointer to a volatile character. This is encoded as:}
-\par % Needed to end paragraph before listing so that it gets a line number
-\nolinenumbers
+pointer to a volatile character. This is encoded as}
 \begin{dwflisting}
 \begin{alltt}
         \DWTAGvariable(p) -->
@@ -551,7 +549,10 @@ pointer to a volatile character. This is encoded as:}
 \end{alltt}
 \end{dwflisting}
 
-\condlinenumbers
+\caption{Type modifier examples}
+\label{fig:typemidifierexamples}
+\end{figure}
+
 \section{Typedef Entries}
 \label{chap:typedefentries}
 A named type that is defined in terms of another type
@@ -573,6 +574,7 @@ the debugging information entry for a typedef represents
 a declaration of the type that is not also a definition,
 it does not contain a type attribute.
 
+\needlines{4}
 \textit{Depending on the language, a named type that is defined in
 terms of another type may be called a type alias, a subtype,
 a constrained type and other terms. A type name declared with
@@ -659,7 +661,6 @@ amount of storage needed to hold an instance of the array type.
 compile time, this value can usually be computed by multiplying
 the number of array elements by the size of each element.}
 
-
 Each array dimension is described by a debugging information
 entry with either the 
 \addtoindexx{subrange type entry!as array dimension}
@@ -719,6 +720,7 @@ coarray type in the source, then the corresponding coarray type
 entry has a \DWATname{} attribute whose value is a null-terminated 
 string containing the array type name.
 
+\needlines{4}
 A coarray entry has one or more \DWTAGsubrangetype{} child entries,
 one for each codimension. It also has a \DWATtype{} attribute 
 describing the type of each element of the coarray.
@@ -775,6 +777,7 @@ in the following discussion, statements about
 \addtoindex{C++} classes may
 be understood to apply to \addtoindex{C++} structures as well.}
 
+\needlines{6}
 \subsection{Structure, Union and Class Type Entries}
 \label{chap:structureunionandclasstypeentries}
 Structure, union, and class types are represented by debugging
@@ -1209,6 +1212,26 @@ of storage needed to hold the value of the data member.
 see Appendix \refersec{app:pascalexample} and 
 \refersec{app:ccppbitfieldexamples}.}
 
+\bb
+\subsection{Member Variable Entries}
+\label{chap:membervariableentries}
+
+A member variable (\doublequote{static data member} in 
+\addtoindex{C++}) is represented by a
+debugging information entry with the tag \DWTAGvariable.
+
+The member variable entry
+may contain the same attributes and follows the same rules
+as non-member global variable entries
+(see Section \refersec{chap:dataobjectentries}).
+
+A member variable entry may have a
+\hyperlink{chap:DWATaccessibilityattribute}{\DWATaccessibilityNAME}
+\addtoindexx{accessibility attribute}
+attribute. If no accessibility attribute is present, private
+access is assumed for an entry of a class and public access
+is assumed for an entry of a structure, union or interface.
+\eb
 
 \subsection{Member Function Entries}
 \label{chap:memberfunctionentries}

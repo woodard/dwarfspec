@@ -119,9 +119,12 @@ output binary include the following:
 skeleton \dotdebuginfo{} section.
 \item
 \dotdebugaddr{} - Contains references to loadable sections,
-indexed by attributes of form \DWFORMaddrx{} or location
-expression 
-\DWOPaddrx{} opcodes.
+indexed by attributes of 
+\bb
+one of the forms 
+\eb
+\DWFORMaddrxXN{}, 
+or location expression \DWOPaddrx{} opcodes.
 \item
 \dotdebugaranges{} - Contains the accelerated range lookup table
 for the compilation unit.
@@ -201,7 +204,11 @@ one \dotdwo{} section to another \dotdwo{} section
 in the same compilation unit. 
 
 \item Some values that need a relocation to refer to a relocatable 
-program address use the \DWFORMaddrx{} form, referencing a relocatable 
+program address use 
+\bb
+one of the \DWFORMaddrxXNor{} forms, 
+\eb
+referencing a relocatable 
 value in the \dotdebugaddr{} section (which remains in the .o file).
 
 \end{enumerate}
@@ -556,7 +563,11 @@ begins at offset 48. Because the \dotdebugaddr{} section contains an
 actually begins at offset 40 (for a 64-bit DWARF object, the
 header would be 16 bytes long, and the value for the
 \DWATaddrbase{} attribute would then be 56). All attributes in
-\texttt{demo1.dwo} that use \DWFORMaddrx{} would then refer to address
+\texttt{demo1.dwo} that use 
+\bb
+\DWFORMaddrxXNor{} 
+\eb
+would then refer to address
 table slots relative to that offset. Likewise, the \dotdebugaddr{}
 contribution from \texttt{demo2.dwo} begins at offset 72, and its first
 address slot is at offset 80. Because these contributions have
@@ -602,8 +613,11 @@ form code \DWFORMstrxXNor, referring to slots in the
 \dotdebugstroffsetsdwo{} section.
 
 \needlines{4}
-\item References to relocatable addresses in the object file 
-use the form code \DWFORMaddrx, referring to slots in the
+\item References to relocatable addresses in the object file use
+\bb 
+one of the form codes 
+\eb
+\DWFORMaddrxXNor, referring to slots in the
 \dotdebugaddr{} table, relative to the base offset given by
 \DWATaddrbase{} in the skeleton compilation unit.
 \end{itemize}
@@ -715,8 +729,11 @@ Figure~\ref{fig:splitobjectexampledemoonedwodwarfexcerpts}: Split object example
 
 \needlines{4}
 In the defining declaration for \texttt{Box::contains} at 5\$, the
-\DWATlowpc{} attribute is represented with \DWFORMaddrx,
-referring to slot 0 in the \dotdebugaddr{} table from \texttt{demo1.o}.
+\DWATlowpc{} attribute is represented 
+\bb
+using \DWFORMaddrx, which refers 
+\eb
+to slot 0 in the \dotdebugaddr{} table from \texttt{demo1.o}.
 That slot contains the relocated address of the beginning of the
 function.
 
@@ -1044,6 +1061,7 @@ is also copied. The type units for class \texttt{Box} and class
 and \texttt{demo2.dwo}, but only one instance of each is copied into 
 the package file.
 
+\needlines{4}
 The \dotdebugstrdwo{} sections from each file are merged to
 form a new string table with no duplicates, requiring the
 adjustment of all references to those strings. The
@@ -1052,7 +1070,6 @@ are copied as individual contributions, but the string table offset
 in each slot of those contributions is adjusted to point to
 the correct offset in the merged string table.
 
-\needlines{4}
 The \dotdebugcuindex{} and \dotdebugtuindex{} sections provide a
 directory to these contributions. 
 Figure \referfol{fig:examplecuindexsection} shows an example CU

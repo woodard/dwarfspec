@@ -261,7 +261,7 @@ An address table, in the \dotdebugaddr{} section. This table
 contains all addresses and constants that require
 link-time relocation, and items in the table can be
 referenced indirectly from the debugging information via
-the \DWFORMaddrx{} form, 
+the \DWFORMaddrxXNand{} forms, 
 by the \DWOPaddrx{} and \DWOPconstx{} operators, and
 by certain of the \texttt{DW\_LLE\_*} location list
 and \texttt{DW\_RLE\_*} range list entries.
@@ -281,6 +281,7 @@ table is necessary only if the skeleton compilation unit
 uses one of the indirect string forms (\DWFORMstrp{}, 
 \DWFORMstrxXNor).
 \eb
+\needlines{4}
 \item
 A string offsets table, in the \dotdebugstroffsets{}
 section for strings in the \dotdebugstr{} section. 
@@ -307,8 +308,12 @@ file. This partition includes the following:
 The full compilation unit, in the \dotdebuginfodwo{} section.
 
 Attributes contained in the full compilation unit
-may refer to machine addresses indirectly using the \DWFORMaddrx{} 
-form, which accesses the table of addresses specified by the
+may refer to machine addresses indirectly using 
+\bb
+one of the 
+\eb
+\DWFORMaddrxXNor{} 
+forms, which access the table of addresses specified by the
 \DWATaddrbase{} attribute in the associated skeleton unit.
 Location descriptions may similarly do so using the \DWOPaddrx{} and
 \DWOPconstx{} operations. 
@@ -415,7 +420,7 @@ corresponding application binary. It consists only of a file
 header, a section table, a number of DWARF debug information
 sections, and two index sections.
 
-\needlines{10}
+%\needlines{8}
 Each DWARF package file contains no more than one of each of the
 following sections, copied from a set of object or DWARF object
 files, and combined, section by section:
@@ -979,9 +984,8 @@ enumeration are shown in Table \refersec{tab:unitheaderunitkindencodings}.
 \end{centering}
 
 \bb
-All unit headers have the same initial three fields.
+All unit headers have the same initial three fields: \HFNinitiallength, \HFNversion{} and \HFNunittype.
 \eb
-
 
 \needlines{5}
 \bb
@@ -1215,7 +1219,7 @@ unit.
 the primary type contained in this 
 \addtoindex{type unit} uses this value.}
 
-%\needlines{8}
+\needlines{8}
 \item \texttt{type\_offset} (\livelink{datarep:sectionoffsetlength}{section offset}) \\
 \addttindexx{type\_offset}
 A 4-byte or 8-byte unsigned offset 
@@ -1846,11 +1850,20 @@ This address is relocatable in a relocatable object file and
 is relocated in an executable file or shared object file.
 
 \item An indirect index into a table of addresses (as 
-described in the previous bullet) in the
-\dotdebugaddr{} section (\DWFORMaddrxTARG). 
+described in the previous bullet) in the \dotdebugaddr{} section 
+\bb
+(\DWFORMaddrxTARG, \DWFORMaddrxoneTARG, \DWFORMaddrxtwoTARG, 
+\DWFORMaddrxthreeTARG{} and \DWFORMaddrxfourTARG). 
+\eb 
 The representation of a \DWFORMaddrxNAME{} value is an unsigned
 \addtoindex{LEB128} value, which is interpreted as a zero-based 
 index into an array of addresses in the \dotdebugaddr{} section.
+\bb
+The representation of a \DWFORMaddrxoneNAME, \DWFORMaddrxtwoNAME, 
+\DWFORMaddrxthreeNAME{} or \DWFORMaddrxfourNAME{} value is a 
+1-, 2-, 3- or 4-byte unsigned integer value, respectively,
+which is similarly interpretated.
+\eb
 The index is relative to the value of the \DWATaddrbase{} attribute 
 of the associated compilation unit.
 
@@ -1951,7 +1964,7 @@ The information bytes contain a DWARF expression
 or location description 
 (see Section \refersec{chap:locationdescriptions}).
 
-\needlines{4}
+\needlines{8}
 \item \CLASSflag \\
 \livetarg{datarep:classflag}{}
 A flag \addtoindexx{flag class}
@@ -2083,7 +2096,7 @@ format, it is an 8-byte unsigned value (see Section
 
 \textit{This class is new in \DWARFVersionV.}
 
-\needlines{4}
+\needlines{8}
 \item \CLASSreference \\
 \livetarg{datarep:classreference}{}
 There are four types of reference.\addtoindexx{reference class}
@@ -2189,10 +2202,10 @@ one null byte.
 A string may be represented: 
 \begin{itemize}
 \setlength{\itemsep}{0em}
-\item immediately in the debugging information entry itself 
+\item Immediately in the debugging information entry itself 
 (\DWFORMstringTARG), 
 
-\item as an 
+\item As an 
 \addtoindexx{section offset!in class string value}
 offset into a string table contained in
 the \dotdebugstr{} section of the object file (\DWFORMstrpTARG), 
@@ -2213,7 +2226,7 @@ it is an 8-byte unsigned offset
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
 \needlines{6}
-\item as an indirect offset into the string table using an 
+\item As an indirect offset into the string table using an 
 index into a table of offsets contained in the 
 \dotdebugstroffsets{} section of the object file 
 \bb
@@ -2326,23 +2339,27 @@ Table \referfol{tab:attributeformencodings}.
                    &    & \CLASSmacptr, \CLASSrnglist, \CLASSrnglistsptr, \CLASSstroffsetsptr \\
 \DWFORMexprloc{} &0x18&\livelink{chap:classexprloc}{exprloc} \\
 \DWFORMflagpresent{} &0x19&\livelink{chap:classflag}{flag} \\
-\DWFORMstrx{} \ddag &0x1a&\livelink{chap:classstring}{string} \\
-\DWFORMaddrx{} \ddag &0x1b&\livelink{chap:classaddress}{address} \\
-\DWFORMrefsupfour{}~\ddag &0x1c &\livelink{chap:classreference}{reference} \\
-\DWFORMstrpsup{}~\ddag &0x1d &\livelink{chap:classstring}{string} \\
-\DWFORMdatasixteen~\ddag &0x1e &\CLASSconstant \\
-\DWFORMlinestrp~\ddag &0x1f &\CLASSstring \\
-\DWFORMrefsigeight &0x20 &\livelink{chap:classreference}{reference} \\
+\DWFORMstrx{} \ddag        &0x1a &\CLASSstring \\
+\DWFORMaddrx{} \ddag       &0x1b &\CLASSaddress \\
+\DWFORMrefsupfour{}~\ddag  &0x1c &\CLASSreference \\
+\DWFORMstrpsup{}~\ddag     &0x1d &\CLASSstring \\
+\DWFORMdatasixteen~\ddag   &0x1e &\CLASSconstant \\
+\DWFORMlinestrp~\ddag      &0x1f &\CLASSstring \\
+\DWFORMrefsigeight         &0x20 &\CLASSreference \\
 \DWFORMimplicitconst~\ddag &0x21 &\CLASSconstant \\
-\DWFORMloclistx~\ddag &0x22 &\CLASSloclist \\
-\DWFORMrnglistx~\ddag &0x23 &\CLASSrnglist \\
+\DWFORMloclistx~\ddag      &0x22 &\CLASSloclist \\
+\DWFORMrnglistx~\ddag      &0x23 &\CLASSrnglist \\
 \DWFORMrefsupeight{}~\ddag &0x24 &\CLASSreference \\
 \bb
-\DWFORMstrxone{}~\ddag   &0x25 &\CLASSstring \\
-\DWFORMstrxtwo{}~\ddag   &0x26 &\CLASSstring \\
-\DWFORMstrxthree{}~\ddag &0x27 &\CLASSstring \\
+\DWFORMstrxone{}~\ddag     &0x25 &\CLASSstring \\
+\DWFORMstrxtwo{}~\ddag     &0x26 &\CLASSstring \\
+\DWFORMstrxthree{}~\ddag   &0x27 &\CLASSstring \\
+\DWFORMstrxfour{}~\ddag    &0x28 &\CLASSstring \\
+\DWFORMaddrxone{}~\ddag    &0x29 &\CLASSaddress \\
+\DWFORMaddrxtwo{}~\ddag    &0x2a &\CLASSaddress \\
+\DWFORMaddrxthree{}~\ddag  &0x2b &\CLASSaddress \\
 \eb
-\DWFORMstrxfour{}~\ddag  &0x28 &\CLASSstring \\
+\DWFORMaddrxfour{}~\ddag   &0x2c &\CLASSaddress \\
 \end{longtable}
 \end{centering}
 
