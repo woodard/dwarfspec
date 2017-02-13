@@ -68,6 +68,7 @@ more condensed format.
 \subsection{Lookup by Name}
 \addtoindexx{lookup!by name}
 \addtoindexx{accelerated access!by name}
+\addtoindexx{name index}
 For lookup by name, a name index is maintained in a separate
 object file section named \dotdebugnames{}. 
 
@@ -776,7 +777,7 @@ folded according to the simple case folding algorithm defined in the
 "Caseless Matching" subsection of Section 5.18 ("Case Mappings") of
 the \addtoindex{Unicode} Standard, Version 9.0.0. The original symbol 
 name, as it appears in the source code, should be stored in the name 
-table.
+table.\addtoindex{name index!case folding}
 
 \textit{Thus, two symbols that differ only by case will hash to
 the same slot, but the consumer will be able to distinguish the names
@@ -788,8 +789,8 @@ Character Database. That file defines four classes of mappings:
 Common (C), Simple (S), Full (F), and Turkish (T). 
 The hash computation specified here uses the C + S mappings only, 
 which do not affect the total length of the string, with the addition 
-that Turkish dotted 'I' and undotted 'I', both
-upper and lower case, are translated to the Latin lower case 'i'.
+that Turkish upper case dotted '\.{I}' and lower case dotless '\i'
+are folded to the Latin lower case 'i'.
 \eb
 
 Each bucket contains the index of an entry in the hashes array. The
