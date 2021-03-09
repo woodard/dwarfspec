@@ -1,0 +1,125 @@
+
+---Introduction
+
+We do two sorts of 'index' entries:  indexing and linking.
+
+There are specific commands to do the indexing in Latex, but
+we use local commands rather than directly using \index
+to save redundant typing and to make future revisions easier.
+
+Where terms are actually defined in the document (as opposed
+to simply being referenced) each reference to the term
+is made an active link (in pdf terms) to the definition.
+Of course the command also indexes the link.
+
+---Indexing
+
+The actual command definitions in dwarf5.tex are:
+\newcommand{\addtoindex}[1]{#1\index{#1}}
+\newcommand{\addtoindexi}[2]{#1\index{#2}}
+\newcommand{\addtoindexx}[1]{\index{#1}}
+\newcommand{\noindex}[1]{#1}
+
+Where a word or phrase is to be indexed.
+
+The \noindex case indicates the word or phrase is to be
+inserted as-is, not indexed.   So that readers of the
+latex source can know someone considered indexing a word
+that looked like it should be indexed
+but decided not to index it.   This is mostly necessary
+for form-class instances as some form-class words are used
+in ordinary English, like 'block'.  When searching a document
+for index omissions we will often want to distinguish
+new uses from old (and already-considered) instances and
+the \noindex command helps us do that.
+
+---Indexing special cases
+The special cases are index entries that say 
+'See ' instead of a page reference (documented
+in latex and called cross-references), entries
+that are indexed with a phrase, and entries that are indexed
+with a phrase with a comma.
+   
+(these taken from DWARF4 FIXME use dwarf5 examples)
+   address selection        See base address selection
+   abstract instance tree
+   array, declaration of type
+   array, descriptor for
+
+standard case where we index a word as-is.
+\addtoindex{document}
+
+This generates the subindex case, the index spelling does not match
+what the text must say:
+\addtoindexi{array}{array!declaration of type}
+
+This generates an index with See (See can be any phrase, not
+just .
+The | here is uniquely handled by latex so it is not confused as
+a math character.
+\addtoindexi{address selection}{address selection|see{base address selection}}
+
+
+Use \textgreater  and \textless to represent < and >
+in indexes (and other contexts).  For example
+       \textless caf\textgreater   results in <caf>
+oddly enough.
+
+
+---Linking
+
+The actual command definitions in dwarf5.tex are:
+\newcommand{\livelink}[2]{\hyperlink{#1}{#2}\index{#2} }
+\newcommand{\livetarg}[2]{\hypertarget{#1}{#2}\index{#2}}
+\newcommand{\livetargi}[3]{\hypertarget{#1}{#2}\index{#3}}
+\newcommand{\nolink}[1]{#1}
+
+We want terms like DW_TAG_common (which is all the DW_* terms)
+to both be indexed and also to be a 'live link' in a pdf to
+a definition of the term.  The intent is that clicking
+on the word or phrase in the document switches you to
+a display of the definition.
+
+--- Linking of attributes
+Attributes in DWARF may have multiple definition points, so
+for example DW_AT_abstract_origin links one to the attribute table
+and that in turn links to the 3 distinct definitions.
+Other than Attributes though, links are usually directly
+to the definition.
+
+It is critical that the hypertarget and livelink be
+separated to avoid problems with latex. Example:
+
+out\dash of\dash line instance 
+\hypertarget{chap:DWATabstractoriginoutoflineinstance}
+makes use of
+\livelink{chap:DWATabstractorigin}{DW\-\_AT\-\_abstract\-\_origin}
+
+If the 'makes use of' or some other text is not between
+the hypertarget and hyperlink latex produces output text of
+chap:DWATabstractorigin instead of thinking of it as a link.
+
+It's also useful to put the hypertarget before the livelink
+for the attribute use in the sentence because then when your
+reader takes you to the hypertarget (via a mouse click) 
+you will see the attribute instance (assumuing
+your  viewer puts the 'target' location at the top of
+the viewing area).
+
+--- Linking (continued)
+
+The first argument in a livelink/livetarg/livetargi command
+is a string that must be unique to the target, it is used
+by latex to tie each link to its single target location.
+
+Sentences referencing the form-class words should also be
+live links. For common English form-class words 
+like 'address' or 'block' there can be many word uses
+we do not want to link or index, so \nolink or \noindex
+let us designate those instances for folks working with
+the latex document source.
+
+The \livetargi instance lets us make the index entry be
+a phrase or spelling distinct from the live link word.
+
+

@@ -1,0 +1,404 @@
+\documentclass[12pt,letterpaper,oneside]{memoir} 
+% for debugging, add 'draft' (without quotes) to the [] document class list.
+% If draft is in the document class list, pix are just suggested
+% by an outline, that is, the pic does not appear as a picture.
+%
+\newcommand{\docdate}{February 13, 2017}
+%
+\usepackage{ifthen}
+    \newcommand{\ifthen}[2]{\ifthenelse{#1}{#2}{}}
+    \newboolean{isdraft}\setboolean{isdraft}{false}
+    \newboolean{uselinenumbers}\setboolean{uselinenumbers}{true}
+    \newboolean{usechangesummary}\setboolean{usechangesummary}{false}
+\newcommand{\draftmark}{\ifthenelse{\boolean{isdraft}}{***FINAL REVIEW DRAFT***}{}}
+%
+\usepackage[T1]{fontenc}
+\usepackage{palatino}
+\usepackage{cmtt}
+    \renewcommand{\ttdefault}{cmtt}	% Use Computer Modern Typewriter instead of Courier
+\usepackage{url} 	   % for color in letters. Links instead?
+\usepackage[usenames]{color}%for color in letters. Links instead?
+\usepackage{ellipsis} 	   % provides ... as \dots
+%\usepackage[utf8]{inputenc}% to type directly diacritic characters
+%\usepackage{color}
+\usepackage{listings}
+\usepackage{alltt}
+\lstset{ %
+language={},               % choose the language of the code
+basicstyle=\footnotesize\ttfamily, % the size of the fonts that are used for the code
+numbers=none,              % where to put the line-numbers
+numberstyle=\footnotesize, % the size of the fonts that are used for the line-numbers
+numberfirstline=true,
+firstnumber=1,             % first line number in each listing
+stepnumber=5,              % the step between two line-numbers. If it is 1 each line will be numbered
+numbersep=10pt,            % how far the line-numbers are from the code
+backgroundcolor=\color{white}, % choose the background color. You must add \usepackage{color}
+showspaces=false,          % show spaces adding particular underscores
+showstringspaces=false,    % underline spaces within strings
+showtabs=false,            % show tabs within strings adding particular underscores
+frame=single,              % adds a frame around the code
+tabsize=2,                 % sets default tabsize to 2 spaces
+captionpos=b,              % sets the caption-position to bottom
+breaklines=true,           % sets automatic line breaking
+breakatwhitespace=false,   % sets if automatic breaks should only happen at whitespace
+escapeinside={\%*}{*)}     % if you want to add a comment within your code
+}
+\usepackage{float}
+    \restylefloat{figure}
+\usepackage{amsmath}       % Provides \nobreakdash
+\usepackage{amssymb}       % maths
+\usepackage{graphicx}      % For pictures
+\usepackage{epstopdf}      % Autoconvert .eps to .pdf
+    \epstopdfsetup{suffix=-generated} % Mark generaed PDF as such
+\usepackage[pagewise]{lineno} % line numbers
+    \pagewiselinenumbers
+    \setlength\linenumbersep{3em}
+    \renewcommand\linenumberfont{\normalfont\itshape\tiny} 
+    \nolinenumbers    
+\usepackage{longtable}     % For multipage tables
+\usepackage{hhline}        % Single column horizontal lines
+\usepackage{varioref}      % defines \vref
+%   \textregistered is the trademark symbol
+\usepackage[headheight=16pt,paper=letterpaper]{geometry}
+    \setlength{\headheight}{15pt}  % avoids warning from latex
+\usepackage{needspace}     % For assuring space remaining on a page
+\usepackage{ifthen}        % For conditional processing
+\include{dwarfchangebarpatch} % Patch needed for package changebar
+\usepackage{changepage}    % For odd/even page checks
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{lscape}        % For landscape mode (Appendix B)
+\usepackage{tikz}	       % graphics (Name Index (Fig 6.1), Appendix B)
+    \usetikzlibrary{arrows}
+    \usetikzlibrary{arrows.meta}
+    \usetikzlibrary{backgrounds}
+    \usetikzlibrary{calc}
+    \usetikzlibrary{chains}
+    \usetikzlibrary{decorations.pathreplacing}
+    \usetikzlibrary{shapes.geometric}
+    \usetikzlibrary{shapes.multipart}
+    \usetikzlibrary{shapes.symbols}
+\usepackage{changebar}     % For change bars in margin
+\ifthenelse{\boolean{isdraft}}{}{\nochangebars} % Use no bars in APPROVED Standard
+\usepackage{xspace}
+\usepackage{makeidx}       % For making an index
+% hyperref must be the last package listed.
+% The hyperref settings helps hypertext get links right in the 
+% pdf of the index. 
+% Also, allcolors lets us generate colored active links inside a pdf.
+% And breaklinks resolves truncation issues with very long link names.
+\usepackage[breaklinks,plainpages=false,pdfpagelabels,pagebackref,
+            allcolors=blue!80!black,bookmarksnumbered=true]{hyperref}
+\makeindex  % This and the makeidx package allow \index to create index entries.
+
+\newcommand{\dwf}{DWARF Debugging Information Format}
+
+\newenvironment{myindentpara}[1]%
+  {\begin{list}{}%
+    {\setlength{\leftmargin}{#1}}%
+    \item[]%
+  }
+  {\end{list}}
+
+\hypersetup{colorlinks=true,
+  %bookmarks=true,
+  pdfauthor={\dwf\ Committee},
+  pdftitle={\dwf\ Version 5}
+}
+
+% An environment to create a listing-like (boxed) presentation for 
+% DWARF examples Use like \begin{nlnlisting}...\end{nlnlisting}. 
+% Does not do line numbers but does full LaTex processing within its 
+% scope (unlike \verb).
+\newsavebox{\savedwf}
+\newenvironment{dwflisting}
+  {\nolinenumbers\begin{lrbox}{\savedwf}\begin{minipage}{\textwidth}\footnotesize}
+  {\end{minipage}\end{lrbox}\fbox{\usebox{\savedwf}} 
+   \condlinenumbers}
+
+% Conditionally turn on line numbers
+\newcommand{\condlinenumbers}{\ifthen{\boolean{uselinenumbers}}{\linenumbers}}
+
+% An environment that turns off line numbers then conditionally turns
+% them back on at the end
+\newenvironment{nolinenumbersenv}
+    {\nolinenumbers}
+    {\par\condlinenumbers}
+
+% An environment like lstlisting that is wrapped to prevent the
+% contents of the listing from having line numbers generated by
+% the lineno package
+\lstnewenvironment{nlnlisting}    % listing-specific newenvironment command
+    {\nolinenumbers}
+    {\condlinenumbers}
+    
+% A helper to annotate the parts of a multipage figure
+\newcommand{\figurepart}[2]{\raggedleft{\textit{\tiny{part #1 of #2}}}}
+
+% Define a simple hyper-reference to a given URL
+\newcommand{\hrefself}[1]{\href{#1}{#1}}
+
+% Generate a page ref.
+% use like   \refersec{chap:registervalues}
+%\newcommand{\refersec}[1]{\ref{#1} on page \pageref{#1}}
+\newcommand{\refersec}[1]{\vref{#1}}  % beware possible rerun loop
+\newcommand{\referfol}[1]{\ref{#1} following}
+
+% Generate a live link in the document that gets indexed as well
+% Use like \livelink{chap:DWOPdup}{DW\_OP\_dup}
+\newcommand{\livelink}[2]{\hyperlink{#1}{#2}\index{#2}}
+% use when the index is different from the text and target.
+\newcommand{\livelinki}[3]{\hyperlink{#1}{#2}\index{#3}}
+% livetarg is the declaration that is the target of livelinks.
+\newcommand{\livetarg}[2]{\hypertarget{#1}{#2}\index{#2}}
+% When we want the index entry to look different from the name.
+\newcommand{\livetargi}[3]{\hypertarget{#1}{#2}\index{#3}}
+
+\newcommand{\thirtytwobitdwarfformat}[1][]{\livelink{datarep:xxbitdwffmt}{32-bit DWARF format}}
+\newcommand{\sixtyfourbitdwarfformat}[1][]{\livelink{datarep:xxbitdwffmt}{64-bit DWARF format}}
+
+\newcommand{\dash}{\nobreakdash-\hspace{0pt}}  % So we handle dashes ok.
+
+% The following two let us mark a word as 'do not link' or
+% 'do not index' to indicate the word is used generically
+% and has been considered so do not index or link it.
+% There is no significant difference in the two commands, though
+% \nolink would be more oriented to words such as flag or address
+% that might be linked (and indexed) in some circumstances.
+\newcommand{\nolink}[1]{#1}
+\newcommand{\noindex}[1]{#1}
+
+% For index entries. The tt-variant of each pair is designed to
+% allow a word to appear in tt font in the main test and the index
+% but to collate in the index in its non-tt order. Similarly for
+% the it-variant using italics font. 
+% (LaTex normally % sorts all tt words before all non-tt words.)
+\newcommand{\addtoindex}[1]{#1\index{#1}}
+\newcommand{\additindex}[1]{\textit{#1}\index{#1@\textit{#1}}}
+\newcommand{\addttindex}[1]{\texttt{#1}\index{#1@\texttt{#1}}}
+\newcommand{\addtoindexi}[2]{#1\index{#2}}
+\newcommand{\additindexi}[2]{\textit{#1}\index{#2@\textit{#2}}}
+\newcommand{\addttindexi}[2]{\texttt{#1}\index{#2@\texttt{#2}}}
+\newcommand{\addtoindexx}[1]{\index{#1}}
+\newcommand{\additindexx}[1]{\index{#1@\textit{#1}}}
+\newcommand{\addttindexx}[1]{\index{#1@\texttt{#1}}}
+
+% Quote commands that avoid need for inline UTF-8 in these sources
+\newcommand{\doublequote}[1]{\textquotedblleft #1\textquotedblright}
+\newcommand{\singlequote}[1]{\textquoteleft #1\textquoteright}
+
+% Better naming for the lowest level section header
+\newcommand{\subsubsubsection}[1]{\paragraph{#1}~\newline}
+\newcommand{\subsubsubsubsection}[1]{\textbf{#1}.~~}
+
+% Start new page if less than n lines remain on current page
+\newcommand{\needlines}[1]{\needspace{#1\baselineskip}}
+
+% Helper for item lists with bold subject markers
+\newcommand{\itembf}[1]{\needlines{4} \item \textbf{#1}}
+\newcommand{\itembfnl}[1]{\itembf{#1} \\}
+
+% And description lists with normal (not bold) text
+\renewcommand{\descriptionlabel}[1]{\hspace{\labelsep}\textnormal{#1}}
+\newcommand{\descriptionlabelnl}[1]{\item[#1] \mbox{}\\}
+
+% Define an alternate footnote command that creates ragged right text
+% (using \raggedright in the parameter does not work)
+\newcommand\footnoteRR[1]{\footnote{\raggedright#1}}
+
+% Emit an empty page
+%
+\newcommand{\emptypage}{
+    \clearpage
+    \vspace*{4in}
+    \begin{nolinenumbers}
+    \begin{center} 
+        \textit{(empty page)} 
+    \end{center}
+    \end{nolinenumbers}
+    }
+
+% Define a new column type P that is just like p except
+% that it uses ragged right (rather than right justification}
+% within a column  of a tabular environment. (See Goossens,
+% Mittelback&Samarin, "The LaTex Companion", pp108&114.)
+\newcommand{\PBS}[1]{\let\temp=\\#1\let\\=\temp}
+\newcolumntype{P}[1]{>{\PBS\raggedright\hspace{0pt}}p{#1}}
+
+% A simple rule used in simple tables; default length is 2 inches
+\newcommand{\simplerule}[1][2in]{\rule[4pt]{#1}{0.5pt}}
+
+% A simple one column table of names; default width is 2 inches
+\newcommand{\simplenametablerule}{\simplerule[2in]}
+\newenvironment{simplenametable}[3][2in]
+    {   \begin{table}[ht] \caption{#2} \label{#3}
+        \begin{center}
+        \renewcommand{\simplenametablerule}{\simplerule[#1]}
+        \simplenametablerule \\
+        \begin{tabular*}{#1}{l}
+        }
+    {   \end{tabular*}
+        \vspace{4pt} \\
+        \simplenametablerule \\
+        \end{center}
+        \end{table}
+        }
+
+% Complement of \isundefined
+\newcommand{\isdefined}[1]{\not{\isundefined{#1}}}
+
+% Preferred changebar aliases
+\newcommand{\bb}{\cbstart}      % Begin (change) bar
+\newcommand{\eb}{\cbend}        % End (change) bar
+\newcommand{\bbeb}{\bb\eb}      % Mark deleted word or phrase
+% Mark deleted paragraph
+\newcommand{\bbpareb}{\vspace{-0.6\baselineskip}\bb~\eb\vspace{-0.6\baselineskip}} 
+% Variations for use inside an alltt environment--But don't work!
+%\newcommand(\bballtt){\end{alltt}\bb\vspace{-0.8\baselineskip}\begin{alltt}}
+%\newcommand{\eballtt}{\end{alltt}\eb\vspace{-0.8\baselineskip}\begin{alltt}}
+%\newcommand(\bbeballtt){\end{alltt}\bb\eb\vspace{-0.8\baselineskip}\begin{alltt}}
+
+% Define commands for all of the DWARF names (DW\_*, .debug_*, a few others)
+%
+%\newcommand{\definition}[1]{\textcolor{red!80!black}{#1}}
+\newcommand{\definition}[1]{\textcolor{red!65!black}{#1}}
+\newcommand{\definitionx}[1]{\definition{\addtoindex{#1}}}
+\include{dwarfnamecmds}
+
+% Define commands for pgf use in the name index figure (Fig 6.1)
+%
+\include{pgfcmdsfornameindexfig}
+
+% --------------------------------
+% --- Begin the document pages ---
+% --------------------------------
+%
+\begin{document}
+\frontmatter
+\thispagestyle{empty}
+
+\nonzeroparskip
+\setlength{\parindent}{0pt} 
+\setlength{\headheight}{6cm}
+\setlength{\uppermargin}{6cm}
+\setlength{\topsep}{0pt}
+\tightlists					% less spacing before/after lists
+
+\begin{center}
+\LARGE
+\textbf{\dwf}
+\\
+\textbf{Version 5}
+\\
+\vspace{1cm}
+\includegraphics[keepaspectratio=true,scale=1.0]{dwarf-logo}
+\\
+\vspace{1cm}
+\href{http://www.dwarfstd.org}{\dwf}
+\href{http://www.dwarfstd.org}{Committee}
+\\
+\vspace{0.5cm} 
+\url{http://www.dwarfstd.org}
+\\
+\vspace{2cm}
+{\Large \textbf{\docdate}}
+\\
+\ifthenelse{\boolean{isdraft}}{
+	\vspace{2cm}
+	\draftmark}
+	{}
+\end{center}
+
+\textmd
+\normalsize
+\setlength{\headheight}{15pt}  
+\pagestyle{plain}
+%\makeevenhead{plain}{}{}{}
+%\makeoddhead{plain}{}{}{}
+%\makeevenfoot{plain}{}{}{}
+%\makeoddfoot{plain}{}{}{}
+\nonzeroparskip
+\setlength{\parindent}{0pt} 
+\settrims{0.5in}{0.5in}
+\settypeblocksize{8.2in}{6.0in}
+%\setlrmarginsandblock{0.6in}{0.6in}{*}
+%\setheadfoot{15pt}{15pt}
+%\setheaderspaces {*}{2\onelineskip}{*}
+\nouppercaseheads
+\makeevenhead{plain}{}{\rightmark}{}
+\makeoddhead{plain}{}{\rightmark}{}
+\makeevenfoot{plain}{\docdate}{\draftmark}{Page \thepage}
+\makeoddfoot{plain}{\docdate}{\draftmark}{Page \thepage}
+
+%\openany
+
+\nonzeroparskip
+\setlength{\parindent}{0pt} 
+\flushleft
+\include{copyright}
+\include{foreword}
+
+\newpage
+~ % Make the page non-empty...
+\newpage
+\tableofcontents
+
+\clearpage
+\listoffigures
+
+\clearpage
+\listoftables
+
+\ifthenelse{\boolean{usechangesummary}}
+	{	\emptypage
+		{% Environment to keep the following header change local
+		\clearpage
+		\makeevenhead{plain}{}{Change Summary}{}
+		\makeoddhead{plain}{}{Change Summary}{}
+		\include{changesummary}
+                %\emptypage
+		}
+	}{\emptypage}
+%\cleardoublepage
+\flushleft
+\raggedbottom
+\chapterstyle{default}
+
+\setlength{\parindent}{0pt} 
+
+\makepagestyle{fragFirstChPage}
+    \makeevenhead{fragFirstChPage}{}{}{}
+    \makeoddhead{fragFirstChPage}{}{}{}
+    \makeoddfoot{fragFirstChPage}{\docdate}{\draftmark}{Page \thepage}
+    \makeevenfoot{fragFirstChPage}{\docdate}{\draftmark}{Page \thepage}
+\nouppercaseheads
+\aliaspagestyle{chapter}{fragFirstChPage}
+
+% ----- Start the main part of the document -----
+\mainmatter
+% Define the levels of sectionality that are numbered.
+\setcounter{secnumdepth}{5}
+
+\condlinenumbers\include{introduction}              \emptypage
+\condlinenumbers\include{generaldescription}        %\emptypage
+\condlinenumbers\include{programscope}              \emptypage
+\condlinenumbers\include{dataobject}                \emptypage
+\condlinenumbers\include{typeentries}               %\emptypage
+\condlinenumbers\include{otherdebugginginformation} %\emptypage
+\condlinenumbers\include{datarepresentation}        %\emptypage
+
+%  The \appendix command toggles us into appendix chapters
+\appendix
+
+\condlinenumbers\include{attributesbytag}	        %\emptypage
+\condlinenumbers\include{debugsectionrelationships} \emptypage
+\condlinenumbers\include{encodingdecoding}          \emptypage
+\condlinenumbers\include{examples}                  %\emptypage
+\condlinenumbers\include{compression}               \emptypage
+\condlinenumbers\include{splitobjects}	            \emptypage
+\condlinenumbers\include{sectionversionnumbers}     \emptypage
+\nolinenumbers
+\include{gnulicense}                           \emptypage
+% Maybe someday the selected glossary concept will be of interest...
+%\include{selectedglossary}                    %\emptypage
+\printindex                                    \clearpage
+\end{document}
