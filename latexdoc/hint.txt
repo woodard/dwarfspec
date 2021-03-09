@@ -1,0 +1,78 @@
+%DWARF5 local or useful Latex macros
+%Be sure to read the file READMEindexing.
+
+\dwf DWARF Debugging Information Format
+\docdate  % document date, like 1 April 1492
+
+\begin{myindentpara}{1cm}
+jtext indented 1 cm or whatever distance in arg
+\end{myindentpara}
+
+\copyright  % shows copyright symbol.
+
+\begin{itemize} % A bullet list
+\item x
+\end {itemize}
+
+\begin{tabular}{ll}
+% another example: \begin{tabular}{l|p{10cm}} \hline
+a&b\\
+d&e\\
+\end{tabular}
+
+\dash  % Use as in   x\dash y  to print x-y
+% but don't do this inside chapter or paragraph headings!
+
+% Underbar is special to latex, so use \_ not plain _  .
+% In rare cases we must hyphenate a DW\_OP\_call4 or the like to
+% avoid an overfull hbox. So use  DW\-\_OP\-\_call4 (for example) and
+% latex will hyphenate (otherwise it will not with these underbar words).
+
+% By default x<n>y prints strangely because of
+% the default code page of T1 involved,  so one can use
+    x\textless~n~\textgreater~y  
+% instead.
+
+\begin{verbatim}
+Text here is not formatted or examined except to look for \end{verbatim}
+\end{verbatim}
+
+\begin{alltt}  % \usepackage{alltt} to make this accessible
+Here the contents are not reformatted, but various
+commands are allowed.
+\end{alltt}
+% see https://en.wikibooks.org/wiki/LaTeX/Paragraph_Formatting#Verbatim_Text
+
+% Generate a page ref.
+% use like \refersec{chap:registerbasedaddressing}
+
+%Generate a live link into the doc
+% use like \livelink{chap:DWOPdup}{DW\_OP\_dup}
+%Generate a live link into the doc where the index entry != text
+% use like \livelinki{chap:DWATaddressclass}{address}{address class}
+
+% To print < use \textless and for > use \textgreater
+% which is awkward.
+
+\begin{lstlisting}
+% C or other example code goes here.
+\end{lstlisting}
+
+% The nesting order (showing via indent here) is:
+\chapter{title}
+ \section{title} 
+  \subsection{title} 
+   \subsubsection{title} 
+    \paragraph{title}
+
+\label{fig:classesofattributevalue}
+
+\textit{this text shows in italics}
+
+\begin{enumerate}[1]  % or [a] for lowercase alpha item id
+\item xtitle \\    % The  backslash pair gets indented content
+x content
+\item ytitle \\
+y content
+\end{enumerate}
+
