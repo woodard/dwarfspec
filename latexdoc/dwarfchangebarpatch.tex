@@ -1,0 +1,29 @@
+%%%
+% PROBLEM: The changebar package creates a page or two full of “spsp” 
+% groups at the end of the document.
+%
+% SOLUTION: The following must be invoked in the preamble prior to the
+% \usepackage command for changebar.
+%
+% For further information, see http://tex.stackexchange.com/questions/162332,
+% also known as http://tex.stackexchange.com/questions/162332/why-does-the-changebar-package-create-a-page-full-of-spsp-and-how-can-this-be
+% (or do a web search for "latex spsp").
+%%%
+\makeatletter
+\AtEndDocument{%
+\def\cb@checkPdfxy#1#2#3#4#5{%
+\cb@@findpdfpoint{#1}{#2}%
+\ifdim#3sp=\cb@pdfx\relax      % <<-- original has \ifnum#3=\cb@pdfx
+\ifdim#4sp=\cb@pdfy\relax      % <<-- original has \ifnum#4=\cb@pdfy
+\ifdim#5=\cb@pdfz\relax
+\else
+\cb@error
+\fi
+\else
+\cb@error
+\fi
+\else
+\cb@error
+\fi
+}}
+\makeatother

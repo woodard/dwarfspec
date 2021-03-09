@@ -1,0 +1,102 @@
+
+\chapter[Encoding/Decoding (Informative)]{Variable Length Data: Encoding/Decoding (Informative)}
+\label{app:variablelengthdataencodingdecodinginformative}
+\addtoindexx{LEB128 encoding!algorithms}
+
+Here are algorithms expressed in a C-like pseudo-code to
+encode and decode signed and unsigned numbers in LEB128
+representation.
+
+The encode and decode algorithms given here do not take account of C/C++ rules
+that mean that in \texttt{E1}$ << $\texttt{E2} the type of \texttt{E1} should be
+a sufficiently large unsigned type to hold the correct mathematical result.
+The decode algorithms do not take account of
+or protect from possibly invalid LEB values, such as values
+that are too large to fit in the target type or that
+lack a proper terminator byte.
+Implementation languages may have additional or different rules.
+
+\vspace{2cm}
+
+\begin{figure}[hb]
+\begin{nlnlisting}
+do
+{
+    byte = low order 7 bits of value;
+    value >>= 7;
+    if (value != 0)     /* more bytes to come */
+        set high order bit of byte;
+    emit byte;
+} while (value != 0);
+\end{nlnlisting}
+\caption{Algorithm to encode an unsigned integer}
+\addtoindexx{LEB128!unsigned, encoding as}
+\end{figure}
+
+\begin{figure}[ht]
+\begin{nlnlisting}
+more = 1;
+negative = (value < 0);
+size = no. of bits in signed integer;
+while(more)
+{
+    byte = low order 7 bits of value;
+    value >>= 7;
+    /* the following is unnecessary if the
+     * implementation of >>= uses an arithmetic rather
+     * than logical shift for a signed left operand
+     */
+    if (negative)
+        /* sign extend */
+        value |= - (1 <<(size - 7));
+    /* sign bit of byte is second high order bit (0x40) */
+    if ((value == 0 && sign bit of byte is clear) ||
+        (value == -1 && sign bit of byte is set))
+        more = 0;
+    else
+        set high order bit of byte;
+    emit byte;
+}
+\end{nlnlisting}
+\caption{Algorithm to encode a signed integer}
+\addtoindexx{LEB128!signed, encoding as}
+\end{figure}
+
+\begin{figure}[ht]
+\begin{nlnlisting}
+result = 0;
+shift = 0;
+while(true)
+{
+    byte = next byte in input;
+    result |= (low order 7 bits of byte << shift);
+    if (high order bit of byte == 0)
+        break;
+    shift += 7;
+}
+\end{nlnlisting}
+\caption{Algorithm to decode an unsigned LEB128 integer}
+\addtoindexx{LEB128!unsigned, decoding of}
+\end{figure}
+
+\begin{figure}[ht]
+\begin{nlnlisting}
+result = 0;
+shift = 0;
+size = number of bits in signed integer;
+while(true)
+{
+    byte = next byte in input;
+    result |= (low order 7 bits of byte << shift);
+    shift += 7;
+    /* sign bit of byte is second high order bit (0x40) */
+    if (high order bit of byte == 0)
+        break;
+}
+if ((shift <size) && (sign bit of byte is set))
+    /* sign extend */
+    result |= - (1 << shift);
+\end{nlnlisting}
+\caption{Algorithm to decode a signed LEB128 integer}
+\addtoindexx{LEB128!signed, decoding of}
+\end{figure}

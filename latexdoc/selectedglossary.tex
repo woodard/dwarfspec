@@ -1,0 +1,80 @@
+\chapter[Selected Glossary (Informative)]{Selected Glossary$^0$ (Informative)}
+\footnotetext[0]{\textcolor{green!30!black}{Note to Reviewers--This new Appendix is
+an experiment. Comments regarding whether it should be
+retained and expanded are solicited. --Ed.}}
+\label{app:selectedglossary}
+
+This appendix contains descriptions for selected terms
+and vocabulary used in this document. The focus is on groups
+of related terms that may sound similar and/or have similar 
+meanings but do need to be distinguished. These descriptions
+are informal and cannot be used to contradict or change the
+meaning given in the main text. 
+    
+\section{Classification of Object Files}
+
+\begin{description}
+\itembf{DWARF object file}: an object file that includes 
+DWARF information (includes relocatable, hybrid, split, executable,
+shareable and package object files).
+
+\itembf{relocatable DWARF object file (.o\footnote{These 
+file extensions are typical of Linux and other Unix-based 
+operating systems, but other extensions are used in other 
+environments.} file)}: an object file that includes 
+relocatable program text (code) and data as well as either
+one or more DWARF conventional units, or a skeleton unit.
+
+\itembf{split DWARF object file (.dwo$^1$ file)}: an object 
+file that contains no program text (code) or data, but does 
+contain the split units that are associated with a specific 
+skeleton unit of a different file.
+ 
+\itembf{hybrid DWARF object file (.o$^1$ file)}: an object 
+file that contains relocatable program text (code) and data,
+the skeleton unit for that code and data, as well as the 
+split units that are associated with that skeleton unit.
+
+\itembf{split/hybrid object file}: an object file that is 
+either a split DWARF object file (.dwo) or a hybrid DWARF 
+object file (.o), that is, an object file that contains 
+one or more split units.
+
+\itembf{supplementary object file}: an object file (typically
+a shareable image object file) that contains macro units and
+related string information that can be shared with other
+object files.
+\end{description}
+
+\section{Kinds of Units}
+
+\begin{table}[ht]
+\caption{Kinds of Units and Their Characteristics}
+\label{tab:kindsofunitsandtheir characteristics}
+\footnotesize
+\begin{tabular}{P{3.6cm}llP{3.3cm}}
+\hline
+\bfseries
+Type of unit &\bfseries Unit Type Code &\bfseries Root DIE TAG &\bfseries Other Key \\
+(short name) &                &              &\bfseries Characteristics \\
+\hline
+conventional full compilation unit \newline(full unit) &\DWUTcompile     &\DWTAGcompileunit&\dotdebuginfo \\
+\hline
+conventional type unit \newline(type unit)             &\DWUTtype        &\DWTAGtypeunit   &\dotdebuginfo \\
+\hline
+conventional partial unit (partial unit)       &\DWUTpartial     &\DWTAGpartialunit&\dotdebuginfo \\
+\hline
+skeleton unit \newline (skeleton unit)                 &\DWUTskeleton    &\DWTAGcompileunit&\dotdebuginfo{}
+                                                                                            \DWATdwoname{}
+                                                                                            \DWATdwoid \\
+\hline
+split full compilation unit (split full unit)           &\DWUTsplitcompile&\DWTAGcompileunit&\dotdebuginfodwo{}                                                                                            \DWATdwoid \\
+\hline
+split type unit                                        &\DWUTsplittype   &\DWTAGtypeunit   &\dotdebuginfodwo \\
+\hline
+\end{tabular} 
+\end{table}
+
+Macro units defined in Section \refersec{chap:macroinformation}
+are distinctly different from the above units.
+

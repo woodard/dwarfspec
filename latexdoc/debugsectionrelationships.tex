@@ -1,0 +1,546 @@
+\chapter{Debug Section Relationships (Informative)}
+\label{app:debugsectionrelationshipsinformative}
+DWARF information is organized into multiple program sections, 
+each of which holds a particular kind of information. In some 
+cases, information in one section refers to information in one 
+or more of the others. These relationships are illustrated by 
+the diagrams and associated notes on the following pages.
+
+In the figures, a section is shown as a shaded oval with the
+name of the section inside. References from one section to
+another are shown by an arrow. In the first figure, the arrow
+is annotated with an unshaded box which contains an indication
+of the construct (such as an attribute or form) that encodes
+the reference. In the second figure, this box is left out
+for reasons of space in favor of a label annotation that is
+explained in the subsequent notes.
+
+\section{Normal DWARF Section Relationships}
+Figure \referfol{fig:debugsectionrelationships} illustrates
+the DWARF section relations without split DWARF object files
+involved. Similarly, it does not show the 
+relationships between the main debugging sections of an executable
+or sharable file and a related \addtoindex{supplementary object file}.
+
+\section{Split DWARF Section Relationships}
+Figure \ref{fig:splitdwarfsectionrelationships} illustrates
+the DWARF section relationships for \splitDWARFobjectfile{s}.
+However, it does not show the 
+relationships between the main debugging sections of an executable
+or shareable file and a related \addtoindex{supplementary object file}.
+
+\begin{landscape}
+\begin{figure}
+\scriptsize
+\begin{tikzpicture}
+    [sect/.style={rectangle, rounded corners=10pt, draw, fill=blue!15, 
+         inner sep=.2cm, minimum width=4.0cm},
+     link/.style={rectangle,                       draw,
+         inner sep=.2cm, minimum width=4.5cm},
+     circ/.style={circle,                          draw, fill=yellow!25,
+         minimum size=0.5cm}]
+     
+% The first (leftmost) column, first sections, then links, from top to bottom
+%
+\node(zsectara) at ( 0, 15.0) [sect] {\dotdebugaranges};
+\node(zlinka)   at ( 0, 13.5) [link] {To compilation unit~~(a)};
+\node(zsectinf) at ( 0,  7.5) [sect] {\begin{tabular}{c}
+                                        ~\\
+				      \dotdebuginfo\\
+                                        ~
+				      \end{tabular}};
+\node(zcircs)   at (-1.8,4.0) [circ] {\textit{A}};
+\node(zlinkb)   at ( 0,  1.5) [link] {To compilation unit~~(b)};
+\node(zsectpub) at ( 0,-0.25) [sect] {\begin{tabular}{c} 
+				      \dotdebugnames  
+				      \end{tabular}};
+                                      
+\draw[thin,triangle 45-]            (zcircs) -- (zsectinf);
+\draw[thin,-to reversed]            (zlinka) -- (zsectara);
+\draw[thin,triangle 45-]            (zsectinf) -- (zlinka);
+\draw[thin,-triangle 45]            (zlinkb) -- (zsectinf);
+\draw[thin,to reversed-]	    (zsectpub) -- (zlinkb);
+
+% The second column, similarly
+%
+\node(zsectfra) at (5, 15.0)  [sect] {\dotdebugframe};
+\node(zlinkc)   at (5, 13.5)  [link] {To abbreviations~~(c)};
+\node(zlinkd)   at (5, 12.1)  [link] {\DWFORMstrp{}~~(d)};
+\node(zlinke)	at (5, 10.4)  [link] {\begin{tabular}{c}
+				      \DWATstroffsetsbase \\
+				      \DWFORMstrx\textit{[1,2,3,4]}{}~(e) \\
+				      \end{tabular}};
+\node(zlinkf)   at (5,  8.4)  [link] {\begin{tabular}{c}
+				      \DWOPcallref{}~~~~~(f) \\
+				      \DWFORMrefaddr
+				      \end{tabular}};
+\node(zlinki)   at (5,  6.7)  [link] {\DWATmacros{}~~(g)};
+\node(zlinkj)   at (5,  5.4)  [link] {\DWATstmtlist{}~~(h)};
+\node(zlinkh)   at (5,  3.9)  [link] {\begin{tabular}{c}
+                                      \DWATranges{}~~~~(i) \\
+                                      \DWATrnglistsbase
+                                      \end{tabular}};
+\node(zlinkg)   at (5,  2.4)  [link] {\DWATlocation{}, etc.~~(j)};
+\node(zlinkk)	at (5,  0.5)  [link] {\begin{tabular}(c)
+				      \DWATaddrbase    \\
+				      \DWFORMaddrx\textit{[1,2,3,4]}{} \\
+				      \DWOPaddrx \\
+				      \DWOPconstx
+				      \end{tabular} (k)};
+
+% Links between first and second columns
+%
+\draw[thin,to reversed-]	     (zsectinf) -- (zlinkc.west);
+\draw[thin,to reversed-]	     (zsectinf) -- (zlinkd.west);
+\draw[thin,to reversed-]	     (zsectinf) -- (zlinke.west);
+\draw[thin, triangle 45-triangle 45] (zsectinf) -- (zlinkf.west);
+\draw[thin,to reversed-]	     (zsectinf) -- (zlinkg.west);
+\draw[thin,to reversed-]	     (zsectinf) -- (zlinkh.west);
+\draw[thin,to reversed-]	     (zsectinf) -- (zlinki.west);
+\draw[thin,to reversed-]	     (zsectinf) -- (zlinkj.west);
+\draw[thin,to reversed-]	     (zsectinf) -- (zlinkk.north west);
+
+% The third column
+%
+\node(zsectabb)	at (10, 15.00) [sect] {\dotdebugabbrev};
+\node(zsectstr)	at (10, 13.75) [sect] {\dotdebugstr};
+\node(zlinkl)   at (10, 12.50) [link] {To strings~~(l)};
+\node(zsectstx) at (10, 11.25) [sect] {\dotdebugstroffsets};
+\node(zlinkm)   at (10,  9.50) [link] {\begin{tabular}{c}
+                                      \DWMACROdefinestrx \\
+                                      \DWMACROundefstrx \\
+                                      (m)
+                                      \end{tabular}};
+\node(zsectmac)	at (10,  7.80) [sect] {\dotdebugmacro};
+\node(zlinkn)   at (10,  6.40) [link] {\begin{tabular}{c}
+                                      macroinfo header~~~~~~(n)\\
+                                      \DWMACROstartfile
+                                      \end{tabular}};
+\node(zsectlin)	at (10,  5.00) [sect] {\dotdebugline};
+\node(zsectran)	at (10,  3.85) [sect] {\dotdebugrnglists};
+\node(zsectloc)	at (10,  2.70) [sect] {\dotdebugloclists{}};
+\node(zlinko)   at (10,  1.20) [link] {\begin{tabular}{c}
+                                       \DWOPaddrx \\
+                                       \DWOPconstx
+                                       \end{tabular} (o)};
+\node(zsectadx) at (10,  -0.25) [sect] {\dotdebugaddr{}};
+
+\draw[thin,to reversed-]       (zsectstx) -- (zlinkl);
+\draw[thin,-triangle 45]       (zlinkl) -- (zsectstr);
+\draw[thin,to reversed-]       (zsectmac) -- (zlinkm);
+\draw[thin,-triangle 45]       (zlinkm) -- (zsectstx);
+\draw[thin,to reversed-]       (zsectmac) -- (zlinkn);
+\draw[thin,-triangle 45]       (zlinkn) -- (zsectlin);
+\draw[thin,to reversed-]       (zsectloc) -- (zlinko);
+\draw[thin,-triangle 45]       (zlinko) -- (zsectadx);
+
+% Links between second and third colums
+%
+\draw[thin,-triangle 45]	(zlinkc.east) -- (zsectabb.west);
+\draw[thin,-triangle 45]	(zlinkd.east) -- (zsectstr.west);
+\draw[thin,-triangle 45]	(zlinke.east) -- (zsectstx.west);
+\draw[thin,-triangle 45]	(zlinkg.east) -- (zsectloc.west);
+\draw[thin,-triangle 45]	(zlinkh.east) -- (zsectran.west);
+\draw[thin,-triangle 45]	(zlinki.east) -- (zsectmac.west);
+\draw[thin,-triangle 45]	(zlinkj.east) -- (zsectlin.west);
+\draw[thin,-triangle 45]	(zlinkk.east) -- (zsectadx.west);
+
+% The fourth column
+%
+\node(zlinky)   at (15.6, 10.5) [link] {\begin{tabular}{c}
+                                        \DWMACROdefinestrp \\
+                                        \DWMACROundefstrp \\
+                                        (p)
+                                        \end{tabular}};
+\node(zlinkz)   at (15.6,  6.4) [link] {\begin{tabular}{c}
+                                        \DWMACROimport \\
+                                        (q)
+                                        \end{tabular}};
+\node(zcircsp)  at (17.4,  4.0) [circ]  {\textit{A}};
+\node(zlinkx)   at (15.6,  2.0) [link]  {\DWFORMlinestrp~(r, s)};
+\node(zsectlns) at (15.6,-0.25) [sect]  {\dotdebuglinestr};
+             
+             
+\draw[thin,to reversed-]       (zsectmac.east) -- (zlinky);
+\draw[thin,-triangle 45]       (zlinky) -- (zsectstr.east);
+\draw[triangle 45-triangle 45] (zsectmac.east) -- (zlinkz);
+\draw[thin,to reversed-]       (zcircsp) -- (zlinkx);
+\draw[thin,to reversed-]       (zsectlin.east) -- (zlinkx);
+\draw[thin,-triangle 45]       (zlinkx) -- (zsectlns);
+
+\end{tikzpicture}
+\vspace{5mm}
+\caption{Debug section relationships}
+\label{fig:debugsectionrelationships}
+\end{figure}
+\end{landscape}
+
+\clearpage
+\begin{center}
+   \textbf{Notes for Figure \ref{fig:debugsectionrelationships}}
+\end{center}
+\begin{description} 
+\itembfnl{(a) \dotdebugaranges{} to \dotdebuginfo}
+The \texttt{debug\_info\_offset} value in
+the header is
+the offset in the \dotdebuginfo{} section of the
+corresponding compilation unit header (not the compilation
+unit entry).
+
+%b
+\itembfnl{(b) \dotdebugnames{} to \dotdebuginfo}
+The list of compilation units following the header contains the offsets in the
+\dotdebuginfo{} section of the 
+corresponding compilation unit headers (not
+the compilation unit entries). 
+
+%c
+\itembfnl{(c) \dotdebuginfo{} to \dotdebugabbrev}
+The \HFNdebugabbrevoffset{} value in the header is the offset in the
+\dotdebugabbrev{} 
+section of the abbreviations for that compilation unit.
+
+%d
+\itembfnl{(d) \dotdebuginfo{} to \dotdebugstr}
+Attribute values of class string may have form 
+\DWFORMstrp, whose
+value is the offset in the \dotdebugstr{}
+section of the corresponding string.
+
+%e
+\itembfnl{(e) \dotdebuginfo{} to \dotdebugstroffsets}
+The value of the \DWATstroffsetsbase{} attribute in a
+\DWTAGcompileunit{}, \DWTAGtypeunit{} or \DWTAGpartialunit{} 
+DIE is the offset in the
+\dotdebugstroffsets{} section of the 
+\addtoindex{string offsets table}
+for that unit.
+In addition, attribute values of class string may have 
+\bb
+one of the forms
+\eb 
+\DWFORMstrxXNor, whose value is an index into the
+string offsets table.
+
+%f
+\itembfnl{(f) \dotdebuginfo{} to \dotdebuginfo}
+The operand of the \DWOPcallref{} 
+DWARF expression operator is the
+offset of a debugging information entry in the 
+\dotdebuginfo{} section of another compilation.
+Similarly for attribute operands that use
+\DWFORMrefaddr.
+
+%g
+\itembfnl{(g) \dotdebuginfo{} to \dotdebugmacro}
+An attribute value of class 
+\livelink{chap:classmacptr}{macptr} (specifically form
+\DWFORMsecoffset) is an 
+offset within the 
+\dotdebugmacro{} section
+of the beginning of the macro information for the referencing unit.
+
+%h
+\itembfnl{(h) \dotdebuginfo{} to \dotdebugline}
+An attribute value of class 
+\livelink{chap:classlineptr}{lineptr} (specifically form
+\DWFORMsecoffset) 
+is an offset in the 
+\dotdebugline{} section of the
+beginning of the line number information for the referencing unit.
+
+%i
+\needlines{5}
+\itembfnl{(i) \dotdebuginfo{} to \dotdebugrnglists}
+An attribute value of class \CLASSrnglist{} 
+(specifically form \DWFORMrnglistx{} or \DWFORMsecoffset) 
+is an index or offset within the \dotdebugrnglists{} 
+section of a \addtoindex{range list}.
+
+%j
+\itembfnl{(j) \dotdebuginfo{} to \dotdebugloclists}
+An attribute value of class \CLASSloclist{} 
+(specifically form \DWFORMloclistx{} or \DWFORMsecoffset) 
+is an index or offset within the \dotdebugloclists{}
+section of a \addtoindex{location list}.
+
+%k
+\itembfnl{(k) \dotdebuginfo{} to \dotdebugaddr}
+The value of the \DWATaddrbase{} attribute in the
+\DWTAGcompileunit{} or \DWTAGpartialunit{} DIE is the
+offset in the \dotdebugaddr{} section of the machine
+addresses for that unit.
+\DWFORMaddrxXN, \DWOPaddrx{} and \DWOPconstx{} contain
+indices relative to that offset.
+
+%l
+\itembfnl{(l) \dotdebugstroffsets{} to \dotdebugstr}
+Entries in the string offsets table
+are offsets to the corresponding string text in the 
+\dotdebugstr{} section.
+
+%m
+\itembfnl{(m) \dotdebugmacro{} to \dotdebugstroffsets}
+The second operand of a 
+\DWMACROdefinestrx{} or \DWMACROundefstrx{} 
+macro information entry is an index
+into the string offset table in the 
+\dotdebugstroffsets{} section.
+
+%n
+\itembfnl{(n) \dotdebugmacro{} to \dotdebugline}
+The second operand of 
+\DWMACROstartfile{} refers to a file entry in the 
+\dotdebugline{} section relative to the start 
+of that section given in the macro information header.
+
+%o
+\itembfnl{(o) \dotdebugloclists{} to \dotdebugaddr}
+\DWOPaddrx{} and \DWOPconstx{} operators that occur in the 
+\dotdebugloclists{} section refer indirectly to the 
+\dotdebugaddr{} section by way of the 
+\DWATaddrbase{} attribute in the associated \dotdebuginfo{} 
+section.
+
+%p
+\itembfnl{(p) \dotdebugmacro{} to \dotdebugstr}
+The second operand of a 
+\DWMACROdefinestrp{} or \DWMACROundefstrp{} macro information
+entry is an index into the string table in the 
+\dotdebugstr{} section.
+
+%q
+\needlines{4}
+\itembfnl{(q) \dotdebugmacro{} to \dotdebugmacro}
+The operand of a 
+\DWMACROimport{} macro information
+entry is an offset into another part of the 
+\dotdebugmacro{} section to the header for the 
+sequence to be replicated.
+
+%r
+\needlines{4}
+\itembfnl{(r) \dotdebugline{} to \dotdebuglinestr}
+The value of a \DWFORMlinestrp{} form refers to a
+string section specific to the line number table.
+This form can be used in a \dotdebugline{} section
+(as well as in a \dotdebuginfo{} section).
+
+%s
+\itembfnl{(s) \dotdebuginfo{} to \dotdebuglinestr}
+The value of a \DWFORMlinestrp{} form refers to a
+string section specific to the line number table.
+This form can be used in a \dotdebuginfo{} section
+(as well as in a \dotdebugline{} section).\footnote{ 
+The circled (s) connects to the circled
+(s)' via hyperspace (a wormhole).}
+ 
+\end{description}
+
+
+
+\begin{landscape}
+\begin{figure}
+%\scriptsize
+\begin{tikzpicture}
+    [sect/.style={rectangle, rounded corners=10pt, draw, fill=blue!15, 
+        inner sep=.2cm, minimum width=4.0cm},
+     link/.style={rectangle,                       draw,
+        inner sep=.2cm, minimum width=4.5cm}]
+
+\fill[yellow!25] (7.5,-1) -- (7.5,14.5) -- (19,14.5) -- (19,-1) -- cycle;
+
+% First column
+%
+\node(ysectabb)    at ( 5, 13.5) [sect] {\dotdebugabbrev};
+\node(ysectadd)    at ( 2, 12.0) [sect] {\dotdebugaddr};
+\node(ysectara)    at ( 0, 10.5) [sect] {\dotdebugaranges};
+\node(ysectfra)    at ( 0,  9.0) [sect] {\dotdebugframe};
+\node(ysectlin)    at ( 0,  7.5) [sect] {\dotdebugline};
+\node(ysectlis)    at ( 0,  5.7) [sect] {\dotdebuglinestr};
+\node(ysectnam)    at ( 0,  4.0) [sect] {\dotdebugnames};
+\node(ysectstr)    at ( 2,  2.0) [sect] {\dotdebugstr};
+\node(ysectsto)    at ( 5,  0.0) [sect] {\dotdebugstroffsets};
+
+\node(ysectinf)    at ( 5,  7)   [sect] {\begin{tabular}{c}
+                                         ~\\
+                                         \dotdebuginfo \\
+                                         (skeleton CU)\\
+                                         ~
+                                         \end{tabular}};
+
+\node(ysectinfdwo) at (10.5,7)   [sect] {\begin{tabular}{c}
+                                         \dotdebuginfodwo \\
+                                         (one CU, possibly \\
+                                         multiple COMDAT \\
+                                         type units)
+                                         \end{tabular}};
+
+\node(ysectabbdwo) at (10.5, 13.5) [sect] {\dotdebugabbrevdwo};
+\node(ysectlocdwo) at (14.0, 11.5) [sect] {\dotdebugloclistsdwo};
+\node(ysectrandwo) at (15.8,  9.5) [sect] {\dotdebugrnglistsdwo};
+\node(ysectlindwo) at (16.0,  7.0) [sect] {\dotdebuglinedwo};
+\node(ysectmacdwo) at (16.0,  4.5) [sect] {\dotdebugmacrodwo};
+\node(ysectstrdwo) at (13.5,  2.0) [sect] {\dotdebugstrdwo};
+\node(ysectstodwo) at (10.5,  0.0) [sect] {\dotdebugstroffsetsdwo};
+
+\draw[thin,-triangle 45]	(ysectinf) -- (ysectabb) node[midway, right] {(c)};
+\draw[thin,-triangle 45]	(ysectinf) -- (ysectadd) node[midway, right] {(k)};
+\draw[thin,-triangle 45]	(ysectara.east) -- (ysectinf) node[midway, left] {(a)};
+\draw[thin,-triangle 45]	(ysectinf) -- (ysectlin.east) node[midway, above] {(h)};
+\draw[thin,-triangle 45]	(ysectlin) -- (ysectlis) node[midway, right] {(l)};
+\draw[thin,-triangle 45]	(ysectnam.east) -- (ysectinf) node[midway, left] {(b)};
+\draw[thin,-triangle 45]	(ysectinf) -- (ysectstr) node[midway, right] {(d)};
+\draw[thin,-triangle 45]	(ysectinf) -- (ysectsto) node[midway, right] {(e)};
+\draw[thin,-triangle 45]	(ysectsto) -- (ysectstr) node[midway, right] {(l)};
+
+\draw[dashed, thick,-triangle 45]  (ysectinf) .. controls (7.5, 11) ..(ysectinfdwo) 
+                                                       node[midway, above] {(did)};
+
+\draw[thin,-triangle 45]  (ysectinfdwo) -- (ysectabbdwo) node[midway, left] {(co)};
+\draw[thin,-triangle 45]  (ysectinfdwo) -- (ysectlindwo.west) node[midway, above] {(ho)};
+\draw[thin,-triangle 45]  (ysectinfdwo) -- (ysectrandwo.west) node[midway, above] {(io)};
+\draw[thin,-triangle 45]  (ysectinfdwo) -- (ysectlocdwo.west) node[midway, right] {(jo)};
+\draw[thin,-triangle 45]  (ysectinfdwo) -- (ysectmacdwo.west) node[midway, above] {(go)};
+\draw[thin,-triangle 45]  (ysectinfdwo) -- (ysectstrdwo) node[midway, right] {(do)};
+\draw[thin,-triangle 45]  (ysectinfdwo) -- (ysectstodwo) node[midway, left] {(eo)};
+
+\draw[thin,-triangle 45]  (ysectstodwo) -- (ysectstrdwo) node[near end, below] {(lo)};
+\draw[thin,-triangle 45]  (ysectmacdwo) -- (ysectstrdwo) node[midway, left] {(po)};
+\draw[thin,-triangle 45]  (ysectmacdwo) .. controls (16.2, 1) .. (ysectstodwo.east)
+                                                       node[very near start, right] {(mo)};
+\draw[thin,-triangle 45]  (ysectlindwo.east) .. controls (19,4) and (18, 0) .. (ysectstodwo.east)
+                                                       node[very near start, left] {(lmo)};
+
+\draw (0,  14) node {\begin{tabular}{l} Skeleton DWARF \\ in executable \end{tabular}};
+\draw (17, 14) node {\begin{tabular}{r} Split DWARF \\ in separate object \end{tabular}};                                                
+\end{tikzpicture}
+\vspace{3mm}
+\caption{Split DWARF section relationships}
+\label{fig:splitdwarfsectionrelationships}
+\end{figure}
+\end{landscape}
+
+\clearpage
+\begin{center}
+   \textbf{Notes for Figure \ref{fig:splitdwarfsectionrelationships}}
+\end{center}
+\begin{description}
+\itembfnl{(a)  \dotdebugaranges{} to \dotdebuginfo}
+The \texttt{debug\_info\_offset} field in the header is the 
+offset in the \dotdebuginfo{} section of the corresponding 
+compilation unit header of the skeleton \dotdebuginfo{} section 
+(not the compilation unit entry).  The \DWATdwoname{} attribute 
+in the \dotdebuginfo{} skeleton connects 
+the ranges to the full compilation unit in \dotdebuginfodwo.
+
+\itembfnl{(b) \dotdebugnames{} to \dotdebuginfo}
+The \dotdebugnames{} section  offsets lists provide an offset
+for the skeleton compilation unit and eight 
+byte signatures for the type units that appear only in the 
+\dotdebuginfodwo. The DIE offsets for these 
+compilation units and type units refer to the DIEs in the 
+\dotdebuginfodwo{} section for the respective 
+compilation unit and type units.
+
+\itembfnl{(c) \dotdebuginfo{} skeleton to \dotdebugabbrev}
+The \HFNdebugabbrevoffset{} value in the header is 
+the offset in the \dotdebugabbrev{} section of the 
+abbreviations for that compilation unit skeleton.
+
+\itembfnl{(co) \dotdebuginfodwo{} to \dotdebugabbrevdwo}
+The \HFNdebugabbrevoffset{} value in the header 
+is the offset in the \dotdebugabbrevdwo{} section of the 
+abbreviations for that compilation unit.
+
+\itembfnl{(d) \dotdebuginfo{} to \dotdebugstr}
+Attribute values of class string may have form \DWFORMstrp, 
+whose value is an offset in the 
+\dotdebugstr{} section of the corresponding string.
+
+\itembfnl{(did) \dotdebuginfo{} to \dotdebuginfodwo}
+The \DWATdwoname{}
+attribute in a skeleton unit identifies the file containing 
+the corresponding \texttt{.dwo} (split) data. 
+
+\itembfnl{(do) \dotdebuginfodwo{} to \dotdebugstrdwo}
+Attribute values of class string may have form 
+\DWFORMstrp, whose value is an offset in the 
+\dotdebugstrdwo{} section of the corresponding string.
+
+\itembfnl{(e) \dotdebuginfo{} to \dotdebugstroffsets}
+Attribute values of class string may have 
+\bb
+one of the forms
+\eb 
+\DWFORMstrxXNor, whose value is an index into the 
+\dotdebugstroffsets{} section for the corresponding string.
+
+\needlines{4}
+\itembfnl{(eo)\dotdebuginfodwo{} to \dotdebugstroffsetsdwo}
+Attribute values of class string may have 
+\bb
+one of the forms
+\eb 
+\DWFORMstrxXNor, whose value is an index into the 
+\dotdebugstroffsetsdwo{} section for the corresponding string.
+
+\itembfnl{(fo) \dotdebuginfodwo{} to \dotdebuginfodwo}
+The operand of the \DWOPcallref{} DWARF expression 
+operator is the offset of a debugging 
+information entry in the \dotdebuginfodwo{} section of 
+another compilation unit.  Similarly for attribute 
+operands that use \DWFORMrefaddr. 
+See Section \refersec{chap:controlflowoperations}.
+
+\itembfnl{(go) \dotdebuginfodwo{} to \dotdebugmacrodwo}
+An attribute of class \CLASSmacptr{} (specifically \DWATmacros{} 
+with form \DWFORMsecoffset{}) is an offset within the 
+\dotdebugmacrodwo{} section of the beginning of the macro 
+information for the referencing unit.
+
+\itembfnl{(h) \dotdebuginfo{} (skeleton) to \dotdebugline}
+An attribute value of class \CLASSlineptr{} (specifically 
+\DWATstmtlist{} with form \DWFORMsecoffset) 
+is an offset within the \dotdebugline{} section of the 
+beginning of the line number information for the 
+referencing unit.
+
+\itembfnl{(ho) \dotdebuginfodwo{}  to \dotdebuglinedwo{} (skeleton)}
+An attribute value of class \CLASSlineptr{} (specifically  
+\DWATstmtlist{}  with form \DWFORMsecoffset) 
+is an offset within the \dotdebuglinedwo{} section of the 
+beginning of the line number header information 
+for the referencing unit (the line table details are not in 
+\dotdebuglinedwo{} but the line header with its list 
+of file names is present).
+
+\itembfnl{(io) \dotdebuginfodwo{} to \dotdebugrnglistsdwo}
+An attribute value of class \CLASSrnglist{} (specifically 
+\DWATranges{} with form \DWFORMrnglistx{} or \DWFORMsecoffset) 
+is an index or offset within the \dotdebugrnglistsdwo{}
+section of a \addtoindex{range list}.
+The format of \dotdebugrnglistsdwo{} location list entries 
+is restricted to a subset of those in \dotdebugrnglists.
+See Section \refersec{chap:noncontiguousaddressranges} for details.
+
+\itembfnl{(jo) \dotdebuginfodwo{} to \dotdebugloclistsdwo}
+An attribute value of class 
+\CLASSloclist{} (specifically with form \DWFORMloclistx{}
+or \DWFORMsecoffset) 
+is an index or offset within the \dotdebugloclistsdwo{} 
+section of a \addtoindex{location list.}
+The format of \dotdebugloclistsdwo{} location list entries 
+is restricted to a subset of those in \dotdebugloclists.
+See Section \refersec{chap:locationlists} for details.
+
+\needlines{4}
+\itembfnl{(k) \dotdebuginfo{} to \dotdebugaddr}
+The value of the \DWATaddrbase{} attribute in the 
+\DWTAGcompileunit, \DWTAGpartialunit{} or \DWTAGtypeunit{} DIE 
+is the offset in the \dotdebugaddr{} section of the machine 
+addresses for that unit.
+\DWFORMaddrxXN, \DWOPaddrx{} and \DWOPconstx{} contain indices 
+relative to that offset.
+
+\end{description}

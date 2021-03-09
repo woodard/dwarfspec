@@ -1,0 +1,1490 @@
+\chapter[Compression (Informative)]{DWARF Compression and Duplicate Elimination (Informative)}
+\label{app:dwarfcompressionandduplicateeliminationinformative}
+
+% It seemed difficult to get close to the same layout and 
+% captioning as DWARF4 here with figures as they moved (floated)
+% making it hard to follow.  Hence this uses fewer figures.
+
+DWARF 
+\addtoindexx{DWARF compression}
+can 
+\addtoindexx{DWARF duplicate elimination}
+use a lot of disk space.
+
+This is especially true for \addtoindex{C++}, where the depth and complexity
+of headers can mean that many, many (possibly thousands of)
+declarations are repeated in every compilation unit. \addtoindex{C++}
+templates can also mean that some functions and their DWARF
+descriptions get duplicated.
+
+This Appendix describes techniques for using the DWARF
+representation in combination with features and characteristics
+of some common object file representations to reduce redundancy
+without losing information. It is worth emphasizing that none
+of these techniques are necessary to provide a complete and
+accurate DWARF description; they are solely concerned with
+reducing the size of DWARF information.
+
+The techniques described here depend more directly and more
+obviously on object file concepts and linker mechanisms than
+most other parts of DWARF. While the presentation tends to
+use the vocabulary of specific systems, this is primarily to
+aid in describing the techniques by appealing to well\dash known
+terminology. These techniques can be employed on any system
+that supports certain general functional capabilities
+(described below).
+
+
+\section{Using Compilation Units}
+\label{app:usingcompilationunits}
+
+\subsection{Overview}
+The general approach is to break up the debug information of
+a compilation into separate normal and partial compilation
+units, each consisting of one or more sections. By arranging
+that a sufficiently similar partitioning occurs in other
+compilations, a suitable system linker can delete redundant
+groups of sections when combining object files.
+
+\textit{The following uses some traditional section naming here
+but aside from the DWARF sections, the names are just meant
+to suggest traditional contents as a way of explaining the
+approach, not to be limiting.}
+
+A traditional relocatable object output file
+from a single compilation might contain sections 
+named:
+\begin{alltt}
+    \dotdata{}
+    \dottext{}
+    \dotdebuginfo{}
+    \dotdebugabbrev{}
+    \dotdebugline{}
+    \dotdebugaranges{}
+\end{alltt}
+A relocatable object file from a compilation system 
+attempting duplicate DWARF elimination might
+contain sections as in:
+
+\begin{alltt}
+    \dotdata{}
+    \dottext{}
+    \dotdebuginfo{}
+    \dotdebugabbrev{}
+    \dotdebugline{}
+    \dotdebugaranges{}
+\end{alltt}
+
+followed (or preceded, the order is not significant) 
+by a series of 
+\addtoindexx{section group}
+section groups:
+\begin{alltt}
+==== Section group 1
+    \dotdebuginfo{}
+    \dotdebugabbrev{}
+    \dotdebugline{}
+==== ...
+==== Section group N
+    \dotdebuginfo{}
+    \dotdebugabbrev{}
+    \dotdebugline{}
+\end{alltt}
+
+where each \addtoindex{section group} might or might not contain executable
+code (\dottext{} sections) or data (\dotdata{} sections).
+
+\needlines{6}
+A \textit{\addtoindex{section group}} is a named set 
+of section contributions
+within an object file with the property that the entire set
+of section contributions must be retained or discarded as a
+whole; no partial elimination is allowed. Section groups can
+generally be handled by a linker in two ways:
+\begin{enumerate}[1. ]
+
+\item Given multiple identical (duplicate) section groups,
+\addtoindexx{section group}
+one of them is chosen to be kept and used, while the rest
+are discarded.
+
+\item Given a \addtoindex{section group} 
+that is not referenced from any
+section outside of the \addtoindex{section group}, 
+the section group
+is discarded.
+
+\end{enumerate}
+
+
+Which handling applies may be indicated by the 
+\addtoindex{section group}
+itself and/or selection of certain linker options.
+
+For example, if a linker determines that 
+\addtoindex{section group} 1
+from A.o and 
+\addtoindex{section group} 3 from B.o are identical, it could
+discard one group and arrange that all references in A.o and
+B.o apply to the remaining one of the two identical section
+groups. This saves space.
+
+An important part of making it possible to \doublequote{redirect}
+references to the surviving 
+\addtoindex{section group} is the use of
+consistently chosen linker global symbols for referring to
+locations within each 
+\addtoindex{section group}.
+It follows that references
+are simply to external names and the linker already knows
+how to match up references and definitions.
+
+What is minimally needed from the object file format and system
+linker (outside of DWARF itself, and normal object/linker
+facilities such as simple relocations) are:
+\begin{enumerate}[1. ]
+
+\item A means to reference the \dotdebuginfo{} information 
+of one compilation unit from the \dotdebuginfo{} section of 
+another compilation unit (\DWFORMrefaddr{} provides this).
+
+\item A means to combine multiple contributions to specific sections
+(for example, \dotdebuginfo{}) into a single object file.
+
+\item  A means to identify a \addtoindex{section group} 
+(giving it a name).
+
+\item A means to indicate which sections go together to make
+up a \addtoindex{section group}, so that the group can be 
+treated as a unit (kept or discarded).
+
+\item  A means to indicate how each \addtoindex{section group} 
+should be processed by the linker.
+
+\end{enumerate}
+
+\textit{The notion of section and section contribution used here
+corresponds closely to the similarly named concepts in the
+ELF object file representation. 
+The notion of \addtoindex{section group} is
+an abstraction of common extensions of the ELF representation
+widely known as 
+\doublequote{\COMDAT{}s} or \doublequote{\COMDAT{} sections.} (Other
+object file representations provide \COMDAT{}\dash style mechanisms as
+well.) There are several variations in the \COMDAT{} schemes in
+common use, any of which should be sufficient for the purposes
+of the 
+\addtoindexx{duplication elimination|see{DWARF duplicate elimination}}
+DWARF duplicate elimination techniques described here.}
+
+\subsection{Naming and Usage Considerations}
+\label{app:namingandusageconsiderations}
+
+A precise description of the means of deriving names usable
+by the linker to access DWARF entities is not part of this
+specification. Nonetheless, an outline of a usable approach
+is given here to make this more understandable and to guide
+implementors.
+
+Implementations should clearly document their naming conventions.
+
+In the following, it will be helpful to refer to the examples
+in 
+Figure \ref{fig:duplicateeliminationexample1csource}
+through 
+Figure \ref{fig:duplicateeliminationexample2companiondwarf}
+of 
+Section \refersec{app:examples}.
+
+\textbf{Section Group Names}
+
+Section groups must have a \addtoindex{section group} name.
+\addtoindexx{section group!name}
+For the subsequent 
+\addtoindex{C++} example, a name like
+\begin{alltt}
+    <producer-prefix>.<file-designator>.<gid-number>
+\end{alltt}
+will suffice, where
+
+\begin{description}
+
+\item  [\textless producer\dash prefix\textgreater] 
+is some string specific to the
+producer, which has a language\dash designation embedded in the
+name when appropriate. (Alternatively, the language name
+could be embedded in the 
+\textless gid\dash number\textgreater).
+
+
+\item  [\textless file\dash designator\textgreater]
+names the file, such as wa.h in
+the example.
+
+
+\item  [\textless gid\dash number\textgreater]
+is a string generated to identify the
+specific wa.h header file in such a way that
+
+\begin{itemize}
+
+\item  a 'matching' output from another compile generates
+the same 
+\textless gid\dash number\textgreater,
+and
+
+\item  a non-matching output (say because of \texttt{\#defines})
+generates a different 
+\textless gid\dash number\textgreater.
+\end{itemize}
+
+\end{description}
+
+\textit{It may be useful to think of a 
+\textless gid\dash number\textgreater
+as a kind
+of \doublequote{digital signature} that allows a fast test for the
+equality of two 
+\addtoindexx{section group}
+section groups.}
+
+So, for example, the \addtoindex{section group} 
+corresponding to file wa.h
+above is given the name \texttt{my.compiler.company.cpp.wa.h.123456}.
+
+
+\needlines{4}
+\textbf{Debugging Information Entry Names}
+
+Global labels for 
+\addtoindexx{debugging information entry!ownership relation}
+debugging information entries (the need for which is explained
+below) within a \addtoindex{section group}
+can be given names of the form
+
+\begin{alltt}
+    <prefix>.<file-designator>.<gid-number>.<die-number>
+\end{alltt}
+
+such as
+
+\begin{alltt}
+    my.compiler.company.wa.h.123456.987
+\end{alltt}
+
+where
+\begin{description}
+\item [\textless prefix\textgreater]  
+distinguishes this as a DWARF debug info name, and should identify the producer
+and, when appropriate, the language.
+\item [\textless file\dash designator\textgreater]  
+and 
+\texttt{\textless gid\dash number\textgreater} 
+are as above.
+
+\item  [\textless die\dash number\textgreater]
+could be a number sequentially assigned 
+to entities (tokens, perhaps) found
+during compilation.
+
+\end{description}
+
+In general, every point in the 
+\addtoindexx{section group}
+section group 
+\dotdebuginfo{} that
+could be referenced from outside by \emph{any} compilation unit must
+normally have an external name generated for it in the linker
+symbol table, whether the current compilation references all
+those points or not.
+
+\textit{The completeness of the set of names generated is a
+quality-of-implementation issue.}
+
+It is up to the producer to ensure that if 
+\textless die\dash numbers\textgreater\ 
+in separate compilations would not match properly then a
+distinct 
+\textless gid\dash number\textgreater\ 
+is generated.
+
+Note that only 
+\addtoindexx{section group}
+section groups that are designated as
+duplicate\dash removal\dash applies actually require the
+\begin{alltt}
+    <prefix>.<file-designator>.<gid-number>.<die-number>
+\end{alltt}
+external labels for debugging information entries as all other
+\addtoindex{section group} sections can use 'local' labels 
+(section\dash relative
+relocations).
+
+(This is a consequence of separate compilation, not a rule
+imposed by this document.)
+
+\textit{Local labels use references with form \DWFORMreffour{}
+or 
+\DWFORMrefeight. 
+(These are affected by relocations
+so 
+\DWFORMrefudata, 
+\DWFORMrefone{} and 
+\DWFORMreftwo{} are
+normally not usable and 
+\DWFORMrefaddr{} is not necessary
+for a local label.)}
+
+
+\subsubsection{Use of \addtoindex{DW\_TAG\_compile\_unit} versus 
+\addtoindex{DW\_TAG\_partial\_unit}}
+
+A \addtoindex{section group} compilation unit that uses 
+\DWTAGcompileunit{}
+is like any other compilation unit, in that its contents
+are evaluated by consumers as though it were an ordinary
+compilation unit.
+
+An \#include directive appearing outside any other
+declarations is a good candidate to be represented using
+\DWTAGcompileunit. 
+However, an \#include appearing inside
+a \addtoindex{C++} namespace declaration or a function, for example, is
+not a good candidate because the entities included are not
+necessarily file level entities.
+
+This also applies to \addtoindex{Fortran} INCLUDE lines when declarations
+are included into a subprogram or module context.
+
+Consequently a compiler must use \DWTAGpartialunit{} (instead
+of \DWTAGcompileunit) 
+in a \addtoindex{section group} 
+whenever the section group 
+contents are not necessarily globally visible. 
+This
+directs consumers to ignore that compilation unit when scanning
+top level declarations and definitions.
+
+The \DWTAGpartialunit{} compilation unit will be referenced
+from elsewhere and the referencing locations give the
+appropriate context for interpreting the partial compilation
+unit.
+
+A \DWTAGpartialunit{} entry may have, as appropriate, any of
+the attributes assigned to a \DWTAGcompileunit.
+
+
+\subsubsection{Use of DW\_TAG\_imported\_unit}
+
+A \DWTAGimportedunit{} debugging information entry has an
+\DWATimport{} attribute referencing a \DWTAGcompileunit{} or
+\DWTAGpartialunit{} debugging information entry.
+
+A \DWTAGimportedunit{} debugging information entry refers
+to a 
+\DWTAGcompileunit{} or 
+\DWTAGpartialunit{} debugging
+information entry to specify that the 
+\DWTAGcompileunit{} or
+\DWTAGpartialunit{} contents logically appear at the point
+of the 
+\DWTAGimportedunit{} entry.
+
+
+\subsubsection{Use of DW\_FORM\_ref\_addr}
+
+Use 
+\DWFORMrefaddr{} to reference from one compilation
+unit's debugging information entries to those of another
+compilation unit.
+
+\needlines{4}
+When referencing into a removable \addtoindex{section group}
+\dotdebuginfo{}
+from another \dotdebuginfo{} (from anywhere), the
+\begin{alltt}
+    <prefix>.<file-designator>.<gid-number>.<die-number>
+\end{alltt}
+name should be used for an external symbol and a relocation
+generated based on that name.
+
+\needlines{4}
+\textit{When referencing into a 
+\addtoindexx{section group}
+non-section group 
+\dotdebuginfo{},
+from another \dotdebuginfo{} (from anywhere) 
+\DWFORMrefaddr{} is
+still the form to be used, but a section\dash relative relocation
+generated by use of a non-exported name (often called an
+\doublequote{internal name}) may be used for references within the
+same object file.}
+
+\subsection{Examples}
+\label{app:examples}
+
+This section provides several 
+\addtoindexx{DWARF duplicate elimination!examples}
+examples in order to have a
+concrete basis for discussion.
+
+In these examples, the focus is on the arrangement of DWARF
+information into sections (specifically the 
+\dotdebuginfo{}
+section) and the naming conventions used to achieve references
+into 
+\addtoindexx{section group}
+section groups. 
+In practice, all of the examples that
+follow involve DWARF sections other than just 
+\dotdebuginfo{}
+(for example, \dotdebugline{}, 
+\dotdebugaranges{}, or others);
+however, only the \dotdebuginfo{}
+section is shown to keep the
+examples compact and easier to read.
+
+The grouping of sections into a named set is shown, but the means for achieving this in terms of
+the underlying object language is not (and varies from system to system).
+
+\subsubsection{C++ Example}
+
+The \addtoindex{C++} source 
+\addtoindexx{DWARF duplicate elimination!examples}
+in 
+Figure \refersec{fig:duplicateeliminationexample1csource}
+is used to illustrate the DWARF
+representation intended to allow duplicate elimination.
+
+\begin{figure}[ht]
+\textit{File wa.h}
+\begin{nlnlisting}
+struct A {
+   int i;
+};
+\end{nlnlisting}
+\textit{File wa.c}
+\begin{nlnlisting}
+#include "wa.h";
+int
+f(A &a)
+{
+    return a.i + 2;
+}
+\end{nlnlisting}
+\caption{Duplicate elimination example \#1: C++ Source}
+\label{fig:duplicateeliminationexample1csource}
+\end{figure}
+
+Figure \refersec{fig:duplicateeliminationexample1dwarfsectiongroup}
+shows the \addtoindex{section group} corresponding to the included file 
+wa.h.
+
+\begin{figure}
+\begin{dwflisting}
+% FIXME: the DWFORMrefn could use rethinking
+\begin{alltt}
+==== Section group name:
+    my.compiler.company.cpp.wa.h.123456
+== section \dotdebuginfo{}
+DW.cpp.wa.h.123456.1:     ! linker global symbol
+    \DWTAGcompileunit
+        \DWATlanguage(\DWLANGCplusplus)
+        ...  ! other unit attributes
+DW.cpp.wa.h.123456.2:     ! linker global symbol
+    \DWTAGbasetype
+        \DWATname("int")
+DW.cpp.wa.h.123456.3:     ! linker global symbol
+    \DWTAGstructuretype
+        \DWATname("A")
+DW.cpp.wa.h.123456.4:     ! linker global symbol
+        \DWTAGmember
+        \DWATname("i")
+        \DWATtype(\DWFORMrefn to DW.cpp.wa.h.123456.2)
+            ! (This is a local reference, so the more
+            ! compact form \DWFORMrefn 
+            ! for n = 1,2,4, or 8 can be used)
+\end{alltt}
+\end{dwflisting}
+\vspace{2mm}
+\caption{Duplicate elimination example \#1: DWARF section group} 
+\label{fig:duplicateeliminationexample1dwarfsectiongroup}
+\end{figure}
+
+Figure \refersec{fig:duplicateeliminationexample1primarycompilationunit}
+shows the \doublequote{normal} DWARF sections, which are not part of
+any \addtoindex{section group}, 
+and how they make use of the information
+in the \addtoindex{section group} shown above.
+
+\begin{figure}
+\begin{dwflisting}
+\begin{alltt}
+== section \dottext{}
+    [generated code for function f]
+== section \dotdebuginfo{}
+    \DWTAGcompileunit
+.L1:                           ! local (non-linker) symbol
+        \DWTAGreferencetype
+            \DWATtype(reference to DW.cpp.wa.h.123456.3)
+        \DWTAGsubprogram
+            \DWATname("f")
+            \DWATtype(reference to DW.cpp.wa.h.123456.2)
+            \DWTAGvariable
+                \DWATname("a")
+                \DWATtype(reference to .L1)
+        ...
+\end{alltt}
+\end{dwflisting}
+\caption{Duplicate elimination example \#1: primary compilation unit} 
+\label{fig:duplicateeliminationexample1primarycompilationunit}
+\end{figure}
+
+\needlines{4}
+This example uses \DWTAGcompileunit{} 
+for the \addtoindex{section group},
+implying that the contents of the compilation unit are
+globally visible (in accordance with 
+\addtoindex{C++} language rules).
+\DWTAGpartialunit{} 
+is not needed for the same reason.
+
+\needlines{6}
+\subsubsection{C Example}
+
+The \addtoindex{C++} example 
+\addtoindexx{DWARF duplicate elimination!examples}
+in this Section might appear to be equally
+valid as a \addtoindex{C} example. However, for \addtoindex{C} 
+it is prudent to include a \DWTAGimportedunit{}
+in the primary unit 
+(see Figure \refersec{fig:duplicateeliminationexample1primarycompilationunit})
+as well as an \DWATimport{} attribute that refers to the proper unit
+in the \addtoindex{section group}.
+
+\needlines{4}
+\textit{The \addtoindex{C} rules for consistency of global (file scope) symbols
+across compilations are less strict than for \addtoindex{C++}; inclusion
+of the import unit attribute assures that the declarations of
+the proper \addtoindex{section group} are considered before declarations
+from other compilations.}
+
+
+\subsubsection{Fortran Example}
+
+
+For a \addtoindex{Fortran}
+\addtoindexx{DWARF duplicate elimination!examples}
+example, consider 
+Figure \refersec{fig:duplicateeliminationexample2fortransource}.
+
+\begin{figure}[ht]
+\textit{File CommonStuff.f\hspace{1pt}h}
+\addtoindexx{Fortran}
+\begin{nlnlisting}
+IMPLICIT INTEGER(A-Z)
+COMMON /Common1/ C(100)
+PARAMETER(SEVEN = 7)
+\end{nlnlisting}
+
+\textit{File Func.f}
+\begin{nlnlisting}
+FUNCTION FOO (N)
+INCLUDE 'CommonStuff.fh'
+FOO = C(N + SEVEN)
+RETURN
+END
+\end{nlnlisting}
+\caption{Duplicate elimination example \#2: Fortran source} 
+\label{fig:duplicateeliminationexample2fortransource}
+\end{figure}
+
+
+Figure \refersec{fig:duplicateeliminationexample2dwarfsectiongroup}
+shows the \addtoindex{section group}
+corresponding to the included file 
+\addtoindexx{Fortran example}
+CommonStuff.fh.
+
+\begin{figure}
+\begin{dwflisting}
+\begin{alltt}
+==== Section group name:
+
+    my.f90.company.f90.CommonStuff.fh.654321
+
+== section \dotdebuginfo{}
+
+DW.myf90.CommonStuff.fh.654321.1:    ! linker global symbol
+    \DWTAGpartialunit
+        ! ...compilation unit attributes, including...
+        \DWATlanguage(\DWLANGFortranninety)
+        \DWATidentifiercase(\DWIDcaseinsensitive)
+
+DW.myf90.CommonStuff.fh.654321.2:    ! linker global symbol
+3\$: \DWTAGarraytype
+        ! unnamed
+        \DWATtype(reference to DW.f90.F90\$main.f.2)
+            ! base type INTEGER
+        \DWTAGsubrangetype
+            \DWATtype(reference to DW.f90.F90\$main.f.2)
+                ! base type INTEGER)
+            \DWATlowerbound(constant 1)
+            \DWATupperbound(constant 100)
+
+DW.myf90.CommonStuff.fh.654321.3:    ! linker global symbol
+    \DWTAGcommonblock
+        \DWATname("Common1")
+        \DWATlocation(Address of common \nolink{block} Common1)
+        \DWTAGvariable
+            \DWATname("C")
+            \DWATtype(reference to 3\$)
+            \DWATlocation(address of C)
+
+DW.myf90.CommonStuff.fh.654321.4:    ! linker global symbol
+    \DWTAGconstant
+        \DWATname("SEVEN")
+        \DWATtype(reference to DW.f90.F90\$main.f.2)
+            ! base type INTEGER
+        \DWATconstvalue(constant 7)
+\end{alltt}
+\end{dwflisting}
+\caption{Duplicate elimination example \#2: DWARF section group}
+\label{fig:duplicateeliminationexample2dwarfsectiongroup}
+\end{figure}
+
+Figure \refersec{fig:duplicateeliminationexample2primaryunit}
+shows the sections for the primary compilation unit.
+
+\begin{figure}
+\begin{dwflisting}
+\begin{alltt}
+== section \dottext{}
+    [code for function Foo]
+
+== section \dotdebuginfo{}
+    \DWTAGcompileunit
+        \DWTAGsubprogram
+            \DWATname("Foo")
+            \DWATtype(reference to DW.f90.F90\$main.f.2)
+                ! base type INTEGER
+            \DWTAGimportedunit
+                \DWATimport(reference to
+                    DW.myf90.CommonStuff.fh.654321.1)
+            \DWTAGcommoninclusion ! For Common1
+                \DWATcommonreference(reference to
+                    DW.myf90.CommonStuff.fh.654321.3)
+            \DWTAGvariable ! For function result
+                \DWATname("Foo")
+                    \DWATtype(reference to DW.f90.F90\$main.f.2)
+                        ! base type INTEGER
+\end{alltt}
+\end{dwflisting}
+\caption{Duplicate elimination example \#2: primary unit}
+\label{fig:duplicateeliminationexample2primaryunit}
+\end{figure}
+
+A companion main program is shown in 
+Figure \refersec{fig:duplicateeliminationexample2companionsource}
+
+\begin{figure}
+\textit{File Main.f} 
+\begin{nlnlisting}
+INCLUDE 'CommonStuff.fh'
+C(50) = 8
+PRINT *, 'Result = ', FOO(50 - SEVEN)
+END
+\end{nlnlisting}
+\caption{Duplicate elimination example \#2: companion source }
+\label{fig:duplicateeliminationexample2companionsource}
+\end{figure}
+
+\needlines{3}
+That main program results in an object file that
+contained a duplicate of the \addtoindex{section group} named
+\texttt{my.f90.company.f90.CommonStuff.fh.654321} 
+corresponding to the
+included file as well as the remainder of the main subprogram
+as shown in 
+Figure \refersec{fig:duplicateeliminationexample2companiondwarf}.
+
+\begin{figure}
+\begin{dwflisting}
+\begin{alltt}
+== section \dotdebuginfo{}
+    \DWTAGcompileunit
+        \DWATname(F90\$main)
+        \DWTAGbasetype
+            \DWATname("INTEGER")
+            \DWATencoding(\DWATEsigned)
+            \DWATbytesize(...)
+
+        \DWTAGbasetype
+            ...
+        ...  ! other base types
+        \DWTAGsubprogram
+            \DWATname("F90\$main")
+            \DWTAGimportedunit
+                \DWATimport(reference to
+                    DW.myf90.CommonStuff.fh.654321.1)
+            \DWTAGcommoninclusion ! for Common1
+                \DWATcommonreference(reference to
+                    DW.myf90.CommonStuff.fh.654321.3)
+            ...
+\end{alltt}
+\end{dwflisting}
+\caption{Duplicate elimination example \#2: companion DWARF }
+\label{fig:duplicateeliminationexample2companiondwarf}
+\end{figure}
+
+This example uses \DWTAGpartialunit{} for the \addtoindex{section group}
+because the included declarations are not independently
+visible as global entities.
+
+
+\section{Using Type Units}
+\label{app:usingtypeunits}
+
+A large portion of debug information is type information, and
+in a typical compilation environment, many types are duplicated
+many times. One method of controlling the amount of duplication
+is separating each type into a separate 
+\COMDAT{} \dotdebuginfo{} section
+and arranging for the linker to recognize and eliminate
+duplicates at the individual type level.
+
+Using this technique, each substantial type definition is
+placed in its own individual section, while the remainder
+of the DWARF information (non-type information, incomplete
+type declarations, and definitions of trivial types) is
+placed in the usual debug information section. In a typical
+implementation, the relocatable object file may contain one
+of each of these debug sections:
+
+\begin{alltt}
+\dotdebugabbrev{}
+\dotdebuginfo{}
+\dotdebugline{}
+\end{alltt}
+
+and any number of additional \COMDAT{} \dotdebuginfo{} sections
+containing type units.
+
+\needlines{5}
+As discussed in the previous section 
+(Section \refersec{app:usingcompilationunits}), 
+many
+linkers today support the concept of a \COMDAT{} group or
+linkonce section. The general idea is that a \doublequote{key} can be
+attached to a section or a group of sections, and the linker
+will include only one copy of a \addtoindex{section group}
+(or individual section) for any given key. 
+For \COMDAT{} \dotdebuginfo{} sections, the
+key is the \addtoindex{type signature}
+formed from the algorithm given in
+Section \refersec{datarep:typesignaturecomputation}.
+
+\subsection{Signature Computation Example}
+\label{app:signaturecomputationexample}
+
+As an example, 
+\addtoindexx{type signature!example computation}
+consider a \addtoindex{C++} header file 
+containing the type definitions shown
+in Figure \refersec{fig:typesignatureexamplescsource}.
+
+\begin{figure}[ht]
+\begin{nlnlisting}
+namespace N {
+
+    struct B;
+
+    struct C {
+        int x;
+        int y;
+    };
+
+    class A {
+    public:
+        A(int v);
+        int v();
+    private:
+        int v_;
+        struct A *next;
+        struct B *bp;
+        struct C c;
+    };
+}
+\end{nlnlisting}
+\caption{Type signature examples: C++ source}
+\label{fig:typesignatureexamplescsource}
+\end{figure}
+
+Next, consider one possible representation of the DWARF
+information that describes the type \doublequote{struct C} as shown
+in 
+\refersec{fig:typesignaturecomputation1dwarfrepresentation}.
+
+\begin{figure}
+\begin{dwflisting}
+% We keep the : (colon) away from the attribute so tokenizing in the python tools
+% does not result in adding : into the attribute name.
+\begin{alltt}
+  \DWTAGtypeunit
+      \DWATlanguage : \DWLANGCplusplus (4)
+    \DWTAGnamespace
+        \DWATname : "N"
+L1:
+      \DWTAGstructuretype
+          \DWATname : "C"
+          \DWATbytesize : 8
+          \DWATdeclfile : 1
+          \DWATdeclline : 5
+        \DWTAGmember
+            \DWATname : "x"
+            \DWATdeclfile : 1
+            \DWATdeclline : 6
+            \DWATtype : reference to L2
+            \DWATdatamemberlocation : 0
+        \DWTAGmember
+            \DWATname : "y"
+            \DWATdeclfile : 1
+            \DWATdeclline : 7
+            \DWATtype : reference to L2
+            \DWATdatamemberlocation : 4
+L2:
+     \DWTAGbasetype
+         \DWATbytesize : 4
+         \DWATencoding : \DWATEsigned
+         \DWATname : "int"
+\end{alltt}
+\end{dwflisting}
+\caption{Type signature computation \#1: DWARF representation}
+\label{fig:typesignaturecomputation1dwarfrepresentation}
+\end{figure}
+
+\needlines{3}
+In computing a signature for the type \texttt{N::C}, flatten the type
+\addtoindexx{type signature}
+description into a byte stream according to the procedure
+outlined in 
+Section \refersec{datarep:typesignaturecomputation}.
+The result is shown in 
+Figure \refersec{fig:typesignaturecomputation1flattenedbytestream}.
+
+\begin{figure}
+\begin{dwflisting}
+\begin{alltt}
+// Step 2: 'C' \DWTAGnamespace "N"
+0x43 0x39 0x4e 0x00
+// Step 3: 'D' \DWTAGstructuretype
+0x44 0x13
+// Step 4: 'A' \DWATname \DWFORMstring "C"
+0x41 0x03 0x08 0x43 0x00
+// Step 4: 'A' \DWATbytesize \DWFORMsdata 8
+0x41 0x0b 0x0d 0x08
+// Step 7: First child ("x")
+    // Step 3: 'D' \DWTAGmember
+    0x44 0x0d
+    // Step 4: 'A' \DWATname \DWFORMstring "x"
+    0x41 0x03 0x08 0x78 0x00
+    // Step 4: 'A' \DWATdatamemberlocation \DWFORMsdata 0
+    0x41 0x38 0x0d 0x00
+    // Step 6: 'T' \DWATtype (type \#2)
+    0x54 0x49
+        // Step 3: 'D' \DWTAGbasetype
+        0x44 0x24
+        // Step 4: 'A' \DWATname \DWFORMstring "int"
+        0x41 0x03 0x08 0x69 0x6e 0x74 0x00
+        // Step 4: 'A' \DWATbytesize \DWFORMsdata 4
+        0x41 0x0b 0x0d 0x04
+        // Step 4: 'A' \DWATencoding \DWFORMsdata \DWATEsigned
+        0x41 0x3e 0x0d 0x05
+        // Step 7: End of \DWTAGbasetype "int"
+        0x00
+    // Step 7: End of \DWTAGmember "x"
+    0x00
+// Step 7: Second child ("y")
+    // Step 3: 'D' \DWTAGmember
+    0x44 0x0d
+    // Step 4: 'A' \DWATname \DWFORMstring "y"
+    0x41 0x03 0x08 0x79 0x00
+    // Step 4: 'A' \DWATdatamemberlocation \DWFORMsdata 4
+    0x41 0x38 0x0d 0x04
+    // Step 6: 'R' \DWATtype (type \#2)
+    0x52 0x49 0x02
+    // Step 7: End of \DWTAGmember "y"
+    0x00
+// Step 7: End of \DWTAGstructuretype "C"
+0x00
+\end{alltt}
+\end{dwflisting}
+\caption{Type signature computation \#1: flattened byte stream}
+\label{fig:typesignaturecomputation1flattenedbytestream}
+\end{figure}
+
+\needlines{4}
+Running an \MDfive{} hash over this byte stream, and taking the
+low\dash order 64 bits, yields the final signature: 
+0xd28081e8 dcf5070a.
+
+Next, consider a representation of the DWARF information that
+describes the type \doublequote{class A} as shown in 
+Figure \refersec{fig:typesignaturecomputation2dwarfrepresentation}.
+
+\begin{figure}
+\figurepart{1}{2}
+\begin{dwflisting}
+\begin{alltt}
+  \DWTAGtypeunit
+      \DWATlanguage : \DWLANGCplusplus (4)
+    \DWTAGnamespace
+        \DWATname : "N"
+L1:
+        \DWTAGclasstype
+             \DWATname : "A"
+             \DWATbytesize : 20
+             \DWATdeclfile : 1
+             \DWATdeclline : 10
+           \DWTAGmember
+                \DWATname : "v\_"
+                \DWATdeclfile : 1
+                \DWATdeclline : 15
+                \DWATtype : reference to L2
+                \DWATdatamemberlocation : 0
+                \DWATaccessibility : \DWACCESSprivate
+          \DWTAGmember
+               \DWATname : "next"
+               \DWATdeclfile : 1
+               \DWATdeclline : 16
+               \DWATtype : reference to L3
+               \DWATdatamemberlocation : 4
+               \DWATaccessibility : \DWACCESSprivate
+          \DWTAGmember
+               \DWATname : "bp"
+               \DWATdeclfile : 1
+               \DWATdeclline : 17
+               \DWATtype : reference to L4
+               \DWATdatamemberlocation : 8
+               \DWATaccessibility : \DWACCESSprivate
+          \DWTAGmember
+               \DWATname : "c"
+               \DWATdeclfile : 1
+               \DWATdeclline : 18
+               \DWATtype : 0xd28081e8 dcf5070a (signature for struct C)
+               \DWATdatamemberlocation : 12
+               \DWATaccessibility : \DWACCESSprivate
+\end{alltt}
+\end{dwflisting}
+\caption{Type signature computation \#2: DWARF representation}
+\label{fig:typesignaturecomputation2dwarfrepresentation}
+\end{figure}
+
+\begin{figure}
+\figurepart{2}{2}
+\begin{dwflisting}
+\begin{alltt}
+      \DWTAGsubprogram
+           \DWATexternal : 1
+           \DWATname : "A"
+           \DWATdeclfile : 1
+           \DWATdeclline : 12
+           \DWATdeclaration : 1
+        \DWTAGformalparameter
+           \DWATtype : reference to L3
+           \DWATartificial : 1
+        \DWTAGformalparameter
+           \DWATtype : reference to L2
+       \DWTAGsubprogram
+           \DWATexternal : 1
+           \DWATname : "v"
+           \DWATdeclfile : 1
+           \DWATdeclline : 13
+           \DWATtype : reference to L2
+           \DWATdeclaration : 1
+         \DWTAGformalparameter
+           \DWATtype : reference to L3
+           \DWATartificial : 1
+L2:
+    \DWTAGbasetype
+         \DWATbytesize : 4
+         \DWATencoding : \DWATEsigned
+         \DWATname : "int"
+L3:
+    \DWTAGpointertype
+         \DWATtype : reference to L1
+L4:
+    \DWTAGpointertype
+         \DWATtype : reference to L5
+    \DWTAGnamespace
+         \DWATname : "N"
+L5:
+       \DWTAGstructuretype
+           \DWATname : "B"
+           \DWATdeclaration : 1
+\end{alltt}
+\end{dwflisting}
+\begin{center}
+\vspace{3mm}
+Figure~\ref{fig:typesignaturecomputation2dwarfrepresentation}: Type signature computation \#2: DWARF representation \textit{(concluded)}
+\end{center}
+\end{figure}
+
+In this example, the structure types \texttt{N::A} and \texttt{N::C} have each
+been placed in separate 
+\addtoindexx{type unit}
+type units.  For \texttt{N::A}, the actual
+definition of the type begins at label L1. The definition
+involves references to the \texttt{int} base type and to two pointer
+types. The information for each of these referenced types is
+also included in this \addtoindex{type unit}, 
+since base types and pointer
+types are trivial types that are not worth the overhead of a
+separate \addtoindex{type unit}. 
+The last pointer type contains a reference
+to an incomplete type \texttt{N::B}, which is also included here as
+a declaration, since the complete type is unknown and its
+signature is therefore unavailable. There is also a reference
+to \texttt{N::C}, using 
+\DWFORMrefsigeight{} to refer to the type signature
+\addtoindexx{type signature} for that type.
+
+\begin{figure}
+\figurepart{1}{3}
+\begin{dwflisting}
+% DWARF4 had a \DWATnamespace{} below, 
+% but this error is fixed here to be \DWTAGnamespace.
+\begin{alltt}
+// Step 2: 'C' \DWTAGnamespace "N"
+0x43 0x39 0x4e 0x00
+// Step 3: 'D' \DWTAGclasstype
+0x44 0x02
+// Step 4: 'A' \DWATname \DWFORMstring "A"
+0x41 0x03 0x08 0x41 0x00
+// Step 4: 'A' \DWATbytesize \DWFORMsdata 20
+0x41 0x0b 0x0d 0x14
+// Step 7: First child ("v\_")
+    // Step 3: 'D' \DWTAGmember
+    0x44 0x0d
+    // Step 4: 'A' \DWATname \DWFORMstring "v\_"
+    0x41 0x03 0x08 0x76 0x5f 0x00
+    // Step 4: 'A' \DWATaccessibility \DWFORMsdata \DWACCESSprivate
+    0x41 0x32 0x0d 0x03
+    // Step 4: 'A' \DWATdatamemberlocation \DWFORMsdata 0
+    0x41 0x38 0x0d 0x00
+    // Step 6: 'T' \DWATtype (type \#2)
+    0x54 0x49
+        // Step 3: 'D' \DWTAGbasetype
+        0x44 0x24
+        // Step 4: 'A' \DWATname \DWFORMstring "int"
+        0x41 0x03 0x08 0x69 0x6e 0x74 0x00
+        // Step 4: 'A' \DWATbytesize \DWFORMsdata 4
+        0x41 0x0b 0x0d 0x04
+        // Step 4: 'A' \DWATencoding \DWFORMsdata \DWATEsigned
+        0x41 0x3e 0x0d 0x05
+        // Step 7: End of \DWTAGbasetype "int"
+        0x00
+    // Step 7: End of \DWTAGmember "v\_"
+    0x00
+// Step 7: Second child ("next")
+    // Step 3: 'D' \DWTAGmember
+    0x44 0x0d
+    // Step 4: 'A' \DWATname \DWFORMstring "next"
+    0x41 0x03 0x08 0x6e 0x65 0x78 0x74 0x00
+    // Step 4: 'A' \DWATaccessibility \DWFORMsdata \DWACCESSprivate
+    0x41 0x32 0x0d 0x03
+    // Step 4: 'A' \DWATdatamemberlocation \DWFORMsdata 4
+    0x41 0x38 0x0d 0x04
+\end{alltt}
+\end{dwflisting}
+\caption{Type signature example \#2: flattened byte stream}
+\label{fig:typesignatureexample2flattenedbytestream}
+\end{figure}
+
+\begin{figure}
+\figurepart{2}{3}
+\begin{dwflisting}
+\begin{alltt}    
+    // Step 6: 'T' \DWATtype (type \#3)
+    0x54 0x49
+        // Step 3: 'D' \DWTAGpointertype
+        0x44 0x0f
+        // Step 5: 'N' \DWATtype
+        0x4e 0x49
+        // Step 5: 'C' \DWTAGnamespace "N" 'E'
+        0x43 0x39 0x4e 0x00 0x45
+        // Step 5: "A"
+        0x41 0x00
+        // Step 7: End of \DWTAGpointertype
+        0x00
+    // Step 7: End of \DWTAGmember "next"
+    0x00
+// Step 7: Third child ("bp")
+    // Step 3: 'D' \DWTAGmember
+    0x44 0x0d
+    // Step 4: 'A' \DWATname \DWFORMstring "bp"
+    0x41 0x03 0x08 0x62 0x70 0x00
+    // Step 4: 'A' \DWATaccessibility \DWFORMsdata \DWACCESSprivate
+    0x41 0x32 0x0d 0x03
+    // Step 4: 'A' \DWATdatamemberlocation \DWFORMsdata 8
+    0x41 0x38 0x0d 0x08
+    // Step 6: 'T' \DWATtype (type \#4)
+    0x54 0x49
+        // Step 3: 'D' \DWTAGpointertype
+        0x44 0x0f
+        // Step 5: 'N' \DWATtype
+        0x4e 0x49
+        // Step 5: 'C' \DWTAGnamespace "N" 'E'
+        0x43 0x39 0x4e 0x00 0x45
+        // Step 5: "B"
+        0x42 0x00
+        // Step 7: End of \DWTAGpointertype
+        0x00
+    // Step 7: End of \DWTAGmember "next"
+    0x00
+// Step 7: Fourth child ("c")
+    // Step 3: 'D' \DWTAGmember
+    0x44 0x0d
+    // Step 4: 'A' \DWATname \DWFORMstring "c"
+    0x41 0x03 0x08 0x63 0x00
+    // Step 4: 'A' \DWATaccessibility \DWFORMsdata \DWACCESSprivate
+    0x41 0x32 0x0d 0x03
+\end{alltt}
+\end{dwflisting}
+\begin{center}
+\vspace{3mm}
+Figure~\ref{fig:typesignatureexample2flattenedbytestream}: Type signature example \#2: flattened byte stream \textit{(continued)}
+\end{center}
+\end{figure}
+    
+\begin{figure}
+\figurepart{3}{3}
+\begin{dwflisting}
+\begin{alltt}
+    // Step 4: 'A' \DWATdatamemberlocation \DWFORMsdata 12
+    0x41 0x38 0x0d 0x0c
+    // Step 6: 'T' \DWATtype (type \#5)
+    0x54 0x49
+        // Step 2: 'C' \DWTAGnamespace "N"
+        0x43 0x39 0x4e 0x00
+        // Step 3: 'D' \DWTAGstructuretype
+        0x44 0x13
+        // Step 4: 'A' \DWATname \DWFORMstring "C"
+        0x41 0x03 0x08 0x43 0x00
+        // Step 4: 'A' \DWATbytesize \DWFORMsdata 8
+        0x41 0x0b 0x0d 0x08
+        // Step 7: First child ("x")
+            // Step 3: 'D' \DWTAGmember
+            0x44 0x0d
+            // Step 4: 'A' \DWATname \DWFORMstring "x"
+            0x41 0x03 0x08 0x78 0x00
+            // Step 4: 'A' \DWATdatamemberlocation \DWFORMsdata 0
+            0x41 0x38 0x0d 0x00
+            // Step 6: 'R' \DWATtype (type \#2)
+            0x52 0x49 0x02
+            // Step 7: End of \DWTAGmember "x"
+            0x00
+        // Step 7: Second child ("y")
+            // Step 3: 'D' \DWTAGmember
+            0x44 0x0d
+            // Step 4: 'A' \DWATname \DWFORMstring "y"
+            0x41 0x03 0x08 0x79 0x00
+            // Step 4: 'A' \DWATdatamemberlocation \DWFORMsdata 4
+            0x41 0x38 0x0d 0x04
+            // Step 6: 'R' \DWATtype (type \#2)
+            0x52 0x49 0x02
+            // Step 7: End of \DWTAGmember "y"
+            0x00
+        // Step 7: End of \DWTAGstructuretype "C"
+        0x00
+    // Step 7: End of \DWTAGmember "c"
+    0x00
+// Step 7: Fifth child ("A")
+    // Step 3: 'S' \DWTAGsubprogram "A"
+    0x53 0x2e 0x41 0x00
+// Step 7: Sixth child ("v")
+    // Step 3: 'S' \DWTAGsubprogram "v"
+    0x53 0x2e 0x76 0x00
+// Step 7: End of \DWTAGstructuretype "A"
+0x00
+\end{alltt}
+\end{dwflisting}
+\begin{center}
+\vspace{3mm}
+Figure~\ref{fig:typesignatureexample2flattenedbytestream}: Type signature example \#2: flattened byte stream \textit{(concluded)}
+\end{center}
+\end{figure}
+
+In computing a signature for the type \texttt{N::A}, flatten the type
+description into a byte stream according to the procedure
+outlined in 
+Section \refersec{datarep:typesignaturecomputation}.
+The result is shown in 
+Figure \refersec{fig:typesignatureexample2flattenedbytestream}.
+
+Running an \MDfive{} hash over this byte stream, and taking the
+low-order 64 bits, yields the final signature: 0xd6d160f5
+5589f6e9.
+
+A source file that includes this header file may declare a
+variable of type \texttt{N::A}, and its DWARF information may look
+like that shown in 
+Figure \refersec{fig:typesignatureexampleusage}.
+
+\begin{figure}[ht]
+\begin{dwflisting}
+\begin{alltt}
+  \DWTAGcompileunit
+  ...
+  \DWTAGsubprogram
+    ...
+    \DWTAGvariable
+      \DWATname : "a"
+      \DWATtype : (signature) 0xd6d160f5 5589f6e9
+      \DWATlocation : ...
+    ...
+\end{alltt}
+\end{dwflisting}
+\caption{Type signature example usage}
+\label{fig:typesignatureexampleusage}
+\end{figure}
+
+\subsection{Type Signature Computation Grammar}
+\label{app:typesignaturecomputationgrammar}
+
+Figure \refersec{fig:typesignaturecomputationgrammar}
+\addtoindexx{type signature!computation grammar}
+presents a semi-formal grammar that may aid in understanding
+how the bytes of the flattened type description are formed
+during the type signature computation algorithm of
+Section \refersec{datarep:typesignaturecomputation}. 
+
+\begin{figure}[ht]
+\begin{dwflisting}
+%FIXME: The index entries here with \addtoindexx are ineffective.
+\begin{alltt}
+signature
+    : opt-context debug-entry attributes children
+opt-context               // Step 2
+    : 'C' tag-code string opt-context
+    : empty
+debug-entry               // Step 3
+    : 'D' tag-code
+attributes                // Steps 4, 5, 6
+    : attribute attributes
+    : empty
+attribute
+    : 'A' at-code form-encoded-value     // Normal attributes
+    : 'N' at-code opt-context 'E' string // Reference to type by name
+    : 'R' at-code back-ref               // Back-reference to visited type
+    : 'T' at-code signature              // Recursive type
+children                 //  Step 7
+    : child children
+    : '\textbackslash{}0'
+child
+    : 'S' tag-code string
+    : signature
+tag-code
+    : <ULEB128>
+at-code
+    : <ULEB128>
+form-encoded-value
+    : \DWFORMsdata value \addtoindexx{constant class}
+    : \DWFORMflag value \addtoindexx{flag class}
+    : \DWFORMstring string \addtoindexx{string class}
+    : \DWFORMblock \nolink{block} \addtoindexx{block class}
+\DWFORMstring \addtoindexx{string class}
+    : '\textbackslash{}x08'
+\DWFORMblock  \addtoindexx{block class}
+    : '\textbackslash{}x09'
+\DWFORMflag \addtoindexx{flag class}
+    : '\textbackslash{}x0c'
+\DWFORMsdata \addtoindexx{constant class}
+    : '\textbackslash{}x0d'
+value
+    : <SLEB128>
+\nolink{block}
+    : <ULEB128> <fixed-length-block> // The ULEB128 gives the length of the \nolink{block}
+back-ref
+    : <ULEB128>
+string
+    : <null-terminated-string>
+empty
+    :
+\end{alltt}
+\end{dwflisting}
+\caption{Type signature computation grammar}
+\label{fig:typesignaturecomputationgrammar}
+\end{figure}
+
+\clearpage
+\subsection{Declarations Completing Non-Defining Declarations}
+\label{app:declarationscompletingnondefiningdeclarations}
+Consider a compilation unit that contains a definition of the member
+function \texttt{N::A::v()} from 
+Figure \refersec{fig:typesignatureexamplescsource}. 
+A possible representation of the
+debug information for this function in the compilation unit is shown
+in Figure \refersec{fig:completingedeclarationofamemberfunctiondwarf}.
+
+\begin{figure}[ht]
+\begin{dwflisting}
+\begin{alltt}
+  \DWTAGnamespace
+      \DWATname{} : "N"
+L1:
+    \DWTAGclasstype
+        \DWATname{} : "A"
+        \DWATdeclaration{} : true
+        \DWATsignature{} : 0xd6d160f5 5589f6e9
+L2:
+      \DWTAGsubprogram
+          \DWATexternal{} : 1
+          \DWATname{} : "v"
+          \DWATdeclfile{} : 1
+          \DWATdeclline{} : 13
+          \DWATtype{} : reference to L3
+          \DWATdeclaration{} : 1
+        \DWTAGformalparameter
+            \DWATtype{} : reference to L4
+            \DWATartificial{} : 1
+...
+L3:
+  \DWTAGbasetype
+      \DWATbytesize{} : 4
+      \DWATencoding{} : \DWATEsigned
+      \DWATname{} : "int"
+...
+L4:
+  \DWTAGpointertype
+      \DWATtype{} : reference to L1
+...
+  \DWTAGsubprogram
+      \DWATspecification{} : reference to L2
+      \DWATdeclfile{} : 2
+      \DWATdeclline{} : 25
+      \DWATlowpc{} : ...
+      \DWAThighpc{} : ...
+    \DWTAGlexicalblock
+    ...
+...
+\end{alltt}
+\end{dwflisting}
+\caption{Completing declaration of a member function: DWARF \mbox{encoding}}
+\label{fig:completingedeclarationofamemberfunctiondwarf}
+\end{figure}
+
+
+\clearpage
+\section{Summary of Compression Techniques}
+\label{app:summaryofcompressiontechniques}
+\subsection{\#include compression}
+\label{app:includecompression}
+
+\addtoindex{C++} has a much greater 
+problem than 
+\addtoindex{C} with the number and
+size of the headers included and the amount of data in each,
+but even with \addtoindex{C} 
+there is substantial header file information
+duplication.
+
+A reasonable approach is to put each header file in its own
+\addtoindex{section group}, using the naming rules mentioned above. The
+section groups are marked to ensure duplicate removal.
+
+All data instances and code instances (even if they came
+from the header files above) are put 
+\addtoindexx{section group}
+into non-section group
+sections such as the base object file 
+\dotdebuginfo{} section.
+
+\subsection{Eliminating function duplication}
+\label{app:eliminatingfunctionduplication}
+
+
+Function templates (C++) result in code for the same template
+instantiation being compiled into multiple archives or
+relocatable object files. The linker wants to keep only one of a
+given entity. The DWARF description, and everything else for
+this function, should be reduced to just a single copy.
+
+\needlines{5}
+For each such code group (function template in this example)
+the compiler assigns a name for the group which will match
+all other instantiations of this function but match nothing
+else. 
+The 
+\addtoindexx{section group}
+section groups are marked to ensure duplicate
+removal, so that the second and subsequent definitions seen
+by the static linker are simply discarded.
+
+
+References to other 
+\dotdebuginfo{} sections follow the approach
+suggested above, but the naming rule is slightly
+different in that the \texttt{\textless file-designator\textgreater} 
+should be interpreted as a \texttt{\textless file-designator\textgreater}.
+
+
+\subsection{Single-function-per-DWARF-compilation-unit}
+\label{app:singlefunctionperdwarfcompilationunit}
+
+Section groups can help make it easy for a linker to completely
+remove unused functions.
+
+Such 
+\addtoindexx{section group}
+section groups are not marked for duplicate removal,
+since the functions are not duplicates of anything.
+
+Each function is given a compilation unit and a section
+group. Each such compilation unit is complete, with its own
+text, data, and DWARF sections.
+
+There will also be a compilation unit that has the file\dash level
+declarations and definitions. Other per\dash function compilation
+unit DWARF information (\dotdebuginfo{}) points to this common
+file\dash level compilation unit using 
+\DWTAGimportedunit.
+
+Section groups can use \DWFORMrefaddr{} and internal labels
+(section\dash relative relocations) to refer to the main object
+file sections, as the 
+\addtoindexx{section group}
+section groups here are either deleted
+as unused or kept. There is no possibility (aside from error)
+of a group from some other compilation being used in place
+of one of these groups.
+
+
+\subsection{Inlining and out-of-line-instances}
+\label{app:inliningandoutoflineinstances}
+
+Abstract instances
+\addtoindexx{abstract instance}
+\addtoindexx{concrete out-of-line instance}
+and concrete-out-of-line instances may be
+put in distinct compilation units using 
+\addtoindexx{section group}
+section groups. 
+This
+makes possible some useful duplicate DWARF elimination.
+
+\textit{No special provision for eliminating class duplication
+resulting from template instantiation is made here, though
+nothing prevents eliminating such duplicates using section
+groups.}
+
+
+\subsection{Separate Type Units}
+\label{app:separatetypeunits}
+
+Each complete declaration of a globally-visible type can be
+\addtoindexx{type unit}
+placed in its own separate type section, with a group key
+derived from the type signature. The linker can then remove
+all duplicate type declarations based on the key.
+
