@@ -713,12 +713,11 @@ string is padded with null characters to a multiple of
 four bytes in length.
 
 \textit{The presence of an unrecognised augmentation string 
-\bb
 does not make it
 impossible for a consumer to process data in the \dotdebugnames{} section.
 The augmentation string only provides hints to the consumer regarding
 the completeness of the set of names in the index.
-\eb}
+}
 
 \end{enumerate}
 
@@ -771,7 +770,6 @@ Given a hash value for the symbol,
 the symbol is entered into a bucket whose index is the hash value
 modulo \texttt{bucket\_count}. The buckets array is indexed starting at 0.
 
-\bb
 For the purposes of the hash computation, each symbol name should be
 folded according to the simple case folding algorithm defined in the
 "Caseless Matching" subsection of Section 5.18 ("Case Mappings") of
@@ -791,7 +789,6 @@ The hash computation specified here uses the C + S mappings only,
 which do not affect the total length of the string, with the addition 
 that Turkish upper case dotted '\.{I}' and lower case dotless '\i'
 are folded to the Latin lower case 'i'.
-\eb
 
 Each bucket contains the index of an entry in the hashes array. The
 hashes array is indexed starting at 1, and an empty bucket is
@@ -1557,14 +1554,9 @@ The component is a null-terminated path name string.
 If the associated form code is \DWFORMstring{}, then the
 string occurs immediately in the containing \texttt{directories}
 or \addttindex{file\_names} field. If the form code is \DWFORMlinestrp{},
-\bb
-\DWFORMstrp{} or \DWFORMstrpsup{},
-\eb
-then the string is included in the 
-\bb
-\dotdebuglinestr{}, \dotdebugstr{} or supplementary string section, respectively,
-\eb
-and its offset occurs immediately in the containing
+\DWFORMstrp{} or \DWFORMstrpsup{}, then the string is included in the 
+\dotdebuglinestr{}, \dotdebugstr{} or supplementary string section, 
+respectively, and its offset occurs immediately in the containing
 \addttindex{directories} or \addttindex{file\_names} field.
 
 In the 32-bit DWARF format, the representation of a
@@ -1575,11 +1567,9 @@ Section \refersec{datarep:32bitand64bitdwarfformats}).
 \textit{Note that this use of \DWFORMlinestrp{} is similar to
 \DWFORMstrp{} but refers to the \dotdebuglinestr{} section,
 not \dotdebugstr. 
-\bb
 It is needed to support the common practice of stripping all but 
 the line number sections (\dotdebugline{} and \dotdebuglinestr{}) 
 from an executable.
-\eb
 }
 
 In a \dotdebuglinedwo{} section, the forms \DWFORMstrxXNand{} may
@@ -2089,13 +2079,9 @@ the operand is encoded.  The allowed forms are:
 \DWFORMblock, \DWFORMblockone, \DWFORMblocktwo, \DWFORMblockfour,
 \DWFORMdataone, \DWFORMdatatwo, \DWFORMdatafour, \DWFORMdataeight, 
 \DWFORMdatasixteen,  
-\bb
 \DWFORMflag, \DWFORMlinestrp, \DWFORMsdata, 
-\eb
 \DWFORMsecoffset, \DWFORMstring, \DWFORMstrp{}, 
-\bb
 \DWFORMstrpsup, \DWFORMstrxXN{} and \DWFORMudata.
-\eb
 \end{enumerate}
 
 \subsection{Macro Information Entries}

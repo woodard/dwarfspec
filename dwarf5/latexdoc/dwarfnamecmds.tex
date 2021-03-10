@@ -905,17 +905,22 @@
 % Anti-ligature commands added because \/ and {} don't work for unknown reasons
 % nor does the microtext package DisableLigatures command...???
 %
-\newcommand{\xiiif}		{0x3\hspace{1pt}f}
-\newcommand{\xiiifff}	{0x3\hspace{1pt}f\hspace{2pt}f\hspace{2pt}f}
-\newcommand{\xff}		{0x\hspace{1pt}f\hspace{2pt}f}
-\newcommand{\xffff}		{0x\hspace{1pt}f\hspace{2pt}f\hspace{2pt}f\hspace{2pt}f}
+% Per Issue 180613.1 stop using horizontal space to suppress ligatures
+%\newcommand{\xiiif}	{0x3\hspace{1pt}f}
+%\newcommand{\xiiifff}	{0x3\hspace{1pt}f\hspace{2pt}f\hspace{2pt}f}
+%\newcommand{\xff}		{0x\hspace{1pt}f\hspace{2pt}f}
+%\newcommand{\xffff}	{0x\hspace{1pt}f\hspace{2pt}f\hspace{2pt}f\hspace{2pt}f}
+\newcommand{\xiiif}		{0x3\texttt{f}}
+\newcommand{\xiiifff}	{0x3\texttt{fff}}
+\newcommand{\xff}		{0x\texttt{ff}}
+\newcommand{\xffff}		{0x\texttt{ffff}}
 %
 % These are intended for use in running text...
 %
-\newcommand{\xffffffff}   	    {\texttt{0xffffffff}}		% use with following punctutation
-\newcommand{\wffffffff}   	    {\texttt{0xffffffff}\ }		% use as separate "word"
-\newcommand{\xfffffffzero}	    {\texttt{0xfffffff0}}		% use with following punctutation
-\newcommand{\wfffffffzero}	    {\texttt{0xfffffff0}\ }
-\newcommand{\xffffffffffffffff}	{\texttt{0xffffffffffffffff}}	% use with following punctutation
-\newcommand{\wffffffffffffffff}	{\texttt{0xffffffffffffffff}\ }
+\newcommand{\xffffffff}   	    {0x\texttt{ffffffff}}		  % use with following punctutation
+\newcommand{\wffffffff}   	    {0x\texttt{ffffffff}\ }		  % use as separate "word"
+\newcommand{\xfffffffzero}	    {0x\texttt{fffffff0}}		  % use with following punctutation
+\newcommand{\wfffffffzero}	    {0x\texttt{fffffff0}\ }
+\newcommand{\xffffffffffffffff}	{0x\texttt{ffffffffffffffff}} % use with following punctutation
+\newcommand{\wffffffffffffffff}	{0x\texttt{ffffffffffffffff}\ }
 

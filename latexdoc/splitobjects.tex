@@ -87,10 +87,7 @@ section for directories and file names because the primary
 string table will never be stripped. Accordingly, no
 \texttt{.debug\_line\_str.dwo} section is defined. Content descriptions 
 corresponding to \DWFORMlinestrp{} in an executable file (for example, 
-in the skeleton compilation unit) instead use 
-\bb
-one of the forms
-\eb
+in the skeleton compilation unit) instead use one of the forms
 \DWFORMstrxXNor. This allows
 directory and file name strings to be merged with general
 strings and across compilations in package files 
@@ -119,11 +116,7 @@ output binary include the following:
 skeleton \dotdebuginfo{} section.
 \item
 \dotdebugaddr{} - Contains references to loadable sections,
-indexed by attributes of 
-\bb
-one of the forms 
-\eb
-\DWFORMaddrxXN{}, 
+indexed by attributes of one of the forms \DWFORMaddrxXN{}, 
 or location expression \DWOPaddrx{} opcodes.
 \item
 \dotdebugaranges{} - Contains the accelerated range lookup table
@@ -156,10 +149,7 @@ skeleton compilation unit in the \dotdebuginfo{} section.
 \dotdebuginfo{} sections (via \DWFORMstrp{}, \DWFORMstrxXNor{}).
 \item
 \dotdebugstroffsets{} - Contains the string offsets table for
-the strings in the \dotdebugstr{} section (if 
-\bb
-one of the forms
-\eb
+the strings in the \dotdebugstr{} section (if one of the forms
 \DWFORMstrxXNor{} is used).
 \end{itemize}
 
@@ -204,10 +194,7 @@ one \dotdwo{} section to another \dotdwo{} section
 in the same compilation unit. 
 
 \item Some values that need a relocation to refer to a relocatable 
-program address use 
-\bb
-one of the \DWFORMaddrxXNor{} forms, 
-\eb
+program address use one of the \DWFORMaddrxXNor{} forms, 
 referencing a relocatable 
 value in the \dotdebugaddr{} section (which remains in the .o file).
 
@@ -563,10 +550,7 @@ begins at offset 48. Because the \dotdebugaddr{} section contains an
 actually begins at offset 40 (for a 64-bit DWARF object, the
 header would be 16 bytes long, and the value for the
 \DWATaddrbase{} attribute would then be 56). All attributes in
-\texttt{demo1.dwo} that use 
-\bb
-\DWFORMaddrxXNor{} 
-\eb
+\texttt{demo1.dwo} that use \DWFORMaddrxXNor{} 
 would then refer to address
 table slots relative to that offset. Likewise, the \dotdebugaddr{}
 contribution from \texttt{demo2.dwo} begins at offset 72, and its first
@@ -614,10 +598,7 @@ form code \DWFORMstrxXNor, referring to slots in the
 
 \needlines{4}
 \item References to relocatable addresses in the object file use
-\bb 
-one of the form codes 
-\eb
-\DWFORMaddrxXNor, referring to slots in the
+one of the form codes \DWFORMaddrxXNor, referring to slots in the
 \dotdebugaddr{} table, relative to the base offset given by
 \DWATaddrbase{} in the skeleton compilation unit.
 \end{itemize}
@@ -729,10 +710,7 @@ Figure~\ref{fig:splitobjectexampledemoonedwodwarfexcerpts}: Split object example
 
 \needlines{4}
 In the defining declaration for \texttt{Box::contains} at 5\$, the
-\DWATlowpc{} attribute is represented 
-\bb
-using \DWFORMaddrx, which refers 
-\eb
+\DWATlowpc{} attribute is represented using \DWFORMaddrx, which refers 
 to slot 0 in the \dotdebugaddr{} table from \texttt{demo1.o}.
 That slot contains the relocated address of the beginning of the
 function.
@@ -895,26 +873,26 @@ offset& (DW\_LLE\_*)
 \hline
 &&&&& \\
 
-0x00 & \XXLLEsl &  [9] & 0x002f & \bb 0x01 \eb& \DWOPregfive~(rdi) \\
-0x09 & \XXLLEsl & [11] & 0x01b9 & \bb 0x01 \eb& \DWOPregthree~(rbx) \\
-0x12 & \XXLLEsl & [29] & 0x0003 & \bb 0x03 \eb& \DWOPbregtwelve~(r12): -8;\\
-     &          &      &        &        & \DWOPstackvalue \\
-0x1d & \XXLLEsl & [31] & 0x0001 & \bb 0x03 \eb& \DWOPentryvalue: \\
-     &          &      &        &        & (\DWOPregfive~(rdi)); \\
-     &          &      &        &        & \DWOPstackvalue \\
+0x00 & \XXLLEsl &  [9] & 0x002f & 0x01 & \DWOPregfive~(rdi) \\
+0x09 & \XXLLEsl & [11] & 0x01b9 & 0x01 & \DWOPregthree~(rbx) \\
+0x12 & \XXLLEsl & [29] & 0x0003 & 0x03 & \DWOPbregtwelve~(r12): -8;\\
+     &          &      &        &      & \DWOPstackvalue \\
+0x1d & \XXLLEsl & [31] & 0x0001 & 0x03 & \DWOPentryvalue: \\
+     &          &      &        &      & (\DWOPregfive~(rdi)); \\
+     &          &      &        &      & \DWOPstackvalue \\
 0x29 & \XXLLEeol &&&& \\
 ------ &&&&& \\
 
-0x2a & \XXLLEsl &  [9] & 0x002f & \bb 0x01 \eb& \DWOPregfour~(rsi)) \\
-0x33 & \XXLLEsl & [11] & 0x01ba & \bb 0x03 \eb& \DWOPregsix~(rbp)) \\
-0x3c & \XXLLEsl & [30] & 0x0003 & \bb 0x03 \eb& \DWOPentryvalue: \\
-     &          &      &        &        & (\DWOPregfour~(rsi)); \\
-     &          &      &        &        & \DWOPstackvalue \\
+0x2a & \XXLLEsl &  [9] & 0x002f & 0x01 & \DWOPregfour~(rsi)) \\
+0x33 & \XXLLEsl & [11] & 0x01ba & 0x03 & \DWOPregsix~(rbp)) \\
+0x3c & \XXLLEsl & [30] & 0x0003 & 0x03 & \DWOPentryvalue: \\
+     &          &      &        &      & (\DWOPregfour~(rsi)); \\
+     &          &      &        &      & \DWOPstackvalue \\
 0x48 & \XXLLEeol &&&& \\
 ------ &&&&& \\
 
-0x49 & \XXLLEsl & [10] & 0x0004 & \bb 0x01 \eb& \DWOPregeighteen~(xmm1) \\
-0x52 & \XXLLEsl & [11] & 0x01bd & \bb 0x02 \eb& \DWOPfbreg: -36 \\
+0x49 & \XXLLEsl & [10] & 0x0004 & 0x01 & \DWOPregeighteen~(xmm1) \\
+0x52 & \XXLLEsl & [11] & 0x01bd & 0x02 & \DWOPfbreg: -36 \\
 0x5c & \XXLLEeol &&&& \\
 &&&& \\
 \end{tabular}

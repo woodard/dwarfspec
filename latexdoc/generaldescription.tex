@@ -51,7 +51,7 @@ described in Chapters 3, 4 and 5.
 \DWTAGformalparameter,
 \DWTAGfriend,
 \DWTAGgenericsubrange,
-\bb\eb\DWTAGimmutabletype,
+\DWTAGimmutabletype,
 \DWTAGimporteddeclaration,
 \DWTAGimportedmodule,
 \DWTAGimportedunit,
@@ -60,8 +60,8 @@ described in Chapters 3, 4 and 5.
 \DWTAGinterfacetype,
 \DWTAGlabel,
 \DWTAGlexicalblock,
-\bbeb\DWTAGmember,
-\bbeb\DWTAGmodule,
+\DWTAGmember,
+\DWTAGmodule,
 \DWTAGnamelist,
 \DWTAGnamelistitem,
 \DWTAGnamespace,
@@ -299,7 +299,6 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 &\livelinki{chap:DWATcalllineofcallsite}
            {Line containing call site of non-inlined call} 
            {line containing call site of non-inlined call} \\
-\bbeb
 \DWATcalloriginTARG{}
 &\livelinki{chap:DWATcalloriginofcallsite}
            {Subprogram called in a call}
@@ -340,16 +339,13 @@ The attributes are listed in Table \referfol{tab:attributenames}.
            {Argument value passed in a call}
            {argument value passed}
            \index{call site!argument value passed} \\
-\bb
 \DWATcallingconventionTARG{} 
 &\livelinki{chap:DWATcallingconventionforsubprograms}
            {Calling convention for subprograms}
            {Calling convention!for subprograms} \\
 &\livelinki{chap:DWATcallingconventionfortypes}
            {Calling convention for types}
-           {Calling convention!for types}
-\eb
-\\
+           {Calling convention!for types} \\
 \DWATcommonreferenceTARG
 &\livelinki{chap:commonreferencecommonblockusage}
         {Common block usage}
@@ -642,7 +638,6 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 &\livelinki{chap:DWATrangesnoncontiguousrangeofcodeaddresses}
         {Non-contiguous range of code addresses}
         {non-contiguous range of code addresses} \\
-\bbeb
 \DWATrankTARG
 &\livelinki{chap:DWATrankofdynamicarray}
         {Dynamic number of array dimensions}
@@ -658,13 +653,10 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 &\livelinki{chap:DWATreturnaddrsubroutinereturnaddresssavelocation}
         {Subroutine return address save location}
         {subroutine return address save location} \\
-\bb
 \DWATrnglistsbaseTARG
 &\livelinki{chap:DWATrnglistsbaseforrnglists}
         {Base offset for range lists}
-        {ranges lists} 
-\eb     
-        \\
+        {ranges lists} \\
 \DWATrvaluereferenceTARG
 &\livelink{chap:DWATrvaluereferenceofnonstaticmember}
           {\&\&-qualified non-static member function} \textit{(\addtoindex{C++})} \\
@@ -904,8 +896,7 @@ information.
 
 \hypertarget{chap:classreference}{}
 \livelinki{datarep:classreference}{reference}{reference class}
-&\bbeb
-Refers to one of the debugging information
+&Refers to one of the debugging information
 entries that \mbox{describe} the program.  There are four types of
 \mbox{reference}. The first is an offset relative to the beginning
 of the \mbox{compilation} unit in which the reference occurs and must
@@ -922,14 +913,12 @@ a debugging information entry in the \dotdebuginfo{} section of
 a \addtoindex{supplementary object file}.
 \\
 
-\bb
 \hypertarget{chap:classrnglist}{}
 \livelinki{datarep:classrnglist}{rnglist}{rnglist class}, 
 \hypertarget{chap:classrnglistsptr}{}
 \livelinki{datarep:classrnglistsptr}{rnglistsptr}{rnglistsptr class}
 &Specifies a location in the DWARF section that holds 
 non-contiguous address ranges.
-\eb
 \\
 
 \hypertarget{chap:classstring}{}
@@ -1691,8 +1680,7 @@ upon entering the current subprogram.  It has two operands: an
 unsigned LEB128\addtoindexx{LEB128!unsigned} length, followed by 
 a block containing a DWARF expression or a register location description 
 (see Section \refersec{chap:registerlocationdescriptions}).  
-The length operand specifies the length in bytes of the block.  
-\bb
+The length operand specifies the length in bytes of the block. 
 If the block contains a DWARF expression,
 the DWARF expression is evaluated as if it had been evaluated upon entering
 the current subprogram.  The DWARF expression 
@@ -1701,14 +1689,13 @@ in exactly one value being pushed on the DWARF stack when completed.
 If the block contains a register location
 description, \DWOPentryvalueNAME{} pushes the value that register had upon
 entering the current subprogram. 
-\eb
 
 \DWOPpushobjectaddress{} is not meaningful inside of this DWARF operation.
 
-\textit{\bb 
+\textit{ 
 The register location description provides a more compact form for the
 case where the value was in a register on entry to the subprogram.
-\eb}
+}
 
 \textit{The values needed to evaluate \DWOPentryvalueNAME{} could be obtained in
 several ways. The consumer could suspend execution on entry to the
@@ -2111,10 +2098,7 @@ In the descriptions that follow, these terms are used for operands:
    
 \begin{itemize}
 \item A \definitionx{counted location description} operand consists of
-\bb
-an unsigned ULEB
-\eb
-integer giving the length of the location
+an unsigned ULEB integer giving the length of the location
 description (see Section \refersec{chap:singlelocationdescriptions}) 
 that immediately follows.
 
