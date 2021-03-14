@@ -382,6 +382,8 @@ The circled (s) connects to the circled
 \node(ysectstrdwo) at (13.5,  2.0) [sect] {\dotdebugstrdwo};
 \node(ysectstodwo) at (10.5,  0.0) [sect] {\dotdebugstroffsetsdwo};
 
+\node(ysectextern) at (8.7,   3.0) [shape=circle, draw] {*};
+
 \draw[thin,-triangle 45]	(ysectinf) -- (ysectabb) node[midway, right] {(c)};
 \draw[thin,-triangle 45]	(ysectinf) -- (ysectadd) node[midway, right] {(k)};
 \draw[thin,-triangle 45]	(ysectara.east) -- (ysectinf) node[midway, left] {(a)};
@@ -401,7 +403,8 @@ The circled (s) connects to the circled
 \draw[thin,-triangle 45]  (ysectinfdwo) -- (ysectlocdwo.west) node[midway, right] {(jo)};
 \draw[thin,-triangle 45]  (ysectinfdwo) -- (ysectmacdwo.west) node[midway, above] {(go)};
 \draw[thin,-triangle 45]  (ysectinfdwo) -- (ysectstrdwo) node[midway, right] {(do)};
-\draw[thin,-triangle 45]  (ysectinfdwo) -- (ysectstodwo) node[midway, left] {(eo)};
+\draw[thin,-triangle 45]  (ysectinfdwo) -- (ysectstodwo) node[near end, left] {(eo)};
+\draw[thin,-triangle 45]  (ysectinfdwo) -- (ysectextern) node[midway, left] {(fo)};
 
 \draw[thin,-triangle 45]  (ysectstodwo) -- (ysectstrdwo) node[near end, below] {(lo)};
 \draw[thin,-triangle 45]  (ysectmacdwo) -- (ysectstrdwo) node[midway, left] {(po)};
@@ -534,5 +537,26 @@ is the offset in the \dotdebugaddr{} section of the machine
 addresses for that unit.
 \DWFORMaddrxXN, \DWOPaddrx{} and \DWOPconstx{} contain indices 
 relative to that offset.
+
+\bb
+\itembfnl{(lmo) \dotdebuglinedwo{} to \dotdebugstroffsetsdwo}
+The value of a \DWFORMlinestrp{} form refers to a string section specific
+to the line number table. This form can be used in a \dotdebuglinedwo{} section
+(as well as in a \dotdebuginfodwo{} section).
+
+\itembfnl{(lo) \dotdebugstroffsetsdwo{} to \dotdebugstrdwo}
+Entries in the string offsets table are offsets to the corresponding string text
+in the \dotdebugstrdwo{} section.
+
+\itembfnl{(mo) \dotdebugmacrodwo{} to \dotdebugstroffsetsdwo}
+Within the \dotdebugmacrodwo{} sections, the second operand of \DWMACROdefinestrx{}
+and \DWMACROundefstrx{} operations is an unsigned LEB128 value interpreted as an
+index into the \dotdebugstroffsetsdwo{} section.
+
+\itembfnl{(po) \dotdebugmacrodwo{} to \dotdebugstrdwo}
+Within the \dotdebugmacrodwo{} sections, the second operand of \DWMACROdefinestrp{}
+and \DWMACROundefstrp{} operations is an unsigned LEB128 value interpreted as an
+index into the \dotdebugstrdwo{} section.
+\eb
 
 \end{description}
