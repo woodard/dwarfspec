@@ -225,7 +225,7 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 \DWATbitsizeTARG{} 
 &\livelinki{chap:DWATbitsizebasetypebitsize}
         {Size of a base type in bits}
-        {base type bit size} \\
+        {base type bit size} \\*
 &\livelinki{chap:DWATbitsizedatamemberbitsize}
         {Size of a data member in bits}
         {data member bit size} \\
@@ -822,7 +822,8 @@ to one of the classes shown in Table \referfol{tab:classesofattributevalue}.
 \endfirsthead
   \bfseries Attribute Class & \bfseries General Use and Encoding \\ \hline
 \endhead
-  \hline \emph{Continued on next page}
+  \hline 
+  \multicolumn{2}{l}{\emph{Continued on next page}}
 \endfoot
   \hline
 \endlastfoot
@@ -1787,13 +1788,14 @@ DWARF expression is evaluated independently of any others.
 
 
 \subsubsection{Simple Location Descriptions}
-A 
-\addtoindexx{location description!simple}
+\label{chap:simplelocationdesriptions}
+A \addtoindexx{location description!simple}
 simple location description consists of one 
 contiguous piece or all of an object or value.
 
 \needlines{4}
 \subsubsubsection{Empty Location Descriptions}
+\label{chap:emptylocationdescriptions}
 An \addtoindex{empty location description}
 consists of a DWARF expression
 \addtoindexx{location description!empty}
@@ -1802,8 +1804,8 @@ object that is present in the source but not in the object code
 (perhaps due to optimization).
 
 \subsubsubsection{Memory Location Descriptions}
-A 
-\addtoindexx{location description!memory}
+\label{chap:memorylocationdescriptions}
+A \addtoindexx{location description!memory}
 memory location description 
 \addtoindexx{memory location description}
 consists of a non-empty DWARF
@@ -1861,6 +1863,7 @@ one of the register based addressing operations, such as
 (Section \refersec{chap:registervalues})}.
 
 \subsubsubsection{Implicit Location Descriptions}
+\label{chap:implicitlocationdescriptions}
 An \addtoindex{implicit location description}
 represents a piece or all
 \addtoindexx{location description!implicit}
@@ -1951,6 +1954,7 @@ single register.}
 
 \needlines{6}
 \subsubsection{Composite Location Descriptions}
+\label{chap:compositelocationdescriptions}
 A composite location description describes an object or
 value which may be contained in part of a register or stored
 in more than one location. Each piece is described by a
@@ -1990,28 +1994,44 @@ unsigned LEB128\addtoindexx{LEB128!unsigned} number that
 gives the offset in bits from the location defined by the
 preceding DWARF location description.  
 
-Interpretation of the offset depends on the location description. 
-If the location description is empty, the offset 
-doesn\textquoteright{}t matter and
-the \DWOPbitpieceNAME{} operation describes a piece consisting
-of the given number of bits whose values are undefined. If
-the location is a register, the offset is from the least
-significant bit end of the register. If the location is a
-memory address, the \DWOPbitpieceNAME{} operation describes a
+Interpretation of the offset depends on the location description.
+If the location description is  
+\bb
+empty (see Section \refersec{chap:emptylocationdescriptions}),
+the \DWOPbitpieceNAME{} operation
+describes a piece consisting of the given number of bits whose values
+are undefined, and the offset is ignored.
+\eb
+\db
+If the location is a memory
+\bb 
+address (see Section \refersec{chap:memorylocationdescriptions}),
+\eb 
+the \DWOPbitpieceNAME{} operation describes a
 sequence of bits relative to the location whose address is
 on the top of the DWARF stack using the bit numbering and
 direction conventions that are appropriate to the current
-language on the target system. If the location is any implicit
-value or stack value, the \DWOPbitpieceNAME{} operation describes
-a sequence of bits using the least significant bits of that
-value.  
+language on the target system. 
+\bb
+In all other cases, the source of the piece is given by either a 
+register location (see Section \refersec{chap:registerlocationdescriptions} or an
+implicit value description 
+(see Section \refersec{chap:implicitlocationdescriptions}); 
+the offset is from the least significant bit of the source value.
+\eb
 \end{enumerate}
 
+\needlines{4}
 \textit{\DWOPbitpieceNAME{} is 
 used instead of \DWOPpieceNAME{} when
 the piece to be assembled into a value or assigned to is not
 byte-sized or is not at the start of a register or addressable
 unit of memory.}
+
+\bb
+\textit{Whether or not a \DWOPpiece{} operation is equivalent to any 
+\DWOPbitpiece{} operation with an offset of 0 is ABI dependent.}
+\eb
 
 \needlines{6}
 \subsection{Location Lists}

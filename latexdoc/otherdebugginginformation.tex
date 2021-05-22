@@ -101,7 +101,7 @@ An executable or shareable object file may contain either a collection of
 file, or the linker may produce a "per-module" index by
 combining the per-CU indexes into a single index that covers
 the entire 
-\bbeb
+\db
 module.
 
 \subsubsection{Contents of the Name Index}
@@ -715,6 +715,9 @@ information about the contents of this index. If provided, the string
 begins with a 4-character vendor ID. The remainder of the
 string is meant to be read by a cooperating consumer, and its
 contents and interpretation are not specified here. The
+\bb
+null-terminated
+\eb
 string is padded with null characters to a multiple of
 four bytes in length.
 
@@ -868,27 +871,30 @@ specifications ends with an entry containing 0 for the attribute and
 The index attributes and their meanings are listed in 
 Table \refersec{tab:indexattributeencodings}.
 
-\begin{table}
+\needlines{10}
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
-\begin{longtable}{l|l}
+\begin{longtable}{l|P{7cm}}
   \caption{Index attribute encodings} \label{tab:indexattributeencodings}\\
-  \hline \bfseries Attribute name &\bfseries Meaning \\ \hline
+  \hline \bfseries Attribute name & \bfseries Meaning \\ \hline
 \endfirsthead
-  \bfseries Attribute name &\bfseries Meaning \\ \hline
+  \bfseries Attribute name & \bfseries Meaning \\ \hline
 \endhead
   \hline \emph{Continued on next page}
 \endfoot
   \hline
 \endlastfoot
-\DWIDXcompileunitTARG & Index of CU                                  \\
-\DWIDXtypeunitTARG    & Index of TU (\mbox{local} or foreign)        \\
-\DWIDXdieoffsetTARG   & Offset of DIE within CU or TU                \\
-\DWIDXparentTARG      & Index of name \mbox{table} entry for parent  \\
-\DWIDXtypehashTARG    & Hash of type \mbox{declaration}              \\
+\DWIDXcompileunitTARG 	& Index of CU                                  \\
+\DWIDXtypeunitTARG    	& Index of TU (\mbox{local} or foreign)        \\
+\DWIDXdieoffsetTARG   	& Offset of DIE within CU or TU                \\
+\DWIDXparentTARG      	& Index of name \mbox{table} entry for parent  \\
+\DWIDXtypehashTARG    	& Hash of type \mbox{declaration}              \\
+\bb
+\DWIDXexternalTARG		& Whether \DWATexternal{} is present
+						  on the declaration (flag) 
+\eb \\
 \end{longtable}
 \end{centering}
-\end{table}
 
 The abbreviations table ends with an entry consisting of a single 0
 byte for the abbreviation code. The size of the table given by
@@ -908,6 +914,13 @@ Each index entry in the series begins with an abbreviation code, and is
 followed by the attributes described by the abbreviation declaration
 for that code. The last index entry in the series is followed by a
 terminating entry whose abbreviation code is 0.
+
+\bb
+Each index entry has a flag indicating whether the corresponding DIE
+has the \DWATexternal{} attribute with a true value. If the
+\DWIDXexternal{} attribute is missing from an entry, it means that
+\DWATexternal{} is false for that DIE.
+\eb
 
 Gaps are not allowed between entries in a series (that is, the entries
 for a single name must all be contiguous), but there may be gaps
@@ -1090,13 +1103,14 @@ compilation unit are assumed to be contiguous). \\
 The line number information state machine has a number of  
 registers as shown in Table \referfol{tab:statemachineregisters}.
 
-\begin{longtable}{l|P{9cm}}
+\begin{longtable}{l|P{10cm}}
   \caption{State machine registers } \label{tab:statemachineregisters} \\
   \hline \bfseries Register name&\bfseries Meaning\\ \hline
 \endfirsthead
   \bfseries Register name&\bfseries Meaning\\ \hline
 \endhead
-  \hline \emph{Continued on next page}
+  \hline 
+  \multicolumn{2}{l}{\emph{Continued on next page}}
 \endfoot
   \hline
 \endlastfoot
@@ -1168,7 +1182,7 @@ among multiple blocks that may all be associated with the
 same source file, line, and column. Where only one block
 exists for a given source position, the discriminator value
 is
-\bbeb
+\db
 zero. \\
 \end{longtable}
 
@@ -1179,7 +1193,8 @@ reference any individual operation within the instruction stream.
 At the beginning  of each sequence within a line number
 program, the state of the registers is as show in Table
 \refersec{tab:linenumberprograminitiastate}.
-\begin{table}
+
+\begin{table}[h]
 \caption{Line number program initial state}
 \label{tab:linenumberprograminitiastate}
 \begin{center}
@@ -1287,7 +1302,7 @@ A 1-byte unsigned integer containing the size in bytes of a segment
 selector on the target system.
    
 \textit{The \HFNsegmentselectorsize{} field 
-\bbeb
+\db
 is needed in combination with the \addttindex{address\_size} field 
 to accurately characterize the address representation on the target 
 system.}

@@ -28,11 +28,17 @@ appropriate prefix
 \DWCFAlouserMARK{}\DWCFAhiuserMARK{}DW\_CFA, 
 \DWENDlouserMARK{}\DWENDhiuserMARK{}DW\_END, 
 \DWIDXlouserMARK{}\DWIDXhiuserMARK{}DW\_IDX, 
-\DWLANGlouserMARK{}\DWLANGhiuserMARK{}DW\_LANG, 
+\DWLANGlouserMARK{}\DWLANGhiuserMARK{}DW\_LANG,
+\bb
+\DWLLElouserMARK{}\DWLLEhiuserMARK{}DW\_LLE,
+\eb 
 \DWLNCTlouserMARK{}\DWLNCThiuserMARK{}DW\_LNCT, 
 \DWLNElouserMARK{}\DWLNEhiuserMARK{}DW\_LNE, 
 \DWMACROlouserMARK{}\DWMACROhiuserMARK{}DW\_MACRO,
 \DWOPlouserMARK{}\DWOPhiuserMARK{}DW\_OP,
+\bb
+\DWRLElouserMARK{}\DWRLEhiuserMARK{}DW\_RLE,
+\eb
 \DWTAGlouserMARK{}\DWTAGhiuserMARK{}DW\_TAG,
 \DWUTlouserMARK{}\DWUThiuserMARK{}DW\_UT)
 followed by \_lo\_user or \_hi\_user. 
@@ -598,7 +604,7 @@ starting at 1.
 \DWSECTLOCLISTSTARG     & 5 & \dotdebugloclistsdwo \\
 \DWSECTSTROFFSETSTARG   & 6 & \dotdebugstroffsetsdwo \\
 \DWSECTMACROTARG        & 7 & \dotdebugmacrodwo \\
-\DWSECTRNGLISTSTARG         & 8 & \dotdebugrnglistsdwo \\
+\DWSECTRNGLISTSTARG     & 8 & \dotdebugrnglistsdwo \\
 \end{longtable}
 \end{centering}
 
@@ -785,7 +791,8 @@ Section &Name & Role  \\ \hline
 \dotdebuginfo{}      & \addttindex{debug\_abbrev\_offset} & offset in \dotdebugabbrev{} \\
 \dotdebugline{}      & \addttindex{header\_length}        & length of header itself \\
 \dotdebugnames{}     & entry in array of CUs              & offset in \dotdebuginfo{} \\
-                     & or local TUs                       & \\
+                     & or local TUs                       & \\ 
+\hline
 \end{tabular}
 \end{center}
 \end{nolinenumbersenv}
@@ -814,6 +821,7 @@ Form             & Role  \\ \hline
 \DWFORMstrp      & offset in \dotdebugstr{} \\
 \DWFORMstrpsup   & offset in \dotdebugstr{} section of a \mbox{supplementary} object file \\
 \DWOPcallref     & offset in \dotdebuginfo{} \\
+\hline
 \end{tabular}
 \end{nolinenumbersenv}
 \end{center}
@@ -828,7 +836,8 @@ description depend on the choice of DWARF format as follows: for the
 \begin{nolinenumbersenv}
 \begin{tabular}{lp{6cm}}
 Form             & Role  \\ \hline
-\DWFORMlinestrp  & offset in \dotdebuglinestr
+\DWFORMlinestrp  & offset in \dotdebuglinestr \\
+\hline
 \end{tabular}
 \end{nolinenumbersenv}
 \end{center}
@@ -944,7 +953,8 @@ enumeration are shown in Table \refersec{tab:unitheaderunitkindencodings}.
 \endfirsthead
   \bfseries Unit header unit type encodings&\bfseries Value \\ \hline
 \endhead
-  \hline \emph{Continued on next page}
+  \hline 
+  \multicolumn{2}{l}{\emph{Continued on next page}}
 \endfoot
   \hline 
 \endlastfoot
@@ -954,8 +964,8 @@ enumeration are shown in Table \refersec{tab:unitheaderunitkindencodings}.
 \DWUTskeletonTARG     &0x04 \\
 \DWUTsplitcompileTARG &0x05 \\
 \DWUTsplittypeTARG    &0x06 \\
-\DWUTlouserTARG       &0x80 \\
-\DWUThiuserTARG       &\xff \\
+\DWUTlouser		      &0x80 \\
+\DWUThiuser		      &\xff \\
 \hline
 \end{longtable}
 \end{centering}
@@ -1240,89 +1250,90 @@ Table \refersec{tab:tagencodings}.
 \endfirsthead
   \bfseries Tag name&\bfseries Value \\ \hline
 \endhead
-  \hline \emph{Continued on next page}
+  \hline 
+  \multicolumn{2}{l}{\emph{Continued on next page}}
 \endfoot
   \hline 
 \endlastfoot
-\DWTAGarraytype{} &0x01 \\
-\DWTAGclasstype&0x02 \\
-\DWTAGentrypoint&0x03 \\
-\DWTAGenumerationtype&0x04 \\
-\DWTAGformalparameter&0x05 \\
-\textit{Reserved}&0x06 \\
-\textit{Reserved}&0x07 \\
-\DWTAGimporteddeclaration&0x08 \\
-\textit{Reserved}&0x09 \\
-\DWTAGlabel&0x0a \\
-\DWTAGlexicalblock&0x0b \\
-\textit{Reserved}&0x0c \\
-\DWTAGmember&0x0d \\
-\textit{Reserved}&0x0e \\
-\DWTAGpointertype&0x0f \\
-\DWTAGreferencetype&0x10 \\
-\DWTAGcompileunit&0x11 \\
-\DWTAGstringtype&0x12 \\
-\DWTAGstructuretype&0x13 \\
-\textit{Reserved}&0x14 \\
-\DWTAGsubroutinetype&0x15 \\
-\DWTAGtypedef&0x16 \\
-\DWTAGuniontype&0x17 \\
-\DWTAGunspecifiedparameters&0x18  \\
-\DWTAGvariant&0x19  \\
-\DWTAGcommonblock&0x1a  \\
-\DWTAGcommoninclusion&0x1b  \\
-\DWTAGinheritance&0x1c  \\
-\DWTAGinlinedsubroutine&0x1d  \\
-\DWTAGmodule&0x1e  \\
-\DWTAGptrtomembertype&0x1f  \\
-\DWTAGsettype&0x20  \\
-\DWTAGsubrangetype&0x21  \\
-\DWTAGwithstmt&0x22  \\
-\DWTAGaccessdeclaration&0x23  \\
-\DWTAGbasetype&0x24  \\
-\DWTAGcatchblock&0x25  \\
-\DWTAGconsttype&0x26  \\
-\DWTAGconstant&0x27  \\
-\DWTAGenumerator&0x28  \\
-\DWTAGfiletype&0x29  \\
-\DWTAGfriend&0x2a  \\
-\DWTAGnamelist&0x2b    \\
-\DWTAGnamelistitem&0x2c    \\
-\DWTAGpackedtype&0x2d    \\
-\DWTAGsubprogram&0x2e    \\
-\DWTAGtemplatetypeparameter&0x2f    \\
-\DWTAGtemplatevalueparameter&0x30    \\
-\DWTAGthrowntype&0x31    \\
-\DWTAGtryblock&0x32    \\
-\DWTAGvariantpart&0x33    \\
-\DWTAGvariable&0x34    \\
-\DWTAGvolatiletype&0x35    \\
-\DWTAGdwarfprocedure&0x36     \\
-\DWTAGrestricttype&0x37      \\
-\DWTAGinterfacetype&0x38      \\
-\DWTAGnamespace&0x39      \\
-\DWTAGimportedmodule&0x3a      \\
-\DWTAGunspecifiedtype&0x3b      \\
-\DWTAGpartialunit&0x3c      \\
-\DWTAGimportedunit&0x3d      \\
-\textit{Reserved}&0x3e\footnote{Code 0x3e is reserved to allow backward compatible support of the
-DW\_TAG\_mutable\_type DIE that was defined (only) in \DWARFVersionIII.}
-\\
-\DWTAGcondition&\xiiif      \\
-\DWTAGsharedtype & 0x40      \\
-\DWTAGtypeunit & 0x41      \\
-\DWTAGrvaluereferencetype & 0x42      \\
-\DWTAGtemplatealias & 0x43      \\
-\DWTAGcoarraytype & 0x44 \\
-\DWTAGgenericsubrange & 0x45 \\
-\DWTAGdynamictype & 0x46 \\
-\DWTAGatomictype & 0x47 \\
-\DWTAGcallsite & 0x48 \\
-\DWTAGcallsiteparameter & 0x49 \\
-\DWTAGskeletonunit & 0x4a \\
-\DWTAGimmutabletype & 0x4b \\
-\DWTAGlouser&0x4080      \\
-\DWTAGhiuser&\xffff      \\
+\DWTAGarraytype{} 			&0x01 \\
+\DWTAGclasstype				&0x02 \\
+\DWTAGentrypoint			&0x03 \\
+\DWTAGenumerationtype		&0x04 \\
+\DWTAGformalparameter		&0x05 \\
+\textit{Reserved}			&0x06 \\
+\textit{Reserved}			&0x07 \\
+\DWTAGimporteddeclaration	&0x08 \\
+\textit{Reserved}			&0x09 \\
+\DWTAGlabel					&0x0a \\
+\DWTAGlexicalblock			&0x0b \\
+\textit{Reserved}			&0x0c \\
+\DWTAGmember				&0x0d \\
+\textit{Reserved}			&0x0e \\
+\DWTAGpointertype			&0x0f \\
+\DWTAGreferencetype			&0x10 \\
+\DWTAGcompileunit			&0x11 \\
+\DWTAGstringtype			&0x12 \\
+\DWTAGstructuretype			&0x13 \\
+\textit{Reserved}			&0x14 \\
+\DWTAGsubroutinetype		&0x15 \\
+\DWTAGtypedef				&0x16 \\
+\DWTAGuniontype				&0x17 \\
+\DWTAGunspecifiedparameters	&0x18  \\
+\DWTAGvariant				&0x19  \\
+\DWTAGcommonblock			&0x1a  \\
+\DWTAGcommoninclusion		&0x1b  \\
+\DWTAGinheritance			&0x1c  \\
+\DWTAGinlinedsubroutine		&0x1d  \\
+\DWTAGmodule				&0x1e  \\
+\DWTAGptrtomembertype		&0x1f  \\
+\DWTAGsettype				&0x20  \\
+\DWTAGsubrangetype			&0x21  \\
+\DWTAGwithstmt				&0x22  \\
+\DWTAGaccessdeclaration		&0x23  \\
+\DWTAGbasetype				&0x24  \\
+\DWTAGcatchblock			&0x25  \\
+\DWTAGconsttype				&0x26  \\
+\DWTAGconstant				&0x27  \\
+\DWTAGenumerator			&0x28  \\
+\DWTAGfiletype				&0x29  \\
+\DWTAGfriend				&0x2a  \\
+\DWTAGnamelist				&0x2b  \\
+\DWTAGnamelistitem			&0x2c  \\
+\DWTAGpackedtype			&0x2d  \\
+\DWTAGsubprogram			&0x2e  \\
+\DWTAGtemplatetypeparameter	&0x2f  \\
+\DWTAGtemplatevalueparameter&0x30  \\
+\DWTAGthrowntype			&0x31  \\
+\DWTAGtryblock				&0x32  \\
+\DWTAGvariantpart			&0x33  \\
+\DWTAGvariable				&0x34  \\
+\DWTAGvolatiletype			&0x35  \\
+\DWTAGdwarfprocedure		&0x36  \\
+\DWTAGrestricttype			&0x37  \\
+\DWTAGinterfacetype			&0x38  \\
+\DWTAGnamespace				&0x39  \\
+\DWTAGimportedmodule		&0x3a  \\
+\DWTAGunspecifiedtype		&0x3b  \\
+\DWTAGpartialunit			&0x3c  \\
+\DWTAGimportedunit			&0x3d  \\
+\textit{Reserved}			&0x3e\footnote{Code 0x3e is reserved to allow backward compatible 
+									support of the DW\_TAG\_mutable\_type DIE that was defined 
+									(only) in \DWARFVersionIII.} \\
+\DWTAGcondition				&\xiiif \\
+\DWTAGsharedtype 			& 0x40  \\
+\DWTAGtypeunit 				& 0x41  \\
+\DWTAGrvaluereferencetype 	& 0x42  \\
+\DWTAGtemplatealias 		& 0x43  \\
+\DWTAGcoarraytype 			& 0x44  \\
+\DWTAGgenericsubrange 		& 0x45  \\
+\DWTAGdynamictype 			& 0x46  \\
+\DWTAGatomictype 			& 0x47  \\
+\DWTAGcallsite 				& 0x48  \\
+\DWTAGcallsiteparameter 	& 0x49  \\
+\DWTAGskeletonunit 			& 0x4a  \\
+\DWTAGimmutabletype 		& 0x4b  \\
+\DWTAGlouser				& 0x4080\\
+\DWTAGhiuser				& \xffff\\
 \end{longtable}
 \end{centering}
 
@@ -1420,7 +1431,8 @@ Table \referfol{tab:attributeencodings}.
 \endfirsthead
   \bfseries Attribute name&\bfseries Value &\bfseries Classes\\ \hline
 \endhead
-  \hline \emph{Continued on next page}
+  \hline 
+  \multicolumn{2}{l}{\emph{Continued on next page}}
 \endfoot
   \hline 
 \endlastfoot
@@ -1686,7 +1698,7 @@ Table \referfol{tab:attributeencodings}.
         \livelink{chap:classconstant}{constant},
         \livelink{chap:classexprloc}{exprloc}
             \addtoindexx{rank attribute}  \\
-\DWATstroffsetsbase&0x72&
+\DWATstroffsetsbase &0x72&
 		\livelinki{chap:classstroffsetsptr}{stroffsetsptr}{stroffsetsptr class}
             \addtoindexx{string offsets base!encoding}	\\
 \DWATaddrbase &0x73&
@@ -2233,56 +2245,57 @@ Table \referfol{tab:attributeformencodings}.
 \endfirsthead
   \bfseries Form name&\bfseries Value &\bfseries Classes\\ \hline
 \endhead
-  \hline \emph{Continued on next page}
+  \hline 
+  \multicolumn{2}{l}{\emph{Continued on next page}}
 \endfoot
   \hline 
 \endlastfoot
 
-\DWFORMaddr &0x01&\livelink{chap:classaddress}{address}  \\
-\textit{Reserved} &0x02& \\
-\DWFORMblocktwo &0x03&\livelink{chap:classblock}{block} \\
-\DWFORMblockfour &0x04&\livelink{chap:classblock}{block}  \\
-\DWFORMdatatwo &0x05&\livelink{chap:classconstant}{constant} \\
-\DWFORMdatafour &0x06&\livelink{chap:classconstant}{constant} \\
-\DWFORMdataeight &0x07&\livelink{chap:classconstant}{constant} \\
-\DWFORMstring&0x08&\livelink{chap:classstring}{string} \\
-\DWFORMblock&0x09&\livelink{chap:classblock}{block} \\
-\DWFORMblockone &0x0a&\livelink{chap:classblock}{block} \\
-\DWFORMdataone &0x0b&\livelink{chap:classconstant}{constant} \\
-\DWFORMflag&0x0c&\livelink{chap:classflag}{flag} \\
-\DWFORMsdata&0x0d&\livelink{chap:classconstant}{constant}    \\
-\DWFORMstrp&0x0e&\livelink{chap:classstring}{string}         \\
-\DWFORMudata&0x0f&\livelink{chap:classconstant}{constant}         \\
-\DWFORMrefaddr&0x10&\livelink{chap:classreference}{reference}         \\
-\DWFORMrefone&0x11&\livelink{chap:classreference}{reference}          \\
-\DWFORMreftwo&0x12&\livelink{chap:classreference}{reference}         \\
-\DWFORMreffour&0x13&\livelink{chap:classreference}{reference}         \\
-\DWFORMrefeight&0x14&\livelink{chap:classreference}{reference} \\
-\DWFORMrefudata&0x15&\livelink{chap:classreference}{reference}  \\
-\DWFORMindirect&0x16&(see Section \refersec{datarep:abbreviationstables}) \\
-\DWFORMsecoffset{} &0x17& \CLASSaddrptr, \CLASSlineptr, \CLASSloclist, \CLASSloclistsptr, \\
-                   &    & \CLASSmacptr, \CLASSrnglist, \CLASSrnglistsptr, \CLASSstroffsetsptr \\
-\DWFORMexprloc{} &0x18&\livelink{chap:classexprloc}{exprloc} \\
-\DWFORMflagpresent{} &0x19&\livelink{chap:classflag}{flag} \\
-\DWFORMstrx{}         &0x1a &\CLASSstring \\
-\DWFORMaddrx{}        &0x1b &\CLASSaddress \\
-\DWFORMrefsupfour{}  &0x1c &\CLASSreference \\
-\DWFORMstrpsup{}     &0x1d &\CLASSstring \\
-\DWFORMdatasixteen   &0x1e &\CLASSconstant \\
-\DWFORMlinestrp      &0x1f &\CLASSstring \\
-\DWFORMrefsigeight         &0x20 &\CLASSreference \\
-\DWFORMimplicitconst &0x21 &\CLASSconstant \\
-\DWFORMloclistx      &0x22 &\CLASSloclist \\
-\DWFORMrnglistx      &0x23 &\CLASSrnglist \\
-\DWFORMrefsupeight{} &0x24 &\CLASSreference \\
-\DWFORMstrxone{}     &0x25 &\CLASSstring \\
-\DWFORMstrxtwo{}     &0x26 &\CLASSstring \\
-\DWFORMstrxthree{}   &0x27 &\CLASSstring \\
-\DWFORMstrxfour{}    &0x28 &\CLASSstring \\
-\DWFORMaddrxone{}    &0x29 &\CLASSaddress \\
-\DWFORMaddrxtwo{}    &0x2a &\CLASSaddress \\
-\DWFORMaddrxthree{}  &0x2b &\CLASSaddress \\
-\DWFORMaddrxfour{}   &0x2c &\CLASSaddress \\
+\DWFORMaddr 			&0x01 &\CLASSaddress \\
+\textit{Reserved} 		&0x02 & \\
+\DWFORMblocktwo 		&0x03 &\CLASSblock \\
+\DWFORMblockfour 		&0x04 &\CLASSblock \\
+\DWFORMdatatwo 			&0x05 &\CLASSconstant \\
+\DWFORMdatafour 		&0x06 &\CLASSconstant \\
+\DWFORMdataeight 		&0x07 &\CLASSconstant \\
+\DWFORMstring			&0x08 &\CLASSstring \\
+\DWFORMblock			&0x09 &\CLASSblock \\
+\DWFORMblockone 		&0x0a &\CLASSblock \\
+\DWFORMdataone 			&0x0b &\CLASSconstant \\
+\DWFORMflag				&0x0c &\CLASSflag \\
+\DWFORMsdata			&0x0d &\CLASSconstant \\
+\DWFORMstrp				&0x0e &\CLASSstring \\
+\DWFORMudata			&0x0f &\CLASSconstant \\
+\DWFORMrefaddr			&0x10 &\CLASSreference \\
+\DWFORMrefone			&0x11 &\CLASSreference \\
+\DWFORMreftwo			&0x12 &\CLASSreference \\
+\DWFORMreffour			&0x13 &\CLASSreference \\
+\DWFORMrefeight			&0x14 &\CLASSreference \\
+\DWFORMrefudata			&0x15 &\CLASSreference \\
+\DWFORMindirect			&0x16 &(see Section \refersec{datarep:abbreviationstables}) \\
+\DWFORMsecoffset{} 		&0x17 & \CLASSaddrptr, \CLASSlineptr, \CLASSloclist, \CLASSloclistsptr, \\
+						&     & \CLASSmacptr, \CLASSrnglist, \CLASSrnglistsptr, \CLASSstroffsetsptr \\
+\DWFORMexprloc{} 		&0x18 &\CLASSexprloc \\
+\DWFORMflagpresent{}	&0x19 &\CLASSflag   \\
+\DWFORMstrx{}         	&0x1a &\CLASSstring \\
+\DWFORMaddrx{}        	&0x1b &\CLASSaddress \\
+\DWFORMrefsupfour{}  	&0x1c &\CLASSreference \\
+\DWFORMstrpsup{}     	&0x1d &\CLASSstring \\
+\DWFORMdatasixteen   	&0x1e &\CLASSconstant \\
+\DWFORMlinestrp      	&0x1f &\CLASSstring \\
+\DWFORMrefsigeight      &0x20 &\CLASSreference \\
+\DWFORMimplicitconst 	&0x21 &\CLASSconstant \\
+\DWFORMloclistx      	&0x22 &\CLASSloclist \\
+\DWFORMrnglistx      	&0x23 &\CLASSrnglist \\
+\DWFORMrefsupeight{} 	&0x24 &\CLASSreference \\
+\DWFORMstrxone{}     	&0x25 &\CLASSstring \\
+\DWFORMstrxtwo{}     	&0x26 &\CLASSstring \\
+\DWFORMstrxthree{}   	&0x27 &\CLASSstring \\
+\DWFORMstrxfour{}    	&0x28 &\CLASSstring \\
+\DWFORMaddrxone{}    	&0x29 &\CLASSaddress \\
+\DWFORMaddrxtwo{}    	&0x2a &\CLASSaddress \\
+\DWFORMaddrxthree{}  	&0x2b &\CLASSaddress \\
+\DWFORMaddrxfour{}   	&0x2c &\CLASSaddress \\
 \end{longtable}
 \end{centering}
 
@@ -2308,13 +2321,18 @@ avoids using space to represent the \doublequote{big} end of an
 unsigned integer, when the big end is all zeroes or sign
 extension bits.}
 
+\needlines{4}
 Unsigned LEB128\addtoindexx{LEB128!unsigned} (\addtoindex{ULEB128}) 
 numbers are encoded as follows:
 \addtoindexx{LEB128!unsigned, encoding as}
 start at the low order end of an unsigned integer and chop
 it into 7-bit chunks. Place each chunk into the low order 7
 bits of a byte. Typically, several of the high order bytes
-will be zero; discard them. Emit the remaining bytes in a
+will be 
+\bb
+zero, which may be discarded. 
+\eb
+Emit the remaining bytes in a
 stream, starting with the low order byte; set the high order
 bit on each byte except the last emitted byte. The high bit
 of zero on the last byte indicates to the decoder that it
@@ -2347,6 +2365,12 @@ gives some examples of unsigned LEB128\addtoindexx{LEB128!unsigned}
 numbers and Table \refersec{tab:examplesofsignedleb128encodings}
 gives some examples of signed LEB128\addtoindexx{LEB128!signed} 
 numbers.
+
+\bb
+\textit{Some producers may choose to insert padding or alignment bytes by 
+retaining (not discarding) one or more high-order bytes that would 
+not affect the decoded value.}
+\eb
 
 \textit{Appendix \refersec{app:variablelengthdataencodingdecodinginformative} 
 \addtoindexx{LEB128!examples}
@@ -2420,6 +2444,7 @@ zero or more bytes of additional data. The encodings for the
 operations are described in 
 Table \refersec{tab:dwarfoperationencodings}. 
 
+\needlines{10}
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c|c|l}
@@ -2430,115 +2455,115 @@ Table \refersec{tab:dwarfoperationencodings}.
    & &\bfseries No. of &\\ 
   \bfseries Operation&\bfseries Code &\bfseries  Operands &\bfseries Notes\\ \hline
 \endhead
-  \hline \emph{Continued on next page}
+  \hline 
+  \multicolumn{2}{l}{\emph{Continued on next page}}
 \endfoot
   \hline 
 \endlastfoot
 
-\textit{Reserved}&0x01&-& \\
-\textit{Reserved}&0x02&-& \\
-\DWOPaddr&0x03&1 & constant address  \\ 
-& & &(size is target specific) \\
-\textit{Reserved}&0x04&-& \\
-\textit{Reserved}&0x05&-& \\
-\DWOPderef&0x06&0 & \\
-\textit{Reserved}&0x07&-& \\
-\DWOPconstoneu&0x08&1&1-byte constant  \\
-\DWOPconstones&0x09&1&1-byte constant   \\
-\DWOPconsttwou&0x0a&1&2-byte constant   \\
-\DWOPconsttwos&0x0b&1&2-byte constant   \\
-\DWOPconstfouru&0x0c&1&4-byte constant    \\
-\DWOPconstfours&0x0d&1&4-byte constant   \\
-\DWOPconsteightu&0x0e&1&8-byte constant   \\
-\DWOPconsteights&0x0f&1&8-byte constant   \\
-\DWOPconstu&0x10&1&ULEB128 constant   \\
-\DWOPconsts&0x11&1&SLEB128 constant   \\
-\DWOPdup&0x12&0 &   \\
-\DWOPdrop&0x13&0  &   \\
-\DWOPover&0x14&0 &   \\
-\DWOPpick&0x15&1&1-byte stack index   \\
-\DWOPswap&0x16&0 &   \\
-\DWOProt&0x17&0 &   \\
-\DWOPxderef&0x18&0 &   \\
-\DWOPabs&0x19&0 &   \\
-\DWOPand&0x1a&0 &   \\
-\DWOPdiv&0x1b&0 &   \\
-\DWOPminus&0x1c&0 & \\
-\DWOPmod&0x1d&0 & \\
-\DWOPmul&0x1e&0 & \\
-\DWOPneg&0x1f&0 & \\
-\DWOPnot&0x20&0 & \\
-\DWOPor&0x21&0 & \\
-\DWOPplus&0x22&0 & \\
-\DWOPplusuconst&0x23&1&ULEB128 addend \\
-\DWOPshl&0x24&0 & \\
-\DWOPshr&0x25&0 & \\
-\DWOPshra&0x26&0 & \\
-\DWOPxor&0x27&0 & \\
+\textit{Reserved}	&0x01&-& \\
+\textit{Reserved}	&0x02&-& \\
+\DWOPaddr			&0x03&1 & constant address  \\ 
+					& & &(size is target specific) \\
+\textit{Reserved}	&0x04&-& \\
+\textit{Reserved}	&0x05&-& \\
+\DWOPderef			&0x06&0 & \\
+\textit{Reserved}	&0x07&-& \\
+\DWOPconstoneu		&0x08&1&1-byte constant  \\
+\DWOPconstones		&0x09&1&1-byte constant   \\
+\DWOPconsttwou		&0x0a&1&2-byte constant   \\
+\DWOPconsttwos		&0x0b&1&2-byte constant   \\
+\DWOPconstfouru		&0x0c&1&4-byte constant    \\
+\DWOPconstfours		&0x0d&1&4-byte constant   \\
+\DWOPconsteightu	&0x0e&1&8-byte constant   \\
+\DWOPconsteights	&0x0f&1&8-byte constant   \\
+\DWOPconstu			&0x10&1&ULEB128 constant   \\
+\DWOPconsts			&0x11&1&SLEB128 constant   \\
+\DWOPdup			&0x12&0 &   \\
+\DWOPdrop			&0x13&0 &   \\
+\DWOPover			&0x14&0 &   \\
+\DWOPpick			&0x15&1&1-byte stack index   \\
+\DWOPswap			&0x16&0 &   \\
+\DWOProt			&0x17&0 &   \\
+\DWOPxderef			&0x18&0 &   \\
+\DWOPabs			&0x19&0 &   \\
+\DWOPand			&0x1a&0 &   \\
+\DWOPdiv			&0x1b&0 &   \\
+\DWOPminus			&0x1c&0 & \\
+\DWOPmod			&0x1d&0 & \\
+\DWOPmul			&0x1e&0 & \\
+\DWOPneg			&0x1f&0 & \\
+\DWOPnot			&0x20&0 & \\
+\DWOPor				&0x21&0 & \\
+\DWOPplus			&0x22&0 & \\
+\DWOPplusuconst		&0x23&1&ULEB128 addend \\
+\DWOPshl			&0x24&0 & \\
+\DWOPshr			&0x25&0 & \\
+\DWOPshra			&0x26&0 & \\
+\DWOPxor			&0x27&0 & \\
+\DWOPbra			&0x28&1 & signed 2-byte constant \\
+\DWOPeq				&0x29&0 & \\
+\DWOPge				&0x2a&0 & \\
+\DWOPgt				&0x2b&0 & \\
+\DWOPle				&0x2c&0 & \\
+\DWOPlt				&0x2d&0  & \\
+\DWOPne				&0x2e&0 & \\
+\DWOPskip			&0x2f&1&signed 2-byte constant \\ \hline
 
-\DWOPbra&0x28&1 & signed 2-byte constant \\
-\DWOPeq&0x29&0 & \\
-\DWOPge&0x2a&0 & \\
-\DWOPgt&0x2b&0 & \\
-\DWOPle&0x2c&0 & \\
-\DWOPlt&0x2d&0  & \\
-\DWOPne&0x2e&0 & \\
-\DWOPskip&0x2f&1&signed 2-byte constant \\ \hline
+\DWOPlitzero 		& 0x30 & 0 & \\
+\DWOPlitone  		& 0x31 & 0& literals 0 .. 31 = \\
+\ldots 				& 	   & &\hspace{0.3cm}(\DWOPlitzero{} + literal) \\
+\DWOPlitthirtyone 	& 0x4f & 0 & \\ \hline
 
-\DWOPlitzero & 0x30 & 0 & \\
-\DWOPlitone  & 0x31 & 0& literals 0 .. 31 = \\
-\ldots & & &\hspace{0.3cm}(\DWOPlitzero{} + literal) \\
-\DWOPlitthirtyone & 0x4f & 0 & \\ \hline
+\DWOPregzero 		& 0x50 & 0 & \\*
+\DWOPregone  		& 0x51 & 0&reg 0 .. 31 = \\*
+\ldots 				& 	   & &\hspace{0.3cm}(\DWOPregzero{} + regnum) \\*
+\DWOPregthirtyone 	& 0x6f & 0 & \\ \hline
 
-\DWOPregzero & 0x50 & 0 & \\*
-\DWOPregone  & 0x51 & 0&reg 0 .. 31 = \\*
-\ldots & & &\hspace{0.3cm}(\DWOPregzero{} + regnum) \\*
-\DWOPregthirtyone & 0x6f & 0 & \\ \hline
+\DWOPbregzero 		& 0x70 &1 & SLEB128 offset \\*
+\DWOPbregone  		& 0x71 & 1 &base register 0 .. 31 = \\*
+... 				& &        &\hspace{0.3cm}(\DWOPbregzero{} + regnum) \\*
+\DWOPbregthirtyone 	& 0x8f & 1 & \\ \hline
 
-\DWOPbregzero & 0x70 &1 & SLEB128 offset \\*
-\DWOPbregone  & 0x71 & 1 &base register 0 .. 31 = \\*
-... & &              &\hspace{0.3cm}(\DWOPbregzero{} + regnum) \\*
-\DWOPbregthirtyone & 0x8f & 1 & \\ \hline
-
-\DWOPregx{} & 0x90 &1&ULEB128 register \\
-\DWOPfbreg{} & 0x91&1&SLEB128 offset \\
-\DWOPbregx{} & 0x92&2 &ULEB128 register, \\*
-                  & & &SLEB128 offset \\
-\DWOPpiece{} & 0x93 &1& ULEB128 size of piece \\
-\DWOPderefsize{} & 0x94 &1& 1-byte size of data retrieved \\
-\DWOPxderefsize{} & 0x95&1&1-byte size of data retrieved \\
-\DWOPnop{} & 0x96 &0& \\
+\DWOPregx{} 		& 0x90 &1 &ULEB128 register \\
+\DWOPfbreg{} 		& 0x91 &1 &SLEB128 offset \\
+\DWOPbregx{} 		& 0x92 &2 &ULEB128 register, \\*
+					&      &  &SLEB128 offset \\
+\DWOPpiece{} 		& 0x93 &1 &ULEB128 size of piece \\
+\DWOPderefsize{} 	& 0x94 &1 &1-byte size of data retrieved \\
+\DWOPxderefsize{} 	& 0x95 &1 &1-byte size of data retrieved \\
+\DWOPnop{} 			& 0x96 &0 & \\
 
 \DWOPpushobjectaddress&0x97&0 &  \\
-\DWOPcalltwo&0x98&1& 2-byte offset of DIE \\
-\DWOPcallfour&0x99&1& 4-byte offset of DIE \\
-\DWOPcallref&0x9a&1& 4\dash\  or 8-byte offset of DIE \\
-\DWOPformtlsaddress&0x9b &0& \\
-\DWOPcallframecfa{} &0x9c &0& \\
-\DWOPbitpiece&0x9d &2&ULEB128 size, \\*
-                   &&&ULEB128 offset\\
-\DWOPimplicitvalue{} &0x9e &2&ULEB128 size, \\*
-                   &&&\nolink{block} of that size\\
-\DWOPstackvalue{} &0x9f &0& \\
-\DWOPimplicitpointer{} &0xa0& 2 &4- or 8-byte offset of DIE, \\*
-                              &&&SLEB128 constant offset \\
-\DWOPaddrx&0xa1&1&ULEB128 indirect address \\
-\DWOPconstx&0xa2&1&ULEB128 indirect constant   \\
-\DWOPentryvalue&0xa3&2&ULEB128 size, \\*
-                   &&&\nolink{block} of that size\\
-\DWOPconsttype    & 0xa4 & 3 & ULEB128 type entry offset,\\*
-                               & & & 1-byte size, \\*
-                               & & & constant value \\
-\DWOPregvaltype   & 0xa5 & 2 & ULEB128 register number, \\*
-                                 &&& ULEB128 constant offset \\
-\DWOPdereftype    & 0xa6 & 2 & 1-byte size, \\*
-                                 &&& ULEB128 type entry offset \\
-\DWOPxdereftype   & 0xa7 & 2 & 1-byte size, \\*
-                                 &&& ULEB128 type entry offset \\
-\DWOPconvert      & 0xa8 & 1 & ULEB128 type entry offset \\
-\DWOPreinterpret  & 0xa9 & 1 & ULEB128 type entry offset \\
-\DWOPlouser{} &0xe0 && \\
-\DWOPhiuser{} &\xff && \\
+\DWOPcalltwo		& 0x98 &1 &2-byte offset of DIE \\
+\DWOPcallfour		& 0x99 &1 &4-byte offset of DIE \\
+\DWOPcallref		& 0x9a &1 &4\dash\ or 8-byte offset of DIE \\
+\DWOPformtlsaddress	& 0x9b &0 & \\
+\DWOPcallframecfa{} & 0x9c &0 & \\
+\DWOPbitpiece		& 0x9d &2 &ULEB128 size, \\*
+					&      &  &ULEB128 offset\\
+\DWOPimplicitvalue	& 0x9e &2 &ULEB128 size, \\*
+                    &      &  &\nolink{block} of that size\\
+\DWOPstackvalue		& 0x9f &0 & \\
+\DWOPimplicitpointer& 0xa0 &  &4- or 8-byte offset of DIE, \\*
+                    &      &  &SLEB128 constant offset \\
+\DWOPaddrx			& 0xa1 &1 &ULEB128 indirect address \\
+\DWOPconstx			& 0xa2 &1 &ULEB128 indirect constant   \\
+\DWOPentryvalue		& 0xa3 &2 &ULEB128 size, \\*
+                    &      &  &\nolink{block} of that size\\
+\DWOPconsttype		& 0xa4 &3 &ULEB128 type entry offset,\\*
+                    &      &  &1-byte size, \\*
+                    &      &  &constant value \\
+\DWOPregvaltype		& 0xa5 &2 &ULEB128 register number, \\*
+                    &      &  &ULEB128 constant offset \\
+\DWOPdereftype    	& 0xa6 &2 &1-byte size, \\*
+                    &      &  &ULEB128 type entry offset \\
+\DWOPxdereftype     & 0xa7 &2 &1-byte size, \\*
+                    &      &  &ULEB128 type entry offset \\
+\DWOPconvert		& 0xa8 &1 &ULEB128 type entry offset \\
+\DWOPreinterpret	& 0xa9 &1 &ULEB128 type entry offset \\
+\DWOPlouser			& 0xe0 && \\
+\DWOPhiuser			& \xff && \\
 
 \end{longtable}
 \end{centering}
@@ -2574,18 +2599,31 @@ Table \ref{tab:locationlistentryencodingvalues}.
   \hline \emph{Continued on next page}
 \endfoot
   \hline
+  \multicolumn{2}{l}{\ddagnewinversionx} \\
 \endlastfoot
-\DWLLEendoflist & 0x00 \\
-\DWLLEbaseaddressx & 0x01 \\
-\DWLLEstartxendx & 0x02 \\
-\DWLLEstartxlength & 0x03 \\
-\DWLLEoffsetpair & 0x04 \\
+\DWLLEendoflist       & 0x00 \\
+\DWLLEbaseaddressx    & 0x01 \\
+\DWLLEstartxendx      & 0x02 \\
+\DWLLEstartxlength    & 0x03 \\
+\DWLLEoffsetpair      & 0x04 \\
 \DWLLEdefaultlocation & 0x05 \\
-\DWLLEbaseaddress & 0x06 \\
-\DWLLEstartend & 0x07 \\
-\DWLLEstartlength & 0x08 \\
+\DWLLEbaseaddress     & 0x06 \\
+\DWLLEstartend        & 0x07 \\
+\DWLLEstartlength     & 0x08 \\
+\bb
+\DWLLElouser~\ddag	  & 0xc0 \\
+\DWLLEhiuser~\ddag	  & \xff
+\eb
 \end{longtable}
 \end{centering}
+
+\bb
+If a vendor defines a vendor-specific kind of location 
+list entry, the kind code must be immediately followed by an
+unsigned LEB128 value that specifies the length of all
+remaining bytes (not including either the kind or the length
+itself) for that entry.
+\eb
 
 \section{Base Type Attribute Encodings}
 \label{datarep:basetypeattributeencodings}
@@ -2608,26 +2646,26 @@ Table \refersec{tab:basetypeencodingvalues}
 \endfoot
   \hline
 \endlastfoot
-\DWATEaddress&0x01 \\
-\DWATEboolean&0x02 \\
-\DWATEcomplexfloat&0x03 \\
-\DWATEfloat&0x04 \\
-\DWATEsigned&0x05 \\
-\DWATEsignedchar&0x06 \\
-\DWATEunsigned&0x07 \\
-\DWATEunsignedchar&0x08 \\
-\DWATEimaginaryfloat&0x09 \\
-\DWATEpackeddecimal&0x0a \\
-\DWATEnumericstring&0x0b \\
-\DWATEedited&0x0c \\
-\DWATEsignedfixed&0x0d \\
-\DWATEunsignedfixed&0x0e \\
-\DWATEdecimalfloat & 0x0f \\
-\DWATEUTF{} & 0x10 \\
-\DWATEUCS   & 0x11 \\
-\DWATEASCII & 0x12 \\
-\DWATElouser{} & 0x80 \\
-\DWATEhiuser{} & \xff \\
+\DWATEaddress			& 0x01 \\
+\DWATEboolean			& 0x02 \\
+\DWATEcomplexfloat		& 0x03 \\
+\DWATEfloat				& 0x04 \\
+\DWATEsigned			& 0x05 \\
+\DWATEsignedchar		& 0x06 \\
+\DWATEunsigned			& 0x07 \\
+\DWATEunsignedchar		& 0x08 \\
+\DWATEimaginaryfloat	& 0x09 \\
+\DWATEpackeddecimal		& 0x0a \\
+\DWATEnumericstring		& 0x0b \\
+\DWATEedited			& 0x0c \\
+\DWATEsignedfixed		& 0x0d \\
+\DWATEunsignedfixed		& 0x0e \\
+\DWATEdecimalfloat 		& 0x0f \\
+\DWATEUTF{} 			& 0x10 \\
+\DWATEUCS   			& 0x11 \\
+\DWATEASCII 			& 0x12 \\
+\DWATElouser{} 			& 0x80 \\
+\DWATEhiuser{} 			& \xff \\
 \end{longtable}
 \end{centering}
 
@@ -2637,6 +2675,7 @@ The encodings of the constants used in the
 are given in 
 Table \refersec{tab:decimalsignencodings}.
 
+\needlines{10}
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c}
@@ -2675,8 +2714,8 @@ Table \refersec{tab:endianityencodings}.
   \hline
 \endlastfoot
 
-\DWENDdefault{}  & 0x00 \\
-\DWENDbig{} & 0x01 \\
+\DWENDdefault{}& 0x00 \\
+\DWENDbig{}    & 0x01 \\
 \DWENDlittle{} & 0x02 \\
 \DWENDlouser{} & 0x40 \\
 \DWENDhiuser{} & \xff \\
@@ -2707,9 +2746,9 @@ Table \refersec{tab:accessibilityencodings}.
   \hline
 \endlastfoot
 
-\DWACCESSpublic&0x01  \\
-\DWACCESSprotected&0x02 \\
-\DWACCESSprivate&0x03 \\
+\DWACCESSpublic    & 0x01 \\
+\DWACCESSprotected & 0x02 \\
+\DWACCESSprivate   & 0x03 \\
 
 \end{longtable}
 \end{centering}
@@ -2734,9 +2773,9 @@ Table \refersec{tab:visibilityencodings}.
   \hline
 \endlastfoot
 
-\DWVISlocal&0x01 \\
-\DWVISexported&0x02 \\
-\DWVISqualified&0x03 \\
+\DWVISlocal     &0x01 \\
+\DWVISexported  &0x02 \\
+\DWVISqualified &0x03 \\
 
 \end{longtable}
 \end{centering}
@@ -2761,9 +2800,9 @@ Table \refersec{tab:virtualityencodings}.
   \hline
 \endlastfoot
 
-\DWVIRTUALITYnone&0x00 \\
-\DWVIRTUALITYvirtual&0x01 \\
-\DWVIRTUALITYpurevirtual&0x02 \\
+\DWVIRTUALITYnone        &0x00 \\
+\DWVIRTUALITYvirtual     &0x01 \\
+\DWVIRTUALITYpurevirtual &0x02 \\
 
 \end{longtable}
 \end{centering}
@@ -2798,6 +2837,7 @@ an omitted \DWATlowerbound{} attribute in the context of a
 \DWTAGsubrangetype{} debugging information entry for each
 defined language.
 
+\needlines{10}
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c|c}
@@ -2806,52 +2846,53 @@ defined language.
 \endfirsthead
   \bfseries Language name&\bfseries Value &\bfseries Default Lower Bound\\ \hline
 \endhead
-  \hline \emph{Continued on next page}
+  \hline 
+  \multicolumn{2}{l}{\emph{Continued on next page}}
 \endfoot
   \hline
 \endlastfoot
 \addtoindexx{ISO-defined language names}
 
-\DWLANGCeightynine &0x0001 &0 \addtoindexx{C:1989 (ISO)}      \\
-\DWLANGC{} &0x0002 &0  \addtoindexx{C!non-standard} \\
-\DWLANGAdaeightythree{} \dag &0x0003 &1  \addtoindexx{Ada:1983 (ISO)}     \\
-\DWLANGCplusplus{} &0x0004 &0 \addtoindexx{C++98 (ISO)} \\
-\DWLANGCobolseventyfour{} \dag &0x0005 &1 \addtoindexx{COBOL:1974 (ISO)}      \\
-\DWLANGCoboleightyfive{} \dag &0x0006 &1 \addtoindexx{COBOL:1985 (ISO)}      \\
-\DWLANGFortranseventyseven &0x0007 &1 \addtoindexx{FORTRAN:1977 (ISO)}      \\
-\DWLANGFortranninety &0x0008 &1 \addtoindexx{Fortran:1990 (ISO)}      \\
-\DWLANGPascaleightythree &0x0009 &1 \addtoindexx{Pascal:1983 (ISO)}      \\
-\DWLANGModulatwo &0x000a &1 \addtoindexx{Modula-2:1996 (ISO)}      \\
-\DWLANGJava &0x000b &0 \addtoindexx{Java}      \\
-\DWLANGCninetynine &0x000c &0 \addtoindexx{C:1999 (ISO)}      \\
+\DWLANGCeightynine 			&0x0001 &0 \addtoindexx{C:1989 (ISO)}      \\
+\DWLANGC					&0x0002 &0 \addtoindexx{C!non-standard} \\
+\DWLANGAdaeightythree \dag 	&0x0003 &1 \addtoindexx{Ada:1983 (ISO)}     \\
+\DWLANGCplusplus			&0x0004 &0 \addtoindexx{C++98 (ISO)} \\
+\DWLANGCobolseventyfour\dag &0x0005 &1 \addtoindexx{COBOL:1974 (ISO)}      \\
+\DWLANGCoboleightyfive \dag &0x0006 &1 \addtoindexx{COBOL:1985 (ISO)}      \\
+\DWLANGFortranseventyseven 	&0x0007 &1 \addtoindexx{FORTRAN:1977 (ISO)}      \\
+\DWLANGFortranninety 		&0x0008 &1 \addtoindexx{Fortran:1990 (ISO)}      \\
+\DWLANGPascaleightythree 	&0x0009 &1 \addtoindexx{Pascal:1983 (ISO)}      \\
+\DWLANGModulatwo 			&0x000a &1 \addtoindexx{Modula-2:1996 (ISO)}      \\
+\DWLANGJava 				&0x000b &0 \addtoindexx{Java}      \\
+\DWLANGCninetynine 			&0x000c &0 \addtoindexx{C:1999 (ISO)}      \\
 \DWLANGAdaninetyfive{} \dag &0x000d &1 \addtoindexx{Ada:1995 (ISO)}      \\
-\DWLANGFortranninetyfive &0x000e &1 \addtoindexx{Fortran:1995 (ISO)}      \\
-\DWLANGPLI{} \dag &0x000f &1 \addtoindexx{PL/I:1976 (ANSI)}\\
-\DWLANGObjC{} &0x0010 &0 \addtoindexx{Objective C}\\
-\DWLANGObjCplusplus{} &0x0011 &0 \addtoindexx{Objective C++}\\
-\DWLANGUPC{} &0x0012 &0 \addtoindexx{UPC}\\
-\DWLANGD{} &0x0013 &0 \addtoindexx{D language}\\
-\DWLANGPython{} \dag &0x0014 &0 \addtoindexx{Python}\\
-\DWLANGOpenCL{} \dag  &0x0015 &0 \addtoindexx{OpenCL}\\
-\DWLANGGo{} \dag  &0x0016 &0 \addtoindexx{Go}\\
-\DWLANGModulathree{} \dag  &0x0017 &1 \addtoindexx{Modula-3}\\
-\DWLANGHaskell{} \dag  &0x0018 &0 \addtoindexx{Haskell}\\
-\DWLANGCpluspluszerothree{}  &0x0019 &0 \addtoindexx{C++03 (ISO)}\\
-\DWLANGCpluspluseleven{}  &0x001a &0 \addtoindexx{C++11 (ISO)} \\
-\DWLANGOCaml{}  &0x001b &0	\addtoindexx{OCaml}\\
-\DWLANGRust{}  &0x001c &0 \addtoindexx{Rust}\\
-\DWLANGCeleven{}  &0x001d &0 \addtoindexx{C:2011 (ISO)}\\
-\DWLANGSwift{}  &0x001e &0 \addtoindexx{Swift} \\
-\DWLANGJulia{}  &0x001f &1 \addtoindexx{Julia} \\
-\DWLANGDylan{}  &0x0020 &0 \addtoindexx{Dylan} \\
-\DWLANGCplusplusfourteen{} &0x0021 &0 \addtoindexx{C++14 (ISO)} \\
-\DWLANGFortranzerothree{}  &0x0022 &1 \addtoindexx{Fortran:2004 (ISO)} \\
-\DWLANGFortranzeroeight{}  &0x0023 &1 \addtoindexx{Fortran:2010 (ISO)} \\
-\DWLANGRenderScript{}       &0x0024 &0 \addtoindexx{RenderScript Kernel Language} \\
-\DWLANGBLISS{}  &0x0025 &0 \addtoindexx{BLISS} 
+\DWLANGFortranninetyfive 	&0x000e &1 \addtoindexx{Fortran:1995 (ISO)}      \\
+\DWLANGPLI{} \dag 			&0x000f &1 \addtoindexx{PL/I:1976 (ANSI)}\\
+\DWLANGObjC{} 				&0x0010 &0 \addtoindexx{Objective C}\\
+\DWLANGObjCplusplus{} 		&0x0011 &0 \addtoindexx{Objective C++}\\
+\DWLANGUPC{} 				&0x0012 &0 \addtoindexx{UPC}\\
+\DWLANGD{} 					&0x0013 &0 \addtoindexx{D language}\\
+\DWLANGPython{} \dag 		&0x0014 &0 \addtoindexx{Python}\\
+\DWLANGOpenCL{} \dag  		&0x0015 &0 \addtoindexx{OpenCL}\\
+\DWLANGGo{} \dag  			&0x0016 &0 \addtoindexx{Go}\\
+\DWLANGModulathree{} \dag  	&0x0017 &1 \addtoindexx{Modula-3}\\
+\DWLANGHaskell{} \dag		&0x0018 &0 \addtoindexx{Haskell}\\
+\DWLANGCpluspluszerothree{} &0x0019 &0 \addtoindexx{C++03 (ISO)}\\
+\DWLANGCpluspluseleven{}  	&0x001a &0 \addtoindexx{C++11 (ISO)} \\
+\DWLANGOCaml{}  			&0x001b &0 \addtoindexx{OCaml}\\
+\DWLANGRust{}  				&0x001c &0 \addtoindexx{Rust}\\
+\DWLANGCeleven{}  			&0x001d &0 \addtoindexx{C:2011 (ISO)}\\
+\DWLANGSwift{}  			&0x001e &0 \addtoindexx{Swift} \\
+\DWLANGJulia{}  			&0x001f &1 \addtoindexx{Julia} \\
+\DWLANGDylan{}				&0x0020 &0 \addtoindexx{Dylan} \\
+\DWLANGCplusplusfourteen{}	&0x0021 &0 \addtoindexx{C++14 (ISO)} \\
+\DWLANGFortranzerothree{}	&0x0022 &1 \addtoindexx{Fortran:2004 (ISO)} \\
+\DWLANGFortranzeroeight{}	&0x0023 &1 \addtoindexx{Fortran:2010 (ISO)} \\
+\DWLANGRenderScript{}		&0x0024 &0 \addtoindexx{RenderScript Kernel Language} \\
+\DWLANGBLISS{}				&0x0025 &0 \addtoindexx{BLISS} 
 \\
-\DWLANGlouser{} &0x8000 & \\
-\DWLANGhiuser{} &\xffff & \\
+\DWLANGlouser{}				&0x8000 & \\
+\DWLANGhiuser{}				&\xffff & \\
 
 \end{longtable}
 \end{centering}
@@ -2884,9 +2925,9 @@ Table \refersec{tab:identifiercaseencodings}.
 \endfoot
   \hline
 \endlastfoot
-\DWIDcasesensitive&0x00     \\
-\DWIDupcase&0x01     \\
-\DWIDdowncase&0x02     \\
+\DWIDcasesensitive	&0x00     \\
+\DWIDupcase			&0x01     \\
+\DWIDdowncase		&0x02     \\
 \DWIDcaseinsensitive&0x03     \\
 \end{longtable}
 \end{centering}
@@ -2911,13 +2952,13 @@ Table \refersec{tab:callingconventionencodings}.
   \hline 
 \endlastfoot
 
-\DWCCnormal &0x01     \\
-\DWCCprogram&0x02     \\
-\DWCCnocall &0x03     \\
-\DWCCpassbyreference &0x04 \\
-\DWCCpassbyvalue     &0x05 \\
-\DWCClouser &0x40     \\
-\DWCChiuser&\xff     \\
+\DWCCnormal			&0x01 \\	
+\DWCCprogram		&0x02 \\
+\DWCCnocall			&0x03 \\
+\DWCCpassbyreference&0x04 \\
+\DWCCpassbyvalue    &0x05 \\
+\DWCClouser 		&0x40 \\
+\DWCChiuser			&\xff \\
 
 \end{longtable}
 \end{centering}
@@ -2946,10 +2987,10 @@ Table \refersec{tab:inlineencodings}.
   \hline
 \endlastfoot
 
-\DWINLnotinlined&0x00      \\
-\DWINLinlined&0x01      \\
+\DWINLnotinlined		&0x00      \\
+\DWINLinlined			&0x01      \\
 \DWINLdeclarednotinlined&0x02      \\
-\DWINLdeclaredinlined&0x03      \\
+\DWINLdeclaredinlined	&0x03      \\
 
 \end{longtable}
 \end{centering}
@@ -2979,8 +3020,8 @@ Table \refersec{tab:orderingencodings}.
   \hline
 \endlastfoot
 
-\DWORDrowmajor&0x00  \\
-\DWORDcolmajor&0x01  \\
+\DWORDrowmajor &0x00  \\
+\DWORDcolmajor &0x01  \\
 
 \end{longtable}
 \end{centering}
@@ -3011,8 +3052,8 @@ Table \refersec{tab:discriminantdescriptorencodings}.
   \hline
 \endlastfoot
 
-\DWDSClabel&0x00 \\
-\DWDSCrange&0x01 \\
+\DWDSClabel &0x00 \\
+\DWDSCrange &0x01 \\
 
 \end{longtable}
 \end{centering}
@@ -3037,16 +3078,26 @@ The name index attributes and their encodings are listed in Table \refersec{data
   \hline \emph{Continued on next page}
 \endfoot
   \hline
+  \multicolumn{2}{l}{\ddagnewinversionx}
 \endlastfoot
-\DWIDXcompileunit & 1        & \CLASSconstant \\
-\DWIDXtypeunit    & 2        & \CLASSconstant \\
-\DWIDXdieoffset   & 3        & \CLASSreference \\
-\DWIDXparent      & 4        & \CLASSconstant \\
-\DWIDXtypehash    & 5        & \DWFORMdataeight \\
-\DWIDXlouser      & 0x2000   & \\
-\DWIDXhiuser      & \xiiifff & \\
+\DWIDXcompileunit 	& 1        	& \CLASSconstant \\
+\DWIDXtypeunit    	& 2        	& \CLASSconstant \\
+\DWIDXdieoffset   	& 3        	& \CLASSreference \\
+\DWIDXparent      	& 4        	& \CLASSconstant \\
+\DWIDXtypehash    	& 5      	& \DWFORMdataeight \\
+\bb
+\DWIDXexternal~\ddag& 6			& \CLASSflag
+\eb \\
+\DWIDXlouser      	& 0x2000   	& \\
+\DWIDXhiuser      	& \xiiifff 	& \\
 \end{longtable}
 \end{centering}
+
+\bb
+\textit{It is suggested that producers should use the form code
+\DWFORMflagpresent{} for the \DWIDXexternal{} attribute for
+abbreviation codes that represent external names.}
+\eb
 
 The abbreviations table ends with an entry consisting of a single 0
 byte for the abbreviation code. The size of the table given by
@@ -3071,9 +3122,9 @@ are given in Table \referfol{datarep:defaultedattributeencodings}.
 \endfoot
   \hline
 \endlastfoot
-\DWDEFAULTEDno   & 0x00 \\
-\DWDEFAULTEDinclass       & 0x01 \\
-\DWDEFAULTEDoutofclass    & 0x02 \\
+\DWDEFAULTEDno			& 0x00 \\
+\DWDEFAULTEDinclass     & 0x01 \\
+\DWDEFAULTEDoutofclass  & 0x02 \\
 \end{longtable}
 \end{centering}
 
@@ -3178,18 +3229,18 @@ Table \refersec{tab:linenumberstandardopcodeencodings}.
   \hline
 \endlastfoot
 
-\DWLNScopy&0x01 \\
-\DWLNSadvancepc&0x02 \\
-\DWLNSadvanceline&0x03 \\
-\DWLNSsetfile&0x04 \\
-\DWLNSsetcolumn&0x05 \\
-\DWLNSnegatestmt&0x06 \\
-\DWLNSsetbasicblock&0x07 \\
-\DWLNSconstaddpc&0x08 \\
-\DWLNSfixedadvancepc&0x09 \\
-\DWLNSsetprologueend&0x0a \\*
-\DWLNSsetepiloguebegin&0x0b \\*
-\DWLNSsetisa&0x0c \\*
+\DWLNScopy				&0x01 \\
+\DWLNSadvancepc			&0x02 \\
+\DWLNSadvanceline		&0x03 \\
+\DWLNSsetfile			&0x04 \\
+\DWLNSsetcolumn			&0x05 \\
+\DWLNSnegatestmt		&0x06 \\
+\DWLNSsetbasicblock		&0x07 \\
+\DWLNSconstaddpc		&0x08 \\
+\DWLNSfixedadvancepc	&0x09 \\
+\DWLNSsetprologueend	&0x0a \\*
+\DWLNSsetepiloguebegin	&0x0b \\*
+\DWLNSsetisa			&0x0c \\*
 \end{longtable}
 \end{centering}
 
@@ -3215,9 +3266,9 @@ Table \refersec{tab:linenumberextendedopcodeencodings}.
 \DWLNEendsequence	&0x01 \\
 \DWLNEsetaddress	&0x02 \\
 \textit{Reserved}	&0x03\footnote{Code 0x03 is reserved to allow backward compatible support of the 
-                                       DW\_LNE\_define\_file operation which was defined in \DWARFVersionIV{} 
-                                       and earlier.} \\
-\DWLNEsetdiscriminator  &0x04 \\
+                                   DW\_LNE\_define\_file operation which was defined in \DWARFVersionIV{} 
+                                   and earlier.} \\
+\DWLNEsetdiscriminator &0x04 \\
 \DWLNElouser		&0x80 \\
 \DWLNEhiuser		&\xff \\
 
@@ -3329,40 +3380,41 @@ Table \refersec{tab:callframeinstructionencodings}.
    & \bfseries High 2 &\bfseries Low 6 &  &\\
   \bfseries Instruction&\bfseries Bits &\bfseries Bits &\bfseries Operand 1 &\bfseries Operand 2\\ \hline
 \endhead
-  \hline \emph{Continued on next page}
+  \hline 
+  \multicolumn{2}{l}{\emph{Continued on next page}}
 \endfoot
   \hline
 \endlastfoot
 
-\DWCFAadvanceloc&0x1&delta & \\
-\DWCFAoffset&0x2&register&ULEB128 offset \\
-\DWCFArestore&0x3&register & & \\
-\DWCFAnop&0&0 & & \\
-\DWCFAsetloc&0&0x01&address & \\
-\DWCFAadvancelocone&0&0x02&1-byte delta & \\
-\DWCFAadvanceloctwo&0&0x03&2-byte delta & \\
-\DWCFAadvancelocfour&0&0x04&4-byte delta & \\
-\DWCFAoffsetextended&0&0x05&ULEB128 register&ULEB128 offset \\
-\DWCFArestoreextended&0&0x06&ULEB128 register & \\
-\DWCFAundefined&0&0x07&ULEB128 register & \\
-\DWCFAsamevalue&0&0x08 &ULEB128 register & \\
-\DWCFAregister&0&0x09&ULEB128 register &ULEB128 offset \\
-\DWCFArememberstate&0&0x0a & & \\
-\DWCFArestorestate&0&0x0b & & \\
-\DWCFAdefcfa&0&0x0c &ULEB128 register&ULEB128 offset \\
-\DWCFAdefcfaregister&0&0x0d&ULEB128 register & \\
-\DWCFAdefcfaoffset&0&0x0e &ULEB128 offset & \\
-\DWCFAdefcfaexpression&0&0x0f &BLOCK  \\
-\DWCFAexpression&0&0x10&ULEB128 register & BLOCK \\
+\DWCFAadvanceloc		&0x1&delta & \\
+\DWCFAoffset			&0x2&register&ULEB128 offset \\
+\DWCFArestore			&0x3&register & & \\
+\DWCFAnop				&0&0 & & \\
+\DWCFAsetloc			&0&0x01&address & \\
+\DWCFAadvancelocone		&0&0x02&1-byte delta & \\
+\DWCFAadvanceloctwo		&0&0x03&2-byte delta & \\
+\DWCFAadvancelocfour	&0&0x04&4-byte delta & \\
+\DWCFAoffsetextended	&0&0x05&ULEB128 register&ULEB128 offset \\
+\DWCFArestoreextended	&0&0x06&ULEB128 register & \\
+\DWCFAundefined			&0&0x07&ULEB128 register & \\
+\DWCFAsamevalue			&0&0x08 &ULEB128 register & \\
+\DWCFAregister			&0&0x09&ULEB128 register &ULEB128 offset \\
+\DWCFArememberstate		&0&0x0a & & \\
+\DWCFArestorestate		&0&0x0b & & \\
+\DWCFAdefcfa			&0&0x0c &ULEB128 register&ULEB128 offset \\
+\DWCFAdefcfaregister	&0&0x0d&ULEB128 register & \\
+\DWCFAdefcfaoffset		&0&0x0e &ULEB128 offset & \\
+\DWCFAdefcfaexpression	&0&0x0f &BLOCK  \\
+\DWCFAexpression		&0&0x10&ULEB128 register & BLOCK \\
 
-\DWCFAoffsetextendedsf&0&0x11&ULEB128 register&SLEB128 offset \\
-\DWCFAdefcfasf&0&0x12&ULEB128 register&SLEB128 offset \\
-\DWCFAdefcfaoffsetsf&0&0x13&SLEB128 offset & \\
-\DWCFAvaloffset&0&0x14&ULEB128&ULEB128 \\
-\DWCFAvaloffsetsf&0&0x15&ULEB128&SLEB128 \\
-\DWCFAvalexpression&0&0x16&ULEB128&BLOCK  \\
-\DWCFAlouser&0&0x1c   & & \\
-\DWCFAhiuser&0&\xiiif & & \\
+\DWCFAoffsetextendedsf	&0&0x11&ULEB128 register&SLEB128 offset \\
+\DWCFAdefcfasf			&0&0x12&ULEB128 register&SLEB128 offset \\
+\DWCFAdefcfaoffsetsf	&0&0x13&SLEB128 offset & \\
+\DWCFAvaloffset			&0&0x14&ULEB128&ULEB128 \\
+\DWCFAvaloffsetsf		&0&0x15&ULEB128&SLEB128 \\
+\DWCFAvalexpression		&0&0x16&ULEB128&BLOCK  \\
+\DWCFAlouser			&0&0x1c   & & \\
+\DWCFAhiuser			&0&\xiiif & & \\
 \end{longtable}
 \end{centering}
 
@@ -3393,6 +3445,7 @@ Table \refersec{tab:rnglistsentryencodingvalues}.
   \hline \emph{Continued on next page}
 \endfoot
   \hline
+  \multicolumn{2}{l}{\ddagnewinversionx}
 \endlastfoot
 \DWRLEendoflist    & 0x00 \\
 \DWRLEbaseaddressx & 0x01 \\
@@ -3402,8 +3455,20 @@ Table \refersec{tab:rnglistsentryencodingvalues}.
 \DWRLEbaseaddress  & 0x05 \\
 \DWRLEstartend     & 0x06 \\
 \DWRLEstartlength  & 0x07 \\
+\bb
+\DWRLElouser~\ddag & 0xc0 \\
+\DWRLEhiuser~\ddag & \xff 
+\eb
 \end{longtable}
 \end{centering}
+
+\bb
+If a vendor defines a vendor-specific kind of range list
+entry, the kind code must be immediately followed by an
+unsigned LEB128 value that specifies the length of all
+remaining bytes (not including either the kind or the length
+itself) for that entry.
+\eb
 
 For a \addtoindex{range list} to be specified, the base address of the
 \addtoindexx{base address selection entry!in range list}

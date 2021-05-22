@@ -3,7 +3,7 @@
 % If draft is in the document class list, pix are just suggested
 % by an outline, that is, the pic does not appear as a picture.
 %
-\newcommand{\docdate}{March 14, 2021}
+\newcommand{\docdate}{May 22, 2021}
 \newcommand{\thisversion}{6}
 %
 \usepackage{ifthen}
@@ -17,9 +17,9 @@
 \usepackage{palatino}
 \usepackage{cmtt}
     \renewcommand{\ttdefault}{cmtt}	% Use Computer Modern Typewriter instead of Courier
-\usepackage{url} 	   % for color in letters. Links instead?
-\usepackage[usenames]{color}%for color in letters. Links instead?
-\usepackage{ellipsis} 	   % provides ... as \dots
+\usepackage{url} 	        % for color in letters. Links instead?
+\usepackage[usenames]{color}% for color in letters. Links instead?
+\usepackage{ellipsis} 	    % provides ... as \dots
 %\usepackage[utf8]{inputenc}% to type directly diacritic characters
 %\usepackage{color}
 \usepackage{listings}
@@ -91,6 +91,8 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
             allcolors=blue!80!black,bookmarksnumbered=true]{hyperref}
 \makeindex  % This and the makeidx package allow \index to create index entries.
 
+%\nochangebars
+
 \newcommand{\dwf}{DWARF Debugging Information Format}
 
 \newenvironment{myindentpara}[1]%
@@ -133,8 +135,10 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
     {\nolinenumbers}
     {\condlinenumbers}
 
-% A standard format for "New in DWARF Version x" annotations
-\newcommand{\newinversionx} {\ddag~New in DWARF Version \thisversion}
+% Standard formats for "New in DWARF Version x" annotations
+\newcommand{\newinversionx} 	{new in DWARF Version \thisversion}
+\newcommand{\Newinversionx} 	{New in DWARF Version \thisversion}
+\newcommand{\ddagnewinversionx} {\ddag~New in DWARF Version \thisversion}
 
 % A helper to annotate the parts of a multipage figure
 \newcommand{\figurepart}[2]{\raggedleft{\textit{\tiny{part #1 of #2}}}}
@@ -254,9 +258,10 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 % Preferred changebar aliases
 \newcommand{\bb}{\cbstart}      % Begin (change) bar
 \newcommand{\eb}{\cbend}        % End (change) bar
-\newcommand{\bbeb}{\bb\eb}      % Mark deleted word or phrase
+\newcommand{\bbeb}{\bb\eb}		% Single line bar (without spanning text); useful in tables
+\newcommand{\db}{\cbdelete}     % Mark deleted word or phrase
 % Mark deleted paragraph
-\newcommand{\bbpareb}{\vspace{-0.6\baselineskip}\bb~\eb\vspace{-0.6\baselineskip}} 
+\newcommand{\bbpareb}{\vspace{-0.6\baselineskip}\db\vspace{-0.6\baselineskip}} 
 % Variations for use inside an alltt environment--But don't work!
 %\newcommand(\bballtt){\end{alltt}\bb\vspace{-0.8\baselineskip}\begin{alltt}}
 %\newcommand{\eballtt}{\end{alltt}\eb\vspace{-0.8\baselineskip}\begin{alltt}}
@@ -264,7 +269,6 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 
 % Define commands for all of the DWARF names (DW\_*, .debug_*, a few others)
 %
-%\newcommand{\definition}[1]{\textcolor{red!80!black}{#1}}
 \newcommand{\definition}[1]{\textcolor{red!65!black}{#1}}
 \newcommand{\definitionx}[1]{\definition{\addtoindex{#1}}}
 \include{dwarfnamecmds}
@@ -278,6 +282,7 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 % --------------------------------
 %
 \begin{document}
+
 \frontmatter
 \thispagestyle{empty}
 
@@ -391,7 +396,7 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \condlinenumbers\include{dataobject}                \emptypage
 \condlinenumbers\include{typeentries}               %\emptypage
 \condlinenumbers\include{otherdebugginginformation} %\emptypage
-\condlinenumbers\include{datarepresentation}        %\emptypage
+\condlinenumbers\include{datarepresentation}        \emptypage
 
 %  The \appendix command toggles us into appendix chapters
 \appendix
@@ -404,8 +409,9 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 \condlinenumbers\include{splitobjects}	            \emptypage
 \condlinenumbers\include{sectionversionnumbers}     \emptypage
 \nolinenumbers
-\include{gnulicense}                           \emptypage
+\include{gnulicense}                           		\emptypage
 % Maybe someday the selected glossary concept will be of interest...
-%\include{selectedglossary}                    %\emptypage
-\printindex                                    \clearpage
+%\include{selectedglossary}                    		%\emptypage
+\printindex                                    		\clearpage
+
 \end{document}
