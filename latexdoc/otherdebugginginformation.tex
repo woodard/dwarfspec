@@ -1989,6 +1989,20 @@ parameter, an unsigned LEB128\addtoindexx{LEB128!unsigned}
 integer. It sets the
 \addttindex{discriminator} register to the new value.
 
+\bb
+\item \textbf{\DWLNEpaddingTARG} \\
+The \DWLNEpaddingNAME{} opcode is followed by a single
+operand which consists of a sequence of arbitrary bytes,
+which may be zero length.  The size of the operand is
+implicitly given by the unsigned LEB128\addtoindexx{LEB128!unsigned}
+integer that precedes the opcode.  The opcode and operand have no
+effect on the line number program.
+
+\textit{This permits a producer to pad or overwrite arbitrary
+parts of a line number program, with a minimum of the
+three bytes needed to encode any extended opcode.}
+\eb
+
 \end{enumerate}
 
 \textit{The DW\_LNE\_define\_file operation defined

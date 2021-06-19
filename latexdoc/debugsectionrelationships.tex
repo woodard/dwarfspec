@@ -23,11 +23,16 @@ relationships between the main debugging sections of an executable
 or sharable file and a related \addtoindex{supplementary object file}.
 
 \section{Split DWARF Section Relationships}
-Figure \ref{fig:splitdwarfsectionrelationships} illustrates
+Figure \refersec{fig:splitdwarfsectionrelationships} illustrates
 the DWARF section relationships for \splitDWARFobjectfile{s}.
 However, it does not show the 
 relationships between the main debugging sections of an executable
 or shareable file and a related \addtoindex{supplementary object file}.
+\bb
+For space reasons, the figure omits some details that are shown in
+Figure \ref{fig:debugsectionrelationships}, such as indirect references
+using indexing sections (such as \dotdebugstroffsets).
+\eb
 
 \begin{landscape}
 \begin{figure}
@@ -49,7 +54,7 @@ or shareable file and a related \addtoindex{supplementary object file}.
 				      \dotdebuginfo\\
                                         ~
 				      \end{tabular}};
-\node(zcircs)   at (-1.8,4.0) [circ] {\textit{A}};
+\node(zcircs)   at (-1.6,5.5) [circ] {\textit{A}};
 \node(zlinkb)   at ( 0,  1.5) [link] {To compilation unit~~(b)};
 \node(zsectpub) at ( 0,-0.25) [sect] {\begin{tabular}{c} 
 				      \dotdebugnames  
@@ -59,7 +64,7 @@ or shareable file and a related \addtoindex{supplementary object file}.
 \draw[thin,-to reversed]            (zlinka) -- (zsectara);
 \draw[thin,triangle 45-]            (zsectinf) -- (zlinka);
 \draw[thin,-triangle 45]            (zlinkb) -- (zsectinf);
-\draw[thin,to reversed-]	    (zsectpub) -- (zlinkb);
+\draw[thin,to reversed-]	   		(zsectpub) -- (zlinkb);
 
 % The second column, similarly
 %
@@ -68,7 +73,7 @@ or shareable file and a related \addtoindex{supplementary object file}.
 \node(zlinkd)   at (5, 12.1)  [link] {\DWFORMstrp{}~~(d)};
 \node(zlinke)	at (5, 10.4)  [link] {\begin{tabular}{c}
 				      \DWATstroffsetsbase \\
-				      \DWFORMstrx\textit{[1,2,3,4]}{}~(e) \\
+				      \DWFORMstrx\textit{[1,2,3,4]}{}~~(e) \\
 				      \end{tabular}};
 \node(zlinkf)   at (5,  8.4)  [link] {\begin{tabular}{c}
 				      \DWOPcallref{}~~~~~(f) \\
@@ -77,16 +82,16 @@ or shareable file and a related \addtoindex{supplementary object file}.
 \node(zlinki)   at (5,  6.7)  [link] {\DWATmacros{}~~(g)};
 \node(zlinkj)   at (5,  5.4)  [link] {\DWATstmtlist{}~~(h)};
 \node(zlinkh)   at (5,  3.9)  [link] {\begin{tabular}{c}
-                                      \DWATranges{}~~~~(i) \\
+                                      \DWATranges{}~~~~~~(i) \\
                                       \DWATrnglistsbase
                                       \end{tabular}};
 \node(zlinkg)   at (5,  2.4)  [link] {\DWATlocation{}, etc.~~(j)};
-\node(zlinkk)	at (5,  0.5)  [link] {\begin{tabular}(c)
+\node(zlinkk)	at (5,  0.5)  [link] {\begin{tabular}{c}
 				      \DWATaddrbase    \\
-				      \DWFORMaddrx\textit{[1,2,3,4]}{} \\
-				      \DWOPaddrx \\
-				      \DWOPconstx
-				      \end{tabular} (k)};
+				      \DWFORMaddrx\textit{[1,2,3,4]} \\
+					  \DWOPaddrx \\
+				      \hspace{0.2in}\DWOPconstx~~~~(k)
+				      \end{tabular}};
 
 % Links between first and second columns
 %
@@ -118,11 +123,12 @@ or shareable file and a related \addtoindex{supplementary object file}.
                                       \end{tabular}};
 \node(zsectlin)	at (10,  5.00) [sect] {\dotdebugline};
 \node(zsectran)	at (10,  3.85) [sect] {\dotdebugrnglists};
-\node(zsectloc)	at (10,  2.70) [sect] {\dotdebugloclists{}};
+\node(zsectloc)	at (10,  2.70) [sect] {\dotdebugloclists};
 \node(zlinko)   at (10,  1.20) [link] {\begin{tabular}{c}
                                        \DWOPaddrx \\
-                                       \DWOPconstx
-                                       \end{tabular} (o)};
+                                       \DWOPconstx~~~~~~(o) \\
+									   DW\_LLE\_*x*
+                                       \end{tabular}};
 \node(zsectadx) at (10,  -0.25) [sect] {\dotdebugaddr{}};
 
 \draw[thin,to reversed-]       (zsectstx) -- (zlinkl);
@@ -147,26 +153,33 @@ or shareable file and a related \addtoindex{supplementary object file}.
 
 % The fourth column
 %
-\node(zlinky)   at (15.6, 10.5) [link] {\begin{tabular}{c}
+\node(zlinky)   at (15.6, 12.0) [link] {\begin{tabular}{c}
                                         \DWMACROdefinestrp \\
                                         \DWMACROundefstrp \\
                                         (p)
                                         \end{tabular}};
-\node(zlinkz)   at (15.6,  6.4) [link] {\begin{tabular}{c}
+\node(zlinkz)   at (15.6,  7.9) [link] {\begin{tabular}{c}
                                         \DWMACROimport \\
                                         (q)
                                         \end{tabular}};
-\node(zcircsp)  at (17.4,  4.0) [circ]  {\textit{A}};
-\node(zlinkx)   at (15.6,  2.0) [link]  {\DWFORMlinestrp~(r, s)};
-\node(zsectlns) at (15.6,-0.25) [sect]  {\dotdebuglinestr};
+\node(zcircsp)  at (17.4,  6.3) [circ]  {\textit{A}};
+\node(zlinkx)   at (15.6,  5.0) [link]  {\DWFORMlinestrp~(r, s)};
+\node(zsectlns) at (15.6,  3.5) [sect]  {\dotdebuglinestr};
+\node(zlinkw)   at (15.6,  1.5) [link] {\begin{tabular}{c}
+                                        \DWRLEbaseaddressx \\
+										\DWRLEstartxendx~~~(t) \\
+										\DWRLEstartxlength
+										\end{tabular}};
              
              
-\draw[thin,to reversed-]       (zsectmac.east) -- (zlinky);
+\draw[thin,to reversed-]       (zsectmac.north east) -- (zlinky);
 \draw[thin,-triangle 45]       (zlinky) -- (zsectstr.east);
 \draw[triangle 45-triangle 45] (zsectmac.east) -- (zlinkz);
 \draw[thin,to reversed-]       (zcircsp) -- (zlinkx);
 \draw[thin,to reversed-]       (zsectlin.east) -- (zlinkx);
 \draw[thin,-triangle 45]       (zlinkx) -- (zsectlns);
+\draw[thin,to reversed-]       (zsectran.east) -- (zlinkw);
+\draw[thin,-triangle 45]       (zlinkw) -- (zsectadx.east);
 
 \end{tikzpicture}
 \vspace{5mm}
@@ -299,6 +312,11 @@ of that section given in the macro information header.
 \dotdebugaddr{} section by way of the 
 \DWATaddrbase{} attribute in the associated \dotdebuginfo{} 
 section.
+\bb
+Also, some operands of the \DWLLEbaseaddressx, \DWLLEstartxendx{} 
+and \DWLLEstartxlength{} location list entries have operands that 
+are an index into the \dotdebugaddr{} section.
+\eb
 
 %p
 \itembfnl{(p) \dotdebugmacro{} to \dotdebugstr}
@@ -329,10 +347,21 @@ This form can be used in a \dotdebugline{} section
 The value of a \DWFORMlinestrp{} form refers to a
 string section specific to the line number table.
 This form can be used in a \dotdebuginfo{} section
-(as well as in a \dotdebugline{} section).\footnote{ 
-The circled (s) connects to the circled
-(s)' via hyperspace (a wormhole).}
- 
+(as well as in a \dotdebugline{} section).\footnote{
+\bb
+The circled (A) of the left connects to the circled
+(A) on the right 
+\eb
+via hyperspace (a wormhole).}
+
+\bb
+%t
+\itembfnl{(t) \dotdebugrnglists{} to \dotdebugaddr}
+Some operands of \DWRLEbaseaddressx, \DWRLEstartxendx{} and 
+\DWRLEstartxlength{} range list entries are an 
+an index into the \dotdebugaddr{} section.
+\eb
+
 \end{description}
 
 
@@ -382,7 +411,10 @@ The circled (s) connects to the circled
 \node(ysectstrdwo) at (13.5,  2.0) [sect] {\dotdebugstrdwo};
 \node(ysectstodwo) at (10.5,  0.0) [sect] {\dotdebugstroffsetsdwo};
 
-\node(ysectextern) at (8.7,   3.0) [shape=circle, draw] {*};
+\node(ysectextern) at (8.7,   3.0) [shape=circle, draw] {\begin{tabular}{c}
+														 other \\
+														 units
+														 \end{tabular}};
 
 \draw[thin,-triangle 45]	(ysectinf) -- (ysectabb) node[midway, right] {(c)};
 \draw[thin,-triangle 45]	(ysectinf) -- (ysectadd) node[midway, right] {(k)};
