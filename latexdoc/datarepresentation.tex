@@ -741,10 +741,30 @@ length field of certain DWARF sections, as well as the CIE and
 FDE structures, so that the 32-bit and 64-bit DWARF formats
 can coexist and be distinguished within a single linked object.
 
+\bb
+The 32-bit and 64-bit DWARF format conventions must \emph{not} be
+intermixed within a single compilation unit.
+
+\textit{This rule greatly simplifies parsing DWARF in some cases.  
+For example, the \DWATstroffsetsbase{} attribute points to the 
+zeroth entry of the string offset array, not to the header of that 
+portion of the \dotdebugstroffsets{} section, making it inconvenient 
+to determine the size of the entries in the array.  By requiring 
+that the referencing compilation unit and the referenced array use 
+the same format, a consumer can know the array entry size without
+needing to find the \dotdebugstroffsets{} header.}
+\eb
+
 Except where noted otherwise, all references in this document
 to a debugging information section (for example, \dotdebuginfo),
 apply also to the corresponding split DWARF section (for example,
 \dotdebuginfodwo).
+
+\bb
+\textit{Attribute values and section header fields that represent
+addresses in the target program are not affected by the rules that 
+follow.}
+\eb
 
 The differences between the 32- and 64-bit DWARF formats are
 detailed in the following:
@@ -777,9 +797,15 @@ fields that occur
 \addtoindexx{section offset!use in headers}
 in the headers of DWARF sections (other than initial length
 \addtoindexx{initial length}
-fields) are listed following. In the 32-bit DWARF format these
-are 4-byte unsigned integer values; in the 64-bit DWARF format,
-they are 8-byte unsigned integer values.
+fields) 
+\bb
+depend on the choice of DWARF format as follows: for
+\eb
+the 32-bit DWARF format these are 4-byte unsigned integer values; 
+\bb
+for
+\eb
+the 64-bit DWARF format, they are 8-byte unsigned integer values.
 
 \begin{nolinenumbersenv}
 \begin{center}
@@ -806,7 +832,11 @@ each other (both offset and size).
 
 \item Within the body of the \dotdebuginfo{}
 section, certain forms of attribute value depend on the choice
-of DWARF format as follows. For the 32-bit DWARF format,
+of DWARF format as 
+\bb
+follows: for 
+\eb
+the 32-bit DWARF format,
 the value is a 4-byte unsigned integer; for the 64-bit DWARF
 format, the value is an 8-byte unsigned integer.
 
@@ -847,40 +877,52 @@ sections, the representation of each entry in the array of
 compilation units (CUs) and the array of local type units
 (TUs), which represents an offset in the 
 \dotdebuginfo{}
-section, depends on the DWARF format as follows: in the
-32-bit DWARF format, each entry is a 4-byte unsigned integer;
-in the 64-bit DWARF format, it is a 8-byte unsigned integer.
+section, depends on the DWARF format as follows: 
+\bb
+for
+\eb
+the 32-bit DWARF format, each entry is a 4-byte unsigned integer;
+\bb
+for
+\eb
+the 64-bit DWARF format, it is a 8-byte unsigned integer.
 
 \needlines{4}
 \item In the body of the \dotdebugstroffsets{} 
 sections, the size of entries in the body depend on the DWARF
-format as follows: in the 32-bit DWARF format, entries are 4-byte
-unsigned integer values; in the 64-bit DWARF format, they are
-8-byte unsigned integers.
+format as follows: 
+\bb
+for
+\eb
+the 32-bit DWARF format, entries are 4-byte unsigned integer values; 
+\bb
+for
+\eb
+the 64-bit DWARF format, they are 8-byte unsigned integers.
 
 \item In the body of the \dotdebugloclists{} and \dotdebugrnglists{}
 sections, the offsets the follow the header depend on the
-DWARF format as follows: in the 32-bit DWARF format, offsets are 4-byte
-unsigned integer values; in the 64-bit DWARF format, they are
-8-byte unsigned integers.
+DWARF format as follows: 
+\bb
+for
+\eb
+the 32-bit DWARF format, offsets are 4-byte unsigned integer values; 
+\bb
+for
+\eb
+the 64-bit DWARF format, they are 8-byte unsigned integers.
 
 \end{enumerate}
 
+\bbpareb
 
-The 32-bit and 64-bit DWARF format conventions must \emph{not} be
-intermixed within a single compilation unit.
-
-\textit{Attribute values and section header fields that represent
-addresses in the target program are not affected by these
-rules.}
-
-\needlines{6}
+%\needlines{6}
 A DWARF consumer that supports the 64-bit DWARF format must
 support executables in which some compilation units use the
 32-bit format and others use the 64-bit format provided that
 the combination links correctly (that is, provided that there
-are no link\dash time errors due to truncation or overflow). (An
-implementation is not required to guarantee detection and
+are no link\dash time errors due to truncation or overflow). 
+(An implementation is not required to guarantee detection and
 reporting of all such errors.)
 
 \textit{It is expected that DWARF producing compilers will \emph{not} use
