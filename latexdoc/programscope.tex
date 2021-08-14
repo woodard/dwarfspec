@@ -285,9 +285,10 @@ information for this compilation unit
 and supersedes the 
 \DWATmacroinfoDEFN{} attribute of earlier DWARF versions.
 \livetarg{chap:DWATmacroinfomacroinformation}{}
-While \DWATmacrosNAME{} and \DWATmacroinfoNAME{} attributes cannot both occur in the same
-compilation unit, both may be found in the set of units that make up an executable
-or shared object file. The two attributes have distinct encodings to facilitate such
+While \DWATmacrosNAME{} and \DWATmacroinfoNAME{} attributes cannot 
+both occur in the same compilation unit, both may be found in the 
+set of units that make up an executable or shared object file. 
+The two attributes have distinct encodings to facilitate such
 coexistence.}
 
 \needlines{6}
@@ -297,6 +298,21 @@ whose value is a
 null-terminated string containing the current working directory
 of the compilation command that produced this compilation
 unit in whatever form makes sense for the host system.
+
+\bb
+If a relative path is used in \DWATcompdirNAME, it will be relative 
+to the location of the linked image containing the \DWATcompdirNAME{}
+entry.
+
+\textit{In some cases a producer may allow the user to specify a relative
+path for \DWATcompdir. There are a few cases in which this is useful,
+but in general using a relative path for \DWATcompdir{} is discouraged
+as it will not work well in many cases including the following:
+different relative paths are used within the same build; the build
+system creates multiple linked images in different directories; the
+final linked image is moved before being debugged; .o files that need to
+be debugged directly.}
+\eb
 
 \item  \hypertarget{chap:DWATproducercompileridentification}{}
 A \DWATproducerDEFN{} attribute\addtoindexx{producer attribute}

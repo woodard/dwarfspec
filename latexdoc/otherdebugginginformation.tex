@@ -784,7 +784,7 @@ folded according to the simple case folding algorithm defined in the
 "Caseless Matching" subsection of Section 5.18 ("Case Mappings") of
 the \addtoindex{Unicode} Standard, Version 9.0.0. The original symbol 
 name, as it appears in the source code, should be stored in the name 
-table.\addtoindex{name index!case folding}
+table.\addtoindexx{name index!case folding}\db
 
 \textit{Thus, two symbols that differ only by case will hash to
 the same slot, but the consumer will be able to distinguish the names
@@ -1487,7 +1487,16 @@ including the compilation directory of the compilation.
 user for the compiler to search and those the compiler
 searches without explicit direction.)
    
-The first entry is the current directory of the compilation.
+The first 
+\bb
+path
+\eb
+entry is the current directory of the compilation;
+\bb
+if that entry is specified using a relative path, it is relative 
+to the location of the linked image containing the line table
+entries (assuming the image has not been moved).
+\eb
 Each additional path entry is either a full path name or
 is relative to the current directory of the compilation.
    
@@ -1509,6 +1518,7 @@ both the compilation unit debugging information entry
 and the line number header can
 share a single copy of the current directory name string.}
 
+\needlines{4}
 \item \texttt{file\_name\_entry\_format\_count} (\HFTubyte) \\
 \addttindexx{file\_name\_entry\_format\_count}
 A count of the number of file entry format entries that
