@@ -7,6 +7,7 @@
 # regular page numbers beginning at 1) 
 # up to 4 times might be needed.
 # You need to do makeindex before the final latex!
+#
 all:
 	latex -halt-on-error dwarf6.tex
 	latex -halt-on-error dwarf6.tex
