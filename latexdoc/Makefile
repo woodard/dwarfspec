@@ -8,13 +8,13 @@
 # up to 4 times might be needed.
 # You need to do makeindex before the final latex!
 all:
-	latex -halt-on-error dwarf5.tex
-	latex -halt-on-error dwarf5.tex
-	makeindex dwarf5
-	latex -halt-on-error dwarf5.tex
-	latex -halt-on-error dwarf5.tex
-	dvips dwarf5.dvi -o dwarf5.ps
-	ps2pdf dwarf5.ps dwarf5.pdf
+	latex -halt-on-error dwarf6.tex
+	latex -halt-on-error dwarf6.tex
+	makeindex dwarf6
+	latex -halt-on-error dwarf6.tex
+	latex -halt-on-error dwarf6.tex
+	dvips dwarf6.dvi -o dwarf6.ps
+	ps2pdf dwarf6.ps dwarf6.pdf
 clean:
 	-rm -f *.dvi
 	-rm -f *.aux
@@ -37,9 +37,9 @@ check:
 	@echo '**********************'
 	@echo '*** Cosmetic issues'
 	@echo '**********************'
-	@egrep '(Under)|(Over)' dwarf5.log || echo "None!"
+	@egrep '(Under)|(Over)' dwarf6.log || echo "None!"
 	@echo '**********************'
 	@echo '*** Missing references'
 	@echo '**********************'
-	@grep 'undef' dwarf5.log || echo "None!"
+	@grep 'undef' dwarf6.log || echo "None!"
 
