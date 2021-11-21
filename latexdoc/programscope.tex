@@ -500,10 +500,12 @@ to locate the object file where the split full compilation unit
 can be found, and for the consumer to interpret references to
 addresses in the program. 
 
-
 A skeleton compilation unit has no children.
 
-A skeleton compilation unit has a \DWATdwoname{} attribute:
+A skeleton compilation unit has 
+\bb
+the following attributes:
+\eb
 
 \begin{enumerate}[1. ]
 
@@ -553,8 +555,18 @@ of a \DWATuseUTFeight{} attribute in the full compilation unit
 (see Section \refersec{chap:splitfullcompilationunitentries}).}
 
 \item A \DWATstroffsetsbase{} attribute, for indirect strings references 
-from the skeleton compilation unit.
+from the 
+\bb
+corresponding split full
+\eb 
+compilation unit.
+
 \item A \DWATaddrbase{} attribute.
+
+\bb
+\item A \DWATrnglistsbase{} attribute, for range list entry references 
+from the corresponding split full compilation unit.
+\eb
 
 \end{enumerate}
 
@@ -566,8 +578,11 @@ The attributes provided by the skeleton compilation
 unit entry do not need to be repeated in the full compilation
 unit entry.
 
-\textit{The \DWATaddrbase{} 
-and \DWATstroffsetsbase{} attributes provide context that may be 
+\textit{The \DWATaddrbase{},
+\bb 
+\DWATstroffsetsbase{}, and \DWATrnglistsbase{}
+\eb
+attributes provide context that may be 
 necessary to interpret the contents
 of the corresponding \splitDWARFobjectfile.}
 
