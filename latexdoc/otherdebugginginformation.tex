@@ -2119,8 +2119,12 @@ If zero, that field is omitted.
 All other flags are reserved by DWARF.
 
 \item \addttindex{debug\_line\_offset} \\
-An offset in the \dotdebugline{} section of the
-beginning of the line number information in the containing
+An offset in the \dotdebugline{} section 
+\bb
+(if this header is in a \dotdebugmacro{} section) or \dotdebuglinedwo{} 
+section (if this header is in a \dotdebugmacrodwo{} section)
+\eb
+of the beginning of the line number information in the containing
 compilation, encoded as a 4-byte offset for a 32-bit DWARF 
 format macro section and an 8-byte offset for a 64-bit DWARF format
 macro section.  
@@ -2304,8 +2308,10 @@ The source file name index is the file number in the
 line number information table for the compilation unit.
 
 If a \DWMACROstartfileNAME{} entry is present, the header
-contains a reference to the \dotdebugline{} section of 
-the compilation.
+contains a reference to the \dotdebugline{} section 
+\bb
+or \dotdebuglinedwo{} section of the compilation, as appropriate.
+\eb
 
 \itembfnl{\DWMACROendfileTARG{}}
 A \DWMACROendfileNAME{} entry has no operands. The presence of
