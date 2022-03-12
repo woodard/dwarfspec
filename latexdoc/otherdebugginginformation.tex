@@ -990,7 +990,8 @@ This header is followed by a variable number of address range
 descriptors. Each descriptor is a triple consisting of a
 segment selector, the beginning address within that segment
 of a range of text or data covered by some entry owned by
-the corresponding compilation unit, followed by the non-zero
+the corresponding compilation unit, followed by the 
+\db
 length of that range. A particular set is terminated by an
 entry consisting of three zeroes. 
 When the \HFNsegmentselectorsize{} value
@@ -999,6 +1000,13 @@ each descriptor is just a pair, including the terminating
 entry. By scanning the table, a debugger can quickly decide
 which compilation unit to look in to find the debugging
 information for an object that has a given address.
+
+\bb
+A range description entry whose address is the reserved address (see
+Section \refersec{chap:reservedtargetaddress}), indicates a 
+non-existent range, which is equivalent to
+omitting the range description.
+\eb
 
 \textit{If the range of addresses covered by the text and/or data
 of a compilation unit is not contiguous, then there may be
@@ -2006,6 +2014,15 @@ address as an operand. The size of the operand is the size
 of an address on the target machine. It sets the \texttt{address}
 register to the value given by the relocatable address and
 sets the \addttindex{op\_index} register to 0.
+
+\bb
+If the address value is the reserved target address (see Section 
+\refersec{chap:reservedtargetaddress}),
+no instructions are associated with subsequent rows up to
+but not including the subsequent \DWLNEsetaddress{} or
+\DWLNEendsequence{} opcode, which is equivalent to omitting that sequence
+of opcodes.
+\eb
 
 \textit{All of the other line number program opcodes that
 affect the \texttt{address} register add a delta to it. This instruction

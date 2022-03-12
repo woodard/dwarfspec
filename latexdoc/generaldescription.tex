@@ -1039,6 +1039,24 @@ address sizes. In
 that case, the DWARF debugging information contained in this
 object file will use the same address size.}
 
+\bb
+\needlines{5}
+\subsection{Reserved Target Address for Non-Existent Entity}
+\label{chap:reservedtargetaddress}
+\addtoindexx{reserved target address}
+\addtoindexx{target address!reserved}
+The target address consisting of the largest representable address
+value (for example, \xffffffff{} for a 32-bit address) is reserved to
+indicate that there is no entity designated by that address.
+
+\textit{In some cases a producer may emit machine code or allocate
+storage for an entity, but a linker or other subsequent processing
+step may remove that entity. In that case, rather than be required
+to rewrite the DWARF description to eliminate the relevant DWARF
+construct that contains the address of that entity, the processing
+step may simply update the address value to the reserved value.}
+\eb
+
 \needlines{6}
 \section{DWARF Expressions}
 \label{chap:dwarfexpressions}
@@ -2083,6 +2101,15 @@ object in question is defined, and there is no following default
 location description, it is assumed that the object is not
 available for the portion of the range that is not covered.
 
+\bb
+\needlines{5}
+In the case of a bounded location description where the range is defined
+by a starting address and either an ending address or a length, a
+starting address consisting of the reserved address value (see Section
+\refersec{chap:reservedtargetaddress}) indicates a non-existent range, 
+which is equivalent to omitting the description.
+\eb
+
 \item \definition{Default location description}.\addtoindexx{default location description}
 This kind of entry provides a
 location description that specifies the location of
@@ -2104,6 +2131,13 @@ Section \refersec{chap:fullandpartialcompilationunitentries}).
 In the case of a compilation unit where all of the machine
 code is contained in a single contiguous section, no base
 address entry is needed.
+
+\bb
+If the base address is the reserved target address, either explicitly
+or by default, then the range of any bounded location description
+defined relative to that base address is non-existent, which is
+equivalent to omitting the description.
+\eb
 
 \item  \definition{End-of-list}.\addtoindexx{end-of-list!of location list}
 This kind of entry marks the end of the location list.
@@ -2629,8 +2663,12 @@ A \DWATrangesDEFN{} attribute\addtoindexx{ranges attribute}
 for a non-contiguous range of addresses.
 \end{itemize}
 
-If an entity has no associated machine code, 
-none of these attributes are specified.
+\bb
+If a producer emits no machine code for an entity, none of these
+attributes are specified. Equivalently, a producer may emit such an
+attribute using the reserved target address (see Section 
+\refersec{chap:reservedtargetaddress}) for the non-existent entity.
+\eb
 
 %\needlines{4}
 The \definitionx{base address} of the scope for any of the
@@ -2695,6 +2733,16 @@ of the address range.
        
 There are several kinds of bounded range entries which specify
 the starting and ending addresses in different ways.
+
+\bb
+In the case of a range list entry where the range is defined by a
+starting address and either an ending address or a length, a starting
+address consisting of the reserved address value (see Section 
+\refersec{chap:reservedtargetaddress})
+indicates a non-existent range, which is equivalent to omitting the
+description.
+\eb
+
 \needlines{4}
 \item \definition{Base address}.\addtoindexx{base address!of range list}
 This kind of entry provides an address to be
@@ -2710,6 +2758,13 @@ Section \refersec{chap:fullandpartialcompilationunitentries}).
 In the case of a compilation unit where all of the machine
 code is contained in a single contiguous section, no base
 address entry is needed.
+
+\bb
+If the base address is the reserved target address, either explicitly or
+by default, then the range of any range list entry defined relative to
+that base address is non-existent, which is equivalent to omitting the
+range list entry.
+\eb
 
 \item \definition{End-of-list}.\addtoindexx{end-of-list!of range list} 
 This kind of entry marks the end of the range list.
