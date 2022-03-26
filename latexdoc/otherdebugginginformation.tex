@@ -1242,6 +1242,7 @@ for example, by the object file description.}
 
 \needlines{6}
 \subsection{Line Number Program Instructions}
+\label{chap:linenumberprograminstructions}
 The state machine instructions in a line number program belong to one of three categories:
 
 \begin{enumerate}[1. ]
@@ -1262,12 +1263,27 @@ line number program header also specifies the number of operands for
 each standard opcode.
 
 \needlines{4}
+\bb
+One standard opcode (\DWLNSextendedop) serves as an escape that allows
+additional opcodes without reducing the number of special opcodes.
+\eb
+
+\needlines{4}
 \item extended opcodes \\
-These have a multiple byte format. The first byte is zero; the next bytes
+These have a multiple byte format. The first byte is 
+\bb
+\DWLNSextendedop{}.
+\eb
+The next bytes
 are an unsigned LEB128\addtoindexx{LEB128!unsigned} integer giving the number of bytes in the
-instruction itself (does not include the first zero byte or the size). The
+instruction itself (this does not include the first 
+\bb
+\DWLNSextendedop{}
+\eb
+byte or the size). The
 remaining bytes are the instruction itself (which begins with a \HFTubyte{}
 extended opcode). \\
+
 \end{enumerate}
 
 
@@ -1695,6 +1711,7 @@ it were not present.}
 \needlines{6}
 \subsection{The Line Number Program}
 \label{chap:linenumberprogram}
+\addtoindexx{line number program}
 As stated before, the goal of a line number program is to build
 a matrix representing one compilation unit, which may have
 produced multiple sequences of target machine instructions.
@@ -1706,6 +1723,8 @@ scheduling or other optimization.)
 \needlines{4}
 \subsubsection{Special Opcodes} 
 \label{chap:specialopcodes}
+\addtoindexx{line number program!special opcodes}
+\addtoindexx{special opcodes in line number program}
 Each \HFTubyte{} special opcode has the following effect on the state machine:
 
 \begin{enumerate}[1. ]
@@ -1829,7 +1848,8 @@ is,
 \needlines{6}
 \subsubsection{Standard Opcodes}
 \label{chap:standardopcodes}
-
+\addtoindexx{line number program!standard opcodes}
+\addtoindexx{standard opcodes in line number program}
 The standard opcodes, their applicable operands and the
 actions performed by these opcodes are as follows:
 
@@ -1984,11 +2004,26 @@ The \DWLNSsetisaNAME{} opcode takes a single
 unsigned LEB128\addtoindexx{LEB128!unsigned} operand and stores that value in the 
 \addttindex{isa}
 register of the state machine.
+
+\item \textbf{\DWLNSextendedopTARG} \\
+\bb
+The \DWLNSextendedopNAME{} opcode takes two operands. The first is an
+unsigned LEB128 value that gives the size of the operand that follows.
+The second begins with an extended opcode which is followed by
+operands appropriate to that opcode.
+\eb
+
 \end{enumerate}
 
 \needlines{8}
 \subsubsection{Extended Opcodes}
 \label{chap:extendedopcodes}
+\addtoindexx{line number program!extended opcodes}
+\addtoindexx{extended opcodes in line number program}
+\bb
+Extended opcodes are used as part of a \DWLNSextendedop{} operation
+(see Section \refersec{linenumberprograminstructions}).
+\eb
 
 The extended opcodes are as follows:
 

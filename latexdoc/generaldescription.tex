@@ -1184,12 +1184,23 @@ section.}
 \needlines{10}
 \subsubsection{Register Values}
 \label{chap:registervalues}
-The following operations push a value onto the stack that is either the
-contents of a register or the result of adding the contents of a register
-to a given signed offset. 
+The following operations push a value onto the stack that is either 
+\bb
+part or all of
+\eb
+the contents of a register or the result of adding the contents of a 
+register to a given signed offset. 
 \addtoindexx{DWARF expression!register based addressing}
-\DWOPregvaltype{} pushes the contents
-of the register together with the given base type, while the other operations
+\DWOPregvaltype{} pushes the contents of
+\bb
+a 
+\eb
+register together with the given base type.
+\bb
+\DWOPregvalbits{} pushes the partial contents of
+a register together with the generic type.
+\eb
+The other operations
 push the result of adding the contents of a register to a given
 signed offset together with the \generictype.
 
@@ -1226,6 +1237,19 @@ unsigned LEB128\addtoindexx{LEB128!unsigned} number
 that represents the offset of a debugging information entry in the current
 compilation unit, which must be a \DWTAGbasetype{} entry that provides the
 type of the value contained in the specified register.
+
+\needlines{8}
+\bb
+\itembfnl{\DWOPregvalbitsTARG}
+The \DWOPregvalbitsNAME{} operation takes a single unsigned LEB
+integer operand, which gives the number of bits to read. This number must
+be smaller or equal to the bit size of the generic type.  It pops
+the top two stack elements and interprets the top element as an
+unsigned bit offset from the least significant bit end and the
+other as a register number identifying the register from which to
+extract the value.  If the extracted value is smaller than the size
+of the generic type, it is zero extended.
+\eb
 
 \end{enumerate}
 

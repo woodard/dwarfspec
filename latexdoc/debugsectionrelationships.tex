@@ -384,9 +384,10 @@ an index into the \dotdebugaddr{} section.
 \node(ysectara)    at ( 0, 10.5) [sect] {\dotdebugaranges};
 \node(ysectfra)    at ( 0,  9.0) [sect] {\dotdebugframe};
 \node(ysectlin)    at ( 0,  7.5) [sect] {\dotdebugline};
-\node(ysectlis)    at ( 0,  5.7) [sect] {\dotdebuglinestr};
-\node(ysectnam)    at ( 0,  4.0) [sect] {\dotdebugnames};
-\node(ysectstr)    at ( 2,  2.0) [sect] {\dotdebugstr};
+\node(ysectlis)    at ( 0,  6.0) [sect] {\dotdebuglinestr};
+\node(ysectnam)    at ( 0,  4.5) [sect] {\dotdebugnames};
+\node(ysectrgl)    at ( 0,  3.0) [sect] {\dotdebugrnglists};
+\node(ysectstr)    at ( 2,  1.5) [sect] {\dotdebugstr};
 \node(ysectsto)    at ( 5,  0.0) [sect] {\dotdebugstroffsets};
 
 \node(ysectinf)    at ( 5,  7)   [sect] {\begin{tabular}{c}
@@ -422,6 +423,7 @@ an index into the \dotdebugaddr{} section.
 \draw[thin,-triangle 45]	(ysectinf) -- (ysectlin.east) node[midway, above] {(h)};
 \draw[thin,-triangle 45]	(ysectlin) -- (ysectlis) node[midway, right] {(l)};
 \draw[thin,-triangle 45]	(ysectnam.east) -- (ysectinf) node[midway, left] {(b)};
+\draw[thin,-triangle 45]	(ysectinf) -- (ysectrgl.east) node[midway, left]  {(i)};
 \draw[thin,-triangle 45]	(ysectinf) -- (ysectstr) node[midway, right] {(d)};
 \draw[thin,-triangle 45]	(ysectinf) -- (ysectsto) node[midway, right] {(e)};
 \draw[thin,-triangle 45]	(ysectsto) -- (ysectstr) node[midway, right] {(l)};
@@ -431,8 +433,8 @@ an index into the \dotdebugaddr{} section.
 
 \draw[thin,-triangle 45]  (ysectinfdwo) -- (ysectabbdwo) node[midway, left] {(co)};
 \draw[thin,-triangle 45]  (ysectinfdwo) -- (ysectlindwo.west) node[midway, above] {(ho)};
-\draw[thin,-triangle 45]  (ysectinfdwo) -- (ysectrandwo.west) node[midway, above] {(io)};
-\draw[thin,-triangle 45]  (ysectinfdwo) -- (ysectlocdwo.west) node[midway, right] {(jo)};
+\draw[thin,-triangle 45]  (ysectinfdwo) -- (ysectrandwo.west) node[midway, below] {(io)};
+\draw[thin,-triangle 45]  (ysectinfdwo) -- (ysectlocdwo) node[midway, left] {(jo)};
 \draw[thin,-triangle 45]  (ysectinfdwo) -- (ysectmacdwo.west) node[midway, above] {(go)};
 \draw[thin,-triangle 45]  (ysectinfdwo) -- (ysectstrdwo) node[midway, right] {(do)};
 \draw[thin,-triangle 45]  (ysectinfdwo) -- (ysectstodwo) node[near end, left] {(eo)};
@@ -461,6 +463,8 @@ an index into the \dotdebugaddr{} section.
    \textbf{Notes for Figure \ref{fig:splitdwarfsectionrelationships}}
 \end{center}
 \begin{description}
+
+% a
 \itembfnl{(a)  \dotdebugaranges{} to \dotdebuginfo}
 The \texttt{debug\_info\_offset} field in the header is the 
 offset in the \dotdebuginfo{} section of the corresponding 
@@ -469,6 +473,7 @@ compilation unit header of the skeleton \dotdebuginfo{} section
 in the \dotdebuginfo{} skeleton connects 
 the ranges to the full compilation unit in \dotdebuginfodwo.
 
+% b
 \itembfnl{(b) \dotdebugnames{} to \dotdebuginfo}
 The \dotdebugnames{} section  offsets lists provide an offset
 for the skeleton compilation unit and eight 
@@ -478,42 +483,50 @@ compilation units and type units refer to the DIEs in the
 \dotdebuginfodwo{} section for the respective 
 compilation unit and type units.
 
+% c
 \itembfnl{(c) \dotdebuginfo{} skeleton to \dotdebugabbrev}
 The \HFNdebugabbrevoffset{} value in the header is 
 the offset in the \dotdebugabbrev{} section of the 
 abbreviations for that compilation unit skeleton.
 
+% co
 \itembfnl{(co) \dotdebuginfodwo{} to \dotdebugabbrevdwo}
 The \HFNdebugabbrevoffset{} value in the header 
 is the offset in the \dotdebugabbrevdwo{} section of the 
 abbreviations for that compilation unit.
 
+% d
 \itembfnl{(d) \dotdebuginfo{} to \dotdebugstr}
 Attribute values of class string may have form \DWFORMstrp, 
 whose value is an offset in the 
 \dotdebugstr{} section of the corresponding string.
 
+% did
 \itembfnl{(did) \dotdebuginfo{} to \dotdebuginfodwo}
 The \DWATdwoname{}
 attribute in a skeleton unit identifies the file containing 
 the corresponding \texttt{.dwo} (split) data. 
 
+% do
 \itembfnl{(do) \dotdebuginfodwo{} to \dotdebugstrdwo}
 Attribute values of class string may have form 
 \DWFORMstrp, whose value is an offset in the 
 \dotdebugstrdwo{} section of the corresponding string.
 
+% e
 \itembfnl{(e) \dotdebuginfo{} to \dotdebugstroffsets}
 Attribute values of class string may have one of the forms
 \DWFORMstrxXNor, whose value is an index into the 
 \dotdebugstroffsets{} section for the corresponding string.
 
+% eo
 \needlines{4}
 \itembfnl{(eo)\dotdebuginfodwo{} to \dotdebugstroffsetsdwo}
 Attribute values of class string may have one of the forms
 \DWFORMstrxXNor, whose value is an index into the 
 \dotdebugstroffsetsdwo{} section for the corresponding string.
 
+% fo
 \itembfnl{(fo) \dotdebuginfodwo{} to \dotdebuginfodwo}
 The operand of the \DWOPcallref{} DWARF expression 
 operator is the offset of a debugging 
@@ -522,12 +535,14 @@ another compilation unit.  Similarly for attribute
 operands that use \DWFORMrefaddr. 
 See Section \refersec{chap:controlflowoperations}.
 
+% go
 \itembfnl{(go) \dotdebuginfodwo{} to \dotdebugmacrodwo}
 An attribute of class \CLASSmacptr{} (specifically \DWATmacros{} 
 with form \DWFORMsecoffset{}) is an offset within the 
 \dotdebugmacrodwo{} section of the beginning of the macro 
 information for the referencing unit.
 
+% h
 \itembfnl{(h) \dotdebuginfo{} (skeleton) to \dotdebugline}
 An attribute value of class \CLASSlineptr{} (specifically 
 \DWATstmtlist{} with form \DWFORMsecoffset) 
@@ -535,6 +550,7 @@ is an offset within the \dotdebugline{} section of the
 beginning of the line number information for the 
 referencing unit.
 
+% ho
 \itembfnl{(ho) \dotdebuginfodwo{}  to \dotdebuglinedwo{} (skeleton)}
 An attribute value of class \CLASSlineptr{} (specifically  
 \DWATstmtlist{}  with form \DWFORMsecoffset) 
@@ -544,6 +560,18 @@ for the referencing unit (the line table details are not in
 \dotdebuglinedwo{} but the line header with its list 
 of file names is present).
 
+
+% i
+\needlines{5}
+\bb
+\itembfnl{(i) \dotdebuginfo{} to \dotdebugrnglists}
+An attribute value of class \CLASSrnglist{} 
+(specifically form \DWFORMrnglistx{} or \DWFORMsecoffset) 
+is an index or offset within the \dotdebugrnglists{} 
+section of a \addtoindex{range list}.
+\eb
+
+% io
 \itembfnl{(io) \dotdebuginfodwo{} to \dotdebugrnglistsdwo}
 An attribute value of class \CLASSrnglist{} (specifically 
 \DWATranges{} with form \DWFORMrnglistx{} or \DWFORMsecoffset) 
@@ -553,6 +581,7 @@ The format of \dotdebugrnglistsdwo{} location list entries
 is restricted to a subset of those in \dotdebugrnglists.
 See Section \refersec{chap:noncontiguousaddressranges} for details.
 
+% jo
 \itembfnl{(jo) \dotdebuginfodwo{} to \dotdebugloclistsdwo}
 An attribute value of class 
 \CLASSloclist{} (specifically with form \DWFORMloclistx{}
@@ -564,6 +593,7 @@ is restricted to a subset of those in \dotdebugloclists.
 See Section \refersec{chap:locationlists} for details.
 
 \needlines{4}
+% k
 \itembfnl{(k) \dotdebuginfo{} to \dotdebugaddr}
 The value of the \DWATaddrbase{} attribute in the 
 \DWTAGcompileunit, \DWTAGpartialunit{} or \DWTAGtypeunit{} DIE 
@@ -572,26 +602,31 @@ addresses for that unit.
 \DWFORMaddrxXN, \DWOPaddrx{} and \DWOPconstx{} contain indices 
 relative to that offset.
 
+% lmo
 \bb
 \itembfnl{(lmo) \dotdebuglinedwo{} to \dotdebugstroffsetsdwo}
 The value of a \DWFORMlinestrp{} form refers to a string section specific
 to the line number table. This form can be used in a \dotdebuglinedwo{} section
 (as well as in a \dotdebuginfodwo{} section).
 
+% lo
 \itembfnl{(lo) \dotdebugstroffsetsdwo{} to \dotdebugstrdwo}
 Entries in the string offsets table are offsets to the corresponding string text
 in the \dotdebugstrdwo{} section.
 
+% mo
 \itembfnl{(mo) \dotdebugmacrodwo{} to \dotdebugstroffsetsdwo}
 Within the \dotdebugmacrodwo{} sections, the second operand of \DWMACROdefinestrx{}
 and \DWMACROundefstrx{} operations is an unsigned LEB128 value interpreted as an
 index into the \dotdebugstroffsetsdwo{} section.
 
+% po
 \itembfnl{(po) \dotdebugmacrodwo{} to \dotdebugstrdwo}
 Within the \dotdebugmacrodwo{} sections, the second operand of \DWMACROdefinestrp{}
 and \DWMACROundefstrp{} operations is an unsigned LEB128 value interpreted as an
 index into the \dotdebugstrdwo{} section.
 
+% qo
 \itembfnl{(qo) \dotdebugmacrodwo{} to \dotdebuglinedwo}
 Within the \dotdebugmacrodwo{} sections, if a \DWMACROstartfile{} entry is present,
 the macro header contains an offset into the \dotdebuglinedwo{} section.

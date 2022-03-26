@@ -2500,9 +2500,11 @@ Table \refersec{tab:dwarfoperationencodings}.
   \bfseries Operation&\bfseries Code &\bfseries  Operands &\bfseries Notes\\ \hline
 \endhead
   \hline 
-  \multicolumn{2}{l}{\emph{Continued on next page}}
+  \multicolumn{4}{l}{\emph{Continued on next page}}
 \endfoot
-  \hline 
+  \hline
+  \multicolumn{2}{l}{\ddagnewinversionx} &
+  \multicolumn{2}{l}{\dag~TOS indicates parameter on top of stack}
 \endlastfoot
 
 \textit{Reserved}	&0x01&-& \\
@@ -2606,6 +2608,11 @@ Table \refersec{tab:dwarfoperationencodings}.
                     &      &  &ULEB128 type entry offset \\
 \DWOPconvert		& 0xa8 &1 &ULEB128 type entry offset \\
 \DWOPreinterpret	& 0xa9 &1 &ULEB128 type entry offset \\
+\bb
+\DWOPregvalbits~\ddag&0xaa &1 &ULEB128 field size, \\*
+					&   &TOS~\dag  &integer bit offset, \\*
+\eb
+					&	&TOS~-~1   &integer register number \\ 
 \DWOPlouser			& 0xe0 && \\
 \DWOPhiuser			& \xff && \\
 
@@ -3271,8 +3278,12 @@ Table \refersec{tab:linenumberstandardopcodeencodings}.
   \hline \emph{Continued on next page}
 \endfoot
   \hline
+  \multicolumn{2}{l}{\ddagnewinversionx}
 \endlastfoot
 
+\bb
+\DWLNSextendedop~\ddag	&0x00 \\
+\eb
 \DWLNScopy				&0x01 \\
 \DWLNSadvancepc			&0x02 \\
 \DWLNSadvanceline		&0x03 \\
