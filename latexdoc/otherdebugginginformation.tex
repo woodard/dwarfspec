@@ -157,8 +157,11 @@ at global scope for that name.}
 
 \textit{A producer may choose to implement additional rules for what
 names are placed in the index, and may communicate those rules to
-a cooperating consumer via an augmentation string, described
-below.}
+a cooperating consumer via an augmentation 
+\bb
+block, 
+\eb
+described below.}
 
 \needlines{4}
 \subsubsection{Structure of the Name Index}
@@ -709,26 +712,46 @@ The number of unique names in the index.
 \item \texttt{abbrev\_table\_size} (\HFTuword) \\
 The size in bytes of the abbreviations table.
 
-\item \texttt{augmentation\_string\_size} (\HFTuword) \\
-The size in bytes of the augmentation string. This value is
-rounded up to a multiple of 4.
+\item 
+\bb
+\texttt{augmentation\_size} (\HFTuword) \\
+The size in bytes of the augmentation block. 
+This value must be a multiple of four.
+\eb
 
-\item \texttt{augmentation\_string} (\HFTaugstring) \\
-A vendor-specific augmentation string, which provides additional 
-information about the contents of this index. If provided, the string
-begins with a 4-character vendor ID. The remainder of the
-string is meant to be read by a cooperating consumer, and its
+\item 
+\bbeb
+\texttt{augmentation} (sequence of \HFTubyte) \\
+\addtoindexx{augmentation block}
+A vendor-specific 
+\bb
+sequence of bytes, 
+\eb
+which provides additional information about the contents of 
+this index. If provided, the sequence begins with 
+\bb
+four bytes which serve as a
+\eb
+vendor ID. The remainder of the
+\bb
+sequence
+\eb
+is meant to be read by a cooperating consumer, and its
 contents and interpretation are not specified here. The
 \bb
-null-terminated
+block is padded with zero bytes 
 \eb
-string is padded with null characters to a multiple of
-four bytes in length.
+to a multiple of four bytes in length.
 
-\textit{The presence of an unrecognized augmentation string 
+\textit{The presence of an unrecognized augmentation 
+\bb
+vendor ID
+\eb 
 does not make it
 impossible for a consumer to process data in the \dotdebugnames{} section.
-The augmentation string only provides hints to the consumer regarding
+The augmentation 
+\db
+only provides hints to the consumer regarding
 the completeness of the set of names in the index.
 }
 
@@ -2687,10 +2710,9 @@ and is independent of the DWARF version number.
 \needlines{8}
 \item  \HFNaugmentation{} (\HFTaugstring) \\
 A null-terminated UTF\dash 8 string that identifies the augmentation
-to this CIE or to the FDEs that use it. If a reader encounters
-an augmentation string that is unexpected, then only the
+to this CIE or to the FDEs that use it. If a reader encounters an
+\addtoindex{augmentation string} that is unexpected, then only the
 following fields can be read:
-
 
 \begin{itemize}
 

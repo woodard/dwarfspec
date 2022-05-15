@@ -170,18 +170,22 @@ the \addtoindex{Fortran 2003} string kinds
 
 \subsubsection{Scaled Encodings}
 \label{chap:scaledencodings}
+\index{scaled encodings}
 The \DWATEsignedfixed{} and \DWATEunsignedfixed{} entries
 describe signed and unsigned fixed\dash point binary data types,
 respectively.
 
 The fixed binary type encodings have a
+\index{scaled encodings!binary}
 \DWATdigitcount{} attribute\addtoindexx{digit count attribute}
 with the same interpretation as described for the
 \DWATEpackeddecimal{} and \DWATEnumericstring{} base type encodings
 (see Section \refersec{chap:decimalstringencodings}).
 
 \needlines{4}
-For a data type with a decimal scale factor, the fixed binary
+For a data type with a decimal scale factor, 
+\index{scaled encodings!decimal}
+the fixed binary
 type entry has a \DWATdecimalscale{} attribute 
 \addtoindexx{decimal scale attribute}
 with the same interpretation as described for the 
@@ -203,8 +207,34 @@ point to the left; if the absolute value of the scale is
 larger than the number of bits, this implies additional zero
 bits on the left are not stored in an instance of the type.
 
+\bb
+For a data type with a rational scale factor, 
+\index{scaled encodings!rational}
+one or both of the following attributes may be used:
+\begin{itemize}
+\item
+\DWATscalemultiplierDEFN\hypertarget{chap:DWATscalemultiplierofscalefactor}{}. 
+This attribute is an integer constant value
+that represents a multiplicative scale factor to be applied to an
+instance of the type.
+\item
+\DWATscaledivisorDEFN\hypertarget{chap:DWATscaledivisorofscalefactor}{}. 
+This attribute is an integer constant value
+that represents the reciprocal of a multiplicative scale factor to be
+applied to an instance of the type.
+\end{itemize}
+If both attributes are present, both are applied, with the result
+being equivalent to a rational scale factor x/y, where x is the
+value of \DWATscalemultiplierNAME{} and y is the value of \DWATscaledivisorNAME.
+\eb
+
 For\hypertarget{chap:DWATsmallscalefactorforfixedpointtype}{}
-a data type with a non-decimal and non-binary scale factor,
+a data type with a
+\index{scaled encodings!floating-point} 
+\bb
+non-rational
+\eb
+scale factor,
 the fixed binary type entry has a \DWATsmallDEFN{} attribute which
 \addtoindexx{small attribute} references a 
 \DWTAGconstant{} entry. The scale factor value
@@ -215,6 +245,13 @@ entry for the type.
 
 \textit{The \DWATsmall{} attribute is defined with the 
 \addtoindex{Ada} \texttt{small} attribute in mind.}
+
+\bb
+If a type entry has attributes that describe more than one kind of scale
+factor, \index{scaled encodings!composition of}
+the resulting scale factor for the type is the product of the
+individual scale factors.
+\eb
 
 \needlines{6}
 \subsubsection{Floating-Point Encodings}
