@@ -714,10 +714,14 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 &\livelinki{chap:DWATstringlengthstringlengthofstringtype}
            {Size of string length of string type}
            {string length of string type!size of} \\
-\DWATstroffsetsbaseTARG
-&\livelinki{chap:DWATstroffsetbaseforindirectstringtable}
-        {Base of string offsets table}
-        {string offsets table} \\
+\bb
+\DWATstroffsetsTARG\footnote{
+	DW\_FORM\_str\_offsets is new in \DWARFVersionVI. 
+	It replaces DW\_AT\_str\_offsets\_base which is deprecated.}
+&\livelinki{chap:DWATstroffsetforindirectstringsection}
+        {String offsets information for unit}
+        {string offsets information for unit} 
+\eb		\\
 \DWATthreadsscaledTARG
 &\livelink{chap:DWATthreadsscaledupcarrayboundthreadsscalfactor}
         {Array bound THREADS scale factor} 
@@ -1029,6 +1033,7 @@ Addresses, bytes and bits in DWARF use the numbering and direction
 conventions that are appropriate to the current language on
 the target system.
 
+\needlines{6}
 Many places in this document refer to the size of an address
 on the target architecture (or equivalently, target machine)
 to which a DWARF description applies. For processors which
@@ -1082,6 +1087,7 @@ general operations that are defined here, operations that are
 specific to location descriptions are defined in 
 Section \refersec{chap:locationdescriptions}.
 
+\needlines{6}
 \subsection{General Operations}
 \label{chap:generaloperations}
 Each general operation represents a postfix operation on
@@ -2350,7 +2356,7 @@ Table \refersec{tab:visibilitycodes}.
 \DWVISqualifiedTARG{}  \\
 \end{simplenametable}
 
-\needlines{8}
+\needlines{10}
 \section{Virtuality of Declarations}
 \label{chap:virtualityofdeclarations}
 \textit{\addtoindex{C++} provides for virtual and pure virtual structure or class
@@ -2478,7 +2484,7 @@ Name&Value&Meaning  \\
 \end{tabular}
 \end{table}
 
-\needlines{6}
+\needlines{12}
 \section{Non-Defining Declarations and Completions}
 \label{chap:nondefiningdeclarationsandcompletions}
 A debugging information entry representing a program entity

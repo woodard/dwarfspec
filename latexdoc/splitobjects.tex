@@ -94,6 +94,9 @@ strings and across compilations in package files
 (where they are not subject to potential stripping).
 
 In a \texttt{.dwo} file, referring to a string using \DWFORMstrp{}
+\bb 
+or \DWFORMstrpeight{}
+\eb
 is valid, but such use 
 results in a file that cannot be incorporated into a package file
 (which involves string merging).
@@ -146,7 +149,12 @@ skeleton compilation unit in the \dotdebuginfo{} section.
 
 \item
 \dotdebugstr{} - Contains any strings referenced by the skeleton
-\dotdebuginfo{} sections (via \DWFORMstrp{}, \DWFORMstrxXNor{}).
+\dotdebuginfo{} sections (via \DWFORMstrp{}, 
+\bb 
+\DWFORMstrpeight{},
+\eb
+\DWFORMstrxXNor{}).
+
 \item
 \dotdebugstroffsets{} - Contains the string offsets table for
 the strings in the \dotdebugstr{} section (if one of the forms
@@ -166,7 +174,9 @@ The skeleton compilation unit DIE may have the following attributes:
 \DWATlowpc{},
 \DWATranges{},
 \DWATstmtlist{},
-\DWATstroffsetsbase{}
+\bb
+\DWATstroffsets{}
+\eb
 }
 \end{nolinenumbersenv}
 
@@ -255,7 +265,7 @@ kinds.
 \hline
 \DWATstmtlist           & \chkmk  & \chkmk &  \chkmk   &        & \chkmk  \\
 \hline
-\DWATstroffsetsbase     & \chkmk  & \chkmk &  \chkmk   &        &         \\
+\bbeb \DWATstroffsets   & \chkmk  & \chkmk &  \chkmk   &        &         \\
 \hline
 \DWATuseUTFeight        & \chkmk  & \chkmk &  \chkmk   & \chkmk & \chkmk  \\
 \hline

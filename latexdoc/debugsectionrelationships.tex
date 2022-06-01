@@ -70,9 +70,9 @@ using indexing sections (such as \dotdebugstroffsets).
 %
 \node(zsectfra) at (5, 15.0)  [sect] {\dotdebugframe};
 \node(zlinkc)   at (5, 13.5)  [link] {To abbreviations~~(c)};
-\node(zlinkd)   at (5, 12.1)  [link] {\DWFORMstrp{}~~(d)};
+\node(zlinkd)   at (5, 12.1)  [link] {\DWFORMstrp\textit{[8]}~~(d)};
 \node(zlinke)	at (5, 10.4)  [link] {\begin{tabular}{c}
-				      \DWATstroffsetsbase \\
+				      \DWATstroffsets \\
 				      \DWFORMstrx\textit{[1,2,3,4]}{}~~(e) \\
 				      \end{tabular}};
 \node(zlinkf)   at (5,  8.4)  [link] {\begin{tabular}{c}
@@ -215,18 +215,27 @@ section of the abbreviations for that compilation unit.
 
 %d
 \itembfnl{(d) \dotdebuginfo{} to \dotdebugstr}
-Attribute values of class string may have form 
-\DWFORMstrp, whose
-value is the offset in the \dotdebugstr{}
+Attribute values of class string may have form \DWFORMstrp{}
+\bb
+or \DWFORMstrpeight{},
+\eb
+whose value is the offset in the \dotdebugstr{}
 section of the corresponding string.
 
 %e
 \itembfnl{(e) \dotdebuginfo{} to \dotdebugstroffsets}
-The value of the \DWATstroffsetsbase{} attribute in a
+The value of the 
+\bb
+\DWATstroffsets{} 
+\eb
+attribute in a
 \DWTAGcompileunit{}, \DWTAGtypeunit{} or \DWTAGpartialunit{} 
 DIE is the offset in the
 \dotdebugstroffsets{} section of the 
-\addtoindex{string offsets table}
+\bb
+header of the string offsets information
+\eb
+\addtoindexx{string offsets information}
 for that unit.
 In addition, attribute values of class string may have 
 one of the forms 
@@ -497,7 +506,10 @@ abbreviations for that compilation unit.
 
 % d
 \itembfnl{(d) \dotdebuginfo{} to \dotdebugstr}
-Attribute values of class string may have form \DWFORMstrp, 
+Attribute values of class string may have form \DWFORMstrp{}
+\bb 
+or \DWFORMstrpeight{},
+\eb
 whose value is an offset in the 
 \dotdebugstr{} section of the corresponding string.
 
@@ -509,8 +521,11 @@ the corresponding \texttt{.dwo} (split) data.
 
 % do
 \itembfnl{(do) \dotdebuginfodwo{} to \dotdebugstrdwo}
-Attribute values of class string may have form 
-\DWFORMstrp, whose value is an offset in the 
+Attribute values of class string may have form \DWFORMstrp{}
+\bb 
+or \DWFORMstrpeight{},
+\eb
+whose value is an offset in the 
 \dotdebugstrdwo{} section of the corresponding string.
 
 % e

@@ -157,9 +157,9 @@ at global scope for that name.}
 
 \textit{A producer may choose to implement additional rules for what
 names are placed in the index, and may communicate those rules to
-a cooperating consumer via an augmentation 
-\bb
-block, 
+a cooperating consumer via 
+\bb 
+augmentation sequence as
 \eb
 described below.}
 
@@ -715,14 +715,14 @@ The size in bytes of the abbreviations table.
 \item 
 \bb
 \texttt{augmentation\_size} (\HFTuword) \\
-The size in bytes of the augmentation block. 
+The size in bytes of the augmentation sequence. 
 This value must be a multiple of four.
 \eb
 
 \item 
 \bbeb
 \texttt{augmentation} (sequence of \HFTubyte) \\
-\addtoindexx{augmentation block}
+\addtoindexx{augmentation sequence}
 A vendor-specific 
 \bb
 sequence of bytes, 
@@ -751,7 +751,7 @@ does not make it
 impossible for a consumer to process data in the \dotdebugnames{} section.
 The augmentation 
 \db
-only provides hints to the consumer regarding
+sequence only provides hints to the consumer regarding
 the completeness of the set of names in the index.
 }
 
@@ -959,6 +959,7 @@ it useful to maintain alignment.}
 The size of the entry pool is the remaining size of the contribution to
 the index section, as defined by the \texttt{unit\_length} header field.
 
+\needlines{6}
 \subsection{Lookup by Address}
 \label{chap:lookupbyaddress}
 For \addtoindexx{lookup!by address}
@@ -1393,7 +1394,7 @@ For non-VLIW
 architectures, this field is 1, the \addttindex{op\_index} register is always
 0, and the \addtoindex{operation pointer} is simply the \texttt{address} register.
 
-\needlines{4}
+\needlines{8}
 \item \texttt{default\_is\_stmt} (\HFTubyte) \\
 \addttindexx{default\_is\_stmt}
 The initial value of the \addttindex{is\_stmt} register.  
@@ -1454,7 +1455,7 @@ is greater than the typical value, then the numbers between
 that of the highest standard opcode and the first special
 opcode (not inclusive) are used for vendor specific extensions.}
 
-\needlines{4}
+\needlines{10}
 \item \texttt{standard\_opcode\_lengths} (array of \HFTubyte) \\
 \addttindexx{standard\_opcode\_lengths}
 This array specifies the number of \addtoindex{LEB128} operands for each
@@ -1644,11 +1645,18 @@ The following type codes are defined.
 The component is a null-terminated path name string.
 If the associated form code is \DWFORMstring{}, then the
 string occurs immediately in the containing \texttt{directories}
-or \addttindex{file\_names} field. If the form code is \DWFORMlinestrp{},
-\DWFORMstrp{} or \DWFORMstrpsup{}, then the string is included in the 
-\dotdebuglinestr{}, \dotdebugstr{} or supplementary string section, 
-respectively, and its offset occurs immediately in the containing
+or \addttindex{file\_names} field. 
+\bb
+If the form code is \DWFORMlinestrp, then the string is included in
+the \dotdebuglinestr{} section; if the form code is \DWFORMstrp{} or
+\DWFORMstrpeight, then the string is included in the \dotdebugstr{} section;
+if the form code is \DWFORMstrpsup{} or \DWFORMstrpsupeight, then the
+string is included in the supplementary string section. In all cases
+other than \DWFORMstring, the string's offset
+\eb
+occurs immediately in the containing
 \addttindex{directories} or \addttindex{file\_names} field.
+
 
 In the 32-bit DWARF format, the representation of a
 \DWFORMlinestrp{} value is a 4-byte unsigned offset; in the
@@ -1703,7 +1711,8 @@ It is always paired with one of the forms
 file in bytes, or 0 if not available. It is paired with one of the
 forms \DWFORMudata, \DWFORMdataone, \DWFORMdatatwo, \DWFORMdatafour{}
 or \DWFORMdataeight.
- 
+
+\needlines{4}
 \item \DWLNCTMDfiveTARG \\
 \DWLNCTMDfiveNAME{} indicates that the value is a 16-byte \MDfive{} digest
 of the file contents. It is paired with form \DWFORMdatasixteen.
@@ -1723,7 +1732,9 @@ such code may be combined with one or more forms from the set:
 \DWFORMflag, \DWFORMlinestrp, \DWFORMsdata, \DWFORMsecoffset,
 \DWFORMstring, \DWFORMstrp, 
 \bb
-\DWFORMstrpsup,
+\DWFORMstrpeight,
+\DWFORMstrpsup, 
+\DWFORMstrpsupeight,
 \eb
 \DWFORMstrxXN{} and \DWFORMudata.
 
@@ -2028,6 +2039,7 @@ unsigned LEB128\addtoindexx{LEB128!unsigned} operand and stores that value in th
 \addttindex{isa}
 register of the state machine.
 
+\needlines{6}
 \item \textbf{\DWLNSextendedopTARG} \\
 \bb
 The \DWLNSextendedopNAME{} opcode takes two operands. The first is an
@@ -2098,6 +2110,7 @@ parameter, an unsigned LEB128\addtoindexx{LEB128!unsigned}
 integer. It sets the
 \addttindex{discriminator} register to the new value.
 
+\needlines{6}
 \bb
 \item \textbf{\DWLNEpaddingTARG} \\
 The \DWLNEpaddingNAME{} opcode is followed by a single
@@ -2234,8 +2247,15 @@ the operand is encoded.  The allowed forms are:
 \DWFORMdataone, \DWFORMdatatwo, \DWFORMdatafour, \DWFORMdataeight, 
 \DWFORMdatasixteen,  
 \DWFORMflag, \DWFORMlinestrp, \DWFORMsdata, 
-\DWFORMsecoffset, \DWFORMstring, \DWFORMstrp{}, 
-\DWFORMstrpsup, \DWFORMstrxXN{} and \DWFORMudata.
+\DWFORMsecoffset, \DWFORMstring, \DWFORMstrp{},
+\bb
+\DWFORMstrpeight,
+\eb 
+\DWFORMstrpsup,
+\bb
+\DWFORMstrpsupeight,
+\eb
+\DWFORMstrxXN{} and \DWFORMudata.
 \end{enumerate}
 
 \subsection{Macro Information Entries}
@@ -2310,7 +2330,7 @@ The contents of the operands are described below (see Sections
 
 \end{enumerate}
 
-
+\needlines{6}
 \subsubsection{Macro Define String}
 \label{chap:macrodefinestring}
 In the case of a 
@@ -2370,6 +2390,7 @@ entry for that compilation unit
 (see Section \referfol{chap:fileinclusionentries})
 and encode the value 0 in their line number operands.
 
+\needlines{6}
 \subsection{File Inclusion Entries}
 \label{chap:fileinclusionentries}
 

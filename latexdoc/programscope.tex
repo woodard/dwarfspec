@@ -433,15 +433,23 @@ executable instruction of the unit (see
 Section \refersec{chap:entryaddress}).
 
 \needlines{8}
-\item \hypertarget{chap:DWATstroffsetbaseforindirectstringtable}{}
-A \DWATstroffsetsbaseDEFN\addtoindexx{string offset base attribute}
+\item \hypertarget{chap:DWATstroffsetforindirectstringsection}{}
+\bb
+A \DWATstroffsetsDEFN\addtoindexx{string offset section attribute}
+\eb
 attribute, whose value is of class \CLASSstroffsetsptr. 
-This attribute points to the first string
-offset of the compilation unit's contribution to the
+This attribute points to the 
+\bb
+header
+\eb
+of the compilation unit's contribution to the
 \dotdebugstroffsets{} (or \dotdebugstroffsetsdwo{}) section. 
 Indirect string references
 (using \DWFORMstrxXNor) within the compilation unit are
-interpreted as indices relative to this base.
+interpreted as indices 
+\bb
+into the array of offsets following that header.
+\eb
 
 \needlines{6}
 \item \hypertarget{chap:DWATaddrbaseforaddresstable}{}
@@ -554,8 +562,11 @@ by the \DWATdwoname{} attribute is determined by the presence
 of a \DWATuseUTFeight{} attribute in the full compilation unit 
 (see Section \refersec{chap:splitfullcompilationunitentries}).}
 
-\item A \DWATstroffsetsbase{} attribute, for indirect strings references 
-from the 
+\item A 
+\bb
+\DWATstroffsets{} 
+\eb
+attribute, for indirect strings references from the 
 \bb
 corresponding split full
 \eb 
@@ -580,7 +591,7 @@ unit entry.
 
 \textit{The \DWATaddrbase{},
 \bb 
-\DWATstroffsetsbase{}, and \DWATrnglistsbase{}
+\DWATstroffsets{}, and \DWATrnglistsbase{}
 \eb
 attributes provide context that may be 
 necessary to interpret the contents
@@ -622,7 +633,7 @@ split full compilation unit entry but instead are inherited
 (if present) from the corresponding skeleton compilation unit: 
 \DWATlowpc, \DWAThighpc, \DWATranges, \DWATstmtlist, \DWATcompdir,
 \bb 
-\DWATstroffsetsbase{} and \DWATaddrbase{}.
+\DWATstroffsets{} and \DWATaddrbase{}.
 \eb
 }
 
@@ -646,10 +657,14 @@ information entries in other compilation units and type units.
 
 Conventional and split type units are identical except for
 the sections in which they are represented 
-(see \refersec{datarep:splitdwarfobjectfiles} for details).
+(see Section \refersec{datarep:splitdwarfobjectfiles} for details).
 \addtoindexx{conventional type unit}
 \addtoindexx{split type unit}
-Moreover, the \DWATstroffsetsbase{} attribute (see below) is not 
+Moreover, the 
+\bb
+\DWATstroffsets{} 
+\eb
+attribute (see below) is not 
 used in a split type unit.
 
 \needlines{4}
@@ -702,16 +717,26 @@ unit entry, its children, and its associated
 are represented using the UTF-8 representation.
 
 \needlines{4}
-\item A \DWATstroffsetsbase\addtoindexx{string offsets base attribute}
+\item A 
+\bb
+\DWATstroffsets\addtoindexx{string offsets base attribute}
+\eb
 attribute, whose value is of class \CLASSstroffsetsptr. 
-This attribute points
-to the first string offset of the type unit's contribution to
+This attribute points to the 
+\bb
+header
+\eb 
+of the type unit's contribution to
 the \dotdebugstroffsets{} section. Indirect string references
 (using \DWFORMstrxXNor) within the type unit are interpreted
-as indices relative to this base.
+as indices 
+\bb
+into the array of offsets following that header.
+\eb
 
 \end{enumerate}
 
+\needlines{6}
 A \addtoindex{type unit} entry for a given type T owns a debugging
 information entry that represents a defining declaration
 of type T. If the type is nested within enclosing types or
@@ -770,6 +795,7 @@ may also be represented by a module entry
 (but no declaration attribute is warranted because \addtoindex{Fortran}
 has no concept of a corresponding module body).}
 
+\needlines{4}
 A module is represented by a debugging information entry
 with the 
 tag \DWTAGmoduleTARG.  
@@ -938,6 +964,7 @@ whose value is a \livelink{chap:classreference}{reference} to the
 debugging information entry representing the declaration that
 is being imported.
 
+\needlines{4}
 An imported declaration may also have a \DWATname{}
 attribute\addtoindexx{name attribute}
 whose value is a null-terminated string containing the
@@ -1014,6 +1041,7 @@ containing the definition and/or declaration entries for
 the entities that are to be imported into the context of the
 imported module entry.
 
+\needlines{6}
 An imported module declaration may own a set of imported
 declaration entries, each of which refers to an entry in the
 module whose corresponding entity is to be known in the context
@@ -1089,6 +1117,7 @@ Appendix  \refersec{app:namespaceexamples}
 for an example.
 }
 
+\needlines{8}
 \subsection{Imported Unit Entries}
 \label{chap:importedunitentries}
 \hypertarget{chap:DWATimportimportedunit}{}
@@ -2371,7 +2400,7 @@ within that lexical \nolink{block}. There is
 one such debugging information entry for each local declaration
 of an identifier or inner lexical \nolink{block}.
 
-\needlines{8}
+\needlines{10}
 \section{Label Entries}
 \label{chap:labelentries}
 \textit{A label is a way of identifying a source location.
@@ -2513,6 +2542,7 @@ may have a
 \DWATstartscopeDEFN{}\addtoindexx{start scope attribute}
 attribute to specify that reduced range of addresses. 
 
+\needlines{12}
 There are two cases:
 \begin{enumerate}[1. ]
 \item If the address range for the scope of the entry 

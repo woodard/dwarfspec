@@ -192,7 +192,11 @@ compilation unit. These values require both symbolic binding and
 relocation.
 
 \item Debugging information entries may have attributes with the form
-\DWFORMstrp{} (see Section \refersec{datarep:attributeencodings}). 
+\DWFORMstrp{} 
+\bb
+or \DWFORMstrpeight{}
+\eb
+(see Section \refersec{datarep:attributeencodings}). 
 These attributes refer to strings in
 the \dotdebugstr{} section. These values require relocation.
 
@@ -281,7 +285,10 @@ used by the \dotdebuginfo{} section.
 \item
 A string table, in the \dotdebugstr{} section. The string
 table is necessary only if the skeleton compilation unit
-uses one of the indirect string forms (\DWFORMstrp{}, 
+uses one of the indirect string forms (\DWFORMstrp{},
+\bb
+\DWFORMstrpeight{},
+\eb 
 \DWFORMstrxXNor).
 
 \needlines{4}
@@ -704,17 +711,23 @@ entries referenced from within location descriptions or using loclistsptr
 form attributes must not be moved to a \addtoindex{supplementary object file}.
 
 Executable or shared object file compilation units can use
-\DWTAGimportedunit{} with 
-an \DWATimport{} attribute that uses \DWFORMrefsupfour{} or \DWFORMrefsupeight{} 
-to import entries from the \addtoindex{supplementary object file}, other 
-\DWFORMrefsupfour{} or \DWFORMrefsupeight{} attributes to refer 
-directly to individual entries in the supplementary file, 
-and \DWFORMstrpsup{} form attributes to
-refer to strings that are used by debug information of multiple
+\DWTAGimportedunit{} with an
+\DWATimport{} attribute that uses form \DWFORMrefsupfour{} or \DWFORMrefsupeight{} 
+to import entries from the \addtoindex{supplementary object file}, 
+\bb
+form \DWFORMrefsupfour{} or \DWFORMrefsupeight{} 
+\eb
+to refer directly to individual entries in the supplementary file, or
+\bb
+form \DWFORMstrpsup{} or \DWFORMstrpsupeight{} 
+\eb
+to refer to strings that are used by debug information of multiple
 executables or shared object files.  Within the \addtoindex{supplementary object file}'s
-debugging sections, forms \DWFORMrefsupfour{}, \DWFORMrefsupeight{} 
-or \DWFORMstrpsup{} are
-not used, and all reference forms referring to some other sections
+debugging sections, forms \DWFORMrefsupfour{}, 
+\bb
+\DWFORMrefsupeight{}, \DWFORMstrpsup{} and \DWFORMstrpsupeight{}
+\eb
+are not used, and all reference forms referring to \db other sections
 refer to the local sections in the \addtoindex{supplementary object file}.
 
 In macro information, \DWMACROdefinesup{} or
@@ -749,16 +762,16 @@ can coexist and be distinguished within a single linked object.
 
 \bb
 The 32-bit and 64-bit DWARF format conventions must \emph{not} be
-intermixed within a single compilation unit.
+intermixed within a single compilation 
+\bb
+unit, except for contributions to the \dotdebugstroffsets{} 
+(or \dotdebugstroffsetsdwo) section.
+\eb
 
-\textit{This rule greatly simplifies parsing DWARF in some cases.  
-For example, the \DWATstroffsetsbase{} attribute points to the 
-zeroth entry of the string offset array, not to the header of that 
-portion of the \dotdebugstroffsets{} section, making it inconvenient 
-to determine the size of the entries in the array.  By requiring 
-that the referencing compilation unit and the referenced array use 
-the same format, a consumer can know the array entry size without
-needing to find the \dotdebugstroffsets{} header.}
+\textit{The exception for the \dotdebugstroffsets{} section enables 
+an executable program with a mixture of 32-bit and 64-bit DWARF compilation 
+units to refer to any string in the merged \dotdebugstr{} section, 
+even if that section exceeds 4GB in size.}
 \eb
 
 Except where noted otherwise, all references in this document
@@ -1630,11 +1643,10 @@ Table \referfol{tab:attributeencodings}.
             \addtoindexx{friend attribute}  \\
 \DWATidentifiercase&0x42&\livelink{chap:classconstant}{constant} 
             \addtoindexx{identifier case attribute}  \\
-\textit{Reserved}&0x43\footnote{Code 0x43 is reserved to allow backward compatible support of the 
-             DW\_AT\_macro\_info \mbox{attribute} which was 
-             defined in \DWARFVersionIV{} and earlier.}
-            &\livelink{chap:classmacptr}{macptr} 
-            \addtoindexx{macro information attribute (legacy)!encoding}  \\
+\textit{Reserved}&0x43\footnote{Code 0x43 is reserved to allow backward 
+			compatible support of the DW\_AT\_macro\_info \mbox{attribute} 
+			which was defined in \DWARFVersionIV{} and earlier.}
+            & \textit{Unused} \\
 \DWATnamelistitem&0x44&\livelink{chap:classreference}{reference} 
             \addtoindexx{name list item attribute}  \\
 \DWATpriority&0x45&\livelink{chap:classreference}{reference} 
@@ -1746,9 +1758,12 @@ Table \referfol{tab:attributeencodings}.
         \livelink{chap:classconstant}{constant},
         \livelink{chap:classexprloc}{exprloc}
             \addtoindexx{rank attribute}  \\
-\DWATstroffsetsbase &0x72&
-		\livelinki{chap:classstroffsetsptr}{stroffsetsptr}{stroffsetsptr class}
-            \addtoindexx{string offsets base!encoding}	\\
+\bb
+\textit{Reserved} &0x72\footnote{Code 0x72 is reserved to allow backward 
+			compatible support of the DW\_AT\_str\_offsets\_base \mbox{attribute} 
+			which was defined in \DWARFVersionV{} and earlier.} 
+						& \textit{Unused} 
+\eb \\
 \DWATaddrbase &0x73&
 		\livelinki{chap:classaddrptr}{addrptr}{addrptr class}
             \addtoindexx{address table base!encoding} \\
@@ -1810,6 +1825,8 @@ Table \referfol{tab:attributeencodings}.
 \bbeb 
 \DWATscaledivisor~\ddag &0x8e &\CLASSconstant 
 		\addtoindexx{divisor of rational scale factor} \\
+\bbeb
+\DWATstroffsets~\ddag	&0x8f &\CLASSstroffsetsptr \\
 \DWATlouser&0x2000 & --- \addtoindexx{low user attribute encoding}  \\
 \DWAThiuser&\xiiifff& --- \addtoindexx{high user attribute encoding}  \\
 
@@ -2212,18 +2229,31 @@ A string may be represented:
 \item As an 
 \addtoindexx{section offset!in class string value}
 offset into a string table contained in
-the \dotdebugstr{} section of the object file (\DWFORMstrpTARG), 
+the \dotdebugstr{} section of the object file (\DWFORMstrpTARG{}
+\bb
+or \DWFORMstrpeightTARG),
+\eb
 the \dotdebuglinestr{} section of the object file (\DWFORMlinestrpTARG),
 or as an offset into a string table contained in the
 \dotdebugstr{} section of a \addtoindex{supplementary object file} 
-(\DWFORMstrpsupTARG).  \DWFORMstrpsupNAME{} offsets from the \dotdebuginfo{}  
+(\DWFORMstrpsupTARG{}
+\bb
+or \DWFORMstrpsupeightTARG),
+\eb
+\DWFORMstrpsupNAME{} offsets from the \dotdebuginfo{}  
 section of a \addtoindex{supplementary object file}
 refer to the local \dotdebugstr{} section of that same file.
+
 In the \thirtytwobitdwarfformat, the representation of a 
 \DWFORMstrpNAME{}, \DWFORMlinestrpNAME{} or \DWFORMstrpsupNAME{}
 value is a 4-byte unsigned offset; in the \sixtyfourbitdwarfformat,
 it is an 8-byte unsigned offset 
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
+\bb
+In both 32-bit and 64-bit formats, the representation of a 
+\DWFORMstrpeight{} or \DWFORMstrpsupeight{} 
+value is an 8-byte unsigned offset.
+\eb
 
 \needlines{6}
 \item As an indirect offset into the string table using an 
@@ -2238,8 +2268,10 @@ The representation of a \DWFORMstrxoneNAME, \DWFORMstrxtwoNAME,
 \DWFORMstrxthreeNAME{} or \DWFORMstrxfourNAME{} value is a 
 1-, 2-, 3- or 4-byte unsigned integer value, respectively,
 which is similarly interpreted.
-The offset entries in the \dotdebugstroffsets{} section have the 
-same representation as \DWFORMstrp{} values.
+The offset entries in the \dotdebugstroffsets{} section 
+\bb
+are described in Section \refersec{chap:stringoffsetstable}.
+\eb
 \end{itemize}
 Any combination of these three forms may be used within a single compilation.
 
@@ -2269,7 +2301,10 @@ not. However, the UTF\dash 8 representation is strongly recommended.}
 This is an offset into the \dotdebugstroffsets{} section 
 (\DWFORMsecoffset). It consists of an offset from the beginning of the 
 \dotdebugstroffsets{} section to the
-beginning of the string offsets information for the
+\bb
+header
+\eb
+of the string offsets information for the
 referencing entity. It is relocatable in
 a relocatable object file, and relocated in an executable or
 shared object file. In the \thirtytwobitdwarfformat, this offset
@@ -2304,9 +2339,10 @@ Table \referfol{tab:attributeformencodings}.
   \bfseries Form name&\bfseries Value &\bfseries Classes\\ \hline
 \endhead
   \hline 
-  \multicolumn{2}{l}{\emph{Continued on next page}}
+  \multicolumn{3}{l}{\emph{Continued on next page}}
 \endfoot
-  \hline 
+  \hline
+  \multicolumn{3}{l}{\ddagnewinversionx}
 \endlastfoot
 
 \DWFORMaddr 			&0x01 &\CLASSaddress \\
@@ -2354,6 +2390,8 @@ Table \referfol{tab:attributeformencodings}.
 \DWFORMaddrxtwo{}    	&0x2a &\CLASSaddress \\
 \DWFORMaddrxthree{}  	&0x2b &\CLASSaddress \\
 \DWFORMaddrxfour{}   	&0x2c &\CLASSaddress \\
+\bbeb \DWFORMstrpeight   ~\ddag&0x2d&\CLASSstring \\
+\bbeb \DWFORMstrpsupeight~\ddag&0x2e&\CLASSstring \\
 \end{longtable}
 \end{centering}
 
@@ -2424,8 +2462,9 @@ numbers and Table \refersec{tab:examplesofsignedleb128encodings}
 gives some examples of signed LEB128\addtoindexx{LEB128!signed} 
 numbers.
 
+\textit{Some 
 \bb
-\textit{Some producers may choose to insert padding or alignment bytes by 
+producers may choose to insert padding or alignment bytes by 
 retaining (not discarding) one or more high-order bytes that would 
 not affect the decoded value.}
 \eb
@@ -3565,6 +3604,11 @@ including the length field itself
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 \eb
 
+\bb
+The DWARF format used for the string offsets table is not required to match
+the format used by other sections describing the same compilation unit.
+\eb
+
 %\needlines{4}
 \item  \texttt{version} (\HFTuhalf) \\
 \addtoindexx{version number!string offsets table}
@@ -3575,14 +3619,21 @@ A 2-byte version identifier containing the value
 Reserved to DWARF (must be zero).
 \end{enumerate}
 
-This header is followed by a series of string table offsets
+This header is followed by a series of string table 
+\bb
+offset entries
+\eb
 that have the same representation as \DWFORMstrp.
 For the 32-bit DWARF format, each offset is 4 bytes long; for
 the 64-bit DWARF format, each offset is 8 bytes long.
 
-The \DWATstroffsetsbase{} attribute points to the first
-entry following the header. The entries are indexed
-sequentially from this base entry, starting from 0.
+The 
+\bb
+\DWATstroffsets{} attribute points to the header.
+\eb
+The entries following the header are indexed sequentially,
+\db
+starting from 0.
 
 \section{Address Table}
 \label{chap:addresstable}
