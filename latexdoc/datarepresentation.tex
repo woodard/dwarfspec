@@ -28,9 +28,9 @@ appropriate prefix
 \DWCFAlouserMARK{}\DWCFAhiuserMARK{}DW\_CFA, 
 \DWENDlouserMARK{}\DWENDhiuserMARK{}DW\_END, 
 \DWIDXlouserMARK{}\DWIDXhiuserMARK{}DW\_IDX, 
-\DWLANGlouserMARK{}\DWLANGhiuserMARK{}DW\_LANG,
 \bb
 \DWLLElouserMARK{}\DWLLEhiuserMARK{}DW\_LLE,
+\DWLNAMElouserMARK{}\DWLNAMEhiuserMARK{}DW\_LNAME,
 \eb 
 \DWLNCTlouserMARK{}\DWLNCThiuserMARK{}DW\_LNCT, 
 \DWLNElouserMARK{}\DWLNEhiuserMARK{}DW\_LNE, 
@@ -1377,8 +1377,9 @@ Table \refersec{tab:tagencodings}.
 \DWTAGpartialunit			&0x3c  \\
 \DWTAGimportedunit			&0x3d  \\
 \textit{Reserved}			&0x3e\footnote{Code 0x3e is reserved to allow backward compatible 
-									support of the DW\_TAG\_mutable\_type DIE that was defined 
-									(only) in \DWARFVersionIII.} \\
+									support of the 
+									DW\_TAG\_mutable\_type\addtoindexx{DW\_TAG\_mutable\_type (deprecated)}
+									DIE that was defined (only) in \DWARFVersionIII.} \\
 \DWTAGcondition				&\xiiif \\
 \DWTAGsharedtype 			& 0x40  \\
 \DWTAGtypeunit 				& 0x41  \\
@@ -1516,12 +1517,11 @@ Table \referfol{tab:attributeencodings}.
         \livelink{chap:classexprloc}{exprloc}, 
         \livelink{chap:classreference}{reference}
             \addtoindexx{byte size attribute} \\
+\bbeb
 \textit{Reserved}&0x0c\footnote{Code 0x0c is reserved to allow backward compatible support of the 
-             DW\_AT\_bit\_offset \mbox{attribute} which was 
+             DW\_AT\_bit\_offset\addtoindexx{DW\_AT\_bit\_offset (deprecated)} \mbox{attribute} which was 
              defined in \DWARFVersionIII{} and earlier.}
-       &\livelink{chap:classconstant}{constant}, 
-        \livelink{chap:classexprloc}{exprloc}, 
-        \livelink{chap:classreference}{reference}
+       &\textit{not applicable}
             \addtoindexx{bit offset attribute (Version 3)}
             \addtoindexx{DW\_AT\_bit\_offset (deprecated)}  \\
 \DWATbitsize&0x0d&\livelink{chap:classconstant}{constant}, 
@@ -1537,8 +1537,16 @@ Table \referfol{tab:attributeencodings}.
 \DWAThighpc&0x12&\livelink{chap:classaddress}{address}, 
         \livelink{chap:classconstant}{constant}
             \addtoindexx{high PC attribute}  \\
-\DWATlanguage&0x13&\livelink{chap:classconstant}{constant} 
-            \addtoindexx{language attribute}  \\
+%\DWATlanguage&0x13&\livelink{chap:classconstant}{constant} 
+%            \addtoindexx{language attribute}  \\
+\bbeb
+\textit{Reserved}&0x13\footnote{Code 0x13 is reserved to allow 
+			 backward compatible support of the 
+             DW\_AT\_language\addtoindexx{DW\_AT\_language (deprecated)} \mbox{attribute} which was 
+             defined in \DWARFVersionV{} and earlier.}
+			&\textit{not applicable} 
+			    \addtoindexx{language attribute (Version 5)}
+				\addtoindexx{DW\_AT\_language (deprecated)}  \\
 \textit{Reserved}&0x14&\textit{not applicable} \\
 \DWATdiscr&0x15&\livelink{chap:classreference}{reference} 
             \addtoindexx{discriminant attribute}  \\
@@ -1644,9 +1652,9 @@ Table \referfol{tab:attributeencodings}.
 \DWATidentifiercase&0x42&\livelink{chap:classconstant}{constant} 
             \addtoindexx{identifier case attribute}  \\
 \textit{Reserved}&0x43\footnote{Code 0x43 is reserved to allow backward 
-			compatible support of the DW\_AT\_macro\_info \mbox{attribute} 
-			which was defined in \DWARFVersionIV{} and earlier.}
-            & \textit{Unused} \\
+			compatible support of the DW\_AT\_macro\_info\addtoindexx{DW\_AT\_macro\_info (deprecated)}
+			\mbox{attribute} which was defined in \DWARFVersionIV{} and earlier.}
+            & \textit{not applicable} \\
 \DWATnamelistitem&0x44&\livelink{chap:classreference}{reference} 
             \addtoindexx{name list item attribute}  \\
 \DWATpriority&0x45&\livelink{chap:classreference}{reference} 
@@ -1762,7 +1770,7 @@ Table \referfol{tab:attributeencodings}.
 \textit{Reserved} &0x72\footnote{Code 0x72 is reserved to allow backward 
 			compatible support of the DW\_AT\_str\_offsets\_base \mbox{attribute} 
 			which was defined in \DWARFVersionV{} and earlier.} 
-						& \textit{Unused} 
+						& \textit{not applicable} 
 \eb \\
 \DWATaddrbase &0x73&
 		\livelinki{chap:classaddrptr}{addrptr}{addrptr class}
@@ -1770,7 +1778,7 @@ Table \referfol{tab:attributeencodings}.
 \DWATrnglistsbase&0x74&
 		\CLASSrnglistsptr
             \addtoindexx{range list base!encoding} \\
-\textit{Reserved} &0x75& \textit{Unused} \\
+\textit{Reserved} &0x75& \textit{not applicable} \\
 \DWATdwoname &0x76&
 		\livelink{chap:classstring}{string}
             \addtoindexx{split DWARF object file name!encoding} \\
@@ -1827,6 +1835,11 @@ Table \referfol{tab:attributeencodings}.
 		\addtoindexx{divisor of rational scale factor} \\
 \bbeb
 \DWATstroffsets~\ddag	&0x8f &\CLASSstroffsetsptr \\
+\bbeb
+\DWATlanguagename~\ddag &0x90 & \CLASSconstant \\
+\bbeb
+\DWATlanguageversion~\ddag &0x91& \CLASSconstant \\
+
 \DWATlouser&0x2000 & --- \addtoindexx{low user attribute encoding}  \\
 \DWAThiuser&\xiiifff& --- \addtoindexx{high user attribute encoding}  \\
 
@@ -2925,14 +2938,12 @@ The encodings of the constants used
 in 
 \addtoindexx{language name encoding}
 the 
-\DWATlanguage{}
+\bb
+\DWATlanguagename{}
+\eb
 attribute are given in 
 Table \refersec{tab:languageencodings}.
-Names marked with
-% If we don't force a following space it looks odd
-\dag \  
-and their associated values are reserved, but the
-languages they represent are not well supported. 
+\db
 Table \refersec{tab:languageencodings}
 also shows the 
 \addtoindexx{lower bound attribute!default}
@@ -2940,64 +2951,57 @@ default lower bound, if any, assumed for
 an omitted \DWATlowerbound{} attribute in the context of a
 \DWTAGsubrangetype{} debugging information entry for each
 defined language.
+\addtoindexx{ANSI-defined language names}
+\addtoindexx{ISO-defined language names}
 
 \needlines{10}
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c|c}
   \caption{Language encodings} \label{tab:languageencodings}\\
-  \hline \bfseries Language name&\bfseries Value &\bfseries Default Lower Bound \\ \hline
+  \hline \bfseries Language name&\bfseries Value &\bfseries Default Lower Bound \\ 
+  \hline
 \endfirsthead
   \bfseries Language name&\bfseries Value &\bfseries Default Lower Bound\\ \hline
 \endhead
   \hline 
-  \multicolumn{2}{l}{\emph{Continued on next page}}
+  \multicolumn{3}{l}{\emph{Continued on next page}}
 \endfoot
   \hline
+  \multicolumn{3}{l}{\ddag~Base language is new in DWARF Version \thisversion}
 \endlastfoot
-\addtoindexx{ISO-defined language names}
-
-\DWLANGCeightynine 			&0x0001 &0 \addtoindexx{C:1989 (ISO)}      \\
-\DWLANGC					&0x0002 &0 \addtoindexx{C!non-standard} \\
-\DWLANGAdaeightythree \dag 	&0x0003 &1 \addtoindexx{Ada:1983 (ISO)}     \\
-\DWLANGCplusplus			&0x0004 &0 \addtoindexx{C++98 (ISO)} \\
-\DWLANGCobolseventyfour\dag &0x0005 &1 \addtoindexx{COBOL:1974 (ISO)}      \\
-\DWLANGCoboleightyfive \dag &0x0006 &1 \addtoindexx{COBOL:1985 (ISO)}      \\
-\DWLANGFortranseventyseven 	&0x0007 &1 \addtoindexx{FORTRAN:1977 (ISO)}      \\
-\DWLANGFortranninety 		&0x0008 &1 \addtoindexx{Fortran:1990 (ISO)}      \\
-\DWLANGPascaleightythree 	&0x0009 &1 \addtoindexx{Pascal:1983 (ISO)}      \\
-\DWLANGModulatwo 			&0x000a &1 \addtoindexx{Modula-2:1996 (ISO)}      \\
-\DWLANGJava 				&0x000b &0 \addtoindexx{Java}      \\
-\DWLANGCninetynine 			&0x000c &0 \addtoindexx{C:1999 (ISO)}      \\
-\DWLANGAdaninetyfive{} \dag &0x000d &1 \addtoindexx{Ada:1995 (ISO)}      \\
-\DWLANGFortranninetyfive 	&0x000e &1 \addtoindexx{Fortran:1995 (ISO)}      \\
-\DWLANGPLI{} \dag 			&0x000f &1 \addtoindexx{PL/I:1976 (ANSI)}\\
-\DWLANGObjC{} 				&0x0010 &0 \addtoindexx{Objective C}\\
-\DWLANGObjCplusplus{} 		&0x0011 &0 \addtoindexx{Objective C++}\\
-\DWLANGUPC{} 				&0x0012 &0 \addtoindexx{UPC}\\
-\DWLANGD{} 					&0x0013 &0 \addtoindexx{D language}\\
-\DWLANGPython{} \dag 		&0x0014 &0 \addtoindexx{Python}\\
-\DWLANGOpenCL{} \dag  		&0x0015 &0 \addtoindexx{OpenCL}\\
-\DWLANGGo{} \dag  			&0x0016 &0 \addtoindexx{Go}\\
-\DWLANGModulathree{} \dag  	&0x0017 &1 \addtoindexx{Modula-3}\\
-\DWLANGHaskell{} \dag		&0x0018 &0 \addtoindexx{Haskell}\\
-\DWLANGCpluspluszerothree{} &0x0019 &0 \addtoindexx{C++03 (ISO)}\\
-\DWLANGCpluspluseleven{}  	&0x001a &0 \addtoindexx{C++11 (ISO)} \\
-\DWLANGOCaml{}  			&0x001b &0 \addtoindexx{OCaml}\\
-\DWLANGRust{}  				&0x001c &0 \addtoindexx{Rust}\\
-\DWLANGCeleven{}  			&0x001d &0 \addtoindexx{C:2011 (ISO)}\\
-\DWLANGSwift{}  			&0x001e &0 \addtoindexx{Swift} \\
-\DWLANGJulia{}  			&0x001f &1 \addtoindexx{Julia} \\
-\DWLANGDylan{}				&0x0020 &0 \addtoindexx{Dylan} \\
-\DWLANGCplusplusfourteen{}	&0x0021 &0 \addtoindexx{C++14 (ISO)} \\
-\DWLANGFortranzerothree{}	&0x0022 &1 \addtoindexx{Fortran:2004 (ISO)} \\
-\DWLANGFortranzeroeight{}	&0x0023 &1 \addtoindexx{Fortran:2010 (ISO)} \\
-\DWLANGRenderScript{}		&0x0024 &0 \addtoindexx{RenderScript Kernel Language} \\
-\DWLANGBLISS{}				&0x0025 &0 \addtoindexx{BLISS} 
-\\
-\DWLANGlouser{}				&0x8000 & \\
-\DWLANGhiuser{}				&\xffff & \\
-
+\bb
+\DWLNAMEAda 			&0x0001 &1 \\
+\DWLNAMEBLISS			&0x0002 &0 \\
+\DWLNAMEC		 		&0x0003 &0 \\
+\DWLNAMECplusplus		&0x0004 &0 \\
+\DWLNAMECobol			&0x0005 &1 \\
+\DWLNAMECrystal~\ddag	&0x0006 &0 \\
+\DWLNAMED 				&0x0007 &0 \\
+\DWLNAMEDylan			&0x0008 &0 \\
+\DWLNAMEFortran 		&0x0009 &1 \\
+\DWLNAMEGo  			&0x000a &0 \\
+\DWLNAMEHaskell			&0x000b &0 \\
+\DWLNAMEJava 			&0x000c &0 \\
+\DWLNAMEJulia  			&0x000d &1 \\
+\DWLNAMEKotlin~\ddag	&0x000e &0 \\
+\DWLNAMEModulatwo 		&0x000f &1 \\
+\DWLNAMEModulathree  	&0x0010 &1 \\
+\DWLNAMEObjC 			&0x0011 &0 \\
+\DWLNAMEObjCplusplus	&0x0012 &0 \\
+\DWLNAMEOCaml  			&0x0013 &0 \\
+\DWLNAMEOpenCL  		&0x0014 &0 \\
+\DWLNAMEPascal 			&0x0015 &1 \\
+\DWLNAMEPLI 			&0x0016 &1 \\
+\DWLNAMEPython	 		&0x0017 &0 \\
+\DWLNAMERenderScript	&0x0018 &0 \\
+\DWLNAMERust  			&0x0019 &0 \\
+\DWLNAMESwift  			&0x001a &0 \\
+\DWLNAMEUPC 			&0x001b &0 \\
+\DWLNAMEZig~\ddag		&0x001c &0 \\ 
+\DWLNAMElouser			&0x8000 &  \\
+\eb
+\DWLNAMEhiuser			&\xffff &  \\
 \end{longtable}
 \end{centering}
 
@@ -3375,8 +3379,8 @@ Table \refersec{tab:linenumberextendedopcodeencodings}.
 \DWLNEendsequence	&0x01 \\
 \DWLNEsetaddress	&0x02 \\
 \textit{Reserved}	&0x03\footnote{Code 0x03 is reserved to allow backward compatible support of the 
-                                   DW\_LNE\_define\_file operation which was defined in \DWARFVersionIV{} 
-                                   and earlier.} \\
+                                   DW\_LNE\_define\_file\addtoindexx{DW\_LNE\_define\_file (deprecated)}
+								   operation which was defined in \DWARFVersionIV{} and earlier.} \\
 \DWLNEsetdiscriminator &0x04 \\
 \DWLNEpadding~\ddag	&0x05 \\
 \DWLNElouser		&0x80 \\
