@@ -1477,6 +1477,67 @@ though the fields are allocated in different directions
 the bit naming conventions for memory and/or registers of
 the target architecture may or may not make this seem natural.
 
+\needlines{8}
+\bb
+\subsection{\Ada{} Biased Bit-Field Example}
+The Ada source in Figure \refersec{fig:adabiasedbitfieldexampleadasource}
+demonstrates how a member of a record, which
+normally occupies six bits, can be biased to fit into three bits when the
+range is known. The encoded values \texttt{[~0..7~]} correspond to the source
+values \texttt{[~50..57~]} used by the application.
+
+The DWARF description is shown in Figure \refersec{fig:adabiasedbitfieldexampledwarfdescription}.
+The bias chosen, which in this case corresponds to the lower bound, is specified 
+in the base type at 1\$.
+\eb
+
+\begin{figure}[ht]
+\begin{nlnlisting}
+type SmallRangeType is range 50 .. 57;
+type RecordType is record 
+   A : SmallRangeType;
+end record;
+for RecordType use record 
+   A at 0 range 0 .. 2;
+end record;
+LocalRecord : RecordType;
+\end{nlnlisting}
+\caption{Ada biased bit-field example: Ada source}
+\label{fig:adabiasedbitfieldexampleadasource}
+\end{figure}
+
+\begin{figure}[ht]
+\begin{dwflisting}
+\begin{alltt}
+1\$: \DWTAGbasetype
+        \DWATbytesize(1)
+        \DWATencoding(\DWATEunsigned)
+        \DWATbias(50)
+        \DWATartificial(1)
+2\$: \DWTAGsubrangetype
+        \DWATname("SmallRangeType")
+        \DWATlowerbound(50)
+        \DWATupperbound(57)
+        \DWATtype(reference to 1\$)
+3\$: \DWTAGstructuretype
+        \DWATname("RecordType")
+        \DWATbytesize(1)
+4\$:    \DWTAGmember
+            \DWATname("A")
+            \DWATtype(reference to 2\$)
+            \DWATbitsize(3)
+            \DWATdatabitoffset(0)
+5\$: \DWTAGvariable
+            \DWATname("LocalRecord")
+            \DWATtype(reference to 3\$)
+            \DWATlocation\ ...
+\end{alltt}
+\end{dwflisting}
+\caption{\Ada{} biased bit-field example: DWARF description}
+\label{fig:adabiasedbitfieldexampledwarfdescription}
+\end{figure}
+
+
 \clearpage
 \section{Namespace Examples}
 \label{app:namespaceexamples}
