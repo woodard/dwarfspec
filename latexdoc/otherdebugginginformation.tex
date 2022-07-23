@@ -1716,6 +1716,22 @@ or \DWFORMdataeight.
 \item \DWLNCTMDfiveTARG \\
 \DWLNCTMDfiveNAME{} indicates that the value is a 16-byte \MDfive{} digest
 of the file contents. It is paired with form \DWFORMdatasixteen.
+
+\bb
+\item \DWLNCTsourceTARG \\
+\DWLNCTsourceNAME{} specifies a null-terminated UTF-8 string that
+constitutes the source text for the program. It is paired with the same 
+forms as \DWLNCTpath. 
+
+\textit{When the source field is present, consumers use the embedded source
+instead of accessing the source using the file path
+provided by the \DWLNCTpath{} field.}
+
+\textit{This is useful for programming languages that support runtime
+compilation and runtime generation of source text. In these cases, the
+source text does not reside in any permanent file. For example, the \OpenCL{}
+language supports runtime compilation.}
+\eb
 \end{enumerate}
 
 \textit{An example that uses this line number header format
