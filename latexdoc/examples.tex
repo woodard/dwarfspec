@@ -1930,6 +1930,7 @@ void g() {
 \subsection{Line Number Header Example}
 \label{app:linenumberheaderexample}
 
+\subsubsection{Line Number Header Evolution from Version 4 to Verion 5}
 The information found in a \DWARFVersionIV{} line number 
 header can be encoded in a \DWARFVersionV{} header
 as shown in Figure \refersec{fig:preV5LNCTusingV5}.
@@ -1964,6 +1965,53 @@ as shown in Figure \refersec{fig:preV5LNCTusingV5}.
 \end{centering}
 \end{figure}
 
+
+\subsubsection{Line Number Header Evolution from Version 5 to Version 6}
+\bb
+The information found in a \DWARFVersionV{} line number 
+header can be encoded in a \DWARFVersionVI{} header
+as shown in Figure \refersec{fig:V5LNCTusingV6}.
+\eb
+
+\begin{figure}[h]
+\begin{dwflisting}
+\begin{alltt}
+  Field           Field Name                      Value(s)
+  Number
+     1    \textit{Same as in Version 5}            ...
+     2    version                         6
+     3    \HFNaddresssize                    4 or 8
+     4    \textit{Reserved in Version 6}           0
+   5-12   \textit{Same as in Version 5}            ...
+    13    \HFNdirectoryformatcount{}          1
+    14    \HFNdirectoryformattable{}          [\DWLNCTpath, \DWFORMstring], 
+	                                          [0, 0]
+    15    \HFNdirectoriescount{}               <n>
+    16    \HFNdirectories{}                     <n>*[0, <null terminated string>]
+    17    \HFNfilenameformatcount{}          2
+    18    \HFNfilenameformattable{}          [\DWLNCTpath, \DWFORMstring],
+                                          [\DWLNCTdirectoryindex, \DWFORMudata],
+                                          [\DWLNCTtimestamp, \DWFORMudata],
+                                          [\DWLNCTsize, \DWFORMudata],
+                                          [0, 0],
+                                          [\DWLNCTsource, \DWFORMstrp],
+                                          [0, 0]
+    19    \HFNfilenamescount{}                <m>
+    20    \HFNfilenames{}                      <m-1>*[0, 
+                                               \{<null terminated string>, <index>, 
+                                                <timestamp>, <size>\}],
+                                          [1, \{<null terminated string offset>\}]
+\end{alltt}
+\end{dwflisting}
+\begin{centering}
+\caption{\DWARFVersionV{} line number program header information \mbox{encoded} using 
+		 \DWARFVersionVI}
+\label{fig:V5LNCTusingV6}
+\end{centering}
+\end{figure}
+
+
+\needlines{10}
 \subsection{Line Number Special Opcode Example}
 \label{app:linenumberspecialopcodeexample}
 Suppose the line number header includes the following 

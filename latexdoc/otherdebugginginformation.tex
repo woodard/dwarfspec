@@ -1164,7 +1164,11 @@ architectures, this register will always be 0.  \\
 
 \addttindex{file} &
 An unsigned integer indicating the identity of the source file
-corresponding to a machine instruction. \\
+corresponding to a machine instruction. 
+\bb
+Files are numbered beginning at 0.
+\eb
+\\
 
 \addttindex{line} &
 An unsigned integer indicating a source line number. Lines are numbered
@@ -1241,7 +1245,8 @@ program, the state of the registers is as show in Table
 \hline
 \texttt{address} & 0 \\
 \addttindex{op\_index} & 0 \\
-\texttt{file} & 1 \\
+\bbeb 
+\texttt{file} & 0 \\
 \texttt{line} & 1 \\
 \texttt{column} & 0 \\
 \addttindex{is\_stmt} & determined by \addttindex{default\_is\_stmt} 
@@ -1325,21 +1330,21 @@ The line number program for each compilation unit begins with
 a header containing the following fields in order:
 
 \begin{enumerate}[1. ]
-\item \texttt{unit\_length} (\livelink{datarep:initiallengthvalues}{initial length})  \\
+\item \HFNunitlength{} (\livelink{datarep:initiallengthvalues}{initial length})  \\
 \addttindexx{unit\_length}
 The size in bytes of the line number information for this
 compilation unit, not including the length field itself
 (see Section \refersec{datarep:initiallengthvalues}). 
 
 \needlines{4}
-\item \texttt{version} (\HFTuhalf) \\
+\item \HFNversion{} (\HFTuhalf) \\
 A version number\addtoindexx{version number!line number information} 
 (see Section \refersec{datarep:linenumberinformation}). 
 This number is specific to
 the line number information and is independent of the DWARF
 version number. 
 
-\item \texttt{address\_size} (\HFTubyte)\\
+\item \HFNaddresssize{} (\HFTubyte)\\
 A 1-byte unsigned integer containing the size in bytes of an
 address (or offset portion of an address for segmented addressing)
 on the target system.
@@ -1363,40 +1368,35 @@ to accurately characterize the address representation on the target
 system.}
 
 \needlines{4}
-\item \texttt{header\_length}  \\
-The number of bytes following the \addttindex{header\_length} field to the
+\item \HFNheaderlength{}  \\
+The number of bytes following the \HFNheaderlength{} field to the
 beginning of the first byte of the line number program itself.
 In the \thirtytwobitdwarfformat, this is a 4-byte unsigned
 length; in the \sixtyfourbitdwarfformat, this field is an
 8-byte unsigned length 
 (see Section \refersec{datarep:32bitand64bitdwarfformats}). 
 
-\item \texttt{minimum\_instruction\_length} (\HFTubyte)  \\
-\addttindexx{minimum\_instruction\_length}
+\item \HFNminimuminstructionlength{} (\HFTubyte)  \\
 The size in bytes of the smallest target machine
 instruction. Line number program opcodes that alter
 the \texttt{address} and \addttindex{op\_index}
-registers use this and
-\addttindex{maximum\_operations\_per\_instruction}
+registers use this and \HFNmaximumoperationsperinstruction{}
 in their calculations. 
 
 \needlines{9}
-\item \texttt{maximum\_operations\_per\_instruction} (\HFTubyte) \\
-The 
-\addttindexx{maximum\_operations\_per\_instruction}
-maximum number of individual operations that may be
+\item \HFNmaximumoperationsperinstruction{} (\HFTubyte) \\
+The maximum number of individual operations that may be
 encoded in an instruction. Line number program opcodes
 that alter the \texttt{address} and 
 \addttindex{op\_index} registers use this and
-\addttindex{minimum\_instruction\_length} in their calculations.
+\HFNminimuminstructionlength{} in their calculations.
 
 For non-VLIW
 architectures, this field is 1, the \addttindex{op\_index} register is always
 0, and the \addtoindex{operation pointer} is simply the \texttt{address} register.
 
 \needlines{8}
-\item \texttt{default\_is\_stmt} (\HFTubyte) \\
-\addttindexx{default\_is\_stmt}
+\item \HFNdefaultisstmt{} (\HFTubyte) \\
 The initial value of the \addttindex{is\_stmt} register.  
 
 \textit{A simple approach
@@ -1422,120 +1422,103 @@ constitute such a recommendation and
 be either \doublequote{true} or \doublequote{false.} This approach might be
 used as part of support for debugging optimized code.}
 
-\item \texttt{line\_base} (\HFTsbyte) \\
-\addttindexx{line\_base}
+\item \HFNlinebase{} (\HFTsbyte) \\
 This parameter affects the meaning of the special opcodes. See below.
 
-\item \texttt{line\_range} (\HFTubyte) \\
-\addttindexx{line\_range}
+\item \HFNlinerange{} (\HFTubyte) \\
 This parameter affects the meaning of the special opcodes. See below.
 
 \needlines{4}
-\item \texttt{opcode\_base} (\HFTubyte) \\
-The 
-\addttindexx{opcode\_base}
-number assigned to the first special opcode.
+\item \HFNopcodebase{} (\HFTubyte) \\
+The number assigned to the first special opcode.
 
 \textit{Opcode base is typically one greater than the highest-numbered
 \addttindexx{opcode\_base}
 standard opcode defined for the specified version of the line
-number information (12 in DWARF Versions 3, 4 and 5,
+number information (12 in DWARF Versions 
+\bb
+3 through 6,
+\eb
 \addtoindexx{DWARF Version 3}
 \addtoindexx{DWARF Version 4}
 \addtoindexx{DWARF Version 5}
+\addtoindexx{DWARF Version 6}
 and 9 in
 \addtoindexx{DWARF Version 2}
 Version 2).  
-If opcode\_base is less than the typical value,
-\addttindexx{opcode\_base}
+If \HFNopcodebase{} is less than the typical value,
 then standard opcode numbers greater than or equal to the
 opcode base are not used in the line number table of this unit
-(and the codes are treated as special opcodes). If \texttt{opcode\_base}
+(and the codes are treated as special opcodes). If \HFNopcodebase{}
 is greater than the typical value, then the numbers between
 that of the highest standard opcode and the first special
 opcode (not inclusive) are used for vendor specific extensions.}
 
 \needlines{10}
-\item \texttt{standard\_opcode\_lengths} (array of \HFTubyte) \\
-\addttindexx{standard\_opcode\_lengths}
+\item \HFNstandardopcodelengths{} (array of \HFTubyte) \\
 This array specifies the number of \addtoindex{LEB128} operands for each
 of the standard opcodes. The first element of the array
 corresponds to the opcode whose value is 1, and the last
 element corresponds to the opcode whose value 
 is \texttt{opcode\_base - 1}.
 
-\textit{By increasing \texttt{opcode\_base}, and adding elements to this array,
-\addttindexx{opcode\_base}
+\textit{By increasing \HFNopcodebase{}, and adding elements to this array,
 new standard opcodes can be added, while allowing consumers who
 do not know about these new opcodes to be able to skip them.}
 
 \textit{Codes for vendor specific extensions, if any, are described
 just like standard opcodes.}
 
-%%% Save the current enum counter so we can restart later
-%%% End this enumeration so the following text is outdented to
-%%% the left margin (because it applies to the many following
-%%% items
-\newcounter{saveenumi}
-\setcounter{saveenumi}{\value{enumi}}
-\end{enumerate}
-
-\needlines{6}
-\textit{The remaining fields provide information about the
-source files used in the compilation. These fields
-have been revised in \DWARFVersionV{} to support these
-goals:}
-\begin{itemize}
-\item
-    \textit{To allow new alternative means for a consumer to
-    check that a file it can access is the same version
-    as that used in the compilation.}
-\item
-    \textit{To allow a producer to collect file name strings
-    in a new section (\dotdebuglinestr{}) that can be used
-    to merge duplicate file name strings.}
-\item
-    \textit{To add the ability for producers to provide 
-    vendor-defined information that can be skipped by a consumer
-    that is unprepared to process it.}
-\end{itemize}
-
-\begin{enumerate}[1. ]
-%%% Resume enumeration count where it left off above
-\setcounter{enumi}{\value{saveenumi}}
-\item \texttt{directory\_entry\_format\_count} (\HFTubyte) \\
-\addttindexx{directory\_entry\_format\_count}
-    A count of the number of entries that occur in the
-    following \addttindex{directory\_entry\_format} field.
+\bb
+\item \HFNdirectoryformatcount{} (ULEB128) \\
+A count of the number of entries in the
+following \HFNdirectoryformattable{} field.
+\eb
 
 \needlines{8}
-\item \texttt{directory\_entry\_format} (sequence of ULEB128 pairs) \\
-\addttindexx{directory\_entry\_format}
-    A sequence of directory entry format descriptions.
-    Each description consists of a pair of ULEB128 values:
+\bb
+\item \HFNdirectoryformattable{} (sequence of record format descriptors) \\
+A sequence of record format descriptors.
+Each descriptor consists the following:
 \begin{itemize}
 \setlength{\itemsep}{0em}
-\item A content type code (see 
+\item A sequence of field descriptors. Each field descriptor consists
+of a pair of unsigned LEB128 values: (a) a content type code (see 
 Sections \refersec{chap:standardcontentdescriptions} and
-\refersec{chap:vendordefinedcontentdescriptions}).
-
-\item A form code using the attribute form codes
+\refersec{chap:vendordefinedcontentdescriptions}), and 
+(b) a form code (using the attribute form codes).
+\item A pair of zero bytes to terminate the descriptor.
 \end{itemize}
 
-\needlines{4} 
-\item \texttt{directories\_count} (ULEB128) \\
-\addttindexx{directories\_count}
-A count of the number of entries that occur in the
-following directories field.
+The line number program numbers the record format descriptors
+sequentially, beginning with 0.
 
-\needlines{4}    
-\item \texttt{directories} (sequence of directory names) \\
-\addttindexx{directories}
-A sequence of directory names and optional related
-information. Each entry is encoded as described
-by the \addttindex{directory\_entry\_format} field.
-   
-Entries in this sequence describe each path that was
+The format declarations describe the layout of the entries
+in the \HFNdirectories{} field, below.
+\eb
+
+\needlines{4} 
+\item \HFNdirectoriescount{} (ULEB128) \\
+A count of the number of entries 
+\db
+in the following \HFNdirectories{} field.
+
+\needlines{8}
+\bb    
+\item \HFNdirectories{} (sequence of directory entries) \\
+A sequence of directory entries. Each entry consists of:
+\begin{itemize}
+\setlength{\itemsep}{0em}
+\item A format code (ULEB128), which selects a record format 
+descriptor from the \HFNdirectoryformattable{} field, above, 
+by its index.
+\item A sequence of fields as described by the selected record 
+format descriptor.
+\end{itemize}
+
+\needlines{4}
+Each directory entry describes a path that was
+\eb
 searched for included source files in this compilation,
 including the compilation directory of the compilation.
 (The paths include those directories specified by the
@@ -1558,15 +1541,12 @@ is relative to the current directory of the compilation.
 The line number program assigns a number (index) to each
 of the directory entries in order, beginning with 0.
    
-\textit{Prior to \DWARFVersionV, the current directory was not
-represented in the directories field and a directory index
-of 0 implicitly referred to that directory as found in the
-\DWATcompdir{} attribute of the compilation unit 
-debugging information entry. 
-In \DWARFVersionV, the current directory is explicitly present
-in the directories field. This is needed to support the
-common practice of stripping all but the line number sections
-(\dotdebugline{} and \dotdebuglinestr) from an executable.}
+\textit{Prior to \DWARFVersionV, the current 
+\bb
+compilation file did not have a specific entry in the
+\HFNfilenames{} field. Starting in \DWARFVersionV,
+the current file name has index 0.}
+\eb
 
 \textit{Note that if a \dotdebuglinestr{} section is present, 
 both the compilation unit debugging information entry 
@@ -1574,42 +1554,60 @@ and the line number header can
 share a single copy of the current directory name string.}
 
 \needlines{4}
-\item \texttt{file\_name\_entry\_format\_count} (\HFTubyte) \\
-\addttindexx{file\_name\_entry\_format\_count}
-A count of the number of file entry format entries that
-occur in the following \addttindex{file\_name\_entry\_format} field. 
-If this field is zero, then the \addttindex{file\_names\_count} field 
-(see below) must also be zero.
+\bb
+\item \HFNfilenameformatcount{} (ULEB128) \\
+A count of the number of format descriptors in the following 
+\HFNfilenameformattable{} field. 
+\eb
 
 \needlines{6}
-\item \texttt{file\_name\_entry\_format} (sequence of ULEB128 pairs) \\
-\addttindexx{file\_name\_entry\_format}
-A sequence of file entry format descriptions.
-Each description consists of a pair of ULEB128 values:
+\bb
+\item \HFNfilenameformattable{} (sequence of record format descriptors) \\
+A sequence of record format descriptors. Each descriptor consists of:
 \begin{itemize}
 \setlength{\itemsep}{0em}
-\item A content type code (see below)
-\item A form code using the attribute form codes
+\item A sequence of field descriptors. Each field descriptor consists
+of a pair of unsigned LEB128 values: (a) a content type code (see 
+Sections \refersec{chap:standardcontentdescriptions} and
+\refersec{chap:vendordefinedcontentdescriptions}), and 
+(b) a form code (using the attribute form codes).
+\item A pair of zero bytes to terminate the descriptor.
 \end{itemize}
 
-\item \texttt{file\_names\_count} (ULEB128) \\
-\addttindexx{file\_names\_count}
-A count of the number of file name entries that occur
-in the following \addttindex{file\_names} field.
+The line number program numbers the record format descriptors
+sequentially, beginning with 0.
+
+The format declarations describe the layout of the entries
+in the \HFNfilenames{} field, below.
+\eb
+
+\item \HFNfilenamescount{} (ULEB128) \\
+A count of the number of file name entries 
+\db
+in the following \HFNfilenames{} field.
 
 \needlines{4}
-\item \texttt{file\_names} (sequence of file name entries) \\
-\addttindexx{file\_names}
-A sequence of file names and optional related
-information. Each entry is encoded as described
-by the \addttindex{file\_name\_entry\_format} field.
-  
-Entries in this sequence describe source files that
-contribute to the line number information for this
+\item \HFNfilenames{} (sequence of file name entries) \\
+\bb
+A sequence of file name entries. Each entry consists of:
+\begin{itemize}
+\setlength{\itemsep}{0em}
+\item A format code (ULEB128), which selects a record format 
+descriptor from the \texttt{file\_name\_format\_table}, by its index.
+\item A sequence of fields as described by the selected record 
+format descriptor.
+\end{itemize}
+
+Each file name entry describes a source file that
+contributes
+\eb
+to the line number information for this
 compilation or is used in other contexts, such as in
 a declaration coordinate or a macro file inclusion.
  
-The first entry in the sequence is the primary source file 
+\bb
+The first file name entry is the primary source file,
+\eb 
 whose file name exactly matches that given in the 
 \DWATname{} attribute in the compilation unit 
 debugging information entry.
@@ -1619,8 +1617,10 @@ sequence beginning with 0, and uses those numbers instead
 of file names in the line number program that follows.
 
 \textit{Prior to \DWARFVersionV, the current compilation 
-file name was not represented in the \addttindex{file\_names}
-field. In \DWARFVersionV, the current compilation file name 
+file name was not represented in the \HFNfilenames{}
+field. In \DWARFVersionV and 
+\bbeb
+after, the current compilation file name 
 is explicitly present and has index 0. This is needed to support 
 the common practice of stripping all but the line number sections
 (\dotdebugline{} and \dotdebuglinestr) from an executable.}
