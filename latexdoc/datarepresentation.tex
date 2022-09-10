@@ -518,7 +518,7 @@ boundaries in the DWARF package file.
 \needlines{6}
 The index section header contains the following fields:
 \begin{enumerate}[1. ]
-\item \texttt{version} (\HFTuhalf) \\
+\item \HFNversion{} (\HFTuhalf) \\
 A version number.
 \addtoindexx{version number!CU index information} 
 \addtoindexx{version number!TU index information}
@@ -527,19 +527,19 @@ and is independent of the DWARF version number.
 
 The version number is \versiondotdebugcuindex.
 
-\item \textit{padding} (\HFTuhalf) \\
+\item \HFNpadding{} (\HFTuhalf) \\
 Reserved to DWARF (must be zero).
 
 \needlines{4}
-\item \texttt{section\_count} (\HFTuword) \\
+\item \HFNsectioncount{} (\HFTuword) \\
 The number of entries in the table of section counts that follows.
 For brevity, the contents of this field is referred to as $N$ below.
 
-\item \texttt{unit\_count} (\HFTuword) \\
+\item \HFNunitcount{} (\HFTuword) \\
 The number of compilation units or type units in the index.
 For brevity, the contents of this field is referred to as $U$ below.
 
-\item \texttt{slot\_count} (\HFTuword) \\
+\item \HFNslotcount{} (\HFTuword) \\
 The number of slots in the hash table.
 For brevity, the contents of this field is referred to as $S$ below.
 
@@ -675,37 +675,32 @@ file must contain a \dotdebugsup{} section that establishes the relationship.
 
 The \dotdebugsup{} section contains:
 \begin{enumerate}[1. ]
-\item \texttt{version} (\HFTuhalf) \\
-\addttindexx{version}
+\item \HFNversion{} (\HFTuhalf) \\
 A 2-byte unsigned integer representing the version of the DWARF
 information for the compilation unit. 
 
 The value in this field is \versiondotdebugsup.
 
-\item \texttt{is\_supplementary} (\HFTubyte) \\
-\addttindexx{is\_supplementary}
+\item \HFNissupplementary{} (\HFTubyte) \\
 A 1-byte unsigned integer, which contains the value 1 if it is
 in the \addtoindex{supplementary object file} that other executable or 
 shared object files refer to, or 0 if it is an executable or shared object 
 referring to a \addtoindex{supplementary object file}.
 
 \needlines{4}
-\item \texttt{sup\_filename} (null terminated filename string) \\
-\addttindexx{sup\_filename}
-If \addttindex{is\_supplementary} is 0, this contains either an absolute 
+\item \HFNsupfilename{} (null terminated filename string) \\
+If \HFNissupplementary{} is 0, this contains either an absolute 
 filename for the \addtoindex{supplementary object file}, or a filename 
 relative to the object file containing the \dotdebugsup{} section.  
-If \addttindex{is\_supplementary} is 1, then \addttindex{sup\_filename}
+If \HFNissupplementary{} is 1, then \HFNsupfilename{}
 is not needed and must be an empty string (a single null byte).
 
 \needlines{4}
-\item \texttt{sup\_checksum\_len} (unsigned LEB128) \\
-\addttindexx{sup\_checksum\_len}
-Length of the following \addttindex{sup\_checksum} field; 
+\item \HFNsupchecksumlen{} (unsigned LEB128) \\
+Length of the following \HFNsupchecksum{} field; 
 this value can be 0 if no checksum is provided.
 
-\item \texttt{sup\_checksum} (array of \HFTubyte) \\
-\addttindexx{sup\_checksum}
+\item \HFNsupchecksum{} (array of \HFTubyte) \\
 An implementation-defined integer constant value that
 provides unique identification of the supplementary file.
 
@@ -838,21 +833,21 @@ the 64-bit DWARF format, they are 8-byte unsigned integer values.
 \begin{center}
 \begin{tabular}{lll}
 Section &Name & Role  \\ \hline
-\dotdebugaranges{}   & \addttindex{debug\_info\_offset}   & offset in \dotdebuginfo{} \\
-\dotdebugframe{}/CIE & \addttindex{CIE\_id}               & CIE distinguished value \\
-\dotdebugframe{}/FDE & \addttindex{CIE\_pointer}          & offset in \dotdebugframe{} \\
-\dotdebuginfo{}      & \addttindex{debug\_abbrev\_offset} & offset in \dotdebugabbrev{} \\
-\dotdebugline{}      & \addttindex{header\_length}        & length of header itself \\
-\dotdebugnames{}     & entry in array of CUs              & offset in \dotdebuginfo{} \\
-                     & or local TUs                       & \\ 
+\dotdebugaranges{}   & \HFNdebuginfooffset{}   	& offset in \dotdebuginfo{} \\
+\dotdebugframe{}/CIE & \HFNCIEid{}              & CIE distinguished value \\
+\dotdebugframe{}/FDE & \HFNCIEpointer{}      	& offset in \dotdebugframe{} \\
+\dotdebuginfo{}      & \HFNdebugabbrevoffset{}	& offset in \dotdebugabbrev{} \\
+\dotdebugline{}      & \HFNheaderlength{}       & length of header itself \\
+\dotdebugnames{}     & entry in array of CUs    & offset in \dotdebuginfo{} \\
+                     & or local TUs             & \\ 
 \hline
 \end{tabular}
 \end{center}
 \end{nolinenumbersenv}
 
 \needlines{4}
-The \texttt{CIE\_id} field in a CIE structure must be 64 bits because
-it overlays the \texttt{CIE\_pointer} in a FDE structure; this implicit
+The \HFNCIEid{} field in a CIE structure must be 64 bits because
+it overlays the \HFNCIEpointer{} in a FDE structure; this implicit
 union must be accessed to distinguish whether a CIE or FDE is
 present, consequently, these two fields must exactly overlay
 each other (both offset and size).
@@ -870,7 +865,8 @@ format, the value is an 8-byte unsigned integer.
 \begin{center}
 \begin{nolinenumbersenv}
 \begin{tabular}{lp{6cm}}
-Form             & Role  \\ \hline
+Form             & Role  \\ 
+\hline
 \DWFORMlinestrp  & offset in \dotdebuglinestr \\
 \DWFORMrefaddr   & offset in \dotdebuginfo{} \\
 \DWFORMsecoffset & offset in a section other than \\
@@ -892,7 +888,8 @@ description depend on the choice of DWARF format as follows: for the
 \begin{center}
 \begin{nolinenumbersenv}
 \begin{tabular}{lp{6cm}}
-Form             & Role  \\ \hline
+Form             & Role  \\ 
+\hline
 \DWFORMlinestrp  & offset in \dotdebuglinestr \\
 \hline
 \end{tabular}
@@ -977,17 +974,14 @@ a contribution is made to the \dotdebuginfo{} section of
 the object file. Each such contribution consists of a
 compilation unit header 
 (see Section \refersec{datarep:compilationunitheader}) 
-followed by a
-single \DWTAGcompileunit{} or 
+followed by a single \DWTAGcompileunit{} or 
 \DWTAGpartialunit{} debugging
 information entry, together with its children.
 
 For each type defined in a compilation unit, a separate
-contribution may also be made to the 
-\dotdebuginfo{} 
+contribution may also be made to the \dotdebuginfo{} 
 section of the object file. Each
-such contribution consists of a 
-\addtoindex{type unit} header 
+such contribution consists of a \addtoindex{type unit} header 
 (see Section \refersec{datarep:typeunitheaders}) 
 followed by a \DWTAGtypeunit{} entry, together with
 its children.
@@ -1010,7 +1004,7 @@ units may share the same table.
 \needlines{6}
 \subsection{Unit Headers}
 \label{datarep:unitheaders}
-Unit headers contain a field, \addttindex{unit\_type}, whose value indicates the kind of
+Unit headers contain a field, \HFNunittype{}, whose value indicates the kind of
 compilation unit (see Section \ref{chap:unitentries})
 that follows. The encodings for the unit type 
 enumeration are shown in Table \refersec{tab:unitheaderunitkindencodings}.
@@ -1050,8 +1044,7 @@ All unit headers have the same initial three fields: \HFNinitiallength, \HFNvers
 \label{datarep:compilationunitheader}
 \begin{enumerate}[1. ]
 
-\item \texttt{unit\_length} (\livelink{datarep:initiallengthvalues}{initial length}) \\
-\addttindexx{unit\_length}
+\item \HFNunitlength{} (\livelink{datarep:initiallengthvalues}{initial length}) \\
 A 4-byte or 12-byte 
 \addtoindexx{initial length}
 unsigned integer representing the length
@@ -1061,8 +1054,7 @@ not including the length field itself
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 \eb
 
-\item  \texttt{version} (\HFTuhalf) \\
-\addttindexx{version}
+\item  \HFNversion{} (\HFTuhalf) \\
 \addtoindexx{version number!compilation unit}
 A 2-byte unsigned integer representing the version of the
 DWARF information for the compilation unit.
@@ -1073,8 +1065,7 @@ The value in this field is \versiondotdebuginfo.
 for a summary of all version numbers that apply to DWARF sections.}
 
 \needlines{4}
-\item \texttt{unit\_type} (\HFTubyte) \\
-\addttindexx{unit\_type}
+\item \HFNunittype{} (\HFTubyte) \\
 A 1-byte unsigned integer identifying this unit as a compilation unit.
 The value of this field is 
 \DWUTcompile{} for a (non-split) full compilation unit or
@@ -1085,19 +1076,15 @@ The value of this field is
 regarding a split full compilation unit.}
 
 \needlines{4}
-\item \texttt{address\_size} (\HFTubyte) \\
-\addttindexx{address\_size}
+\item \HFNaddresssize{} (\HFTubyte) \\
 A 1-byte unsigned integer representing the size in bytes of
-an address on the target architecture. If the system uses
-\addtoindexx{address space!segmented}
-segmented addressing, this value represents the size of the
-offset portion of an address.
+an address on the target architecture.
+\db
 
 \item \HFNdebugabbrevoffset{} (\livelink{datarep:sectionoffsetlength}{section offset}) \\
 A 
 \addtoindexx{section offset!in .debug\_info header}
-4-byte or 8-byte unsigned offset into the 
-\dotdebugabbrev{}
+4-byte or 8-byte unsigned offset into the \dotdebugabbrev{}
 section. This offset associates the compilation unit with a
 particular set of debugging information entry abbreviations. In
 the \thirtytwobitdwarfformat, this is a 4-byte unsigned length;
@@ -1111,8 +1098,7 @@ in the \sixtyfourbitdwarfformat, this is an 8-byte unsigned length
 \label{datarep:skeletonandfullcompilationunitheaders}
 \begin{enumerate}[1. ]
 
-\item \texttt{unit\_length} (\livelink{datarep:initiallengthvalues}{initial length}) \\
-\addttindexx{unit\_length}
+\item \HFNunitlength{} (\livelink{datarep:initiallengthvalues}{initial length}) \\
 A 4-byte or 12-byte 
 \addtoindexx{initial length}
 unsigned integer representing the length
@@ -1123,8 +1109,7 @@ not including the length field itself
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 \eb
 
-\item  \texttt{version} (\HFTuhalf) \\
-\addttindexx{version}
+\item  \HFNversion{} (\HFTuhalf) \\
 \addtoindexx{version number!compilation unit}
 A 2-byte unsigned integer representing the version of the
 DWARF information for the compilation unit.
@@ -1135,8 +1120,7 @@ The value in this field is \versiondotdebuginfo.
 for a summary of all version numbers that apply to DWARF sections.}
 
 \needlines{4}
-\item \texttt{unit\_type} (\HFTubyte) \\
-\addttindexx{unit\_type}
+\item \HFNunittype{} (\HFTubyte) \\
 A 1-byte unsigned integer identifying this unit as a compilation unit.
 The value of this field is 
 \DWUTskeleton{} for a skeleton compilation unit or
@@ -1146,13 +1130,10 @@ The value of this field is
 \textit{There is no split analog to the partial compilation unit.}
 
 \needlines{4}
-\item \texttt{address\_size} (\HFTubyte) \\
-\addttindexx{address\_size}
+\item \HFNaddresssize{} (\HFTubyte) \\
 A 1-byte unsigned integer representing the size in bytes of
-an address on the target architecture. If the system uses
-\addtoindexx{address space!segmented}
-segmented addressing, this value represents the size of the
-offset portion of an address.
+an address on the target architecture.
+\db
 
 \item \HFNdebugabbrevoffset{} (\livelink{datarep:sectionoffsetlength}{section offset}) \\
 A 
@@ -1185,8 +1166,7 @@ placed in its own \addtoindex{type unit}, within the
 \dotdebuginfo{} section,
 consists of the following information:
 \begin{enumerate}[1. ]
-\item \texttt{unit\_length} (\livelink{datarep:initiallengthvalues}{initial length}) \\
-\addttindexx{unit\_length}
+\item \HFNunitlength{} (\livelink{datarep:initiallengthvalues}{initial length}) \\
 A 4-byte or 12-byte unsigned integer 
 \addtoindexx{initial length}
 representing the length
@@ -1197,31 +1177,26 @@ not including the length field itself
 \eb
 
 \needlines{4}
-\item  \texttt{version} (\HFTuhalf) \\
-\addttindexx{version}
+\item  \HFNversion{} (\HFTuhalf) \\
 \addtoindexx{version number!type unit}
 A 2-byte unsigned integer representing the version of the
 DWARF information for the type unit.
  
 The value in this field is \versiondotdebuginfo.
 
-\item \texttt{unit\_type} (\HFTubyte) \\
-\addttindexx{unit\_type}
+\item \HFNunittype{} (\HFTubyte) \\
 A 1-byte unsigned integer identifying this unit as a type unit.
 The value of this field is \DWUTtype{} for a non-split type unit
 (see Section \refersec{chap:typeunitentries})
 or \DWUTsplittype{} for a split type unit.
 
 \needlines{4}
-\item \texttt{address\_size} (\HFTubyte) \\
-\addttindexx{address\_size}
+\item \HFNaddresssize{} (\HFTubyte) \\
 A 1-byte unsigned integer representing the size 
 \addtoindexx{size of an address}
 in bytes of
-an address on the target architecture. If the system uses
-\addtoindexx{address space!segmented}
-segmented addressing, this value represents the size of the
-offset portion of an address.
+an address on the target architecture.
+\db
 
 %\needlines{6}
 \item \HFNdebugabbrevoffset{} (\livelink{datarep:sectionoffsetlength}{section offset}) \\
@@ -1235,13 +1210,11 @@ the \thirtytwobitdwarfformat, this is a 4-byte unsigned length;
 in the \sixtyfourbitdwarfformat, this is an 8-byte unsigned length
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
-\item \texttt{type\_signature} (8-byte unsigned integer) \\
-\addttindexx{type\_signature}
+\item \HFNtypesignature{} (8-byte unsigned integer) \\
 \addtoindexx{type signature}
 A unique 8-byte signature (see Section 
 \refersec{datarep:typesignaturecomputation})
-of the type described in this type
-unit.  
+of the type described in this type unit.  
 
 \textit{An attribute that refers (using 
 \DWFORMrefsigeight{}) to
@@ -1249,8 +1222,7 @@ the primary type contained in this
 \addtoindex{type unit} uses this value.}
 
 \needlines{8}
-\item \texttt{type\_offset} (\livelink{datarep:sectionoffsetlength}{section offset}) \\
-\addttindexx{type\_offset}
+\item \HFNtypeoffset{} (\livelink{datarep:sectionoffsetlength}{section offset}) \\
 A 4-byte or 8-byte unsigned offset 
 \addtoindexx{section offset!in .debug\_info header}
 relative to the beginning
@@ -1269,7 +1241,6 @@ this is an 8-byte unsigned length
 
 \subsection{Debugging Information Entry}
 \label{datarep:debugginginformationentry}
-
 Each debugging information entry begins with an 
 unsigned LEB128\addtoindexx{LEB128!unsigned}
 number containing the abbreviation code for the entry. This
@@ -1666,9 +1637,11 @@ Table \referfol{tab:attributeencodings}.
             \addtoindexx{name list item attribute}  \\
 \DWATpriority&0x45&\livelink{chap:classreference}{reference} 
             \addtoindexx{priority attribute}  \\
-\DWATsegment&0x46&\livelink{chap:classexprloc}{exprloc}, 
-        \CLASSloclist 
-            \addtoindexx{segment attribute}  \\
+\bbeb
+\textit{Reserved}&0x46\footnote{Code 0x46 is reserved to allow backward 
+			compatible support of the DW\_AT\_segment\addtoindexx{DW\_AT\_segment (deprecated)}
+			\mbox{attribute} which was defined in \DWARFVersionV{} and earlier.}
+			& \textit{not applicable}  \\
 \DWATspecification&0x47&\livelink{chap:classreference}{reference} 
         \addtoindexx{specification attribute}  \\
 \DWATstaticlink&0x48&\livelink{chap:classexprloc}{exprloc}, 
@@ -1943,7 +1916,7 @@ is a 4-byte unsigned value; in the 64-bit DWARF
 format, it is an 8-byte unsigned value (see Section
 \refersec{datarep:32bitand64bitdwarfformats}).
 
-\needlines{4}
+\needlines{6}
 \item \CLASSblock \\
 \livetarg{datarep:classblock}{}
 Blocks come in four forms:
@@ -2078,6 +2051,7 @@ in the \sixtyfourbitdwarfformat, it is an 8-byte unsigned value
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 \end{itemize}
 
+\needlines{8}
 \item \CLASSloclistsptr \\
 \livetarg{datarep:classloclistsptr}{}
 This is an offset into the \dotdebugloclists{} section (\DWFORMsecoffset). 
@@ -2714,9 +2688,9 @@ end-of-list entry.
 
 Each entry begins with an unsigned 1-byte code that indicates the kind of entry
 that follows. The encodings for these constants are given in
-Table \ref{tab:locationlistentryencodingvalues}.
+Table \refersec{tab:locationlistentryencodingvalues}.
 
-\needlines{10}
+\needlines{14}
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c}
@@ -3222,7 +3196,7 @@ abbreviation codes that represent external names.}
 
 The abbreviations table ends with an entry consisting of a single 0
 byte for the abbreviation code. The size of the table given by
-\texttt{abbrev\_table\_size} may include optional padding following the
+\HFNabbrevtablesize{} may include optional padding following the
 terminating 0 byte.
 
 \section{Defaulted Member Encodings}
@@ -3259,11 +3233,8 @@ Each
 begins with a header containing:
 \eb
 \begin{enumerate}[1. ]
-% FIXME The unit length text is not fully consistent across
-% these tables.
 
-\item \texttt{unit\_length} (\livelink{datarep:initiallengthvalues}{initial length}) \\
-\addttindexx{unit\_length}
+\item \HFNunitlength{} (\livelink{datarep:initiallengthvalues}{initial length}) \\
 A 4-byte or 12-byte length containing the length of the
 \addtoindexx{initial length}
 set of entries for this compilation unit, not including the
@@ -3272,13 +3243,13 @@ length field itself
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 \eb
 
-\item version (\HFTuhalf) \\
+\item \HFNversion{} (\HFTuhalf) \\
 A 2-byte version identifier representing the version of the
 DWARF information for the address range table.
 
 This value in this field \addtoindexx{version number!address range table} is 2. 
  
-\item debug\_info\_offset (\livelink{datarep:sectionoffsetlength}{section offset}) \\
+\item \HFNdebuginfooffset{} (\livelink{datarep:sectionoffsetlength}{section offset}) \\
 A 
 \addtoindexx{section offset!in .debug\_aranges header}
 4-byte or 8-byte offset into the 
@@ -3288,39 +3259,37 @@ this is a 4-byte unsigned offset; in the \sixtyfourbitdwarfformat,
 this is an 8-byte unsigned offset 
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
-\item \texttt{address\_size} (\HFTubyte) \\
-A 1-byte unsigned integer containing the size in bytes of an
-\addttindexx{address\_size}
-address 
+\item \HFNaddresssize{} (\HFTubyte) \\
 \addtoindexx{size of an address}
-(or the offset portion of an address for segmented
-\addtoindexx{address space!segmented}
-addressing) on the target system.
+A 1-byte unsigned integer containing the size in bytes of an
+address. 
+\db
 
-\item \HFNsegmentselectorsize{} (\HFTubyte) \\
-A 1-byte unsigned integer containing the size in bytes of a
-segment selector on the target system.
+\item \HFNreservedwassegmentselectorsize{} 
+\bbeb
+\\
 
 \end{enumerate}
 
 This header is followed by a series of tuples. Each tuple
-consists of a segment, an address and a length. 
-The segment selector
-size is given by the \HFNsegmentselectorsize{} field of the header; the
-address and length size are each given by the \addttindex{address\_size}
+consists of 
+\bb
+an address and a length. The
+address and length size are each given by the \HFNaddresssize{}
 field of the header. 
 The first tuple following the header in
 each set begins at an offset that is a multiple of the size
-of a single tuple (that is, the size of a segment selector
-plus twice the \addtoindex{size of an address}). 
-The header is padded, if
-necessary, to that boundary. Each set of tuples is terminated
-by a 0 for the segment, a 0 for the address and 0 for the
-length. If the \HFNsegmentselectorsize{} field in the header is zero,
-the segment selectors are omitted from all tuples, including
-the terminating tuple.
+of a single tuple (that is, 
+\eb
+twice the \addtoindex{size of an address}). 
+The header is padded, if necessary, to that boundary. 
+Each set of tuples is terminated by 
+\db
+a 0 for the address and a 0 for the length. 
+\db
 
 
+\needlines{12}
 \section{Line Number Information}
 \label{datarep:linenumberinformation}
 
@@ -3428,6 +3397,8 @@ Table \refersec{tab:linenumberheaderentryformatencodings}.
 \DWLNCTMDfive         & 0x5 \\
 \bbeb
 \DWLNCTsource~\ddag	  & 0x6 \\
+\bbeb
+\DWLNCTURL~\ddag	  & 0x7 \\
 \DWLNCTlouser         & 0x2000 \\
 \DWLNCThiuser         & \xiiifff \\
 \end{longtable}
@@ -3616,8 +3587,7 @@ contribution
 \eb
 begins with a header containing:
 \begin{enumerate}[1. ]
-\item \texttt{unit\_length} (\livelink{datarep:initiallengthvalues}{initial length}) \\
-\addttindexx{unit\_length}
+\item \HFNunitlength{} (\livelink{datarep:initiallengthvalues}{initial length}) \\
 A 4-byte or 12-byte length containing the length of
 the set of entries for this compilation unit, not
 including the length field itself
@@ -3631,12 +3601,12 @@ the format used by other sections describing the same compilation unit.
 \eb
 
 %\needlines{4}
-\item  \texttt{version} (\HFTuhalf) \\
+\item  \HFNversion{} (\HFTuhalf) \\
 \addtoindexx{version number!string offsets table}
 A 2-byte version identifier containing the value
 \versiondotdebugstroffsets{}.
 
-\item \textit{padding} (\HFTuhalf) \\
+\item \HFNpadding{} (\HFTuhalf) \\
 Reserved to DWARF (must be zero).
 \end{enumerate}
 
@@ -3664,8 +3634,7 @@ Each
 \eb
 begins with a header containing:
 \begin{enumerate}[1. ]
-\item \texttt{unit\_length} (\livelink{datarep:initiallengthvalues}{initial length}) \\
-\addttindexx{unit\_length}
+\item \HFNunitlength{} (\livelink{datarep:initiallengthvalues}{initial length}) \\
 A 4-byte or 12-byte length containing the length of
 the set of entries for this compilation unit, not
 including the length field itself
@@ -3674,29 +3643,32 @@ including the length field itself
 \eb
 
 \needlines{4}
-\item  \texttt{version} (\HFTuhalf) \\
+\item  \HFNversion{} (\HFTuhalf) \\
 \addtoindexx{version number!address table}
 A 2-byte version identifier containing the value
 \versiondotdebugaddr{}.
 
 \needlines{4}
-\item	\texttt{address\_size} (\HFTubyte) \\
+\item	\HFNaddresssize{} (\HFTubyte) \\
 A 1-byte unsigned integer containing the size in
-bytes of an address (or the offset portion of an
-address for segmented addressing) on the target
-system.
+bytes of an address
+\db
+on the target system.
 
 \needlines{4}
-\item	\HFNsegmentselectorsize{} (\HFTubyte) \\
-A 1-byte unsigned integer containing the size in
-bytes of a segment selector on the target system.
+\item	\HFNreservedwassegmentselectorsize{} 
+\db
+\\
+
 \end{enumerate}
 
-This header is followed by a series of segment/address pairs.
-The segment size is given by the \HFNsegmentselectorsize{} field of the
-header, and the address size is given by the \addttindex{address\_size}
-field of the header. If the \HFNsegmentselectorsize{} field in the header
-is zero, the entries consist only of an addresses.
+This header is followed by a series of 
+\bb
+addresses where
+\eb
+the address size is given by the \HFNaddresssize{}
+field of the header. 
+\db
 
 The \DWATaddrbase{} attribute points to the first entry
 following the header. The entries are indexed sequentially
@@ -3711,8 +3683,7 @@ contribution
 \eb
 begins with a header containing:
 \begin{enumerate}[1. ]
-\item \texttt{unit\_length} (\livelink{datarep:initiallengthvalues}{initial length}) \\
-\addttindexx{unit\_length}
+\item \HFNunitlength{} (\livelink{datarep:initiallengthvalues}{initial length}) \\
 A 4-byte or 12-byte length containing the length of
 the set of entries for this compilation unit, not
 including the length field itself
@@ -3721,22 +3692,22 @@ including the length field itself
 \eb
 
 \needlines{4}
-\item  \texttt{version} (\HFTuhalf) \\
+\item  \HFNversion{} (\HFTuhalf) \\
 \addtoindexx{version number!range list table}
 A 2-byte version identifier containing the value
 \versiondotdebugrnglists{}. 
 
 \needlines{4}
-\item	\texttt{address\_size} (\HFTubyte) \\
+\item	\HFNaddresssize{} (\HFTubyte) \\
 A 1-byte unsigned integer containing the size in
-bytes of an address (or the offset portion of an
-address for segmented addressing) on the target
-system.
+bytes of an address 
+\db
+on the target system.
 
 \needlines{4}
-\item	\HFNsegmentselectorsize{} (\HFTubyte) \\
-A 1-byte unsigned integer containing the size in
-bytes of a segment selector on the target system.
+\item	\HFNreservedwassegmentselectorsize{} 
+\db
+\\
 
 \item   \HFNoffsetentrycount{} (\HFTuword) \\
 A 4-byte count of the number of offsets
@@ -3756,6 +3727,7 @@ In the 32-bit DWARF format, each offset is 4-bytes in size;
 in the 64-bit DWARF format, each offset is 8-bytes in size 
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
+\needlines{5}
 \textit{
 If the \HFNoffsetentrycount{} is zero, then \DWFORMrnglistx{} cannot 
 be used to access a range list; \DWFORMsecoffset{} must be used 
@@ -3765,13 +3737,7 @@ may be more compact than using \DWFORMsecoffset{} in non-split units.}
 
 Range lists are
 described in Section \refersec{chap:noncontiguousaddressranges}.
-
-\needlines{4}
-The segment size is given by the
-\HFNsegmentselectorsize{} field of the header, and the address size is
-given by the \addttindex{address\_size} field of the header. If the
-\HFNsegmentselectorsize{} field in the header is zero, the segment
-selector is omitted from the range list entries.
+\db
 
 The \DWATrnglistsbase{} attribute points to the first offset 
 following the header. The range lists are referenced
@@ -3788,8 +3754,7 @@ contribution
 \eb
 begins with a header containing:
 \begin{enumerate}[1. ]
-\item \texttt{unit\_length} (\livelink{datarep:initiallengthvalues}{initial length}) \\
-\addttindexx{unit\_length}
+\item \HFNunitlength{} (\livelink{datarep:initiallengthvalues}{initial length}) \\
 A 4-byte or 12-byte length containing the length of
 the set of entries for this compilation unit, not
 including the length field itself
@@ -3798,22 +3763,22 @@ including the length field itself
 \eb
 
 \needlines{4}
-\item  \texttt{version} (\HFTuhalf) \\
+\item  \HFNversion{} (\HFTuhalf) \\
 \addtoindexx{version number!location list table}
 A 2-byte version identifier containing the value
 \versiondotdebugloclists{}.
 
 \needlines{5}
-\item	\texttt{address\_size} (\HFTubyte) \\
+\item	\HFNaddresssize{} (\HFTubyte) \\
 A 1-byte unsigned integer containing the size in
-bytes of an address (or the offset portion of an
-address for segmented addressing) on the target
-system.
+bytes of an address 
+\db
+on the target system.
 
 \needlines{4}
-\item	\HFNsegmentselectorsize{} (\HFTubyte) \\
-A 1-byte unsigned integer containing the size in
-bytes of a segment selector on the target system.
+\item	\HFNreservedwassegmentselectorsize{} 
+\db
+\\
 
 \item   \HFNoffsetentrycount{} (\HFTuword) \\
 A 4-byte count of the number of offsets
@@ -3842,14 +3807,8 @@ may be more compact than using \DWFORMsecoffset{}
 \bb\eb
 in non-split units.}
 
-Location lists are
-described in Section \refersec{chap:locationlists}.
-
-The segment size is given by the
-\HFNsegmentselectorsize{} field of the header, and the address size is
-given by the \HFNaddresssize{} field of the header. If the
-\HFNsegmentselectorsize{} field in the header is zero, the segment
-selector is omitted from location list entries.
+Location lists are described in Section \refersec{chap:locationlists}.
+\db
 
 The \DWATloclistsbase{} attribute points to the first offset 
 following the header. The location lists are referenced
@@ -3969,6 +3928,7 @@ types, where V is initialized to a list containing the type
 T0 as its single element. Elements in V are indexed from 1,
 so that V[1] is T0.
 
+\needlines{6}
 \item If the debugging information entry represents a type that
 is nested inside another type or a namespace, append to S
 the type\textquoteright s context as follows: For each surrounding type
@@ -4040,7 +4000,6 @@ code, and the attribute value.
 \bbeb \DWATscaledivisor,
 \bbeb \DWATscalemultiplier,
 \DWATsmall,
-\DWATsegment,
 \DWATstringlength,
 \DWATstringlengthbitsize,
 \DWATstringlengthbytesize,
@@ -4097,6 +4056,7 @@ to the following:
 \DWFORMexprloc,
 and \DWFORMblock.
 
+\needlines{12}
 \item If the tag in Step 3 is one of \DWTAGpointertype,
 \DWTAGreferencetype, 
 \DWTAGrvaluereferencetype,
@@ -4252,7 +4212,7 @@ information entry are encoded by name rather than by recursively
 encoding the type to allow for cases where a complete definition 
 of the type might not be available in all compilation units.}
 
-%\needlines{4}
+\needlines{4}
 \textit{If a type definition contains the definition of a member function, 
 it cannot be moved as is into a type unit, because the member function 
 contains attributes that are unique to that compilation unit. 

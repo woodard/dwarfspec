@@ -396,6 +396,7 @@ Figure \referfol{fig:fortranarrayexamplesourcefragment}.
 \label{fig:fortranarrayexamplesourcefragment}
 \end{figure}
 
+\needlines{6}
 For allocatable and pointer arrays, it is essentially required
 by the\addtoindex{Fortran array} semantics that each array 
 consist of two parts, which we here call 1) the 
@@ -1928,49 +1929,12 @@ void g() {
 \label{app:linenumberexamples}
 
 \subsection{Line Number Header Example}
-\label{app:linenumberheaderexample}
-
-\subsubsection{Line Number Header Evolution from Version 4 to Verion 5}
-The information found in a \DWARFVersionIV{} line number 
-header can be encoded in a \DWARFVersionV{} header
-as shown in Figure \refersec{fig:preV5LNCTusingV5}.
-
-\begin{figure}[ht]
-\begin{dwflisting}
-\begin{alltt}
-  Field           Field Name                      Value(s)
-  Number
-     1    \textit{Same as in Version 4}            ...
-     2    version                         5
-     3    \textit{Not present in Version 4}        -
-     4    \textit{Not present in Version 4}        -
-   5-12   \textit{Same as in Version 4}            ...
-    13    \HFNdirectoryentryformatcount{}    1
-    14    \HFNdirectoryentryformat{}          \DWLNCTpath, \DWFORMstring
-    15    \HFNdirectoriescount{}               <n>
-    16    \HFNdirectories{}                     <n>*<null terminated string>
-    17    \HFNfilenameentryformatcount{}    4
-    18    \HFNfilenameentryformat{}          \DWLNCTpath, \DWFORMstring,
-                                          \DWLNCTdirectoryindex, \DWFORMudata,
-                                          \DWLNCTtimestamp, \DWFORMudata,
-                                          \DWLNCTsize, \DWFORMudata
-    19    \HFNfilenamescount{}                <m>
-    20    \HFNfilenames{}                      <m>*\{<null terminated string>, <index>, 
-                                               <timestamp>, <size>\}
-\end{alltt}
-\end{dwflisting}
-\begin{centering}
-\caption{Pre-\DWARFVersionV{} line number program header information \mbox{encoded} using \DWARFVersionV}
-\label{fig:preV5LNCTusingV5}
-\end{centering}
-\end{figure}
-
-
-\subsubsection{Line Number Header Evolution from Version 5 to Version 6}
+\label{app:linenumberheaderexample} 
 \bb
-The information found in a \DWARFVersionV{} line number 
-header can be encoded in a \DWARFVersionVI{} header
-as shown in Figure \refersec{fig:V5LNCTusingV6}.
+Figure \refersec{fig:V5LNCTusingV6} illustrates a line number header 
+(see Section \refersec{chap:thelinenumberprogramheader}). 
+There are multiple alternative filename formats, 
+which include the source and URL types.
 \eb
 
 \begin{figure}[h]
@@ -1979,7 +1943,7 @@ as shown in Figure \refersec{fig:V5LNCTusingV6}.
   Field           Field Name                      Value(s)
   Number
      1    \textit{Same as in Version 5}            ...
-     2    version                         6
+     2    \HFNversion                         6
      3    \HFNaddresssize                    4 or 8
      4    \textit{Reserved in Version 6}           0
    5-12   \textit{Same as in Version 5}            ...
@@ -1987,25 +1951,28 @@ as shown in Figure \refersec{fig:V5LNCTusingV6}.
     14    \HFNdirectoryformattable{}          [\DWLNCTpath, \DWFORMstring], 
 	                                          [0, 0]
     15    \HFNdirectoriescount{}               <n>
-    16    \HFNdirectories{}                     <n>*[0, <null terminated string>]
-    17    \HFNfilenameformatcount{}          2
-    18    \HFNfilenameformattable{}          [\DWLNCTpath, \DWFORMstring],
+    16    \HFNdirectories{}                     <n>*[0, <path string>]
+    17    \HFNfilenameformatcount{}          3
+    18    \HFNfilenameformattable{}          [\DWLNCTsource, \DWFORMstrp],
+                                          [0, 0]
+                                          [\DWLNCTpath, \DWFORMstring],
                                           [\DWLNCTdirectoryindex, \DWFORMudata],
                                           [\DWLNCTtimestamp, \DWFORMudata],
                                           [\DWLNCTsize, \DWFORMudata],
                                           [0, 0],
-                                          [\DWLNCTsource, \DWFORMstrp],
+                                          [\DWLNCTURL, \DWFORMstrp],
                                           [0, 0]
-    19    \HFNfilenamescount{}                <m>
-    20    \HFNfilenames{}                      <m-1>*[0, 
-                                               \{<null terminated string>, <index>, 
-                                                <timestamp>, <size>\}],
-                                          [1, \{<null terminated string offset>\}]
+    19    \HFNfilenamescount{}                \textit{m}
+    20    \HFNfilenames{}                      [0, \{<source string offset>\}],
+                                          [2, \{<URL string offset>\}],
+	                                          \textit{<m-2>}*[1, 
+                                               \{<name string>, <directory index=0>, 
+                                                <timestamp>, <size>\}]
+
 \end{alltt}
 \end{dwflisting}
 \begin{centering}
-\caption{\DWARFVersionV{} line number program header information \mbox{encoded} using 
-		 \DWARFVersionVI}
+\caption{Example line number program header}
 \label{fig:V5LNCTusingV6}
 \end{centering}
 \end{figure}
@@ -2326,7 +2293,7 @@ cie+4&\xffffffff&CIE\_id    \\
 cie+8&4&version    \\
 cie+9&0&augmentation     \\
 cie+10&4&address size    \\
-cie+11&0&segment size    \\
+cie+11&0&\textit{Reserved}    \\
 cie+12&4&code\_alignment\_factor, \textless caf \textgreater    \\
 cie+13&-4&data\_alignment\_factor, \textless daf \textgreater    \\
 cie+14&8&R8 is the return addr.    \\
@@ -2810,6 +2777,7 @@ omitted from each
 \addtoindexx{concrete instance!example}
 concrete instance of \texttt{OUTER}.
 
+\needlines{8}
 There is one aspect of this approach that is problematical from
 the DWARF perspective. The single compiled instance of \texttt{INNER}
 is assumed to access up\dash level variables of \texttt{OUTER}; however,
@@ -3131,7 +3099,7 @@ for \texttt{T}, which in turn references \texttt{int}. This implies that in the
 original template comp was of type \texttt{T} and that was replaced
 with \texttt{int} in the instance. 
 
-\needlines{10}
+\needlines{12}
 There exist situations where it is
 not possible for the DWARF to imply anything about the nature
 of the original template. 
@@ -3190,6 +3158,7 @@ Figure \refersec{fig:ctemplateexample2dwarf}.
 \label{fig:ctemplateexample2dwarf}
 \end{figure}
 
+\needlines{10}
 In the \DWTAGsubprogram{} 
 entry for the instance of consume, \texttt{U} is described as \texttt{int}. 
 The type of formal is \texttt{wrapper\textless U\textgreater} in
@@ -3964,6 +3933,7 @@ L10:
 The location description for variable \texttt{x} in function 
 \texttt{fn4} might be:
 \par % Needed to end paragraph before listing so that it gets a line number
+\vspace{3mm}
 \begin{nlnlisting}
     DW_OP_entry_value 4 DW_OP_breg0 0 DW_OP_deref_size 4 DW_OP_stack_value
 \end{nlnlisting}

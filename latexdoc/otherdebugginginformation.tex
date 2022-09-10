@@ -8,12 +8,14 @@ is not contained within a \dotdebuginfo{} section.
 In the descriptions that follow, these terms are used to
 specify the representation of DWARF sections:
 \begin{itemize}
+
 \item
 \HFTinitiallength{}, \HFTsectionoffset{} and 
 \HFTsectionlength{}, which are
 defined in 
 Sections \refersec{datarep:initiallengthvalues} and 
 \refersec{datarep:32bitand64bitdwarfformats}.
+
 \item
 \HFTsbyte{}, 
 \HFTubyte{}, 
@@ -21,6 +23,12 @@ Sections \refersec{datarep:initiallengthvalues} and
 \HFTuword{}, 
 which are defined in 
 Section \refersec{datarep:integerrepresentationnames}.
+
+\item
+\bb
+MBZ, which indicates that a value or the contents of a field must be zero.
+\eb
+
 \end{itemize}
 
 \section{Accelerated Access}
@@ -675,8 +683,8 @@ consists of the eight parts described in the following sections.
 \label{chap:sectionheader}
 The section header contains the following fields:
 \begin{enumerate}[1. ]
-\item \texttt{unit\_length} (\livelink{datarep:initiallengthvalues}{initial length}) \\
-\addttindexx{unit\_length}
+
+\item \HFNunitlength{} (\livelink{datarep:initiallengthvalues}{initial length}) \\
 The length of this contribution to the name index section,
 not including the length field itself
 \bb
@@ -684,44 +692,44 @@ not including the length field itself
 \eb
 
 
-\item \texttt{version} (\HFTuhalf) \\
+\item \HFNversion{} (\HFTuhalf) \\
 A version number\addtoindexx{version number!name index table} 
 (see Section \refersec{datarep:nameindextable}). 
 This number is specific to the name index table and is
 independent of the DWARF version number.
 
-\item \textit{padding} (\HFTuhalf) \\
+\item \HFNpadding{} (\HFTuhalf) \\
 Reserved to DWARF (must be zero). 
 
-\item \texttt{comp\_unit\_count} (\HFTuword) \\
+\item \HFNcompunitcount{} (\HFTuword) \\
 The number of CUs in the CU list.
 
-\item \texttt{local\_type\_unit\_count} (\HFTuword) \\
+\item \HFNlocaltypeunitcount{} (\HFTuword) \\
 The number of TUs in the local TU list.
 
-\item \texttt{foreign\_type\_unit\_count} (\HFTuword) \\
+\item \HFNforeigntypeunitcount{} (\HFTuword) \\
 The number of TUs in the foreign TU list.
 
-\item \texttt{bucket\_count} (\HFTuword) \\
+\item \HFNbucketcount{} (\HFTuword) \\
 The number of hash buckets in the hash lookup table. 
 If there is no hash lookup table, this field contains 0.
 
-\item \texttt{name\_count} (\HFTuword) \\
+\item \HFNnamecount{} (\HFTuword) \\
 The number of unique names in the index.
 
-\item \texttt{abbrev\_table\_size} (\HFTuword) \\
+\item \HFNabbrevtablesize{} (\HFTuword) \\
 The size in bytes of the abbreviations table.
 
 \item 
 \bb
-\texttt{augmentation\_size} (\HFTuword) \\
+\HFNaugmentationsize{} (\HFTuword) \\
 The size in bytes of the augmentation sequence. 
 This value must be a multiple of four.
 \eb
 
 \item 
 \bbeb
-\texttt{augmentation} (sequence of \HFTubyte) \\
+\HFNaugmentation{} (sequence of \HFTubyte) \\
 \addtoindexx{augmentation sequence}
 A vendor-specific 
 \bb
@@ -974,54 +982,52 @@ a single compilation unit.
 \needlines{4}
 Each set begins with a header containing five values:
 \begin{enumerate}[1. ]
-\item \texttt{unit\_length} (\livelink{datarep:initiallengthvalues}{initial length}) \\
-\addttindexx{unit\_length}
+\item \HFNunitlength{} (\livelink{datarep:initiallengthvalues}{initial length}) \\
 The length of this contribution to the address lookup section,
 not including the length field itself 
 \bb
 (see Section \refersec{datarep:initiallengthvalues}).
 \eb
 
-\item \texttt{version} (\HFTuhalf) \\
+\item \HFNversion{} (\HFTuhalf) \\
 A version number\addtoindexx{version number!address lookup table}
 (see Section \refersec{datarep:addrssrangetable}). 
 This number is specific to the address lookup table and is
 independent of the DWARF version number.
 
-\item \texttt{debug\_info\_offset} (section offset) \\
+\item \HFNdebuginfooffset{} (section offset) \\
 The offset from the
 \addtoindexx{section offset!in .debug\_aranges header}
 beginning of the \dotdebuginfo{} section of the
 compilation unit header referenced by the set.
 
-\item \texttt{address\_size} (\HFTubyte) \\
+\item \HFNaddresssize{} (\HFTubyte) \\
 The \addtoindex{size of an address}
-in bytes on
-\addttindexx{address\_size}
-the target architecture. For 
-\addtoindexx{address space!segmented}
-segmented addressing, this is
-the size of the offset portion of the address.
+in bytes on the target architecture. 
+\db
 
-\item \HFNsegmentselectorsize{} (\HFTubyte) \\
-The size of a segment selector in
-bytes on the target architecture. If the target system uses
-a flat address space, this value is 0.
+\item \HFNreservedwassegmentselectorsize{} 
+\bbeb 
+\\
 
 \end{enumerate}
 
 This header is followed by a variable number of address range
-descriptors. Each descriptor is a triple consisting of a
-segment selector, the beginning address within that segment
+descriptors. Each descriptor is a 
+\bb
+pair consisting of the beginning address
+\eb 
 of a range of text or data covered by some entry owned by
 the corresponding compilation unit, followed by the 
 \db
 length of that range. A particular set is terminated by an
-entry consisting of three zeroes. 
-When the \HFNsegmentselectorsize{} value
-is zero in the header, the segment selector is omitted so that
-each descriptor is just a pair, including the terminating
-entry. By scanning the table, a debugger can quickly decide
+entry consisting of
+\bb
+two
+\eb
+zeroes.
+\db 
+By scanning the table, a debugger can quickly decide
 which compilation unit to look in to find the debugging
 information for an object that has a given address.
 
@@ -1317,7 +1323,7 @@ extended opcode). \\
 
 
 \subsection{The Line Number Program Header}
-\label{chap:linenumberprogramheader}
+\label{chap:thelinenumberprogramheader}
 The optimal encoding of line number information depends to a
 certain degree upon the architecture of the target machine. The
 line number program header provides information used by
@@ -1344,12 +1350,13 @@ This number is specific to
 the line number information and is independent of the DWARF
 version number. 
 
-\item \HFNaddresssize{} (\HFTubyte)\\
-A 1-byte unsigned integer containing the size in bytes of an
-address (or offset portion of an address for segmented addressing)
-on the target system.
+\item \HFNaddresssize{} (\HFTubyte) \\
+\bb
+The \addtoindex{size of an address}
+in bytes on the target architecture. 
+\eb
 
-\textit{The \addttindex{address\_size} field 
+\textit{The \HFNaddresssize{} field 
 \bb
 supports 
 \eb
@@ -1357,17 +1364,10 @@ the common practice of stripping all but
 the line number sections (\dotdebugline{} and \dotdebuglinestr{}) 
 from an executable.}
 
-\item \HFNsegmentselectorsize{} (\HFTubyte) \\
-A 1-byte unsigned integer containing the size in bytes of a segment
-selector on the target system.
-   
-\textit{The \HFNsegmentselectorsize{} field 
-\db
-is needed in combination with the \addttindex{address\_size} field 
-to accurately characterize the address representation on the target 
-system.}
+\item \HFNreservedwassegmentselectorsize{}
+\bbeb
+\\
 
-\needlines{4}
 \item \HFNheaderlength{}  \\
 The number of bytes following the \HFNheaderlength{} field to the
 beginning of the first byte of the line number program itself.
@@ -1732,6 +1732,15 @@ compilation and runtime generation of source text. In these cases, the
 source text does not reside in any permanent file. For example, the \OpenCL{}
 language supports runtime compilation.}
 \eb
+
+\needlines{6}
+\bb
+\item \DWLNCTURLTARG \\
+\DWLNCTURLNAME{} specifies a null-terminated UTF-8 string that identifies
+where the source text for the program is found on the \addtoindex{Internet}.
+It is paired with the same forms as \DWLNCTpath.
+\eb
+
 \end{enumerate}
 
 \textit{An example that uses this line number header format
@@ -2360,6 +2369,7 @@ string for the macro. If there is no formal parameter list,
 then the name of the defined macro is followed immediately by
 its definition string.
 
+\needlines{5}
 In the case of a function-like macro definition, no whitespace
 characters appear between the name of the defined
 macro and the following left parenthesis. Formal parameters
@@ -2402,7 +2412,7 @@ entry for that compilation unit
 (see Section \referfol{chap:fileinclusionentries})
 and encode the value 0 in their line number operands.
 
-\needlines{6}
+\needlines{15}
 \subsection{File Inclusion Entries}
 \label{chap:fileinclusionentries}
 
@@ -2459,7 +2469,7 @@ provide a mechanism that can be used to reduce redundancy
 in the macro information and thereby to save space.}
 
 \begin{enumerate}[1. ]
-
+\needlines{8}
 \itembfnl{\DWMACROimportTARG{}}
 A \DWMACROimportNAME{} entry has one operand, an offset into
 another part of the \dotdebugmacro{} section that is
@@ -2770,13 +2780,17 @@ UTF\dash 8 encoding.}
 
 \needlines{4}
 \item \HFNaddresssize{} (\HFTubyte) \\
-The size of a target address in this CIE and any FDEs that
-use it, in bytes. If a compilation unit exists for this frame,
+The size of a target address in 
+\bb
+bytes in
+\eb
+this CIE and any FDEs that
+use it. If a compilation unit exists for this frame,
 its address size must match the address size here.
 
-\item \HFNsegmentselectorsize{} (\HFTubyte) \\
-The size of a segment selector in this CIE and any FDEs that
-use it, in bytes.
+\item \HFNreservedwassegmentselectorsize{}
+\bbeb
+\\
 
 \item \HFNcodealignmentfactor{} (unsigned LEB128) 
 \addtoindexx{LEB128!unsigned}\addtoindexx{unsigned LEB128|see{LEB128, unsigned}}
@@ -2842,14 +2856,13 @@ section that denotes
 the CIE that is associated with this FDE.
 
 \needlines{4}
-\item  \HFNinitiallocation{} (segment selector and target address) \\
+\item  \HFNinitiallocation{} (target address) 
+\db
+\\
 The address of the first location associated with this table
-entry. 
-If the \HFNsegmentselectorsize{} field of this FDE's CIE is non-zero,
-the initial location is preceded by a segment selector of
-the given length.
+entry.
+\db 
 
-\needlines{4}
 \item  \HFNaddressrange{} (target address) \\
 The number 
 \addtoindexx{target address}
@@ -2919,11 +2932,8 @@ represents a target address. The required action is to create a
 new table row using the specified address as the location. All
 other values in the new row are initially identical to the
 current row. The new location value is always greater than
-the current one. 
-If the \HFNsegmentselectorsize{} field of this FDE's 
-\addtoindex{CIE}
-is non-zero, the initial location is preceded by a segment
-selector of the given length.
+the current one.
+\db 
 
 \needlines{4}
 \item \textbf{\DWCFAadvancelocTARG} \\
@@ -2988,7 +2998,6 @@ the provided register (but to keep the old offset). This
 operation is valid only if the current CFA rule is defined
 to use a register and offset.
 
-
 \needlines{5}
 \item \textbf{\DWCFAdefcfaoffsetTARG} \\
 The \DWCFAdefcfaoffsetNAME{} instruction takes a single
@@ -3005,10 +3014,10 @@ LEB128\addtoindexx{LEB128!signed} operand representing a factored offset. This i
 is identical to \DWCFAdefcfaoffset{} except that the
 operand is signed and factored. The resulting offset is
 \textit{factored\_offset} * \addttindex{data\_alignment\_factor}.
-This operation
-is valid only if the current CFA rule is defined to use a
+This operation is valid only if the current CFA rule is defined to use a
 register and offset.
 
+\needlines{5}
 \item \textbf{\DWCFAdefcfaexpressionTARG} \\
 The \DWCFAdefcfaexpressionNAME{} instruction takes a 
 \addtoindexx{exprloc class}

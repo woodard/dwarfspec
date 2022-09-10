@@ -682,10 +682,11 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 &\livelinki{chap:DWATscalemultiplierofscalefactor}
 		{Numerator of rational scale factor}
 		{numerator of rational scale factor} \\
-\DWATsegmentTARG
-&\livelinki{chap:DWATsegmentaddressinginformation}
-        {Addressing information}
-        {addressing information} \\
+\db
+%\DWATsegmentTARG
+%&\livelinki{chap:DWATsegmentaddressinginformation}
+%        {Addressing information}
+%        {addressing information} \\
 \DWATsiblingTARG
 &\livelinki{chap:DWATsiblingdebugginginformationentryrelationship}
            {Debugging information entry relationship}
@@ -1125,7 +1126,7 @@ the desired value itself, and so on).
 defined in \DWARFVersionIV{} and before.
 }
 
-\needlines{4}
+\needlines{6}
 \subsubsection{Literal Encodings}
 \label{chap:literalencodings}
 The 
@@ -1202,6 +1203,7 @@ by the first operand. The third operand is a
 sequence of bytes of the given size that is 
 interpreted as a value of the referenced type.
 
+\needlines{6}
 \textit{While the size of the constant can be inferred from the base type
 definition, it is encoded explicitly into the operation so that the
 operation can be parsed easily without reference to the \dotdebuginfo{}
@@ -1369,6 +1371,7 @@ represents the offset of a debugging information entry in the current
 compilation unit, which must be a \DWTAGbasetype{} entry that provides the
 type of the data pushed.
 
+\needlines{6}
 \textit{While the size of the pushed value could be inferred from the base 
 type definition, it is encoded explicitly into the operation so that the
 operation can be parsed easily without reference to the \dotdebuginfo{}
@@ -2409,93 +2412,24 @@ may have a
 which is a \livelink{chap:classflag}{flag}.
 
 \needlines{6}
-\section{Segmented Addresses}
-\label{chap:segmentedaddresses}
-\textit{In some systems, addresses are specified as offsets within a
-given 
-\addtoindexx{address space!segmented}
-segment 
-\addtoindexx{segmented addressing|see{address space}}
-rather than as locations within a single flat
-\addtoindexx{address space!flat}
-address space.}
-
-Any debugging information entry that contains a description
-of\hypertarget{chap:DWATsegmentaddressinginformation}{}
-the location of an object or subroutine may have a 
-\DWATsegmentDEFN{} attribute, 
-\addtoindexx{segment attribute}
-whose value is a location
-description. The description evaluates to the segment selector
-of the item being described. If the entry containing the
-\DWATsegmentNAME{} attribute has a 
-\DWATlowpc, 
-\DWAThighpc,
-\DWATranges{} or 
-\DWATentrypc{} attribute, 
-\addtoindexx{entry PC attribute}
-or 
-a location
-description that evaluates to an address, then those address
-values represent the offset portion of the address within
-the segment specified 
-\addtoindexx{segment attribute}
-by \DWATsegmentNAME.
-
-If an entry has no 
-\DWATsegmentNAME{} attribute, it inherits
-\addtoindexx{segment attribute}
-the segment value from its parent entry.  If none of the
-entries in the chain of parents for this entry back to
-its containing compilation unit entry have 
-\DWATsegmentNAME{} attributes, 
-then the entry is assumed to exist within a flat
-address space. 
-Similarly, if the entry has a 
-\DWATsegmentNAME{} attribute 
-\addtoindexx{segment attribute}
-containing an empty location description, that
-entry is assumed to exist within a 
-\addtoindexi{flat}{address space!flat}
-address space.
-
-\textit{Some systems support different 
-classes of addresses\addtoindexx{address class}. 
-The address class may affect the way a pointer is dereferenced
-or the way a subroutine is called.}
-
+\bb
+\section{Address Classes}
+\label{chap:addressclasses}
+\eb
+\textit{Some systems support different classes of addresses. 
+The \addtoindex{address class} may affect the way a pointer 
+is dereferenced or the way a subroutine is called.}
 
 Any debugging information entry representing a pointer or
 reference type or a subroutine or subroutine type may 
-have a 
-\DWATaddressclass{}
+have a \DWATaddressclass{}
 attribute, whose value is an integer
 constant.  The set of permissible values is specific to
-each target architecture. The value \DWADDRnoneTARG, 
-however,
+each target architecture. The value \DWADDRnoneTARG, however,
 is common to all encodings, and means that no address class
 has been specified.
 
-\needlines{4}
-\textit {For example, the Intel386 \texttrademark\  processor might use the following values:}
-
-\begin{table}[ht]
-\caption{Example address class codes}
-\label{tab:inteladdressclasstable}
-\centering
-\begin{tabular}{l|c|l}
-\hline
-Name&Value&Meaning  \\
-\hline
-\textit{DW\_ADDR\_none}&   0 & \textit{no class specified} \\
-\textit{DW\_ADDR\_near16}& 1 & \textit{16-bit offset, no segment} \\
-\textit{DW\_ADDR\_far16}&  2 & \textit{16-bit offset, 16-bit segment} \\
-\textit{DW\_ADDR\_huge16}& 3 & \textit{16-bit offset, 16-bit segment} \\
-\textit{DW\_ADDR\_near32}& 4 & \textit{32-bit offset, no segment} \\
-\textit{DW\_ADDR\_far32}&  5 & \textit{32-bit offset, 16-bit segment} \\
-\hline
-\end{tabular}
-\end{table}
+\db
 
 \needlines{12}
 \section{Non-Defining Declarations and Completions}
@@ -3125,4 +3059,3 @@ alignment of the entity.
 \textit{For example, an alignment attribute whose value is 8 indicates
 that the entity to which it applies occurs at an address that is a
 multiple of eight (not a multiple of $2^8$ or 256).}
-
