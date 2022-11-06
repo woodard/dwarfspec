@@ -92,14 +92,13 @@ in the skeleton compilation unit) instead use one of the forms
 directory and file name strings to be merged with general
 strings and across compilations in package files 
 (where they are not subject to potential stripping).
-
-In a \texttt{.dwo} file, referring to a string using \DWFORMstrp{}
-\bb 
-or \DWFORMstrpeight{}
+\bb
+This merge is facilitated by the requirement that all references to
+the \dotdebugstrdwo{} string table are made indirectly through the
+\dotdebugstroffsetsdwo{} section so that only that section needs to
+be modified during string merging.
 \eb
-is valid, but such use 
-results in a file that cannot be incorporated into a package file
-(which involves string merging).
+\db
 
 In order for the consumer to locate and process the debug
 information, the compiler must produce a small amount of debug

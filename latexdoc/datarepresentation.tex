@@ -200,6 +200,13 @@ or \DWFORMstrpeight{}
 These attributes refer to strings in
 the \dotdebugstr{} section. These values require relocation.
 
+\bb
+\item The \dotdebugmacro{} section may have \DWMACROdefinestrp{} and
+\DWMACROundefstrp{} entries (see Section \refersec{chap:defineandundefineentries}).
+These entries refer to strings in the \dotdebugstr{} section.
+These values require relocation.
+\eb
+
 \item Entries in the \dotdebugaddr{} and \dotdebugaranges{}
 sections may contain references to locations within the virtual address
 space of the program, and thus require relocation.
@@ -356,6 +363,16 @@ and \DWMACROstartfile{} entries in the macro information.
 \item A string offsets table, in the \dotdebugstroffsetsdwo{}
 section
 for the strings in the \dotdebugstrdwo{} section.
+
+\bb
+Attributes that refer to the \dotdebugstrdwo{} string table do so
+only indirectly through the \dotdebugstroffsetsdwo{} section using the
+forms \DWFORMstrx, \DWFORMstrxNor, or the macro entries
+\DWMACROdefinestrx{} or \DWMACROundefstrx.
+Direct reference, using forms \DWFORMstrp{} or \DWFORMstrpeight, or
+the macro entries \DWMACROdefinestrp{} or \DWMACROundefstrp,
+is not allowed.
+\eb
 \end{itemize}
 
 Except where noted otherwise, all references in this document
@@ -376,8 +393,10 @@ are not possible.
 Split DWARF object files contain at most one compilation unit.
 \eb
 
-\subsection{Executable Objects}
-\label{chap:executableobjects}
+\bb
+\subsection{Executable Objects and .dwo Files}
+\label{chap:executableobjectsanddwofiles}
+\eb
 The relocated addresses in the debugging information for an
 executable object are virtual addresses.
 
@@ -386,7 +405,15 @@ not loaded as part of the memory image of the program (in ELF
 terminology, the sections are not "allocatable" and are not part
 of a loadable segment). Therefore, the debugging information
 sections described in this document are typically linked as if
-they were each to be loaded at virtual address 0, and references
+they were each to be loaded at virtual address 0.
+\bb
+Similarly,
+debugging information in a .dwo file is not loaded in the memory image.
+The absence (or non-use) of relocation information in a .dwo file means
+that sections described in this document are effectively linked as if
+they were each to be loaded at virtual address 0.
+In both cases, references
+\eb
 within the debugging information always implicitly indicate which
 section a particular offset refers to. (For example, a reference
 of form \DWFORMsecoffset{} may refer to one of several sections,
@@ -1550,7 +1577,9 @@ Table \referfol{tab:attributeencodings}.
             \addtoindexx{containing type attribute} \\
 \DWATdefaultvalue&0x1e&\livelink{chap:classconstant}{constant}, 
         \livelink{chap:classreference}{reference}, 
-        \livelink{chap:classflag}{flag}
+        \livelink{chap:classflag}{flag},
+\bbeb
+		\CLASSstring
             \addtoindexx{default value attribute} \\
 \textit{Reserved}&0x1f&\textit{not applicable} \\
 \DWATinline&0x20&\livelink{chap:classconstant}{constant} 
@@ -1826,8 +1855,8 @@ Table \referfol{tab:attributeencodings}.
 \DWATbias~\ddag		&0x92& \CLASSconstant 
 		\addtoindexx{bias attribute} \\
 
-\DWATlouser&0x2000 & --- \addtoindexx{low user attribute encoding}  \\
-\DWAThiuser&\xiiifff& --- \addtoindexx{high user attribute encoding}  \\
+\DWATlouser& 0x2000 & --- \addtoindexx{low user attribute encoding}  \\
+\DWAThiuser&\xiiifff& --- \addtoindexx{high user attribute encoding} \\
 
 \end{longtable} 
 \end{centering}

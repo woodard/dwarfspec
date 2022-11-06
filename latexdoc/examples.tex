@@ -1942,33 +1942,40 @@ which include the source and URL types.
 \begin{alltt}
   Field           Field Name                      Value(s)
   Number
-     1    \textit{Same as in Version 5}            ...
-     2    \HFNversion                         6
-     3    \HFNaddresssize                    4 or 8
-     4    \textit{Reserved in Version 6}           0
-   5-12   \textit{Same as in Version 5}            ...
-    13    \HFNdirectoryformatcount{}          1
-    14    \HFNdirectoryformattable{}          [\DWLNCTpath, \DWFORMstring], 
-	                                          [0, 0]
-    15    \HFNdirectoriescount{}               <n>
-    16    \HFNdirectories{}                     <n>*[0, <path string>]
-    17    \HFNfilenameformatcount{}          3
-    18    \HFNfilenameformattable{}          [\DWLNCTsource, \DWFORMstrp],
-                                          [0, 0]
-                                          [\DWLNCTpath, \DWFORMstring],
-                                          [\DWLNCTdirectoryindex, \DWFORMudata],
-                                          [\DWLNCTtimestamp, \DWFORMudata],
-                                          [\DWLNCTsize, \DWFORMudata],
-                                          [0, 0],
-                                          [\DWLNCTURL, \DWFORMstrp],
-                                          [0, 0]
-    19    \HFNfilenamescount{}                \textit{m}
-    20    \HFNfilenames{}                      [0, \{<source string offset>\}],
-                                          [2, \{<URL string offset>\}],
-	                                          \textit{<m-2>}*[1, 
-                                               \{<name string>, <directory index=0>, 
-                                                <timestamp>, <size>\}]
-
+     1    \HFNunitlength                   <unit length>
+     2    \HFNversion                       6
+     3    \HFNaddresssize                  4 or 8
+     4    \textit{Reserved}                      0
+     5    \HFNheaderlength                 <header length>
+     6    \HFNminimuminstructionlength    1
+     7    \HFNmaximumoperationsperinstruction 1
+     8    \HFNdefaultisstmt               1 (true)
+     9    \HFNlinebase                     -3
+    10    \HFNlinerange                    12
+    11    \HFNopcodebase                   13
+    12    \HFNstandardopcodelengths       [0,1,1,1,1,0,0,0,0,0,0,1]
+    13    \HFNdirectoryformatcount{}        1
+    14    \HFNdirectoryformattable{}        [\DWLNCTpath, \DWFORMstring], 
+	                                        [0, 0]
+    15    \HFNdirectoriescount{}             1
+    16    \HFNdirectories{}                   [0, <directory path string>]
+    17    \HFNfilenameformatcount{}        3
+    18    \HFNfilenameformattable{}        [\DWLNCTsource, \DWFORMstrp],
+                                        [0, 0]
+                                        [\DWLNCTpath, \DWFORMstring],
+                                        [\DWLNCTdirectoryindex, \DWFORMudata],
+                                        [\DWLNCTtimestamp, \DWFORMudata],
+                                        [\DWLNCTsize, \DWFORMudata],
+                                        [0, 0],
+                                        [\DWLNCTURL, \DWFORMstrp],
+                                        [0, 0]
+    19    \HFNfilenamescount{}              4
+    20    \HFNfilenames{}                    [0, \{<source string offset>\}],
+                                        [2, \{<URL string offset>\}],
+                                        [1, \{<name string 1>, <directory index=0>, 
+                                             <timestamp 1>, <size 1>\}],
+                                        [1, \{<name string 2>, <directory index=0>, 
+                                             <timestamp 2>, <size 2>\}]
 \end{alltt}
 \end{dwflisting}
 \begin{centering}
@@ -1981,20 +1988,9 @@ which include the source and URL types.
 \needlines{10}
 \subsection{Line Number Special Opcode Example}
 \label{app:linenumberspecialopcodeexample}
-Suppose the line number header includes the following 
-(header fields not needed are not shown):
-\begin{center}
-\begin{nolinenumbersenv}
-\begin{tabular}{lr}
-    \addttindex{opcode\_base} & 13 \\
-    \addttindex{line\_base}   & -3 \\
-    \addttindex{line\_range}  & 12 \\
-    \addttindex{minimum\_instruction\_length} &          1 \\
-    \addttindex{maximum\_operations\_per\_instruction} & 1 \\
-\end{tabular}
-\end{nolinenumbersenv}
-\end{center}
-This means that
+\bb
+Given the example header in Figure \refersec{fig:V5LNCTusingV6},
+\eb
 we can use a special opcode whenever two successive rows in
 the matrix have source line numbers differing by any value
 within the range \mbox{[-3, 8]} and (because of the limited number
@@ -4175,3 +4171,112 @@ those commands. However, the presence of those offsets complicates
 or may preclude sharing across compilations.
 
 \end{itemize}
+
+\clearpage
+\section{Parameter Default Value Examples}
+\bb
+The default expressions for parameters \texttt{x} and \texttt{y} in 
+the \Cplusplus{} function declaration in Figure \refersec{fig:defaultvalueexampleonesource}  
+can be described in DWARF as illustrated in
+Figure \refersec{fig:defaultvalueexampleoneDWARF}.
+\eb
+
+\begin{figure}[h]
+\begin{nlnlisting}
+    void g (int x = 13;
+            int y = f());
+
+\end{nlnlisting}
+\caption{Default value example \#1: \Cplusplus{} source}
+\label{fig:defaultvalueexampleonesource}
+\end{figure}
+
+\begin{figure}[h]
+\begin{dwflisting}
+\begin{alltt}
+
+    \DWTAGsubprogram
+        \DWATname ("g")
+
+        \DWTAGformalparameter
+           \DWATname ("x")
+           \DWATtype (reference to type "int")
+           \DWATdefaultvalue@\DWFORMsdata (13)
+
+        \DWTAGformalparameter
+           \DWATname ("y")
+           \DWATtype (reference to type "int")
+           \DWATdefaultvalue@\DWFORMstring ("f()")
+
+\end{alltt}
+\end{dwflisting}
+\caption{Default value example \#1: DWARF encoding}
+\label{fig:defaultvalueexampleoneDWARF}
+\end{figure}
+
+\bb
+In Figure \refersec{fig:defaultvalueexampleoneDWARF}, note the following:
+\begin{enumerate}
+\item
+This figure explicitly shows the form used by certain attributes
+(indicated by a trailing @DW\_FORM\_xxx) when it is critical, while
+the form is left implicit in most other examples.
+\item
+The string value for \texttt{y} is three characters in length and
+does not include any quotes. (The quotes are an artifact of the
+presumed dumper tool that created this interpretation.)
+\item
+The default value for x could also be encoded as
+\texttt{\DWATdefaultvalue@\DWFORMstring("13")}; however, this is generally
+a less convenient form and less efficient for consumers to process.
+a less convenient form and less efficient for consumers to process.
+\eb
+\end{enumerate}
+
+\clearpage
+\bb
+A string form in \DWATdefaultvalue{} always represents a source
+code fragment, even in languages that have a native string type. For
+example, the default string parameter of the Ada function in Figure
+\refersec{fig:defaultvalueexampletwosource}
+is encoded in DWARF as a string containing the Ada string literal,
+including the source quotation marks, as shown in 
+Figure \refersec{fig:defaultvalueexampletwoDWARF}.
+\eb
+
+\begin{figure} [h]
+\begin{nlnlisting}
+    procedure s (x : string := "abc";
+                 y : string := "abcd"+10) is
+    begin
+    end s;
+
+\end{nlnlisting} 
+\caption{Default value example \#2: Ada source}
+\label{fig:defaultvalueexampletwosource}
+\end{figure}
+
+\begin{figure}[h]
+\begin{dwflisting}
+\begin{alltt}
+
+    \DWTAGsubprogram
+       \DWATname ("s")
+
+       \DWTAGformalparameter
+          \DWATname ("x")
+          \DWATtype (reference to type "string")
+          \DWATdefaultvalue@\DWFORMdatafour (0x61626364)    ! Big-endian
+
+       \DWTAGformalparameter
+          \DWATname ("y")
+          \DWATtype (reference to type "string")
+          \DWATdefaultvalue@\DWFORMstring ("\textbf{\textsl{"abcd"+10}}")
+
+\end{alltt}
+\end{dwflisting}
+\caption{Default value example \#2: DWARF encoding}
+\label{fig:defaultvalueexampletwoDWARF}
+\end{figure}
+
+
