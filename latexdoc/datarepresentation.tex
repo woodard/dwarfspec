@@ -759,10 +759,21 @@ debugging sections, forms \DWFORMrefsupfour{},
 are not used, and all reference forms referring to \db other sections
 refer to the local sections in the \addtoindex{supplementary object file}.
 
-In macro information, \DWMACROdefinesup{} or
-\DWMACROundefsup{} opcodes can refer to strings in the 
-\dotdebugstr{} section of the \addtoindex{supplementary object file}, 
-or \DWMACROimportsup{} 
+\needlines{8}
+In macro information, 
+\bb
+\DWMACROdefinesupfour{},
+\DWMACROdefinesupeight{},
+\DWMACROundefsupfour{}
+ and
+\DWMACROundefsupeight{} 
+\eb
+opcodes can refer to strings in the 
+\dotdebugstr{} section of the \addtoindex{supplementary object file},
+\bb
+while 
+\DWMACROimportsupfour{} and \DWMACROimportsupeight{}
+\eb
 can refer to \dotdebugmacro{} section entries.  Within the 
 \dotdebugmacro{} section of a \addtoindex{supplementary object file}, 
 \DWMACROdefinestrp{} and \DWMACROundefstrp{}
@@ -770,6 +781,12 @@ opcodes refer to the local \dotdebugstr{} section in that
 supplementary file, not the one in
 the executable or shared object file.
 
+\bb
+\textit{Forms for both 4- and 8-byte references are provided so that references
+may use the appropriate offset size for the content of the supplementary
+object file, which might not use the same 32-bit or 64-bit DWARF format
+as a referencing object file.}
+\eb
 
 \needlines{6}
 \section{32-Bit and 64-Bit DWARF Formats}
@@ -814,6 +831,7 @@ addresses in the target program are not affected by the rules that
 follow.}
 \eb
 
+\needlines{12}
 The differences between the 32- and 64-bit DWARF formats are
 detailed in the following:
 \begin{enumerate}[1. ]
@@ -951,7 +969,8 @@ for
 \eb
 the 64-bit DWARF format, they are 8-byte unsigned integers.
 
-\item In the body of the \dotdebugloclists{} and \dotdebugrnglists{}
+\needlines{5}
+\item Within the body of the \dotdebugloclists{} and \dotdebugrnglists{}
 sections, the offsets 
 \bb
 that 
@@ -3450,7 +3469,7 @@ The encodings
 are given in 
 Table \refersec{tab:macroinfoentrytypeencodings}.
 
-\needlines{10}
+\needlines{40}
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c}
@@ -3461,7 +3480,8 @@ Table \refersec{tab:macroinfoentrytypeencodings}.
 \endhead
   \hline \emph{Continued on next page}
 \endfoot
-  \hline 
+  \hline
+  \multicolumn{2}{l}{\ddagnewinversionx}
 \endlastfoot
 
 \DWMACROdefine          &0x01 \\
@@ -3471,11 +3491,26 @@ Table \refersec{tab:macroinfoentrytypeencodings}.
 \DWMACROdefinestrp      &0x05 \\
 \DWMACROundefstrp       &0x06 \\
 \DWMACROimport          &0x07 \\
-\DWMACROdefinesup       &0x08 \\
-\DWMACROundefsup        &0x09 \\
-\DWMACROimportsup       &0x0a \\
+\textit{Reserved}		&0x08\footnote{Code 0x08 is reserved to allow backward compatible 
+								support of the 
+								DW\_MACRO\_define\_sup\addtoindexx{DW\_MACRO\_define\_sup (deprecated)}
+								entry type that was defined (only) in \DWARFVersionV.} \\
+\textit{Reserved}		&0x09\footnote{Code 0x09 is reserved to allow backward compatible 
+								support of the 
+								DW\_MACRO\_undef\_sup\addtoindexx{DW\_MACRO\_undef\_sup (deprecated)}
+								entry type that was defined (only) in \DWARFVersionV.} \\
+\textit{Reserved}		&0x0a\footnote{Code 0x0a is reserved to allow backward compatible 
+								support of the 
+								DW\_MACRO\_import\_sup\addtoindexx{DW\_MACRO\_import\_sup (deprecated)}
+								entry type that was defined (only) in \DWARFVersionV.} \\
 \DWMACROdefinestrx      &0x0b \\
 \DWMACROundefstrx       &0x0c \\
+\bbeb \DWMACROdefinesupfour~\ddag	&0x0d \\
+\bbeb \DWMACROdefinesupeight~\ddag	&0x0e \\
+\bbeb \DWMACROundefsupfour~\ddag	&0x0f \\
+\bbeb \DWMACROundefsupeight~\ddag	&0x10 \\
+\bbeb \DWMACROimportsupfour~\ddag	&0x11 \\
+\bbeb \DWMACROimportsupeight~\ddag	&0x12 \\
 \DWMACROlouser          &0xe0 \\
 \DWMACROhiuser          &\xff \\
 

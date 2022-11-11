@@ -2132,7 +2132,9 @@ previously needed for location lists.}
 A location list consists of a series of location list entries.
 Each location list entry is one of the following kinds:
 \begin{itemize}
-\item \definition{Bounded location description}.\addtoindexx{bounded location description} 
+\item \definition{\livetargi{text:bndlocdesc}{Bounded location description}{bounded location description}}. 
+\label{text:bndlocdesc}
+\bbeb
 This kind of entry provides a
 location description that specifies the location of
 an object that is valid over a lifetime bounded
@@ -2246,16 +2248,22 @@ LEB128 operand. The operand value is an address index (into the
 used by subsequent \DWLLEoffsetpair{} entries.
 
 \itembfnl{\DWLLEstartxendxTARG}
-This is a form of bounded location description entry that
-has two unsigned LEB128 operands. The operand values are
+This is a form of \livelink{text:bndlocdesc}{bounded location description} entry
+\bb
+(see page \pageref{text:bndlocdesc})
+\eb
+that has two unsigned LEB128 operands. The operand values are
 address indices (into the \dotdebugaddr{} section). These indicate the
 starting and ending addresses, respectively, that define
 the address range for which this location is valid.
 These operands are followed by a counted location description.
 
 \itembfnl{\DWLLEstartxlengthTARG}
-This is a form of bounded location description that has two
-unsigned ULEB operands. The first value is an address index 
+This is a form of \livelink{text:bndlocdesc}{bounded location description} entry
+\bb
+(see page \pageref{text:bndlocdesc})
+\eb
+that has two unsigned LEB128 operands. The first value is an address index 
 (into the \dotdebugaddr{} section)
 that indicates the beginning of the address range over
 which the location is valid.
@@ -2263,8 +2271,11 @@ The second value is the length of the range.
 These operands are followed by a counted location description.
 
 \itembfnl{\DWLLEoffsetpairTARG}
-This is a form of bounded location description entry that
-has two unsigned LEB128 operands. The values of these
+This is a form of \livelink{text:bndlocdesc}{bounded location description} entry
+\bb
+(see page \pageref{text:bndlocdesc})
+\eb
+that has two unsigned LEB128 operands. The values of these
 operands are the starting and ending offsets, respectively,
 relative to the applicable base address, that define the
 address range for which this location is valid.
@@ -2289,15 +2300,21 @@ offsets in subsequent location list entries of kind
 \DWLLEoffsetpair.
 
 \itembfnl{\DWLLEstartendTARG}
-This is a form of bounded location description entry that
-has two target address operands. These indicate the
+This is a form of \livelink{text:bndlocdesc}{bounded location description} entry
+\bb
+(see page \pageref{text:bndlocdesc})
+\eb
+that has two target address operands. These indicate the
 starting and ending addresses, respectively, that define
 the address range for which the location is valid.
 These operands are followed by a counted location description.
        
 \itembfnl{\DWLLEstartlengthTARG}
-This is a form of bounded location description entry that
-has one target address operand value and an unsigned LEB128
+This is a form of \livelink{text:bndlocdesc}{bounded location description} entry
+\bb
+(see page \pageref{text:bndlocdesc})
+\eb
+that has one target address operand value and an unsigned LEB128
 integer operand value. The address is the beginning address
 of the range over which the location description is valid, and
 the length is the number of bytes in that range.
@@ -2709,7 +2726,9 @@ previously needed for range lists.}
 
 Each range list entry is one of the following kinds:
 \begin{itemize}
-\item \definition{Bounded range}.\addtoindexx{bounded range} 
+\item \definition{\livetargi{text:bndrng}{Bounded range}{bounded range}}. 
+\label{text:bndrng}
+\bbeb
 This kind of entry defines an address range
 that is included in the range list. The starting address is
 the lowest address of the address range. The ending address
@@ -2800,21 +2819,30 @@ section) that indicates the applicable base address used by
 following \DWRLEoffsetpair{} entries.
     
 \itembfnl{\DWRLEstartxendxTARG}
-This is a form of bounded range entry that
-has two unsigned LEB128 operands. The operand values are
+This is a form of \livelink{text:bndrng}{bounded range} 
+\bb
+(see page \pageref{text:bndrng})
+\eb
+entry that has two unsigned LEB128 operands. The operand values are
 address indices (into the \dotdebugaddr{} section) that indicate the
 starting and ending addresses, respectively, that define
 the address range.
 
 \itembfnl{\DWRLEstartxlengthTARG}
-This is a form of bounded location description that
-has two unsigned ULEB operands. The first value is an address index
+This is a form of \livelink{text:bndrng}{bounded range} 
+\bb
+(see page \pageref{text:bndrng})
+\eb
+entry that has two unsigned ULEB operands. The first value is an address index
 (into the \dotdebugaddr{} section) that indicates the beginning of 
 the address range. The second value is the length of the range.
        
 \itembfnl{\DWRLEoffsetpairTARG}
-This is a form of bounded range entry that
-has two unsigned LEB128 operands. The values of these
+This is a form of \livelink{text:bndrng}{bounded range} 
+\bb
+(see page \pageref{text:bndrng})
+\eb
+entry that has two unsigned LEB128 operands. The values of these
 operands are the starting and ending offsets, respectively,
 relative to the applicable base address, that define the
 address range.
@@ -2834,16 +2862,22 @@ offsets in subsequent location list entries of kind
 \DWRLEoffsetpair.
 
 \itembfnl{\DWRLEstartendTARG}
-This is a form of bounded range entry that
-has two target address operands. Each
+This is a form of \livelink{text:bndrng}{bounded range} 
+\bb
+(see page \pageref{text:bndrng})
+\eb
+entry that has two target address operands. Each
 operand is the same size as used in \DWFORMaddr.
 These indicate the starting and ending addresses,
 respectively, that define the address range for which
 the following location is valid.
        
 \itembfnl{\DWRLEstartlengthTARG}
-This is a form of bounded range entry that
-has one target address operand value and an unsigned LEB128
+This is a form of \livelink{text:bndrng}{bounded range} 
+\bb
+(see page \pageref{text:bndrng})
+\eb
+entry that has one target address operand value and an unsigned LEB128
 integer length operand value. The address is the beginning address
 of the range over which the location description is valid, and
 the length is the number of bytes in that range.

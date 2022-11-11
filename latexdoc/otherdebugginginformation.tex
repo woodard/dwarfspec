@@ -2157,10 +2157,9 @@ gives some sample line number programs.}
 
 \section{Macro Information}
 \label{chap:macroinformation}
-\textit{Some languages, such as 
-\addtoindex{C} and 
-\addtoindex{C++}, provide a way to replace
 \addtoindexx{macro information}
+\textit{Some languages, such as \C{} and \Cplusplus{}, 
+provide a way to replace
 text in the source program with macros defined either in the
 source file itself, or in another file included by the source
 file.  Because these macros are not themselves defined in the
@@ -2177,18 +2176,7 @@ the macro information for a
 given compilation unit is represented in the 
 \dotdebugmacro{}
 section of an object file. 
-
-\needlines{4}
-\textit{The \dotdebugmacro{} section is new in 
-\DWARFVersionV, and supersedes the
-\dotdebugmacinfo{} section of earlier DWARF versions. 
-While \dotdebugmacro{} and \dotdebugmacinfo{}
-sections cannot both occur in the same compilation unit, both may be found in the 
-set of units that make up an executable or shared object file.}
-
-\textit{The representation of debugging information in the \dotdebugmacinfo{} section is specified
-in earlier versions of the DWARF standard. Note that the \dotdebugmacinfo{} section does not contain 
-any headers and does not support sharing of strings or sharing of repeated macro sequences.}
+\db
 
 The macro information for each compilation unit consists of one or
 more macro units.  Each macro unit starts with a header
@@ -2201,7 +2189,7 @@ In all macro information entries,
 the line number of the entry is encoded as an
 unsigned LEB128 integer.
 
-\needlines{6}
+\needlines{7}
 \subsection{Macro Information Header}
 The macro information header contains the following fields:
 
@@ -2211,6 +2199,7 @@ A version number (see Section \refersec{datarep:macroinformation}).
 This number is specific to the macro information and is independent
 of the DWARF version number.
 
+\needlines{4}
 \item \texttt{flags} (\HFTubyte) \\
 The bits of the \texttt{flags} field are interpreted as a set
 of flags, some of which may indicate that additional fields follow.
@@ -2223,6 +2212,16 @@ If the \HFNoffsetsizeflag{} is zero, the header is for a 32-bit
 DWARF format macro section and all offsets are 4 bytes long;
 if it is one, the header is for a 64-bit DWARF format macro section 
 and all offsets are 8 bytes long.
+
+\bb
+This flag does not apply to the the following entries:
+\DWMACROdefinesupfour,
+\DWMACROdefinesupeight,
+\DWMACROundefsupfour,
+\DWMACROundefsupeight,
+\DWMACROimportsupfour{} and
+\DWMACROimportsupeight.
+\eb
 
 \item \addttindex{debug\_line\_offset\_flag} \\
 If the \addttindex{debug\_line\_offset\_flag} is one, 
@@ -2336,15 +2335,23 @@ The contents of the operands are described below (see Sections
 \ref{chap:macrodefinestring} and \referfol{chap:macroundefinestring}).
 
 \needlines{6}
-\itembfnl{\DWMACROdefinesupTARG{}, \DWMACROundefsupTARG{}}
-A \DWMACROdefinesupNAME{} or \DWMACROundefsupNAME{} entry 
-has two operands.  The first operand encodes the line number 
+\itembfnl{\bb \DWMACROdefinesupfourTARG{}, \DWMACROdefinesupeightTARG{},
+\DWMACROundefsupfourTARG{}, \DWMACROundefsupeightTARG
+\eb}
+\bb
+A \DWMACROdefinesupfourNAME{}, \DWMACROdefinesupeightNAME{}, 
+\DWMACROundefsupfourNAME{} or \DWMACROundefsupeightNAME{}
+\eb
+entry has two operands.  The first operand encodes the line number 
 of the \texttt{\#define} or \texttt{\#undef} macro directive.
 The second operand identifies a string; it is represented as
 an offset into a string table contained in the \dotdebugstr{} 
 section of the \addtoindex{supplementary object file}.  
-The size of the operand depends on the macro section header 
-\HFNoffsetsizeflag{} field.  
+The size of the operand 
+\bb
+is 4-bytes for \DWMACROdefinesupfourNAME{} and \DWMACROundefsupfourNAME, and
+8-bytes for \DWMACROdefinesupeightNAME{} and \DWMACROundefsupeightNAME.
+\eb  
 
 The contents of the operands are described below (see Sections 
 \ref{chap:macrodefinestring} and \referfol{chap:macroundefinestring}).
@@ -2357,8 +2364,11 @@ The contents of the operands are described below (see Sections
 In the case of a 
 \DWMACROdefine{},
 \DWMACROdefinestrp{},
-\DWMACROdefinestrx{} or
-\DWMACROdefinesup{}
+\bb
+\DWMACROdefinestrx{},
+\DWMACROdefinesupfour{} or
+\DWMACROdefinesupeight{}
+\eb
 entry, the value of the
 second operand is the name of the macro symbol that is defined
 at the indicated source line, followed immediately by the 
@@ -2387,8 +2397,11 @@ name of the defined macro from the following definition text.
 In the case of a 
 \DWMACROundef{},
 \DWMACROundefstrp{},
-\DWMACROundefstrx{} or
-\DWMACROundefsup{}
+\bb
+\DWMACROundefstrx{},
+\DWMACROundefsupfour{} or
+\DWMACROundefsupeight{}
+\eb
 entry, the value of the second string is the name of the pre-processor
 symbol that is undefined at the indicated source line.
 
@@ -2486,16 +2499,25 @@ the sequence of entries
 \eb
 occurs in place of the import operation.
 
-\itembfnl{\DWMACROimportsupTARG}
-A \DWMACROimportsupNAME{} entry has one operand, an 
+\itembfnl{\bb \DWMACROimportsupfourTARG, \DWMACROimportsupeightTARG}
+A \DWMACROimportsupfourNAME{} or \DWMACROimportsupeightNAME{} 
+\eb
+entry has one operand, an 
 offset from the start of the \dotdebugmacro{} section in the 
 \addtoindex{supplementary object file}.  
-The size of the operand depends on the section header 
-\HFNoffsetsizeflag{} field. 
+The size of the operand 
+\bb
+is 4 bytes for \DWMACROimportsupfourNAME{} and 8 bytes for
+\DWMACROimportsupeightNAME{}.
+\eb
 Apart from the different location in which to find the macro unit,
 this entry type is equivalent to \DWMACROimport. 
 
-\textit{This entry type is aimed at sharing duplicate 
+\textit{
+\bb
+These entry types are
+\eb
+aimed at sharing duplicate 
 macro units between \dotdebugmacro{}
 sections from different executable or shared object files.}  
 
