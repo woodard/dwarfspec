@@ -220,7 +220,7 @@ Figure \referfol{fig:nameindexlayoutpart1}.
   overview/.style={draw, node font=\small, minimum height=28pt, text width=80pt},
   detail1/.style={draw, minimum height=14pt, text width=116pt},
   detail2/.style={draw, minimum height=28pt, text width=116pt},
-  detail3/.style={draw, minimum height=48pt, text width=116pt},
+  detail3/.style={draw, minimum height=38pt, text width=116pt},
   detail4/.style={draw, minimum height=72pt, text width=116pt},
   ellip/.style={draw, shape=broken rectangle, minimum height=14pt, text width=116pt},
   explode/.style={draw=black!50, fill=black!20, line join=bevel},
@@ -230,12 +230,13 @@ Figure \referfol{fig:nameindexlayoutpart1}.
   hashes/.style={fill=hashesgreen},
   stroffsets/.style={fill=stroffsetspink},
   entryoffsets/.style={fill=entryoffsetspink},
+  abbrevs/.style={fill=olive!40},
   indexentries/.style={fill=indexentriesorange}
 ]
 
 % Name Table Overview
 
-\begin{scope}[start chain=going below, node distance=0]
+\begin{scope}[start chain=going below, node distance=0, yshift=-130pt]
   \node           [on chain,caption]  {Name Index};
   \node (header)  [on chain,overview,header] {Header};
   \node (culist)  [on chain,overview,header] {CU List};
@@ -249,7 +250,7 @@ Figure \referfol{fig:nameindexlayoutpart1}.
 
 % Exploded View of CU List
 
-\begin{scope}[start chain=going below, node distance=0, shift={($(header.north east) + (72pt,18pt)$)}]
+\begin{scope}[start chain=going below, node distance=0, shift={($(header.north east) + (72pt,130pt)$)}]
   \node (cu0) [on chain,detail1,culist] {offset to CU 0};
   \node (cu1) [on chain,detail1,culist] {offset to CU 1};
   \node (cu2) [on chain,ellip,culist]   {\dots};
@@ -320,10 +321,20 @@ Figure \referfol{fig:nameindexlayoutpart1}.
   \filldraw [explode] (names.north east) -- (name0.north west) -- (name1.south west) -- (names.south east) -- cycle;
 \end{scope}
 
-% Exploded View of Entry Pool
+% Exploded View of Abbreviations
 
 \begin{scope}[shift={($(name1.south west) + (0,-9pt)$)}]
-  \node (pool0) [detail4,indexentries] {Index Entries};
+  \node (abbrev0) [detail3,abbrevs] {Abbreviations};
+\end{scope}
+
+\begin{scope}[on background layer]
+  \filldraw [explode] (abbrev.north east) -- (abbrev0.north west) -- (abbrev0.south west) -- (abbrev.south east) -- cycle;
+\end{scope}
+
+% Exploded View of Entry Pool
+
+\begin{scope}[shift={($(abbrev0.south west) + (0,-9pt)$)}]
+  \node (pool0) [detail3,indexentries] {Index Entries};
 \end{scope}
 
 \begin{scope}[on background layer]
@@ -354,7 +365,7 @@ Figure \referfol{fig:nameindexlayoutpart1}.
 \draw [dashed,{Circle[open]}-{Stealth[]}] (p3) .. controls (c3) and (c4) .. (p4);
 
 \end{tikzpicture}
-
+\vspace{2mm}
 \caption{Name Index Layout}
 \label{fig:nameindexlayoutpart1}
 \end{center}
@@ -577,12 +588,15 @@ their forms.
 \needlines{4}
 The standard 
 \bb
-index attributes (see Table \refersec{tab:indexattributeencodings})
+\addtoindex{index attribute}s (see Table \refersec{tab:indexattributeencodings})
 \eb 
 are:
 \begin{itemize}
 \item Compilation Unit (CU), a reference to an entry in the list of
-    CUs. In a per-CU index, index entries without this attribute
+    CUs. In a per-CU index, index entries without this 
+\bb
+	index attribute
+\eb
     implicitly refer to the single CU.
 
 \item Type Unit (TU), a reference to an entry in the list of local
@@ -603,22 +617,42 @@ are:
 It is possible that an indexed debugging information entry
 has a parent that is not
 indexed (for example, if its parent does not have a name attribute). 
-In such a case, a parent attribute may point to a nameless index
+In such a case, a parent 
+\bb
+index attribute
+\eb
+may point to a nameless index
 entry (that is, one that cannot be reached from any entry in the
 name table), or it may point to the nearest ancestor that does
 have an index entry.
 
-A producer may define additional vendor-specific attributes, 
-and a consumer will be able to ignore and skip over any attributes 
+A producer may define additional vendor-specific 
+\bb
+index attributes, 
+\eb
+and a consumer will be able to ignore and skip over any 
+\bb
+index attributes 
+\eb
 it is not prepared to handle.
 
 \needlines{4}
 When an index entry refers to a foreign type unit, it may have
-attributes for both CU and (foreign) TU. For such entries, the CU
-attribute gives the consumer a reference to the CU that may be used to
+\bb
+index attributes 
+\eb
+for both CU and (foreign) TU. For such entries, the CU
+\bb
+index attribute
+\eb
+gives the consumer a reference to the CU that may be used to
 locate a \splitDWARFobjectfile{} that contains the type unit.
 
-\textit{The type hash attribute, not to be confused with the type signature
+\textit{The type hash
+\bb
+index attribute, 
+\eb
+not to be confused with the type signature
 for a TU, may be provided for type entries whose declarations are not
 in a type unit, for the convenience of link-time or post-link
 utilities that wish to de-duplicate type declarations across
@@ -631,11 +665,19 @@ terminates the list. There may be gaps between the lists.
 \subsubsection{Per-CU versus Per-Module Indexes}
 \label{chap:percuvspermoduleindexes}
 \textit{In a per-CU index, the CU list may have only a single entry, 
-and index entries may omit the CU attribute. (Cross-module or link-time
+and index entries may omit the CU 
+\bb
+attribute. 
+\eb
+(Cross-module or link-time
 optimization, however, may produce an object file with several compile
 units in one object. A compiler in this case may produce a separate
 index for each CU, or a combined index for all CUs. In the latter
-case, index entries will require the CU attribute.) Most name table
+case, index entries will require the CU
+\bb
+attribute.) 
+\eb
+Most name table
 entries may have only a single index entry for each, but sometimes a
 name may be used in more than one context and will require multiple
 index entries, each pointing to a different debugging information
@@ -760,8 +802,7 @@ impossible for a consumer to process data in the \dotdebugnames{} section.
 The augmentation 
 \db
 sequence only provides hints to the consumer regarding
-the completeness of the set of names in the index.
-}
+the completeness of the set of names in the index.}
 
 \end{enumerate}
 
@@ -785,14 +826,14 @@ In the DWARF-32 format, a section offset is 4 bytes,
 while in the DWARF-64 format, a section offset is 8 bytes.
 
 The total number of entries in the list is given by
-\texttt{local\_type\_unit\_count}. This list may be empty.
+\HFNlocaltypeunitcount{}. This list may be empty.
 
 \subsubsubsection{List of Foreign TUs}
 The list of foreign TUs immediately follows the list of local TUs.
 Each entry in the list is a 8-byte type signature (as described by
 \DWFORMrefsigeight).
 
-The number of entries in the list is given by \texttt{foreign\_type\_unit\_count}.
+The number of entries in the list is given by \HFNforeigntypeunitcount{}.
 This list may be empty.
 
 \needlines{4}
@@ -801,8 +842,8 @@ The optional hash lookup table immediately follows the list of type signatures.
 
 The hash lookup table is actually two separate arrays: an array of
 buckets, followed immediately by an array of hashes. The number of
-entries in the buckets array is given by \texttt{bucket\_count}, and the number
-of entries in the hashes array is given by \texttt{name\_count}. Each array
+entries in the buckets array is given by \HFNbucketcount{}, and the number
+of entries in the hashes array is given by \HFNnamecount{}. Each array
 contains 4-byte unsigned integers.
 
 \needlines{4}
@@ -812,7 +853,7 @@ using the "DJB" hash function\addtoindexx{DJB hash function}
 described in Section \refersec{datarep:nametablehashfunction}.
 Given a hash value for the symbol,
 the symbol is entered into a bucket whose index is the hash value
-modulo \texttt{bucket\_count}. The buckets array is indexed starting at 0.
+modulo \HFNbucketcount{}. The buckets array is indexed starting at 0.
 
 For the purposes of the hash computation, each symbol name should be
 folded according to the simple case folding algorithm defined in the
@@ -870,7 +911,7 @@ the start of the entry pool area.
 
 These two arrays are indexed starting at 1, and correspond 
 one-to-one with each other. The length of each array is
-given by \texttt{name\_count}.
+given by \HFNnamecount{}.
 
 If there is a hash lookup table, the hashes array corresponds on
 a one-to-one basis with the string offsets array and with the
@@ -883,7 +924,7 @@ requirement for the name table.}
 \subsubsubsection{Abbreviations Table}
 The abbreviations table immediately follows the name table. This table
 consists of a series of abbreviation declarations. Its size is given
-by \texttt{abbrev\_table\_size}.
+by \HFNabbrevtablesize{}.
 
 Each abbreviation declaration defines the tag and other attributes for
 a particular form of index entry. Each declaration starts with an
@@ -896,9 +937,17 @@ that encodes the tag of the debugging information entry corresponding
 to the index entry.
 
 Following the tag encoding is a series of attribute specifications.
-Each attribute consists of two parts: an unsigned LEB128 number that
+Each
+\bb
+index attribute 
+\eb
+consists of two parts: an unsigned LEB128 number that
 represents the index attribute, and another unsigned LEB128 number
-that represents the attribute's form (as described in 
+that represents the 
+\bb
+index attribute's 
+\eb
+form (as described in 
 Section \refersec{datarep:attributeencodings}). The series of attribute 
 specifications ends with an entry containing 0 for the attribute and 
 0 for the form.
@@ -911,9 +960,9 @@ Table \refersec{tab:indexattributeencodings}.
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|P{7cm}}
   \caption{Index attribute encodings} \label{tab:indexattributeencodings}\\
-  \hline \bfseries Attribute name & \bfseries Meaning \\ \hline
+  \hline \bbeb \bfseries Index attribute name & \bfseries Meaning \\ \hline
 \endfirsthead
-  \bfseries Attribute name & \bfseries Meaning \\ \hline
+  \bbeb \bfseries Index attribute name & \bfseries Meaning \\ \hline
 \endhead
   \hline \emph{Continued on next page}
 \endfoot
@@ -933,7 +982,7 @@ Table \refersec{tab:indexattributeencodings}.
 
 The abbreviations table ends with an entry consisting of a single 0
 byte for the abbreviation code. The size of the table given by
-\texttt{abbrev\_table\_size} may include optional padding following the
+\HFNabbrevtablesize{} may include optional padding following the
 terminating 0 byte.
 
 \needlines{4}
@@ -2082,7 +2131,7 @@ operands appropriate to that opcode.
 \addtoindexx{extended opcodes in line number program}
 \bb
 Extended opcodes are used as part of a \DWLNSextendedop{} operation
-(see Section \refersec{linenumberprograminstructions}).
+(see Section \refersec{chap:linenumberprograminstructions}).
 \eb
 
 The extended opcodes are as follows:
@@ -2820,10 +2869,9 @@ its address size must match the address size here.
 A 
 \addtoindexx{\textless caf\textgreater|see{code alignment factor}}
 constant that is factored out of all advance location
-instructions (see 
-Section \refersec{chap:rowcreationinstructions}).
+instructions (see Section \refersec{chap:rowcreationinstructions}).
 The resulting value is  
-\mbox{\textit{(operand} * \HFNcodealignmentfactor)}.
+\mbox{\textit{operand} * \HFNcodealignmentfactor}.
 
 \item  \HFNdataalignmentfactor{} (signed LEB128)
 \addtoindexx{LEB128!signed}\addtoindexx{signed LEB128|see{LEB128, signed}} \\
@@ -2833,8 +2881,7 @@ A
 constant that is factored out of certain offset instructions
 (see Sections \refersec{chap:cfadefinitioninstructions} and 
 \refersec{chap:registerruleinstructions}).
-The resulting value is  \textit{(operand} *
-\HFNdataalignmentfactor).
+The resulting value is  \mbox{\textit{operand} * \HFNdataalignmentfactor}.
 
 \item  \HFNreturnaddressregister{} (unsigned LEB128)\addtoindexx{LEB128!unsigned} \\
 An unsigned LEB128 constant that indicates which column in the
@@ -2964,7 +3011,7 @@ with the opcode) that represents a constant delta. The required
 action is to create a new table row with a location value that
 is computed by taking the current entry\textquoteright s location value
 and adding the value of 
-\textit{delta} * \addttindex{code\_alignment\_factor}. 
+\mbox{\textit{delta} * \addttindex{code\_alignment\_factor}}. 
 All other values in the new row are initially identical to the
 current row
 
@@ -3007,8 +3054,8 @@ an unsigned LEB128 value\addtoindexx{LEB128!unsigned}
 representing a register number and a
 signed LEB128\addtoindexx{LEB128!signed} factored offset. This instruction is identical
 to \DWCFAdefcfa{} except that the second operand is signed
-and factored. The resulting offset is \textit{factored\_offset} *
-\addttindex{data\_alignment\_factor}.
+and factored. The resulting offset is 
+\mbox{\textit{factored\_offset} * \addttindex{data\_alignment\_factor}}.
 
 
 \item \textbf{\DWCFAdefcfaregisterTARG} \\
@@ -3035,7 +3082,7 @@ The \DWCFAdefcfaoffsetsfNAME{} instruction takes a signed
 LEB128\addtoindexx{LEB128!signed} operand representing a factored offset. This instruction
 is identical to \DWCFAdefcfaoffset{} except that the
 operand is signed and factored. The resulting offset is
-\textit{factored\_offset} * \addttindex{data\_alignment\_factor}.
+\mbox{\textit{factored\_offset} * \addttindex{data\_alignment\_factor}}.
 This operation is valid only if the current CFA rule is defined to use a
 register and offset.
 
@@ -3078,7 +3125,9 @@ constant representing a factored offset. The required action
 is to change the rule for the register indicated by the
 register number to be an offset(N) rule where the value of
 N is 
-\textit{factored offset} * \addttindex{data\_alignment\_factor}.
+\bb
+\mbox{\textit{factored\_offset} * \addttindex{data\_alignment\_factor}}.
+\eb
 
 \needlines{4}
 \item \textbf{\DWCFAoffsetextendedTARG} \\
@@ -3099,7 +3148,7 @@ signed LEB128 factored offset. This instruction is identical
 to \DWCFAoffsetextended{} 
 except that the second operand is
 signed and factored. The resulting offset is 
-\textit{factored\_offset} * \addttindex{data\_alignment\_factor}.
+\mbox{\textit{factored\_offset} * \addttindex{data\_alignment\_factor}}.
 
 \needlines{4}
 \item \textbf{\DWCFAvaloffsetTARG} \\
@@ -3109,7 +3158,7 @@ LEB128 operands\addtoindexx{LEB128!unsigned} representing a register number and 
 factored offset. The required action is to change the rule
 for the register indicated by the register number to be a
 val\_offset(N) rule where the value of N is 
-\textit{factored\_offset} * \addttindex{data\_alignment\_factor}.
+\mbox{\textit{factored\_offset} * \addttindex{data\_alignment\_factor}}.
 
 \needlines{6}
 \item \textbf{\DWCFAvaloffsetsfTARG} \\
@@ -3118,7 +3167,7 @@ unsigned LEB128\addtoindexx{LEB128!unsigned} value representing a register numbe
 signed LEB128\addtoindexx{LEB128!signed} factored offset. This instruction is identical
 to \DWCFAvaloffset{} except that the second operand is signed
 and factored. The resulting offset is 
-\textit{factored\_offset} * \addttindex{data\_alignment\_factor}.
+\mbox{\textit{factored\_offset} * \addttindex{data\_alignment\_factor}}.
 
 \item \textbf{\DWCFAregisterTARG} \\
 The \DWCFAregisterNAME{} 

@@ -519,7 +519,7 @@ it is undefined. If the base address is undefined, then any
 DWARF entry or structure defined in terms of the base address
 of that compilation unit is not valid.
 
-\needlines{6}
+\needlines{8}
 \subsection{Skeleton Compilation Unit Entries}
 \label{chap:skeletoncompilationunitentries}
 \addtoindexx{compilation unit!skeleton}
@@ -869,7 +869,7 @@ It may also have a
 the first executable instruction of that initialization code
 (see Section \refersec{chap:entryaddress}).
 
-\needlines{4}
+\needlines{5}
 If\hypertarget{chap:DWATprioritymodulepriority}{}
 the module has been assigned a priority, it may have a
 \addtoindexx{priority attribute}
@@ -877,7 +877,7 @@ the module has been assigned a priority, it may have a
 The value of this attribute is a
 reference to another debugging information entry describing
 a variable with a constant value. The value of this variable
-is the actual constant value of the module\textquoteright s priority,
+is the actual constant value of the module\textquoteright{s} priority,
 represented as it would be on the target architecture.
 
 \subsection{Namespace Entries}
@@ -2227,7 +2227,20 @@ instructions are given a location in the caller.
 \DWTAGcallsite{} entries describe normal and tail calls but not tail recursion calls,
 while \DWTAGinlinedsubroutine{} entries describe inlined calls 
 (see Section \refersec{chap:inlinedsubroutines}).
-Call site entries cannot describe tail recursion or optimized out calls.
+Call site entries cannot 
+\bb
+fully
+\eb
+describe tail recursion or optimized out calls.
+
+\bb
+\textit{For optimized out calls there is no code address to use for
+\DWATcallreturnpc{} or \DWATcallpc{} attributes; however, the fact
+that the souce code makes a call to a certain function 
+at a specific source code location and whether
+some of the arguments have constant values can be useful for certain
+consumers.}
+\eb
 
 \subsection{Call Site Entries}
 \label{chap:callsiteentries}
