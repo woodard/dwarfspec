@@ -2187,18 +2187,16 @@ integer. It sets the
 \needlines{6}
 \bb
 \item \textbf{\DWLNEpaddingTARG} \\
-The \DWLNEpaddingNAME{} opcode is followed by a single
-operand which consists of a sequence of arbitrary bytes,
-which may be zero length.  The size of the operand is
-implicitly given by the unsigned LEB128\addtoindexx{LEB128!unsigned}
-integer that precedes the opcode.  The opcode and operand have no
-effect on the line number program.
+The \DWLNEpaddingNAME{} opcode is followed by a sequence of
+zero or more arbitrary bytes up to the length specified
+by the unsigned LEB128\addtoindexx{LEB128!unsigned} integer 
+that precedes all extended opcodes. The opcode has no effect 
+on the line number program.
 
 \textit{This permits a producer to pad or overwrite arbitrary
-parts of a line number program, with a minimum of the
+parts of a line number program, subject to the minimum of 
 three bytes needed to encode any extended opcode.}
 \eb
-
 \end{enumerate}
 \db
 \textit{Appendix \refersec{app:linenumberprogramexample} 

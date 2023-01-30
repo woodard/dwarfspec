@@ -260,6 +260,7 @@ the linker must process.}
 
 \needlines{6}
 \subsubsection{First Partition (with Skeleton Unit)}
+\label{datarep:firstpartition}
 The first partition contains
 debugging information that must still be processed by the linker,
 and includes the following:
@@ -311,6 +312,7 @@ unit can be used by a DWARF consumer to find the
 DWARF object file that contains the second partition.
 
 \subsubsection{Second Partition (Unlinked or in a \texttt{.dwo} File)}
+\label{datarep:secondpartition}
 The second partition contains the debugging information that
 does not need to be processed by the linker. These sections
 may be left in the object files and ignored by the linker
@@ -369,8 +371,8 @@ Attributes that refer to the \dotdebugstrdwo{} string table do so
 only indirectly through the \dotdebugstroffsetsdwo{} section using the
 forms \DWFORMstrx, \DWFORMstrxNor, or the macro entries
 \DWMACROdefinestrx{} or \DWMACROundefstrx.
-Direct reference, using forms \DWFORMstrp{} or \DWFORMstrpeight, or
-the macro entries \DWMACROdefinestrp{} or \DWMACROundefstrp,
+Direct reference (for example, using forms \DWFORMstrp{} or \DWFORMstrpeight, or
+the macro entries \DWMACROdefinestrp{} or \DWMACROundefstrp)
 is not allowed.
 \eb
 \end{itemize}
@@ -535,7 +537,10 @@ sections:
 \end{alltt}
 
 \subsubsection{Format of the CU and TU Index Sections}
-Both index sections have the same format, and serve to map an
+\bb
+Both \dotdebugcuindex{} and \dotdebugtuindex{}
+\eb
+index sections have the same format, and serve to map an
 8-byte signature to a set of contributions to the debug sections.
 Each index section begins with a header, followed by a hash table of
 signatures, a parallel table of indexes, a table of offsets, and
@@ -553,6 +558,15 @@ This number is specific to the CU and TU index information
 and is independent of the DWARF version number.
 
 The version number is \versiondotdebugcuindex.
+
+\bb
+\item \HFNoffsetsizeflag{} (\HFTuhalf) \\
+If the \HFNoffsetsizeflag{} is zero, the header is for a 32-bit 
+DWARF format unit index section and all offsets and lengths 
+are 4 bytes long; if it is one, the header is for a 64-bit 
+DWARF format unit index section and all offsets and lengths 
+are 8 bytes long.
+\eb
 
 \item \HFNpadding{} (\HFTuhalf) \\
 Reserved to DWARF (must be zero).
@@ -617,9 +631,12 @@ The table of offsets begins immediately following the parallel
 table (at offset \mbox{$16 + 12 * S$} from the beginning of the section).
 This table consists of a single header row containing $N$ fields,
 each a 4-byte unsigned integer, followed by $U$ data rows, each
-also containing $N$ fields of 4-byte unsigned integers. The fields
-in the header row provide a section identifier referring to a
-debug section; the available section identifiers are shown in
+\bb
+containing $N$ unsigned integer fields of size specified 
+by the index header \HFNoffsetsizeflag{} field. 
+\eb
+The fields in the header row provide a section identifier referring 
+to a debug section; the available section identifiers are shown in
 Table \referfol{tab:dwarfpackagefilesectionidentifierencodings}. 
 Each data row corresponds to a specific CU
 or TU in the package file. In the data rows, each field provides
@@ -671,8 +688,12 @@ interpreted as relative to the corresponding base offset.
 The table of sizes begins immediately following the table of
 offsets, and provides the sizes of the contributions made by each
 CU or TU to the corresponding section in the package file. 
-This table consists of U data rows, each with N fields of 4-byte
-unsigned integers. Each data row corresponds to the same CU or TU
+This table consists of U data rows, each with 
+\bb
+$N$ unsigned integer fields of size specified by 
+the index header \HFNoffsetsizeflag{} field. 
+\eb
+Each data row corresponds to the same CU or TU
 as the corresponding data row in the table of offsets described
 above. Within each data row, the N fields also correspond
 one-to-one with the fields in the corresponding data row of the
@@ -1476,22 +1497,35 @@ The series of attribute specifications ends with an
 entry containing 0 for the name and 0 for the form.
 
 \needlines{4}
-The attribute form 
-\DWFORMindirectTARG{} is a special case. For
-attributes with this form, the attribute value itself in the
-\dotdebuginfo{}
-section begins with an unsigned
-LEB128 number that represents its form. This allows producers
-to choose forms for particular attributes 
+\bb
+For attributes with the form \DWFORMindirectTARG{}, 
+the attribute value itself is in the \dotdebuginfo{}
+section which begins with an unsigned LEB128 number that 
+specifies the form followed by the value according that form. 
+\eb
+This allows producers to choose forms for particular attributes 
 \addtoindexx{abbreviations table!dynamic forms in}
-dynamically,
-without having to add a new entry to the abbreviations table.
+dynamically, without having to add a new entry to the abbreviations table.
 
-The attribute form \DWFORMimplicitconstTARG{} is another special case.
-For attributes with this form, the attribute specification contains 
+\bb
+For attributes with the form \DWFORMimplicitconstTARG{},
+\eb 
+the attribute specification contains 
 a third part, which is a signed LEB128\addtoindexx{LEB128!signed} 
 number. The value of this number is used as the value of the 
 attribute, and no value is stored in the \dotdebuginfo{} section.
+
+\bb
+For attributes with the form \DWFORMaddrxoffset{}, the attribute  
+specification contains 
+two unsigned LEB128 numbers, each representing a form. The first 
+form must be of class address and the second of class constant. Values 
+using this form in the \dotdebuginfo{} section contain a value for the first 
+form followed by a value for the second form. The total value of the 
+\DWFORMaddrxoffset{} is then computed by adding those two values together 
+(if the first value is an indirect address, that is resolved first 
+before adding it to the second value).
+\eb
 
 The abbreviations for a given compilation unit end with an
 entry consisting of a 0 byte for the abbreviation code.
@@ -2792,7 +2826,7 @@ The\hypertarget{chap:DWATencodingencodingofbasetype}{}
 encodings of the constants used in the 
 \DWATencodingDEFN{} attribute\addtoindexx{encoding attribute} 
 are given in 
-Table \refersec{tab:basetypeencodingvalues}
+Table \refersec{tab:basetypeencodingvalues}.
 
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
@@ -2805,6 +2839,7 @@ Table \refersec{tab:basetypeencodingvalues}
   \hline \emph{Continued on next page}
 \endfoot
   \hline
+  \multicolumn{2}{l}{\ddagnewinversionx} \\
 \endlastfoot
 \DWATEaddress			& 0x01 \\
 \DWATEboolean			& 0x02 \\
@@ -2824,6 +2859,12 @@ Table \refersec{tab:basetypeencodingvalues}
 \DWATEUTF{} 			& 0x10 \\
 \DWATEUCS   			& 0x11 \\
 \DWATEASCII 			& 0x12 \\
+\bb
+\DWATEcomplexsigned~\ddag	& 0x13 \\
+\DWATEimaginarysigned~\ddag	& 0x14 \\
+\DWATEcomplexunsigned~\ddag	& 0x15 \\
+\DWATEimaginaryunsigned~\ddag&0x16 \\
+\eb
 \DWATElouser{} 			& 0x80 \\
 \DWATEhiuser{} 			& \xff \\
 \end{longtable}
