@@ -1765,10 +1765,8 @@ entering the current subprogram.
 
 \DWOPpushobjectaddress{} is not meaningful inside of this DWARF operation.
 
-\textit{ 
-The register location description provides a more compact form for the
-case where the value was in a register on entry to the subprogram.
-}
+\textit{The register location description provides a more compact form for the
+case where the value was in a register on entry to the subprogram.}
 
 \textit{The values needed to evaluate \DWOPentryvalueNAME{} could be obtained in
 several ways. The consumer could suspend execution on entry to the
@@ -2240,6 +2238,7 @@ An end-of-list entry contains no further data.
 \textit{A series of this kind of entry may be used for padding or
 alignment purposes.}
 
+
 \itembfnl{\DWLLEbaseaddressxTARG}
 This is a form of base address entry that has one unsigned
 LEB128 operand. The operand value is an address index (into the 
@@ -2285,6 +2284,15 @@ The operand is a counted location description which defines
 where an object is located if no prior location description 
 is valid.
 
+\bb
+\itembfnl{\DWLLEincludeloclistxTARG}
+This is a form of list inclusion, that has one unsigned LEB128
+operand.  The value is an index into the \dotdebugloclists{} section,
+interpreted the same way as the operand of \DWFORMloclistx{} to find
+a target list of entries, which will be regarded as part of the
+current location list, up to the \DWLLEendoflist{} entry.
+\eb
+
 \end{enumerate}
       
 The following kinds of location list entries are defined for
@@ -2318,6 +2326,15 @@ integer operand value. The address is the beginning address
 of the range over which the location description is valid, and
 the length is the number of bytes in that range.
 These operands are followed by a counted location description.
+
+\bb
+\itembfnl{\DWLLEincludeloclistTARG}
+This is a form of list inclusion, that has one offset operand.  The
+value is an offset into the \dotdebugloclists{} section, like the
+operand of \DWFORMsecoffset{}.  The offset identifies the
+first entry of a location list whose entries are to be regarded as part of
+the current location  list, up to the \DWLLEendoflist{} entry.
+\eb
 
 \end{enumerate}
 
@@ -2846,6 +2863,15 @@ operands are the starting and ending offsets, respectively,
 relative to the applicable base address, that define the
 address range.
 
+\bb
+\itembfnl{\DWRLEincludernglistxTARG}
+This is a form of range inclusion, that has one unsigned LEB128
+operand.  The value is an index into the \dotdebugrnglists{} section,
+interpreted the same way as the operand of \DWFORMrnglistx{} to find
+a target list of entries, which will be regarded as part of the
+current range list, up to the \DWRLEendoflist{} entry.
+\eb
+
 \end{enumerate} 
 
 The following kinds of range entry may be used only in non-split 
@@ -2880,6 +2906,15 @@ entry that has one target address operand value and an unsigned LEB128
 integer length operand value. The address is the beginning address
 of the range over which the location description is valid, and
 the length is the number of bytes in that range.
+
+\bb
+\itembfnl{\DWRLEincludernglistTARG}
+This is a form of list inclusion, that has one offset operand.  The
+value is an offset into the \dotdebugloclists{} section, like the
+operand of a \DWFORMsecoffset{} location list.  The offset identifies the
+first entry of a location list whose entries are to be regarded as part of
+the current location list, up to the \DWRLEendoflist{} entry.
+\eb
 
 \end{enumerate}
 

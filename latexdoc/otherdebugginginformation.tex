@@ -210,7 +210,7 @@ Figure \referfol{fig:nameindexlayoutpart1}.
 \end{enumerate}
 
 \begin{figure}[p]
-\figurepart{1}{2}
+\figurepart{1}{3}
 \begin{center}
 %\includegraphics[keepaspectratio=true,scale=1.0]{name-index-drawings-6p1}
 
@@ -344,7 +344,7 @@ Figure \referfol{fig:nameindexlayoutpart1}.
 %
 \path [decoration={brace,amplitude=6pt}] ([xshift=9pt]hash0.north east)
       [draw,decorate] -- ([xshift=9pt]pool0.south east)
-      node [midway,right,inner xsep=9pt] {\textit{see figure part 2 on next page}};
+      node [midway,right,inner xsep=9pt] {\textit{see continued figure on the next pages}};
 
 % Arrows pointing to .debug_info
 
@@ -372,7 +372,7 @@ Figure \referfol{fig:nameindexlayoutpart1}.
 \end{figure}
 
 \begin{figure}[p]
-\figurepart{2}{2}
+\figurepart{2}{3}
 \begin{center}
 %\includegraphics[keepaspectratio=true,scale=1.0]{name-index-drawings-6p2}
 
@@ -382,13 +382,17 @@ Figure \referfol{fig:nameindexlayoutpart1}.
   % to make room for the second line.
   caption1/.style={node font=\small \bfseries, text depth=1.2em, text width=90pt},
   caption2/.style={node font=\small \bfseries, text depth=1.2em, text width=41pt},
+  caption3/.style={node font=\small \bfseries, text depth=1.2em, text width=200pt},
   detail1/.style={draw, minimum height=14pt, text width=90pt},
   detail2/.style={draw, minimum height=14pt, text width=41pt},
+  detail3/.style={draw, minimum height=14pt, text width=200pt},
   ellip1/.style={draw, shape=broken rectangle, minimum height=14pt, text width=90pt},
   ellip2/.style={draw, shape=broken rectangle, minimum height=14pt, text width=41pt},
+  ellip3/.style={draw, shape=broken rectangle, minimum height=14pt, text width=200pt},
   buckets/.style={fill=bucketsblue},
   hashes/.style={fill=hashesgreen},
   stroffsets/.style={fill=stroffsetspink},
+  abbreviations/.style={fill=olive!40},
   entryoffsets/.style={fill=entryoffsetspink}
 ]
 
@@ -404,11 +408,11 @@ Figure \referfol{fig:nameindexlayoutpart1}.
 
 \path [decoration={brace,amplitude=6pt}] ([xshift=40pt]bucket0.north east)
       [draw,decorate] -- ([xshift=40pt]bucket3.south east)
-      node [midway,right,inner xsep=9pt] {\texttt{bucket\_count} $(= b)$};
+          node [midway,right,inner xsep=9pt] {\texttt{bucket\_count} $(= b)$};
 
 % Hashes
 
-\begin{scope}[start chain=going below, node distance=0, shift={($(bucket3.south east) + (18pt,-24pt)$)}]
+\begin{scope}[start chain=going below, node distance=0, shift={($(bucket3.south east) + (9pt,-24pt)$)}]
   \node (hashes) [on chain,caption1]       {\\ Hashes};
   \node (hash0)  [on chain,detail1,hashes] {hash value 1};
   \node (hash1)  [on chain,detail1,hashes] {hash value 2};
@@ -421,7 +425,7 @@ Figure \referfol{fig:nameindexlayoutpart1}.
 
 % String Offsets
 
-\begin{scope}[start chain=going below, node distance=0, shift={($(hashes.north east)$)}]
+\begin{scope}[start chain=going below, node distance=0, shift={($(hashes.north east) + (9pt, 0pt)$)}]
   \node (strs) [on chain,caption2]           {String \\ Offsets};
   \node (str0) [on chain,detail2,stroffsets] {};
   \node (str1) [on chain,detail2,stroffsets] {};
@@ -434,7 +438,7 @@ Figure \referfol{fig:nameindexlayoutpart1}.
 
 % Entry Offsets
 
-\begin{scope}[start chain=going below, node distance=0, shift={($(strs.north east)$)}]
+\begin{scope}[start chain=going below, node distance=0, shift={($(strs.north east) + (9pt, 0pt)$)}]
   \node (entries) [on chain,caption2]             {Entry \\ Offsets};
   \node (entry0)  [on chain,detail2,entryoffsets] {};
   \node (entry1)  [on chain,detail2,entryoffsets] {};
@@ -458,13 +462,15 @@ Figure \referfol{fig:nameindexlayoutpart1}.
 \path ([xshift=18pt]p1) coordinate (c1);
 \path ([shift={(36pt,45pt)}]p1) coordinate (p2);
 \path ([xshift=-18pt]p2) coordinate (c2);
-\draw [dashed,{Circle[open]}-{Stealth[]}] (p1) .. controls (c1) and (c2) .. (p2) node [anchor=west] {$.debug\_str$};
+\draw [dashed,{Circle[open]}-{Stealth[]}] (p1) .. controls (c1) and (c2) .. (p2) node [anchor=west] 
+																					{$.debug\_str$};
 
 \path (entry0.center) coordinate (p3);
 \path ([xshift=18pt]p3) coordinate (c3);
 \path ([shift={(36pt,27pt)}]p3) coordinate (p4);
 \path ([xshift=-18pt]p4) coordinate (c4);
-\draw [dashed,{Circle[open]}-{Stealth[]}] (p3) .. controls (c3) and (c4) .. (p4) node [anchor=west] {$entry\ pool$};
+\draw [dashed,{Circle[open]}-{Stealth[]}] (p3) .. controls (c3) and (c4) .. (p4) node [anchor=west] 
+																					{$index\ entries$};
 
 % Arrows from buckets to hashes
 
@@ -478,13 +484,46 @@ Figure \referfol{fig:nameindexlayoutpart1}.
 \path ([xshift=-144pt]hash3.west) coordinate (c8);
 \draw [dashed,{Circle[open]}-{Stealth[]}] (p7) .. controls (c7) and (c8) .. (hash3.west);
 
+% Abbreviations
+
+\begin{scope}[start chain=going below, node distance=0, shift={($(hash6.south west) + (-48pt,-24pt)$)}]
+  \node (abbreves)[on chain,caption3]              {\\ Abbreviations};
+  \node (abbrev1) [on chain,detail3,abbreviations] {abbrev code $m$};
+  \node (abbrev2) [on chain,detail3,abbreviations] {tag (DW\_TAG)};
+  \node (abbrev3) [on chain,detail3,abbreviations] {idx attrib name (DW\_IDX), form (DW\_FORM)};
+  \node (abbrev4) [on chain,ellip3,abbreviations]  {\dots};
+  \node (abbrev5) [on chain,detail3,abbreviations] {idx attrib name (DW\_IDX), form (DW\_FORM)};
+  \node (abbrev6) [on chain,detail3,abbreviations] {0, 0 (end of abbrev code $m$)};
+  \node (abbrev7) [on chain,ellip3,abbreviations]  {\dots};
+  \node (abbrev8) [on chain,detail3,abbreviations] {0 (end of abbreviations)};
+  \node (abbrev9) [on chain,detail3,abbreviations] {\textit{padding}};
+\end{scope}
+
+\path [decoration={brace,amplitude=6pt}] ([xshift=9pt]abbrev1.north east)
+      [draw,decorate] -- ([xshift=9pt]abbrev9.south east)
+      node [midway,right,inner xsep=9pt] {\begin{tabular}{c} 
+                                          \texttt{abbrev\_table\_size} \\ 
+                                                     $(= s)$ 
+                                          \end{tabular}};
+
 \end{tikzpicture}
 
-\vspace{15mm}
+\vspace{5mm}
+%\caption{Name Index Layout \textit{(continued)}}
+Figure~\ref{fig:nameindexlayoutpart1}: Name Index Layout \textit{(continued)}
+%\label{fig:nameindexlayoutpart2}
+\end{center}
+\end{figure}
+
+\begin{figure}[t]
+\figurepart{3}{3}
+\begin{center}
+%\includegraphics[keepaspectratio=true,scale=1.0]{name-index-drawings-6p2}
 
 %\includegraphics[keepaspectratio=true,scale=1.0]{name-index-drawings-6p3}
 \begin{tikzpicture}[
-  every node/.style={node font=\small, anchor=north west, text height=.8em, text depth=.2em, inner sep=4pt, outer ysep=0},
+  every node/.style={node font=\small, anchor=north west, text height=.8em, text depth=.2em, 
+             inner sep=4pt, outer ysep=0},
   caption/.style={node font=\small \bfseries, text width=120pt},
   detail/.style={draw, node font=\small, minimum height=14pt, text width=120pt},
   ellip/.style={draw, shape=broken rectangle, minimum height=14pt, text width=120pt},
@@ -492,10 +531,10 @@ Figure \referfol{fig:nameindexlayoutpart1}.
   indexentries/.style={fill=indexentriesorange}
 ]
 
-% Entry Pool
+% Index Entries
 
 \begin{scope}[start chain=going below, node distance=0]
-  \node           [on chain,caption]             {Entry Pool};
+  \node           [on chain,caption]             {Index Entries};
   \node (entry0)  [on chain,detail,indexentries] {index entry \#1 for ``a''};
   \node (entry1)  [on chain,detail,indexentries] {index entry \#2 for ``a''};
   \node (entry2)  [on chain,ellip,indexentries]  {\dots};
@@ -503,19 +542,19 @@ Figure \referfol{fig:nameindexlayoutpart1}.
   \node (entry4)  [on chain,detail,indexentries] {index entry \#1 for ``b''};
   \node (entry5)  [on chain,detail,indexentries] {index entry \#2 for ``b''};
   \node (entry6)  [on chain,ellip,indexentries]  {\dots};
-  \node (entry7)  [on chain,detail,indexentries] {0};
+  \node (entry7)  [on chain,detail,indexentries] {0 \textit{(end of entries for ``b'')}};
   \node (entry8)  [on chain,detail,indexentries] {index entry \#1 for ``c''};
   \node (entry9)  [on chain,ellip,indexentries]  {\dots};
 \end{scope}
 
 % Exploded Index Entry
 
-\begin{scope}[start chain=going below, node distance=0, shift={($(entry1.north east) + (60pt,30pt)$)}]
-  \node (abbrev) [on chain,detail,indexentries] {abbrev code};
-  \node (attr1)  [on chain,detail,indexentries] {attribute};
-  \node (attr2)  [on chain,detail,indexentries] {attribute};
+\begin{scope}[start chain=going below, node distance=0, shift={($(entry1.north east) + (50pt,30pt)$)}]
+  \node (abbrev) [on chain,detail,indexentries] {abbrev code $m$};
+  \node (attr1)  [on chain,detail,indexentries] {idx attrib value};
+  \node (attr2)  [on chain,detail,indexentries] {idx attrib value};
   \node (attr3)  [on chain,ellip,indexentries]  {\dots};
-  \node (attr4)  [on chain,detail,indexentries] {attribute};
+  \node (attr4)  [on chain,detail,indexentries] {idx attrib value};
 \end{scope}
 
 \begin{scope}[on background layer]
@@ -524,21 +563,30 @@ Figure \referfol{fig:nameindexlayoutpart1}.
 
 % Arrows
 
-\node (from1) [anchor=east] at ([xshift=-36pt]entry0.west) {\textit{(from name table)}};
+\node (from1) [anchor=east] at ([xshift=-30pt]entry0.west) {\begin{tabular}{c}
+															\textit{from entry offsets} \\
+															\textit{of name table}
+															\end{tabular} };
 \draw [dashed,-{Stealth[]}] (from1) -- (entry0.west);
 
-\node (from2) [anchor=east] at ([xshift=-36pt]entry4.west) {\textit{(from name table)}};
+\node (from2) [anchor=east] at ([xshift=-30pt]entry4.west) {\begin{tabular}{c}
+															\textit{from entry offsets} \\
+															\textit{of name table}
+															\end{tabular} };
 \draw [dashed,-{Stealth[]}] (from2) -- (entry4.west);
 
-\node (from2) [anchor=east] at ([xshift=-36pt]entry7.west) {\textit{(from name table)}};
-\draw [dashed,-{Stealth[]}] (from2) -- (entry7.west);
+\node (from2) [anchor=east] at ([xshift=-30pt]entry8.west) {\begin{tabular}{c}
+															\textit{from entry offsets} \\
+															\textit{of name table}
+															\end{tabular} };
+\draw [dashed,-{Stealth[]}] (from2) -- (entry8.west);
 
 \end{tikzpicture}
 
-\vspace{3mm}
+\vspace{5mm}
 %\caption{Name Index Layout \textit{(concluded)}}
 Figure~\ref{fig:nameindexlayoutpart1}: Name Index Layout \textit{(concluded)}
-%\label{fig:nameindexlayoutpart2}
+%\label{fig:nameindexlayoutpart3}
 \end{center}
 \end{figure}
 
@@ -2187,16 +2235,18 @@ integer. It sets the
 \needlines{6}
 \bb
 \item \textbf{\DWLNEpaddingTARG} \\
-The \DWLNEpaddingNAME{} opcode is followed by a sequence of
-zero or more arbitrary bytes up to the length specified
-by the unsigned LEB128\addtoindexx{LEB128!unsigned} integer 
-that precedes all extended opcodes. The opcode has no effect 
-on the line number program.
+The \DWLNEpaddingNAME{} opcode is followed by a single
+operand which consists of a sequence of zero or more 
+arbitrary bytes up to the length specified by the unsigned 
+LEB128\addtoindexx{LEB128!unsigned} integer that precedes all 
+extended opcodes.  The opcode and operand have no
+effect on the line number program.
 
 \textit{This permits a producer to pad or overwrite arbitrary
-parts of a line number program, subject to the minimum of 
+parts of a line number program, with a minimum of the
 three bytes needed to encode any extended opcode.}
 \eb
+
 \end{enumerate}
 \db
 \textit{Appendix \refersec{app:linenumberprogramexample} 

@@ -2794,18 +2794,20 @@ Table \refersec{tab:locationlistentryencodingvalues}.
   \hline
   \multicolumn{2}{l}{\ddagnewinversionx} \\
 \endlastfoot
-\DWLLEendoflist       & 0x00 \\
-\DWLLEbaseaddressx    & 0x01 \\
-\DWLLEstartxendx      & 0x02 \\
-\DWLLEstartxlength    & 0x03 \\
-\DWLLEoffsetpair      & 0x04 \\
-\DWLLEdefaultlocation & 0x05 \\
-\DWLLEbaseaddress     & 0x06 \\
-\DWLLEstartend        & 0x07 \\
-\DWLLEstartlength     & 0x08 \\
+\DWLLEendoflist       		& 0x00 \\
+\DWLLEbaseaddressx    		& 0x01 \\
+\DWLLEstartxendx      		& 0x02 \\
+\DWLLEstartxlength    		& 0x03 \\
+\DWLLEoffsetpair      		& 0x04 \\
+\DWLLEdefaultlocation 		& 0x05 \\
+\DWLLEbaseaddress     		& 0x06 \\
+\DWLLEstartend        		& 0x07 \\
+\DWLLEstartlength     		& 0x08 \\
 \bb
-\DWLLElouser~\ddag	  & 0xc0 \\
-\DWLLEhiuser~\ddag	  & \xff
+\DWLLEincludeloclist~\ddag	& 0x09 \\
+\DWLLEincludeloclistx~\ddag	& 0x0a \\
+\DWLLElouser~\ddag	  		& 0xc0 \\
+\DWLLEhiuser~\ddag	  		& \xff
 \eb
 \end{longtable}
 \end{centering}
@@ -3663,17 +3665,19 @@ Table \refersec{tab:rnglistsentryencodingvalues}.
   \hline
   \multicolumn{2}{l}{\ddagnewinversionx}
 \endlastfoot
-\DWRLEendoflist    & 0x00 \\
-\DWRLEbaseaddressx & 0x01 \\
-\DWRLEstartxendx   & 0x02 \\
-\DWRLEstartxlength & 0x03 \\
-\DWRLEoffsetpair   & 0x04 \\
-\DWRLEbaseaddress  & 0x05 \\
-\DWRLEstartend     & 0x06 \\
-\DWRLEstartlength  & 0x07 \\
+\DWRLEendoflist    			& 0x00 \\
+\DWRLEbaseaddressx 			& 0x01 \\
+\DWRLEstartxendx   			& 0x02 \\
+\DWRLEstartxlength 			& 0x03 \\
+\DWRLEoffsetpair   			& 0x04 \\
+\DWRLEbaseaddress  			& 0x05 \\
+\DWRLEstartend     			& 0x06 \\
+\DWRLEstartlength  			& 0x07 \\
 \bb
-\DWRLElouser~\ddag & 0xc0 \\
-\DWRLEhiuser~\ddag & \xff 
+\DWRLEincludernglist~\ddag	& 0x08 \\
+\DWRLEincludernglistx~\ddag	& 0x09 \\
+\DWRLElouser~\ddag 			& 0xc0 \\
+\DWRLEhiuser~\ddag 			& \xff 
 \eb
 \end{longtable}
 \end{centering}
@@ -3842,8 +3846,7 @@ in the 64-bit DWARF format, each offset is 8-bytes in size
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
 \needlines{5}
-\textit{
-If the \HFNoffsetentrycount{} is zero, then \DWFORMrnglistx{} cannot 
+\textit{If the \HFNoffsetentrycount{} is zero, then \DWFORMrnglistx{} cannot 
 be used to access a range list; \DWFORMsecoffset{} must be used 
 instead. If the \HFNoffsetentrycount{} is non-zero, then \DWFORMrnglistx{} 
 may be used to access a range list; this is necessary in split units and
@@ -3912,8 +3915,7 @@ In the 32-bit DWARF format, each offset is 4-bytes in size;
 in the 64-bit DWARF format, each offset is 8-bytes in size 
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
-\textit{
-If the \HFNoffsetentrycount{} is zero, then \DWFORMloclistx{} cannot 
+\textit{If the \HFNoffsetentrycount{} is zero, then \DWFORMloclistx{} cannot 
 be used to access a location list; \DWFORMsecoffset{} must be used 
 instead. If the \HFNoffsetentrycount{} is non-zero, then \DWFORMloclistx{} 
 may be used to access a location list; this is necessary in split units and
