@@ -3127,7 +3127,8 @@ to use a register and offset.
 \needlines{6}
 \item \textbf{\DWCFAdefcfaoffsetsfTARG} \\
 The \DWCFAdefcfaoffsetsfNAME{} instruction takes a signed
-LEB128\addtoindexx{LEB128!signed} operand representing a factored offset. This instruction
+LEB128\addtoindexx{LEB128!signed} operand representing a 
+factored offset. This instruction
 is identical to \DWCFAdefcfaoffset{} except that the
 operand is signed and factored. The resulting offset is
 \mbox{\textit{factored\_offset} * \addttindex{data\_alignment\_factor}}.
@@ -3137,9 +3138,11 @@ register and offset.
 \needlines{5}
 \item \textbf{\DWCFAdefcfaexpressionTARG} \\
 The \DWCFAdefcfaexpressionNAME{} instruction takes a 
-\addtoindexx{exprloc class}
-single operand encoded as a 
-\DWFORMexprloc{} value representing a
+single operand encoded as 
+\bb
+an exprloc \addtoindexx{exprloc class}
+\eb
+value representing a
 DWARF expression. The required action is to establish that
 expression as the means by which the current CFA is computed.
 
@@ -3227,11 +3230,12 @@ where R is the second register.
 \item \textbf{\DWCFAexpressionTARG} \\
 The \DWCFAexpressionNAME{} instruction takes two operands: an
 unsigned LEB128\addtoindexx{LEB128!unsigned} 
-value representing a register number, and
-a \DWFORMblock{} 
+value representing a register number, and 
+\bb
+an exprloc \addtoindexx{exprloc class}
+\eb
 value representing a DWARF expression. 
-The
-required action is to change the rule for the register
+The required action is to change the rule for the register
 indicated by the register number to be an expression(E)
 rule where E is the DWARF expression. That is, the DWARF
 expression computes the address. The value of the CFA is
@@ -3247,7 +3251,9 @@ expression operators that can be used.}
 The \DWCFAvalexpressionNAME{} instruction takes two operands:
 an unsigned LEB128\addtoindexx{LEB128!unsigned} 
 value representing a register number, and
-a \DWFORMblock{} 
+\bb
+an exprloc \addtoindexx{exprloc class}
+\eb
 value representing a DWARF expression. The
 required action is to change the rule for the register
 indicated by the register number to be a val\_expression(E)
