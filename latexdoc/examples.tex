@@ -1550,6 +1550,219 @@ If the valid range of values is completely negative (for example, -57..-50) then
 only signed encoding is valid, and the bias will also need to be negative (-53).
 \eb
 
+\needlines{10}
+\bb
+\subsection{Variant Entry Examples}
+\label{app:variantentryexamples}
+The following examples illustrate some of the diverse
+ways that the DWARF variant entry constructs are used 
+in various programming languages.
+
+\subsubsection{Pascal Variant Entry Example}
+\label{app:pascalvariantentryexample}
+A \Pascal{} record example without a variant part is shown
+in \refersec{app:pascalexample}. Here a \Pascal{} record with
+a variant part is shown in Figure 
+\referfol{fig:pascalvariantrecordexamplesource}.
+The corresponding DWARF representation follows in Figure 
+\refersec{fig:pascalvariantrecordexampledwarfdescription}.
+\eb
+
+\begin{figure}[ht]
+\begin{nlnlisting}
+RPoint = Record  
+    Case UsePolar : Boolean of  
+        False : (X, Y : Real);  
+        True : (Radius, Theta : Real);  
+        end;
+    end; 
+\end{nlnlisting}
+\caption{\Pascal{} variant record example: source}
+\label{fig:pascalvariantrecordexamplesource}
+\end{figure}
+
+\needlines{30}
+\begin{figure}[ht]
+\begin{dwflisting}
+\begin{alltt}
+! Description for type RPoint
+!
+1\$: \DWTAGstructuretype
+        \DWATname("RPoint")
+        \DWTAGvariantpart
+            \DWATdiscr (reference to 2\$)
+2\$:         \DWTAGmember
+                \DWATname("UsePolar")
+                \DWATtype(reference to Boolean)
+            \DWTAGvariant
+                \DWATdiscrvalue(constant 0)
+                \DWTAGmember
+                    \DWATname("X")
+                    \DWATtype(reference to Real)
+                    \DWATdatamemberlocation(1)
+                \DWTAGmember
+                    \DWATname("Y")
+                    \DWATtype(reference to Real)
+                    \DWATdatamemberlocation(5)
+            \DWTAGvariant
+                \DWATdiscrvalue(constant 1)
+                \DWTAGmember
+                    \DWATname("Radius")
+                    \DWATtype(reference to Real)
+                    \DWATdatamemberlocation(1)
+                \DWTAGmember
+                    \DWATname("Theta")
+                    \DWATtype(reference to Real)
+                    \DWATdatamemberlocation(5)
+\end{alltt}
+\end{dwflisting}
+\caption{\Pascal{} variant record example: DWARF description}
+\label{fig:pascalvariantrecordexampledwarfdescription}
+\end{figure}
+
+\needlines{8}
+\bb
+Notice that the "tag" (member \texttt{UsePolar} in this case)
+is the first child of the variant part.
+A "tagless" version of this example would simply delete "UsePolar :" 
+from the second line of the source (so that the tag has no name, 
+hence is not visible). In the DWARF description, the
+member entry and name for \texttt{UsePolar} are then deleted, as is 
+the \DWATdiscr{} attribute, and the remaining type
+attribute is made an attribute of the containing variant part entry. 
+\eb
+
+\needlines{10}
+\bb
+\subsubsection{Ada Variant Entry Example}
+\label{app:adavariantentryexample}
+An \Ada{} example variant part is illustrated in Figure
+\referfol{fig:adavariantrecordexamplesource}.
+The corresponding DWARF is shown in Figure
+\refersec{fig:adavariantrecordexampledwarfdescription}.
+\eb
+
+\begin{figure}[ht]
+\begin{nlnlisting}
+   type R (D : integer) is
+      record
+         A : integer;
+         case D is
+            when 0 =>
+               F : float;
+            when 1 =>
+               N : integer;
+            when others =>
+               null;
+         end case;
+      end record;
+\end{nlnlisting}
+\caption{\Ada{} variant record example: source}
+\label{fig:adavariantrecordexamplesource}
+\end{figure}
+
+\bb
+For \Ada, note that the tag is not "declared" as part
+of the variant part construct. Rather the variant part
+refers to a discriminant of the containing type which
+necessarily occurs as an initial member in the sequence
+of record components. This reference is implemented as
+a \DWATdiscr{} attribute of the \DWTAGvariantpart{} entry.
+\eb
+
+\needlines{26}
+\begin{figure}[ht]
+\begin{dwflisting}
+\begin{alltt}
+    \DWTAGstructuretype
+        \DWATname("r")
+1\$:     \DWTAGmember                             ! Discriminant
+           \DWATtype(reference to integer)
+           \DWATdatamemberlocation(\DWOPplusuconst 0)
+           \DWATname("d")
+       \DWTAGmember
+           \DWATtype(reference to integer)
+           \DWATdatamemberlocation(\DWOPplusuconst 4)
+           \DWATname("a")
+       \DWTAGvariantpart
+           \DWATdiscr(reference to 1\$)
+           \DWTAGvariant
+               \DWATdiscrvalue(0)
+               \DWTAGmember
+                  \DWATtype(reference to float)
+                  \DWATdatamemberlocation(\DWOPplusuconst 8)
+                  \DWATname("f")
+          \DWTAGvariant
+              \DWATdiscrvalue(1)
+              \DWTAGmember
+                  \DWATtype(reference to integer)
+                  \DWATdatamemberlocation(\DWOPplusuconst 8)
+                  \DWATname("n")
+          \DWTAGvariant
+              ! No members described for the "others" variant
+\end{alltt}
+\end{dwflisting}
+\caption{\Ada{} variant record example: DWARF description}
+\label{fig:adavariantrecordexampledwarfdescription}
+\end{figure}
+
+\bb
+\subsubsection{Rust Enum Example}
+\label{app:rustenumexample}
+While \Rust{} does not have a variant record concept similar to that 
+in \Pascal{} or \Ada{}, it does use a similar mechanism in the implementation
+of enums\addtoindexx{enum, Rust}. To illustrate, consider the enumeration
+in Figure \referfol{fig:rustenumexamplesource}. This can be described in
+DWARF as shown in Figure \refersec{fig:rustenumexampledwarfdescription}.
+\eb
+
+\begin{figure}[ht]
+\begin{nlnlisting}
+    enum Message {
+        F(f64),
+        U(u32),
+        N(i32)
+    }
+\end{nlnlisting}
+\caption{Rust{} enum example: source}
+\label{fig:rustenumexamplesource}
+\end{figure}
+
+\begin{figure}[ht]
+\begin{dwflisting}
+\begin{alltt}
+    \DWTAGstructuretype
+        \DWATname("Message")
+        \DWTAGvariantpart
+            \DWATdiscr(reference to $1)
+\$1:         \DWTAGmember                     ! Artificial discriminant
+                \DWATtype(reference to u32)
+                \DWATdatamemberlocation(0)
+                \DWATartificial(1)
+            \DWTAGvariant
+                \DWATdiscrvalue(0)
+                \DWTAGmember
+                    \DWATtype(reference to f32)
+                    \DWATname("F")
+                    \DWATdatamemberlocation(4)
+            \DWTAGvariant
+                \DWATdiscrvalue(1)
+                \DWTAGmember
+                    \DWATtype(reference to u32)
+                    \DWATname("U")
+                    \DWATdatamemberlocation(4)
+            \DWTAGvariant
+                \DWATdiscrvalue(2)
+                \DWTAGmember
+                    \DWATtype(reference to i32)
+                    \DWATname("N")
+                    \DWATdatamemberlocation(4)
+\end{alltt}
+\end{dwflisting}
+\caption{\Rust{} enum example: DWARF description}
+\label{fig:rustenumexampledwarfdescription}
+\end{figure}
+
 \clearpage
 \section{Namespace Examples}
 \label{app:namespaceexamples}

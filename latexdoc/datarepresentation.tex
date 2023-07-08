@@ -462,8 +462,11 @@ A DWARF package file is itself an object file, using the
 \addtoindexx{package files}
 \addtoindexx{DWARF package files}
 same object file format (including \byteorder) as the
-corresponding application binary. It consists only of a file
-header, a section table, a number of DWARF debug information
+corresponding application binary. It 
+\bb
+contains
+\eb
+a file header, a section table, a number of DWARF debug information
 sections, and two index sections.
 
 %\needlines{8}
@@ -703,6 +706,7 @@ the package file.
 
 For an example, see Figure \refersec{fig:examplecuindexsection}.
 
+\needlines{8}
 \subsection{DWARF Supplementary Object Files}
 \label{datarep:dwarfsupplemetaryobjectfiles}
 \textit{A supplementary object file permits a post-link utility to analyze executable and
@@ -714,12 +718,16 @@ multiple files in order to reduce link time and executable size.}
 \needlines{4}
 A DWARF \addtoindex{supplementary object file} is itself an object file, 
 using the same object
-file format, \byteorder{}, and size as the corresponding application executables
-or shared libraries. It consists only of a file header, section table, and
-a number of DWARF debug information sections.  Both the 
-\addtoindex{supplementary object file}
-and all the executable or shared object files that reference entries or strings in that
-file must contain a \dotdebugsup{} section that establishes the relationship.
+file format, \byteorder{}, and size as the corresponding application 
+executables or shared libraries. It 
+\bb
+contains
+\eb
+a file header, section table, and a number of DWARF debug information 
+sections.  Both the \addtoindex{supplementary object file}
+and all the executable or shared object files that reference entries or 
+strings in that file must contain a \dotdebugsup{} section that establishes 
+the relationship.
 
 The \dotdebugsup{} section contains:
 \begin{enumerate}[1. ]
@@ -1487,7 +1495,12 @@ each chain of sibling entries is terminated by a null entry.)
 \needlines{4}
 Finally, the child encoding is followed by a series of
 attribute specifications. Each attribute specification
-consists of two parts. The first part is an 
+consists of two parts
+\bb
+(except for \DWFORMimplicitconst{}, \DWFORMaddrxoffset{} 
+and \DWFORMindirect{}, see below).
+\eb
+The first part is an 
 unsigned LEB128\addtoindexx{LEB128!unsigned}
 number representing the attribute\textquoteright s name. 
 The second part is an 
@@ -1496,35 +1509,51 @@ number representing the attribute\textquoteright s form.
 The series of attribute specifications ends with an
 entry containing 0 for the name and 0 for the form.
 
-\needlines{4}
-\bb
-For attributes with the form \DWFORMindirectTARG{}, 
-the attribute value itself is in the \dotdebuginfo{}
-section which begins with an unsigned LEB128 number that 
-specifies the form followed by the value according that form. 
-\eb
-This allows producers to choose forms for particular attributes 
-\addtoindexx{abbreviations table!dynamic forms in}
-dynamically, without having to add a new entry to the abbreviations table.
-
 \bb
 For attributes with the form \DWFORMimplicitconstTARG{},
+in addition to the attribute name and form values,
 \eb 
 the attribute specification contains 
 a third part, which is a signed LEB128\addtoindexx{LEB128!signed} 
-number. The value of this number is used as the value of the 
-attribute, and no value is stored in the \dotdebuginfo{} section.
+number.
+\label{chap:attributeencodingsimplicitconst}
+The value of this number is used as the value of the 
+attribute.  
 
 \bb
-For attributes with the form \DWFORMaddrxoffset{}, the attribute  
-specification contains 
+For attributes with the form \DWFORMaddrxoffsetTARG{}, following the
+attribute name, the attribute specification contains 
 two unsigned LEB128 numbers, each representing a form. The first 
 form must be of class address and the second of class constant. Values 
 using this form in the \dotdebuginfo{} section contain a value for the first 
 form followed by a value for the second form. The total value of the 
-\DWFORMaddrxoffset{} is then computed by adding those two values together 
+\DWFORMaddrxoffsetNAME{} is then computed by adding those two values together 
 (if the first value is an indirect address, that is resolved first 
 before adding it to the second value).
+\eb
+
+\needlines{5}
+\bb
+For attributes with the form \DWFORMindirectTARG{}, 
+the actual attribute form value itself is in the \dotdebuginfo{}
+section which begins with an unsigned LEB128 number that 
+specifies the actual form, followed by the value according to 
+that form.
+\eb
+This allows producers to choose forms for particular attributes 
+\addtoindexx{abbreviations table!dynamic forms in} dynamically, 
+without having to add a new entry to the abbreviations table.
+
+\bb
+If the actual attribute form is \DWFORMimplicitconst, the form is 
+(still) followed by a signed LEB128 number. 
+
+\needlines{4}
+If the actual attribute form is itself \DWFORMindirect, the indirection
+repeats. There may be one or more occurrences of \DWFORMindirect{} in 
+sequence until a non-\DWFORMindirect{} form is reached. The sequence of
+\DWFORMindirect{} forms does not have any effect other than to use up 
+space.
 \eb
 
 The abbreviations for a given compilation unit end with an
@@ -2043,10 +2072,11 @@ There are variable length constant
 data forms encoded using 
 signed LEB128 numbers (\DWFORMsdataTARG) and unsigned 
 LEB128 numbers (\DWFORMudataTARG).
-There is also an implicit constant (\DWFORMimplicitconst),
-whose value is provided as part of the abbreviation
-declaration.
-
+There is also an implicit constant (\DWFORMimplicitconst,
+\bb
+see Section \refersec{chap:attributeencodingsimplicitconst}),
+whose value is provided as part of an abbreviation specification.
+\eb
 \needlines{4}
 The data in \DWFORMdataone, 
 \DWFORMdatatwo, 
