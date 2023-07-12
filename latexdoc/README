@@ -6,6 +6,8 @@ early latex passes forward references tend to be reported as
 LaTeX Warning: Reference `chap:generaldescription' on page
 3 undefined on input line 59.
 
+Many many overflows are reported. Ignore them.
+
 Because the side-files latex generates help resolve those in
 later passes the simple existence of 'undefined' in a 'make'
 on a 'clean' directory should not be alarming as these will
@@ -17,9 +19,7 @@ any messages about 'undefined'.
 ============================
 
 On Linux:
-On modern linux, here is the set of steps to build a pdf.
-While pdflatex might seem simpler to use (than the following)
-it will not correctly generate a pdf as complex as this one.
+Here are the steps to build a pdf.
 
         latex dwarf5.tex
         latex dwarf5.tex
@@ -29,6 +29,12 @@ it will not correctly generate a pdf as complex as this one.
         dvips dwarf5.dvi -o dwarf5.ps
         ps2pdf dwarf5.ps dwarf5.pdf
 
+Using Ubuntu 22  Ubuntu 22.04.2 LTS jammy
+The following seems to suffice to build the libdwarf pdf.
+sudo apt install texlive texlive-base texlive-binaries \
+  texlive-fonts-recommended texlive-latex-base  \
+  texlive-latex-extra texlive-latex-recommended \
+  texlive-pictuers texlive-plain-generic
 
 
 On Windows:
