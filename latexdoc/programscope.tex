@@ -220,32 +220,42 @@ and applicable versions may be found at}
 \endlastfoot
 \bb
 \DWLNAMEAdaTARG~\dag 		& ISO \Ada 		& \LVESYYYY \\
+\DWLNAMEAssemblyTARG 		& \Assembly		& \\
 \DWLNAMEBLISSTARG 			& \BLISS 		& \\
 \DWLNAMECTARG 				& ISO \C 		& \LVESYYYYMM \\
 %\DWLANGCTARG & Non-standardized C, such as K\&R \addtoindexx{C!non-standard} \\*
 \DWLNAMECplusplusTARG   	& ISO \Cplusplus& \LVESYYYYMM \\
-\DWLNAMECobolTARG 			& ISO \COBOL 	& \LVESYYYY\\
-\DWLNAMECrystalTARG 		& \Crystal &	 \\
+\DWLNAMECobolTARG 			& ISO \COBOL 	& \LVESYYYY \\
+\DWLNAMECPPforOpenCLTARG~\dag& \CPPforOpenCL& \LVESVVMM \\
+\DWLNAMECrystalTARG 		& \Crystal 		& \\
+\DWLNAMECsharpTARG 			& \Csharp 		& \\
 \DWLNAMEDTARG{}~\dag 		& \D 			& \\
 \DWLNAMEDylanTARG~\dag 		& \Dylan 		& \\
 \DWLNAMEFortranTARG 		& ISO \Fortran 	& \LVESYYYY \\
 \DWLNAMEGoTARG{}~\dag 		& \Go 			& \\
+\DWLNAMEGLSLTARG{}~\dag 	& \GLSL			& \LVESVVMMPP \\
+\DWLNAMEGLSLESTARG{}~\dag 	& \GLSLES		& \LVESVVMMPP \\
 \DWLNAMEHaskellTARG{}~\dag 	& \Haskell 		& \\
+\DWLNAMEHLSLTARG{}~\dag 	& \HLSL 		& \LVESYYYY \\
 \DWLNAMEJavaTARG{} 			& \Java 		& \\
 \DWLNAMEJuliaTARG{}~\dag 	& \Julia 		& \\
 \DWLNAMEKotlinTARG 			& \Kotlin 		& \\
 \DWLNAMEModulatwoTARG   	& ISO \Modulatwo& \\
 \DWLNAMEModulathreeTARG 	& \Modulathree 	& \\
+\DWLNAMEMojoTARG 			& \Mojo 		& \\
 \DWLNAMEObjCTARG         	& \ObjC 		& \LVESYYYYMM \\
 \DWLNAMEObjCplusplusTARG{} 	& \ObjCplusplus & \LVESYYYYMM \\
 \DWLNAMEOCamlTARG{}~\dag  	& \OCaml 		& \\
-\DWLNAMEOpenCLTARG{}~\dag 	& \OpenCL 		& \\
+\DWLNAMEOpenCLCTARG\footnote{This is equivalent to DW\_LANG\_OpenCL in \DWARFVersionV}~\dag
+							& \OpenCLC 		& \LVESVVMM \\
+\DWLNAMEOpenCLCPPTARG~\dag	& \OpenCLCPP	& \LVESVVMM \\	
 \DWLNAMEPascalTARG 			& ISO \Pascal	& \LVESYYYY \\
 \DWLNAMEPLITARG{}~\dag 		& ANSI \PLI 	& \\
 \DWLNAMEPythonTARG{}~\dag 	& \Python 		& \\
 \DWLNAMERenderScriptTARG~\dag & \RenderScript{} Kernel Language & \\
 \DWLNAMERustTARG{}~\dag 	& \Rust 		& \\
 \DWLNAMESwiftTARG{} 		& \Swift 		& \\*
+\DWLNAMESYCLTARG~\dag		& \SYCL			& \LVESYYYYRR \\
 \DWLNAMEUPCTARG{} 			& \UPC~(Unified Parallel C) &   
 								\index{Unified Parallel C|see{UPC}} \\*
 \eb\bbeb
@@ -268,7 +278,7 @@ this attribute.
 \caption{Version Encoding Schemes}
 \label{tab:versionencodingschemes}
 \centering
-\begin{tabular}{l|P{9cm}}
+\begin{tabular}{l|P{11cm}}
 \hline
 Scheme & Encoding \\
 \hline
@@ -278,14 +288,23 @@ Scheme & Encoding \\
 			plus the ordinal number of the month (from 1 to 12). 
 			\newline	
 			\textit{For example, 202206 represents June of 2022.} \\
+\LVESYYYYRR	& Year in which the language definition was released times 100 
+			plus the revision number.
+			\newline
+			\textit{For example, 202007 represents version 2020 revision 7 
+			while 202011 represents version 2020 revision 11.} \\
 \LVESVVMM   & Major version number times 100 plus the minor version number.
 			\newline
 			\textit{For example, 306 represents version 3.6 while 312
 			represents version 3.12.} \\
+\LVESVVMMPP	& Major version number times 10,000 plus the minor version 
+			number times 100 plus the patch version number.
+			\newline			
+			\textit{For example, 30607 represents version 3.6.7 while 
+			31215 represents version 3.12.15.} \\
 \hline
 \end{tabular}
 \end{table}
-
 \eb
 
 \item \hypertarget{chap:DWATstmtlistlinenumberinformationforunit}{}
@@ -349,6 +368,7 @@ final linked image is moved before being debugged; .o files that need to
 be debugged directly.}
 \eb
 
+\needlines{8}
 \item  \hypertarget{chap:DWATproducercompileridentification}{}
 A \DWATproducerDEFN{} attribute\addtoindexx{producer attribute}
 whose value is a null-terminated string containing 

@@ -883,15 +883,17 @@ that precedes that number of data bytes.
 bytes of uninterpreted data, or data
 encoded in the variable length format known as LEB128 
 (see Section \refersec{datarep:variablelengthdata}).
+\db
 \\
 
-\hypertarget{chap:classexprloc}{}
-\livelinki{datarep:classexprloc}{exprloc}{exprloc class}
-&A DWARF expression for a value or a location in the 
-address space of the described program.
-A leading unsigned LEB128 value 
-(see Section \refersec{datarep:variablelengthdata})
+\bb
+\hypertarget{chap:classexprval}{}
+\livelinki{datarep:classexprval}{exprval}{exprval class}
+&A DWARF expression yielding a value (see Section 
+\refersec{chap:dwarfexpressions}). A leading unsigned 
+ULEB128 value (see Section \refersec{datarep:variablelengthdata})
 specifies the number of bytes in the expression.
+\eb
 \\
 
 \hypertarget{chap:classflag}{}
@@ -904,6 +906,16 @@ of an attribute.
 \livelinki{datarep:classlineptr}{lineptr}{lineptr class}
 &Specifies a location in the DWARF section that holds line 
 number information.
+\\
+
+\bb
+\hypertarget{chap:classlocdesc}{}
+\livelinki{datarep:classlocdesc}{locdesc}{locdesc class}
+&A DWARF location description (see Section 
+\refersec{chap:locationdescriptions}). A leading unsigned 
+ULEB128 value (see Section \refersec{datarep:variablelengthdata})
+specifies the number of bytes in the location description.
+\eb
 \\
 
 \hypertarget{chap:classloclist}{}
@@ -1676,14 +1688,16 @@ unit. The \DWOPcallrefNAME{} operator has a single operand. In the
 \thirtytwobitdwarfformat,
 the operand is a 4-byte unsigned value;
 in the \sixtyfourbitdwarfformat, it is an 8-byte unsigned value
-(see Section \referfol{datarep:32bitand64bitdwarfformats}). 
+(see Section 
+\bb
+\refersec{datarep:32bitand64bitdwarfformats}). 
+\eb
 The operand is used as the offset of a
-debugging information entry in a 
-\dotdebuginfo{}
-section which may be contained in an executable or shared object file
-other than that containing the operator. For references from
-one executable or shared object file to another, the relocation
-must be performed by the consumer.  
+debugging information entry in
+\bb
+the \dotdebuginfo{} section of the current executable or shared object file.
+\eb
+
 
 \textit{Operand interpretation of
 \DWOPcalltwo, \DWOPcallfour{} and \DWOPcallref{} is exactly like
@@ -1834,7 +1848,10 @@ manner. As the value of an attribute, a
 \bb
 single
 \eb
-location description is encoded using class \CLASSexprloc{}
+location description is encoded using class 
+\bb
+\CLASSlocdesc{}
+\eb
 and a \addtoindex{location list} is encoded
 using class \CLASSloclist{} (which serves as an 
 index into a separate section containing location lists).
@@ -1989,16 +2006,15 @@ is treated as a byte offset from the start of that value.
 The first operand is a 4-byte unsigned value in the 32-bit 
 DWARF format, or an 8-byte unsigned value in the 64-bit 
 DWARF format (see Section 
-\refersec{datarep:32bitand64bitdwarfformats}).
+\refersec{datarep:32bitand64bitdwarfformats})
+\bb
+that is used as the offset of a debugging information entry 
+in the \dotdebuginfo{} section of the current executable 
+or shared object file.
+\eb
 The second operand is a 
 signed LEB128\addtoindexx{LEB128!signed} number.
-
-The first operand is used as the offset of a debugging
-information entry in a \dotdebuginfo{} section, which may be
-contained in an executable or shared object file other than that
-containing the operator. For references from one executable or
-shared object file to another, the relocation must be performed 
-by the consumer.
+\db
 
 \textit{The debugging information entry referenced by a 
 \DWOPimplicitpointerNAME{} operation is typically a
@@ -2983,9 +2999,12 @@ This entry may:
       (for example, a \DWTAGdwarfprocedure{} entry).
 \end{itemize}
 
-\item For an \livelink{chap:classexprloc}{exprloc}, the value 
-is interpreted as a DWARF expression; evaluation of the expression 
-yields the value of the attribute.
+\item For an 
+\bb
+\CLASSexprval,
+\eb
+the value is interpreted as a DWARF expression; evaluation of 
+the expression yields the value of the attribute.
 \end{itemize}
 
 
