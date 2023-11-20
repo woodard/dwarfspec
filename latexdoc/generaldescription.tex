@@ -736,6 +736,12 @@ The attributes are listed in Table \referfol{tab:attributenames}.
         {String offsets information for unit}
         {string offsets information for unit} 
 \eb		\\
+\bb
+\DWATtensorTARG
+&\livelinki{chap:DWATtensorarraytype}
+		{Tensor (array) type}
+		{Tensor (array) type}
+\eb		\\
 \DWATthreadsscaledTARG
 &\livelink{chap:DWATthreadsscaledupcarrayboundthreadsscalfactor}
         {Array bound THREADS scale factor} 
@@ -1270,7 +1276,11 @@ number. The second operand is a signed LEB128\addtoindexx{LEB128!signed} offset.
 
 \needlines{8}
 \itembfnl{\DWOPregvaltypeTARG}
-The \DWOPregvaltypeNAME{} operation provides the contents of
+The \DWOPregvaltypeNAME{} operation 
+\bb
+pushes 
+\eb
+the contents of
 a given register interpreted as a value of a given type. The first 
 operand is an \ULEB{} number, 
 which identifies a register whose contents is to
@@ -1763,7 +1773,10 @@ on the location stack or any of its values.
 
 \itembfnl{\DWOPentryvalueTARG}
 The \DWOPentryvalueNAME{} operation pushes 
-the value that the described location held
+the value that 
+\bb
+an expression would have had, or a register location would have held, 
+\eb
 upon entering the current subprogram.  It has two operands: an 
 unsigned LEB128\addtoindexx{LEB128!unsigned} length, followed by 
 a block containing a DWARF expression or a register location description 
@@ -1775,8 +1788,11 @@ the current subprogram.  The DWARF expression
 assumes no values are present on the DWARF stack initially and results
 in exactly one value being pushed on the DWARF stack when completed.
 If the block contains a register location
-description, \DWOPentryvalueNAME{} pushes the value that register had upon
-entering the current subprogram. 
+description, \DWOPentryvalueNAME{} pushes the value that register 
+\bb
+held 
+\eb
+upon entering the current subprogram. 
 
 \DWOPpushobjectaddress{} is not meaningful inside of this DWARF operation.
 

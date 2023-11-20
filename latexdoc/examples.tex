@@ -267,104 +267,215 @@ examples illustrate their behavior graphically.}
 \label{app:dwarflocationdescriptionexamples}
 
 Following are examples of DWARF operations used to form location descriptions:
+\vspace{3mm}
 
-\newcommand{\descriptionitemnl}[1]
-        {\vspace{0.3\baselineskip}\item[#1]\mbox{}\\\vspace{0.5\baselineskip}}
+% Local helper command used only in this section
+%
+\newcommand{\itemtext}[1]{
+		\begin{description}
+		\item[\ \ \ \ \ \ \ ]
+			#1
+		\end{description}
+		\vspace{3mm}
+		}
 
+		
+\begin{alltt}
+\DWOPregthree
+\end{alltt}
+\itemtext{The value is in register 3.}
 
-\begin{description}
-\descriptionitemnl{\DWOPregthree}
-The value is in register 3.
+\bb
+\begin{alltt}
+\DWOPregx (54)
+\end{alltt}
+\eb
+\itemtext{The value is in register 54.}
 
-\descriptionitemnl{\DWOPregx{} 54}
-The value is in register 54.
+\bb
+\begin{alltt}
+\DWOPaddr (0x80d0045c)
+\end{alltt}
+\eb
+\itemtext{The value of a static variable is at machine address 0x80d0045c.}
 
-\descriptionitemnl{\DWOPaddr{} 0x80d0045c}
-The value of a static variable is at machine address 0x80d0045c.
+\bb
+\begin{alltt}
+\DWOPbregeleven (44)
+\end{alltt}
+\eb
+\itemtext{Add 44 to the value in register 11 to get the address of an automatic
+variable instance.}
 
-\descriptionitemnl{\DWOPbregeleven{} 44}
-Add 44 to the value in register 11 to get the address of an automatic
-variable instance.
-
-\needlines{4}
-\descriptionitemnl{\DWOPfbreg{} -50}
-Given a \DWATframebase{} value of
+\bb
+\begin{alltt}
+\DWOPfbreg (-50)
+\end{alltt}
+\eb
+\itemtext{Given a \DWATframebase{} value of
 \doublequote{\DWOPbregthirtyone{} 64,} this example
 computes the address of a local variable that is -50 bytes from a
 logical frame pointer that is computed by adding 64 to the current
-stack pointer (register 31).
+stack pointer (register 31).}
 
-\descriptionitemnl{\DWOPbregx{} 54 32 \DWOPderef}
-A call-by-reference parameter whose address is in the word 32 bytes
-from where register 54 points.
+\bb
+\begin{alltt}
+\DWOPbregx (54, 32)
+\DWOPderef
+\end{alltt}
+\eb
+\itemtext{A call-by-reference parameter whose address is in the location 
+beginning 32 bytes from where register 54 points.}
 
-\descriptionitemnl{\DWOPplusuconst{} 4}
-A structure member is four bytes from the start of the structure
-instance. The base address is assumed to be already on the stack.
+\bb
+\begin{alltt}
+\DWOPplusuconst (4)
+\end{alltt}
+\eb
+\itemtext{A structure member is four bytes from the start of the structure
+instance. The base address is assumed to be already on the stack.}
 
-\descriptionitemnl{\DWOPregthree{} \DWOPpiece{} 4 \DWOPregten{} \DWOPpiece{} 2}
-A variable whose first four bytes reside in register 3 and whose next
-two bytes reside in register 10.
+\needlines{8}
+\bb
+\begin{alltt}
+\DWOPregthree{} 
+\DWOPpiece (4) 
+\DWOPregten{} 
+\DWOPpiece (2)
+\end{alltt}
+\eb
+\itemtext{A variable whose first four bytes reside in register 3 and whose next
+two bytes reside in register 10.}
 
-\needlines{4}
-\descriptionitemnl{\DWOPregzero{} \DWOPpiece{} 4 \DWOPpiece{} 4 \DWOPfbreg{} -12 \DWOPpiece{} 4 }
-\vspace{-2\parsep}
-A twelve byte value whose first four bytes reside in register zero,
+\needlines{8}
+\bb
+\begin{alltt}
+\DWOPregzero{} 
+\DWOPpiece{} (4) 
+\DWOPpiece{} (4) 
+\DWOPfbreg{} (-12)
+\DWOPpiece{} (4)
+\end{alltt}
+\eb
+\itemtext{A twelve byte value whose first four bytes reside in register zero,
 whose middle four bytes are unavailable (perhaps due to optimization),
 and whose last four bytes are in memory, 12 bytes before the frame
-base.
+base.}
 
-\descriptionitemnl{\DWOPbregone{} 0 \DWOPbregtwo{} 0 \DWOPplus{} \DWOPstackvalue{} }
-Add the contents of r1 and r2 to compute a value. This value is the
-\doublequote{contents} of an otherwise anonymous location.
+\bb
+\begin{alltt}
+\DWOPbregone{} (0) 
+\DWOPbregtwo{} (0) 
+\DWOPplus{} 
+\DWOPstackvalue{}
+\end{alltt}
+\eb
+\itemtext{Add the contents of r1 and r2 to compute a value. This value is the
+\doublequote{contents} of an otherwise anonymous location.}
 
-\needlines{4}
-\descriptionitemnl{\DWOPlitone{} \DWOPstackvalue{} \DWOPpiece{} 4 \DWOPbregthree{} 0 \DWOPbregfour{} 0}
-\vspace{-3\parsep}\descriptionitemnl{
-\hspace{0.5cm}\DWOPplus{} \DWOPstackvalue{} \DWOPpiece{} 4 }
-The object value is found in an anonymous (virtual) location whose
+\needlines{12}
+\bb
+\begin{alltt}
+\DWOPlitone{} 
+\DWOPstackvalue{} 
+\DWOPpiece{} (4) 
+\DWOPbregthree{} (0) 
+\DWOPbregfour{} (0)
+\DWOPplus{} 
+\DWOPstackvalue{} 
+\DWOPpiece{} (4) 
+\end{alltt}
+\eb
+\itemtext{The object value is found in an anonymous (virtual) location whose
 value consists of two parts, given in memory address order: the 4 byte
 value 1 followed by the four byte value computed from the sum of the
-contents of r3 and r4.
+contents of r3 and r4.}
 
-\descriptionitemnl{\DWOPentryvalue{} 2 \DWOPbregone{} 0 }
-The value register 1 contained upon entering the current subprogram is 
-pushed on the stack.
+\needlines{5}
+\bb
+\begin{alltt}
+\DWOPentryvalue (2, \DWOPbregone{} 0)   
+                ! \textit{The first operand gives the number of bytes in the }
+                ! \textit{second operand (see Section \refersec{chap:specialoperations}).}
+\end{alltt}
+\eb
+\itemtext{The 
+\bb
+variable's address is the value that register 1 contained upon entering
+the current subprogram.
+\eb
+}
 
-\descriptionitemnl{\DWOPentryvalue{} 1 \DWOPregone{} }
-Same as the previous example
-(push the value register 1 contained upon entering the current subprogram)
-but use the more compact register location description.
+\bb
+\begin{alltt}
+\DWOPentryvalue (1, \DWOPregone{}) 
+\end{alltt}
+\eb
+\itemtext{Same as the previous example but 
+\bb
+uses the more compact register location description as an operand.
+\eb
+}
 
-\descriptionitemnl{\DWOPentryvalue{} 2 \DWOPbregone{} 0 \DWOPstackvalue }
-The value register 1 contained upon entering the current subprogram is 
-pushed on the stack. This value is the
-\doublequote{contents} of an otherwise anonymous location.
+\bb
+\begin{alltt}
+\DWOPentryvalue (2, \DWOPbregone{} 0)
+\DWOPstackvalue 
+\end{alltt}
+\eb
+\itemtext{The 
+\bb
+variables's value is the value that register 1 contained upon entering 
+the current subprogram.
+\eb
+This value is the
+\doublequote{contents} of an otherwise anonymous location.}
 
-\descriptionitemnl{\DWOPentryvalue{} 1 \DWOPregone{} \DWOPstackvalue }
-Same as the previous example (push the value register 1 contained
-upon entering the current subprogram) but use the more compact
-register location description.
+\bb
+\begin{alltt}
+\DWOPentryvalue (1, \DWOPregone{})
+\DWOPstackvalue 
+\end{alltt}
+\eb
+\itemtext{Same as the previous example, 
+\db
+but uses the more compact register location description.}
 
 \needlines{6}
-\descriptionitemnl{\DWOPentryvalue{} 3 \DWOPbregfour{} 16 \DWOPderef{} \DWOPstackvalue }
-Add 16 to the value register 4 had upon entering the current subprogram
+\bb
+\begin{alltt}
+\DWOPentryvalue{} (3, \DWOPbregfour 16 \DWOPderef)
+\DWOPstackvalue 
+\end{alltt}
+\eb
+\itemtext{Add 16 to the value register 4 had upon entering the current subprogram
 to form an address and then push the value of the memory location at that address.
-This value is the \doublequote{contents} of an otherwise anonymous location.
+This value is the \doublequote{contents} of an otherwise anonymous location.}
 
-\descriptionitemnl{\DWOPentryvalue{} 1 \DWOPregfive{} \DWOPplusuconst{} 16 }
-The address of the memory location is calculated by adding 16 to the value
-contained in register 5 upon entering the current subprogram.
+\bb
+\begin{alltt}
+\DWOPentryvalue (1, \DWOPregfive) 
+\DWOPplusuconst (16) 
+\end{alltt}
+\eb
+\itemtext{The address of the memory location is calculated by adding 16 to the value
+contained in register 5 upon entering the current subprogram.}
 
-\textit{Note that unlike the previous \DWOPentryvalue{} examples, this one does not end
-with \DWOPstackvalue.{}}
+\vspace{3mm}
 
-\descriptionitemnl{\DWOPregzero{} \DWOPbitpiece{} 1 31 \DWOPbitpiece{} 7 0 \DWOPregone{} }
-\vspace{-1\parsep}\descriptionitemnl{
-\hspace{0.5cm}\DWOPpiece{} 1 }
-A variable whose first bit resides in the 31st bit of register 0, whose next 
-seven bits are undefined and whose second byte resides in register 1.
-\end{description}
+
+\needlines{8}
+\bbeb
+\begin{alltt}
+\DWOPregzero{} 
+\DWOPbitpiece{} (1, 31) 
+\DWOPbitpiece{} (7, 0)
+\DWOPregone{} 
+\DWOPpiece{} (1) 
+\end{alltt}
+\itemtext{A variable whose first bit resides in the 31st bit of register 0, whose next 
+seven bits are undefined and whose second byte resides in register 1.}
+
 
 %\clearpage
 \section{Aggregate Examples}
@@ -3957,7 +4068,8 @@ location description applies):
     ! Afterwards, it is not. The value can perhaps be looked up in the caller
     !
     \textit{Range} [L2 .. L3) 
-        \DWOPentryvalue 1 \DWOPregzero \DWOPstackvalue
+        \DWOPentryvalue (1, \DWOPregzero)
+        \DWOPstackvalue
     \textit{End-of-list}
 
 \end{alltt}
@@ -3974,13 +4086,19 @@ Similarly, the variable \texttt{q} in \texttt{fn2} then might have this location
     ! two times the contents of register 0
     !
     \textit{Range} [L1 .. L2)
-        \DWOPlittwo \DWOPbregzero 0 \DWOPmul \DWOPstackvalue
+        \DWOPlittwo 
+        \DWOPbregzero 0 
+        \DWOPmul 
+        \DWOPstackvalue
 
     ! Afterwards. it is not. It can be computed from the original value of 
     ! the first parameter, multiplied by two
     !
     \textit{Range} [L2 .. L3)
-        \DWOPlittwo \DWOPentryvalue 1 \DWOPregzero \DWOPmul \DWOPstackvalue
+        \DWOPlittwo 
+        \DWOPentryvalue (1, \DWOPregzero)
+        \DWOPmul
+        \DWOPstackvalue
     \textit{End-of-list}
 
 \end{alltt}
@@ -4016,7 +4134,7 @@ This is shown in Figure \refersec{fig:callsiteexample1dwarf}.
         \DWATcallreturnpc(L7) ! Second indirect call to (*fn4) in fn3.
         ! The address of the call is not preserved across the call anywhere, but
         ! could be perhaps looked up in fn3's caller.
-        \DWATcalltarget(\DWOPentryvalue{} 1 \DWOPregone)
+        \DWATcalltarget(\DWOPentryvalue (1, \DWOPregone))
         \DWTAGcallsiteparameter
             \DWATlocation(\DWOPregzero)
             \DWATcallvalue(\DWOPbregthree{} 24)
@@ -4078,7 +4196,7 @@ This is shown in Figure \refersec{fig:callsiteexample1dwarf}.
             \DWATlocation(\DWOPregtwo)
             ! Value of the 3rd argument is not preserved, but could be perhaps 
             ! computed from the value passed fn3's caller.
-            \DWATcallvalue(\DWOPentryvalue{} 1 \DWOPregzero)
+            \DWATcallvalue(\DWOPentryvalue (1, \DWOPregzero))
 \end{alltt}
 \end{dwflisting}
 \begin{center}
@@ -4173,11 +4291,12 @@ Figure \refersec{fig:callsiteexample2dwarf}.
         \DWATlocation(\DWOPregzero)
         ! The value of register 0 at the time of the call can be perhaps 
         !   looked up in fn5's caller
-        \DWATcallvalue(\DWOPentryvalue{} 1 \DWOPregzero)
+        \DWATcallvalue(\DWOPentryvalue (1, \DWOPregzero))
         ! DW_AT_call_data_location(DW_OP_push_object_address) ! left out, implicit
         ! And the actual value of the parameter can be also perhaps looked up in
         ! fn5's caller
-        \DWATcalldatavalue(\DWOPentryvalue{} 4 \DWOPbregzero{} 0 \DWOPderefsize 4)
+        \DWATcalldatavalue(
+            \DWOPentryvalue (4, \DWOPbregzero{} 0 \DWOPderefsize 4))
         
 \DWTAGcallsite
     \DWATcallreturnpc(L10)                      ! Second call to fn4

@@ -655,7 +655,17 @@ source syntax) in other languages.}
 
 \textit{Many languages share the concept of an \doublequote{array,} which is
 \addtoindexx{array type entry}
-a table of components of identical type.}
+a table of components of identical type.
+\bb
+Furthermore, many architectures contain vector types which mirror 
+the language concept of a short single dimension array but have 
+different encoding, a different calling convention and different 
+arithmetic and logical operational semantics than the source 
+language arrays. Likewise, a few architectures are starting to 
+add matrix register types with similar variations in encoding 
+and semantics from normal source language array types.
+\eb
+}
 
 An array type is represented by a debugging information entry
 with the tag \DWTAGarraytypeTARG. 
@@ -667,6 +677,15 @@ array type entry has a \DWATname{} attribute
 whose value is a
 null-terminated string containing the array type name.
 
+\bb
+The array type may have a \DWATtensorDEFN{} attribute, 
+\hypertarget{chap:DWATtensortypearray}
+which is a flag. 
+If present, this attribute indicates that the entry describes a 
+vector or matrix type. The array dimensions (see below) describe 
+the vector width, and when applicable the number of rows.
+\eb
+
 The\hypertarget{chap:DWATorderingarrayrowcolumnordering}{}
 array type entry describing a multidimensional array may
 \addtoindexx{array!element ordering}
@@ -676,9 +695,8 @@ interpreted to mean either row-major or column-major ordering
 of array elements. The set of values and their meanings
 for the ordering attribute are listed in 
 Table \referfol{tab:arrayordering}. 
-If no
-ordering attribute is present, the default ordering for the
-source language (which is indicated by the 
+If no ordering attribute is present, the default ordering 
+for the source language (which is indicated by the 
 \bb
 \DWATlanguagename{}
 \eb
@@ -693,10 +711,13 @@ of the enclosing compilation unit entry) is assumed.
 
 An array type entry has 
 \addtoindexx{type attribute}
-a \DWATtype{} attribute
-describing
+a \DWATtype{} attribute describing
 \addtoindexx{array!element type}
 the type of each element of the array.
+\bb
+If \DWATtensor{} is present, the element type must be a 
+base type (see Section \refersec{chap:basetypeentries}).
+\eb
 
 \needlines{4}
 If the amount of storage allocated to hold each element of an
