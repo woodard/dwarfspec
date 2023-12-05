@@ -97,7 +97,23 @@ are shown in groups that have similar characteristics purely
 for presentation purposes. These groups are not part of this
 DWARF specification.}
 
+\subsubsection{Simple Encodings}
+\label{chap:simpleencodings}
+Types with simple encodings are widely supported in many
+programming languages and are not discussed further.
+
+\label{chap:DWATbiassimpleencodingbias}
+\bb
+For a type with simple encodings, the type entry may have a \DWATbias{} attribute
+whose value is an integer constant which is added to the encoded value to
+determine the value of an object of the type in the source program. 
+If the \DWATbias{} is encoded using \DWFORMdatan{}, then the bias value
+is treated as an unsigned integer.
+\eb
+
+
 \newcommand{\EncodingGroup}[1]{\multicolumn{2}{l}{\hspace{2cm}\bfseries\textit{#1}}}
+
 \begin{table}[!ht]
 \caption{Encoding attribute values}
 \label{tab:encodingattributevalues}
@@ -122,6 +138,10 @@ DWARF specification.}
                     \addtoindexx{UCS character} \\
 \DWATEUTFTARG{}   & \addtoindex{ISO/IEC 10646-1:1993 character}
                     \addtoindexx{UTF character} \\
+					
+\EncodingGroup{Bit-precise integer types} \bbeb \\
+\DWATEsignedbitintTARG		& bit-precise signed integer   \bbeb \\
+\DWATEunsignedbitintTARG	& bit-precise unsigned integer \bbeb \\
 
 \EncodingGroup{Scaled encodings} \\
 \DWATEsignedfixedTARG{} & signed fixed-point scaled integer \\
@@ -138,7 +158,6 @@ DWARF specification.}
 \DWATEnumericstringTARG & numeric string \\
 \DWATEeditedTARG        & edited string \\
 
-
 \EncodingGroup{Complex integral encodings} \bbeb \\
 \DWATEcomplexsignedTARG		& complex (signed) binary integral number   \bbeb \\
 \DWATEimaginarysignedTARG	& imaginary (signed) binary integral number \bbeb \\
@@ -149,19 +168,7 @@ DWARF specification.}
 \end{tabular}
 \end{table}
 
-\subsubsection{Simple Encodings}
-\label{chap:simpleencodings}
-Types with simple encodings are widely supported in many
-programming languages and are not discussed further.
-
-\label{chap:DWATbiassimpleencodingbias}
-\bb
-For a type with simple encodings, the type entry may have a \DWATbias{} attribute
-whose value is an integer constant which is added to the encoded value to
-determine the value of an object of the type in the source program. 
-If the \DWATbias{} is encoded using \DWFORMdatan{}, then the bias value
-is treated as an unsigned integer.
-\eb
+\clearpage 	% A desparate attempt to get Table 5.1 to come out in the right place
 
 \needlines{6}
 \subsubsection{Character Encodings}
@@ -181,8 +188,16 @@ is \DWATEUTF{} and a byte size attribute whose value is 2.}
 \DWATEASCII{} and \DWATEUCS{} specify encodings for
 the \addtoindex{Fortran 2003} string kinds 
 \texttt{ASCII}\index{ASCII@\texttt{ASCII} (Fortran string kind)} (ISO/IEC 646:1991) and
-\texttt{ISO\_10646}\index{ISO\_10646@\texttt{ISO\_10646} (Fortran string kind)} (UCS-4 in ISO/IEC 10646:2000).
+\texttt{ISO 10646}\index{ISO 10646@\texttt{ISO 10646} (Fortran string kind)} (UCS-4 in ISO/IEC 10646:2000).
 \addtoindexx{ISO 10646 character set standard}
+
+\bb
+\subsection{Bit-precise integer types}
+Bit-precise integer types \DWATEsignedbitint{} and \DWATEunsignedbitint{} are
+supported in {\C}23\footnote{C23 is an informal name for what will likely
+become ISO/IEC 9899:2024.}, where they are known as \texttt{\_BitInt(N)} 
+and \mbox{\texttt{unsigned \_BitInt(N)}}, respectively.
+\eb
 
 \subsubsection{Scaled Encodings}
 \label{chap:scaledencodings}

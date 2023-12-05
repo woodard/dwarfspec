@@ -397,7 +397,7 @@ Split DWARF object files contain at most one compilation unit.
 
 \bb
 \subsection{Executable Objects and .dwo Files}
-\label{chap:executableobjectsanddwofiles}
+\label{datarep:executableobjectsanddwofiles}
 \eb
 The relocated addresses in the debugging information for an
 executable object are virtual addresses.
@@ -1081,8 +1081,9 @@ units may share the same table.
 \subsection{Unit Headers}
 \label{datarep:unitheaders}
 Unit headers contain a field, \HFNunittype{}, whose value indicates the kind of
-compilation unit (see Section \ref{chap:unitentries})
-that follows. The encodings for the unit type 
+compilation unit (see Section \refersec{chap:unitentries}).
+\db
+The encodings for the unit type 
 enumeration are shown in Table \refersec{tab:unitheaderunitkindencodings}.
 
 \needlines{6}
@@ -1517,7 +1518,7 @@ in addition to the attribute name and form values,
 the attribute specification contains 
 a third part, which is a signed LEB128\addtoindexx{LEB128!signed} 
 number.
-\label{chap:attributeencodingsimplicitconst}
+\label{datarep:attributeencodingsimplicitconst}
 The value of this number is used as the value of the 
 attribute.  
 
@@ -2108,7 +2109,7 @@ signed LEB128 numbers (\DWFORMsdataTARG) and unsigned
 LEB128 numbers (\DWFORMudataTARG).
 There is also an implicit constant (\DWFORMimplicitconst,
 \bb
-see Section \refersec{chap:attributeencodingsimplicitconst}),
+see Section \refersec{datarep:attributeencodingsimplicitconst}),
 whose value is provided as part of an abbreviation specification.
 \eb
 \needlines{4}
@@ -2432,7 +2433,7 @@ The representation of a \DWFORMstrxoneNAME, \DWFORMstrxtwoNAME,
 which is similarly interpreted.
 The offset entries in the \dotdebugstroffsets{} section 
 \bb
-are described in Section \refersec{chap:stringoffsetstable}.
+are described in Section \refersec{datarep:stringoffsetstable}.
 \eb
 \end{itemize}
 Any combination of these three forms may be used within a single compilation.
@@ -2941,6 +2942,8 @@ Table \refersec{tab:basetypeencodingvalues}.
 \DWATEimaginarysigned~\ddag	& 0x14 \\
 \DWATEcomplexunsigned~\ddag	& 0x15 \\
 \DWATEimaginaryunsigned~\ddag&0x16 \\
+\DWATEsignedbitint~\ddag	& 0x17 \\
+\DWATEunsignedbitint~\ddag	& 0x18 \\
 \eb
 \DWATElouser{} 			& 0x80 \\
 \DWATEhiuser{} 			& \xff \\
@@ -3784,7 +3787,7 @@ corresponding compilation unit must be defined
 
 \needlines{6}
 \section{String Offsets Table}
-\label{chap:stringoffsetstable}
+\label{datarep:stringoffsetstable}
 Each 
 \bb
 \dotdebugstroffsets{} or \dotdebugstroffsetsdwo{} section
@@ -3832,7 +3835,7 @@ The entries following the header are indexed sequentially,
 starting from 0.
 
 \section{Address Table}
-\label{chap:addresstable}
+\label{datarep:addresstable}
 Each 
 \bb
 \dotdebugaddr{} section contribution
@@ -4470,3 +4473,10 @@ uint32_t /* must be a 32-bit integer type */
 \label{fig:nametablehashfunctiondefinition}
 \end{figure}
 
+\bb
+\section{Contiguous Tables}
+\label{datarep:contiguoustables}
+Tables within each section must be contiguous with the preceding 
+table in that section, or the beginning of the section if there 
+is no preceding table.
+\eb
