@@ -1810,6 +1810,19 @@ virtually unwind using the Call Frame Information
 to recover register values that might have been clobbered since the
 subprogram entry point.}
 
+\bb
+\itembfnl{\DWOPuserextendedTARG}
+The \DWOPuserextendedNAME{} opcode encodes a vendor extension operation. 
+It has at least one operand: a ULEB128 constant identifying a vendor extension
+operation. The remaining operands are defined by the vendor extension.
+The vendor extension opcode 0 is reserved and cannot be used by any
+vendor extension.
+
+\textit{The \DWOPuserextended{} encoding space can be understood to supplement 
+the space defined by \DWOPlouser{} and \DWOPhiuser{} that is allocated by
+the standard for the same purpose.}
+\eb
+
 \end{enumerate}
 
 \needlines{8}
@@ -2948,7 +2961,7 @@ the length is the number of bytes in that range.
 \bb
 \itembfnl{\DWRLEincludernglistTARG}
 This is a form of list inclusion, that has one offset operand.  The
-value is an offset into the \dotdebugloclists{} section, like the
+value is an offset into the \dotdebugrnglists{} section, like the
 operand of a \DWFORMsecoffset{} location list.  The offset identifies the
 first entry of a location list whose entries are to be regarded as part of
 the current location list, up to the \DWRLEendoflist{} entry.
