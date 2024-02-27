@@ -2685,6 +2685,7 @@ of the DWARF Wiki
 (\url{http://wiki.dwarfstd.org/index.php?title=Best_Practices}.)}
 
 \section{Data Locations and DWARF Procedures}
+\label{chap:datalocationsanddwarfprocedures}
 \hypertarget{chap:DWATlocationdataobjectlocation}{}
 Any debugging information entry describing a data object (which
 includes variables and parameters) or 
@@ -3016,16 +3017,28 @@ attributes is determined based on the class as follows:
 \item For a \livelink{chap:classconstant}{constant}, the value 
 of the constant is the value of the attribute.
 
-\item For a \livelink{chap:classreference}{reference}, the
-value is a reference to another debugging information entry.  
-This entry may:
+\item For a \livelink{chap:classreference}{reference}, the value 
+\bb
+of the attribute is determined indirectly via
+\eb
+a reference to another debugging information entry.
+\db
 \begin{itemize}
 \renewcommand{\itemsep}{0cm}
-\item describe a constant which is the attribute value,
-\item describe a variable which contains the attribute value, or
-\item contain a \DWATlocation{} attribute whose value is a
-      DWARF expression which computes the attribute value
-      (for example, a \DWTAGdwarfprocedure{} entry).
+\bb
+\item If the referenced entry describes a constant (e.g., has a 
+\DWATconstvalue{} attribute), the attribute value is the value 
+of that constant.
+
+\item If the referenced entry describes a data object 
+(see Section \refersec{chap:dataobjectentries}) or common block 
+(see Section \refersec{chap:commonblockentries}), the attribute 
+value is the value of the data object or common block.
+
+\item If the referenced entry represents a data member (e.g. has either a 
+\DWATdatamemberlocation{} or a \DWATdatabitoffset{} attribute), the 
+attribute value is the value of the data member.
+\eb
 \end{itemize}
 
 \item For an 
@@ -3036,6 +3049,14 @@ the value is interpreted as a DWARF expression; evaluation of
 the expression yields the value of the attribute.
 \end{itemize}
 
+\bb
+\textit{Prior to \DWARFVersionVI, a reference to a DWARF procedure 
+(see Section \refersec{chap:datalocationsanddwarfprocedures}) 
+that is not a data object or common block was allowed. This type of 
+reference was removed in DWARF Version 6. Instead, a producer may use a form 
+of class \CLASSexprval{} or \CLASSlocdesc{} with a \DWOPcallref{} 
+operator to call the DWARF procedure.}
+\eb
 
 \needlines{4}
 \section{Entity Descriptions}
