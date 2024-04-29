@@ -14,8 +14,7 @@ all:
 	makeindex dwarf6
 	latex -halt-on-error dwarf6.tex
 	latex -halt-on-error dwarf6.tex
-	dvips dwarf6.dvi -o dwarf6.ps
-	ps2pdf dwarf6.ps dwarf6.pdf
+	dvipdfm dwarf6.dvi
 clean:
 	-rm -f *.dvi
 	-rm -f *.aux
@@ -29,6 +28,7 @@ clean:
 	-rm -f *.out
 	-rm -f *.ps
 	-rm -f *.cb
+	-rm -f *.cb2
 	-rm -f p2.txt
 archive:
 	sh bldtar.sh
