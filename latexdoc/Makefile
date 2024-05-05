@@ -7,15 +7,14 @@
 # regular page numbers beginning at 1) 
 # up to 4 times might be needed.
 # You need to do makeindex before the final latex!
-#
+# --driver=pdftex might be needed with the pdflatex command?
 all:
-	latex -halt-on-error dwarf6.tex
-	latex -halt-on-error dwarf6.tex
+	pdflatex -halt-on-error dwarf6.tex
+	pdflatex -halt-on-error dwarf6.tex
 	makeindex dwarf6
-	latex -halt-on-error dwarf6.tex
-	latex -halt-on-error dwarf6.tex
-	dvips dwarf6.dvi -o dwarf6.ps
-	ps2pdf dwarf6.ps dwarf6.pdf
+	pdflatex -halt-on-error dwarf6.tex
+	pdflatex -halt-on-error dwarf6.tex
+
 clean:
 	-rm -f *.dvi
 	-rm -f *.aux
@@ -29,6 +28,7 @@ clean:
 	-rm -f *.out
 	-rm -f *.ps
 	-rm -f *.cb
+	-rm -f *.cb2
 	-rm -f p2.txt
 archive:
 	sh bldtar.sh
