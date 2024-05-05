@@ -3,7 +3,7 @@
 % If draft is in the document class list, pix are just suggested
 % by an outline, that is, the pic does not appear as a picture.
 %
-\newcommand{\docdate}{February 27, 2024}
+\newcommand{\docdate}{May 1, 2024}
 \newcommand{\thisversion}{6}
 %
 \usepackage{ifthen}
@@ -24,6 +24,7 @@
 %\usepackage{color}
 \usepackage{listings}
 \usepackage{alltt}
+\usepackage[flushleft]{threeparttable} % http://ctan.org/pkg/threeparttable
 \lstset{ %
 language={},               % choose the language of the code
 basicstyle=\footnotesize\ttfamily, % the size of the fonts that are used for the code
@@ -78,7 +79,8 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
     \usetikzlibrary{shapes.geometric}
     \usetikzlibrary{shapes.multipart}
     \usetikzlibrary{shapes.symbols}
-\usepackage{changebar}     % For change bars in margin
+\usepackage[color]{changebar}     % For change bars in margin
+    \cbcolor{red}
 \ifthenelse{\boolean{isdraft}}{}{\nochangebars} % Use no bars in APPROVED Standard
 \usepackage{xspace}
 \usepackage{makeidx}       % For making an index
@@ -390,18 +392,21 @@ escapeinside={\%*}{*)}     % if you want to add a comment within your code
 % Define the levels of sectionality that are numbered.
 \setcounter{secnumdepth}{5}
 
+% Enable or comment out the empty page after each chapter so the
+% the following chapter starts on an odd numbered page
+%
 \condlinenumbers\include{introduction}              \emptypage
-\condlinenumbers\include{generaldescription}        \emptypage
+\condlinenumbers\include{generaldescription}        %\emptypage
 \condlinenumbers\include{programscope}              %\emptypage
 \condlinenumbers\include{dataobject}                \emptypage
-\condlinenumbers\include{typeentries}               \emptypage
+\condlinenumbers\include{typeentries}               %\emptypage
 \condlinenumbers\include{otherdebugginginformation} \emptypage
-\condlinenumbers\include{datarepresentation}        %\emptypage
+\condlinenumbers\include{datarepresentation}        \emptypage
 
 %  The \appendix command toggles us into appendix chapters
 \appendix
 
-\condlinenumbers\include{attributesbytag}	        %\emptypage
+\condlinenumbers\include{attributesbytag}	        \emptypage
 \condlinenumbers\include{debugsectionrelationships} %\emptypage
 \condlinenumbers\include{encodingdecoding}          \emptypage
 \condlinenumbers\include{examples}                  \emptypage

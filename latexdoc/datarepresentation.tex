@@ -338,8 +338,11 @@ Abbreviations table(s) for the compilation unit and type
 units, in the \dotdebugabbrevdwo{} section
 used by the \dotdebuginfodwo{} section.
 
-\item Location lists, in the 
-\dotdebugloclistsdwo{} section.
+\item 
+\bb
+Value lists and location
+\eb
+lists, in the \dotdebugloclistsdwo{} section.
 
 \item Range lists, in the \dotdebugrnglistsdwo{} section.
 
@@ -861,7 +864,7 @@ addresses in the target program are not affected by the rules that
 follow.}
 \eb
 
-\needlines{12}
+\needlines{8}
 The differences between the 32- and 64-bit DWARF formats are
 detailed in the following:
 \begin{enumerate}[1. ]
@@ -999,7 +1002,7 @@ for
 \eb
 the 64-bit DWARF format, they are 8-byte unsigned integers.
 
-\needlines{5}
+\needlines{4}
 \item Within the body of the \dotdebugloclists{} and \dotdebugrnglists{}
 sections, the offsets 
 \bb
@@ -2146,6 +2149,7 @@ followed by a byte sequence of the specified length (\DWFORMexprvalTARG)
 containing the expression. 
 \eb
 
+
 \needlines{8}
 \item \CLASSflag \\
 \livetarg{datarep:classflag}{}
@@ -2192,6 +2196,9 @@ containing the location description.
 \needlines{10}
 \item \CLASSloclist \\
 \livetarg{datarep:classloclist}{}
+\bb
+A location list (see Section \refersec{chap:locationlists}).
+\eb
 This is represented as either:
 \begin{itemize}
 \item
@@ -2475,6 +2482,15 @@ is a 4-byte unsigned value; in the \sixtyfourbitdwarfformat,
 it is an 8-byte unsigned value (see Section
 \refersec{datarep:32bitand64bitdwarfformats}).
 
+\bb
+\item \CLASSvallist \\
+\livetarg{datarep:classvallist}{}
+A value list (see Section \refersec{chap:valuelists}).
+This class has the same representation as class \CLASSloclist.
+
+\textit{This class is \newinversionx.}
+\eb
+
 \end{itemize}
 
 In no case does an attribute use one of the classes 
@@ -2543,7 +2559,8 @@ Table \referfol{tab:attributeformencodings}.
 \DWFORMlinestrp      	&0x1f &\CLASSstring \\
 \DWFORMrefsigeight      &0x20 &\CLASSreference \\
 \DWFORMimplicitconst 	&0x21 &\CLASSconstant \\
-\DWFORMloclistx      	&0x22 &\CLASSloclist \\
+\bbeb
+\DWFORMloclistx      	&0x22 &\CLASSloclist, \CLASSvallist \\
 \DWFORMrnglistx      	&0x23 &\CLASSrnglist \\
 \DWFORMrefsupeight{} 	&0x24 &\CLASSreference \\
 \DWFORMstrxone{}     	&0x25 &\CLASSstring \\
@@ -2830,7 +2847,9 @@ Table \refersec{tab:dwarfoperationencodings}.
 \DWOPregvalbits~\ddag&0xaa &1 &ULEB128 field size, \\*
 					&   &TOS~\dag  &integer bit offset, \\*
 \eb
-					&	&TOS~-~1   &integer register number \\ 
+					&	&TOS~-~1   &integer register number \\
+\bbeb
+\DWOPextended~\ddag & 0xde & 1~+ & \\
 \bbeb
 \DWOPuserextended~\ddag 
 					& 0xdf & 1~+ & \\
@@ -2841,6 +2860,7 @@ Table \refersec{tab:dwarfoperationencodings}.
 \end{centering}
 
 
+\needlines{8}
 \subsection{Location Descriptions}
 \label{datarep:locationdescriptions}
 
@@ -2899,7 +2919,7 @@ remaining bytes (not including either the kind or the length
 itself) for that entry.
 \eb
 
-\needlines{8}
+
 \section{Base Type Attribute Encodings}
 \label{datarep:basetypeattributeencodings}
 
@@ -3177,9 +3197,13 @@ defined language.
 \DWLNAMEOpenCLCPP~\ddag		&0x0023	&0 \\
 \DWLNAMECPPforOpenCL~\ddag	&0x0024	&0 \\
 \DWLNAMESYCL~\ddag			&0x0025 &0 \\ 
-\DWLNAMERuby~\ddag			&0x0026 &0 \\ 
+\DWLNAMERuby~\ddag			&0x0026 &0 \\
+\DWLNAMEMove~\ddag			&0x0027 &0 \\
+\DWLNAMEHylo~\ddag			&0x0028	&0 \\
+\DWLNAMEHIP~\ddag			&0x0029 &0 
+\eb 
+\\ 
 \DWLNAMElouser				&0x8000 &  \\
-\eb
 \DWLNAMEhiuser				&\xffff &  \\
 \end{longtable}
 \end{centering}
@@ -3558,6 +3582,9 @@ Table \refersec{tab:linenumberextendedopcodeencodings}.
 \DWLNEsetdiscriminator &0x04 \\
 \bbeb
 \DWLNEpadding~\ddag	&0x05 \\
+\bbeb
+\DWLNEsetprologueepilogue~\ddag
+					&0x06 \\
 \DWLNElouser		&0x80 \\
 \DWLNEhiuser		&\xff \\
 
@@ -3681,52 +3708,56 @@ The instructions and their encodings are presented in
 Table \refersec{tab:callframeinstructionencodings}.
 
 \begin{centering}
-\setlength{\extrarowheight}{0.1cm}
-\begin{longtable}{l|c|c|l|l}
+\setlength{\extrarowheight}{0.15cm}
+\begin{longtable}{l|c|c|P{3.5cm}}
   \caption{Call frame instruction encodings} \label{tab:callframeinstructionencodings} \\
-  \hline &\bfseries High 2 &\bfseries Low 6 &  & \\
-  \bfseries Instruction&\bfseries Bits &\bfseries Bits &\bfseries Operand 1 &\bfseries Operand 2\\ \hline
-\endfirsthead
-   & \bfseries High 2 &\bfseries Low 6 &  &\\
-  \bfseries Instruction&\bfseries Bits &\bfseries Bits &\bfseries Operand 1 &\bfseries Operand 2\\ \hline
-\endhead
   \hline 
+                        & \bfseries High 2 & \bfseries Low 6 & \bfseries Operand 1, \\
+  \bfseries Instruction & \bfseries Bits   & \bfseries Bits  & \bfseries Operand 2  \\ 
+  \hline
+\endfirsthead
+  \hline
+                        & \bfseries High 2 & \bfseries Low 6 & \bfseries Operand 1, \\
+  \bfseries Instruction & \bfseries Bits   & \bfseries Bits  & \bfseries Operand 2  \\ 
+  \hline
+\endhead
+  \hline
   \multicolumn{2}{l}{\emph{Continued on next page}}
 \endfoot
   \hline
 \endlastfoot
 
-\DWCFAadvanceloc		&0x1&delta & \\
-\DWCFAoffset			&0x2&register &ULEB128 offset \\
-\DWCFArestore			&0x3&register & & \\
-\DWCFAnop				&0&0 & & \\
-\DWCFAsetloc			&0&0x01&address & \\
-\DWCFAadvancelocone		&0&0x02&1-byte delta & \\
-\DWCFAadvanceloctwo		&0&0x03&2-byte delta & \\
-\DWCFAadvancelocfour	&0&0x04&4-byte delta & \\
-\DWCFAoffsetextended	&0&0x05&ULEB128 register &ULEB128 offset \\
-\DWCFArestoreextended	&0&0x06&ULEB128 register & \\
-\DWCFAundefined			&0&0x07&ULEB128 register & \\
-\DWCFAsamevalue			&0&0x08 &ULEB128 register & \\
-\DWCFAregister			&0&0x09&ULEB128 register &ULEB128 offset \\
-\DWCFArememberstate		&0&0x0a & & \\
-\DWCFArestorestate		&0&0x0b & & \\
-\DWCFAdefcfa			&0&0x0c &ULEB128 register &ULEB128 offset \\
-\DWCFAdefcfaregister	&0&0x0d &ULEB128 register & \\
-\DWCFAdefcfaoffset		&0&0x0e &ULEB128 offset & \\
-\bbeb\DWCFAdefcfaexpression	&0&0x0f &exprloc  \\
-\bbeb\DWCFAexpression		&0&0x10&ULEB128 register &exprloc \\
+\DWCFAadvanceloc			&0x1 &delta		& \\
+\DWCFAoffset				&0x2 &register  &ULEB128 offset \\
+\DWCFArestore				&0x3 &register  & \\
+\DWCFAnop					&0   &0 		& \\
+\DWCFAsetloc				&0   &0x01		&address \\
+\DWCFAadvancelocone			&0   &0x02		&1-byte delta \\
+\DWCFAadvanceloctwo			&0   &0x03		&2-byte delta \\
+\DWCFAadvancelocfour		&0   &0x04		&4-byte delta \\
+\DWCFAoffsetextended		&0   &0x05		&ULEB128 register, \newline ULEB128 offset \\
+\DWCFArestoreextended		&0   &0x06		&ULEB128 register \\
+\DWCFAundefined				&0   &0x07		&ULEB128 register \\
+\DWCFAsamevalue				&0   &0x08		&ULEB128 register \\
+\DWCFAregister				&0   &0x09		&ULEB128 register, \newline ULEB128 offset \\
+\DWCFArememberstate			&0   &0x0a		& \\
+\DWCFArestorestate			&0   &0x0b		& \\
+\DWCFAdefcfa				&0   &0x0c 		&ULEB128 register, \newline ULEB128 offset \\
+\DWCFAdefcfaregister		&0   &0x0d 		&ULEB128 register \\
+\DWCFAdefcfaoffset			&0   &0x0e 		&ULEB128 offset \\
+\bbeb\DWCFAdefcfaexpression	&0   &0x0f		&exprloc \\
+\bbeb\DWCFAexpression		&0   &0x10		&ULEB128 register, \newline exprloc \\
 
-\DWCFAoffsetextendedsf	&0&0x11 &ULEB128 register &SLEB128 offset \\
-\DWCFAdefcfasf			&0&0x12 &ULEB128 register &SLEB128 offset \\
-\DWCFAdefcfaoffsetsf	&0&0x13 &SLEB128 offset & \\
+\DWCFAoffsetextendedsf		&0   &0x11		&ULEB128 register, \newline SLEB128 offset \\
+\DWCFAdefcfasf				&0   &0x12		&ULEB128 register, \newline SLEB128 offset \\
+\DWCFAdefcfaoffsetsf		&0   &0x13		&SLEB128 offset \\
 \bb
-\DWCFAvaloffset			&0&0x14 &ULEB128 register &ULEB128 offset\\
-\DWCFAvaloffsetsf		&0&0x15 &ULEB128 register &SLEB128 offset\\
-\DWCFAvalexpression		&0&0x16 &ULEB128 register &exprloc \\
+\DWCFAvaloffset				&0   &0x14		&ULEB128 register, \newline ULEB128 offset \\
+\DWCFAvaloffsetsf			&0   &0x15		&ULEB128 register, \newline SLEB128 offset \\
+\DWCFAvalexpression			&0   &0x16		&ULEB128 register, \newline exprloc \\
 \eb
-\DWCFAlouser			&0&0x1c   & & \\
-\DWCFAhiuser			&0&\xiiif & & \\
+\DWCFAlouser				&0   &0x1c   	& \\
+\DWCFAhiuser				&0   &\xiiif 	& \\
 \end{longtable}
 \end{centering}
 
@@ -3960,10 +3991,10 @@ array of offsets, which indirectly specifies the offset to the
 target list.
  
 \needlines{12}
-\section{Location List Table}
+\bb
+\section{Value List and Location List Table}
 \label{datarep:locationlisttable}
 Each \dotdebugloclists{} or \dotdebugloclistsdwo{} section
-\bb
 contribution
 \eb
 begins with a header containing:
@@ -4000,33 +4031,57 @@ that follow the header. This count may be zero.
 \end{enumerate}
 
 Immediately following the header is an array of offsets.
-This array is followed by a series of location lists. 
+This array is followed by a series of 
+\bb
+value lists and 
+\eb
+location lists. 
 
 If the \HFNoffsetentrycount{} is non-zero, there 
-is one offset for each location list. The contents
+is one offset for each 
+\bb
+value list and 
+\eb
+location list. The contents
 of the $i$\textsuperscript{th} offset is the offset 
 (an unsigned integer) from the
 beginning of the offset array to the location of the 
-$i$\textsuperscript{th} location list. 
+$i$\textsuperscript{th} 
+\bb
+value list or 
+\eb
+location list. 
 In the 32-bit DWARF format, each offset is 4-bytes in size; 
 in the 64-bit DWARF format, each offset is 8-bytes in size 
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
 \textit{If the \HFNoffsetentrycount{} is zero, then \DWFORMloclistx{} cannot 
-be used to access a location list; \DWFORMsecoffset{} must be used 
-instead. If the \HFNoffsetentrycount{} is non-zero, then \DWFORMloclistx{} 
-may be used to access a location 
+be used to access a 
 \bb
-list.
+value list or 
 \eb
+location list; \DWFORMsecoffset{} must be used 
+instead. If the \HFNoffsetentrycount{} is non-zero, then \DWFORMloclistx{} 
+may be used to access a 
+\bb
+value list or location 
+\eb
+list.
 \db
 }
 
+\bb
+Value lists are described in Section \refersec{chap:valuelists}.
+\eb
 Location lists are described in Section \refersec{chap:locationlists}.
 \db
 
 The \DWATloclistsbase{} attribute points to the first offset 
-following the header. The location lists are referenced
+following the header. The 
+\bb
+value lists and
+\eb
+location lists are referenced
 by the index of the position of their corresponding offset in the
 array of offsets, which indirectly specifies the offset to the
 target list.

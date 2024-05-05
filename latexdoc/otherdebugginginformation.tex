@@ -920,6 +920,7 @@ table.\addtoindexx{name index!case folding}\db
 the same slot, but the consumer will be able to distinguish the names
 when appropriate.}
 
+\needlines{6}
 The simple case folding algorithm is further described
 in the CaseFolding.txt file distributed with the \addtoindex{Unicode} 
 Character Database. That file defines four classes of mappings: 
@@ -1119,6 +1120,7 @@ in bytes on the target architecture.
 
 \end{enumerate}
 
+\needlines{6}
 This header is followed by a variable number of address range
 descriptors. Each descriptor is a 
 \bb
@@ -1321,6 +1323,13 @@ A boolean indicating that the current address is one (of possibly many)
 where execution should be suspended for a breakpoint just prior to
 the exit of a function. \\
 
+\bb
+\addttindex{prologue\_epilogue} &
+A boolean indicating that the current row describes instructions 
+within a prologue or epilogue range.
+\eb
+\\
+
 \addttindex{isa} &
 An unsigned integer whose value encodes the applicable
 instruction set architecture for the current instruction.
@@ -1368,6 +1377,8 @@ program, the state of the registers is as show in Table
 \addttindex{end\_sequence}   & \doublequote{false} \\
 \addttindex{prologue\_end}   & \doublequote{false} \\
 \addttindex{epilogue\_begin} & \doublequote{false} \\
+\bbeb
+\addttindex{prologue\_epilogue} & \doublequote{false} \\
 \addttindex{isa} & 0 \\
 \addttindex{discriminator} & 0 \\
 \hline
@@ -1892,7 +1903,8 @@ scheduling or other optimization.)
 \label{chap:specialopcodes}
 \addtoindexx{line number program!special opcodes}
 \addtoindexx{special opcodes in line number program}
-Each \HFTubyte{} special opcode has the following effect on the state machine:
+Each \HFTubyte{} special opcode has the following 
+effect on the state machine:
 
 \begin{enumerate}[1. ]
 
@@ -1904,17 +1916,21 @@ Each \HFTubyte{} special opcode has the following effect on the state machine:
 \item  Append a row to the matrix using the current values
 of the state machine registers.
 
-\item  Set the \addttindex{basic\_block} register to \doublequote{false.} \addtoindexx{basic block}
+\item  Set the \addttindex{basic\_block} register to \doublequote{false.}\addtoindexx{basic block}
 \item  Set the \addttindex{prologue\_end} register to \doublequote{false.}
 \item  Set the \addttindex{epilogue\_begin} register to \doublequote{false.}
+\bb
+\item  Set the \addttindex{epilogue\_epilogue} register to \doublequote{false.}
+\eb
 \item  Set the \addttindex{discriminator} register to 0.
 
 \end{enumerate}
 
-All of the special opcodes do those same seven things; they
-differ from one another only in what values they add to the
-\texttt{line}, \texttt{address} and \addttindex{op\_index} registers.
-
+All of the special opcodes do those same 
+\db
+things; they differ from one another only in what values 
+they add to the \texttt{line}, \texttt{address} and 
+\addttindex{op\_index} registers.
 
 \textit{Instead of assigning a fixed meaning to each special opcode,
 the line number program uses several parameters in the header
@@ -2028,8 +2044,10 @@ opcode takes no operands. It appends a row
 to the matrix using the current values of the state machine
 registers. Then it sets the \addttindex{discriminator} register to 0,
 and sets the \addttindex{basic\_block}, 
-\addttindex{prologue\_end} and 
-\addttindex{epilogue\_begin}
+\bb\addttindex{prologue\_end}, 
+\addttindex{epilogue\_begin} and
+\addttindex{prologue\_epilogue}
+\eb
 registers to \doublequote{false.}
 
 \needlines{5}
@@ -2130,7 +2148,7 @@ location; for example, the code might test for a special case
 and make a fast exit prior to setting up the frame.}
 
 \textit{Note that the function to which the 
-\addtoindex{prologue end} applies cannot
+\addttindex{prologue end} applies cannot
 be directly determined from the line number information alone;
 \bb
 the function
@@ -2142,7 +2160,11 @@ subroutines).}
 \needlines{4}
 \item \textbf{\DWLNSsetepiloguebeginTARG} \\
 The \DWLNSsetepiloguebeginNAME{} opcode takes no operands. It
-sets the \addttindex{epilogue\_begin} register to \doublequote{true.}
+sets the \addttindex{epilogue\_begin} 
+\bb
+and \addttindex{prologue\_epilogue} registers
+\eb
+to \doublequote{true.}
 
 \textit{When a breakpoint is set on the exit of a function or execution
 steps over the last executable statement of a function, it is
@@ -2163,8 +2185,8 @@ information entries of the compilation (including inlined
 subroutines).}
 
 \textit{In the case of a trivial function, both 
-\addtoindex{prologue end} and
-\addtoindex{epilogue begin} may occur at the same address.}
+\addttindex{prologue end} and
+\addttindex{epilogue begin} may occur at the same address.}
 
 \item \textbf{\DWLNSsetisaTARG} \\
 The \DWLNSsetisaNAME{} opcode takes a single
@@ -2256,6 +2278,12 @@ effect on the line number program.
 \textit{This permits a producer to pad or overwrite arbitrary
 parts of a line number program, with a minimum of the
 three bytes needed to encode any extended opcode.}
+\eb
+
+\bb
+\item \textbf{\DWLNEsetprologueepilogueTARG} \\
+The \DWLNEsetprologueepilogueNAME{} opcode takes no operands. 
+It sets the \addttindex{prologue\_epilogue} register to "true."
 \eb
 
 \end{enumerate}

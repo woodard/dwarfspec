@@ -848,7 +848,7 @@ Attribute value forms belong
 \addtoindexx{tag names!list of}
 to one of the classes shown in Table \referfol{tab:classesofattributevalue}.
 
-\begin{longtable}{l|P{11cm}}
+\begin{longtable}{P{3cm}|P{11cm}}
 \caption{Classes of attribute value}
 \label{tab:classesofattributevalue} \\
 \hline \bfseries Attribute Class & \bfseries General Use and Encoding \\ \hline
@@ -924,13 +924,24 @@ specifies the number of bytes in the location description.
 \eb
 \\
 
+\bb
+\hypertarget{chap:classvallist}{}
+\livelinki{datarep:classvallist}{vallist}{vallist class},
+\eb
 \hypertarget{chap:classloclist}{}
 \livelinki{datarep:classloclist}{loclist}{loclist class}, 
+\newline
 \hypertarget{chap:classloclistsptr}{}
 \livelinki{datarep:classloclistsptr}{loclistsptr}{loclistsptr class}
-&Specifies a location in the DWARF section that holds location 
-lists, which describe objects whose location can change during 
-their lifetime.
+&Specifies a location in the DWARF section that holds 
+\bb
+value lists and
+\eb
+location lists, which describe objects whose 
+\bb
+attributes or
+\eb
+location can change during their lifetime.
 \\
 
 \hypertarget{chap:classmacptr}{}
@@ -960,7 +971,8 @@ a \addtoindex{supplementary object file}.
 \\
 
 \hypertarget{chap:classrnglist}{}
-\livelinki{datarep:classrnglist}{rnglist}{rnglist class}, 
+\livelinki{datarep:classrnglist}{rnglist}{rnglist class},
+\newline 
 \hypertarget{chap:classrnglistsptr}{}
 \livelinki{datarep:classrnglistsptr}{rnglistsptr}{rnglistsptr class}
 &Specifies a location in the DWARF section that holds 
@@ -1811,6 +1823,15 @@ to recover register values that might have been clobbered since the
 subprogram entry point.}
 
 \bb
+\itembfnl{\DWOPextendedTARG}
+The \DWOPextendedNAME{} opcode encodes an extension operation. It has 
+at least one operand: a ULEB128 constant identifying the extension operation. 
+The remaining operands are defined by the extension opcode, which are named
+using a prefix of \DWOPEXT. 
+The extension opcode 0 is reserved.
+\eb
+
+\bb
 \itembfnl{\DWOPuserextendedTARG}
 The \DWOPuserextendedNAME{} opcode encodes a vendor extension operation. 
 It has at least one operand: a ULEB128 constant identifying a vendor extension
@@ -1824,6 +1845,36 @@ the standard for the same purpose.}
 \eb
 
 \end{enumerate}
+
+\bb
+\subsection{Value Lists}
+\label{chap:valuelists}
+Value lists/addtoindexx{value lists} are used in place of 
+DWARF expressions whenever the value of an object's attribute 
+can change during the lifetime of that object.
+
+Value lists are contained in a separate object file section, 
+along with location lists (see \refersec{chap:locationlists}).
+
+A value list is indicated by an attribute whose value is of class 
+\label{chap:classvallist}\CLASSvallist{} (see Section \refersec{datarep:classesandforms}).
+
+A value list consists of a series of value list entries. 
+The representation of a value list is the same as for a 
+location list (see \refersec{chap:locationlists}), except 
+that bounded location description and default location description 
+entries are understood to provide DWARF expressions that produce 
+values rather than location descriptions.
+
+\textit{The DWARF expressions in value list entries, being 
+expressions and not location descriptions, may not contain 
+any of the DWARF operations described in Section 
+\refersec{chap:locationdescriptions}.}
+
+The address ranges defined by the bounded expressions of a 
+value list may overlap. When they do, the meaning is undefined 
+if the overlapping expressions do not produce the same value.
+\eb
 
 \needlines{8}
 \section{Location Descriptions}
@@ -1841,6 +1892,7 @@ recent computer architectures and optimization techniques,
 debugging information must be able to describe the location of
 an object whose location changes over the object\textquoteright s lifetime.}
 
+\needlines{8}
 Information about the location of program objects is provided
 by location descriptions. Location descriptions can be either
 of two forms:
@@ -1857,7 +1909,10 @@ and/or other
 DWARF operations specific to describing locations. They are
 sufficient for describing the location of any object as long
 as its lifetime is either static or the same as the 
-\livelink{chap:lexicalblock}{lexical block} that owns it, 
+\livelink{chap:lexicalblock}{lexical block} that owns it,
+\bb
+excluding any prologue or epilogue ranges,
+\eb 
 and it does not move during its lifetime.
 
 
@@ -2192,11 +2247,16 @@ is valid. The ending address is the address of the first
 location past the highest address of the address range.
 When the current PC is within the given range, the location
 description may be used to locate the specified object.
+\bb
+The location description is valid even if the address range 
+includes addresses within a prologue or epilogue range.
+\eb
         
 There are several kinds of bounded location description
 entries which differ in the way that they specify the
 starting and ending addresses.
-        
+
+\needlines{7}      
 The address ranges defined by the bounded location descriptions
 of a location list may overlap. When they do, they describe a
 situation in which an object exists simultaneously in more than
@@ -2215,14 +2275,20 @@ starting address consisting of the reserved address value (see Section
 which is equivalent to omitting the description.
 \eb
 
-\item \definition{Default location description}.\addtoindexx{default location description}
+\item \definition{Default location description}.
+\addtoindexx{default location description}
 This kind of entry provides a
 location description that specifies the location of
 an object that is valid when no bounded location description
 applies.
+\bb
+As with simple location descriptions, the lifetime of a default 
+location excludes any prologue or epilogue ranges.
+\eb
 
 \needlines{6}
-\item \definition{Base address}.\addtoindexx{base address!of location list}
+\item \definition{Base address}.
+\addtoindexx{base address!of location list}
 This kind of entry provides an address to be
 used as the base address for beginning and ending address
 offsets given in certain kinds of bounded location description.
@@ -2244,7 +2310,8 @@ defined relative to that base address is non-existent, which is
 equivalent to omitting the description.
 \eb
 
-\item  \definition{End-of-list}.\addtoindexx{end-of-list!of location list}
+\item  \definition{End-of-list}.
+\addtoindexx{end-of-list!of location list}
 This kind of entry marks the end of the location list.
 
 \end{itemize}
@@ -2257,7 +2324,8 @@ entry.
 Each location list entry begins with a single byte identifying
 the kind of that entry, followed by zero or more operands depending
 on the kind.   
-   
+
+\needlines{5} 
 In the descriptions that follow, these terms are used for operands:
    
 \begin{itemize}
@@ -2755,7 +2823,7 @@ such as a label or alternate entry point of a subprogram,
 the entry has a \DWATlowpc{} attribute whose value is the
 address for the entity.
 
-\needlines{8}
+\needlines{6}
 \subsection{Contiguous Address Range}
 \label{chap:contiguousaddressranges}
 When the set of addresses of a debugging information entry can
@@ -3141,6 +3209,7 @@ distinct combination of type or value actual parameters.  DWARF does
 not represent the generic template definition, but does represent each
 instantiation.}
 
+\needlines{5}
 A debugging information entry that represents a 
 \addtoindex{template instantiation}
 will contain child entries describing the actual template parameters.
