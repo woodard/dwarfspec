@@ -618,6 +618,11 @@ The attributes are listed in Table \referfol{tab:attributenames}.
 &\livelinki{chap:DWATnoreturnofsubprogram}
         {\doublequote{no return} property of a subprogram}
         {noreturn attribute} \\
+\bbeb
+\DWATnumlanesTARG
+&\livelinki{chap:lanesinsimdvectorization}
+		{Number of implicitly parallel lanes}
+		{Number of lanes attribute} \\
 \DWATobjectpointerTARG
 &\livelinki{chap:DWATobjectpointerobjectthisselfpointerofmemberfunction}
         {Object (\texttt{this}, \texttt{self}) pointer of member function}
@@ -1538,6 +1543,24 @@ CFA change during a subroutine. If the
 Call Frame Information 
 is present, then it already encodes such changes, and it is
 space efficient to reference that.}
+
+\needlines{6}
+\bb
+\itembfnl{\DWOPpushlaneTARG}
+The \DWOPpushlaneNAME{} operation pushes a lane index value 
+of the generic type, which provides the context of the lane in 
+which the expression is being evaluated. 
+See section \refersec{chap:lowlevelinformation}.
+
+\textit{Producers that widen source code into vectorized machine 
+code may use this operation to describe the location of a source 
+variable as function of a single lane in the widened machine code.}
+
+\textit{Consumers supply the lane argument to obtain the 
+location of the instance of that source variable that corresponds 
+to the provided lane argument.}
+\eb
+
 \end{enumerate}
 
 \textit{Examples illustrating many of these stack operations are

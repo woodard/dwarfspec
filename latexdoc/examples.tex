@@ -4321,9 +4321,9 @@ Figure \refersec{fig:callsiteexample2dwarf}.
 
 \clearpage
 \section{Macro Example}
-\label{macroexample}
+\label{app:macroexample}
 Consider the \addtoindex{C} source in Figure 
-\referfol{ref:macroexamplesource} which is used to illustrate the
+\referfol{fig:macroexamplesource} which is used to illustrate the
 DWARF encoding of macro information (see Section \refersec{chap:macroinformation}).
 
 \begin{figure}[ht]
@@ -4349,7 +4349,7 @@ DWARF encoding of macro information (see Section \refersec{chap:macroinformation
 #define FUNCTION_LIKE_MACRO(x) 4+x
 \end{nlnlisting}
 \caption{Macro example: source}
-\label{ref:macroexamplesource}
+\label{fig:macroexamplesource}
 \end{figure}
 
 Two possible encodings are shown. The first, in 
@@ -4623,4 +4623,123 @@ Figure \refersec{fig:defaultvalueexampletwoDWARF}.
 \label{fig:defaultvalueexampletwoDWARF}
 \end{figure}
 
+\needlines{16}
+\bb
+\section{SIMD Lane Example}
+\label{app:simdlaneexample}
+The following example uses a hypothetical machine with 64-bit 
+scalar registers r0, r1, ..., and 256-bit vector registers 
+v0, v1, ... that supports SIMD instructions with different 
+SIMD widths. Scalar arguments are passed in scalar registers 
+starting with r0 for the first argument.
 
+Consider the source code in Figure \refersec{fig:simdlaneexamplecopenmpsource}, 
+which is implicitly widened by a vectorization factor of 8 to 
+match the 256-bit vector registers of the target machine, 
+resulting in the pseudo-code in Figure \refersec{fig:simdlaneexamplepseudoassemblycode}.
+\eb
+
+\begin{figure}[ht]
+\begin{nlnlisting}
+
+void vec_add (int dst[], int src[], int len) {
+    #pragma omp simd
+    for (int i = 0; i < len; ++i)
+        dst[i] += src[i];
+}
+
+\end{nlnlisting}
+\caption{SIMD Lane Example: C OpenMP Source}
+\label{fig:simdlaneexamplecopenmpsource}
+\end{figure}
+
+\begin{figure}[ht]
+\begin{nlnlisting}
+
+.l0:
+    move.64b    r3, 0              ; i = 0
+.l1:            ; implicitly 8-wide vectorized loop body
+    add.64b     r4, r3, 8          ; inext = i + 8
+    cmp.64b     r4, r2             ; compare inext to len
+    jmp.ge      .l2                ; jump to .l2 if inext >= len
+    load.256b   v0, [r0+4*r3]      ; v0[n] = dst[i+n] for 
+                                   ;    n in [0..7]
+.l1.1:
+    load.256b   v1, [r1+4*r3]      ; v1[n] = src[i+n] for 
+                                   ;    n in [0..7]
+.l1.2:          ; add 8 elements
+    add.simd-8  v0, v0, v1         ; v0[n] = v0[n] + v1[n] for 
+                                   ;    n in [0..7]
+    store.256b  [r0+4*r3], v0      ; dst[i+n] = v0[n] for 
+                                   ;    n in [0..7]
+.l1.3:
+    mov.64b     r3, r4             ; i = inext
+    jmp         .l1                ; loop back for more
+.l2:            ; scalar loop body
+    add.64b     r4, r3, 1          ; inext = i + 1
+    cmp.64b     r4, r2             ; compare inext to len
+    jmp.ge      .l3                ; jump to .l3 if inext >= len
+    load.32b    r5, [r0+4*r3]      ; r5 = dst[i]
+.l2.1:
+    load.32b    r6, [r1+4*r3]      ; r6 = src[i]
+.l2.2:          ; add a single element
+    add.32b     r5, r5, r6         ; r5 = r5 + r6
+    store.32b   [r0+4*r3], r5      ; dst[i] = r5
+.l2.3:
+    mov.64b     r3, r4             ; i = inext
+    jmp .l2                        ; loop back for more
+.l3:
+    return
+	
+\end{nlnlisting}
+\caption{SIMD Lane Example: Pseudo-Assembly Code}
+\label{fig:simdlaneexamplepseudoassemblycode}
+\end{figure}
+
+\needlines{6}
+\bb
+The machine code contains two instances of the source loop: 
+one instance with SIMD width 8 beginning at .l1, and one scalar instance 
+beginning at .l2 to handle any remaining elements.
+
+This function may be described in DWARF as shown in Figure 
+\refersec{fig:simdlaneexampledwarfencoding}.
+\eb
+
+\begin{figure}[ht]
+\begin{dwflisting}
+\begin{alltt}
+
+
+    \DWTAGsubprogram
+        \DWATname ("vec_add")
+        \DWATnumlanes .vallist.0
+        ...
+        \DWTAGvariable
+            \DWATname ("i")
+            \DWATtype (reference to type int)
+            \DWATlocation .loclist.1
+            ...
+
+.vallist.0:
+    range [.l1, .l2)
+       \DWOPliteight
+    end-of-list
+
+.loclist.1:
+    range [.l0, .l1)
+        \DWOPregx r3
+    range [.l1, .l2)
+        \DWOPbregx r3, 0
+        \DWOPpushlane
+        \DWOPplus
+        \DWOPstackvalue
+    range [.l2, .l4)
+        \DWOPregx r3
+    end-of-list
+
+\end{alltt}
+\end{dwflisting}
+\caption{SIMD Lane Example: DWARF Encoding}
+\label{fig:simdlaneexampledwarfencoding}
+\end{figure}

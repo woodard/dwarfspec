@@ -700,9 +700,7 @@ except as noted:
 \item A \DWATlanguagename{} attribute.
 \item A \DWATlanguageversion{} attribute.
 \eb
-\item A \DWATmacros{} attribute.
-The value of this attribute is of class \CLASSmacptr{}, which is 
-an offset relative to the \dotdebugmacrodwo{} section.
+\item A \DWATmacros{} attribute.\db
 \item A \DWATproducer{} attribute.        
 \item A \DWATidentifiercase{} attribute.
 \item A \DWATmainsubprogram{} attribute.
@@ -714,15 +712,30 @@ an offset relative to the \dotdebugmacrodwo{} section.
 \textit{The following attributes are not part of a 
 split full compilation unit entry but instead are inherited 
 (if present) from the corresponding skeleton compilation unit: 
-\DWATlowpc, \DWAThighpc, \DWATranges, \DWATstmtlist, \DWATcompdir,
-\bb 
-\DWATstroffsets{} and \DWATaddrbase{}.
-\eb
+\bbeb
+\DWATaddrbase{},
+\DWATcompdir,
+\DWAThighpc,
+\DWATlowpc,
+\DWATranges{}
+\db
+and
+\DWATstmtlist.\db 
 }
 
 \textit{The \DWATbasetypes{} attribute is not defined for a
 split full compilation unit.}
 
+\bb
+\textit{Use of \DWFORMsecoffset{} and other equivalent encodings 
+(for example, the abbrev offset in a compilation unit header) are resolved 
+relative to the beginning of the contribution of the relevant 
+section within the dwo or dwp file and cannot be used for sharing 
+content between multiple compilation units. \DWFORMsecoffset{} may 
+not be used when a reference to content in the skeleton unit is 
+required (as the value present in the dwo file could not be relocated 
+during linking of the skeleton units), such as for the \CLASSaddrptr{} class.}
+\eb
 
 \needlines{6}
 \subsection{Type Unit Entries}
@@ -1032,7 +1045,7 @@ references in exactly the manner defined by the
 see Appendix \refersec{app:namespaceexamples}.}
 
 
-\needlines{5}
+\needlines{10}
 \subsection{Imported (or Renamed) Declaration Entries} 
 \label{chap:importedorrenameddeclarationentries}
 
@@ -1108,6 +1121,7 @@ by an imported declaration entry with a name attribute that
 specifies the new local name.
 }
 
+\needlines{8}
 \subsection{Imported Module Entries}
 \label{chap:importedmoduleentries}
 
@@ -1174,7 +1188,7 @@ series of individual imported declaration entries as described
 in Section \refersec{chap:importedorrenameddeclarationentries}.
 }
 
-\needlines{8}
+\needlines{12}
 \textit{A \addtoindex{Fortran} use statement for an entity in a module that is
 \addtoindexx{Fortran!use statement}
 itself imported by a use statement without an explicit mention
@@ -1571,6 +1585,9 @@ for the common \nolink{block} being included
 \subsection{Low-Level Information}
 \label{chap:lowlevelinformation}
 
+\bbeb
+\subsubsection{Return Address Location}
+\label{chap:returnaddresslocation}
 A\hypertarget{chap:DWATreturnaddrsubroutinereturnaddresssavelocation}{}
 subroutine or entry point entry may have a 
 \addtoindexx{return address attribute}
@@ -1579,6 +1596,9 @@ attribute, whose value is a location description. The location
 specified is the place where the return address for the
 subroutine or entry point is stored.
 
+\bbeb
+\subsubsection{Frame Base}
+\label{chap:framebase}
 A\hypertarget{chap:DWATframebasesubroutineframebaseaddress}{}
 subroutine or entry point entry may also have a
 \addtoindexx{frame base attribute}
@@ -1617,6 +1637,9 @@ within nested routines.
 \end{enumerate}
 
 \needlines{5}
+\bbeb
+\subsubsection{Nested subroutines and up-level references}
+\label{nestedsubroutinesanduplevelreferences}
 \textit{Some languages support nested subroutines. In such languages,
 it is possible to reference the local variables of an
 outer subroutine from within an inner subroutine. The
@@ -1656,6 +1679,45 @@ determine which subroutine is the lexical parent and the
 frame of the parent. It can then attempt to find the reference
 within the context of the parent.}
 
+\bbeb\subsubsection{Lanes in SIMD Vectorization}
+\label{chap:lanesinsimdvectorization}
+\addtoindexx{SIMD Vectorization}
+\bb
+\textit{SIMD instructions process multiple data elements in 
+one instruction. The number of data elements that is processed 
+with one instruction is typically referred to as the SIMD width. 
+Each individual data element is typically referred to as SIMD lane.}
+
+\textit{When generating code for a SIMD architecture, compilers 
+may need to implicitly widen the source code to match the SIMD 
+width of the instruction set they are using. Source variables 
+are widened into a vector of variables, with one instance per 
+SIMD lane.}
+
+A subroutine that is implicitly vectorized may have a 
+\DWATnumlanes{} attribute whose value describes the implicit 
+vectorization factor and the corresponding number of lanes in 
+the generated code. The value of this attribute is determined as 
+described in Section \refersec{chap:staticanddynamicvaluesofattributes}.
+
+To refer to individual lanes in such vectorized code, for example 
+to describe the location of widened source variables, producers 
+may use the \DWOPpushlane{} operation (see Section 
+\refersec{chap:stackoperations}) to have the consumer supply 
+the current focus lane for which to evaluate the expression. 
+The pushed lane index must be an unsigned integer value between 
+zero (inclusive) and the value of \DWATnumlanes{} (exclusive) 
+at the current location.
+
+If the attribute is omitted, its value is defined by the ABI.
+
+\textit{If the source code had already been vectorized and is 
+not further widened by the compiler, the value should be one.}
+
+\textit{This value does not only apply to vector instructions. 
+If a loop or function has been widened, the entire loop or 
+function body shall be annotated with the vectorization factor.}
+\eb
 
 \needlines{8}
 \subsection{Types Thrown by Exceptions}
