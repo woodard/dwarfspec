@@ -5,22 +5,29 @@ This section describes the binary representation of the
 debugging information entry itself, of the attribute types
 and of other fundamental elements described above.
 
-\section{Vendor Extensibility}
-\label{datarep:vendorextensibility}
-\addtoindexx{vendor extensibility}
-\addtoindexx{vendor specific extensions|see{vendor extensibility}}
-
-To 
-\addtoindexx{extensibility|see{vendor extensibility}}
-reserve a portion of the DWARF name space and ranges of
-enumeration values for use for vendor specific extensions,
+\bb
+\section{Extensibility}
+\eb
+\label{datarep:extensibility}
+\addtoindexx{extensibility}
+\addtoindexx{producer-specific extensions|see{extensibility}}
+\addtoindexx{producer extensibility|see{extensibility}}
+To reserve a portion of the DWARF name space and ranges of
+enumeration values for use for 
+\bb
+producer-specific 
+\eb
+extensions,
 special labels are reserved for tag names, attribute names,
 base type encodings, location operations, language names,
 calling conventions and call frame instructions.
 
 The labels denoting the beginning and end of the 
-\hypertarget{chap:DWXXXlohiuser}{reserved value range}
-for vendor specific extensions consist of the
+\hypertarget{chap:DWXXXlohiuser}{reserved value range} for 
+\bb
+producer-specific 
+\eb
+extensions consist of the
 appropriate prefix 
 (\DWATlouserMARK{}\DWAThiuserMARK{}DW\_AT, 
 \DWATElouserMARK{}\DWATEhiuserMARK{}DW\_ATE, 
@@ -44,15 +51,22 @@ appropriate prefix
 followed by \_lo\_user or \_hi\_user. 
 Values in the  range between \textit{prefix}\_lo\_user 
 and \textit{prefix}\_hi\_user inclusive,
-are reserved for vendor specific extensions. Vendors may
-use values in this range without conflicting with current or
+are reserved for 
+\bb
+producer-specific extensions. Producers
+\eb
+may use values in this range without conflicting with current or
 future system\dash defined values. All other values are reserved
 for use by the system.
 
 \textit{For example, for debugging information entry
 tags, the special labels are \DWTAGlouserNAME{} and \DWTAGhiuserNAME.}
 
-\textit{There may also be codes for vendor specific extensions
+\textit{There may also be codes for 
+\bb
+producer-specific 
+\eb
+extensions
 between the number of standard line number opcodes and
 the first special line number opcode. However, since the
 number of standard opcodes varies with the DWARF version,
@@ -60,15 +74,28 @@ the range for extensions is also version dependent. Thus,
 \DWLNSlouserTARG{} and 
 \DWLNShiuserTARG{} symbols are not defined.}
 
-Vendor defined tags, attributes, base type encodings, location
+Producer-defined 
+\bbeb
+tags, attributes, base type encodings, location
 atoms, language names, line number actions, calling conventions
-and call frame instructions, conventionally use the form
-\text{prefix\_vendor\_id\_name}, where 
-\textit{vendor\_id}\addtoindexx{vendor id} is some identifying
-character sequence chosen so as to avoid conflicts with
-other vendors.
+and call frame instructions, 
+\bb
+use the form
+\text{prefix\_producer\_id\_name} by historical convention, where 
+\textit{producer\_id}\addtoindexx{producer id} 
+\eb
+is some identifying
+character sequence chosen so as to avoid conflicts with other 
+\bb
+producers. While this convention is not strictly necessary, 
+it is still recommended.
+\eb
 
-To ensure that extensions added by one vendor may be safely
+To ensure that extensions added by one 
+\bb
+producer 
+\eb
+may be safely
 ignored by consumers that do not understand those extensions,
 the following rules must be followed:
 \begin{enumerate}[1. ]
@@ -768,7 +795,7 @@ provides unique identification of the supplementary file.
 \needlines{5}
 Debug information entries that refer to an executable's or shared
 object's addresses must \emph{not} be moved to supplementary files 
-(the addesses will likely not be the same). Similarly,
+(the addresses will likely not be the same). Similarly,
 entries referenced from within location descriptions or using loclistsptr
 form attributes must not be moved to a \addtoindex{supplementary object file}.
 
@@ -1358,8 +1385,12 @@ section. As described above, the abbreviation
 code 0 is reserved for null debugging information entries. The
 abbreviation code is followed by another unsigned LEB128\addtoindexx{LEB128!unsigned}
 number that encodes the entry\textquoteright s tag. The encodings for the
-tag names are given in 
-Table \refersec{tab:tagencodings}.
+tag names are given in Table \refersec{tab:tagencodings}.
+
+\bb
+\textit{An abbreviations table may be padded at the end 
+with null bytes.}
+\eb
 
 \needlines{20}
 \begin{centering}
@@ -2917,7 +2948,7 @@ Table \refersec{tab:locationlistentryencodingvalues}.
 \end{centering}
 
 \bb
-If a vendor defines a vendor-specific kind of location 
+If a producer defines a producer-specific kind of location 
 list entry, the kind code must be immediately followed by an
 unsigned LEB128 value that specifies the length of all
 remaining bytes (not including either the kind or the length
@@ -3660,6 +3691,8 @@ Table \refersec{tab:macroinfoentrytypeencodings}.
   \multicolumn{2}{l}{\ddagnewinversionx}
 \endlastfoot
 
+\bbeb
+\DWMACROpadding~\ddag	&0x00 \\
 \DWMACROdefine          &0x01 \\
 \DWMACROundef           &0x02 \\
 \DWMACROstartfile       &0x03 \\
@@ -3813,7 +3846,7 @@ Table \refersec{tab:rnglistsentryencodingvalues}.
 \end{centering}
 
 \bb
-If a vendor defines a vendor-specific kind of range list
+If a producer defines a producer-specific kind of range list
 entry, the kind code must be immediately followed by an
 unsigned LEB128 value that specifies the length of all
 remaining bytes (not including either the kind or the length
@@ -3874,6 +3907,12 @@ The entries following the header are indexed sequentially,
 \db
 starting from 0.
 
+\bb
+\textit{This table may be padded with unused entries. 
+These entries should have all 1 bits as a hint that the 
+entries are unused.}
+\eb
+
 \section{Address Table}
 \label{datarep:addresstable}
 Each 
@@ -3921,6 +3960,12 @@ field of the header.
 The \DWATaddrbase{} attribute points to the first entry
 following the header. The entries are indexed sequentially
 from this base entry, starting from 0.
+
+\bb
+\textit{This table may be padded with unused entries. 
+These entries should have all 1 bits as a hint that the 
+entries are unused.}
+\eb
 
 \needlines{10}
 \section{Range List Table}
@@ -3994,7 +4039,14 @@ following the header. The range lists are referenced
 by the index of the position of their corresponding offset in the
 array of offsets, which indirectly specifies the offset to the
 target list.
- 
+
+\bb
+\textit{This table may be padded with unused entries. 
+These entries should have all 1 bits as a hint that the 
+entries are unused.}
+\eb
+
+
 \needlines{12}
 \bb
 \section{Value List and Location List Table}
@@ -4298,7 +4350,11 @@ attributes are appended in order according to the alphabetical
 spelling of their identifier.
 
 \needlines{4}
-If an implementation defines any vendor-specific attributes,
+If an implementation defines any 
+\bb
+producer-specific 
+\eb
+attributes,
 any such attributes that are essential to the definition of
 the type are also included at the end of the above list,
 in their own alphabetical suborder.
@@ -4537,10 +4593,21 @@ uint32_t /* must be a 32-bit integer type */
 \label{fig:nametablehashfunctiondefinition}
 \end{figure}
 
+\needlines{6}
 \bb
 \section{Contiguous Tables}
 \label{datarep:contiguoustables}
 Tables within each section must be contiguous with the preceding 
 table in that section, or the beginning of the section if there 
 is no preceding table.
+
+\textit{Consumers may prefer to have these tables padded so that 
+each subsequent table is "aligned" on a certain boundary, typically 
+4 or 8 bytes. Every table of information has a way for the table as 
+a whole to be padded if the producer wishes to do so. Tables from 
+multiple object files that are concatenated by a linker would then 
+each be aligned without any special effort by the linker; this 
+alignment may provide performance or other benefits. 
+This padding is entirely optional, and does not relax any constraint 
+specified in Section \refersec{datarep:dependenciesandconstraints}.}
 \eb

@@ -674,8 +674,9 @@ entry (that is, one that cannot be reached from any entry in the
 name table), or it may point to the nearest ancestor that does
 have an index entry.
 
-A producer may define additional vendor-specific 
+A producer may define additional 
 \bb
+producer-specific 
 index attributes, 
 \eb
 and a consumer will be able to ignore and skip over any 
@@ -821,16 +822,16 @@ This value must be a multiple of four.
 \bbeb
 \HFNaugmentation{} (sequence of \HFTubyte) \\
 \addtoindexx{augmentation sequence}
-A vendor-specific 
 \bb
+A producer-specific 
 sequence of bytes, 
 \eb
 which provides additional information about the contents of 
 this index. If provided, the sequence begins with 
 \bb
-four bytes which serve as a
+four bytes which serve as a producer ID.
 \eb
-vendor ID. The remainder of the
+The remainder of the
 \bb
 sequence
 \eb
@@ -843,7 +844,7 @@ to a multiple of four bytes in length.
 
 \textit{The presence of an unrecognized augmentation 
 \bb
-vendor ID
+producer ID
 \eb 
 does not make it
 impossible for a consumer to process data in the \dotdebugnames{} section.
@@ -1494,6 +1495,7 @@ length; in the \sixtyfourbitdwarfformat, this field is an
 8-byte unsigned length 
 (see Section \refersec{datarep:32bitand64bitdwarfformats}). 
 
+\needlines{6}
 \item \HFNminimuminstructionlength{} (\HFTubyte)  \\
 The size in bytes of the smallest target machine
 instruction. Line number program opcodes that alter
@@ -1570,7 +1572,11 @@ opcode base are not used in the line number table of this unit
 (and the codes are treated as special opcodes). If \HFNopcodebase{}
 is greater than the typical value, then the numbers between
 that of the highest standard opcode and the first special
-opcode (not inclusive) are used for vendor specific extensions.}
+opcode (not inclusive) are used for 
+\bb
+producer-specific 
+\eb
+extensions.}
 
 \needlines{10}
 \item \HFNstandardopcodelengths{} (array of \HFTubyte) \\
@@ -1584,7 +1590,11 @@ is \texttt{opcode\_base - 1}.
 new standard opcodes can be added, while allowing consumers who
 do not know about these new opcodes to be able to skip them.}
 
-\textit{Codes for vendor specific extensions, if any, are described
+\textit{Codes for 
+\bb
+producer-specific 
+\eb
+extensions, if any, are described
 just like standard opcodes.}
 
 \bb
@@ -1603,7 +1613,7 @@ Each descriptor consists the following:
 \item A sequence of field descriptors. Each field descriptor consists
 of a pair of unsigned LEB128 values: (a) a content type code (see 
 Sections \refersec{chap:standardcontentdescriptions} and
-\refersec{chap:vendordefinedcontentdescriptions}), and 
+\refersec{chap:producerdefinedcontentdescriptions}), and 
 (b) a form code (using the attribute form codes).
 \item A pair of zero bytes to terminate the descriptor.
 \end{itemize}
@@ -1687,7 +1697,7 @@ A sequence of record format descriptors. Each descriptor consists of:
 \item A sequence of field descriptors. Each field descriptor consists
 of a pair of unsigned LEB128 values: (a) a content type code (see 
 Sections \refersec{chap:standardcontentdescriptions} and
-\refersec{chap:vendordefinedcontentdescriptions}), and 
+\refersec{chap:producerdefinedcontentdescriptions}), and 
 (b) a form code (using the attribute form codes).
 \item A pair of zero bytes to terminate the descriptor.
 \end{itemize}
@@ -1865,9 +1875,12 @@ It is paired with the same forms as \DWLNCTpath.
 \textit{An example that uses this line number header format
 is found in Appendix \refersec{app:linenumberheaderexample}.}
 
-\subsubsection{Vendor-defined Content Descriptions}
-\label{chap:vendordefinedcontentdescriptions}
-Vendor-defined content descriptions may be defined using content
+\bb
+\subsubsection{Producer-defined Content Descriptions}
+\label{chap:producerdefinedcontentdescriptions}
+Producer-defined 
+\eb
+content descriptions may be defined using content
 type codes in the range \DWLNCTlouserNAME{} to \DWLNCThiuserNAME{}. Each
 such code may be combined with one or more forms from the set:
 \DWFORMblock, \DWFORMblockone, \DWFORMblocktwo, \DWFORMblockfour,
@@ -1882,7 +1895,11 @@ such code may be combined with one or more forms from the set:
 \eb
 \DWFORMstrxXN{} and \DWFORMudata.
 
-\textit{If a consumer encounters a vendor-defined content type that
+\textit{If a consumer encounters a 
+\bb
+producer-defined content 
+\eb
+type that
 it does not understand, it should skip the content data as though
 it were not present.}
 
@@ -2390,8 +2407,15 @@ An \texttt{opcode\_operands\_table} describing the operands
 of the macro information entry opcodes.
 
 The macro information entries defined in this standard may, but need not, be
-described in the table, while other user-defined entry opcodes used in the section
-are described there.  Vendor extension entry opcodes are
+described in the table, while other 
+\bb
+producer-defined 
+\eb
+entry opcodes used in the section are described there. 
+\bb
+Producer 
+\eb
+extension entry opcodes are
 allocated in the range from \DWMACROlouser{} to \DWMACROhiuser. Other
 unassigned codes are reserved for future DWARF standards.
 
@@ -2669,8 +2693,24 @@ similarly, \DWMACROimport{} entries refer to the
 
 \end{enumerate}
 
+\bb
+\subsection{Other Entries}
+\label{chap:otherentries}
+\begin{enumerate}[1. ]
+\itembfnl{\DWMACROpaddingTARG}
+The \DWMACROpaddingNAME{} opcode takes two operands, a byte count 
+and a sequence of arbitrary bytes. The byte count is an unsigned 
+\ULEB{} encoded number and does not include the size of the opcode 
+or the byte count operand. The opcode and operands have no effect 
+on the macro information.
 
-\needlines{6}
+\textit{This permits a producer to pad the macro information 
+with a minimum of two bytes.}
+\end{enumerate}
+\eb
+
+
+\needlines{10}
 \section{Call Frame Information}
 \label{chap:callframeinformation}
 \addtoindexx{unwind|see{virtual unwind}}\addtoindexx{virtual unwind}
