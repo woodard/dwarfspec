@@ -1206,8 +1206,12 @@ shrink it with two techniques. First, we delete from
 the matrix each row whose file, line, source column and
 discriminator\addttindexx{discriminator}
 is identical with that of its
-predecessors. Any deleted row would never be the beginning of
-a source statement. Second, we design a byte-coded language
+\bb
+predecessors, except where the instruction is marked as a 
+suggested breakpoint location, the end of a prologue region, 
+or the beginning of an epilogue region. 
+\eb
+Second, we design a byte-coded language
 for a state machine and store a stream of bytes in the object
 file instead of the matrix. This language can be much more
 compact than the matrix. To the line number information a
