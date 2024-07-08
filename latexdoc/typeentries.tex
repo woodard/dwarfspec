@@ -9,7 +9,7 @@ user-defined types.
 \label{chap:basetypeentries}
 
 \textit{A base type is a data type that is not defined in terms of
-other data types. 
+other data types.
 \addtoindexx{fundamental type|see{base type entry}}
 Each programming language has a set of base
 types that are considered to be built into that language.}
@@ -24,18 +24,18 @@ a null-terminated string containing the name of the base type
 as recognized by the programming language of the compilation
 unit containing the base type entry.
 
-A base type entry has 
+A base type entry has
 \addtoindexx{encoding attribute}
 a \DWATencoding{} attribute describing
-how the base type is encoded and is to be interpreted. 
+how the base type is encoded and is to be interpreted.
 The \DWATencoding{} attribute is described in
 Section \referfol{chap:basetypeencodings}.
 
 A base type entry
 may have a \DWATendianity{} attribute
 \addtoindexx{endianity attribute}
-as described in 
-Section \refersec{chap:dataobjectentries}. 
+as described in
+Section \refersec{chap:dataobjectentries}.
 If omitted, the encoding assumes the representation that
 is the default for the target architecture.
 
@@ -45,13 +45,13 @@ A base type entry has a
 \DWATbytesize{}\hypertarget{chap:DWATbytesizedataobjectordatatypesize}{}
 attribute or a
 \addtoindexx{bit size attribute}
-\DWATbitsize{}\hypertarget{chap:DWATbitsizebasetypebitsize}{} 
+\DWATbitsize{}\hypertarget{chap:DWATbitsizebasetypebitsize}{}
 attribute whose \livelink{chap:classconstant}{integer constant} value
-(see Section \refersec{chap:byteandbitsizes}) 
+(see Section \refersec{chap:byteandbitsizes})
 is the amount of storage needed to hold a value of the type.
 
 \needlines{5}
-\textit{For example, the 
+\textit{For example, the
 \addtoindex{C} type \texttt{int} on a machine that uses 32-bit
 integers is represented by a base type entry with a name
 attribute whose value is \doublequote{int}, an encoding attribute
@@ -59,21 +59,21 @@ whose value is \DWATEsigned{}
 and a byte size attribute whose value is 4.}
 
 If the value of an object of the given type does not fully
-occupy the storage described by a byte size 
+occupy the storage described by a byte size
 attribute,\hypertarget{chap:DWATdatabitoffsetbasetypebitlocation}{}
-the base type entry may also have a 
+the base type entry may also have a
 \DWATbitsizeDEFN{} and a \DWATdatabitoffsetDEFN{} attribute,
 \addtoindexx{bit size attribute}
 \addtoindexx{data bit offset attribute}
 both of whose values are
 \livelink{chap:classconstant}{integer constant} values
-(see Section \refersec{chap:staticanddynamicvaluesofattributes}). 
+(see Section \refersec{chap:staticanddynamicvaluesofattributes}).
 The bit size
 attribute describes the actual size in bits used to represent
 values of the given type. The data bit offset attribute is the
 offset in bits from the beginning of the containing storage to
 the beginning of the value. Bits that are part of the offset
-are padding. 
+are padding.
 If this attribute is omitted a default data bit offset
 of zero is assumed.
 
@@ -83,13 +83,13 @@ in the following section.
 
 \subsection{Base Type Encodings}
 \label{chap:basetypeencodings}
-A base type entry has 
+A base type entry has
 \addtoindexx{encoding attribute}
 a \DWATencoding{} attribute describing
-how the base type is encoded and is to be interpreted. The 
+how the base type is encoded and is to be interpreted. The
 value of this attribute is an integer of class \CLASSconstant.
 The set of values and their meanings for the
-\DWATencoding{} attribute is given in 
+\DWATencoding{} attribute is given in
 Table \refersec{tab:encodingattributevalues}.
 
 \textit{In Table \ref{tab:encodingattributevalues}, encodings
@@ -106,7 +106,7 @@ programming languages and are not discussed further.
 \bb
 For a type with simple encodings, the type entry may have a \DWATbias{} attribute
 whose value is an integer constant which is added to the encoded value to
-determine the value of an object of the type in the source program. 
+determine the value of an object of the type in the source program.
 If the \DWATbias{} is encoded using \DWFORMdatan{}, then the bias value
 is treated as an unsigned integer.
 \eb
@@ -132,13 +132,13 @@ is treated as an unsigned integer.
 \DWATEunsignedcharTARG & unsigned character \\
 
 \EncodingGroup{Character encodings} \\
-\DWATEASCIITARG{} & \addtoindex{ISO/IEC 646:1991 character} 
+\DWATEASCIITARG{} & \addtoindex{ISO/IEC 646:1991 character}
                     \addtoindexx{ASCII character} \\
-\DWATEUCSTARG{}   & \addtoindex{ISO/IEC 10646-1:1993 character (UCS-4)} 
+\DWATEUCSTARG{}   & \addtoindex{ISO/IEC 10646-1:1993 character (UCS-4)}
                     \addtoindexx{UCS character} \\
 \DWATEUTFTARG{}   & \addtoindex{ISO/IEC 10646-1:1993 character}
                     \addtoindexx{UTF character} \\
-					
+
 \EncodingGroup{Bit-precise integer types} \bbeb \\
 \DWATEsignedbitintTARG		& bit-precise signed integer   \bbeb \\
 \DWATEunsignedbitintTARG	& bit-precise unsigned integer \bbeb \\
@@ -151,7 +151,7 @@ is treated as an unsigned integer.
 \DWATEfloatTARG          & binary floating-point number \\
 \DWATEcomplexfloatTARG   & complex binary floating-point number \\
 \DWATEimaginaryfloatTARG & imaginary binary floating-point number \\
-\DWATEdecimalfloatTARG{} & \addtoindex{IEEE 754R decimal floating-point number} \\ 
+\DWATEdecimalfloatTARG{} & \addtoindex{IEEE 754R decimal floating-point number} \\
 
 \EncodingGroup{Decimal string encodings} \\
 \DWATEpackeddecimalTARG & packed decimal number\\
@@ -173,7 +173,7 @@ is treated as an unsigned integer.
 \needlines{6}
 \subsubsection{Character Encodings}
 \label{chap:characterencodings}
-\DWATEUTF{} 
+\DWATEUTF{}
 specifies the \addtoindex{Unicode} string encoding
 (see the Universal Character Set standard,
 ISO/IEC 10646\dash 1:1993).
@@ -186,7 +186,7 @@ is \DWATEUTF{} and a byte size attribute whose value is 2.}
 
 \needlines{4}
 \DWATEASCII{} and \DWATEUCS{} specify encodings for
-the \addtoindex{Fortran 2003} string kinds 
+the \addtoindex{Fortran 2003} string kinds
 \texttt{ASCII}\index{ASCII@\texttt{ASCII} (Fortran string kind)} (ISO/IEC 646:1991) and
 \texttt{ISO 10646}\index{ISO 10646@\texttt{ISO 10646} (Fortran string kind)} (UCS-4 in ISO/IEC 10646:2000).
 \addtoindexx{ISO 10646 character set standard}
@@ -195,7 +195,7 @@ the \addtoindex{Fortran 2003} string kinds
 \subsection{Bit-precise integer types}
 Bit-precise integer types \DWATEsignedbitint{} and \DWATEunsignedbitint{} are
 supported in {\C}23\footnote{C23 is an informal name for what will likely
-become ISO/IEC 9899:2024.}, where they are known as \texttt{\_BitInt(N)} 
+become ISO/IEC 9899:2024.}, where they are known as \texttt{\_BitInt(N)}
 and \mbox{\texttt{unsigned \_BitInt(N)}}, respectively.
 \eb
 
@@ -214,19 +214,19 @@ with the same interpretation as described for the
 (see Section \refersec{chap:decimalstringencodings}).
 
 \needlines{4}
-For a data type with a decimal scale factor, 
+For a data type with a decimal scale factor,
 \index{scaled encodings!decimal}
 the fixed binary
-type entry has a \DWATdecimalscale{} attribute 
+type entry has a \DWATdecimalscale{} attribute
 \addtoindexx{decimal scale attribute}
-with the same interpretation as described for the 
+with the same interpretation as described for the
 \DWATEpackeddecimal{} and \DWATEnumericstring{} base types
 (see Section \refersec{chap:decimalstringencodings}).
 
 For\hypertarget{chap:DWATbinaryscalebinaryscalefactorforfixedpointtype}{}
 a data type with a binary scale factor, the fixed
-binary type entry has a \DWATbinaryscaleNAME{} attribute. 
-The \DWATbinaryscaleDEFN{} attribute\addtoindexx{binary scale attribute} 
+binary type entry has a \DWATbinaryscaleNAME{} attribute.
+The \DWATbinaryscaleDEFN{} attribute\addtoindexx{binary scale attribute}
 is an \livelink{chap:classconstant}{integer constant} value
 that represents the exponent of the base two scale factor to
 be applied to an instance of the type.  Zero scale puts the
@@ -239,17 +239,17 @@ larger than the number of bits, this implies additional zero
 bits on the left are not stored in an instance of the type.
 
 \bb
-For a data type with a rational scale factor, 
+For a data type with a rational scale factor,
 \index{scaled encodings!rational}
 one or both of the following attributes may be used:
 \begin{itemize}
 \item
-\DWATscalemultiplierDEFN\hypertarget{chap:DWATscalemultiplierofscalefactor}{}. 
+\DWATscalemultiplierDEFN\hypertarget{chap:DWATscalemultiplierofscalefactor}{}.
 This attribute is an integer constant value
 that represents a multiplicative scale factor to be applied to an
 instance of the type.
 \item
-\DWATscaledivisorDEFN\hypertarget{chap:DWATscaledivisorofscalefactor}{}. 
+\DWATscaledivisorDEFN\hypertarget{chap:DWATscaledivisorofscalefactor}{}.
 This attribute is an integer constant value
 that represents the reciprocal of a multiplicative scale factor to be
 applied to an instance of the type.
@@ -262,20 +262,20 @@ value of \DWATscalemultiplierNAME{} and y is the value of \DWATscaledivisorNAME.
 \needlines{5}
 For\hypertarget{chap:DWATsmallscalefactorforfixedpointtype}{}
 a data type with a
-\index{scaled encodings!floating-point} 
+\index{scaled encodings!floating-point}
 \bb
 non-rational
 \eb
 scale factor,
 the fixed binary type entry has a \DWATsmallDEFN{} attribute which
-\addtoindexx{small attribute} references a 
+\addtoindexx{small attribute} references a
 \DWTAGconstant{} entry. The scale factor value
 is interpreted in accordance with the value defined by the
 \DWTAGconstant{} entry. The value represented is the product
 of the integer value in memory and the associated constant
 entry for the type.
 
-\textit{The \DWATsmall{} attribute is defined with the 
+\textit{The \DWATsmall{} attribute is defined with the
 \addtoindex{Ada} \texttt{small} attribute in mind.}
 
 \bb
@@ -288,40 +288,40 @@ individual scale factors.
 \needlines{6}
 \subsubsection{Floating-Point Encodings}
 \label{chap:floatingpointencodings}
-Types with binary floating-point encodings 
+Types with binary floating-point encodings
 (\DWATEfloat{}, \DWATEcomplexfloat{} and \DWATEimaginaryfloat{})
 are supported in many
 programming languages and are not discussed further.
 
-\DWATEdecimalfloat{} specifies 
+\DWATEdecimalfloat{} specifies
 floating-point representations that have a power-of-ten
 exponent, such as specified in IEEE 754R.
 
 \subsubsection{Decimal String Encodings}
 \label{chap:decimalstringencodings}
-The \DWATEpackeddecimalDEFN{} and \DWATEnumericstringDEFN{} 
+The \DWATEpackeddecimalDEFN{} and \DWATEnumericstringDEFN{}
 base type encodings
 represent packed and unpacked decimal string numeric data
-types, respectively, either of which may be either 
+types, respectively, either of which may be either
 \addtoindexx{decimal scale attribute}
 signed
 \addtoindexx{decimal sign attribute}
-or 
+or
 \addtoindexx{digit count attribute}
-unsigned. These 
+unsigned. These
 base types are used in combination with
-\DWATdecimalsign, 
-\DWATdigitcount{} and 
+\DWATdecimalsign,
+\DWATdigitcount{} and
 \DWATdecimalscale{}
 attributes.
 
 \needlines{5}
 A\hypertarget{chap:DWATdecimalsigndecimalsignrepresentation}{}
-\DWATdecimalsignDEFN{} attribute 
+\DWATdecimalsignDEFN{} attribute
 \addtoindexx{decimal sign attribute}
 is an \livelink{chap:classconstant}{integer constant} that
 conveys the representation of the sign of the decimal type
-(see Table \refersec{tab:decimalsignattributevalues}). 
+(see Table \refersec{tab:decimalsignattributevalues}).
 Its \livelink{chap:classconstant}{integer constant} value is interpreted to
 mean that the type has a leading overpunch, trailing overpunch,
 leading separate or trailing separate sign representation or,
@@ -340,11 +340,11 @@ alternatively, no sign at all.
 is encoded in the most significant digit in a target-dependent  manner \\
 \DWDStrailingoverpunchTARG{} & Sign
 is encoded in the least significant digit in a target-dependent manner \\
-\DWDSleadingseparateTARG{} 
-& Decimal type: Sign is a \doublequote{+} or \doublequote{-} character 
+\DWDSleadingseparateTARG{}
+& Decimal type: Sign is a \doublequote{+} or \doublequote{-} character
 to the left of the most significant digit. \\
-\DWDStrailingseparateTARG{} 
-& Decimal type: Sign is a \doublequote{+} or \doublequote{-} character 
+\DWDStrailingseparateTARG{}
+& Decimal type: Sign is a \doublequote{+} or \doublequote{-} character
 to the right of the least significant digit. \\
 &Packed decimal type: Least significant nibble contains
 a target\dash dependent value
@@ -355,7 +355,7 @@ indicating positive or negative. \\
 
 \needlines{4}
 The\hypertarget{chap:DWATdecimalscaledecimalscalefactor}{}
-\DWATdecimalscaleDEFN{} attribute 
+\DWATdecimalscaleDEFN{} attribute
 \addtoindexx{decimal scale attribute}
 is an integer constant value
 that represents the exponent of the base ten scale factor to
@@ -368,8 +368,8 @@ decimal point to the left; if the absolute value of the scale
 is larger than the digit count, this implies additional zero
 digits on the left are not stored in an instance of the type.
 
-The\hypertarget{chap:DWATdigitcountdigitcountforpackeddecimalornumericstringtype}{} 
-\DWATdigitcountDEFN{} attribute 
+The\hypertarget{chap:DWATdigitcountdigitcountforpackeddecimalornumericstringtype}{}
+\DWATdigitcountDEFN{} attribute
 \addtoindexx{digit count attribute}
 is an \livelink{chap:classconstant}{integer constant}
 value that represents the number of digits in an instance of
@@ -378,7 +378,7 @@ the type.
 The\hypertarget{chap:DWATpicturestringpicturestringfornumericstringtype}{}
 \DWATEedited{} base type is used to represent an edited
 numeric or alphanumeric data type. It is used in combination
-with a \DWATpicturestringDEFN{} attribute whose value is a 
+with a \DWATpicturestringDEFN{} attribute whose value is a
 null\dash terminated string containing the target\dash dependent picture
 string associated with the type.
 
@@ -387,9 +387,9 @@ If the edited base type entry describes an edited numeric
 data type, the edited type entry has a \DWATdigitcount{} and a
 \DWATdecimalscale{} attribute.\addtoindexx{decimal scale attribute}
 These attributes have the same
-interpretation as described for the 
+interpretation as described for the
 \DWATEpackeddecimal{} and
-\DWATEnumericstring{} base 
+\DWATEnumericstring{} base
 types. If the edited type entry
 describes an edited alphanumeric data type, the edited type
 entry does not have these attributes.
@@ -415,16 +415,16 @@ languages (for example, GNU \C\addtoindexx{GNU C} and \Rust) and are not discuss
 \label{chap:unspecifiedtypeentries}
 \addtoindexx{unspecified type entry}
 \addtoindexx{void type|see{unspecified type entry}}
-Some languages have constructs in which a type 
+Some languages have constructs in which a type
 may be left unspecified or the absence of a type
 may be explicitly indicated.
 
 An unspecified (implicit, unknown, ambiguous or nonexistent)
 type is represented by a debugging information entry with
-the tag \DWTAGunspecifiedtypeTARG. 
+the tag \DWTAGunspecifiedtypeTARG.
 If a name has been given
 to the type, then the corresponding unspecified type entry
-has a \DWATname{} attribute 
+has a \DWATname{} attribute
 \addtoindexx{name attribute}
 whose value is
 a null\dash terminated
@@ -436,9 +436,9 @@ appropriately in different languages. For example, in \C{} and
 \Cplusplus{} the language implementation can provide an unspecified type
 entry with the name \doublequote{void} which can be referenced by the
 type attribute of pointer types and typedef declarations for
-'void' (see Sections \refersec{chap:typemodifierentries} and 
+'void' (see Sections \refersec{chap:typemodifierentries} and
 \db
-\refersec{chap:typedefentries}, 
+\refersec{chap:typedefentries},
 respectively). As another
 example, in \addtoindex{Ada} such an unspecified type entry can be referred
 to by the type attribute of an access type where the denoted
@@ -446,12 +446,12 @@ to by the type attribute of an access type where the denoted
 type is incomplete (the name is declared as a type but the
 definition is deferred to a separate compilation unit).}
 
-\textit{\addtoindex{C++} permits using the 
-\autoreturntype{} specifier for the return type of a member function declaration. 
-The actual return type is deduced based on the definition of the 
-function, so it may not be known when the function is declared.  The language 
-implementation can provide an unspecified type entry with the name \texttt{auto} which 
-can be referenced by the return type attribute of a function declaration entry.  
+\textit{\addtoindex{C++} permits using the
+\autoreturntype{} specifier for the return type of a member function declaration.
+The actual return type is deduced based on the definition of the
+function, so it may not be known when the function is declared.  The language
+implementation can provide an unspecified type entry with the name \texttt{auto} which
+can be referenced by the return type attribute of a function declaration entry.
 When the function is later defined, the \DWTAGsubprogram{} entry for the definition
 includes a reference to the actual return type.}
 
@@ -479,46 +479,46 @@ given in Table \refersec{tab:typemodifiertags}.
 \begin{tabular}{l|P{9cm}}
 \hline
 Name&Meaning\\ \hline
-\DWTAGatomictypeTARG{} & 
-    atomic qualified type 
-    (for example, in C) 
+\DWTAGatomictypeTARG{} &
+    atomic qualified type
+    (for example, in C)
     \addtoindexx{atomic qualified type entry} \addtoindexx{C} \\
-\DWTAGconsttypeTARG{} &  
-    const qualified type 
+\DWTAGconsttypeTARG{} &
+    const qualified type
     (for example in C, C++)
     \addtoindexx{const qualified type entry} \addtoindexx{C} \addtoindexx{C++} \\
 \DWTAGimmutabletypeTARG &
-    immutable type 
+    immutable type
     (for example, in \addtoindex{D})
     \addtoindexx{immutable type} \\
-\DWTAGpackedtypeTARG & 
-    packed type\addtoindexx{packed type entry} 
+\DWTAGpackedtypeTARG &
+    packed type\addtoindexx{packed type entry}
     (for example in Ada, Pascal)
     \addtoindexx{packed qualified type entry} \addtoindexx{Ada} \addtoindexx{Pascal} \\
-\DWTAGpointertypeTARG{} & 
-    pointer to an object of the type being modified 
+\DWTAGpointertypeTARG{} &
+    pointer to an object of the type being modified
     \addtoindexx{pointer qualified type entry} \\
-\DWTAGreferencetypeTARG & 
-    reference to (lvalue of) an object of the type \mbox{being} modified 
+\DWTAGreferencetypeTARG &
+    reference to (lvalue of) an object of the type \mbox{being} modified
     \addtoindexx{reference type entry}
     \addtoindexx{reference qualified type entry} \\
-\DWTAGrestricttypeTARG &  
+\DWTAGrestricttypeTARG &
     restrict qualified type
     \addtoindexx{restricted type entry}
     \addtoindexx{restrict qualified type} \addtoindexx{C} \\
 \DWTAGrvaluereferencetypeTARG{} &
-    rvalue reference to an object of the type \mbox{being} modified  
-    (for example, in \addtoindex{C++}) 
+    rvalue reference to an object of the type \mbox{being} modified
+    (for example, in \addtoindex{C++})
     \addtoindexx{rvalue reference type entry}
     \addtoindexx{restricted type entry}
     \addtoindexx{rvalue reference qualified type entry} \\
 \DWTAGsharedtypeTARG &
-    shared qualified type 
-    (for example, in \addtoindex{UPC}) 
+    shared qualified type
+    (for example, in \addtoindex{UPC})
     \addtoindexx{shared qualified type entry} \\
-\DWTAGvolatiletypeTARG & 
-    volatile qualified type 
-    (for example, in \addtoindex{C}, \addtoindex{C++}) 
+\DWTAGvolatiletypeTARG &
+    volatile qualified type
+    (for example, in \addtoindex{C}, \addtoindex{C++})
     \addtoindexx{volatile qualified type entry} \\
 \hline
 \end{tabular}
@@ -528,26 +528,26 @@ If a name has been given to the modified type in the source
 program, then the corresponding modified type entry has
 a \DWATname{} attribute\addtoindexx{name attribute}
 whose value is a null-terminated string containing
-the name of the modified type. 
+the name of the modified type.
 
-Each of the type modifier entries has a 
+Each of the type modifier entries has a
 \DWATtype{} attribute\addtoindexx{type attribute},
-whose value is a \livelink{chap:classreference}{reference} 
+whose value is a \livelink{chap:classreference}{reference}
 to a debugging information entry
 describing a base type, a user-defined type or another type
 modifier.
 
 \needlines{4}
-A modified type entry describing a 
+A modified type entry describing a
 \addtoindexx{pointer type entry}
 pointer or \addtoindex{reference type}
 (using \DWTAGpointertype,
 \DWTAGreferencetype{} or
-\DWTAGrvaluereferencetype) 
+\DWTAGrvaluereferencetype)
 % Another instance of no-good-place-to-put-index entry.
 may have
 a\hypertarget{chap:DWATadressclasspointerorreferencetypes}{}
-\DWATaddressclassDEFN{}\addtoindexx{address class attribute} 
+\DWATaddressclassDEFN{}\addtoindexx{address class attribute}
 attribute to describe how objects having the given pointer
 or reference type are dereferenced.
 
@@ -561,25 +561,25 @@ blocksize is assumed.
 
 When multiple type modifiers are chained together to modify
 a base or user-defined type, the tree ordering reflects the
-semantics of the 
+semantics of the
 \addtoindexx{reference type entry, lvalue|see{reference type entry}}
-applicable language 
+applicable language
 \addtoindexx{reference type entry, rvalue|see{rvalue reference type entry}}
-rather 
+rather
 \addtoindexx{parameter|see{macro formal parameter list}}
-than 
+than
 \addtoindexx{parameter|see{\textit{this} parameter}}
-the 
+the
 \addtoindexx{parameter|see{variable parameter attribute}}
 textual
 \addtoindexx{parameter|see{optional parameter attribute}}
-order 
+order
 \addtoindexx{parameter|see{unspecified parameters entry}}
-in 
+in
 \addtoindexx{parameter|see{template value parameter entry}}
-the 
+the
 \addtoindexx{parameter|see{template type parameter entry}}
-source 
+source
 \addtoindexx{parameter|see{formal parameter entry}}
 presentation.
 
@@ -608,7 +608,7 @@ character. It is encoded in DWARF as}
 \end{dwflisting}
 
 \textit{On the other hand}
-\begin{nlnlisting}                        
+\begin{nlnlisting}
     volatile unsigned char * const restrict p;
 \end{nlnlisting}
 \textit{represents a restricted constant
@@ -634,18 +634,18 @@ pointer to a volatile character. This is encoded as}
 A named type that is defined in terms of another type
 definition is represented by a debugging information entry with
 \addtoindexx{typedef entry}
-the tag \DWTAGtypedefTARG. 
-The typedef entry has a \DWATname{} attribute 
+the tag \DWTAGtypedefTARG.
+The typedef entry has a \DWATname{} attribute
 \addtoindexx{name attribute}
 whose value is a null\dash terminated string containing
 the name of the typedef.
 
 \needlines{4}
-The typedef entry may also contain 
+The typedef entry may also contain
 \addtoindexx{type attribute}
-a 
+a
 \DWATtype{} attribute whose
-value is a \livelink{chap:classreference}{reference} 
+value is a \livelink{chap:classreference}{reference}
 to the type named by the typedef. If
 the debugging information entry for a typedef represents
 a declaration of the type that is not also a definition,
@@ -655,11 +655,11 @@ it does not contain a type attribute.
 \textit{Depending on the language, a named type that is defined in
 terms of another type may be called a type alias, a subtype,
 a constrained type and other terms. A type name declared with
-no defining details may be termed an 
+no defining details may be termed an
 \addtoindexx{incomplete type}
-incomplete, forward or hidden type. 
+incomplete, forward or hidden type.
 While the DWARF \DWTAGtypedef{} entry was
-originally inspired by the like named construct in 
+originally inspired by the like named construct in
 \addtoindex{C} and \addtoindex{C++},
 it is broadly suitable for similar constructs (by whatever
 source syntax) in other languages.}
@@ -672,50 +672,50 @@ source syntax) in other languages.}
 \addtoindexx{array type entry}
 a table of components of identical type.
 \bb
-Furthermore, many architectures contain vector types which mirror 
-the language concept of a short single dimension array but have 
-different encoding, a different calling convention and different 
-arithmetic and logical operational semantics than the source 
-language arrays. Likewise, a few architectures are starting to 
-add matrix register types with similar variations in encoding 
+Furthermore, many architectures contain vector types which mirror
+the language concept of a short single dimension array but have
+different encoding, a different calling convention and different
+arithmetic and logical operational semantics than the source
+language arrays. Likewise, a few architectures are starting to
+add matrix register types with similar variations in encoding
 and semantics from normal source language array types.
 \eb
 }
 
 An array type is represented by a debugging information entry
-with the tag \DWTAGarraytypeTARG. 
+with the tag \DWTAGarraytypeTARG.
 If a name has been given to
 \addtoindexx{array!declaration of type}
 the array type in the source program, then the corresponding
-array type entry has a \DWATname{} attribute 
+array type entry has a \DWATname{} attribute
 \addtoindexx{name attribute}
 whose value is a
 null-terminated string containing the array type name.
 
 \bb
-The array type may have a \DWATtensorDEFN{} attribute, 
+The array type may have a \DWATtensorDEFN{} attribute,
 \hypertarget{chap:DWATtensortypearray}
-which is a flag. 
-If present, this attribute indicates that the entry describes a 
-vector or matrix type. The array dimensions (see below) describe 
+which is a flag.
+If present, this attribute indicates that the entry describes a
+vector or matrix type. The array dimensions (see below) describe
 the vector width, and when applicable the number of rows.
 \eb
 
 The\hypertarget{chap:DWATorderingarrayrowcolumnordering}{}
 array type entry describing a multidimensional array may
 \addtoindexx{array!element ordering}
-have a \DWATorderingDEFN{} attribute whose 
+have a \DWATorderingDEFN{} attribute whose
 \livelink{chap:classconstant}{integer constant} value is
 interpreted to mean either row-major or column-major ordering
 of array elements. The set of values and their meanings
-for the ordering attribute are listed in 
-Table \referfol{tab:arrayordering}. 
-If no ordering attribute is present, the default ordering 
-for the source language (which is indicated by the 
+for the ordering attribute are listed in
+Table \referfol{tab:arrayordering}.
+If no ordering attribute is present, the default ordering
+for the source language (which is indicated by the
 \bb
 \DWATlanguagename{}
 \eb
-attribute 
+attribute
 \addtoindexx{language name attribute}
 of the enclosing compilation unit entry) is assumed.
 
@@ -724,13 +724,13 @@ of the enclosing compilation unit entry) is assumed.
 \DWORDrowmajorTARG{} \\
 \end{simplenametable}
 
-An array type entry has 
+An array type entry has
 \addtoindexx{type attribute}
 a \DWATtype{} attribute describing
 \addtoindexx{array!element type}
 the type of each element of the array.
 \bb
-If \DWATtensor{} is present, the element type must be a 
+If \DWATtensor{} is present, the element type must be a
 base type (see Section \refersec{chap:basetypeentries}).
 \eb
 
@@ -743,18 +743,18 @@ of\hypertarget{chap:DWATbitstridearrayelementstrideofarraytype}{}
 the\hypertarget{chap:DWATbytestridearrayelementstrideofarraytype}{}
 indicated element type, then the array type entry has either a
 \addtoindexx{byte stride attribute}
-\DWATbytestrideDEFN{} 
+\DWATbytestrideDEFN{}
 or a
 \addtoindexx{bit stride attribute}
 \DWATbitstrideDEFN{}
-attribute, whose value 
-(see Section \refersec{chap:staticanddynamicvaluesofattributes}) 
+attribute, whose value
+(see Section \refersec{chap:staticanddynamicvaluesofattributes})
 is the size of each
 element of the array.
 
 The array type entry may have either a \DWATbytesize{} or a
-\DWATbitsize{} attribute 
-(see Section \refersec{chap:byteandbitsizes}), 
+\DWATbitsize{} attribute
+(see Section \refersec{chap:byteandbitsizes}),
 whose value is the
 amount of storage needed to hold an instance of the array type.
 
@@ -763,9 +763,9 @@ compile time, this value can usually be computed by multiplying
 the number of array elements by the size of each element.}
 
 Each array dimension is described by a debugging information
-entry with either the 
+entry with either the
 \addtoindexx{subrange type entry!as array dimension}
-tag \DWTAGsubrangetype{} or the 
+tag \DWTAGsubrangetype{} or the
 \addtoindexx{enumeration type entry!as array dimension}
 tag
 \DWTAGenumerationtype. These entries are
@@ -774,14 +774,14 @@ array type entry and are ordered to reflect the appearance of
 the dimensions in the source program (that is, leftmost dimension
 first, next to leftmost second, and so on).
 
-\textit{In languages that have no concept of a 
-\doublequote{multidimensional array} (for example, 
+\textit{In languages that have no concept of a
+\doublequote{multidimensional array} (for example,
 \addtoindex{C}), an array of arrays may
 be represented by a debugging information entry for a
 multidimensional array.}
 
 \needlines{8}
-Alternatively, for an array with dynamic rank the array dimensions 
+Alternatively, for an array with dynamic rank the array dimensions
 are described by a debugging information entry with the tag
 \DWTAGgenericsubrangeTARG.
 This entry has the same attributes as a
@@ -795,11 +795,11 @@ is used, the number of dimensions must be specified using a
 
 %\needlines{5}
 Other attributes especially applicable to arrays are
-\DWATallocated, 
-\DWATassociated{} and 
+\DWATallocated,
+\DWATassociated{} and
 \DWATdatalocation,
-which are described in 
-Section \refersec{chap:dynamicpropertiesoftypes}. 
+which are described in
+Section \refersec{chap:dynamicpropertiesoftypes}.
 For relevant examples, see also Appendix \refersec{app:fortranarrayexample}.
 
 \section{Coarray Type Entries}
@@ -809,56 +809,56 @@ For relevant examples, see also Appendix \refersec{app:fortranarrayexample}.
 elements are located in different processes rather than in the
 memory of one process. The individual elements
 of a coarray can be scalars or arrays.
-Similar to arrays, coarrays have \doublequote{codimensions} that are 
+Similar to arrays, coarrays have \doublequote{codimensions} that are
 indexed using a \doublequote{coindex} or multiple \doublequote{coindices}.
 \addtoindexx{codimension|see{coarray}}
 \addtoindexx{coindex|see{coarray}}
 }
 
-A coarray type is represented by a debugging information entry 
+A coarray type is represented by a debugging information entry
 with the tag \DWTAGcoarraytypeTARG.
-If a name has been given to the 
-coarray type in the source, then the corresponding coarray type 
-entry has a \DWATname{} attribute whose value is a null-terminated 
+If a name has been given to the
+coarray type in the source, then the corresponding coarray type
+entry has a \DWATname{} attribute whose value is a null-terminated
 string containing the array type name.
 
 \needlines{4}
 A coarray entry has one or more \DWTAGsubrangetype{} child entries,
-one for each codimension. It also has a \DWATtype{} attribute 
+one for each codimension. It also has a \DWATtype{} attribute
 describing the type of each element of the coarray.
 
 \textit{In a coarray application, the run-time number of processes in the application
 is part of the coindex calculation.  It is represented in the Fortran source by
 a coindex which is declared with a \doublequote{*} as the upper bound.  To express this
-concept in DWARF, the \DWTAGsubrangetype{} child entry for that index has 
+concept in DWARF, the \DWTAGsubrangetype{} child entry for that index has
 only a lower bound and no upper bound.}
 
-\textit{How coarray elements are located and how coindices are 
+\textit{How coarray elements are located and how coindices are
 converted to process specifications is implementation-defined.}
 
 \needlines{8}
 \section{Structure, Union, Class and Interface Type Entries}
 \label{chap:structureunionclassandinterfacetypeentries}
 
-\textit{The languages 
-\addtoindex{C}, 
-\addtoindex{C++}, and 
+\textit{The languages
+\addtoindex{C},
+\addtoindex{C++}, and
 \addtoindex{Pascal}, among others, allow the
 programmer to define types that are collections of related
 \addtoindexx{structure type entry}
-components. 
+components.
 In \addtoindex{C} and \addtoindex{C++}, these collections are called
-\doublequote{structures.} 
+\doublequote{structures.}
 In \addtoindex{Pascal}, they are called \doublequote{records.}
 The components may be of different types. The components are
-called \doublequote{members} in \addtoindex{C} and 
+called \doublequote{members} in \addtoindex{C} and
 \addtoindex{C++}, and \doublequote{fields} in \addtoindex{Pascal}.}
 
 \textit{The components of these collections each exist in their
 own space in computer memory. The components of a \addtoindex{C} or \addtoindex{C++}
 \doublequote{union} all coexist in the same memory.}
 
-\textit{\addtoindex{Pascal} and 
+\textit{\addtoindex{Pascal} and
 other languages have a \doublequote{discriminated union,}
 \addtoindexx{discriminated union|see {variant entry}}
 also called a \doublequote{variant record.} Here, selection of a
@@ -866,16 +866,16 @@ number of alternative substructures (\doublequote{variants}) is based
 on the value of a component that is not part of any of those
 substructures (the \doublequote{discriminant}).}
 
-\textit{\addtoindex{C++} and 
+\textit{\addtoindex{C++} and
 \addtoindex{Java} have the notion of \doublequote{class,} which is in some
 ways similar to a structure. A class may have \doublequote{member
 functions} which are subroutines that are within the scope
 of a class or structure.}
 
-\textit{The \addtoindex{C++} notion of 
+\textit{The \addtoindex{C++} notion of
 structure is more general than in \addtoindex{C}, being
 equivalent to a class with minor differences. Accordingly,
-in the following discussion, statements about 
+in the following discussion, statements about
 \addtoindex{C++} classes may
 be understood to apply to \addtoindex{C++} structures as well.}
 
@@ -884,18 +884,18 @@ be understood to apply to \addtoindex{C++} structures as well.}
 \label{chap:structureunionandclasstypeentries}
 Structure, union, and class types are represented by debugging
 \addtoindexx{structure type entry}
-information entries 
+information entries
 \addtoindexx{union type entry}
-with 
+with
 \addtoindexx{class type entry}
-the tags 
+the tags
 \DWTAGstructuretypeTARG,
-\DWTAGuniontypeTARG, 
+\DWTAGuniontypeTARG,
 and \DWTAGclasstypeTARG,
 respectively. If a name has been given to the structure,
 union, or class in the source program, then the corresponding
 structure type, union type, or class type entry has a
-\DWATname{} attribute 
+\DWATname{} attribute
 \addtoindexx{name attribute}
 whose value is a null\dash terminated string
 containing the type name.
@@ -907,24 +907,24 @@ and appear in the same order as the corresponding declarations
 in the source program.
 
 A structure, union, or class type may have a \DWATexportsymbolsDEFN{}
-attribute\addtoindexx{export symbols (of structure, class or union) attribute} 
+attribute\addtoindexx{export symbols (of structure, class or union) attribute}
 \livetarg{chap:DWATexportsymbolsofstructunionclass}{}
-which indicates that all member names defined within 
+which indicates that all member names defined within
 the structure, union, or class may be referenced as if they were
-defined within the containing structure, union, or class. 
+defined within the containing structure, union, or class.
 
-\textit{This may be used to describe anonymous structures, unions 
+\textit{This may be used to describe anonymous structures, unions
 and classes in \addtoindex{C} or \addtoindex{C++}}.
 
-A\hypertarget{chap:DWATbitsizedatamemberbitsize}{} 
+A\hypertarget{chap:DWATbitsizedatamemberbitsize}{}
 structure type, union type or class type entry may have
-either a \DWATbytesize{} or a \DWATbitsize{} attribute 
-(see Section \refersec{chap:byteandbitsizes}), 
+either a \DWATbytesize{} or a \DWATbitsize{} attribute
+(see Section \refersec{chap:byteandbitsizes}),
 whose value is the amount of storage needed
 to hold an instance of the structure, union or class type,
 including any padding.
-  
-An incomplete structure, union or class type 
+
+An incomplete structure, union or class type
 \addtoindexx{incomplete structure/union/class}
 \addtoindexx{incomplete type}
 is represented by a structure, union or class
@@ -932,11 +932,11 @@ entry that does not have a byte size attribute and that has
 \addtoindexx{declaration attribute}
 a \DWATdeclaration{} attribute.
 
-If the complete declaration of a type has been placed 
+If the complete declaration of a type has been placed
 in\hypertarget{chap:DWATsignaturetypesignature}{}
 a separate \addtoindex{type unit}
-(see Section \refersec{chap:typeunitentries}), 
-an incomplete declaration 
+(see Section \refersec{chap:typeunitentries}),
+an incomplete declaration
 \addtoindexx{incomplete type}
 of that type in the compilation unit may provide
 the unique 8-byte signature of the type using a
@@ -946,14 +946,14 @@ the unique 8-byte signature of the type using a
 If a structure, union or class entry represents the definition
 of a structure, union or class member corresponding to a prior
 incomplete structure, union or class, the entry may have a
-\DWATspecification{} attribute 
+\DWATspecification{} attribute
 \addtoindexx{specification attribute}
 whose value is a \livelink{chap:classreference}{reference} to
 the debugging information entry representing that incomplete
 declaration.
 
 Structure, union and class entries containing the
-\DWATspecification{} attribute 
+\DWATspecification{} attribute
 \addtoindexx{specification attribute}
 do not need to duplicate
 information provided by the declaration entry referenced by the
@@ -962,8 +962,8 @@ need to contain an attribute for the name of the structure,
 union or class they represent if such information is already
 provided in the declaration.
 
-\textit{For \addtoindex{C} and \addtoindex{C++}, 
-data 
+\textit{For \addtoindex{C} and \addtoindex{C++},
+data
 \addtoindexx{data member|see {member entry (data)}}
 member declarations occurring within
 the declaration of a structure, union or class type are
@@ -978,8 +978,8 @@ within the type declaration.}
 If the definition for a given member of the structure, union
 or class does not appear within the body of the declaration,
 that member also has a debugging information entry describing
-its definition. That latter entry has a 
-\DWATspecification{} attribute 
+its definition. That latter entry has a
+\DWATspecification{} attribute
 \addtoindexx{specification attribute}
 referencing the debugging information entry
 owned by the body of the structure, union or class entry and
@@ -990,7 +990,7 @@ for function members, location descriptions for data members)
 and will have a \DWATdeclaration{} attribute.
 
 \needlines{5}
-\textit{Consider a nested class whose 
+\textit{Consider a nested class whose
 definition occurs outside of the containing class definition, as in:}
 
 \begin{nlnlisting}
@@ -1000,18 +1000,18 @@ struct A {
 struct A::B { ... };
 \end{nlnlisting}
 
-\textit{The two different structs can be described in 
-different compilation units to 
-facilitate DWARF space compression 
+\textit{The two different structs can be described in
+different compilation units to
+facilitate DWARF space compression
 (see Appendix \refersec{app:usingcompilationunits}).}
 
 \needlines{4}
 A structure type, union type or class type entry may have a
 \DWATcallingconventionDEFN{} attribute,
-\addtoindexx{calling convention attribute!for types} 
-whose value indicates whether a value of the type 
-is passed by reference 
-or passed by value. The set of calling convention codes for use with types 
+\addtoindexx{calling convention attribute!for types}
+whose value indicates whether a value of the type
+is passed by reference
+or passed by value. The set of calling convention codes for use with types
 \addtoindexx{calling convention codes!for types}
 is\hypertarget{chap:DWATcallingconventionfortypes}{}
 given in Table \referfol{tab:callingconventioncodesfortypes}.
@@ -1026,8 +1026,8 @@ If this attribute is not present, or its value is
 \DWCCnormalNAME, the convention to be used for an object of the
 given type is assumed to be unspecified.
 
-\textit{Note that \DWCCnormalNAME{} is also used as a calling convention 
-code for certain subprograms 
+\textit{Note that \DWCCnormalNAME{} is also used as a calling convention
+code for certain subprograms
 (see Table \refersec{tab:callingconventioncodesforsubroutines}).}
 
 \textit{If unspecified, a consumer may be able to deduce the calling
@@ -1037,23 +1037,23 @@ convention based on knowledge of the type and the ABI.}
 \subsection{Interface Type Entries}
 \label{chap:interfacetypeentries}
 
-\textit{The \addtoindex{Java} language defines \doublequote{interface} types. 
+\textit{The \addtoindex{Java} language defines \doublequote{interface} types.
 An interface
 \addtoindexx{interface type entry}
-in \addtoindex{Java} is similar to a \addtoindex{C++} or 
+in \addtoindex{Java} is similar to a \addtoindex{C++} or
 \addtoindex{Java} class with only abstract
 methods and constant data members.}
 
-Interface types 
+Interface types
 \addtoindexx{interface type entry}
 are represented by debugging information
-entries with the 
+entries with the
 tag \DWTAGinterfacetypeTARG.
 
-An interface type entry has 
+An interface type entry has
 a \DWATname{} attribute,
 \addtoindexx{name attribute}
-whose value is a null\dash terminated string containing the 
+whose value is a null\dash terminated string containing the
 type name.
 
 The members of an interface are represented by debugging
@@ -1064,19 +1064,19 @@ declarations in the source program.
 \subsection{Derived or Extended Structures, Classes and Interfaces}
 \label{chap:derivedorextendedstructsclasesandinterfaces}
 
-\textit{In \addtoindex{C++}, a class (or struct) 
-may 
+\textit{In \addtoindex{C++}, a class (or struct)
+may
 \addtoindexx{derived type (C++)|see{inheritance entry}}
 be \doublequote{derived from} or be a
-\doublequote{subclass of} another class. 
+\doublequote{subclass of} another class.
 In \addtoindex{Java}, an interface may \doublequote{extend}
 \addtoindexx{extended type (Java)|see{inheritance entry}}
-one 
+one
 \addtoindexx{implementing type (Java)|see{inheritance entry}}
 or more other interfaces, and a class may \doublequote{extend} another
 class and/or \doublequote{implement} one or more interfaces. All of these
 relationships may be described using the following. Note that
-in \addtoindex{Java}, 
+in \addtoindex{Java},
 the distinction between extends and implements is
 implied by the entities at the two ends of the relationship.}
 
@@ -1086,27 +1086,27 @@ derived, extended or implementing class or interface owns
 debugging information entries describing each of the classes
 or interfaces it is derived from, extending or implementing,
 respectively, ordered as they were in the source program. Each
-such entry has 
+such entry has
 \addtoindexx{inheritance entry}
-the 
+the
 tag \DWTAGinheritanceTARG.
 
 \needlines{4}
-An inheritance entry 
+An inheritance entry
 \addtoindexx{type attribute}
-has 
+has
 \addtoindexx{inheritance entry}
-a 
+a
 \DWATtype{} attribute whose value is
 a reference to the debugging information entry describing the
 class or interface from which the parent class or structure
 of the inheritance entry is derived, extended or implementing.
 
-An\hypertarget{chap:DWATdatamemberlocationinheritedmemberlocation}{} 
+An\hypertarget{chap:DWATdatamemberlocationinheritedmemberlocation}{}
 inheritance entry\addtoindexx{inheritance entry}
 for a class that derives from or extends
-another class or struct also has a 
-\DWATdatamemberlocationDEFN{} attribute, 
+another class or struct also has a
+\DWATdatamemberlocationDEFN{} attribute,
 \addtoindexx{data member location attribute}
 whose value describes the location of the beginning
 of the inherited type relative to the beginning address of the
@@ -1121,27 +1121,27 @@ evaluation is the location of the instance of the inherited type.
 
 \textit{The interpretation of the value of this attribute for
 inherited types is the same as the interpretation for data
-members 
+members
 (see Section \referfol{chap:datamemberentries}).  }
 
-An\hypertarget{chap:DWATaccessibilitycppinheritedmembers}{} 
+An\hypertarget{chap:DWATaccessibilitycppinheritedmembers}{}
 \addtoindexx{inheritance entry}
 inheritance entry may have a
 \hyperlink{chap:DWATaccessibilityattribute}{\DWATaccessibilityNAME}
 attribute.\addtoindexx{accessibility attribute}
-If no accessibility attribute is present, private access 
-is assumed for an entry of a class and public access is 
+If no accessibility attribute is present, private access
+is assumed for an entry of a class and public access is
 assumed for an entry of a struct, union or interface.
 
 If the class referenced by the \addtoindex{inheritance entry}
-serves as a \addtoindex{C++} virtual base class, the 
-inheritance entry has a 
-\hyperlink{chap:DWATvirtualityvirtualityindication}{\DWATvirtualityNAME} 
+serves as a \addtoindex{C++} virtual base class, the
+inheritance entry has a
+\hyperlink{chap:DWATvirtualityvirtualityindication}{\DWATvirtualityNAME}
 attribute.
 
-\textit{For a \addtoindex{C++} virtual base, the 
+\textit{For a \addtoindex{C++} virtual base, the
 \addtoindex{data member location attribute}
-will usually consist of a non-trivial 
+will usually consist of a non-trivial
 \addtoindex{location description}.}
 
 \subsection{Access Declarations}
@@ -1159,12 +1159,12 @@ information entry with the tag \DWTAGaccessdeclarationTARG.
 \addtoindexx{access declaration entry}
 Each such entry is a child of the class or structure type entry.
 
-An access declaration entry has a \DWATname{} attribute, 
-whose value is a null-terminated string representing the name 
+An access declaration entry has a \DWATname{} attribute,
+whose value is a null-terminated string representing the name
 used in the declaration,
 including any class or structure qualifiers.
 
-An\hypertarget{chap:DWATaccessdeclaration}{} 
+An\hypertarget{chap:DWATaccessdeclaration}{}
 access declaration entry also has a
 \hyperlink{chap:DWATaccessibilityattribute}{\DWATaccessibilityNAME}
 \addtoindexx{accessibility attribute}
@@ -1175,7 +1175,7 @@ attribute describing the declared accessibility of the named entities.
 \subsection{Friends}
 \label{chap:friends}
 
-Each\hypertarget{chap:DWATfriendfriendrelationship}{} 
+Each\hypertarget{chap:DWATfriendfriendrelationship}{}
 friend\addtoindexx{friend entry}
 declared by a structure, union or class
 type may be represented by a debugging information entry
@@ -1192,42 +1192,42 @@ the declaration of the friend.
 \label{chap:datamemberentries}
 
 A data member (as opposed to a member function) is
-represented by a debugging information entry with the 
-tag \DWTAGmemberTARG. 
-The 
+represented by a debugging information entry with the
+tag \DWTAGmemberTARG.
+The
 \addtoindexx{member entry (data)}
 member entry for a named member has
-a \DWATname{} attribute 
+a \DWATname{} attribute
 \addtoindexx{name attribute}
 whose value is a null\dash terminated
 string containing the member name.
-If the member entry describes an 
+If the member entry describes an
 \addtoindex{anonymous union},
 the name attribute is omitted or the value of the attribute
 consists of a single zero byte.
 
-The data member entry has a 
+The data member entry has a
 \DWATtype{} attribute\addtoindexx{type attribute} to denote
 \addtoindexx{member entry (data)} the type of that member.
 
-A data member entry may have a 
+A data member entry may have a
 \hyperlink{chap:DWATaccessibilityattribute}{\DWATaccessibilityNAME}
-attribute.\addtoindexx{accessibility attribute} 
+attribute.\addtoindexx{accessibility attribute}
 If no accessibility attribute is present, private
 access is assumed for an member of a class and public access
 is assumed for an member of a structure, union, or interface.
 
 A\hypertarget{chap:DWATmutablemutablepropertyofmemberdata}{}
 data member entry \addtoindexx{member entry (data)}
-may have a 
+may have a
 \addtoindexx{mutable attribute}
 \DWATmutableDEFN{} attribute,
-which is a \livelink{chap:classflag}{flag}. 
+which is a \livelink{chap:classflag}{flag}.
 This attribute indicates whether the data
 member was declared with the mutable storage class specifier.
 
-The beginning of a data member 
-\addtoindexx{beginning of a data member} 
+The beginning of a data member
+\addtoindexx{beginning of a data member}
 is described relative to
 \addtoindexx{beginning of an object}
 the beginning of the object in which it is immediately
@@ -1238,13 +1238,13 @@ the bits in the beginning byte, the beginning bit offset is
 defined to be zero.
 
 The\hypertarget{chap:DWATdatabitoffsetdatamemberbitlocation}{}
-member\hypertarget{chap:DWATdatamemberlocationdatamemberlocation}{} 
+member\hypertarget{chap:DWATdatamemberlocationdatamemberlocation}{}
 entry \addtoindexx{member entry (data)}
 corresponding to a data member that is defined
-in a structure, union or class may have either a 
+in a structure, union or class may have either a
 \DWATdatamemberlocationDEFN{} attribute
 \addtoindexx{data member location attribute}
-or a \DWATdatabitoffsetDEFN{} attribute. 
+or a \DWATdatabitoffsetDEFN{} attribute.
 \addtoindexx{data bit offset attribute}
 If the beginning of the data member is the same as
 the beginning of the containing entity then neither attribute
@@ -1255,8 +1255,8 @@ For a \DWATdatamemberlocation{} attribute
 \addtoindexx{data member location attribute}
 there are two cases:
 \begin{enumerate}[1. ]
-\item If the value is an 
-\livelink{chap:classconstant}{integer constant}, 
+\item If the value is an
+\livelink{chap:classconstant}{integer constant},
 it is the offset
 in bytes from the beginning of the containing entity. If
 the beginning of the containing entity has a non-zero bit
@@ -1272,17 +1272,17 @@ member entry.
 
 \textit{The push on the DWARF expression stack of the base address of
 the containing construct is equivalent to execution of the
-\DWOPpushobjectaddress{} operation 
+\DWOPpushobjectaddress{} operation
 (see Section \refersec{chap:stackoperations});
-\DWOPpushobjectaddress{} therefore 
+\DWOPpushobjectaddress{} therefore
 is not needed at the
-beginning of a \addtoindex{location description} for a data member. 
+beginning of a \addtoindex{location description} for a data member.
 The
 result of the evaluation is a location---either an address or
 the name of a register, not an offset to the member.}
 
-\textit{A \DWATdatamemberlocation{} 
-attribute 
+\textit{A \DWATdatamemberlocation{}
+attribute
 \addtoindexx{data member location attribute}
 that has the form of a
 \addtoindex{location description} is not valid for a data member contained
@@ -1292,9 +1292,9 @@ do not allow for manipulating or computing bit offsets.}
 \end{enumerate}
 
 \needlines{4}
-For a \DWATdatabitoffset{} attribute, 
-the value is an \livelink{chap:classconstant}{integer constant} 
-(see Section \refersec{chap:staticanddynamicvaluesofattributes}) 
+For a \DWATdatabitoffset{} attribute,
+the value is an \livelink{chap:classconstant}{integer constant}
+(see Section \refersec{chap:staticanddynamicvaluesofattributes})
 that specifies the number of bits
 from the beginning of the containing entity to the beginning
 of the data member. This value must be greater than or equal
@@ -1303,22 +1303,22 @@ per byte.
 
 If the size of a data member is not the same as the size
 of the type given for the data member, the data member has
-either a \DWATbytesize\addtoindexx{byte size attribute} 
+either a \DWATbytesize\addtoindexx{byte size attribute}
 or a \DWATbitsize{} attribute\addtoindexx{bit size attribute} whose
-\livelink{chap:classconstant}{integer constant} value 
-(see Section \refersec{chap:staticanddynamicvaluesofattributes}) 
+\livelink{chap:classconstant}{integer constant} value
+(see Section \refersec{chap:staticanddynamicvaluesofattributes})
 is the amount
 of storage needed to hold the value of the data member.
 
-\textit{For showing nested and packed records and arrays, 
-see Appendix \refersec{app:pascalexample} and 
+\textit{For showing nested and packed records and arrays,
+see Appendix \refersec{app:pascalexample} and
 \refersec{app:ccppbitfieldexamples}.}
 
 \needlines{8}
 \subsection{Class Variable Entries}
 \label{chap:classvariableentries}
 \addtoindexx{class variable entry}
-A class variable (\doublequote{static data member} in 
+A class variable (\doublequote{static data member} in
 \addtoindex{C++}) is a variable shared by all instances
 of a class. It is represented by a
 debugging information entry with the tag \DWTAGvariable.
@@ -1339,25 +1339,25 @@ is assumed for an entry of a structure, union or interface.
 \subsection{Member Function Entries}
 \label{chap:memberfunctionentries}
 
-A member function is represented by a 
+A member function is represented by a
 \addtoindexx{member function entry}
-debugging information entry 
-with the 
+debugging information entry
+with the
 \addtoindexx{subprogram entry!as member function}
 tag \DWTAGsubprogram.
 The member function entry
 may contain the same attributes and follows the same rules
-as non-member global subroutine entries 
+as non-member global subroutine entries
 (see Section \refersec{chap:subroutineandentrypointentries}).
 
 \needlines{4}
 \textit{In particular, if the member function entry is an
-instantiation of a member function template, it follows the 
-same rules as function template instantiations (see Section 
+instantiation of a member function template, it follows the
+same rules as function template instantiations (see Section
 \refersec{chap:functiontemplateinstantiations}).
 }
 
-A member function entry may have a 
+A member function entry may have a
 \hyperlink{chap:DWATaccessibilityattribute}{\DWATaccessibilityNAME}
 \addtoindexx{accessibility attribute}
 attribute. If no accessibility attribute is present, private
@@ -1366,7 +1366,7 @@ is assumed for an entry of a structure, union or interface.
 
 If the member function entry describes a virtual function,
 then that entry has a
-\hyperlink{chap:DWATvirtualityvirtualityindication}{\DWATvirtualityNAME} 
+\hyperlink{chap:DWATvirtualityvirtualityindication}{\DWATvirtualityNAME}
 attribute.
 
 If\hypertarget{chap:DWATexplicitexplicitpropertyofmemberfunction}{}
@@ -1380,7 +1380,7 @@ An\hypertarget{chap:DWATvtableelemlocationvirtualfunctiontablevtableslot}{}
 entry for a virtual function also has a
 \DWATvtableelemlocationDEFN{}
 \addtoindexi{attribute}{vtable element location attribute} whose value contains
-a \addtoindex{location description} 
+a \addtoindex{location description}
 yielding the address of the slot
 for the function within the virtual function table for the
 enclosing class. The address of an object of the enclosing
@@ -1391,18 +1391,18 @@ description is evaluated.
 If\hypertarget{chap:DWATobjectpointerobjectthisselfpointerofmemberfunction}{}
 the member function entry describes a non-static member
 \addtoindexx{this pointer attribute|see{object pointer attribute}}
-function, then that entry 
+function, then that entry
 \addtoindexx{self pointer attribute|see{object pointer attribute}}
-has 
+has
 \addtoindexx{object pointer attribute}
 a \DWATobjectpointerDEFN{} attribute
-whose value is a \livelink{chap:classreference}{reference} 
+whose value is a \livelink{chap:classreference}{reference}
 to the formal parameter entry
 that corresponds to the object for which the function is
 called. The name attribute of that formal parameter is defined
-by the current language (for example, 
+by the current language (for example,
 \texttt{this} for \addtoindex{C++} or \texttt{self}
-for \addtoindex{Objective C} 
+for \addtoindex{Objective C}
 and some other languages). That parameter
 also has a \DWATartificial{} attribute whose value is true.
 
@@ -1414,24 +1414,24 @@ member function, the entry does not have a
 \textit{In \addtoindex{C++}, non-static member functions can have const-volatile
 qualifiers, which affect the type of the first formal parameter (the
 \doublequote{\texttt{this}}-pointer).}
- 
+
 If the member function entry describes a non-static member
 function that has a const\dash volatile qualification, then
 the entry describes a non-static member function whose
 object formal parameter has a type that has an equivalent
 const-volatile qualification.
 
-\textit{Beginning in \addtoindex{C++11}, non-static member 
-functions can also have one of the ref-qualifiers, \& and \&\&. 
+\textit{Beginning in \addtoindex{C++11}, non-static member
+functions can also have one of the ref-qualifiers, \& and \&\&.
 These do not change the type of the
-\doublequote{\texttt{this}}-pointer, but they do affect the types of 
+\doublequote{\texttt{this}}-pointer, but they do affect the types of
 object values on which the function can be invoked.}
 
 \needlines{6}
 The member function entry may have an \DWATreferenceDEFN{} attribute
 \livetarg{chap:DWATreferenceofnonstaticmember}{}
 to indicate a non-static member function that can only be called on
-lvalue objects, or the \DWATrvaluereferenceDEFN{} attribute 
+lvalue objects, or the \DWATrvaluereferenceDEFN{} attribute
 \livetarg{chap:DWATrvaluereferenceofnonstaticmember}{}
 to indicate that it can only be called on prvalues and xvalues.
 
@@ -1441,8 +1441,8 @@ to indicate that it can only be called on prvalues and xvalues.
 If a subroutine entry represents the defining declaration
 of a member function and that definition appears outside of
 the body of the enclosing class declaration, the subroutine
-entry has a 
-\DWATspecification{} attribute, 
+entry has a
+\DWATspecification{} attribute,
 \addtoindexx{specification attribute}
 whose value is
 a reference to the debugging information entry representing
@@ -1451,19 +1451,19 @@ will be a child of some class (or structure) type entry.
 
 \needlines{6}
 Subroutine entries containing the
-\DWATspecification{} attribute 
+\DWATspecification{} attribute
 \addtoindexx{specification attribute}
 do not need to duplicate information provided
 by the declaration entry referenced by the specification
 attribute. In particular, such entries do not need to contain
-a name attribute giving the name of the function member whose 
-definition they represent.  
-Similarly, such entries do not need to contain a return type 
-attribute, unless the return type on the declaration was 
-unspecified (for example, the declaration used the 
+a name attribute giving the name of the function member whose
+definition they represent.
+Similarly, such entries do not need to contain a return type
+attribute, unless the return type on the declaration was
+unspecified (for example, the declaration used the
 \addtoindex{C++} \autoreturntype{} specifier).
 
-\textit{In \addtoindex{C++}, a member function may be declared 
+\textit{In \addtoindex{C++}, a member function may be declared
 as deleted. This prevents the compiler from generating a default
 implementation of a special member function such as a
 constructor or destructor, and can affect overload resolution
@@ -1473,7 +1473,7 @@ If the member function entry has been declared as deleted,
 then that entry has a \DWATdeletedDEFN{}\livetarg{chap:DWATdeleteddef}{}
 attribute.\addtoindexx{deleted attribute}
 
-\textit{In \addtoindex{C++}, a special member function may be 
+\textit{In \addtoindex{C++}, a special member function may be
 declared as defaulted, which explicitly declares a default
 compiler-generated implementation of the function. The
 declaration may have different effects on the calling
@@ -1481,12 +1481,12 @@ convention used for objects of its class, depending on
 whether the default declaration is made inside or outside the
 class.}
 
-If the member function has been declared as defaulted, 
+If the member function has been declared as defaulted,
 then the entry has a \DWATdefaultedDEFN{}\livetarg{chap:DWATdefaulteddef}{}
 attribute\addtoindexx{defaulted attribute}
 whose integer constant value indicates whether, and if so,
 how, that member is defaulted. The possible values and
-their meanings are shown in 
+their meanings are shown in
 Table \referfol{tab:defaultedattributevaluenames}.
 
 \needlines{8}
@@ -1520,13 +1520,13 @@ copy that does not appear in the source) does not have a
 type that may be instantiated when an instance of the class
 is declared or defined. The generic description of the class may include
 parameterized types, parameterized compile-time constant
-values, and/or parameterized run-time constant addresses. 
+values, and/or parameterized run-time constant addresses.
 DWARF does not represent the generic template
 definition, but does represent each instantiation.}
 
 A class template instantiation is represented by a
 debugging information entry with the tag \DWTAGclasstype,
-\DWTAGstructuretype{} or 
+\DWTAGstructuretype{} or
 \DWTAGuniontype. With the following
 exceptions, such an entry will contain the same attributes
 and have the same types of child entries as would an entry
@@ -1539,7 +1539,7 @@ specified in Section \refersec{chap:templateparameters}.
 
 %\needlines{4}
 \item If the compiler has generated a special compilation unit to
-hold the 
+hold the
 \addtoindexx{template instantiation!and special compilation unit}
 template instantiation and that special compilation
 unit has a different name from the compilation unit containing
@@ -1560,11 +1560,11 @@ generated artificially by the compiler.
 \label{chap:variantentries}
 
 A variant part of a structure is represented by a debugging
-information entry\addtoindexx{variant part entry} with the 
+information entry\addtoindexx{variant part entry} with the
 tag \DWTAGvariantpartTARG{} and is
 owned by the corresponding structure type entry.
 
-If the variant part has a discriminant, the discriminant 
+If the variant part has a discriminant, the discriminant
 is\hypertarget{chap:DWATdiscrdiscriminantofvariantpart}{}
 represented by a \addtoindexx{discriminant (entry)}
 separate debugging information entry.
@@ -1577,7 +1577,7 @@ whose value is a \livelink{chap:classreference}{reference} to
 the member entry for the discriminant.
 
 If the variant part does not have a discriminant (tag field),
-the variant part entry 
+the variant part entry
 \bb
 may have
 \eb
@@ -1585,21 +1585,21 @@ may have
 a \DWATtype{} attribute to represent the tag type.
 
 \bb
-\textit{A reference to a type supports the Pascal notion of a 
-tagless variant part where the omitted tag nonetheless is given 
+\textit{A reference to a type supports the Pascal notion of a
+tagless variant part where the omitted tag nonetheless is given
 a type whose values are used in later parts of the variant syntax.}
 \eb
 
 \needlines{6}
-Each variant of a particular variant part is represented 
+Each variant of a particular variant part is represented
 by\hypertarget{chap:DWATdiscrvaluediscriminantvalue}{}
-a debugging information entry\addtoindexx{variant entry} with the 
+a debugging information entry\addtoindexx{variant entry} with the
 tag \DWTAGvariantTARG{}
 and is a child of the variant part entry. The value that
 selects a given variant may be represented in one of three
-ways. The variant entry may have a \DWATdiscrvalueDEFN{} 
+ways. The variant entry may have a \DWATdiscrvalueDEFN{}
 attribute\addtoindexx{discriminant value attribute}
-whose value represents the discriminant value selecting 
+whose value represents the discriminant value selecting
 this variant. The value of this
 attribute is encoded as an LEB128 number. The number is signed
 if the tag type for the variant part containing this variant
@@ -1612,20 +1612,20 @@ the variant entry may contain a
 \addtoindexx{discriminant list attribute}
 \DWATdiscrlistDEFN{}
 attribute, whose value represents a list of discriminant
-values. This list is represented by any of the 
-\livelink{chap:classblock}{block} forms and may contain a 
-mixture of discriminant values and discriminant ranges. 
+values. This list is represented by any of the
+\livelink{chap:classblock}{block} forms and may contain a
+mixture of discriminant values and discriminant ranges.
 Each item on the list is prefixed with a discriminant value
 descriptor that determines whether the list item represents
 a single label or a label range. A single case label is
 represented as an LEB128 number as defined above for the
 \addtoindexx{discriminant value attribute}
-\DWATdiscrvalue{} 
+\DWATdiscrvalue{}
 attribute. A label range is represented by
 two LEB128 numbers, the low value of the range followed by the
 high value. Both values follow the rules for signedness just
 described. The discriminant value descriptor is an integer
-constant that may have one of the values given in 
+constant that may have one of the values given in
 Table \refersec{tab:discriminantdescriptorvalues}.
 
 \begin{simplenametable}[1.4in]{Discriminant descriptor values}{tab:discriminantdescriptorvalues}
@@ -1653,7 +1653,7 @@ see Section \refersec{app:variantentryexamples}.}
 \section{Condition Entries}
 \label{chap:conditionentries}
 
-\textit{COBOL has the notion of 
+\textit{COBOL has the notion of
 \addtoindexx{level-88 condition, COBOL}
 a \doublequote{level\dash 88 condition} that
 associates a data item, called the conditional variable, with
@@ -1678,9 +1678,9 @@ giving the condition name.
 \needlines{4}
 The condition entry's parent entry describes the conditional
 variable; normally this will be a \DWTAGvariable,
-\DWTAGmember{} or 
+\DWTAGmember{} or
 \DWTAGformalparameter{} entry.
-If 
+If
 \addtoindexx{formal parameter entry}
 the parent
 entry has an array type, the condition can test any individual
@@ -1692,11 +1692,11 @@ otherwise it is the type of the parent entry.
 %\needlines{4}
 The condition entry owns \DWTAGconstant{} and/or
 \DWTAGsubrangetype{} entries that describe the constant
-values associated with the condition. If any child entry 
+values associated with the condition. If any child entry
 \addtoindexx{type attribute}
 has a \DWATtype{} attribute, that attribute describes
-a type compatible with the comparison type (according to the 
-source language); otherwise the child\textquoteright{}s type 
+a type compatible with the comparison type (according to the
+source language); otherwise the child\textquoteright{}s type
 is the same as the comparison type.
 
 \textit{For conditional variables with alphanumeric types, COBOL
@@ -1716,7 +1716,7 @@ type entry.}
 a fixed number of symbolic values.}
 
 An enumeration type is represented by a debugging information
-entry with the tag 
+entry with the tag
 \DWTAGenumerationtypeTARG.
 
 If a name has been given to the enumeration type in the source
@@ -1727,23 +1727,23 @@ whose value is a null\dash terminated
 string containing the enumeration type name.
 
 The \addtoindex{enumeration type entry}
-may have 
+may have
 \addtoindexx{type attribute}
 a \DWATtype{} attribute
 which refers to the underlying data type used to implement
 the enumeration. The entry also may have a
-\DWATbytesize{} attribute or 
+\DWATbytesize{} attribute or
 \DWATbitsize{}
-attribute, whose value 
-(see Section \refersec{chap:byteandbitsizes}) 
-is the amount of storage 
-required to hold an instance of the enumeration. If no 
+attribute, whose value
+(see Section \refersec{chap:byteandbitsizes})
+is the amount of storage
+required to hold an instance of the enumeration. If no
 \DWATbytesize{} or \DWATbitsize{}
-attribute is present, the size for holding an instance of the 
+attribute is present, the size for holding an instance of the
 enumeration is given by the size of the underlying data type.
 
 \needlines{4}
-If an enumeration type has type safe 
+If an enumeration type has type safe
 \addtoindexx{type safe enumeration types}
 semantics such that
 
@@ -1753,30 +1753,30 @@ semantics such that
 \item Enumerators are not implicitly converted to another type
 \end{enumerate}
 
-then the \addtoindex{enumeration type entry} may 
+then the \addtoindex{enumeration type entry} may
 \addtoindexx{enum class|see{type-safe enumeration}}
 have a \DWATenumclassDEFN{}
-attribute, which is a \livelink{chap:classflag}{flag}. 
+attribute, which is a \livelink{chap:classflag}{flag}.
 In a language that offers only
 one kind of enumeration declaration, this attribute is not
 required.
 
-\textit{In \addtoindex{C} or \addtoindex{C++}, 
+\textit{In \addtoindex{C} or \addtoindex{C++},
 the underlying type will be the appropriate
-integral type determined by the compiler from the properties 
+integral type determined by the compiler from the properties
 of\hypertarget{chap:DWATenumclasstypesafeenumerationdefinition}{}
-the enumeration literal values. 
+the enumeration literal values.
 A \addtoindex{C++} type declaration written
 using enum class declares a strongly typed enumeration and
-is represented using \DWTAGenumerationtype{} 
+is represented using \DWTAGenumerationtype{}
 in combination with \DWATenumclass.}
 
 Each enumeration literal is represented by a debugging
 \addtoindexx{enumeration literal|see{enumeration entry}}
-information entry with the 
-tag \DWTAGenumeratorTARG. 
+information entry with the
+tag \DWTAGenumeratorTARG.
 Each
-such entry is a child of the 
+such entry is a child of the
 \addtoindex{enumeration type entry}, and the
 enumerator entries appear in the same order as the declarations
 of the enumeration literals in the source program.
@@ -1784,10 +1784,10 @@ of the enumeration literals in the source program.
 \needlines{4}
 Each \addtoindex{enumerator entry} has a \DWATname{} attribute, whose
 \addtoindexx{name attribute}
-value is a null-terminated string containing the name of 
+value is a null-terminated string containing the name of
 the\hypertarget{chap:DWATconstvalueenumerationliteralvalue}{}
 enumeration literal.
-Each enumerator entry also has a 
+Each enumerator entry also has a
 \DWATconstvalueDEFN{} attribute,
 \addtoindexx{constant value attribute}
 whose value is the actual numeric value of the enumerator as
@@ -1796,20 +1796,20 @@ represented on the target system.
 \needlines{4}
 If the enumeration type occurs as the description of a
 \addtoindexx{enumeration type entry!as array dimension}
-dimension of an array type, and the stride for that 
+dimension of an array type, and the stride for that
 dimension\hypertarget{chap:DWATbytestrideenumerationstridedimensionofarraytype}{}
-is different than what would otherwise be determined, 
+is different than what would otherwise be determined,
 then\hypertarget{chap:DWATbitstrideenumerationstridedimensionofarraytype}{}
 the enumeration type entry has either a
-\addtoindexx{byte stride attribute} 
+\addtoindexx{byte stride attribute}
 \DWATbytestrideDEFN{} or
 \addtoindexx{bit stride attribute}
 \DWATbitstrideDEFN{} attribute which specifies the separation
 between successive elements along the dimension as described
-in Section \refersec{chap:staticanddynamicvaluesofattributes}. 
+in Section \refersec{chap:staticanddynamicvaluesofattributes}.
 The value of the \DWATbitstride{} attribute
-is interpreted as bits and 
-the value of the \DWATbytestride{} attribute is interpreted 
+is interpreted as bits and
+the value of the \DWATbytestride{} attribute is interpreted
 as bytes.
 
 \needlines{8}
@@ -1818,7 +1818,7 @@ as bytes.
 
 \textit{It is possible in \addtoindex{C}
 to declare pointers to subroutines
-that return a value of a specific type. In both 
+that return a value of a specific type. In both
 \addtoindex{C} and \addtoindex{C++},
 it is possible to declare pointers to subroutines that not
 only return a value of a specific type, but accept only
@@ -1828,13 +1828,13 @@ user\dash defined type.}
 
 \needlines{4}
 A subroutine type is represented by a debugging information
-entry with the 
+entry with the
 \addtoindexx{subroutine type entry}
-tag \DWTAGsubroutinetypeTARG. 
+tag \DWTAGsubroutinetypeTARG.
 If a name has
 been given to the subroutine type in the source program,
-then the corresponding subroutine type entry has 
-a \DWATname{} attribute 
+then the corresponding subroutine type entry has
+a \DWATname{} attribute
 \addtoindexx{name attribute}
 whose value is a null\dash terminated string containing
 the subroutine type name.
@@ -1851,17 +1851,17 @@ arguments. These debugging information entries appear in the
 order that the corresponding argument types appear in the
 source program.
 
-\textit{In \addtoindex{C} there 
+\textit{In \addtoindex{C} there
 is a difference between the types of functions
 declared using function prototype style declarations and
 those declared using non-prototype declarations.}
 
-A 
+A
 \hypertarget{chap:DWATprototypedsubroutineprototype}{}
 subroutine entry declared with a function prototype style
-declaration may have 
+declaration may have
 \addtoindexx{prototyped attribute}
-a 
+a
 \DWATprototypedDEFN{} attribute, which is
 a \livelink{chap:classflag}{flag}.
 
@@ -1873,32 +1873,32 @@ unspecified parameters of the subprogram type:
 \begin{enumerate}[1. ]
 \item A formal parameter of a parameter list (that has a
 specific type) is represented by a debugging information entry
-with the tag \DWTAGformalparameter. 
+with the tag \DWTAGformalparameter.
 Each formal parameter
-entry has 
+entry has
 \addtoindexx{type attribute}
 a \DWATtype{} attribute that refers to the type of
 the formal parameter.
 
 \item The unspecified parameters of a variable parameter list
 \addtoindexx{unspecified parameters entry}
-are 
+are
 \addtoindexx{\texttt{...} parameters|see{unspecified parameters entry}}
 represented by a debugging information entry with the
 tag \DWTAGunspecifiedparameters.
 \end{enumerate}
 
-\textit{\addtoindex{C++} const-volatile qualifiers are encoded as 
+\textit{\addtoindex{C++} const-volatile qualifiers are encoded as
 part of the type of the \doublequote{\texttt{this}}-pointer.
-\addtoindex{C++11} reference and rvalue-reference qualifiers are 
-encoded using the \DWATreference{} and \DWATrvaluereference{} attributes, 
-respectively. 
+\addtoindex{C++11} reference and rvalue-reference qualifiers are
+encoded using the \DWATreference{} and \DWATrvaluereference{} attributes,
+respectively.
 See also Section \refersec{chap:memberfunctionentries}.}
 
 \needlines{4}
 A subroutine type entry may have the \DWATreference{} or
 \DWATrvaluereference{} attribute to indicate that it describes the
-type of a member function with reference or rvalue-reference 
+type of a member function with reference or rvalue-reference
 semantics, respectively.
 
 \needlines{6}
@@ -1908,50 +1908,50 @@ semantics, respectively.
 \textit{A \doublequote{string} is a sequence of characters that have specific
 \addtoindexx{string type entry}
 semantics and operations that distinguish them from arrays of
-characters. 
+characters.
 \addtoindex{Fortran} is one of the languages that has a string
 type. Note that \doublequote{string} in this context refers to a target
 machine concept, not the class string as used in this document
 (except for the name attribute).}
 
 A string type is represented by a debugging information entry
-with the tag \DWTAGstringtypeTARG. 
+with the tag \DWTAGstringtypeTARG.
 If a name has been given to
 the string type in the source program, then the corresponding
-string type entry has a 
+string type entry has a
 \DWATname{} attribute
 \addtoindexx{name attribute}
 whose value is a null-terminated string containing the string type name.
 
-A string type entry may have a \DWATtypeDEFN{} 
+A string type entry may have a \DWATtypeDEFN{}
 \livetargi{chap:DWAATtypeofstringtype}{attribute}{type attribute!of string type entry}
-describing how each character is encoded and is to be interpreted.  
-The value of this attribute is a \CLASSreference{} to a 
-\DWTAGbasetype{} base type entry.  If the attribute is absent, 
+describing how each character is encoded and is to be interpreted.
+The value of this attribute is a \CLASSreference{} to a
+\DWTAGbasetype{} base type entry.  If the attribute is absent,
 then the character is encoded using the system default.
 
-\textit{The 
-\addtoindex{Fortran 2003} language standard allows string 
-types that are composed of different types of (same sized) characters. 
+\textit{The
+\addtoindex{Fortran 2003} language standard allows string
+types that are composed of different types of (same sized) characters.
 While there is no standard list of character kinds, the kinds
-\texttt{ASCII}\index{ASCII@\texttt{ASCII} (Fortran string kind)} (see \DWATEASCII), 
+\texttt{ASCII}\index{ASCII@\texttt{ASCII} (Fortran string kind)} (see \DWATEASCII),
 \texttt{ISO\_10646}\index{ISO\_10646@\texttt{ISO\_10646} (Fortran string kind)}
 \addtoindexx{ISO 10646 character set standard}
-(see \DWATEUCS) and 
+(see \DWATEUCS) and
 \texttt{DEFAULT}\index{DEFAULT@\texttt{DEFAULT} (Fortran string kind)}
 are defined.}
 
 \needlines{4}
-The string type entry may have a 
-\DWATbytesize{} attribute or 
+The string type entry may have a
+\DWATbytesize{} attribute or
 \DWATbitsize{}
-attribute, whose value 
-(see Section \refersec{chap:byteandbitsizes}) 
+attribute, whose value
+(see Section \refersec{chap:byteandbitsizes})
 is the amount of
 storage needed to hold a value of the string type.
 
 The\hypertarget{chap:DWATstringlengthstringlengthofstringtype}{}
-string type entry may also have a 
+string type entry may also have a
 \DWATstringlengthDEFN{} attribute\addtoindexx{string length attribute}
 whose value is either
 \bb
@@ -1960,10 +1960,10 @@ whose value is either
 a \livelink{chap:classreference}{reference}
 (see Section \ref{chap:staticanddynamicvaluesofattributes})
 \bb
-to another debugging information entry that provides the 
+to another debugging information entry that provides the
 value of
 \eb
-the length of the 
+the length of the
 \bb
 string, or (b)
 \eb
@@ -1974,32 +1974,32 @@ of the string is assumed to be the amount of storage that is
 allocated for the string (as specified by the \DWATbytesize{}
 or \DWATbitsize{} attribute).
 
-The string type entry may also have a 
+The string type entry may also have a
 \DWATstringlengthbytesizeDEFN{} or
 \DWATstringlengthbitsizeDEFN{} attribute,
 \addtoindexx{string length size attribute}
 \addtoindexx{string length attribute!size of length data}
-whose value (see Section \refersec{chap:byteandbitsizes}) 
+whose value (see Section \refersec{chap:byteandbitsizes})
 is the size of the data to be retrieved from the location
 referenced by the \DWATstringlength{} attribute. If no byte or bit
 size attribute is present, the size of the data to be retrieved
-is the same as the 
+is the same as the
 \addtoindex{size of an address} on the target machine.
 
 \needlines{8}
 \addtoindexx{DWARF Version 5}	% Avoid italics
-\textit{Prior to DWARF Version 5, the meaning of a 
+\textit{Prior to DWARF Version 5, the meaning of a
 \DWATbytesize{} attribute depended on the presence of the
 \DWATstringlength{} attribute:
 \begin{itemize}
-\item If \DWATstringlength{} was present, \DWATbytesize{} 
-	specified the size of the length data to be retrieved 
+\item If \DWATstringlength{} was present, \DWATbytesize{}
+	specified the size of the length data to be retrieved
 	from the location specified by the \DWATstringlength{} attribute.
 \item If \DWATstringlength{} was not present, \DWATbytesize{}
 	specified the amount of storage allocated for objects
 	of the string type.
 \end{itemize}
-In \DWARFVersionV{}, \DWATbytesize{} always specifies the amount of storage 
+In \DWARFVersionV{}, \DWATbytesize{} always specifies the amount of storage
 allocated for objects of the string type.}
 
 \needlines{6}
@@ -2010,10 +2010,10 @@ allocated for objects of the string type.}
 a group of values of ordinal type.}
 
 A set is represented by a debugging information entry with
-the tag \DWTAGsettypeTARG. 
+the tag \DWTAGsettypeTARG.
 \addtoindexx{set type entry}
 If a name has been given to the
-set type, then the set type entry has 
+set type, then the set type entry has
 a \DWATname{} attribute
 \addtoindexx{name attribute}
 whose value is a null\dash terminated string containing the
@@ -2029,7 +2029,7 @@ If the amount of storage allocated to hold each element of an
 object of the given set type is different from the amount of
 storage that is normally allocated to hold an individual object
 of the indicated element type, then the set type entry has
-either a \DWATbytesize{} attribute, or 
+either a \DWATbytesize{} attribute, or
 \DWATbitsize{} attribute
 whose value (see Section \refersec{chap:byteandbitsizes}) is
 the amount of storage needed to hold a value of the set type.
@@ -2039,15 +2039,15 @@ the amount of storage needed to hold a value of the set type.
 \label{chap:subrangetypeentries}
 
 \textit{Several languages support the concept of a \doublequote{subrange}
-type. Objects of the subrange type can represent only a contiguous 
+type. Objects of the subrange type can represent only a contiguous
 subset (range) of values from the type on which the subrange is defined.
 Subrange types may also be used to represent the bounds of array dimensions.}
 
 A subrange type is represented by a debugging information
-entry with the tag 
-\DWTAGsubrangetypeTARG.\addtoindexx{subrange type entry} 
-If a name has been given to the subrange type, then the 
-subrange type entry has a 
+entry with the tag
+\DWTAGsubrangetypeTARG.\addtoindexx{subrange type entry}
+If a name has been given to the subrange type, then the
+subrange type entry has a
 \DWATname{} attribute\addtoindexx{name attribute}
 whose value is a null-terminated
 string containing the subrange type name.
@@ -2056,7 +2056,7 @@ The tag \DWTAGgenericsubrange{}
 is used to describe arrays with a dynamic rank. See Section
 \refersec{chap:DWTAGgenericsubrange}.
 
-The subrange entry may have a 
+The subrange entry may have a
 \DWATtype{} attribute\addtoindexx{type attribute} to describe
 the type of object, called the basis type, of whose values
 this subrange is a subset.
@@ -2065,17 +2065,17 @@ If the amount of storage allocated to hold each element of an
 object of the given subrange type is different from the amount
 of storage that is normally allocated to hold an individual
 object of the indicated element type, then the subrange
-type entry has a 
-\DWATbytesize{} attribute or 
+type entry has a
+\DWATbytesize{} attribute or
 \DWATbitsize{}
-attribute, whose value 
+attribute, whose value
 (see Section \refersec{chap:staticanddynamicvaluesofattributes})
 is the amount of storage needed to hold a value of the subrange type.
 
 The\hypertarget{chap:DWATthreadsscaledupcarrayboundthreadsscalfactor}{}
-subrange entry may have a 
+subrange entry may have a
 \DWATthreadsscaledDEFN{} attribute\addtoindexx{threads scaled attribute},
-which is a \livelink{chap:classflag}{flag}. 
+which is a \livelink{chap:classflag}{flag}.
 If present, this attribute indicates whether
 this subrange represents a \addtoindex{UPC} array bound which is scaled
 by the runtime \texttt{THREADS} value (the number of \addtoindex{UPC} threads in
@@ -2090,21 +2090,21 @@ int shared foo[34*THREADS][10][20];
 \needlines{4}
 The\hypertarget{chap:DWATlowerboundlowerboundofsubrange}{}
 subrange\hypertarget{chap:DWATupperboundupperboundofsubrange}{}
-entry may have the attributes 
+entry may have the attributes
 \DWATlowerboundDEFN{}
 \addtoindexx{lower bound attribute}
 and \DWATupperboundDEFN{}
 \addtoindexx{upper bound attribute} to specify, respectively, the lower
-and upper bound values of the subrange. The 
-\DWATupperboundNAME{} 
+and upper bound values of the subrange. The
+\DWATupperboundNAME{}
 attribute\hypertarget{chap:DWATcountelementsofsubrangetype}{}
 may be replaced by a
 \addtoindexx{count attribute!default}
 \addtoindexx{count attribute}
-\DWATcountDEFN{} attribute, 
-whose value describes the number of elements in the subrange 
-rather than the value of the last element. The value of each 
-of these attributes is determined as described in 
+\DWATcountDEFN{} attribute,
+whose value describes the number of elements in the subrange
+rather than the value of the last element. The value of each
+of these attributes is determined as described in
 Section \refersec{chap:staticanddynamicvaluesofattributes}.
 
 If the lower bound value is missing, the value is assumed to
@@ -2112,7 +2112,7 @@ be a language-dependent default constant as defined in
 Table \refersec{tab:languageencodings}.
 \addtoindexx{lower bound attribute!default}
 
-If the upper bound and count are missing, then the upper bound value is 
+If the upper bound and count are missing, then the upper bound value is
 \textit{unknown}.\addtoindexx{upper bound attribute!default unknown}
 
 If the subrange entry has no type attribute describing the
@@ -2132,17 +2132,17 @@ integer with the same size as an address on the target machine.
 \end{enumerate}
 
 If the subrange type occurs as the description of a dimension
-of an array type, and the stride for that dimension 
+of an array type, and the stride for that dimension
 is\hypertarget{chap:DWATbytestridesubrangestridedimensionofarraytype}{}
-different than what would otherwise be determined, 
+different than what would otherwise be determined,
 then\hypertarget{chap:DWATbitstridesubrangestridedimensionofarraytype}{}
 the subrange type entry has either a
 \addtoindexx{byte stride attribute}
 \DWATbytestrideDEFN{} or
-\DWATbitstrideDEFN{} attribute 
+\DWATbitstrideDEFN{} attribute
 \addtoindexx{bit stride attribute}
 which specifies the separation
-between successive elements along the dimension as described in 
+between successive elements along the dimension as described in
 Section \refersec{chap:byteandbitsizes}.
 
 \textit{Note that the stride can be negative.}
@@ -2151,7 +2151,7 @@ Section \refersec{chap:byteandbitsizes}.
 \section{Pointer to Member Type Entries}
 \label{chap:pointertomembertypeentries}
 
-\textit{In \addtoindex{C++}, a 
+\textit{In \addtoindex{C++}, a
 pointer to a data or function member of a class or
 structure is a unique type.}
 
@@ -2159,34 +2159,34 @@ A debugging information entry representing the type of an
 object that is a pointer to a structure or class member has
 the tag \DWTAGptrtomembertypeTARG.
 
-If the \addtoindex{pointer to member type} has a name, the 
+If the \addtoindex{pointer to member type} has a name, the
 \addtoindexx{pointer to member type entry}
 pointer to member entry has a
-\DWATname{} attribute, 
+\DWATname{} attribute,
 \addtoindexx{name attribute}
 whose value is a
 null\dash terminated string containing the type name.
 
-The \addtoindex{pointer to member} entry 
-has 
+The \addtoindex{pointer to member} entry
+has
 \addtoindexx{type attribute}
 a \DWATtype{} attribute to
 describe the type of the class or structure member to which
 objects of this type may point.
 
-The \addtoindexx{pointer to member} entry 
+The \addtoindexx{pointer to member} entry
 also\hypertarget{chap:DWATcontainingtypecontainingtypeofpointertomembertype}{}
-has a \DWATcontainingtypeDEFN{} attribute, 
+has a \DWATcontainingtypeDEFN{} attribute,
 \addtoindexx{containing type (of pointer) attribute}
 whose value is a \livelink{chap:classreference}{reference} to a debugging
 information entry for the class or structure to whose members
 objects of this type may point.
 
 The\hypertarget{chap:DWATuselocationmemberlocationforpointertomembertype}{}
-\addtoindex{pointer to member entry} has a 
+\addtoindex{pointer to member entry} has a
 \DWATuselocationDEFN{} attribute
 \addtoindexx{use location attribute}
-whose value is a 
+whose value is a
 \addtoindex{location description} that computes the
 address of the member of the class to which the pointer to
 member entry points.
@@ -2218,7 +2218,7 @@ is being calculated.
 \begin{enumerate}[1. ]
 \item \textit{Push the value of \texttt{mbr\_ptr} onto the DWARF expression stack.}
 \item \textit{Push the base address of \texttt{object} onto the DWARF expression stack.}
-\item \textit{Evaluate the \DWATuselocation{} description 
+\item \textit{Evaluate the \DWATuselocation{} description
 given in the type of \texttt{mbr\_ptr}.}
 \end{enumerate}
 
@@ -2226,61 +2226,61 @@ given in the type of \texttt{mbr\_ptr}.}
 \section{File Type Entries}
 \label{chap:filetypeentries}
 
-\textit{Some languages, such as \addtoindex{Pascal}, 
-provide a data type to represent 
+\textit{Some languages, such as \addtoindex{Pascal},
+provide a data type to represent
 files.}
 
 A file type is represented by a debugging information entry
-with 
+with
 \addtoindexx{file type entry}
 the tag
-\DWTAGfiletypeTARG. 
+\DWTAGfiletypeTARG.
 If the file type has a name,
 the file type entry has a \DWATname{} attribute,
 \addtoindexx{name attribute}
 whose value
 is a null\dash terminated string containing the type name.
 
-The file type entry has 
+The file type entry has
 \addtoindexx{type attribute}
 a \DWATtype{} attribute describing
 the type of the objects contained in the file.
 
-The file type entry also has a 
+The file type entry also has a
 \DWATbytesize{}\addtoindexx{byte size attribute} or
-\DWATbitsize{}\addtoindexx{bit size attribute} attribute, whose value 
+\DWATbitsize{}\addtoindexx{bit size attribute} attribute, whose value
 (see Section \refersec{chap:staticanddynamicvaluesofattributes})
 is the amount of storage need to hold a value of the file type.
 
 \section{Dynamic Type Entries}
 \label{chap:dynamictypeentries}
-\textit{Some languages such as 
+\textit{Some languages such as
 \addtoindex{Fortran 90}, provide types whose values
 may be dynamically allocated or associated with a variable
 under explicit program control. However, unlike the
-pointer type in \addtoindex{C} or 
+pointer type in \addtoindex{C} or
 \addtoindex{C++}, the indirection involved in accessing
 the value of the variable is generally implicit, that is, not
 indicated as part of the program source.}
 
-A dynamic type entry is used to declare a dynamic type that is 
+A dynamic type entry is used to declare a dynamic type that is
 \doublequote{just like} another non-dynamic type without needing to
 replicate the full description of that other type.
 
 A dynamic type is represented by a debugging information entry
 with the tag \DWTAGdynamictypeTARG. If a name has been given to the
-dynamic type, then the dynamic type has a \DWATname{} attribute 
+dynamic type, then the dynamic type has a \DWATname{} attribute
 whose value is a null-terminated string containing the dynamic
 type name.
-	
+
 A dynamic type entry has a \DWATtype{} attribute whose value is a
 reference to the type of the entities that are dynamically allocated.
-	
+
 A dynamic type entry also has a \DWATdatalocation, and may also
-have \DWATallocated{} and/or \DWATassociated{} attributes as 
-described in Section \refersec{chap:dynamicpropertiesoftypes}. 
-A \DWATdatalocation, \DWATallocated{} or \DWATassociated{} attribute 
-may not occur on a dynamic type entry if the same kind of attribute 
+have \DWATallocated{} and/or \DWATassociated{} attributes as
+described in Section \refersec{chap:dynamicpropertiesoftypes}.
+A \DWATdatalocation, \DWATallocated{} or \DWATassociated{} attribute
+may not occur on a dynamic type entry if the same kind of attribute
 already occurs on the type referenced by the \DWATtype{} attribute.
 
 
@@ -2293,12 +2293,12 @@ parameters.  DWARF does not represent the template alias definition
 but does represent instantiations of the alias.}
 
 A type named using a template alias is represented
-by a debugging information entry 
+by a debugging information entry
 \addtoindexx{template alias entry}
 with the tag
-\DWTAGtemplatealiasTARG. 
+\DWTAGtemplatealiasTARG.
 The template alias entry has a
-\DWATname{} attribute 
+\DWATname{} attribute
 \addtoindexx{name attribute}
 whose value is a null\dash terminated string
 containing the name of the template alias.
@@ -2321,13 +2321,13 @@ information, including a location and/or run\dash time parameters,
 about the data that represents the value for that object.}
 
 The\hypertarget{chap:DWATdatalocationindirectiontoactualdata}{}
-\DWATdatalocationDEFN{} attribute 
+\DWATdatalocationDEFN{} attribute
 \addtoindexx{data (indirect) location attribute}
-may be used with any type that provides one or more levels of 
+may be used with any type that provides one or more levels of
 \addtoindexx{hidden indirection|see{data location attribute}}
 hidden indirection
 and/or run-time parameters in its representation. Its value
-is a \addtoindex{location description}. 
+is a \addtoindex{location description}.
 The result of evaluating this
 description yields the location of the data for an object.
 When this attribute is omitted, the address of the data is
@@ -2335,12 +2335,12 @@ the same as the address of the object.
 
 \needlines{5}
 \textit{This location description will typically begin with
-\DWOPpushobjectaddress{} 
+\DWOPpushobjectaddress{}
 which loads the address of the
 object which can then serve as a descriptor in subsequent
-calculation. For an example using 
-\DWATdatalocation{} 
-for a \addtoindex{Fortran 90 array}, see 
+calculation. For an example using
+\DWATdatalocation{}
+for a \addtoindex{Fortran 90 array}, see
 Appendix \refersec{app:fortranarrayexample}.}
 
 \subsection{Allocation and Association Status}
@@ -2361,9 +2361,9 @@ integer value of the attribute (see below) specifies whether
 an object of the type is currently allocated or not.
 
 \needlines{4}
-The\hypertarget{chap:DWATassociatedassociationstatusoftypes}{} 
-\DWATassociatedDEFN{} attribute 
-may 
+The\hypertarget{chap:DWATassociatedassociationstatusoftypes}{}
+\DWATassociatedDEFN{} attribute
+may
 \addtoindexx{associated attribute}
 optionally be used with
 any type for which objects of the type can be dynamically
@@ -2377,8 +2377,8 @@ Section \refersec{chap:staticanddynamicvaluesofattributes}.
 A non-zero value is interpreted as allocated or associated,
 and zero is interpreted as not allocated or not associated.
 
-\textit{For \addtoindex{Fortran 90}, 
-if the \DWATassociated{} 
+\textit{For \addtoindex{Fortran 90},
+if the \DWATassociated{}
 attribute is present,
 the type has the POINTER property where either the parent
 variable is never associated with a dynamic object or the
@@ -2392,10 +2392,10 @@ be used to indicate that the association status of the object
 resulted from execution of an ALLOCATE statement rather than
 pointer assignment.}
 
-\textit{For examples using 
-\DWATallocated{} for \addtoindex{Ada} and 
+\textit{For examples using
+\DWATallocated{} for \addtoindex{Ada} and
 \addtoindex{Fortran 90}
-arrays, 
+arrays,
 see Appendix \refersec{app:aggregateexamples}.}
 
 \needlines{6}
@@ -2408,7 +2408,7 @@ see Appendix \refersec{app:aggregateexamples}.}
   at compile time. The Fortran runtime stores the rank in an array
   descriptor.}
 
-The presence of 
+The presence of
 the\hypertarget{chap:DWATrankofdynamicarray}{\DWATrankINDX}
 attribute indicates that an array's rank
 (number of dimensions) is dynamic, and therefore unknown at compile
@@ -2416,7 +2416,7 @@ time. The value of the \DWATrankDEFN{} attribute is either an integer constant
 or a DWARF expression whose evaluation yields the dynamic rank.
 
 The bounds of an array with dynamic rank are described using a
-\DWTAGgenericsubrange{} entry, which  
+\DWTAGgenericsubrange{} entry, which
 is the dynamic rank array equivalent of
 \DWTAGsubrangetype. The
 difference is that a \DWTAGgenericsubrange{} entry contains generic
@@ -2439,4 +2439,3 @@ order.
 
 \textit{For an example in Fortran 2008, see
   Section~\refersec{app:assumedrankexample}.}
-
