@@ -923,7 +923,7 @@ number information.
 \hypertarget{chap:classlocdesc}{}
 \livelinki{datarep:classlocdesc}{locdesc}{locdesc class}
 &A DWARF location description (see Section
-\refersec{chap:locationdescriptions}). A leading unsigned
+\refersec{chap:locationoperations}). A leading unsigned
 ULEB128 value (see Section \refersec{datarep:variablelengthdata})
 specifies the number of bytes in the location description.
 \eb
@@ -1175,7 +1175,7 @@ address space, the address is implicitly converted to a value.
 \subsection{Value Operations}
 \label{chap:valueoperations}
 Each general operation represents a postfix operation on
-a simple stack machine. 
+a simple stack machine.
 
 \needlines{6}
 \subsubsection{Literal Encodings}
@@ -1596,12 +1596,12 @@ pushes the result.
 \needlines{6}
 \subsection{Location Operations}
 \label{chap:locationoperations}
-\textit{DWARF location descriptions 
+\textit{DWARF location descriptions
 are intended to yield the \textbf{location}
 of a value rather than the value itself. An optimizing compiler
 may perform a number of code transformations where it becomes
 impossible to give a location for a value, but it remains possible
-to describe the value itself. 
+to describe the value itself.
 Section \refersec{chap:registerlocatios}
 describes operators that can be used to
 describe the location of a value when that value exists in a
@@ -1636,10 +1636,10 @@ on the target machine.
 \needlines{4}
 \itembfnl{\DWOPaddrxTARG}
 The \DWOPaddrxNAME{} operation has a single operand that
-encodes an unsigned LEB128\addtoindexx{LEB128!unsigned} value, 
-which is a zero-based index into the \dotdebugaddr{} section, 
+encodes an unsigned LEB128\addtoindexx{LEB128!unsigned} value,
+which is a zero-based index into the \dotdebugaddr{} section,
 where a machine address is stored.
-This index is relative to the value of the 
+This index is relative to the value of the
 \DWATaddrbase{} attribute of the associated compilation unit.
 
 \itembfnl{\DWOPpushobjectaddressTARG}
@@ -1650,65 +1650,65 @@ in the default address space and pushed onto the stack.
 
 \textit{This operator provides explicit functionality
 (especially for arrays involving descriptors) that is analogous
-to the implicit push of the base 
+to the implicit push of the base
 \addtoindexi{address}{address!implicit push of base}
-of a structure prior to evaluation of a 
-\DWATdatamemberlocation{} 
-to access a data member of a structure. For an example, see 
+of a structure prior to evaluation of a
+\DWATdatamemberlocation{}
+to access a data member of a structure. For an example, see
 Appendix \refersec{app:aggregateexamples}.}
 
 \needlines{4}
 \itembfnl{\DWOPformtlsaddressTARG}
-The \DWOPformtlsaddressNAME{} 
-operation pops a value from the stack, which must have an 
+The \DWOPformtlsaddressNAME{}
+operation pops a value from the stack, which must have an
 integral type identifier, translates this
-value into an address in the 
+value into an address in the
 \addtoindex{thread-local storage}
-for a thread, and pushes the address 
-onto the stack together with the \generictype{} identifier. 
-The meaning of the value on the top of the stack prior to this 
-operation is defined by the run-time environment.  If the run-time 
-environment supports multiple thread-local storage 
-\nolink{blocks} for a single thread, then the \nolink{block} 
-corresponding to the executable or shared 
+for a thread, and pushes the address
+onto the stack together with the \generictype{} identifier.
+The meaning of the value on the top of the stack prior to this
+operation is defined by the run-time environment.  If the run-time
+environment supports multiple thread-local storage
+\nolink{blocks} for a single thread, then the \nolink{block}
+corresponding to the executable or shared
 library containing this DWARF expression is used.
-   
-\textit{Some implementations of 
-\addtoindex{C}, \addtoindex{C++}, \addtoindex{Fortran}, and other 
-languages, support a 
+
+\textit{Some implementations of
+\addtoindex{C}, \addtoindex{C++}, \addtoindex{Fortran}, and other
+languages, support a
 thread-local storage class. Variables with this storage class
 have distinct values and addresses in distinct threads, much
 as automatic variables have distinct values and addresses in
 each function invocation. Typically, there is a single \nolink{block}
 of storage containing all thread\dash local variables declared in
 the main executable, and a separate \nolink{block} for the variables
-declared in each shared library. Each 
+declared in each shared library. Each
 thread\dash local variable can then be accessed in its block using an
-identifier. This identifier is typically an offset into the block and 
-pushed onto the DWARF stack by one of the 
+identifier. This identifier is typically an offset into the block and
+pushed onto the DWARF stack by one of the
 \DWOPconstnx{} operations prior to the
-\DWOPformtlsaddress{} operation. 
+\DWOPformtlsaddress{} operation.
 Computing the address of
 the appropriate \nolink{block} can be complex (in some cases, the
 compiler emits a function call to do it), and difficult
 to describe using ordinary DWARF location descriptions.
-Instead of    forcing complex thread-local storage calculations into 
-the DWARF expressions, the \DWOPformtlsaddress{} allows the consumer 
+Instead of    forcing complex thread-local storage calculations into
+the DWARF expressions, the \DWOPformtlsaddress{} allows the consumer
 to perform the computation based on the run-time environment.}
 
 \needlines{6}
 \itembfnl{\DWOPcallframecfaTARG}
-The \DWOPcallframecfaNAME{} 
+The \DWOPcallframecfaNAME{}
 operation pushes the value of the
-CFA, obtained from the Call Frame Information 
+CFA, obtained from the Call Frame Information
 (see Section \refersec{chap:callframeinformation}).
 
 \textit{Although the value of \DWATframebase{}
 can be computed using other DWARF expression operators,
 in some cases this would require an extensive location list
 because the values of the registers used in computing the
-CFA change during a subroutine. If the 
-Call Frame Information 
+CFA change during a subroutine. If the
+Call Frame Information
 is present, then it already encodes such changes, and it is
 space efficient to reference that.}
 
@@ -1719,7 +1719,7 @@ represents a piece or all of an object located in a given register.
 
 \textit{Register location descriptions describe an object
 (or a piece of an object) that resides in a register, while
-the opcodes listed in 
+the opcodes listed in
 Section \refersec{chap:registervalues}
 are used to describe an object (or a piece of
 an object) that is located in memory at an address that is
@@ -1729,7 +1729,7 @@ description of an object or a piece of an object.
 }
 
 \needlines{4}
-The following DWARF operations can be used to 
+The following DWARF operations can be used to
 specify a register location.
 
 \textit{Note that the register number represents a DWARF specific
@@ -1747,16 +1747,16 @@ addressed is in register \textit{n}.
 
 \needlines{4}
 \itembfnl{\DWOPregxTARG}
-The \DWOPregxNAME{} operation has a single 
+The \DWOPregxNAME{} operation has a single
 unsigned LEB128\addtoindexx{LEB128!unsigned} literal
-operand that encodes the name of a register.  
+operand that encodes the name of a register.
 
 \end{enumerate}
 
 \textit{These operations name a register location. To
 fetch the contents of a register, it is necessary to use
 one of the register based addressing operations, such as
-\DWOPbregx{} 
+\DWOPbregx{}
 (Section \refersec{chap:registervalues})}.
 
 \subsubsection{Implicit Locations}
@@ -1773,7 +1773,7 @@ other locations and values in the program.
 \itembfnl{\DWOPimplicitvalueTARG}
 The \DWOPimplicitvalueNAME{} operation specifies an immediate value
 using two operands: an unsigned LEB128\addtoindexx{LEB128!unsigned}
-length, followed by a 
+length, followed by a
 sequence of bytes of the given length that contain the value.
 
 \itembfnl{\DWOPstackvalueTARG}
@@ -1787,7 +1787,7 @@ expression.
 \needlines{4}
 \itembfnl{\DWOPimplicitpointerTARG}
 \textit{An optimizing compiler may eliminate a pointer, while
-still retaining the value that the pointer addressed.  
+still retaining the value that the pointer addressed.
 \DWOPimplicitpointerNAME{} allows a producer to describe this value.}
 
 The \DWOPimplicitpointerNAME{} operation specifies that the object is
@@ -1800,24 +1800,24 @@ to show the value of the dereferenced pointer, even when it cannot
 show the value of the pointer itself.
 
 \needlines{5}
-The \DWOPimplicitpointerNAME{} operation has two operands: a 
-reference to a debugging information entry that describes 
-the dereferenced object's value, and a signed number that 
-is treated as a byte offset from the start of that value. 
-The first operand is a 4-byte unsigned value in the 32-bit 
-DWARF format, or an 8-byte unsigned value in the 64-bit 
-DWARF format (see Section 
+The \DWOPimplicitpointerNAME{} operation has two operands: a
+reference to a debugging information entry that describes
+the dereferenced object's value, and a signed number that
+is treated as a byte offset from the start of that value.
+The first operand is a 4-byte unsigned value in the 32-bit
+DWARF format, or an 8-byte unsigned value in the 64-bit
+DWARF format (see Section
 \refersec{datarep:32bitand64bitdwarfformats})
 \bb
-that is used as the offset of a debugging information entry 
-in the \dotdebuginfo{} section of the current executable 
+that is used as the offset of a debugging information entry
+in the \dotdebuginfo{} section of the current executable
 or shared object file.
 \eb
-The second operand is a 
+The second operand is a
 signed LEB128\addtoindexx{LEB128!signed} number.
 \db
 
-\textit{The debugging information entry referenced by a 
+\textit{The debugging information entry referenced by a
 \DWOPimplicitpointerNAME{} operation is typically a
 \DWTAGvariable{} or \DWTAGformalparameter{} entry whose
 \DWATlocation{} attribute gives a second DWARF expression or a
@@ -1865,7 +1865,7 @@ composition operation describes which part of the object is located
 there.
 
 \begin{enumerate}[1. ]
-  
+
 \itembfnl{\DWOPcompositeTARG}
 The \DWOPcompositeNAME{} operator has no operands. It pushes a new,
 empty, composite location onto the stack.
@@ -2104,7 +2104,7 @@ an expression would have had, or a register location would have held,
 upon entering the current subprogram.  It has two operands: an
 unsigned LEB128\addtoindexx{LEB128!unsigned} length, followed by
 a block containing a DWARF expression or a register location description
-(see Section \refersec{chap:registerlocationdescriptions}).
+(see Section \refersec{chap:registerlocations}).
 The length operand specifies the length in bytes of the block.
 If the block contains a DWARF expression,
 the DWARF expression is evaluated as if it had been evaluated upon entering
@@ -2456,9 +2456,9 @@ the current location  list, up to the \DWLLEendoflist{} entry.
 \needlines{8}
 \section{Location Descriptions}
 \label{chap:locationdescriptions}
-\textit{Debugging information 
+\textit{Debugging information
 \addtoindexx{location description}
-must 
+must
 \addtoindexx{location description|see{\textit{also} DWARF expression}}
 provide consumers a way to find
 the location of program variables, determine the bounds
@@ -2474,27 +2474,27 @@ Information about the location of program objects is provided
 by location descriptions. Location descriptions can be either
 of two forms:
 \begin{enumerate}[1. ]
-\item \textit{Single location descriptions}, 
-which 
+\item \textit{Single location descriptions},
+which
 \addtoindexx{location description!single}
-are 
+are
 \addtoindexx{single location description}
 a language independent representation of
-addressing rules of arbitrary complexity built from 
-DWARF expressions (See Section \refersec{chap:dwarfexpressions}) 
+addressing rules of arbitrary complexity built from
+DWARF expressions (See Section \refersec{chap:dwarfexpressions})
 and/or other
 DWARF operations specific to describing locations. They are
 sufficient for describing the location of any object as long
-as its lifetime is either static or the same as the 
+as its lifetime is either static or the same as the
 \livelink{chap:lexicalblock}{lexical block} that owns it,
 \bb
 excluding any prologue or epilogue ranges,
-\eb 
+\eb
 and it does not move during its lifetime.
 
 
 \needlines{4}
-\item \textit{Location lists}, which are used to 
+\item \textit{Location lists}, which are used to
 \addtoindexx{location list}
 describe
 \addtoindexx{location description!use in location list}
@@ -2505,16 +2505,16 @@ Section \refersec{chap:locationlists} below.
 \end{enumerate}
 
 Location descriptions are distinguished in a context sensitive
-manner. As the value of an attribute, a 
+manner. As the value of an attribute, a
 \bb
 single
 \eb
-location description is encoded using class 
+location description is encoded using class
 \bb
 \CLASSlocdesc{}
 \eb
 and a \addtoindex{location list} is encoded
-using class \CLASSloclist{} (which serves as an 
+using class \CLASSloclist{} (which serves as an
 index into a separate section containing location lists).
 
 \needlines{8}
@@ -2524,9 +2524,9 @@ A single location description is either:
 \begin{enumerate}[1. ]
 \item A simple location description, representing an object
 \addtoindexx{location description!simple}
-which 
+which
 \addtoindexx{simple location description}
-exists in one contiguous piece at the given location, or 
+exists in one contiguous piece at the given location, or
 \item A composite location description consisting of one or more
 \addtoindexx{location description!composite}
 simple location descriptions, each of which is followed by
@@ -2541,7 +2541,7 @@ DWARF expression is evaluated independently of any others.
 \subsubsection{Simple Location Descriptions}
 \label{chap:simplelocationdesriptions}
 A \addtoindexx{location description!simple}
-simple location description 
+simple location description
 \bb
 represents
 \eb
@@ -2556,7 +2556,7 @@ consists of a DWARF expression
 containing no operations. It represents a piece or all of an
 object that is present in the source but not in the object code
 (perhaps due to optimization).
- 
+
 
 
 
