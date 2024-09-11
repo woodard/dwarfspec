@@ -8,4 +8,6 @@ latex dwarf6.tex
 dvips dwarf6.dvi -o dwarf6.ps
 ps2pdf dwarf6.ps dwarf6.pdf
 dvi2tty -w150 dwarf6.dvi -o rendered/dwarf6.txt
+sed '/^$/d' rendered/dwarf6.txt > rendered/dwarf6.txt2
+mv rendered/dwarf6.txt2 rendered/dwarf6.txt
 mv dwarf6.dvi dwarf6.pdf rendered
