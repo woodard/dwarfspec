@@ -1129,6 +1129,14 @@ location. They are expressed in terms of DWARF operations that operate
 on a stack. Each element on the stack may be either a value or a
 location.
 
+A DWARF expression is encoded as a stream of operations, each
+consisting of an opcode followed by zero or more literal operands. The
+number of operands is implied by the opcode.
+
+The result of a DWARF expression is the value or location on the top
+of the stack after evaluating the operations.
+
+\subsection{Values and Locations}
 Values on the stack are typed, and can represent a value of any
 supported base type of the target machine, or of the generic type,
 which is an integral type that has the size of an address on the
@@ -1137,31 +1145,48 @@ target machine and unspecified signedness.
 The generic type is the same as the unspecified type used for stack
 operations defined in DWARF Version 4 and before.
 
-Locations represent a place where a value is stored, which may be any
-of the following:
+\textit{Debugging information must provide consumers a way to
+find the location of program variables, determine the bounds of dynamic
+arrays and strings, and possibly to find the base address of a
+subroutine’s stack frame or the return address of a subroutine.
+Furthermore, to meet the needs of recent computer architectures and
+optimization techniques, debugging information must be able to describe
+the location of an object whose location changes over the object’s
+lifetime.}
+
+Information about the location of program objects is provided by
+location descriptions.
+
+Location descriptions can consist of one or more single location
+descriptions.
+
+A single location description specifies the location storage that holds
+a program object and a position within the location storage where the
+program object starts. The position within the location storage is
+expressed as a bit offset relative to the start of the location storage.
+
+A location storage is a linear stream of bits that can hold values. Each
+location storage has a size in bits and can be accessed using a
+zero-based bit offset. The ordering of bits within a location storage
+uses the bit numbering and direction conventions that are appropriate to
+the current language on the target architecture.
+
+There are five kinds of location storage:
+
 \begin{itemize}
-\item Memory locations, for values that are stored in memory, starting
-  at a given address within a given address space.
-\item Register locations, for values that are stored in registers.
-\item Undefined locations, for values that are unavailable (perhaps
-  due to optimization).
-\item Implicit locations, for values that are not stored anywhere
-  (like undefined locations), but whose values can be reconstructed.
-\item Composite locations, for values that are stored in a combination
-  of storage (e.g., aggregate values where certain components have
-  been promoted to registers).
+\item Memory location storage. Corresponds to the target architecture
+memory address spaces.
+\item Register location storage. Corresponds to the target
+architecture registers.
+\item Implicit location storage. Corresponds to fixed values that can
+only be read.
+\item Undefined location storage. Indicates no value is available and
+therefore cannot be read or written.
+
+\item Composite location storage. Allows a mixture of these where some
+bits come from one location storage and some from another location
+storage, or from disjoint parts of the same location storage.
 \end{itemize}
-
-A DWARF expression is encoded as a stream of operations, each
-consisting of an opcode followed by zero or more literal operands. The
-number of operands is implied by the opcode.
-
-The result of a DWARF expression is the value or location on the top
-of the stack after evaluating the operations.
-
-A DWARF expression is evaluated in a context that determines whether
-its result is expected to be a value or a location. Expressions that
-are expected to produce a location are called "location descriptions."
 
 Implicit conversions between memory addresses and values may happen
 during the execution of any operation or when evaluation of the
@@ -1169,7 +1194,47 @@ expression is completed. If a location is expected, but the result is
 a value, the value is implicitly treated as a memory address in the
 default address space, and converted to a memory location. If a value
 is expected, but the result is a memory location in the default
-address space, the address is implicitly converted to a value.
+address space, the address is implicitly converted to a value of the
+generic type.
+
+\textit{Location descriptions are a language independent representation of
+addressing rules.}
+
+\textit{They can be the result of evaluating a debugger information entry
+attribute that specifies an operation expression of arbitrary
+complexity. In this usage they can describe the location of an object
+as long as its lifetime is either static or the same as the lexical
+block that owns it, and it does not move during its lifetime.}
+
+\textit{They can be the result of evaluating a debugger information entry
+attribute that specifies a location list expression. In this usage they
+can describe the location of an object that has a limited lifetime,
+changes its location during its lifetime, or has multiple locations over
+part or all of its lifetime.}
+
+If a location description yields more than one single location,
+the DWARF expression is ill-formed if the object value held in each
+single location’s position within the associated location
+storage is not the same value, except for the parts of the value that
+are uninitialized.
+
+A multiple location can only be created by a location list that has
+overlapping program location ranges.
+
+A multiple location description can be used to describe objects that
+reside in more than one piece of storage at the same time. An object
+may have more than one location as a result of optimization. For
+example, a value that is only read may be promoted from memory to a
+register for some region of code, but later code may revert to reading
+the value from memory as the register may be used for other purposes.
+For the code region where the value is in a register, any change to
+the object value must be made in both the register and the memory so
+both regions of code will read the updated value.
+
+A consumer of a multiple location description can read the object’s
+value from any of the single location descriptions (since they all
+refer to location storage that has the same value), but must write any
+changed value to all the single locations.
 
 \needlines{6}
 \subsection{Value Operations}
@@ -1382,11 +1447,12 @@ the stack as a value of the \generictype{}.
 
 The \DWOPderefsizeNAME{} takes a single 1-byte unsigned integral
 operand that specifies the size S, in bytes, of the value to be
-retrieved. The operation behaves like the \DWOPderef{} operation: it
-pops the top stack entry and treats it as a location. The first S
-bytes are retrieved from the location, zero extended to the size of an
-address on the target machine, and pushed onto the stack as a value of
-the \generictype{}.
+retrieved. The size `S` must be no larger than the size of the generic
+type. The operation behaves like the \DWOPderef{} operation: it pops
+the top stack entry and treats it as a location. The first S bytes are
+retrieved from the location, zero extended to the size of an address
+on the target machine, and pushed onto the stack as a value of the
+\generictype{}.
 
 \itembfnl{\DWOPdereftypeTARG}
 
@@ -1395,10 +1461,11 @@ operand is a 1-byte unsigned integer that specifies the size S of the
 type given by the second operand. The second operand is an unsigned
 LEB128 integer that represents the offset of a debugging information
 entry in the current compilation unit, which must be a
-\DWTAGbasetype{} entry that provides the type T of the value to be
-retrieved. This operation pops the top stack entry and treats it as a
-location. The first S bytes are retrieved from the location and pushed
-onto the stack as a value of type T.
+\DWTAGbasetype{} entry that provides the type `T` of the value to be
+retrieved. The size `S` must be the same as the size of the base type
+represented by thesecond operand. This operation pops the top stack
+entry and treats it as a location. The first `S` bytes are retrieved
+from the location and pushed onto the stack as a value of type `T`.
 
 \needlines{6}
 \textit{While the size of the pushed value could be inferred from the
@@ -1617,10 +1684,7 @@ A \addtoindexx{location description!memory} memory location
 \addtoindexx{memory location} represents the location of a piece or
 all of an object or other entity in memory. On architectures that
 support multiple address spaces, a memory location contains a
-component that identifies the address space (which may be provided by
-the \DWOPxderefNAME{} operation). A memory location is considered
-unbounded, as the size of the location storage is only implied by the
-type of object stored at that location.
+component that identifies the address space.
 
 In contexts that expect a location, a value of the generic type may be
 implicitly converted to a memory location in the default address
@@ -1737,8 +1801,8 @@ mapping of numbers onto the actual registers of a given
 architecture. The mapping should be chosen to gain optimal
 density and should be shared by all users of a given
 architecture. It is recommended that this mapping be defined
-by the ABI authoring committee for each architecture.
-}
+by the ABI authoring committee for each architecture.}
+
 \begin{enumerate}[1. ]
 \itembfnl{\DWOPregzeroTARG, \DWOPregoneTARG, ..., \DWOPregthirtyoneTARG}
 The \DWOPregnTARG{} operations encode the names of up to 32
@@ -1781,8 +1845,7 @@ The \DWOPstackvalueNAME{} operation specifies that the object does not
 exist in memory but its value is nonetheless known and is at the top
 of the DWARF expression stack. In this form of location, the DWARF
 expression represents the actual value of the object, rather than its
-location. The \DWOPstackvalueNAME{} operation terminates the
-expression.
+location.
 
 \needlines{4}
 \itembfnl{\DWOPimplicitpointerTARG}
@@ -1956,8 +2019,9 @@ In addition to the composite operations, locations may be modified by the follow
 \DWOPoffsetNAME pops two stack entries. The first (top of stack) must
 be an integral type value, which represents a byte displacement. The
 second must be a location. It forms an updated location by adding the
-given byte displacement to the original location and pushes the
-updated location onto the stack.
+given byte displacement to the offset component of the offset
+component of the original location and pushes the updated location
+onto the stack.
 
 \itembfnl{\DWOPbitoffsetTARG}
 \DWOPbitoffsetNAME pops two stack entries. The first (top of stack)
