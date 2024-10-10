@@ -1137,13 +1137,17 @@ The result of a DWARF expression is the value or location on the top
 of the stack after evaluating the operations.
 
 \subsection{Values and Locations}
+A DWARF expression is evaluated in a context that determines whether
+its result is expected to be a value or a location. Expressions that
+are expected to produce a location are called "location descriptions."
+
 Values on the stack are typed, and can represent a value of any
 supported base type of the target machine, or of the generic type,
 which is an integral type that has the size of an address on the
 target machine and unspecified signedness.
 
-The generic type is the same as the unspecified type used for stack
-operations defined in DWARF Version 4 and before.
+\textit{The generic type is the same as the unspecified type used for
+stack operations defined in DWARF Version 4 and before.}
 
 \textit{Debugging information must provide consumers a way to
 find the location of program variables, determine the bounds of dynamic
@@ -1237,6 +1241,53 @@ refer to location storage that has the same value), but must write any
 changed value to all the single locations.
 
 \needlines{6}
+\subsection{Stack Operations}
+\label{chap:stackoperations}
+The following \addtoindexx{DWARF expression!stack operations}
+operations manipulate the DWARF stack, and may operate on both values
+and locations.
+
+Each entry on the stack is either a value (with an associated type) or
+a location. When operating on a value, the associated type is always
+included with the value.
+
+\needlines{4}
+\begin{enumerate}[1. ]
+\itembfnl{\DWOPdupTARG}
+The \DWOPdupNAME{} operation duplicates the entry at the top of the
+stack.
+
+\itembfnl{\DWOPdropTARG}
+The \DWOPdropNAME{} operation pops the entry at the top of the stack.
+
+\itembfnl{\DWOPpickTARG}
+The single operand of the \DWOPpickNAME{} operation provides a 1-byte
+index. A copy of the stack entry with the specified index (0 through
+255, inclusive) is pushed onto the stack.
+
+\itembfnl{\DWOPoverTARG}
+The \DWOPoverNAME{} operation duplicates the entry currently second in
+the stack at the top of the stack.  This is equivalent to a
+\DWOPpick{} operation, with index 1.
+
+\needlines{4}
+\itembfnl{\DWOPswapTARG}
+The \DWOPswapNAME{} operation swaps the top two stack entries.  The
+entry at the top of the stack becomes the second stack entry, and the
+second entry becomes the top of the stack.
+
+\itembfnl{\DWOProtTARG}
+The \DWOProtNAME{} operation rotates the first three stack
+entries. The entry at the top of the stack becomes the third stack
+entry, the second entry becomes the top of the stack, and the third
+entry becomes the second entry.
+\end{enumerate}
+
+\textit{Examples illustrating many of these stack operations are
+found in Appendix \refersec{app:dwarfstackoperationexamples}.}
+
+
+\needlines{6}
 \subsection{Value Operations}
 \label{chap:valueoperations}
 Each general operation represents a postfix operation on
@@ -1311,6 +1362,20 @@ definition, it is encoded explicitly into the operation so that the
 operation can be parsed easily without reference to the \dotdebuginfo{}
 section.}
 
+\itembfnl{\DWOPpushlaneTARG}
+The \DWOPpushlaneNAME{} operation pushes a lane index value
+of the generic type, which provides the context of the lane in
+which the expression is being evaluated.
+See section \refersec{chap:lowlevelinformation}.
+
+\textit{Producers that widen source code into vectorized machine
+code may use this operation to describe the location of a source
+variable as function of a single lane in the widened machine code.}
+
+\textit{Consumers supply the lane argument to obtain the
+location of the instance of that source variable that corresponds
+to the provided lane argument.}
+
 \end{enumerate}
 
 \needlines{10}
@@ -1338,25 +1403,6 @@ signed offset together with the \generictype.
 
 \needlines{8}
 \begin{enumerate}[1. ]
-\itembfnl{\DWOPfbregTARG}
-The \DWOPfbregNAME{} operation provides a
-signed LEB128\addtoindexx{LEB128!signed} offset
-from the address specified by the location description in the
-\DWATframebase{} attribute of the current function.
-
-\textit{This is typically a stack pointer register plus or minus some offset.}
-
-\itembfnl{\DWOPbregzeroTARG, \DWOPbregoneTARG, \dots, \DWOPbregthirtyoneTARG}
-The single operand of the \DWOPbregnTARG{}
-operations provides
-a signed LEB128\addtoindexx{LEB128!signed} offset from
-the contents of the specified register.
-
-\itembfnl{\DWOPbregxTARG}
-The \DWOPbregxNAME{} operation provides the sum of two values specified
-by its two operands. The first operand is a register number
-which is specified by an unsigned LEB128\addtoindexx{LEB128!unsigned}
-number. The second operand is a signed LEB128\addtoindexx{LEB128!signed} offset.
 
 \needlines{8}
 \itembfnl{\DWOPregvaltypeTARG}
@@ -1387,168 +1433,6 @@ of the generic type, it is zero extended.
 \eb
 
 \end{enumerate}
-
-\needlines{6}
-\subsubsection{Stack Operations}
-\label{chap:stackoperations}
-The following
-\addtoindexx{DWARF expression!stack operations}
-operations manipulate the DWARF stack. Operations
-that index the stack assume that the top of the stack (most
-recently added entry) has index 0.
-
-Each entry on the stack has an associated type.
-
-\needlines{4}
-\begin{enumerate}[1. ]
-\itembfnl{\DWOPdupTARG}
-The \DWOPdupNAME{} operation duplicates the value (including its
-type identifier) at the top of the stack.
-
-\itembfnl{\DWOPdropTARG}
-The \DWOPdropNAME{} operation pops the value (including its type
-identifier) at the top of the stack.
-
-\itembfnl{\DWOPpickTARG}
-The single operand of the \DWOPpickNAME{} operation provides a
-1-byte index. A copy of the stack entry (including its
-type identifier) with the specified
-index (0 through 255, inclusive) is pushed onto the stack.
-
-\itembfnl{\DWOPoverTARG}
-The \DWOPoverNAME{} operation duplicates the entry currently second
-in the stack at the top of the stack.
-This is equivalent to a
-\DWOPpick{} operation, with index 1.
-
-\needlines{4}
-\itembfnl{\DWOPswapTARG}
-The \DWOPswapNAME{} operation swaps the top two stack entries.
-The entry at the top of the stack (including its type identifier)
-becomes the second stack entry, and the second entry (including
-its type identifier) becomes the top of the stack.
-
-\itembfnl{\DWOProtTARG}
-The \DWOProtNAME{} operation rotates the first three stack
-entries. The entry at the top of the stack (including its
-type identifier) becomes the third stack entry, the second
-entry (including its type identifier) becomes the top of
-the stack, and the third entry (including its type identifier)
-becomes the second entry.
-
-\itembfnl{\DWOPderefTARG}
-The \DWOPderefNAME{} operation pops the top stack entry and treats it
-as a location. The first S bytes, where S is the size of an address on
-the target machine, are retrieved from the location and pushed onto
-the stack as a value of the \generictype{}.
-
-\needlines{6}
-\itembfnl{\DWOPderefsizeTARG}
-
-The \DWOPderefsizeNAME{} takes a single 1-byte unsigned integral
-operand that specifies the size S, in bytes, of the value to be
-retrieved. The size `S` must be no larger than the size of the generic
-type. The operation behaves like the \DWOPderef{} operation: it pops
-the top stack entry and treats it as a location. The first S bytes are
-retrieved from the location, zero extended to the size of an address
-on the target machine, and pushed onto the stack as a value of the
-\generictype{}.
-
-\itembfnl{\DWOPdereftypeTARG}
-
-The \DWOPdereftypeNAME{} operation takes two operands. The first
-operand is a 1-byte unsigned integer that specifies the size S of the
-type given by the second operand. The second operand is an unsigned
-LEB128 integer that represents the offset of a debugging information
-entry in the current compilation unit, which must be a
-\DWTAGbasetype{} entry that provides the type `T` of the value to be
-retrieved. The size `S` must be the same as the size of the base type
-represented by thesecond operand. This operation pops the top stack
-entry and treats it as a location. The first `S` bytes are retrieved
-from the location and pushed onto the stack as a value of type `T`.
-
-\needlines{6}
-\textit{While the size of the pushed value could be inferred from the
-base type definition, it is encoded explicitly into the operation so
-that the operation can be parsed easily without reference to the
-\dotdebuginfo{} section.}
-
-\needlines{7}
-\itembfnl{\DWOPxderefTARG}
-The \DWOPxderefNAME{} operation provides an extended dereference
-mechanism. The entry at the top of the stack is treated as an
-address. The second stack entry is treated as an \doublequote{address
-space identifier} for those architectures that support
-\addtoindexi{multiple}{address space!multiple}
-address spaces.
-Both of these entries must have integral type identifiers.
-The top two stack elements are popped,
-and a data item is retrieved through an implementation-defined
-address calculation and pushed as the new stack top together with the
-\generictype{} identifier.
-The size of the data retrieved from the
-\addtoindexi{dereferenced}{address!dereference operator}
-address is the size of the \generictype.
-
-\needlines{4}
-\itembfnl{\DWOPxderefsizeTARG}
-The \DWOPxderefsizeNAME{} operation behaves like the
-\DWOPxderef{} operation. The entry at the top of the stack is
-treated as an address. The second stack entry is treated as
-an \doublequote{address space identifier} for those architectures
-that support
-\addtoindexi{multiple}{address space!multiple}
-address spaces.
-Both of these entries must have integral type identifiers.
-The top two stack
-elements are popped, and a data item is retrieved through an
-implementation\dash defined address calculation and pushed as the
-new stack top. In the \DWOPxderefsizeNAME{} operation, however,
-the size in bytes of the data retrieved from the
-\addtoindexi{dereferenced}{address!dereference operator}
-address is specified by the single operand. This operand is a
-1-byte unsigned integral constant whose value may not be larger
-than the \addtoindex{size of an address} on the target machine. The data
-retrieved is zero extended to the \addtoindex{size of an address} on the
-target machine before being pushed onto the expression stack together
-with the \generictype{} identifier.
-
-\itembfnl{\DWOPxdereftypeTARG}
-The \DWOPxdereftypeNAME{} operation behaves like the \DWOPxderefsize{}
-operation: it pops the top two stack entries, treats them as an address and
-an address space identifier, and pushes the value retrieved. In the
-\DWOPxdereftypeNAME{} operation, the size in bytes of the data retrieved from
-the dereferenced address is specified by the first operand. This operand is
-a 1-byte unsigned integral constant whose value
-value which is the same as the size of the base type referenced
-by the second operand. The second
-operand is an unsigned LEB128 integer that represents the offset of a
-debugging information entry in the current compilation unit, which must be a
-\DWTAGbasetype{} entry that provides the type of the data pushed.
-
-\needlines{6}
-
-\needlines{6}
-\bb
-\itembfnl{\DWOPpushlaneTARG}
-The \DWOPpushlaneNAME{} operation pushes a lane index value
-of the generic type, which provides the context of the lane in
-which the expression is being evaluated.
-See section \refersec{chap:lowlevelinformation}.
-
-\textit{Producers that widen source code into vectorized machine
-code may use this operation to describe the location of a source
-variable as function of a single lane in the widened machine code.}
-
-\textit{Consumers supply the lane argument to obtain the
-location of the instance of that source variable that corresponds
-to the provided lane argument.}
-\eb
-
-\end{enumerate}
-
-\textit{Examples illustrating many of these stack operations are
-found in Appendix \refersec{app:dwarfstackoperationexamples}.}
 
 \needlines{4}
 \subsubsection{Arithmetic and Logical Operations}
@@ -1663,49 +1547,59 @@ pushes the result.
 \needlines{6}
 \subsection{Location Operations}
 \label{chap:locationoperations}
-\textit{DWARF location descriptions
-are intended to yield the \textbf{location}
-of a value rather than the value itself. An optimizing compiler
-may perform a number of code transformations where it becomes
-impossible to give a location for a value, but it remains possible
-to describe the value itself.
-Section \refersec{chap:registerlocatios}
-describes operators that can be used to
-describe the location of a value when that value exists in a
-register but not in memory. The operations in this section are
-used to describe values that exist neither in memory nor in a
-single register.}
+Information about the location of program objects is provided by
+location descriptions. Location descriptions can be either of two
+forms:
 
+\begin{itemize}
+\item \textit{Single location descriptions},
+which
+\addtoindexx{location description!single}
+are
+\addtoindexx{single location description}
+a language independent representation of
+addressing rules of arbitrary complexity built from
+DWARF expressions (See Section \refersec{chap:dwarfexpressions})
+and/or other
+DWARF operations specific to describing locations. They are
+sufficient for describing the location of any object as long
+as its lifetime is either static or the same as the
+\livelink{chap:lexicalblock}{lexical block} that owns it,
+\bb
+excluding any prologue or epilogue ranges,
+\eb
+and it does not move during its lifetime.
 
-\subsubsection{Memory Locations}
-\label{chap:memorylocations}
-
-A \addtoindexx{location description!memory} memory location
-\addtoindexx{memory location} represents the location of a piece or
-all of an object or other entity in memory. On architectures that
-support multiple address spaces, a memory location contains a
-component that identifies the address space.
-
-In contexts that expect a location, a value of the generic type may be
-implicitly converted to a memory location in the default address
-space.
-
-The following operations push memory locations onto the DWARF stack:
-
-\itembfnl{\DWOPaddrTARG}
-The \DWOPaddrNAME{} operation has a single operand that encodes
-a machine address and whose size is the \addtoindex{size of an address}
-on the target machine.
 
 \needlines{4}
-\itembfnl{\DWOPaddrxTARG}
-The \DWOPaddrxNAME{} operation has a single operand that
-encodes an unsigned LEB128\addtoindexx{LEB128!unsigned} value,
-which is a zero-based index into the \dotdebugaddr{} section,
-where a machine address is stored.
-This index is relative to the value of the
-\DWATaddrbase{} attribute of the associated compilation unit.
+\item \textit{Location lists}, which are used to
+\addtoindexx{location list}
+describe
+\addtoindexx{location description!use in location list}
+objects that have a limited lifetime or change their location
+during their lifetime. Location lists are described in
+Section \refersec{chap:locationlists} below.
 
+\end{itemize}
+
+Location descriptions are distinguished in a context-sensitive
+manner. As the value of an attribute, a single location description is
+encoded using \CLASSlocdesc, and a location list is encoded using
+\CLASSloclist (which serves as an index into a separate section
+containing location lists).
+
+The following operations can be used to push a location onto the
+stack:
+
+\begin{enumerate}[1. ]
+\itembfnl{\DWOPfbregTARG} The \DWOPfbregNAME{} operation provides a
+signed LEB128\addtoindexx{LEB128!signed} offset from the address
+specified by the location description in the \DWATframebase{}
+attribute of the current function.
+
+\textit{This is typically a stack pointer register plus or minus some
+offset.}
+  
 \itembfnl{\DWOPpushobjectaddressTARG}
 The \DWOPpushobjectaddressNAME{} operation has a single operand that
 encodes a machine address and whose size is the size of an address on
@@ -1722,6 +1616,55 @@ to access a data member of a structure. For an example, see
 Appendix \refersec{app:aggregateexamples}.}
 
 \needlines{4}
+
+\needlines{6}
+\itembfnl{\DWOPcallframecfaTARG}
+The \DWOPcallframecfaNAME{}
+operation pushes the value of the
+CFA, obtained from the Call Frame Information
+(see Section \refersec{chap:callframeinformation}).
+
+\textit{Although the value of \DWATframebase{}
+can be computed using other DWARF expression operators,
+in some cases this would require an extensive location list
+because the values of the registers used in computing the
+CFA change during a subroutine. If the
+Call Frame Information
+is present, then it already encodes such changes, and it is
+space efficient to reference that.}
+\end{enumerate}
+
+\subsubsection{Memory Locations}
+\label{chap:memorylocations}
+
+A \addtoindexx{location description!memory} memory location
+\addtoindexx{memory location} represents the location of a piece or
+all of an object or other entity in memory. On architectures that
+support multiple address spaces, a memory location contains a
+component that identifies the address space.
+
+In contexts that expect a location, a value of the generic type may be
+implicitly converted to a memory location in the default address
+space.
+
+The following operations push memory locations onto the DWARF stack:
+
+\begin{enumerate}[1. ]
+
+\itembfnl{\DWOPaddrTARG}
+The \DWOPaddrNAME{} operation has a single operand that encodes
+a machine address and whose size is the \addtoindex{size of an address}
+on the target machine.
+
+\needlines{4}
+\itembfnl{\DWOPaddrxTARG}
+The \DWOPaddrxNAME{} operation has a single operand that
+encodes an unsigned LEB128\addtoindexx{LEB128!unsigned} value,
+which is a zero-based index into the \dotdebugaddr{} section,
+where a machine address is stored.
+This index is relative to the value of the
+\DWATaddrbase{} attribute of the associated compilation unit.
+
 \itembfnl{\DWOPformtlsaddressTARG}
 The \DWOPformtlsaddressNAME{}
 operation pops a value from the stack, which must have an
@@ -1760,37 +1703,122 @@ Instead of    forcing complex thread-local storage calculations into
 the DWARF expressions, the \DWOPformtlsaddress{} allows the consumer
 to perform the computation based on the run-time environment.}
 
-\needlines{6}
-\itembfnl{\DWOPcallframecfaTARG}
-The \DWOPcallframecfaNAME{}
-operation pushes the value of the
-CFA, obtained from the Call Frame Information
-(see Section \refersec{chap:callframeinformation}).
+\itembfnl{\DWOPbregzeroTARG, \DWOPbregoneTARG, \dots,
+  \DWOPbregthirtyoneTARG} The single operand of the \DWOPbregnTARG{}
+operations provides a signed LEB128\addtoindexx{LEB128!signed} offset
+from the contents of the specified register.
 
-\textit{Although the value of \DWATframebase{}
-can be computed using other DWARF expression operators,
-in some cases this would require an extensive location list
-because the values of the registers used in computing the
-CFA change during a subroutine. If the
-Call Frame Information
-is present, then it already encodes such changes, and it is
-space efficient to reference that.}
+\itembfnl{\DWOPbregxTARG}
+The \DWOPbregxNAME{} operation provides the sum of two values
+specified by its two operands. The first operand is a register number
+which is specified by an unsigned LEB128\addtoindexx{LEB128!unsigned}
+number. The second operand is a signed
+LEB128\addtoindexx{LEB128!signed} offset.
+
+\itembfnl{\DWOPderefTARG}
+The \DWOPderefNAME{} operation pops the top stack entry and treats it
+as a location. The first S bytes, where S is the size of an address on
+the target machine, are retrieved from the location and pushed onto
+the stack as a value of the \generictype{}.
+
+\needlines{6}
+\itembfnl{\DWOPderefsizeTARG}
+
+The \DWOPderefsizeNAME{} takes a single 1-byte unsigned integral
+operand that specifies the size S, in bytes, of the value to be
+retrieved. The size `S` must be no larger than the size of the generic
+type. The operation behaves like the \DWOPderef{} operation: it pops
+the top stack entry and treats it as a location. The first S bytes are
+retrieved from the location, zero extended to the size of an address
+on the target machine, and pushed onto the stack as a value of the
+\generictype{}.
+
+\itembfnl{\DWOPdereftypeTARG}
+
+The \DWOPdereftypeNAME{} operation takes two operands. The first
+operand is a 1-byte unsigned integer that specifies the size S of the
+type given by the second operand. The second operand is an unsigned
+LEB128 integer that represents the offset of a debugging information
+entry in the current compilation unit, which must be a
+\DWTAGbasetype{} entry that provides the type `T` of the value to be
+retrieved. The size `S` must be the same as the size of the base type
+represented by thesecond operand. This operation pops the top stack
+entry and treats it as a location. The first `S` bytes are retrieved
+from the location and pushed onto the stack as a value of type `T`.
+
+\needlines{6}
+\textit{While the size of the pushed value could be inferred from the
+base type definition, it is encoded explicitly into the operation so
+that the operation can be parsed easily without reference to the
+\dotdebuginfo{} section.}
+
+\needlines{7}
+\itembfnl{\DWOPxderefTARG}
+The \DWOPxderefNAME{} operation provides an extended dereference
+mechanism. The entry at the top of the stack is treated as an
+address. The second stack entry is treated as an \doublequote{address
+space identifier} for those architectures that support
+\addtoindexi{multiple}{address space!multiple}
+address spaces.
+Both of these entries must have integral type identifiers.
+The top two stack elements are popped,
+and a data item is retrieved through an implementation-defined
+address calculation and pushed as the new stack top together with the
+\generictype{} identifier.
+The size of the data retrieved from the
+\addtoindexi{dereferenced}{address!dereference operator}
+address is the size of the \generictype.
+
+\needlines{4}
+\itembfnl{\DWOPxderefsizeTARG}
+The \DWOPxderefsizeNAME{} operation behaves like the
+\DWOPxderef{} operation. The entry at the top of the stack is
+treated as an address. The second stack entry is treated as
+an \doublequote{address space identifier} for those architectures
+that support
+\addtoindexi{multiple}{address space!multiple}
+address spaces.
+Both of these entries must have integral type identifiers.
+The top two stack
+elements are popped, and a data item is retrieved through an
+implementation\dash defined address calculation and pushed as the
+new stack top. In the \DWOPxderefsizeNAME{} operation, however,
+the size in bytes of the data retrieved from the
+\addtoindexi{dereferenced}{address!dereference operator}
+address is specified by the single operand. This operand is a
+1-byte unsigned integral constant whose value may not be larger
+than the \addtoindex{size of an address} on the target machine. The data
+retrieved is zero extended to the \addtoindex{size of an address} on the
+target machine before being pushed onto the expression stack together
+with the \generictype{} identifier.
+
+\itembfnl{\DWOPxdereftypeTARG}
+The \DWOPxdereftypeNAME{} operation behaves like the \DWOPxderefsize{}
+operation: it pops the top two stack entries, treats them as an address and
+an address space identifier, and pushes the value retrieved. In the
+\DWOPxdereftypeNAME{} operation, the size in bytes of the data retrieved from
+the dereferenced address is specified by the first operand. This operand is
+a 1-byte unsigned integral constant whose value
+value which is the same as the size of the base type referenced
+by the second operand. The second
+operand is an unsigned LEB128 integer that represents the offset of a
+debugging information entry in the current compilation unit, which must be a
+\DWTAGbasetype{} entry that provides the type of the data pushed.
+
+\end{enumerate}
 
 \subsubsection{Register Locations}
 \label{chap:registerlocations}
 A register location consists of a register name operation, which
 represents a piece or all of an object located in a given register.
 
-\textit{Register location descriptions describe an object
+\textit{Register locations describe an object
 (or a piece of an object) that resides in a register, while
 the opcodes listed in
 Section \refersec{chap:registervalues}
 are used to describe an object (or a piece of
 an object) that is located in memory at an address that is
-contained in a register (possibly offset by some constant). A
-register location description must stand alone as the entire
-description of an object or a piece of an object.
-}
+contained in a register (possibly offset by some constant).}
 
 \needlines{4}
 The following DWARF operations can be used to
@@ -1827,8 +1855,7 @@ one of the register based addressing operations, such as
 \label{chap:implicitlocations}
 An \addtoindex{implicit location} represents a piece or all
 \addtoindexx{location!implicit} of an object which has no actual
-location but whose contents are nonetheless either known or known to
-be undefined.
+location but whose contents are nonetheless known.
 
 The following DWARF operations may be used to specify a value that has
 no location in the program but is a known constant or is computed from
@@ -2030,7 +2057,7 @@ displacement. The second must be a location. It forms an updated
 location by adding the given bit displacement to the original location
 and pushes the updated location onto the stack.
 
-/textit{A bit offset of n*8 is equivalent to a byte offset of n.}
+\textit{A bit offset of n*8 is equivalent to a byte offset of n.}
 \end{enumerate}
 
 \subsection{Control Flow Operations}
@@ -2518,10 +2545,10 @@ the current location  list, up to the \DWLLEendoflist{} entry.
 \end{enumerate}
 
 \needlines{8}
-\section{Location Descriptions}
-\label{chap:locationdescriptions}
+\section{Expression Lists}
+\label{chap:expressionlists}
 \textit{Debugging information
-\addtoindexx{location description}
+\addtoindexx{Expression Lists}
 must
 \addtoindexx{location description|see{\textit{also} DWARF expression}}
 provide consumers a way to find
@@ -2537,36 +2564,6 @@ an object whose location changes over the object\textquoteright s lifetime.}
 Information about the location of program objects is provided
 by location descriptions. Location descriptions can be either
 of two forms:
-\begin{enumerate}[1. ]
-\item \textit{Single location descriptions},
-which
-\addtoindexx{location description!single}
-are
-\addtoindexx{single location description}
-a language independent representation of
-addressing rules of arbitrary complexity built from
-DWARF expressions (See Section \refersec{chap:dwarfexpressions})
-and/or other
-DWARF operations specific to describing locations. They are
-sufficient for describing the location of any object as long
-as its lifetime is either static or the same as the
-\livelink{chap:lexicalblock}{lexical block} that owns it,
-\bb
-excluding any prologue or epilogue ranges,
-\eb
-and it does not move during its lifetime.
-
-
-\needlines{4}
-\item \textit{Location lists}, which are used to
-\addtoindexx{location list}
-describe
-\addtoindexx{location description!use in location list}
-objects that have a limited lifetime or change their location
-during their lifetime. Location lists are described in
-Section \refersec{chap:locationlists} below.
-
-\end{enumerate}
 
 Location descriptions are distinguished in a context sensitive
 manner. As the value of an attribute, a
