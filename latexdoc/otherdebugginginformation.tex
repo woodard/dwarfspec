@@ -183,7 +183,11 @@ and another has a struct named \texttt{fred}, a lookup for
 \doublequote{fred} will find the list containing those two index
 entries.
 
-The index section contains eight individual parts, as illustrated in
+The index section contains 
+\bb
+nine
+\eb
+individual parts, as illustrated in 
 Figure \referfol{fig:nameindexlayoutpart1}.
 \begin{enumerate}
 \item A header, describing the layout of the section.
@@ -202,6 +206,10 @@ Figure \referfol{fig:nameindexlayoutpart1}.
 
 \item The name table.
 
+\bb
+\item An optional local string pool.
+\eb
+
 \item An abbreviations table, similar to the one used by the
     \dotdebuginfo{} section.
 
@@ -215,13 +223,14 @@ Figure \referfol{fig:nameindexlayoutpart1}.
 %\includegraphics[keepaspectratio=true,scale=1.0]{name-index-drawings-6p1}
 
 \begin{tikzpicture}[
-  every node/.style={node font=\small, anchor=north west, text height=.8em, text depth=.2em, inner sep=4pt, outer ysep=0},
+  every node/.style={node font=\small, anchor=north west, text height=.8em, 
+                     text depth=.2em, inner sep=4pt, outer ysep=0},
   caption/.style={node font=\small \bfseries, text width=90pt},
-  overview/.style={draw, node font=\small, minimum height=28pt, text width=80pt},
+  overview/.style={draw, node font=\small, minimum height=28pt, text width=90pt},
   detail1/.style={draw, minimum height=14pt, text width=116pt},
   detail2/.style={draw, minimum height=28pt, text width=116pt},
-  detail3/.style={draw, minimum height=38pt, text width=116pt},
-  detail4/.style={draw, minimum height=72pt, text width=116pt},
+  detail3/.style={draw, minimum height=30pt, text width=116pt},
+  detail4/.style={draw, minimum height=40pt, text width=116pt, align=left},
   ellip/.style={draw, shape=broken rectangle, minimum height=14pt, text width=116pt},
   explode/.style={draw=black!50, fill=black!20, line join=bevel},
   header/.style={fill=headerblue},
@@ -230,22 +239,24 @@ Figure \referfol{fig:nameindexlayoutpart1}.
   hashes/.style={fill=hashesgreen},
   stroffsets/.style={fill=stroffsetspink},
   entryoffsets/.style={fill=entryoffsetspink},
+  localstrs/.style={fill=olive!80},
   abbrevs/.style={fill=olive!40},
   indexentries/.style={fill=indexentriesorange}
 ]
 
 % Name Table Overview
 
-\begin{scope}[start chain=going below, node distance=0, yshift=-130pt]
-  \node           [on chain,caption]  {Name Index};
-  \node (header)  [on chain,overview,header] {Header};
-  \node (culist)  [on chain,overview,header] {CU List};
-  \node (ltulist) [on chain,overview,header] {Local TU List};
-  \node (ftulist) [on chain,overview,header] {Foreign TU List};
-  \node (hash)    [on chain,overview,header] {Hash Table};
-  \node (names)   [on chain,overview,header] {Name Table};
-  \node (abbrev)  [on chain,overview,header] {Abbrev Table};
-  \node (pool)    [on chain,overview,header] {Entry Pool};
+\begin{scope}[start chain=going below, node distance=0, yshift=-150pt]
+  \node            [on chain,caption]         {Name Index};
+  \node (header)   [on chain,overview,header] {Header};
+  \node (culist)   [on chain,overview,header] {CU List};
+  \node (ltulist)  [on chain,overview,header] {Local TU List};
+  \node (ftulist)  [on chain,overview,header] {Foreign TU List};
+  \node (hash)     [on chain,overview,header] {Hash Table};
+  \node (names)    [on chain,overview,header] {Name Table};
+  \node (localstrs)[on chain,overview,header] {Local String Pool};
+  \node (abbrev)   [on chain,overview,header] {Abbrev Table};
+  \node (pool)     [on chain,overview,header] {Index Pool};
 \end{scope}
 
 % Exploded View of CU List
@@ -258,7 +269,8 @@ Figure \referfol{fig:nameindexlayoutpart1}.
 \end{scope}
 
 \begin{scope}[on background layer]
-  \filldraw [explode] (culist.north east) -- (cu0.north west) -- (cu3.south west) -- (culist.south east) -- cycle;
+  \filldraw [explode] (culist.north east) -- (cu0.north west) -- 
+                       (cu3.south west) -- (culist.south east) -- cycle;
 \end{scope}
 
 \path [decoration={brace,amplitude=6pt}] ([xshift=9pt]cu0.north east)
@@ -275,7 +287,8 @@ Figure \referfol{fig:nameindexlayoutpart1}.
 \end{scope}
 
 \begin{scope}[on background layer]
-  \filldraw [explode] (ltulist.north east) -- (ltu0.north west) -- (ltu3.south west) -- (ltulist.south east) -- cycle;
+  \filldraw [explode] (ltulist.north east) -- (ltu0.north west) -- 
+                      (ltu3.south west) -- (ltulist.south east) -- cycle;
 \end{scope}
 
 \path [decoration={brace,amplitude=6pt}] ([xshift=9pt]ltu0.north east)
@@ -292,7 +305,8 @@ Figure \referfol{fig:nameindexlayoutpart1}.
 \end{scope}
 
 \begin{scope}[on background layer]
-  \filldraw [explode] (ftulist.north east) -- (ftu0.north west) -- (ftu3.south west) -- (ftulist.south east) -- cycle;
+  \filldraw [explode] (ftulist.north east) -- (ftu0.north west) -- 
+                      (ftu3.south west) -- (ftulist.south east) -- cycle;
 \end{scope}
 
 \path [decoration={brace,amplitude=6pt}] ([xshift=9pt]ftu0.north east)
@@ -307,28 +321,44 @@ Figure \referfol{fig:nameindexlayoutpart1}.
 \end{scope}
 
 \begin{scope}[on background layer]
-  \filldraw [explode] (hash.north east) -- (hash0.north west) -- (hash1.south west) -- (hash.south east) -- cycle;
+  \filldraw [explode] (hash.north east) -- (hash0.north west) -- 
+                      (hash1.south west) -- (hash.south east) -- cycle;
 \end{scope}
 
 % Exploded View of Name Table
 
 \begin{scope}[start chain=going below, node distance=0, shift={($(hash1.south west) + (0,-9pt)$)}]
-  \node (name0) [on chain,detail3,stroffsets]   {String Offsets};
+  \node (name0) [on chain,detail4,stroffsets]   {\begin{tabular}{l}
+                                                   String Pointers\\
+												   or Indexes
+												 \end{tabular}};
   \node (name1) [on chain,detail3,entryoffsets] {Entry Offsets};
 \end{scope}
 
 \begin{scope}[on background layer]
-  \filldraw [explode] (names.north east) -- (name0.north west) -- (name1.south west) -- (names.south east) -- cycle;
+  \filldraw [explode] (names.north east) -- (name0.north west) -- 
+                      (name1.south west) -- (names.south east) -- cycle;
 \end{scope}
+
+% Exploded View of Local Strings Pool
+
+\begin{scope}[shift={($(name1.south west) + (0,-9pt)$)}]
+  \node (localstrs0) [detail3,localstrs] {Local Strings};
+\end{scope}
+
+begin{scope}
+\filldraw [explode] (localstrs.north east) -- (localstrs0.north west) -- 
+                    (localstrs0.south west) -- (localstrs.south east) -- cycle;
 
 % Exploded View of Abbreviations
 
-\begin{scope}[shift={($(name1.south west) + (0,-9pt)$)}]
+\begin{scope}[shift={($(localstrs0.south west) + (0,-9pt)$)}]
   \node (abbrev0) [detail3,abbrevs] {Abbreviations};
 \end{scope}
 
 \begin{scope}[on background layer]
-  \filldraw [explode] (abbrev.north east) -- (abbrev0.north west) -- (abbrev0.south west) -- (abbrev.south east) -- cycle;
+  \filldraw [explode] (abbrev.north east) -- (abbrev0.north west) -- 
+                      (abbrev0.south west) -- (abbrev.south east) -- cycle;
 \end{scope}
 
 % Exploded View of Entry Pool
@@ -602,6 +632,7 @@ will be one CU entry for each compile unit in the module, and one TU
 entry for each unique type unit in the module. Each list is indexed
 starting at 0.
 
+\needlines{6}
 The list of foreign TUs is an array of 64-bit (\DWFORMrefsigeight) type
 signatures, representing types referenced by the index whose
 definitions have been placed in a different object file (that is, a split
@@ -782,15 +813,23 @@ not including the length field itself
 (see Section \refersec{datarep:initiallengthvalues}).
 \eb
 
-
+\needlines{4}
 \item \HFNversion{} (\HFTuhalf) \\
 A version number\addtoindexx{version number!name index table}
 (see Section \refersec{datarep:nameindextable}).
 This number is specific to the name index table and is
 independent of the DWARF version number.
 
-\item \HFNpadding{} (\HFTuhalf) \\
-Reserved to DWARF (must be zero).
+\bb
+\item \HFNstrformat{} (\HFTubyte) \\
+An enumerated constant that specifies the representation of 
+string references in the name index. The possible values are: 
+\DWFORMstrp, \DWFORMstrpeight, and \DWFORMstrxfour{} (see 
+Section \refersec{datarep:classesandforms}).
+
+\item \HFNpadding{} (\HFTubyte) \\
+\eb
+Reserved to DWARF (must be zero). 
 
 \item \HFNcompunitcount{} (\HFTuword) \\
 The number of CUs in the CU list.
@@ -808,10 +847,29 @@ If there is no hash lookup table, this field contains 0.
 \item \HFNnamecount{} (\HFTuword) \\
 The number of unique names in the index.
 
+\bb
+\item \HFNlocalstrpoolsize{} (\HFTsectionlength) \\
+Size of the local string pool. If this value is non-zero, 
+string offsets (when \HFNstrformat{} is \DWFORMstrp{} or \DWFORMstrpeight) 
+reference the local string pool. If this value is 0, 
+string offsets reference the \dotdebugstr{} section. 
+If \HFNstrformat{} is \DWFORMstrxfour, this field should be 0.
+
+\item \HFNstroffsets{} (\HFNsectionoffset) \\
+A 4-byte or 8-byte unsigned offset that points to the header 
+of the compilation unit’s contribution to the \dotdebugstroffsets{} 
+section. Indirect string references (when \HFNstrformat{} is 
+\DWFORMstrxfour) are interpreted as zero-based indexes into the 
+array of offsets following the header. If \HFNstrformat{} is 
+\DWFORMstrp{} or \DWFORMstrpeight, this field should be 0.
+\eb
+
+\needlines{3}
 \item \HFNabbrevtablesize{} (\HFTuword) \\
 The size in bytes of the abbreviations table.
 
-\item
+\needlines{4}
+\item 
 \bb
 \HFNaugmentationsize{} (\HFTuword) \\
 The size in bytes of the augmentation sequence.
@@ -955,15 +1013,19 @@ in the name table.
 \needlines{6}
 \subsubsubsection{Name Table}
 \label{chap:nametable}
-The name table immediately follows the hash lookup table. It
-consists of two arrays: an array of string offsets, followed
-immediately by an array of entry offsets. The items in both
-arrays are section offsets: 4-byte unsigned integers for the
-DWARF-32 format or 8-byte unsigned integers for the DWARF-64
-format. The string offsets in the first array refer to names in
-the \dotdebugstr{} (or \dotdebugstrdwo) section. The entry offsets
-in the second array refer to index entries, and are relative to
-the start of the entry pool area.
+\bb
+The name table immediately follows the hash lookup table. 
+It consists of two arrays: an array of string pointers or indexes, 
+followed immediately by an array of entry offsets. The items in 
+the first array are determined by the \HFNstrformat{} field in the 
+section header, and may be 4-byte or 8-byte offsets into either the 
+\dotdebugstr{} section or the local string pool, or 4-byte indexes 
+into the array of offsets in the \dotdebugstroffsets{} section.
+The items in the second array are section offsets: 4-byte unsigned 
+integers for the DWARF-32 format or 8-byte unsigned integers for the 
+DWARF-64 format. The entry offsets in the second array refer to index 
+entries, and are relative to the start of the entry pool area.
+\eb
 
 These two arrays are indexed starting at 1, and correspond
 one-to-one with each other. The length of each array is
@@ -976,9 +1038,34 @@ entry offsets array.
 \textit{If there is no hash lookup table, there is no ordering
 requirement for the name table.}
 
+\bb
+\subsubsubsection{Local String Pool}
+\label{chap:localstringpool}
+The local string pool, if present, immediately follows the name table. 
+It consists of a series of null-terminated strings. Its size is given by 
+\HFNlocalstrpoolsize.
+
+\textit{For non-split DWARF compilation units, strings used by the 
+name table will have significant overlap with strings used by the 
+\dotdebuginfo{} section, and a local string pool is not advisable. 
+Relocations for the string references may be minimized by using the 
+indirect string forms in both \dotdebuginfo{} and \dotdebugnames. 
+For split DWARF compilation units with a linker that is aware of 
+and can combine \dotdebugnames{} sections into a single per-module 
+index, there is likely little overlap, and relocations for string 
+references in the name table can be minimized by using the local 
+string pool. If the linker simply concatenates the per-CU indexes, 
+however, it remains beneficial to use indirect string forms and a 
+separate string table.}
+\eb
+
 \needlines{6}
 \subsubsubsection{Abbreviations Table}
-The abbreviations table immediately follows the name table. This table
+The abbreviations table immediately follows 
+\bb
+the local string pool or, if the local string pool is absent, 
+\eb
+the name table. This table
 consists of a series of abbreviation declarations. Its size is given
 by \HFNabbrevtablesize{}.
 
@@ -1755,7 +1842,7 @@ field. In \DWARFVersionV and
 after, the current compilation file name
 is explicitly present and has index 0. This is needed to support
 the common practice of stripping all but the line number sections
-(\dotdebugline{} and \dotdebuglinestr) from an executable.}
+fnad{} and \dotdebuglinestr) from an executable.}
 
 \textit{Note that if a \dotdebuglinestr{} section is present,
 both the compilation unit debugging information entry
