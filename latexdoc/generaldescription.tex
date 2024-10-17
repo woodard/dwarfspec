@@ -1920,108 +1920,207 @@ if the overlapping expressions do not produce the same value.
 \needlines{8}
 \section{Location Descriptions}
 \label{chap:locationdescriptions}
-\textit{Debugging information 
-\addtoindexx{location description}
-must 
-\addtoindexx{location description|see{\textit{also} DWARF expression}}
-provide consumers a way to find
-the location of program variables, determine the bounds
-of dynamic arrays and strings, and possibly to find the
-base address of a subroutine\textquoteright s stack frame or the return
-address of a subroutine. Furthermore, to meet the needs of
-recent computer architectures and optimization techniques,
-debugging information must be able to describe the location of
-an object whose location changes over the object\textquoteright s lifetime.}
+\textit{Debugging information \addtoindexx{location description} must
+\addtoindexx{location description|see{\textit{also} DWARF
+expression}} provide consumers a way to find the location of
+program variables, determine the bounds of dynamic arrays and
+strings, and possibly to find the base address of a
+subroutine\textquoteright s stack frame or the return address of a
+subroutine. Furthermore, to meet the needs of recent computer
+architectures and optimization techniques, debugging information
+must be able to describe the location of an object whose location
+changes over the object\textquoteright s lifetime, and may reside at
+multiple locations simultaneously during parts of an object's
+lifetime.}
 
-\needlines{8}
-Information about the location of program objects is provided
-by location descriptions. Location descriptions can be either
-of two forms:
+Information about the location of program objects is provided by
+location descriptions.
+
+Location descriptions can consist of one or more single location
+descriptions.
+
+A single location description specifies the location storage that
+holds a program object and a position within the location storage
+where the program object starts. The position within the location
+storage is expressed as a bit offset relative to the start of the
+location storage.
+
+A location storage is a linear stream of bits that can hold values.
+Each location storage has a size in bits and can be accessed using a
+zero-based bit offset. The ordering of bits within a location storage
+uses the bit numbering and direction conventions that are appropriate
+to the current language on the target architecture.
+
+There are five kinds of location storage:
 \begin{enumerate}[1. ]
-\item \textit{Single location descriptions}, 
-which 
-\addtoindexx{location description!single}
-are 
-\addtoindexx{single location description}
-a language independent representation of
-addressing rules of arbitrary complexity built from 
-DWARF expressions (See Section \refersec{chap:dwarfexpressions}) 
-and/or other
-DWARF operations specific to describing locations. They are
-sufficient for describing the location of any object as long
-as its lifetime is either static or the same as the 
-\livelink{chap:lexicalblock}{lexical block} that owns it,
-\bb
-excluding any prologue or epilogue ranges,
-\eb 
-and it does not move during its lifetime.
+\item \textit{memory location storage}
 
+Corresponds to the target architecture memory address spaces.
 
-\needlines{4}
-\item \textit{Location lists}, which are used to 
-\addtoindexx{location list}
-describe
-\addtoindexx{location description!use in location list}
-objects that have a limited lifetime or change their location
-during their lifetime. Location lists are described in
-Section \refersec{chap:locationlists} below.
+\item \textit{register location storage}
 
+Corresponds to the target architecture registers.
+
+\item \textit{implicit location storage}
+
+Corresponds to fixed values that can only be read.
+
+\item \textit{undefined location storage}
+
+Indicates no value is available and therefore cannot be read or
+written.
+
+\item \textit{composite location storage}
+
+Allows a mixture of these where some bits come from one location
+storage and some from another location storage, or from disjoint parts
+of the same location storage.
 \end{enumerate}
 
-Location descriptions are distinguished in a context sensitive
-manner. As the value of an attribute, a 
-\bb
-single
-\eb
-location description is encoded using class 
-\bb
-\CLASSlocdesc{}
-\eb
-and a \addtoindex{location list} is encoded
-using class \CLASSloclist{} (which serves as an 
-index into a separate section containing location lists).
+\textit{Location descriptions are a language independent
+representation of addressing rules.}
+
+\begin{itemize}
+\item \textit{They can be the result of evaluating a debugging
+information entry attribute that specifies an operation expression
+of arbitrary complexity. In this usage they can describe the
+location of an object as long as its lifetime is either static or
+the same as the lexical block (see
+\livelink{chap:lexicalblock}{lexical block entries}) that owns it,
+and it does not move during its lifetime.}
+
+\item \textit{They can be the result of evaluating a debugging
+information entry attribute that specifies a location list
+expression.  In this usage they can describe the location of an
+object that has a limited lifetime, changes its location during its
+lifetime, or has multiple locations over part or all of its
+lifetime.}
+\end{itemize}
+
+If a location description has more than one single location
+description, the DWARF expression is ill-formed if the object value
+held in each single location description’s position within the
+associated location storage is not the same value, except for the
+parts of the value that are uninitialized.
+
+\textit{A location description that has more than one single location
+description can only be created by a location list expression that
+has overlapping program location ranges, or certain expression
+operations that act on a location description that has more than one
+single location description. There are no operation expression
+operations that can directly create a location description with more
+than one single location description.}
+
+\textit{A location description with more than one single location
+description can be used to describe objects that reside in more than
+one piece of storage at the same time. An object may have more than
+one location as a result of optimization. For example, a value that
+is only read may be promoted from memory to a register for some
+region of code, but later code may revert to reading the value from
+memory as the register may be used for other purposes.  For the code
+region where the value is in a register, any change to the object
+value must be made in both the register and the memory so both
+regions of code will read the updated value.}
+
+\textit{A consumer of a location description with more than one single
+location description can read the object’s value from any of the
+single location descriptions (since they all refer to location
+storage that has the same value), but must write any changed value
+to all the single location descriptions.}
+
+Updating a location description L by a bit offset B is defined as
+adding the value of B to the bit offset of each single location
+description SL of L. It is an evaluation error if the updated bit
+offset of any SL is less than 0 or greater than or equal to the size
+of the location storage specified by SL.
+
+The evaluation of an expression may require context elements to create
+a location description. If such a location description is accessed,
+the storage it denotes is that associated with the context element
+values specified when the location description was created, which may
+differ from the context at the time it is accessed.
+
+\textit{For example, creating a register location description requires
+the thread context: the location storage is for the specified
+register of that thread. Creating a memory location description for
+an address space may required a thread context: the location storage
+is the memory associated with that thread.}
+
+If any of the context elements required to create a location
+description change, the location description becomes invalid and
+accessing it is undefined.
+
+\textit{Examples of context that can invalidate a location description
+are:}
+
+\begin{itemize}
+\item \textit{The thread context is required and execution causes the thread
+to terminate.}
+
+\item \textit{The call frame context is required and further execution
+causes the call frame to return to the calling frame.}
+
+\item \textit{The program location is required and further execution
+of the thread occurs. That could change the location list entry or
+call frame information entry that applies.}
+
+\item \textit{An operation uses call frame information:}
+
+\begin{itemize}
+\item \textit{Any of the frames used in the virtual call frame
+unwinding return.}
+
+\item \textit{The top call frame is used, the program location is used
+to select the call frame information entry, and further execution of
+the thread occurs.}
+\end{itemize}
+\end{itemize}
+
+\textit{A DWARF expression can be used to compute a location
+description for an object. A subsequent DWARF expression evaluation
+can be given the object location description as the object context
+or initial stack context to compute a component of the object. The
+final result is undefined if the object location description becomes
+invalid between the two expression evaluations.}
+
+A change of a thread’s program location may not make a location
+description invalid, yet may still render it as no longer
+meaningful. Accessing such a location description, or using it as the
+object context or initial stack context of an expression evaluation,
+may produce an undefined result.
+
+\textit{For example, a location description may specify a register
+that no longer holds the intended program object after a program
+location change. One way to avoid such problems is to recompute
+location descriptions associated with threads when their program
+locations change.}
 
 \needlines{8}
-\subsection{Single Location Descriptions}
-\label{chap:singlelocationdescriptions}
-A single location description is either:
-\begin{enumerate}[1. ]
-\item A simple location description, representing an object
-\addtoindexx{location description!simple}
-which 
-\addtoindexx{simple location description}
-exists in one contiguous piece at the given location, or 
-\item A composite location description consisting of one or more
-\addtoindexx{location description!composite}
-simple location descriptions, each of which is followed by
-one composition operation. Each simple location description
-describes the location of one piece of the object; each
-composition operation describes which part of the object is
-located there. Each simple location description that is a
-DWARF expression is evaluated independently of any others.
-\end{enumerate}
-
-
-\subsubsection{Simple Location Descriptions}
-\label{chap:simplelocationdesriptions}
-A \addtoindexx{location description!simple}
-simple location description 
-\bb
-represents
-\eb
-one contiguous piece or all of an object or value.
 
 \needlines{4}
-\subsubsubsection{Empty Location Descriptions}
-\label{chap:emptylocationdescriptions}
-An \addtoindex{empty location description}
+\subsection{Undefined Location Descriptions}
+\label{chap:undefinedlocationdescriptions}
+An \addtoindex{undefined location description}
 consists of a DWARF expression
-\addtoindexx{location description!empty}
+\addtoindexx{location description!undefined}
 containing no operations. It represents a piece or all of an
 object that is present in the source but not in the object code
 (perhaps due to optimization).
 
-\subsubsubsection{Memory Location Descriptions}
+\textit{The undefined location storage represents a piece or all of an
+object that is present in the source but not in the object code
+(perhaps due to optimization). Neither reading nor writing to the
+undefined location storage is meaningful.}
+
+An \addtoindex{undefined location description} \addtoindexx{location
+  description!undefined} specifies the undefined location
+storage. There is no concept of the size of the undefined location
+storage, nor of a bit offset for an undefined location description.
+The \DWOPpiece operations can implicitly specify an undefined location
+description, allowing any size and offset to be specified, and results
+in a part with all undefined bits.
+
+\subsection{Memory Location Descriptions}
 \label{chap:memorylocationdescriptions}
 A \addtoindexx{location description!memory}
 memory location description 
@@ -2032,7 +2131,7 @@ Section \refersec{chap:dwarfexpressions}),
 whose value is the address of
 a piece or all of an object or other entity in memory.
 
-\subsubsubsection{Register Location Descriptions}
+\subsection{Register Location Descriptions}
 \label{chap:registerlocationdescriptions}
 A register location description consists of a register name
 operation, which represents a piece or all of an object
@@ -2080,7 +2179,7 @@ one of the register based addressing operations, such as
 \DWOPbregx{} 
 (Section \refersec{chap:registervalues})}.
 
-\subsubsubsection{Implicit Location Descriptions}
+\subsection{Implicit Location Descriptions}
 \label{chap:implicitlocationdescriptions}
 An \addtoindex{implicit location description}
 represents a piece or all
@@ -2170,7 +2269,7 @@ single register.}
  
 
 \needlines{6}
-\subsubsection{Composite Location Descriptions}
+\subsection{Composite Location Descriptions}
 \label{chap:compositelocationdescriptions}
 A composite location description describes an object or
 value which may be contained in part of a register or stored
