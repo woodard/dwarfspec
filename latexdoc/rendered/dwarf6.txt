@@ -1642,27 +1642,26 @@ whose location changes over the object's lifetime.
 Information about the location of program objects is provided by location
 descriptions.
 Location descriptions can consist of one or more single location descriptions.
-A single location description specioes the location storage that holds a program
-object and a position within the location storage where the program object starts.
-The position within the location storage is expressed as a bit ooeset relative to the
-start of the location storage.
-A location storage is a linear stream of bits that can hold values. Each location
-storage has a size in bits and can be accessed using a zero-based bit ooeset. The
-ordering of bits within a location storage uses the bit numbering and direction
-conventions that are appropriate to the current language on the target
-architecture.
+A single location description specioes the storage bank that holds a program
+object and a position within that storage bank where the program object starts.
+The position within the storage bank is expressed as a bit ooeset relative to the
+start of the storage bank.
+A storage bank is a linear stream of bits that can hold values. Each storage bank
+has a size in bits and can be accessed using a zero-based bit ooeset. The ordering
+of bits within a storage bank uses the bit numbering and direction conventions
+that are appropriate to the current language on the target architecture.
 There are ove kinds of location storage:
-     #    Memory location storage. Corresponds to the target architecture memory
-          address spaces.
-     #    Register location storage. Corresponds to the target architecture registers.
-     #    Implicit location storage. Corresponds to oxed values that can only be read.
-     #    Undeoned location storage. Indicates no value is available and therefore
-          cannot be read or written.
+     #    Memory storage. Corresponds to the target architecture memory address
+          spaces.
+     #    Register storage. Corresponds to the target architecture registers.
+     #    Implicit torage. Corresponds to oxed values that can only be read.
+     #    Undeoned storage. Indicates no value is available and therefore cannot be
+          read or written.
 October 12, 2024                                  ***WORKING DRAFT***                                                             Page 27
                                             Chapter 2.  General Description
-     #    Composite location storage. Allows a mixture of these where some bits
-          come from one location storage and some from another location storage, or
-          from disjoint parts of the same location storage.
+     #    Composite storage. llows a mixture of these where some bits come from
+          one storage bank and some from another storage bank, or from disjoint
+          parts of the same storage bank.
 Implicit conversions between memory addresses and values may happen during
 the execution of any operation or when evaluation of the expression is
 completed. If a location is expected, but the result is a value, the value is
@@ -1671,14 +1670,14 @@ converted to a memory location. If a value is expected, but the result is a memo
 location in the default address space, the address is implicitly converted to a
 value of the generic type.
 Location descriptions are a language independent representation of addressing rules.
-They can be the result of evaluating a debugger information entry attribute that specioes
-an operation expression of arbitrary complexity. In this usage they can describe the
-location of an object as long as its lifetime is either static or the same as the lexical block
-that owns it, and it does not move during its lifetime.
-They can be the result of evaluating a debugger information entry attribute that specioes
-a location list expression. In this usage they can describe the location of an object that has
-a limited lifetime, changes its location during its lifetime, or has multiple locations over
-part or all of its lifetime.
+They can be the result of evaluating a debugging information entry attribute that
+specioes an operation expression of arbitrary complexity. In this usage they can describe
+the location of an object as long as its lifetime is either static or the same as the lexical
+block that owns it, and it does not move during its lifetime.
+They can be the result of evaluating a debugging information entry attribute that
+specioes a location list expression. In this usage they can describe the location of an object
+that has a limited lifetime, changes its location during its lifetime, or has multiple
+locations over part or all of its lifetime.
 If a location description yields more than one single location, the DWARF
 expression is ill-formed if the object value held in each single location's position
 within the associated location storage is not the same value, except for the parts
@@ -1694,8 +1693,8 @@ for other purposes. For the code region where the value is in a register, any
 change to the object value must be made in both the register and the memory so
 both regions of code will read the updated value.
 A consumer of a multiple location description can read the object's value from
-any of the single location descriptions (since they all refer to location storage that
-has the same value), but must write any changed value to all the single locations.
+any of the single location descriptions (since they all refer to storage that has the
+same value), but must write any changed value to all the single locations.
 October 12, 2024                                  ***WORKING DRAFT***                                                             Page 28
                                             Chapter 2.  General Description
 2.5.2          Stack Operations
