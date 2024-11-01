@@ -4,19 +4,19 @@
 This section presents the debugging information entries that
 describe individual data objects: variables, parameters and
 constants, and lists of those objects that may be grouped in
-a single declaration, such as a 
+a single declaration, such as a
 \livelink{chap:commonblockentry}{common block}.
 
 \section{Data Object Entries}
 \label{chap:dataobjectentries}
 \addtoindexx{data object entries}
 
-Program variables, 
+Program variables,
 \addtoindexx{formal parameter entry}
 formal parameters and constants are
 represented by debugging information entries with the tags
-\DWTAGvariableTARG\addtoindexx{variable entry}, 
-\DWTAGformalparameterTARG\addtoindexx{formal parameter entry} and 
+\DWTAGvariableTARG\addtoindexx{variable entry},
+\DWTAGformalparameterTARG\addtoindexx{formal parameter entry} and
 \DWTAGconstantTARG\addtoindexx{constant (data) entry},
 respectively.
 
@@ -27,7 +27,7 @@ The debugging information entry for a program variable,
 formal parameter or constant may have the following attributes:
 \begin{enumerate}[1. ]
 \item A \DWATname{} attribute,\addtoindexx{name attribute}
-whose value is a null-terminated string containing the data object 
+whose value is a null-terminated string containing the data object
 name.
 
 If a variable entry describes an anonymous object (for example
@@ -36,18 +36,18 @@ the name attribute is omitted or its value consists of a single
 zero byte.
 
 \item \hypertarget{chap:DWATexternalexternalvariable}{}
-A \DWATexternalDEFN{} attribute,\addtoindexx{external attribute} 
+A \DWATexternalDEFN{} attribute,\addtoindexx{external attribute}
 which is a \livelink{chap:classflag}{flag}, if the name
 of a variable is visible outside of its enclosing compilation
-unit.  
+unit.
 
-\textit{The definitions of \addtoindex{C++} static data members 
-of structures or classes are represented by variable entries 
-\nolink{flagged} as external. Both file static and local variables 
-in \addtoindex{C} and \addtoindex{C++} are represented by 
+\textit{The definitions of \addtoindex{C++} static data members
+of structures or classes are represented by variable entries
+\nolink{flagged} as external. Both file static and local variables
+in \addtoindex{C} and \addtoindex{C++} are represented by
 non-external variable entries.}
 
-\item A \DWATdeclaration{} attribute, 
+\item A \DWATdeclaration{} attribute,
 \addtoindexx{declaration attribute}
 which is a \livelink{chap:classflag}{flag} that
 indicates whether this entry represents a non-defining
@@ -57,28 +57,28 @@ declaration of an object.
 \addtoindexx{location attribute}
 whose value describes the location of a variable or parameter at run-time.
 
-If no location attribute is present in a variable 
+If no location attribute is present in a variable
 entry representing the definition of a variable (that is,
 \addtoindexx{declaration attribute}
-with no 
+with no
 \DWATdeclaration{} attribute),
 or if the location attribute is present but has
-an empty location description (as described in Section 
+an empty location description (as described in Section
 \refersec{chap:locationdescriptions}),
 \addtoindexx{unallocated variable}
 the variable is assumed to exist in the source code but not
 in the executable program (but see number 10, below).
 
-In a variable entry representing a non-defining declaration 
-of a variable, the location specified supersedes the location 
+In a variable entry representing a non-defining declaration
+of a variable, the location specified supersedes the location
 specified by the defining declaration but only within the
-scope of the variable entry; if no location is specified, 
-then the location specified in the defining declaration 
+scope of the variable entry; if no location is specified,
+then the location specified in the defining declaration
 applies.
 
-\textit{This can occur, for example, for a \addtoindex{C} 
-or \addtoindex{C++} external variable (one that is defined 
-and allocated in another compilation unit) and whose location 
+\textit{This can occur, for example, for a \addtoindex{C}
+or \addtoindex{C++} external variable (one that is defined
+and allocated in another compilation unit) and whose location
 varies in the current unit due to optimization.}
 \db
 
@@ -88,9 +88,9 @@ constant or formal parameter.
 \item If the variable entry represents the defining declaration
 for a C++ static data member of a structure, class or union,
 the entry has a \DWATspecification{} attribute, whose value is a
-\livelink{chap:classreference}{reference} to the debugging information 
-entry representing the declaration of this data member. The referenced 
-entry also has the tag \DWTAGvariable{} 
+\livelink{chap:classreference}{reference} to the debugging information
+entry representing the declaration of this data member. The referenced
+entry also has the tag \DWTAGvariable{}
 and will be a child of some class, structure or union type entry.
 
 If the variable entry represents a
@@ -99,7 +99,7 @@ to reference the defining declaration of the variable. If
 no \DWATspecification{} attribute is present, the defining
 declaration may be found as a global definition either in the
 current compilation unit or in another compilation unit with
-the \DWATexternal{} attribute.  
+the \DWATexternal{} attribute.
 
 Variable entries containing
 the \DWATspecification{} attribute do not need to duplicate
@@ -111,7 +111,7 @@ type of the data member whose definition they represent.
 \needlines{4}
 \item \hypertarget{chap:DWATvariableparameternonconstantparameterflag}{}
 A \DWATvariableparameterDEFN{}
-attribute\addtoindexx{variable parameter attribute}, 
+attribute\addtoindexx{variable parameter attribute},
 which is a \livelink{chap:classflag}{flag},
 if a formal parameter entry represents a parameter whose
 value in the calling function may be modified by the callee.
@@ -119,31 +119,31 @@ The absence of this attribute implies that the parameter\textquoteright s
 value in the calling function cannot be modified by the callee.
 
 \item \hypertarget{chap:DWATisoptionaloptionalparameter}{}
-A \DWATisoptionalDEFN{} attribute,\addtoindexx{is optional attribute} 
+A \DWATisoptionalDEFN{} attribute,\addtoindexx{is optional attribute}
 which is a \livelink{chap:classflag}{flag}, if a
 parameter entry represents an \addtoindex{optional parameter}.
 
 \item \hypertarget{chap:DWATdefaultvaluedefaultvalueofparameter}{}
 A \DWATdefaultvalueDEFN{} attribute\addtoindexx{default value attribute}
 for \addtoindexx{formal parameter entry!with default value}
-a formal parameter entry. 
-The value of this attribute may be a constant, 
+a formal parameter entry.
+The value of this attribute may be a constant,
 \db
-a reference to the debugging information entry for a variable, 
+a reference to the debugging information entry for a variable,
 \db
-a reference to a debugging information entry 
+a reference to a debugging information entry
 \bb
-for a DWARF procedure, 
+for a DWARF procedure,
 or a string containing a source language fragment.
 \eb
 \begin{itemize}
-\item  
-If the attribute form is of class \CLASSconstant, that constant is 
-interpreted as a value whose type is the same as 
-the type of the formal parameter. 
+\item
+If the attribute form is of class \CLASSconstant, that constant is
+interpreted as a value whose type is the same as
+the type of the formal parameter.
 
 \bb
-\textit{For a constant form there is no way to 
+\textit{For a constant form there is no way to
 express the absence of a default value.}
 \eb
 
@@ -153,23 +153,23 @@ form is of class \CLASSreference, and the referenced entry is for a
 variable, the default value of the parameter is the value of the
 referenced variable.  If the reference value is 0, no default value
 has been specified.
- 
+
 \db
-%\item 
+%\item
 %\bb
 %If the attribute form is of class \CLASSreference, and the referenced entry
-%is a DWARF procedure, 
+%is a DWARF procedure,
 %\eb
-%the default value of the parameter is the value returned 
+%the default value of the parameter is the value returned
 %\bb
-%by calling that DWARF procedure (using \DWOPcallref{}), 
+%by calling that DWARF procedure (using \DWOPcallref{}),
 %\eb
 %interpreted as a value of the type of the formal parameter.
 \item
 \bb
 If the attribute form is of class \CLASSstring, that string is interpreted
 as an expression in the source language, as defined by the compilation
-unit's \DWATlanguagename{} and \DWATlanguageversion{} attributes, that is 
+unit's \DWATlanguagename{} and \DWATlanguageversion{} attributes, that is
 to be evaluated according to the rules defined by that source language.
 
 \textit{The source language fragment may be different from the actual source
@@ -179,18 +179,18 @@ text if the latter contains macros which have been expanded.}
 \db
 \item \hypertarget{chap:DWATconstvalueconstantobject}{}
 A \DWATconstvalueDEFN{} attribute
-\addtoindexx{constant value attribute}  
+\addtoindexx{constant value attribute}
 for an entry describing a
 variable or formal parameter whose value is constant and not
 represented by an object in the address space of the program,
 or an entry describing a named constant. (Note that such
 an entry does not have a location attribute.) The value of
 this attribute may be a string or any of the constant data
-or data block forms, 
+or data block forms,
 as appropriate for the representation
 of the variable's value. The value is the actual constant
 value of the variable, represented as it would be on the
-target architecture.  
+target architecture.
 
 \textit{One way in which a formal parameter
 with a constant value and no location can arise is for a
@@ -201,16 +201,16 @@ to a constant actual parameter of a call that is inlined.}
 \item \hypertarget{chap:DWATendianityendianityofdata}{}
 A \DWATendianityDEFN{} attribute,
 \addtoindexx{endianity attribute}
-whose value is a constant that 
+whose value is a constant that
 \addtoindexx{big-endian encoding|see{endianity attribute}}
 specifies the endianity of the object. The value of
-this attribute specifies an ABI-defined 
+this attribute specifies an ABI-defined
 \byteorder{ing} \addtoindexx{ordering attribute} for
 the value of the object. If omitted, the default endianity
-of data for the given type is assumed.  
+of data for the given type is assumed.
 
 The set of values
-and their meaning for this attribute is given in 
+and their meaning for this attribute is given in
 Table \refersec{tab:endianityattributevalues}.
 These represent the default encoding formats as defined by
 the target architecture's ABI or processor definition. The
@@ -225,7 +225,7 @@ for different architectures.
 \hline
 Name&Meaning\\ \hline
 \DWENDdefaultTARG{} &  Default endian encoding
-  (equivalent to the \mbox{absence} of a 
+  (equivalent to the \mbox{absence} of a
   \DWATendianity{} attribute) \\
 \DWENDbigTARG{} & Big-endian encoding \\
 \DWENDlittleTARG& Little-endian encoding \\
@@ -241,47 +241,47 @@ A \DWATconstexprDEFN{} attribute,
 which is a \CLASSflag, if a
 variable entry represents a \addtoindex{C++} object declared with the
 \texttt{constexpr} specifier. This attribute indicates that the
-variable can be evaluated as a compile\dash time constant.  
+variable can be evaluated as a compile\dash time constant.
 
 \textit{In \addtoindex{C++},
-a variable declared with \texttt{constexpr} is implicitly 
-\texttt{const}. Such a variable has a \DWATtype{} attribute 
-whose value is a \CLASSreference{} to a debugging information 
+a variable declared with \texttt{constexpr} is implicitly
+\texttt{const}. Such a variable has a \DWATtype{} attribute
+whose value is a \CLASSreference{} to a debugging information
 entry describing a \texttt{const} qualified type.}
 
-\item A \DWATlinkagename{} attribute for a 
-variable or constant entry as described in 
+\item A \DWATlinkagename{} attribute for a
+variable or constant entry as described in
 Section \refersec{chap:linkagenames}.
 
 \end{enumerate}
 
 \section{Common Block Entries}
 \label{chap:commonblockentries}
-A Fortran 
+A Fortran
 \livetargi{chap:fortrancommonblock}{common}{Fortran!common block}
-\livetargi{chap:commonblockentry}{block}{common block entry} 
-may 
+\livetargi{chap:commonblockentry}{block}{common block entry}
+may
 \addtoindexx{Fortran!common block}
-be described by a debugging information entry with the 
-tag \DWTAGcommonblockTARG. 
+be described by a debugging information entry with the
+tag \DWTAGcommonblockTARG.
 
-The common \nolink{block} 
+The common \nolink{block}
 entry has a \DWATname{} attribute\addtoindexx{name attribute}
 whose value is a null-terminated string containing the
-\livetargi{chap:commonblockreferenceattribute}{common block}{common block reference attribute} 
-name. It may also have a \DWATlinkagename{} attribute as described 
-in Section \refersec{chap:linkagenames}. 
+\livetargi{chap:commonblockreferenceattribute}{common block}{common block reference attribute}
+name. It may also have a \DWATlinkagename{} attribute as described
+in Section \refersec{chap:linkagenames}.
 
 A common block entry also has a \DWATlocation{} attribute
 \addtoindexx{location attribute}
 whose value describes the
-location of the beginning of the common \nolink{block}. 
+location of the beginning of the common \nolink{block}.
 
 The common
 \nolink{block} entry owns debugging information entries describing
 the variables contained within the common \nolink{block}.
 
-\textit{\addtoindex{Fortran} allows each declarer of a common block 
+\textit{\addtoindex{Fortran} allows each declarer of a common block
 to independently define its contents; thus, common blocks are not types.}
 
 \needlines{8}
@@ -304,18 +304,18 @@ name.
 Each\hypertarget{chap:DWATnamelistitemnamelistitem}{}
 name that is part of the namelist is represented
 by a debugging information entry with the tag
-\DWTAGnamelistitemTARG. 
+\DWTAGnamelistitemTARG.
 Each such entry is a child of the
-namelist entry, and all of the 
+namelist entry, and all of the
 namelist item entries for a
 \addtoindexx{namelist item entry}
 given namelist are ordered as were the list of names they
 correspond to in the source program.
 
-Each namelist item entry contains a 
+Each namelist item entry contains a
 \DWATnamelistitemDEFN{} attribute
 \addtoindexx{namelist item attribute}
-whose 
+whose
 \addtoindexx{namelist item entry}
 value is a \livelink{chap:classreference}{reference} to the debugging
 information entry representing the declaration of the item
