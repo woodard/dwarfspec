@@ -10,18 +10,18 @@ specify the representation of DWARF sections:
 \begin{itemize}
 
 \item
-\HFTinitiallength{}, \HFTsectionoffset{} and 
+\HFTinitiallength{}, \HFTsectionoffset{} and
 \HFTsectionlength{}, which are
-defined in 
-Sections \refersec{datarep:initiallengthvalues} and 
+defined in
+Sections \refersec{datarep:initiallengthvalues} and
 \refersec{datarep:32bitand64bitdwarfformats}.
 
 \item
-\HFTsbyte{}, 
-\HFTubyte{}, 
-\HFTuhalf{} and 
-\HFTuword{}, 
-which are defined in 
+\HFTsbyte{},
+\HFTubyte{},
+\HFTuhalf{} and
+\HFTuword{},
+which are defined in
 Section \refersec{datarep:integerrepresentationnames}.
 
 \item
@@ -66,8 +66,8 @@ entries for different compilation units within a large program
 would potentially require the access of many memory pages,
 probably hurting debugger performance.}
 
-To make lookups of program entities (including data objects, 
-functions and types) by name or by address faster, a producer 
+To make lookups of program entities (including data objects,
+functions and types) by name or by address faster, a producer
 of DWARF information may provide two different types of tables
 containing information about the debugging information
 entries owned by a particular compilation unit entry in a
@@ -78,7 +78,7 @@ more condensed format.
 \addtoindexx{accelerated access!by name}
 \addtoindexx{name index}
 For lookup by name, a name index is maintained in a separate
-object file section named \dotdebugnames{}. 
+object file section named \dotdebugnames{}.
 
 \textit{The \dotdebugnames{} section is new in \DWARFVersionV,
 and supersedes the \dotdebugpubnames{} and \dotdebugpubtypes{}
@@ -108,52 +108,52 @@ An executable or shareable object file may contain either a collection of
 "per-CU" indexes, simply copied from each relocatable object
 file, or the linker may produce a "per-module" index by
 combining the per-CU indexes into a single index that covers
-the entire 
+the entire
 \db
 module.
 
 \subsubsection{Contents of the Name Index}
 \label{chap:contentsofthenameindex}
-The name index must contain an entry for each 
+The name index must contain an entry for each
 debugging information entry that defines a
-named subprogram, label, variable, type, or namespace, 
+named subprogram, label, variable, type, or namespace,
 subject to the following rules:
 \begin{itemize}
 
-\item All non-defining declarations (that is, 
+\item All non-defining declarations (that is,
       debugging information entries with a
       \DWATdeclaration{} attribute) are excluded.
 
-\item \DWTAGnamespace{} debugging information entries 
+\item \DWTAGnamespace{} debugging information entries
       without a \DWATname{} attribute are
-      included with the name 
+      included with the name
       \doublequote{\texttt{(anonymous namespace)}}.
 
-\item All other debugging information entries 
+\item All other debugging information entries
       without a \DWATname{} attribute are excluded.
 
 \item \DWTAGsubprogram{}, \DWTAGinlinedsubroutine{}, and
-      \DWTAGlabel{} debugging information entries 
+      \DWTAGlabel{} debugging information entries
       without an address attribute (\DWATlowpc{},
-      \DWAThighpc{}, \DWATranges{}, or \DWATentrypc{}) 
+      \DWAThighpc{}, \DWATranges{}, or \DWATentrypc{})
       are excluded.
 
-\item \DWTAGvariable{} debugging information entries 
-      with a \DWATlocation{} attribute that includes a 
+\item \DWTAGvariable{} debugging information entries
+      with a \DWATlocation{} attribute that includes a
       \DWOPaddr{} or \DWOPformtlsaddress{} operator are
       included; otherwise, they are excluded.
 
 \item If a subprogram or inlined subroutine is included, and has a
       \DWATlinkagename{} attribute, there will be an additional
       index entry for the linkage name.
-      
+
 \end{itemize}
 
-For the purposes of determining whether a 
+For the purposes of determining whether a
 debugging information entry has a particular
-attribute (such as \DWATname{}), if 
+attribute (such as \DWATname{}), if
 debugging information entry $A$ has a \DWATspecification{}
-or \DWATabstractorigin{} attribute pointing to another 
+or \DWATabstractorigin{} attribute pointing to another
 debugging information entry $B$, any
 attributes of $B$ are considered to be part of $A$.
 
@@ -165,8 +165,8 @@ at global scope for that name.}
 
 \textit{A producer may choose to implement additional rules for what
 names are placed in the index, and may communicate those rules to
-a cooperating consumer via 
-\bb 
+a cooperating consumer via
+\bb
 augmentation sequence as
 \eb
 described below.}
@@ -174,20 +174,20 @@ described below.}
 \needlines{4}
 \subsubsection{Structure of the Name Index}
 \label{chap:structureofthenametindex}
-Logically, the name index can be viewed as a list of names, 
-with a list of index entries for each name. Each index entry 
-corresponds to a debugging information entry 
+Logically, the name index can be viewed as a list of names,
+with a list of index entries for each name. Each index entry
+corresponds to a debugging information entry
 that matches the criteria given in the previous section. For
-example, if one compilation unit has a function named \texttt{fred} 
-and another has a struct named \texttt{fred}, a lookup for 
-\doublequote{fred} will find the list containing those two index 
+example, if one compilation unit has a function named \texttt{fred}
+and another has a struct named \texttt{fred}, a lookup for
+\doublequote{fred} will find the list containing those two index
 entries.
 
-The index section contains 
+The index section contains
 \bb
 nine
 \eb
-individual parts, as illustrated in 
+individual parts, as illustrated in
 Figure \referfol{fig:nameindexlayoutpart1}.
 \begin{enumerate}
 \item A header, describing the layout of the section.
@@ -223,7 +223,7 @@ Figure \referfol{fig:nameindexlayoutpart1}.
 %\includegraphics[keepaspectratio=true,scale=1.0]{name-index-drawings-6p1}
 
 \begin{tikzpicture}[
-  every node/.style={node font=\small, anchor=north west, text height=.8em, 
+  every node/.style={node font=\small, anchor=north west, text height=.8em,
                      text depth=.2em, inner sep=4pt, outer ysep=0},
   caption/.style={node font=\small \bfseries, text width=90pt},
   overview/.style={draw, node font=\small, minimum height=28pt, text width=90pt},
@@ -269,7 +269,7 @@ Figure \referfol{fig:nameindexlayoutpart1}.
 \end{scope}
 
 \begin{scope}[on background layer]
-  \filldraw [explode] (culist.north east) -- (cu0.north west) -- 
+  \filldraw [explode] (culist.north east) -- (cu0.north west) --
                        (cu3.south west) -- (culist.south east) -- cycle;
 \end{scope}
 
@@ -287,7 +287,7 @@ Figure \referfol{fig:nameindexlayoutpart1}.
 \end{scope}
 
 \begin{scope}[on background layer]
-  \filldraw [explode] (ltulist.north east) -- (ltu0.north west) -- 
+  \filldraw [explode] (ltulist.north east) -- (ltu0.north west) --
                       (ltu3.south west) -- (ltulist.south east) -- cycle;
 \end{scope}
 
@@ -305,7 +305,7 @@ Figure \referfol{fig:nameindexlayoutpart1}.
 \end{scope}
 
 \begin{scope}[on background layer]
-  \filldraw [explode] (ftulist.north east) -- (ftu0.north west) -- 
+  \filldraw [explode] (ftulist.north east) -- (ftu0.north west) --
                       (ftu3.south west) -- (ftulist.south east) -- cycle;
 \end{scope}
 
@@ -321,7 +321,7 @@ Figure \referfol{fig:nameindexlayoutpart1}.
 \end{scope}
 
 \begin{scope}[on background layer]
-  \filldraw [explode] (hash.north east) -- (hash0.north west) -- 
+  \filldraw [explode] (hash.north east) -- (hash0.north west) --
                       (hash1.south west) -- (hash.south east) -- cycle;
 \end{scope}
 
@@ -336,7 +336,7 @@ Figure \referfol{fig:nameindexlayoutpart1}.
 \end{scope}
 
 \begin{scope}[on background layer]
-  \filldraw [explode] (names.north east) -- (name0.north west) -- 
+  \filldraw [explode] (names.north east) -- (name0.north west) --
                       (name1.south west) -- (names.south east) -- cycle;
 \end{scope}
 
@@ -347,7 +347,7 @@ Figure \referfol{fig:nameindexlayoutpart1}.
 \end{scope}
 
 begin{scope}
-\filldraw [explode] (localstrs.north east) -- (localstrs0.north west) -- 
+\filldraw [explode] (localstrs.north east) -- (localstrs0.north west) --
                     (localstrs0.south west) -- (localstrs.south east) -- cycle;
 
 % Exploded View of Abbreviations
@@ -357,7 +357,7 @@ begin{scope}
 \end{scope}
 
 \begin{scope}[on background layer]
-  \filldraw [explode] (abbrev.north east) -- (abbrev0.north west) -- 
+  \filldraw [explode] (abbrev.north east) -- (abbrev0.north west) --
                       (abbrev0.south west) -- (abbrev.south east) -- cycle;
 \end{scope}
 
@@ -481,9 +481,9 @@ begin{scope}
 
 \path [decoration={brace,amplitude=6pt}] ([xshift=9pt]entry0.north east)
       [draw,decorate] -- ([xshift=9pt]entry6.south east)
-      node [midway,right,inner xsep=9pt] {\begin{tabular}{c} 
-                                          \texttt{name\_count} \\ 
-                                                     $(= n)$ 
+      node [midway,right,inner xsep=9pt] {\begin{tabular}{c}
+                                          \texttt{name\_count} \\
+                                                     $(= n)$
                                           \end{tabular}};
 
 % Arrows pointing to .debug_str and entry pool
@@ -492,14 +492,14 @@ begin{scope}
 \path ([xshift=18pt]p1) coordinate (c1);
 \path ([shift={(36pt,45pt)}]p1) coordinate (p2);
 \path ([xshift=-18pt]p2) coordinate (c2);
-\draw [dashed,{Circle[open]}-{Stealth[]}] (p1) .. controls (c1) and (c2) .. (p2) node [anchor=west] 
+\draw [dashed,{Circle[open]}-{Stealth[]}] (p1) .. controls (c1) and (c2) .. (p2) node [anchor=west]
 																					{$.debug\_str$};
 
 \path (entry0.center) coordinate (p3);
 \path ([xshift=18pt]p3) coordinate (c3);
 \path ([shift={(36pt,27pt)}]p3) coordinate (p4);
 \path ([xshift=-18pt]p4) coordinate (c4);
-\draw [dashed,{Circle[open]}-{Stealth[]}] (p3) .. controls (c3) and (c4) .. (p4) node [anchor=west] 
+\draw [dashed,{Circle[open]}-{Stealth[]}] (p3) .. controls (c3) and (c4) .. (p4) node [anchor=west]
 																					{$index\ entries$};
 
 % Arrows from buckets to hashes
@@ -531,9 +531,9 @@ begin{scope}
 
 \path [decoration={brace,amplitude=6pt}] ([xshift=9pt]abbrev1.north east)
       [draw,decorate] -- ([xshift=9pt]abbrev9.south east)
-      node [midway,right,inner xsep=9pt] {\begin{tabular}{c} 
-                                          \texttt{abbrev\_table\_size} \\ 
-                                                     $(= s)$ 
+      node [midway,right,inner xsep=9pt] {\begin{tabular}{c}
+                                          \texttt{abbrev\_table\_size} \\
+                                                     $(= s)$
                                           \end{tabular}};
 
 \end{tikzpicture}
@@ -552,7 +552,7 @@ Figure~\ref{fig:nameindexlayoutpart1}: Name Index Layout \textit{(continued)}
 
 %\includegraphics[keepaspectratio=true,scale=1.0]{name-index-drawings-6p3}
 \begin{tikzpicture}[
-  every node/.style={node font=\small, anchor=north west, text height=.8em, text depth=.2em, 
+  every node/.style={node font=\small, anchor=north west, text height=.8em, text depth=.2em,
              inner sep=4pt, outer ysep=0},
   caption/.style={node font=\small \bfseries, text width=120pt},
   detail/.style={draw, node font=\small, minimum height=14pt, text width=120pt},
@@ -636,9 +636,9 @@ starting at 0.
 The list of foreign TUs is an array of 64-bit (\DWFORMrefsigeight) type
 signatures, representing types referenced by the index whose
 definitions have been placed in a different object file (that is, a split
-DWARF object). This list may be empty. 
-The foreign TU list immediately follows the local TU list 
-and they both use the same index, so that if there are $N$ local TU entries, 
+DWARF object). This list may be empty.
+The foreign TU list immediately follows the local TU list
+and they both use the same index, so that if there are $N$ local TU entries,
 the index for the first foreign TU is $N$.
 
 The name table is logically a table with a row for each unique name in
@@ -665,14 +665,14 @@ the entry as well as the set of attributes provided by the entry and
 their forms.
 
 \needlines{4}
-The standard 
+The standard
 \bb
 \addtoindex{index attribute}s (see Table \refersec{tab:indexattributeencodings})
-\eb 
+\eb
 are:
 \begin{itemize}
 \item Compilation Unit (CU), a reference to an entry in the list of
-    CUs. In a per-CU index, index entries without this 
+    CUs. In a per-CU index, index entries without this
 \bb
 	index attribute
 \eb
@@ -683,7 +683,7 @@ are:
 
 \item Debugging information entry offset within the CU or TU.
 
-\item Parent debugging information entry, 
+\item Parent debugging information entry,
     a reference to the index entry for the parent.
     This is represented as the offset of the entry relative to
     the start of the entry pool.
@@ -695,8 +695,8 @@ are:
 \needlines{6}
 It is possible that an indexed debugging information entry
 has a parent that is not
-indexed (for example, if its parent does not have a name attribute). 
-In such a case, a parent 
+indexed (for example, if its parent does not have a name attribute).
+In such a case, a parent
 \bb
 index attribute
 \eb
@@ -705,21 +705,21 @@ entry (that is, one that cannot be reached from any entry in the
 name table), or it may point to the nearest ancestor that does
 have an index entry.
 
-A producer may define additional 
+A producer may define additional
 \bb
-producer-specific 
-index attributes, 
+producer-specific
+index attributes,
 \eb
-and a consumer will be able to ignore and skip over any 
+and a consumer will be able to ignore and skip over any
 \bb
-index attributes 
+index attributes
 \eb
 it is not prepared to handle.
 
 \needlines{4}
 When an index entry refers to a foreign type unit, it may have
 \bb
-index attributes 
+index attributes
 \eb
 for both CU and (foreign) TU. For such entries, the CU
 \bb
@@ -730,7 +730,7 @@ locate a \splitDWARFobjectfile{} that contains the type unit.
 
 \textit{The type hash
 \bb
-index attribute, 
+index attribute,
 \eb
 not to be confused with the type signature
 for a TU, may be provided for type entries whose declarations are not
@@ -744,10 +744,10 @@ terminates the list. There may be gaps between the lists.
 
 \subsubsection{Per-CU versus Per-Module Indexes}
 \label{chap:percuvspermoduleindexes}
-\textit{In a per-CU index, the CU list may have only a single entry, 
-and index entries may omit the CU 
+\textit{In a per-CU index, the CU list may have only a single entry,
+and index entries may omit the CU
 \bb
-attribute. 
+attribute.
 \eb
 (Cross-module or link-time
 optimization, however, may produce an object file with several compile
@@ -755,7 +755,7 @@ units in one object. A compiler in this case may produce a separate
 index for each CU, or a combined index for all CUs. In the latter
 case, index entries will require the CU
 \bb
-attribute.) 
+attribute.)
 \eb
 Most name table
 entries may have only a single index entry for each, but sometimes a
@@ -763,16 +763,16 @@ name may be used in more than one context and will require multiple
 index entries, each pointing to a different debugging information
 entry.}
 
-\textit{When linking object files containing per-CU indexes, the 
-linker may choose to concatenate the indexes as ordinary sections, 
-or it may choose to combine the input indexes into a single 
+\textit{When linking object files containing per-CU indexes, the
+linker may choose to concatenate the indexes as ordinary sections,
+or it may choose to combine the input indexes into a single
 per-module index.}
 
-\textit{A per-module index will contain a number of CUs, and each index 
-entry contains a CU attribute or a TU attribute to identify which 
+\textit{A per-module index will contain a number of CUs, and each index
+entry contains a CU attribute or a TU attribute to identify which
 CU or TU contains the debugging information entry being indexed. When a
 given name is used in multiple CUs or TUs, it will typically have a
-series of index entries pointing to each CU or TU where it is declared. 
+series of index entries pointing to each CU or TU where it is declared.
 For example, an index entry for a \addtoindex{C++} namespace needs to
 list each occurrence, since each CU may contribute additional names to
 the namespace, and the consumer needs to find them all. On the
@@ -815,21 +815,21 @@ not including the length field itself
 
 \needlines{4}
 \item \HFNversion{} (\HFTuhalf) \\
-A version number\addtoindexx{version number!name index table} 
-(see Section \refersec{datarep:nameindextable}). 
+A version number\addtoindexx{version number!name index table}
+(see Section \refersec{datarep:nameindextable}).
 This number is specific to the name index table and is
 independent of the DWARF version number.
 
 \bb
 \item \HFNstrformat{} (\HFTubyte) \\
-An enumerated constant that specifies the representation of 
-string references in the name index. The possible values are: 
-\DWFORMstrp, \DWFORMstrpeight, and \DWFORMstrxfour{} (see 
+An enumerated constant that specifies the representation of
+string references in the name index. The possible values are:
+\DWFORMstrp, \DWFORMstrpeight, and \DWFORMstrxfour{} (see
 Section \refersec{datarep:classesandforms}).
 
 \item \HFNpadding{} (\HFTubyte) \\
 \eb
-Reserved to DWARF (must be zero). 
+Reserved to DWARF (must be zero).
 
 \item \HFNcompunitcount{} (\HFTuword) \\
 The number of CUs in the CU list.
@@ -841,7 +841,7 @@ The number of TUs in the local TU list.
 The number of TUs in the foreign TU list.
 
 \item \HFNbucketcount{} (\HFTuword) \\
-The number of hash buckets in the hash lookup table. 
+The number of hash buckets in the hash lookup table.
 If there is no hash lookup table, this field contains 0.
 
 \item \HFNnamecount{} (\HFTuword) \\
@@ -849,18 +849,18 @@ The number of unique names in the index.
 
 \bb
 \item \HFNlocalstrpoolsize{} (\HFTsectionlength) \\
-Size of the local string pool. If this value is non-zero, 
-string offsets (when \HFNstrformat{} is \DWFORMstrp{} or \DWFORMstrpeight) 
-reference the local string pool. If this value is 0, 
-string offsets reference the \dotdebugstr{} section. 
+Size of the local string pool. If this value is non-zero,
+string offsets (when \HFNstrformat{} is \DWFORMstrp{} or \DWFORMstrpeight)
+reference the local string pool. If this value is 0,
+string offsets reference the \dotdebugstr{} section.
 If \HFNstrformat{} is \DWFORMstrxfour, this field should be 0.
 
 \item \HFNstroffsets{} (\HFNsectionoffset) \\
-A 4-byte or 8-byte unsigned offset that points to the header 
-of the compilation unit’s contribution to the \dotdebugstroffsets{} 
-section. Indirect string references (when \HFNstrformat{} is 
-\DWFORMstrxfour) are interpreted as zero-based indexes into the 
-array of offsets following the header. If \HFNstrformat{} is 
+A 4-byte or 8-byte unsigned offset that points to the header
+of the compilation unit’s contribution to the \dotdebugstroffsets{}
+section. Indirect string references (when \HFNstrformat{} is
+\DWFORMstrxfour) are interpreted as zero-based indexes into the
+array of offsets following the header. If \HFNstrformat{} is
 \DWFORMstrp{} or \DWFORMstrpeight, this field should be 0.
 \eb
 
@@ -869,23 +869,23 @@ array of offsets following the header. If \HFNstrformat{} is
 The size in bytes of the abbreviations table.
 
 \needlines{4}
-\item 
+\item
 \bb
 \HFNaugmentationsize{} (\HFTuword) \\
-The size in bytes of the augmentation sequence. 
+The size in bytes of the augmentation sequence.
 This value must be a multiple of four.
 \eb
 
-\item 
+\item
 \bbeb
 \HFNaugmentation{} (sequence of \HFTubyte) \\
 \addtoindexx{augmentation sequence}
 \bb
-A producer-specific 
-sequence of bytes, 
+A producer-specific
+sequence of bytes,
 \eb
-which provides additional information about the contents of 
-this index. If provided, the sequence begins with 
+which provides additional information about the contents of
+this index. If provided, the sequence begins with
 \bb
 four bytes which serve as a producer ID.
 \eb
@@ -896,17 +896,17 @@ sequence
 is meant to be read by a cooperating consumer, and its
 contents and interpretation are not specified here. The
 \bb
-block is padded with zero bytes 
+block is padded with zero bytes
 \eb
 to a multiple of four bytes in length.
 
-\textit{The presence of an unrecognized augmentation 
+\textit{The presence of an unrecognized augmentation
 \bb
 producer ID
-\eb 
+\eb
 does not make it
 impossible for a consumer to process data in the \dotdebugnames{} section.
-The augmentation 
+The augmentation
 \db
 sequence only provides hints to the consumer regarding
 the completeness of the set of names in the index.}
@@ -915,10 +915,10 @@ the completeness of the set of names in the index.}
 
 \needlines{4}
 \subsubsubsection{List of CUs}
-The list of CUs immediately follows the header. Each entry in the 
+The list of CUs immediately follows the header. Each entry in the
 list is an offset of the corresponding compilation unit
 in the \dotdebuginfo{} section.
-In the DWARF-32 format, a section offset is 4 bytes, 
+In the DWARF-32 format, a section offset is 4 bytes,
 while in the DWARF-64 format, a section offset is 8 bytes.
 
 The total number of entries in the list is given by \texttt{comp\_unit\_count}.
@@ -926,15 +926,15 @@ There must be at least one CU.
 
 \needlines{4}
 \subsubsubsection{List of Local TUs}
-The list of local TUs immediately follows the list of CUs. Each 
+The list of local TUs immediately follows the list of CUs. Each
 entry in the list is an offset of the corresponding type unit
-in the \dotdebuginfo{} section. 
-In the DWARF-32 format, a section offset is 4 bytes, 
+in the \dotdebuginfo{} section.
+In the DWARF-32 format, a section offset is 4 bytes,
 while in the DWARF-64 format, a section offset is 8 bytes.
 
 \bb
-Any local TU entry with a maximum representable value is 
-considered not present. Any index entry referencing such 
+Any local TU entry with a maximum representable value is
+considered not present. Any index entry referencing such
 a local TU entry should be ignored.
 \eb
 
@@ -961,8 +961,8 @@ contains 4-byte unsigned integers.
 
 \needlines{4}
 Symbols are entered into the hash table by first computing a hash
-value from the symbol name. The hash is computed 
-using the "DJB" hash function\addtoindexx{DJB hash function} 
+value from the symbol name. The hash is computed
+using the "DJB" hash function\addtoindexx{DJB hash function}
 described in Section \refersec{datarep:nametablehashfunction}.
 Given a hash value for the symbol,
 the symbol is entered into a bucket whose index is the hash value
@@ -971,8 +971,8 @@ modulo \HFNbucketcount{}. The buckets array is indexed starting at 0.
 For the purposes of the hash computation, each symbol name should be
 folded according to the simple case folding algorithm defined in the
 "Caseless Matching" subsection of Section 5.18 ("Case Mappings") of
-the \addtoindex{Unicode} Standard, Version 9.0.0. The original symbol 
-name, as it appears in the source code, should be stored in the name 
+the \addtoindex{Unicode} Standard, Version 9.0.0. The original symbol
+name, as it appears in the source code, should be stored in the name
 table.\addtoindexx{name index!case folding}\db
 
 \textit{Thus, two symbols that differ only by case will hash to
@@ -981,11 +981,11 @@ when appropriate.}
 
 \needlines{6}
 The simple case folding algorithm is further described
-in the CaseFolding.txt file distributed with the \addtoindex{Unicode} 
-Character Database. That file defines four classes of mappings: 
-Common (C), Simple (S), Full (F), and Turkish (T). 
-The hash computation specified here uses the C + S mappings only, 
-which do not affect the total length of the string, with the addition 
+in the CaseFolding.txt file distributed with the \addtoindex{Unicode}
+Character Database. That file defines four classes of mappings:
+Common (C), Simple (S), Full (F), and Turkish (T).
+The hash computation specified here uses the C + S mappings only,
+which do not affect the total length of the string, with the addition
 that Turkish upper case dotted '\.{I}' and lower case dotless '\i'
 are folded to the Latin lower case 'i'.
 
@@ -995,10 +995,10 @@ represented by the value 0.
 
 \needlines{4}
 The hashes array contains a sequence of the full hash values for each
-symbol. All symbols that have the same index into the bucket list 
-follow one another in the hashes array, and the indexed entry in 
-the bucket list refers to the first symbol. 
-When searching for a symbol, the search 
+symbol. All symbols that have the same index into the bucket list
+follow one another in the hashes array, and the indexed entry in
+the bucket list refers to the first symbol.
+When searching for a symbol, the search
 starts at the index given by the bucket, and continues either until a
 matching symbol is found or until a hash value from a different bucket
 is found. If two different symbol names produce the same hash value,
@@ -1014,20 +1014,20 @@ in the name table.
 \subsubsubsection{Name Table}
 \label{chap:nametable}
 \bb
-The name table immediately follows the hash lookup table. 
-It consists of two arrays: an array of string pointers or indexes, 
-followed immediately by an array of entry offsets. The items in 
-the first array are determined by the \HFNstrformat{} field in the 
-section header, and may be 4-byte or 8-byte offsets into either the 
-\dotdebugstr{} section or the local string pool, or 4-byte indexes 
+The name table immediately follows the hash lookup table.
+It consists of two arrays: an array of string pointers or indexes,
+followed immediately by an array of entry offsets. The items in
+the first array are determined by the \HFNstrformat{} field in the
+section header, and may be 4-byte or 8-byte offsets into either the
+\dotdebugstr{} section or the local string pool, or 4-byte indexes
 into the array of offsets in the \dotdebugstroffsets{} section.
-The items in the second array are section offsets: 4-byte unsigned 
-integers for the DWARF-32 format or 8-byte unsigned integers for the 
-DWARF-64 format. The entry offsets in the second array refer to index 
+The items in the second array are section offsets: 4-byte unsigned
+integers for the DWARF-32 format or 8-byte unsigned integers for the
+DWARF-64 format. The entry offsets in the second array refer to index
 entries, and are relative to the start of the entry pool area.
 \eb
 
-These two arrays are indexed starting at 1, and correspond 
+These two arrays are indexed starting at 1, and correspond
 one-to-one with each other. The length of each array is
 given by \HFNnamecount{}.
 
@@ -1041,29 +1041,29 @@ requirement for the name table.}
 \bb
 \subsubsubsection{Local String Pool}
 \label{chap:localstringpool}
-The local string pool, if present, immediately follows the name table. 
-It consists of a series of null-terminated strings. Its size is given by 
+The local string pool, if present, immediately follows the name table.
+It consists of a series of null-terminated strings. Its size is given by
 \HFNlocalstrpoolsize.
 
-\textit{For non-split DWARF compilation units, strings used by the 
-name table will have significant overlap with strings used by the 
-\dotdebuginfo{} section, and a local string pool is not advisable. 
-Relocations for the string references may be minimized by using the 
-indirect string forms in both \dotdebuginfo{} and \dotdebugnames. 
-For split DWARF compilation units with a linker that is aware of 
-and can combine \dotdebugnames{} sections into a single per-module 
-index, there is likely little overlap, and relocations for string 
-references in the name table can be minimized by using the local 
-string pool. If the linker simply concatenates the per-CU indexes, 
-however, it remains beneficial to use indirect string forms and a 
+\textit{For non-split DWARF compilation units, strings used by the
+name table will have significant overlap with strings used by the
+\dotdebuginfo{} section, and a local string pool is not advisable.
+Relocations for the string references may be minimized by using the
+indirect string forms in both \dotdebuginfo{} and \dotdebugnames.
+For split DWARF compilation units with a linker that is aware of
+and can combine \dotdebugnames{} sections into a single per-module
+index, there is likely little overlap, and relocations for string
+references in the name table can be minimized by using the local
+string pool. If the linker simply concatenates the per-CU indexes,
+however, it remains beneficial to use indirect string forms and a
 separate string table.}
 \eb
 
 \needlines{6}
 \subsubsubsection{Abbreviations Table}
-The abbreviations table immediately follows 
+The abbreviations table immediately follows
 \bb
-the local string pool or, if the local string pool is absent, 
+the local string pool or, if the local string pool is absent,
 \eb
 the name table. This table
 consists of a series of abbreviation declarations. Its size is given
@@ -1082,20 +1082,20 @@ to the index entry.
 Following the tag encoding is a series of attribute specifications.
 Each
 \bb
-index attribute 
+index attribute
 \eb
 consists of two parts: an unsigned LEB128 number that
 represents the index attribute, and another unsigned LEB128 number
-that represents the 
+that represents the
 \bb
-index attribute's 
+index attribute's
 \eb
-form (as described in 
-Section \refersec{datarep:attributeencodings}). The series of attribute 
-specifications ends with an entry containing 0 for the attribute and 
+form (as described in
+Section \refersec{datarep:attributeencodings}). The series of attribute
+specifications ends with an entry containing 0 for the attribute and
 0 for the form.
 
-The index attributes and their meanings are listed in 
+The index attributes and their meanings are listed in
 Table \refersec{tab:indexattributeencodings}.
 
 \needlines{10}
@@ -1118,7 +1118,7 @@ Table \refersec{tab:indexattributeencodings}.
 \DWIDXtypehashTARG    	& Hash of type \mbox{declaration}              \\
 \bb
 \DWIDXexternalTARG		& Whether \DWATexternal{} is present
-						  on the declaration (flag) 
+						  on the declaration (flag)
 \eb \\
 \end{longtable}
 \end{centering}
@@ -1130,8 +1130,8 @@ terminating 0 byte.
 
 \needlines{4}
 \subsubsubsection{Entry Pool}
-The entry pool immediately follows the abbreviations table. 
-Each entry in the entry offsets array in the name table (see 
+The entry pool immediately follows the abbreviations table.
+Each entry in the entry offsets array in the name table (see
 Section \ref{chap:nametable})
 points to an offset in the entry pool, where a series
 of index entries for that name is located.
@@ -1169,7 +1169,7 @@ the index section, as defined by the \texttt{unit\_length} header field.
 For \addtoindexx{lookup!by address}
 lookup by address, a table is maintained in a separate
 \addtoindexx{accelerated access!by address}
-object file section called 
+object file section called
 \dotdebugaranges{}. The table consists
 of sets of variable length entries, each set describing the
 portion of the program\textquoteright{}s address space that is covered by
@@ -1180,14 +1180,14 @@ Each set begins with a header containing five values:
 \begin{enumerate}[1. ]
 \item \HFNunitlength{} (\livelink{datarep:initiallengthvalues}{initial length}) \\
 The length of this contribution to the address lookup section,
-not including the length field itself 
+not including the length field itself
 \bb
 (see Section \refersec{datarep:initiallengthvalues}).
 \eb
 
 \item \HFNversion{} (\HFTuhalf) \\
 A version number\addtoindexx{version number!address lookup table}
-(see Section \refersec{datarep:addrssrangetable}). 
+(see Section \refersec{datarep:addrssrangetable}).
 This number is specific to the address lookup table and is
 independent of the DWARF version number.
 
@@ -1199,23 +1199,23 @@ compilation unit header referenced by the set.
 
 \item \HFNaddresssize{} (\HFTubyte) \\
 The \addtoindex{size of an address}
-in bytes on the target architecture. 
+in bytes on the target architecture.
 \db
 
-\item \HFNreservedwassegmentselectorsize{} 
-\bbeb 
+\item \HFNreservedwassegmentselectorsize{}
+\bbeb
 \\
 
 \end{enumerate}
 
 \needlines{6}
 This header is followed by a variable number of address range
-descriptors. Each descriptor is a 
+descriptors. Each descriptor is a
 \bb
 pair consisting of the beginning address
-\eb 
+\eb
 of a range of text or data covered by some entry owned by
-the corresponding compilation unit, followed by the 
+the corresponding compilation unit, followed by the
 \db
 length of that range. A particular set is terminated by an
 entry consisting of
@@ -1223,14 +1223,14 @@ entry consisting of
 two
 \eb
 zeroes.
-\db 
+\db
 By scanning the table, a debugger can quickly decide
 which compilation unit to look in to find the debugging
 information for an object that has a given address.
 
 \bb
 A range description entry whose address is the reserved address (see
-Section \refersec{chap:reservedtargetaddress}), indicates a 
+Section \refersec{chap:reservedtargetaddress}), indicates a
 non-existent range, which is equivalent to
 omitting the range description.
 \eb
@@ -1245,7 +1245,7 @@ multiple address range descriptors for that compilation unit.}
 \textit{A source\dash level debugger needs to know how to
 \addtoindexx{line number information|see{\textit{also} statement list attribute}}
 associate locations in the source files with the corresponding
-machine instruction addresses in the executable or the shared 
+machine instruction addresses in the executable or the shared
 object files used by that executable object file. Such an
 association makes it possible for the debugger user
 to specify machine instruction addresses in terms of source
@@ -1256,18 +1256,18 @@ of the source files and to single step from line to line,
 or statement to statement.}
 
 Line number information generated for a compilation unit is
-represented in the 
+represented in the
 \dotdebugline{} section of an object file, and optionally
 also in the \dotdebuglinestr{} section, and
 is referenced by a corresponding compilation unit debugging
-information entry 
-(see Section \refersec{chap:fullandpartialcompilationunitentries}) 
+information entry
+(see Section \refersec{chap:fullandpartialcompilationunitentries})
 in the \dotdebuginfo{} section.
 
 \textit{Some computer architectures employ more than one instruction
-set (for example, the ARM 
+set (for example, the ARM
 \addtoindexx{ARM instruction set architecture}
-and 
+and
 MIPS architectures support
 \addtoindexx{MIPS instruction set architecture}
 a 32-bit as well as a 16-bit instruction set). Because the
@@ -1276,7 +1276,7 @@ convenient to encode the applicable instruction set in the
 \dotdebugline{} section as well.}
 
 \textit{If space were not a consideration, the information provided
-in the \dotdebugline{} 
+in the \dotdebugline{}
 section could be represented as a large
 matrix, with one row for each instruction in the emitted
 object code. The matrix would have columns for:}
@@ -1291,17 +1291,17 @@ object code. The matrix would have columns for:}
 \textit{Such a matrix, however, would be impractically large. We
 shrink it with two techniques. First, we delete from
 the matrix each row whose file, line, source column and
-discriminator\addttindexx{discriminator} 
+discriminator\addttindexx{discriminator}
 is identical with that of its
 \bb
-predecessors, except where the instruction is marked as a 
-suggested breakpoint location, the end of a prologue region, 
-or the beginning of an epilogue region. 
+predecessors, except where the instruction is marked as a
+suggested breakpoint location, the end of a prologue region,
+or the beginning of an epilogue region.
 \eb
 Second, we design a byte-coded language
 for a state machine and store a stream of bytes in the object
 file instead of the matrix. This language can be much more
-compact than the matrix. To the line number information a 
+compact than the matrix. To the line number information a
 consumer must \doublequote{run} the state machine
 to generate the matrix for each compilation unit of interest.
 The concept of an encoded matrix also leaves
@@ -1318,22 +1318,22 @@ number information format:
 \begin{longtable} {lP{9cm}}
 state machine &
 The hypothetical machine used by a consumer of the line number
-information to expand the byte\dash coded 
+information to expand the byte\dash coded
 instruction stream into a matrix of
 line number information. \\
 
 line number program &
-A series of byte\dash coded 
+A series of byte\dash coded
 line number information instructions representing
 one compilation unit. \\
 
 \addtoindex{basic block} &
  A sequence of instructions where only the first instruction may be a
 branch target and only the last instruction may transfer control. A
-subprogram invocation is defined to be an exit from a 
+subprogram invocation is defined to be an exit from a
 \addtoindex{basic block}.
 
-\textit{A \addtoindex{basic block} does not 
+\textit{A \addtoindex{basic block} does not
 necessarily correspond to a specific source code
 construct.} \\
 
@@ -1346,7 +1346,7 @@ compilation unit are assumed to be contiguous). \\
 \needlines{8}
 \subsection{State Machine Registers}
 \label{chap:statemachineregisters}
-The line number information state machine has a number of  
+The line number information state machine has a number of
 registers as shown in Table \referfol{tab:statemachineregisters}.
 
 \begin{longtable}{l|P{10cm}}
@@ -1355,7 +1355,7 @@ registers as shown in Table \referfol{tab:statemachineregisters}.
 \endfirsthead
   \bfseries Register name&\bfseries Meaning\\ \hline
 \endhead
-  \hline 
+  \hline
   \multicolumn{2}{l}{\emph{Continued on next page}}
 \endfoot
   \hline
@@ -1373,7 +1373,7 @@ architectures, this register will always be 0.  \\
 
 \LNSREGfile &
 An unsigned integer indicating the identity of the source file
-corresponding to a machine instruction. 
+corresponding to a machine instruction.
 \bb
 Files are numbered beginning at 0.
 \eb
@@ -1391,8 +1391,8 @@ that a statement begins at the \doublequote{left edge} of the line. \\
 
 \LNSREGisstmt &
 A boolean indicating that the current instruction is a recommended
-breakpoint location. A recommended breakpoint location 
-is intended to \doublequote{represent} a line, a 
+breakpoint location. A recommended breakpoint location
+is intended to \doublequote{represent} a line, a
 statement and/or a semantically distinct subpart of a
 statement. \\
 
@@ -1418,7 +1418,7 @@ the exit of a function. \\
 
 \bb
 \LNSREGprologueepilogue &
-A boolean indicating that the current row describes instructions 
+A boolean indicating that the current row describes instructions
 within a prologue or epilogue range.
 \eb
 \\
@@ -1445,7 +1445,7 @@ zero. \\
 \end{longtable}
 
 The \texttt{address} and \addttindex{op\_index} registers,
-taken together, form an \addtoindex{operation pointer} that can 
+taken together, form an \addtoindex{operation pointer} that can
 reference any individual operation within the instruction stream.
 
 At the beginning  of each sequence within a line number
@@ -1460,7 +1460,7 @@ program, the state of the registers is as show in Table
 \hline
 \LNSREGaddress 			& 0 \\
 \LNSREGopindex 			& 0 \\
-\bbeb 
+\bbeb
 \LNSREGfile				& 0 \\
 \LNSREGline 			& 1 \\
 \LNSREGcolumn 			& 0 \\
@@ -1480,7 +1480,7 @@ program, the state of the registers is as show in Table
 \vspace{5mm}
 \end{table}
 
-\textit{The 
+\textit{The
 \LNSREGisa{} value 0 specifies that the instruction set is the
 architecturally determined default instruction set. This may
 be fixed by the ABI, or it may be specified by other means,
@@ -1495,14 +1495,14 @@ The state machine instructions in a line number program belong to one of three c
 \item special opcodes \\
 These have a \HFTubyte{} opcode field and no operands.\vspace{1ex}
 
-\textit{Most of the instructions in a 
+\textit{Most of the instructions in a
 line number program are special opcodes.}
 
 \needlines{4}
 \item standard opcodes \\
 These have a \HFTubyte{} opcode field which may be followed by zero or more
-\addtoindex{LEB128} operands (except for 
-\mbox{\DWLNSfixedadvancepc,} see 
+\addtoindex{LEB128} operands (except for
+\mbox{\DWLNSfixedadvancepc,} see
 Section \refersec{chap:standardopcodes}).
 The opcode implies the number of operands and their meanings, but the
 line number program header also specifies the number of operands for
@@ -1516,13 +1516,13 @@ additional opcodes without reducing the number of special opcodes.
 
 \needlines{4}
 \item extended opcodes \\
-These have a multiple byte format. The first byte is 
+These have a multiple byte format. The first byte is
 \bb
 \DWLNSextendedop{}.
 \eb
 The next bytes
 are an unsigned LEB128\addtoindexx{LEB128!unsigned} integer giving the number of bytes in the
-instruction itself (this does not include the first 
+instruction itself (this does not include the first
 \bb
 \DWLNSextendedop{}
 \eb
@@ -1550,28 +1550,28 @@ a header containing the following fields in order:
 \item \HFNunitlength{} (\livelink{datarep:initiallengthvalues}{initial length})  \\
 The size in bytes of the line number information for this
 compilation unit, not including the length field itself
-(see Section \refersec{datarep:initiallengthvalues}). 
+(see Section \refersec{datarep:initiallengthvalues}).
 
 \needlines{4}
 \item \HFNversion{} (\HFTuhalf) \\
-A version number\addtoindexx{version number!line number information} 
-(see Section \refersec{datarep:linenumberinformation}). 
+A version number\addtoindexx{version number!line number information}
+(see Section \refersec{datarep:linenumberinformation}).
 This number is specific to
 the line number information and is independent of the DWARF
-version number. 
+version number.
 
 \item \HFNaddresssize{} (\HFTubyte) \\
 \bb
 The \addtoindex{size of an address}
-in bytes on the target architecture. 
+in bytes on the target architecture.
 \eb
 
-\textit{The \HFNaddresssize{} field 
+\textit{The \HFNaddresssize{} field
 \bb
-supports 
+supports
 \eb
-the common practice of stripping all but 
-the line number sections (\dotdebugline{} and \dotdebuglinestr{}) 
+the common practice of stripping all but
+the line number sections (\dotdebugline{} and \dotdebuglinestr{})
 from an executable.}
 
 \item \HFNreservedwassegmentselectorsize{}
@@ -1583,8 +1583,8 @@ The number of bytes following the \HFNheaderlength{} field to the
 beginning of the first byte of the line number program itself.
 In the \thirtytwobitdwarfformat, this is a 4-byte unsigned
 length; in the \sixtyfourbitdwarfformat, this field is an
-8-byte unsigned length 
-(see Section \refersec{datarep:32bitand64bitdwarfformats}). 
+8-byte unsigned length
+(see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
 \needlines{6}
 \item \HFNminimuminstructionlength{} (\HFTubyte)  \\
@@ -1592,13 +1592,13 @@ The size in bytes of the smallest target machine
 instruction. Line number program opcodes that alter
 the \texttt{address} and \addttindex{op\_index}
 registers use this and \HFNmaximumoperationsperinstruction{}
-in their calculations. 
+in their calculations.
 
 \needlines{9}
 \item \HFNmaximumoperationsperinstruction{} (\HFTubyte) \\
 The maximum number of individual operations that may be
 encoded in an instruction. Line number program opcodes
-that alter the \LNSREGaddress{} and 
+that alter the \LNSREGaddress{} and
 \LNSREGopindex{} registers use this and
 \HFNminimuminstructionlength{} in their calculations.
 
@@ -1608,14 +1608,14 @@ architectures, this field is 1, the \LNSREGopindex{} register is always
 
 \needlines{8}
 \item \HFNdefaultisstmt{} (\HFTubyte) \\
-The initial value of the \LNSREGisstmt{} register.  
+The initial value of the \LNSREGisstmt{} register.
 
 \textit{A simple approach
 to building line number information when machine instructions
 are emitted in an order corresponding to the source program
 is to set \HFNdefaultisstmt{}
 to \doublequote{true} and to not change the
-value of the \LNSREGisstmt{} register 
+value of the \LNSREGisstmt{} register
 within the line number program.
 One matrix entry is produced for each line that has code
 generated for it. The effect is that every entry in the
@@ -1628,7 +1628,7 @@ the matrix for a line number; in this case, at least one entry
 (often but not necessarily only one) specifies a recommended
 breakpoint location for the line number. \DWLNSnegatestmt{}
 opcodes in the line number program control which matrix entries
-constitute such a recommendation and 
+constitute such a recommendation and
 \HFNdefaultisstmt{} might
 be either \doublequote{true} or \doublequote{false.} This approach might be
 used as part of support for debugging optimized code.}
@@ -1645,7 +1645,7 @@ The number assigned to the first special opcode.
 
 \textit{Opcode base is typically one greater than the highest-numbered
 standard opcode defined for the specified version of the line
-number information (12 in DWARF Versions 
+number information (12 in DWARF Versions
 \bb
 3 through 6,
 \eb
@@ -1655,16 +1655,16 @@ number information (12 in DWARF Versions
 \addtoindexx{DWARF Version 6}
 and 9 in
 \addtoindexx{DWARF Version 2}
-Version 2).  
+Version 2).
 If \HFNopcodebase{} is less than the typical value,
 then standard opcode numbers greater than or equal to the
 opcode base are not used in the line number table of this unit
 (and the codes are treated as special opcodes). If \HFNopcodebase{}
 is greater than the typical value, then the numbers between
 that of the highest standard opcode and the first special
-opcode (not inclusive) are used for 
+opcode (not inclusive) are used for
 \bb
-producer-specific 
+producer-specific
 \eb
 extensions.}
 
@@ -1673,16 +1673,16 @@ extensions.}
 This array specifies the number of \addtoindex{LEB128} operands for each
 of the standard opcodes. The first element of the array
 corresponds to the opcode whose value is 1, and the last
-element corresponds to the opcode whose value 
+element corresponds to the opcode whose value
 is \mbox{\HFNopcodebase{} - 1}.
 
 \textit{By increasing \HFNopcodebase{}, and adding elements to this array,
 new standard opcodes can be added, while allowing consumers who
 do not know about these new opcodes to be able to skip them.}
 
-\textit{Codes for 
+\textit{Codes for
 \bb
-producer-specific 
+producer-specific
 \eb
 extensions, if any, are described
 just like standard opcodes.}
@@ -1701,9 +1701,9 @@ Each descriptor consists the following:
 \begin{itemize}
 \setlength{\itemsep}{0em}
 \item A sequence of field descriptors. Each field descriptor consists
-of a pair of unsigned LEB128 values: (a) a content type code (see 
+of a pair of unsigned LEB128 values: (a) a content type code (see
 Sections \refersec{chap:standardcontentdescriptions} and
-\refersec{chap:producerdefinedcontentdescriptions}), and 
+\refersec{chap:producerdefinedcontentdescriptions}), and
 (b) a form code (using the attribute form codes).
 \item A pair of zero bytes to terminate the descriptor.
 \end{itemize}
@@ -1715,22 +1715,22 @@ The format declarations describe the layout of the entries
 in the \HFNdirectories{} field, below.
 \eb
 
-\needlines{4} 
+\needlines{4}
 \item \HFNdirectoriescount{} (ULEB128) \\
-A count of the number of entries 
+A count of the number of entries
 \db
 in the following \HFNdirectories{} field.
 
 \needlines{8}
-\bb    
+\bb
 \item \HFNdirectories{} (sequence of directory entries) \\
 A sequence of directory entries. Each entry consists of:
 \begin{itemize}
 \setlength{\itemsep}{0em}
-\item A format code (ULEB128), which selects a record format 
-descriptor from the \HFNdirectoryformattable{} field, above, 
+\item A format code (ULEB128), which selects a record format
+descriptor from the \HFNdirectoryformattable{} field, above,
 by its index.
-\item A sequence of fields as described by the selected record 
+\item A sequence of fields as described by the selected record
 format descriptor.
 \end{itemize}
 
@@ -1742,40 +1742,40 @@ including the compilation directory of the compilation.
 (The paths include those directories specified by the
 user for the compiler to search and those the compiler
 searches without explicit direction.)
-   
-The first 
+
+The first
 \bb
 path
 \eb
 entry is the current directory of the compilation;
 \bb
-if that entry is specified using a relative path, it is relative 
+if that entry is specified using a relative path, it is relative
 to the location of the linked image containing the line table
 entries (assuming the image has not been moved).
 \eb
 Each additional path entry is either a full path name or
 is relative to the current directory of the compilation.
-   
+
 The line number program assigns a number (index) to each
 of the directory entries in order, beginning with 0.
-   
-\textit{Prior to \DWARFVersionV, the current 
+
+\textit{Prior to \DWARFVersionV, the current
 \bb
 compilation file did not have a specific entry in the
 \HFNfilenames{} field. Starting in \DWARFVersionV,
 the current file name has index 0.}
 \eb
 
-\textit{Note that if a \dotdebuglinestr{} section is present, 
-both the compilation unit debugging information entry 
+\textit{Note that if a \dotdebuglinestr{} section is present,
+both the compilation unit debugging information entry
 and the line number header can
 share a single copy of the current directory name string.}
 
 \needlines{4}
 \bb
 \item \HFNfilenameformatcount{} (ULEB128) \\
-A count of the number of format descriptors in the following 
-\HFNfilenameformattable{} field. 
+A count of the number of format descriptors in the following
+\HFNfilenameformattable{} field.
 \eb
 
 \needlines{6}
@@ -1785,9 +1785,9 @@ A sequence of record format descriptors. Each descriptor consists of:
 \begin{itemize}
 \setlength{\itemsep}{0em}
 \item A sequence of field descriptors. Each field descriptor consists
-of a pair of unsigned LEB128 values: (a) a content type code (see 
+of a pair of unsigned LEB128 values: (a) a content type code (see
 Sections \refersec{chap:standardcontentdescriptions} and
-\refersec{chap:producerdefinedcontentdescriptions}), and 
+\refersec{chap:producerdefinedcontentdescriptions}), and
 (b) a form code (using the attribute form codes).
 \item A pair of zero bytes to terminate the descriptor.
 \end{itemize}
@@ -1800,7 +1800,7 @@ in the \HFNfilenames{} field, below.
 \eb
 
 \item \HFNfilenamescount{} (ULEB128) \\
-A count of the number of file name entries 
+A count of the number of file name entries
 \db
 in the following \HFNfilenames{} field.
 
@@ -1810,10 +1810,10 @@ in the following \HFNfilenames{} field.
 A sequence of file name entries. Each entry consists of:
 \begin{itemize}
 \setlength{\itemsep}{0em}
-\item A format code (ULEB128), which selects a record format 
+\item A format code (ULEB128), which selects a record format
 descriptor from the \HFNfilenameformattable{}, by its index.
 
-\item A sequence of fields as described by the selected record 
+\item A sequence of fields as described by the selected record
 format descriptor.
 \end{itemize}
 
@@ -1823,29 +1823,29 @@ contributes
 to the line number information for this
 compilation or is used in other contexts, such as in
 a declaration coordinate or a macro file inclusion.
- 
+
 \bb
 The first file name entry is the primary source file,
-\eb 
-whose file name exactly matches that given in the 
-\DWATname{} attribute in the compilation unit 
+\eb
+whose file name exactly matches that given in the
+\DWATname{} attribute in the compilation unit
 debugging information entry.
-   
-The line number program references file names in this 
-sequence beginning with 0, and uses those numbers instead 
+
+The line number program references file names in this
+sequence beginning with 0, and uses those numbers instead
 of file names in the line number program that follows.
 
-\textit{Prior to \DWARFVersionV, the current compilation 
+\textit{Prior to \DWARFVersionV, the current compilation
 file name was not represented in the \HFNfilenames{}
-field. In \DWARFVersionV and 
+field. In \DWARFVersionV and
 \bbeb
-after, the current compilation file name 
-is explicitly present and has index 0. This is needed to support 
+after, the current compilation file name
+is explicitly present and has index 0. This is needed to support
 the common practice of stripping all but the line number sections
 fnad{} and \dotdebuglinestr) from an executable.}
 
-\textit{Note that if a \dotdebuglinestr{} section is present, 
-both the compilation unit debugging information entry 
+\textit{Note that if a \dotdebuglinestr{} section is present,
+both the compilation unit debugging information entry
 and the line number header can
 share a single copy of the current file name string.}
 
@@ -1864,7 +1864,7 @@ The following type codes are defined.
 The component is a null-terminated path name string.
 If the associated form code is \DWFORMstring{}, then the
 string occurs immediately in the containing \texttt{directories}
-or \addttindex{file\_names} field. 
+or \addttindex{file\_names} field.
 \bb
 If the form code is \DWFORMlinestrp, then the string is included in
 the \dotdebuglinestr{} section; if the form code is \DWFORMstrp{} or
@@ -1884,24 +1884,24 @@ Section \refersec{datarep:32bitand64bitdwarfformats}).
 
 \textit{Note that this use of \DWFORMlinestrp{} is similar to
 \DWFORMstrp{} but refers to the \dotdebuglinestr{} section,
-not \dotdebugstr. 
-It is needed to support the common practice of stripping all but 
-the line number sections (\dotdebugline{} and \dotdebuglinestr{}) 
+not \dotdebugstr.
+It is needed to support the common practice of stripping all but
+the line number sections (\dotdebugline{} and \dotdebuglinestr{})
 from an executable.
 }
 
 In a \dotdebuglinedwo{} section, the forms \DWFORMstrxXNand{} may
 also be used. These refer into the \dotdebugstroffsetsdwo{}
 section (and indirectly also the \dotdebugstrdwo{} section)
-because no 
+because no
 \bb
-\doublequote{.debug\_line\_str\_offsets.dwo} or 
-\doublequote{.debug\_line\_str.dwo} 
+\doublequote{.debug\_line\_str\_offsets.dwo} or
+\doublequote{.debug\_line\_str.dwo}
 \eb
-sections exist or are defined for 
-use in split objects. (The form \DWFORMstring{} may also be used, 
+sections exist or are defined for
+use in split objects. (The form \DWFORMstring{} may also be used,
 but this precludes the benefits of string sharing.)
-   
+
 \item \DWLNCTdirectoryindexTARG \\
 The unsigned directory index represents an entry in the
 directories field of the header. The index is 0 if
@@ -1910,7 +1910,7 @@ the file was found in the current directory of the compilation
 1 if it was found in the second directory in the directories
 field, and so on.
 
-This content code is always paired with one of 
+This content code is always paired with one of
 \bb
 the forms
 \eb
@@ -1924,12 +1924,12 @@ listed and the number of times each is used in the \addttindex{file\_names} fiel
 
 \needlines{4}
 \item \DWLNCTtimestampTARG \\
-\DWLNCTtimestampNAME{} indicates that the value is the implementation-defined 
-time of last modification of the file, or 0 if not available. 
+\DWLNCTtimestampNAME{} indicates that the value is the implementation-defined
+time of last modification of the file, or 0 if not available.
 It is always paired with one of the forms
 \DWFORMudata, \DWFORMdatafour, \DWFORMdataeight{} or \DWFORMblock.
 
-\needlines{4} 
+\needlines{4}
 \item  \DWLNCTsizeTARG \\
 \DWLNCTsizeNAME{} indicates that the value is the unsigned size of the
 file in bytes, or 0 if not available. It is paired with one of the
@@ -1944,8 +1944,8 @@ of the file contents. It is paired with form \DWFORMdatasixteen.
 \bb
 \item \DWLNCTsourceTARG \\
 \DWLNCTsourceNAME{} specifies a null-terminated UTF-8 string that
-constitutes the source text for the program. It is paired with the same 
-forms as \DWLNCTpath. 
+constitutes the source text for the program. It is paired with the same
+forms as \DWLNCTpath.
 
 \textit{When the source field is present, consumers use the embedded source
 instead of accessing the source using the file path
@@ -1973,7 +1973,7 @@ is found in Appendix \refersec{app:linenumberheaderexample}.}
 \bb
 \subsubsection{Producer-defined Content Descriptions}
 \label{chap:producerdefinedcontentdescriptions}
-Producer-defined 
+Producer-defined
 \eb
 content descriptions may be defined using content
 type codes in the range \DWLNCTlouserNAME{} to \DWLNCThiuserNAME{}. Each
@@ -1982,17 +1982,17 @@ such code may be combined with one or more forms from the set:
 \DWFORMdataone, \DWFORMdatatwo, \DWFORMdatafour, \DWFORMdataeight,
 \DWFORMdatasixteen,
 \DWFORMflag, \DWFORMlinestrp, \DWFORMsdata, \DWFORMsecoffset,
-\DWFORMstring, \DWFORMstrp, 
+\DWFORMstring, \DWFORMstrp,
 \bb
 \DWFORMstrpeight,
-\DWFORMstrpsup, 
+\DWFORMstrpsup,
 \DWFORMstrpsupeight,
 \eb
 \DWFORMstrxXN{} and \DWFORMudata.
 
-\textit{If a consumer encounters a 
+\textit{If a consumer encounters a
 \bb
-producer-defined content 
+producer-defined content
 \eb
 type that
 it does not understand, it should skip the content data as though
@@ -2005,17 +2005,17 @@ it were not present.}
 As stated before, the goal of a line number program is to build
 a matrix representing one compilation unit, which may have
 produced multiple sequences of target machine instructions.
-Within a sequence, addresses and 
-\addtoindex{operation pointer}s may only increase. 
+Within a sequence, addresses and
+\addtoindex{operation pointer}s may only increase.
 (Line numbers may decrease in cases of pipeline
 scheduling or other optimization.)
 
 \needlines{4}
-\subsubsection{Special Opcodes} 
+\subsubsection{Special Opcodes}
 \label{chap:specialopcodes}
 \addtoindexx{line number program!special opcodes}
 \addtoindexx{special opcodes in line number program}
-Each \HFTubyte{} special opcode has the following 
+Each \HFTubyte{} special opcode has the following
 effect on the state machine:
 
 \begin{enumerate}[1. ]
@@ -2038,10 +2038,10 @@ of the state machine registers.
 
 \end{enumerate}
 
-All of the special opcodes do those same 
+All of the special opcodes do those same
 \db
-things; they differ from one another only in what values 
-they add to the \texttt{line}, \texttt{address} and 
+things; they differ from one another only in what values
+they add to the \texttt{line}, \texttt{address} and
 \addttindex{op\_index} registers.
 
 \textit{Instead of assigning a fixed meaning to each special opcode,
@@ -2064,11 +2064,11 @@ the \texttt{line} register (a standard opcode provides an alternate
 way to decrease the line number) in return for the ability
 to add larger positive values to the \texttt{address} register. To
 permit this variety of strategies, the line number program
-header defines a 
+header defines a
 \addttindex{line\_base}
 field that specifies the minimum
 value which a special opcode can add to the line register
-and a 
+and a
 \addttindex{line\_range}
 field that defines the range of values it
 can add to the line register.}
@@ -2077,11 +2077,11 @@ can add to the line register.}
 A special opcode value is chosen based on the amount that needs
 to be added to the \texttt{line}, \texttt{address} and \addttindex{op\_index} registers.
 The maximum line increment for a special opcode is the value
-of the 
+of the
 \addttindex{line\_base}
-field in the header, plus the value of the 
-\addttindex{line\_range} field, minus 1 (line base + 
-line range - 1). 
+field in the header, plus the value of the
+\addttindex{line\_range} field, minus 1 (line base +
+line range - 1).
 If the desired line increment is greater than the maximum
 line increment, a standard opcode must be used instead of a
 special opcode. The \addtoindex{operation advance} represents the number
@@ -2090,23 +2090,23 @@ of operations to skip when advancing the \addtoindex{operation pointer}.
 \needlines{6}
 The special opcode is then calculated using the following formula:
 \begin{alltt}
-  opcode = 
+  opcode =
     (\textit{desired line increment} - \addttindex{line\_base}) +
       (\addttindex{line\_range} * \textit{operation advance}) + \addttindex{opcode\_base}
 \end{alltt}
 If the resulting opcode is greater than 255, a standard opcode
 must be used instead.
 
-\textit{When \addttindex{maximum\_operations\_per\_instruction} is 1, 
+\textit{When \addttindex{maximum\_operations\_per\_instruction} is 1,
 the operation advance is simply the address increment divided by the
 \addttindex{minimum\_instruction\_length}.}
 
 \needlines{6}
 To decode a special opcode, subtract the \addttindex{opcode\_base} from
-the opcode itself to give the \textit{adjusted opcode}. 
-The \textit{operation advance} 
+the opcode itself to give the \textit{adjusted opcode}.
+The \textit{operation advance}
 is the result of the adjusted opcode divided by the
-\addttindex{line\_range}. The new \texttt{address} and 
+\addttindex{line\_range}. The new \texttt{address} and
 \addttindex{op\_index} values are given by
 \begin{alltt}
   \textit{adjusted opcode} = opcode \dash opcode\_base
@@ -2120,16 +2120,16 @@ is the result of the adjusted opcode divided by the
     (\addttindex{op\_index} + \addtoindex{operation advance}) \% \addttindex{maximum\_operations\_per\_instruction}
 \end{alltt}
 
-\textit{When the \addttindex{maximum\_operations\_per\_instruction} 
+\textit{When the \addttindex{maximum\_operations\_per\_instruction}
 field is 1,
-\texttt{op\_index} is always 0 and these calculations simplify to 
+\texttt{op\_index} is always 0 and these calculations simplify to
 those given for addresses in \DWARFVersionIII{} and earlier.}
 
 \needlines{4}
-The amount to increment the line register is the 
+The amount to increment the line register is the
 \addttindex{line\_base} plus
-the result of the 
-\textit{\addtoindex{adjusted opcode}} modulo the 
+the result of the
+\textit{\addtoindex{adjusted opcode}} modulo the
 \addttindex{line\_range}. That
 is,
 
@@ -2151,12 +2151,12 @@ actions performed by these opcodes are as follows:
 \begin{enumerate}[1. ]
 
 \item \textbf{\DWLNScopyTARG} \\
-The \DWLNScopyNAME{} 
+The \DWLNScopyNAME{}
 opcode takes no operands. It appends a row
 to the matrix using the current values of the state machine
 registers. Then it sets the \addttindex{discriminator} register to 0,
-and sets the \addttindex{basic\_block}, 
-\bb\addttindex{prologue\_end}, 
+and sets the \addttindex{basic\_block},
+\bb\addttindex{prologue\_end},
 \addttindex{epilogue\_begin} and
 \addttindex{prologue\_epilogue}
 \eb
@@ -2164,29 +2164,29 @@ registers to \doublequote{false.}
 
 \needlines{5}
 \item \textbf{\DWLNSadvancepcTARG} \\
-The \DWLNSadvancepcNAME{} 
+The \DWLNSadvancepcNAME{}
 opcode takes a single unsigned LEB128\addtoindexx{LEB128!unsigned}
 operand as the \addtoindex{operation advance} and modifies the \texttt{address}
-and \addttindex{op\_index} registers as specified in 
+and \addttindex{op\_index} registers as specified in
 Section \refersec{chap:specialopcodes}.
 
 \item \textbf{\DWLNSadvancelineTARG} \\
-The \DWLNSadvancelineNAME{} 
+The \DWLNSadvancelineNAME{}
 opcode takes a single signed LEB128\addtoindexx{LEB128!signed}
 operand and adds that value to the \texttt{line} register of the
 state machine.
 
 \needlines{4}
-\item \textbf{\DWLNSsetfileTARG} \\ 
+\item \textbf{\DWLNSsetfileTARG} \\
 The \DWLNSsetfileNAME{} opcode takes a single
-unsigned LEB128\addtoindexx{LEB128!unsigned} 
+unsigned LEB128\addtoindexx{LEB128!unsigned}
 operand and stores it in the \texttt{file} register
 of the state machine.
 
 \needlines{4}
-\item \textbf{\DWLNSsetcolumnTARG} \\ 
+\item \textbf{\DWLNSsetcolumnTARG} \\
 The \DWLNSsetcolumnNAME{} opcode takes a
-single unsigned LEB128\addtoindexx{LEB128!unsigned} operand 
+single unsigned LEB128\addtoindexx{LEB128!unsigned} operand
 and stores it in the \texttt{column}
 register of the state machine.
 
@@ -2201,7 +2201,7 @@ to the logical negation of its current value.
 The \DWLNSsetbasicblockNAME{}
 opcode
 \addtoindexx{basic block}
-takes no operands. 
+takes no operands.
 It sets the \addttindex{basic\_block} register of the
 state machine to \doublequote{true.}
 
@@ -2221,18 +2221,18 @@ address by more than twice that range will it need to use
 both \DWLNSadvancepc{} and a special opcode, requiring three
 or more bytes.}
 
-\item \textbf{\DWLNSfixedadvancepcTARG} \\ 
+\item \textbf{\DWLNSfixedadvancepcTARG} \\
 The \DWLNSfixedadvancepcNAME{} opcode
 takes a single \HFTuhalf{} (unencoded) operand and adds it to the
 \texttt{address} register of the state machine and sets the \addttindex{op\_index}
 register to 0. This is the only standard opcode whose operand
-is \textbf{not} a variable length number. It also does 
+is \textbf{not} a variable length number. It also does
 \textbf{not} multiply the
-operand by the \addttindex{minimum\_instruction\_length} 
+operand by the \addttindex{minimum\_instruction\_length}
 field of the header.
 
-\textit{Some assemblers may not be able emit 
-\DWLNSadvancepc{} or special opcodes because they cannot encode 
+\textit{Some assemblers may not be able emit
+\DWLNSadvancepc{} or special opcodes because they cannot encode
 \addtoindex{LEB128} numbers or judge when
 the computation of a special opcode overflows and requires
 the use of \DWLNSadvancepc. Such assemblers, however, can
@@ -2241,7 +2241,7 @@ use \DWLNSfixedadvancepc{} instead, sacrificing compression.}
 \needlines{6}
 \item \textbf{\DWLNSsetprologueendTARG} \\
 The \DWLNSsetprologueendNAME{}
-opcode takes no operands. It sets the 
+opcode takes no operands. It sets the
 \addttindex{prologue\_end} register
 to \doublequote{true.}
 
@@ -2259,7 +2259,7 @@ the location(s) to use.}
 location; for example, the code might test for a special case
 and make a fast exit prior to setting up the frame.}
 
-\textit{Note that the function to which the 
+\textit{Note that the function to which the
 \addttindex{prologue end} applies cannot
 be directly determined from the line number information alone;
 \bb
@@ -2272,7 +2272,7 @@ subroutines).}
 \needlines{4}
 \item \textbf{\DWLNSsetepiloguebeginTARG} \\
 The \DWLNSsetepiloguebeginNAME{} opcode takes no operands. It
-sets the \addttindex{epilogue\_begin} 
+sets the \addttindex{epilogue\_begin}
 \bb
 and \addttindex{prologue\_epilogue} registers
 \eb
@@ -2286,7 +2286,7 @@ local variables can still be examined). Debuggers generally
 cannot properly determine where this point is. This command
 allows a compiler to communicate the location(s) to use.}
 
-\textit{Note that the function to which the 
+\textit{Note that the function to which the
 \addtoindex{epilogue end} applies cannot
 be directly determined from the line number information alone;
 \bb
@@ -2296,13 +2296,13 @@ must be determined in combination with the subroutine
 information entries of the compilation (including inlined
 subroutines).}
 
-\textit{In the case of a trivial function, both 
+\textit{In the case of a trivial function, both
 \addttindex{prologue end} and
 \addttindex{epilogue begin} may occur at the same address.}
 
 \item \textbf{\DWLNSsetisaTARG} \\
 The \DWLNSsetisaNAME{} opcode takes a single
-unsigned LEB128\addtoindexx{LEB128!unsigned} operand and stores that value in the 
+unsigned LEB128\addtoindexx{LEB128!unsigned} operand and stores that value in the
 \addttindex{isa}
 register of the state machine.
 
@@ -2337,8 +2337,8 @@ The \DWLNEendsequenceNAME{} opcode takes no operands. It sets the
 register of the state machine to \doublequote{true} and
 appends a row to the matrix using the current values of the
 state-machine registers. Then it resets the registers to the
-initial values specified above 
-(see Section \refersec{chap:statemachineregisters}). 
+initial values specified above
+(see Section \refersec{chap:statemachineregisters}).
 Every line
 number program sequence must end with a \DWLNEendsequence{}
 instruction which creates a row whose address is that of the
@@ -2353,7 +2353,7 @@ register to the value given by the relocatable address and
 sets the \addttindex{op\_index} register to 0.
 
 \bb
-If the address value is the reserved target address (see Section 
+If the address value is the reserved target address (see Section
 \refersec{chap:reservedtargetaddress}),
 no instructions are associated with subsequent rows up to
 but not including the subsequent \DWLNEsetaddress{} or
@@ -2363,7 +2363,7 @@ of opcodes.
 
 \textit{All of the other line number program opcodes that
 affect the \texttt{address} register add a delta to it. This instruction
-stores a relocatable value into 
+stores a relocatable value into
 \bb
 the address register
 \eb
@@ -2373,7 +2373,7 @@ instead.}
 \item \textbf{\DWLNEsetdiscriminatorTARG} \\
 The \DWLNEsetdiscriminatorNAME{}
 opcode takes a single
-parameter, an unsigned LEB128\addtoindexx{LEB128!unsigned} 
+parameter, an unsigned LEB128\addtoindexx{LEB128!unsigned}
 integer. It sets the
 \addttindex{discriminator} register to the new value.
 
@@ -2381,9 +2381,9 @@ integer. It sets the
 \bb
 \item \textbf{\DWLNEpaddingTARG} \\
 The \DWLNEpaddingNAME{} opcode is followed by a single
-operand which consists of a sequence of zero or more 
-arbitrary bytes up to the length specified by the unsigned 
-LEB128\addtoindexx{LEB128!unsigned} integer that precedes all 
+operand which consists of a sequence of zero or more
+arbitrary bytes up to the length specified by the unsigned
+LEB128\addtoindexx{LEB128!unsigned} integer that precedes all
 extended opcodes.  The opcode and operand have no
 effect on the line number program.
 
@@ -2394,19 +2394,19 @@ three bytes needed to encode any extended opcode.}
 
 \bb
 \item \textbf{\DWLNEsetprologueepilogueTARG} \\
-The \DWLNEsetprologueepilogueNAME{} opcode takes no operands. 
+The \DWLNEsetprologueepilogueNAME{} opcode takes no operands.
 It sets the \addttindex{prologue\_epilogue} register to "true."
 \eb
 
 \end{enumerate}
 \db
-\textit{Appendix \refersec{app:linenumberprogramexample} 
+\textit{Appendix \refersec{app:linenumberprogramexample}
 gives some sample line number programs.}
 
 \section{Macro Information}
 \label{chap:macroinformation}
 \addtoindexx{macro information}
-\textit{Some languages, such as \C{} and \Cplusplus{}, 
+\textit{Some languages, such as \C{} and \Cplusplus{},
 provide a way to replace
 text in the source program with macros defined either in the
 source file itself, or in another file included by the source
@@ -2418,12 +2418,12 @@ the macro definition has been expanded, rather than as the
 programmer wrote it. The macro information table provides a way
 of preserving the original source in the debugging information.}
 
-As described in 
+As described in
 Section \refersec{chap:fullandpartialcompilationunitentries},
 the macro information for a
-given compilation unit is represented in the 
+given compilation unit is represented in the
 \dotdebugmacro{}
-section of an object file. 
+section of an object file.
 \db
 
 \needlines{5}
@@ -2457,9 +2457,9 @@ of flags, some of which may indicate that additional fields follow.
 The following flags, beginning with the least significant bit, are defined:
 \begin{itemize}
 \item \HFNoffsetsizeflag \\
-If the \HFNoffsetsizeflag{} is zero, the header is for a 32-bit 
+If the \HFNoffsetsizeflag{} is zero, the header is for a 32-bit
 DWARF format macro section and all offsets are 4 bytes long;
-if it is one, the header is for a 64-bit DWARF format macro section 
+if it is one, the header is for a 64-bit DWARF format macro section
 and all offsets are 8 bytes long.
 
 \bb
@@ -2473,8 +2473,8 @@ This flag does not apply to the the following entries:
 \eb
 
 \item \addttindex{debug\_line\_offset\_flag} \\
-If the \addttindex{debug\_line\_offset\_flag} is one, 
-the \addttindex{debug\_line\_offset} field (see below) is present. 
+If the \addttindex{debug\_line\_offset\_flag} is one,
+the \addttindex{debug\_line\_offset} field (see below) is present.
 If zero, that field is omitted.
 
 \item \addttindex{opcode\_operands\_table\_flag} \\
@@ -2487,28 +2487,28 @@ All other flags are reserved by DWARF.
 
 \needlines{6}
 \item \addttindex{debug\_line\_offset} \\
-An offset in the \dotdebugline{} section 
+An offset in the \dotdebugline{} section
 \bb
-(if this header is in a \dotdebugmacro{} section) or \dotdebuglinedwo{} 
+(if this header is in a \dotdebugmacro{} section) or \dotdebuglinedwo{}
 section (if this header is in a \dotdebugmacrodwo{} section)
 \eb
 of the beginning of the line number information in the containing
-compilation, encoded as a 4-byte offset for a 32-bit DWARF 
+compilation, encoded as a 4-byte offset for a 32-bit DWARF
 format macro section and an 8-byte offset for a 64-bit DWARF format
-macro section.  
+macro section.
 
 \item \addttindex{opcode\_operands\_table} \\
-An \texttt{opcode\_operands\_table} describing the operands 
+An \texttt{opcode\_operands\_table} describing the operands
 of the macro information entry opcodes.
 
 The macro information entries defined in this standard may, but need not, be
-described in the table, while other 
+described in the table, while other
 \bb
-producer-defined 
+producer-defined
 \eb
-entry opcodes used in the section are described there. 
+entry opcodes used in the section are described there.
 \bb
-Producer 
+Producer
 \eb
 extension entry opcodes are
 allocated in the range from \DWMACROlouser{} to \DWMACROhiuser. Other
@@ -2519,15 +2519,15 @@ The table starts with a 1-byte \texttt{count} of the defined opcodes, followed b
 an entry for each of those opcodes.  Each entry starts with a 1-byte unsigned
 opcode number, followed by unsigned LEB128\addtoindexx{ULEB128} encoded number of operands
 and for each operand there is a single unsigned byte describing the form in which
-the operand is encoded.  The allowed forms are: 
+the operand is encoded.  The allowed forms are:
 \DWFORMblock, \DWFORMblockone, \DWFORMblocktwo, \DWFORMblockfour,
-\DWFORMdataone, \DWFORMdatatwo, \DWFORMdatafour, \DWFORMdataeight, 
-\DWFORMdatasixteen,  
-\DWFORMflag, \DWFORMlinestrp, \DWFORMsdata, 
+\DWFORMdataone, \DWFORMdatatwo, \DWFORMdatafour, \DWFORMdataeight,
+\DWFORMdatasixteen,
+\DWFORMflag, \DWFORMlinestrp, \DWFORMsdata,
 \DWFORMsecoffset, \DWFORMstring, \DWFORMstrp{},
 \bb
 \DWFORMstrpeight,
-\eb 
+\eb
 \DWFORMstrpsup,
 \bb
 \DWFORMstrpsupeight,
@@ -2538,57 +2538,57 @@ the operand is encoded.  The allowed forms are:
 \subsection{Macro Information Entries}
 \label{chap:macroinformationentries}
 All macro information entries within a \dotdebugmacro{}
-section for a given compilation unit appear in the same 
-order in which the directives were processed by the 
+section for a given compilation unit appear in the same
+order in which the directives were processed by the
 compiler (after taking into account the effect of the
 macro import directives).
 
 \textit{The source file in which a macro information entry occurs
 can be derived by interpreting the sequence of entries from the
-beginning of the \dotdebugmacro{} section. \DWMACROstartfile{} and 
-\DWMACROendfile{} indicate changes in the containing file.} 
+beginning of the \dotdebugmacro{} section. \DWMACROstartfile{} and
+\DWMACROendfile{} indicate changes in the containing file.}
 
 \subsubsection{Define and Undefine Entries}
 \label{chap:defineandundefineentries}
 The define and undefine macro entries have multiple forms that
 use different representations of their two operands.
 
-While described in pairs below, the forms of define 
+While described in pairs below, the forms of define
 and undefine entries may be freely intermixed.
 
 \begin{enumerate}[1. ]
 
 \itembfnl{\DWMACROdefineTARG{}, \DWMACROundefTARG{}}
 A \DWMACROdefineNAME{} or \DWMACROundefNAME{} entry has two
-operands. The first operand encodes the source line number 
+operands. The first operand encodes the source line number
 of the \texttt{\#define} or \texttt{\#undef} macro directive.
 The second operand is a null-terminated character
-string for the macro being defined or undefined. 
+string for the macro being defined or undefined.
 
-The contents of the operands are described below (see Sections 
+The contents of the operands are described below (see Sections
 \ref{chap:macrodefinestring} and \referfol{chap:macroundefinestring}).
 
 \itembfnl{\DWMACROdefinestrpTARG{}, \DWMACROundefstrpTARG{}}
-A \DWMACROdefinestrpNAME{} or \DWMACROundefstrpNAME{} 
+A \DWMACROdefinestrpNAME{} or \DWMACROundefstrpNAME{}
 entry has two operands.  The first operand encodes the source line number
-of the \texttt{\#define} or \texttt{\#undef} macro directive. 
+of the \texttt{\#define} or \texttt{\#undef} macro directive.
 The second operand consists of an offset into a string table contained in
 the \dotdebugstr{} section of the object file.  The size of the operand is
-given in the header \HFNoffsetsizeflag{} field. 
+given in the header \HFNoffsetsizeflag{} field.
 
-The contents of the operands are described below (see Sections 
+The contents of the operands are described below (see Sections
 \ref{chap:macrodefinestring} and \referfol{chap:macroundefinestring}).
 
 \itembfnl{\DWMACROdefinestrxTARG{}, \DWMACROundefstrxTARG{}}
-A \DWMACROdefinestrxNAME{} or \DWMACROundefstrxNAME{} entry 
-has two operands.  The first operand encodes the line number 
+A \DWMACROdefinestrxNAME{} or \DWMACROundefstrxNAME{} entry
+has two operands.  The first operand encodes the line number
 of the \texttt{\#define} or \texttt{\#undef} macro directive.
-The second operand identifies a string; it is represented using an 
+The second operand identifies a string; it is represented using an
 unsigned LEB128\addtoindexx{ULEB128} encoded value,
 which is interpreted as a zero-based index into an array of offsets in the
-\dotdebugstroffsets{} section. 
+\dotdebugstroffsets{} section.
 
-The contents of the operands are described below (see Sections 
+The contents of the operands are described below (see Sections
 \ref{chap:macrodefinestring} and \referfol{chap:macroundefinestring}).
 
 \needlines{6}
@@ -2596,21 +2596,21 @@ The contents of the operands are described below (see Sections
 \DWMACROundefsupfourTARG{}, \DWMACROundefsupeightTARG
 \eb}
 \bb
-A \DWMACROdefinesupfourNAME{}, \DWMACROdefinesupeightNAME{}, 
+A \DWMACROdefinesupfourNAME{}, \DWMACROdefinesupeightNAME{},
 \DWMACROundefsupfourNAME{} or \DWMACROundefsupeightNAME{}
 \eb
-entry has two operands.  The first operand encodes the line number 
+entry has two operands.  The first operand encodes the line number
 of the \texttt{\#define} or \texttt{\#undef} macro directive.
 The second operand identifies a string; it is represented as
-an offset into a string table contained in the \dotdebugstr{} 
-section of the \addtoindex{supplementary object file}.  
-The size of the operand 
+an offset into a string table contained in the \dotdebugstr{}
+section of the \addtoindex{supplementary object file}.
+The size of the operand
 \bb
 is 4-bytes for \DWMACROdefinesupfourNAME{} and \DWMACROundefsupfourNAME, and
 8-bytes for \DWMACROdefinesupeightNAME{} and \DWMACROundefsupeightNAME.
-\eb  
+\eb
 
-The contents of the operands are described below (see Sections 
+The contents of the operands are described below (see Sections
 \ref{chap:macrodefinestring} and \referfol{chap:macroundefinestring}).
 
 \end{enumerate}
@@ -2618,7 +2618,7 @@ The contents of the operands are described below (see Sections
 \needlines{6}
 \subsubsection{Macro Define String}
 \label{chap:macrodefinestring}
-In the case of a 
+In the case of a
 \DWMACROdefine{},
 \DWMACROdefinestrp{},
 \bb
@@ -2628,7 +2628,7 @@ In the case of a
 \eb
 entry, the value of the
 second operand is the name of the macro symbol that is defined
-at the indicated source line, followed immediately by the 
+at the indicated source line, followed immediately by the
 \addtoindex{macro formal parameter list}
 including the surrounding parentheses (in
 the case of a function-like macro) followed by the definition
@@ -2651,7 +2651,7 @@ name of the defined macro from the following definition text.
 
 \subsubsection{Macro Undefine String}
 \label{chap:macroundefinestring}
-In the case of a 
+In the case of a
 \DWMACROundef{},
 \DWMACROundefstrp{},
 \bb
@@ -2676,8 +2676,8 @@ result of command line options (when invoking the compiler)
 are represented by their own define and
 undefine entries.
 
-All such define and undefine entries representing compilation 
-options appear before the first \DWMACROstartfile{} 
+All such define and undefine entries representing compilation
+options appear before the first \DWMACROstartfile{}
 entry for that compilation unit
 (see Section \referfol{chap:fileinclusionentries})
 and encode the value 0 in their line number operands.
@@ -2699,14 +2699,14 @@ ending of an included file.
 \itembfnl{\DWMACROstartfileTARG{}}
 A \DWMACROstartfileNAME{} entry has two operands. The
 first operand encodes the line number of the source line on
-which the \texttt{\#include} macro directive occurs. 
-The second operand encodes a source file name index. 
+which the \texttt{\#include} macro directive occurs.
+The second operand encodes a source file name index.
 
-The source file name index is the file number in the 
+The source file name index is the file number in the
 line number information table for the compilation unit.
 
 If a \DWMACROstartfileNAME{} entry is present, the header
-contains a reference to the \dotdebugline{} section 
+contains a reference to the \dotdebugline{} section
 \bb
 or \dotdebuglinedwo{} section of the compilation, as appropriate.
 \eb
@@ -2730,7 +2730,7 @@ primary source file.
 \label{chap:importationofmacrounits}
 The import entries make it possible to replicate macro units.
 The first form supports replication within the current compilation
-and the second form supports replication across separate 
+and the second form supports replication across separate
 executable or shared object files.
 
 \textit{Import entries do not reflect the source program
@@ -2746,44 +2746,44 @@ another part of the \dotdebugmacro{} section that is
 the beginning of a target macro unit. The size of the operand
 depends on the header \HFNoffsetsizeflag{} field.  The
 \DWMACROimportNAME{} entry instructs the consumer to
-replicate the sequence of entries following the target macro 
-header which begins at the given 
+replicate the sequence of entries following the target macro
+header which begins at the given
 \dotdebugmacro{} offset, up to, but excluding,
 the terminating entry with opcode \texttt{0},
-as though 
+as though
 \bb
 the sequence of entries
 \eb
 occurs in place of the import operation.
 
 \itembfnl{\bb \DWMACROimportsupfourTARG, \DWMACROimportsupeightTARG}
-A \DWMACROimportsupfourNAME{} or \DWMACROimportsupeightNAME{} 
+A \DWMACROimportsupfourNAME{} or \DWMACROimportsupeightNAME{}
 \eb
-entry has one operand, an 
-offset from the start of the \dotdebugmacro{} section in the 
-\addtoindex{supplementary object file}.  
-The size of the operand 
+entry has one operand, an
+offset from the start of the \dotdebugmacro{} section in the
+\addtoindex{supplementary object file}.
+The size of the operand
 \bb
 is 4 bytes for \DWMACROimportsupfourNAME{} and 8 bytes for
 \DWMACROimportsupeightNAME{}.
 \eb
 Apart from the different location in which to find the macro unit,
-this entry type is equivalent to \DWMACROimport. 
+this entry type is equivalent to \DWMACROimport.
 
 \textit{
 \bb
 These entry types are
 \eb
-aimed at sharing duplicate 
+aimed at sharing duplicate
 macro units between \dotdebugmacro{}
-sections from different executable or shared object files.}  
+sections from different executable or shared object files.}
 
 \needlines{4}
-From within the \dotdebugmacro{} section of the 
-\addtoindex{supplementary object file}, \DWMACROdefinestrp{} 
+From within the \dotdebugmacro{} section of the
+\addtoindex{supplementary object file}, \DWMACROdefinestrp{}
 and \DWMACROundefstrp{} entries refer to the
 \dotdebugstr{} section of that same supplementary file;
-similarly, \DWMACROimport{} entries refer to the 
+similarly, \DWMACROimport{} entries refer to the
 \dotdebugmacro{} section of that same supplementary file.
 
 \end{enumerate}
@@ -2793,13 +2793,13 @@ similarly, \DWMACROimport{} entries refer to the
 \label{chap:otherentries}
 \begin{enumerate}[1. ]
 \itembfnl{\DWMACROpaddingTARG}
-The \DWMACROpaddingNAME{} opcode takes two operands, a byte count 
-and a sequence of arbitrary bytes. The byte count is an unsigned 
-\ULEB{} encoded number and does not include the size of the opcode 
-or the byte count operand. The opcode and operands have no effect 
+The \DWMACROpaddingNAME{} opcode takes two operands, a byte count
+and a sequence of arbitrary bytes. The byte count is an unsigned
+\ULEB{} encoded number and does not include the size of the opcode
+or the byte count operand. The opcode and operands have no effect
 on the macro information.
 
-\textit{This permits a producer to pad the macro information 
+\textit{This permits a producer to pad the macro information
 with a minimum of two bytes.}
 \end{enumerate}
 \eb
@@ -2810,7 +2810,7 @@ with a minimum of two bytes.}
 \label{chap:callframeinformation}
 \addtoindexx{unwind|see{virtual unwind}}\addtoindexx{virtual unwind}
 
-\textit{Debuggers often need to be able to view and modify the 
+\textit{Debuggers often need to be able to view and modify the
 state of any subroutine activation that is
 \addtoindexx{activation of call frame}
 on the call stack. An activation consists of:}
@@ -2842,9 +2842,9 @@ frame and restores it on exit. The code that allocates space
 on the call frame stack and performs the save operation is
 called the subroutine\textquoteright{s} \addtoindex{prologue}, and the code that performs
 the restore operation and deallocates the frame is called its
-\addtoindex{epilogue}. Typically, the 
+\addtoindex{epilogue}. Typically, the
 \addtoindex{prologue} code is physically at the
-beginning of a subroutine and the 
+beginning of a subroutine and the
 \addtoindex{epilogue} code is at the end.}
 
 \textit{To be able to view or modify an activation that is not
@@ -2860,7 +2860,7 @@ debugger virtually unwinds the stack because the actual state
 of the target process is unchanged.}
 
 \needlines{4}
-\textit{The virtual unwind 
+\textit{The virtual unwind
 operation needs to know where registers are
 saved and how to compute the predecessor\textquoteright{s} CFA and code
 location. When considering an architecture-independent way
@@ -2869,13 +2869,13 @@ special things:}
 
 \begin{itemize} % bullet list
 
-\item \textit{Prologue 
+\item \textit{Prologue
 \addtoindexx{prologue}
-and 
-\addtoindex{epilogue} code is not always in 
+and
+\addtoindex{epilogue} code is not always in
 distinct \nolink{blocks}
 at the beginning and end of a subroutine. It is common
-to duplicate the \addtoindex{epilogue} code 
+to duplicate the \addtoindex{epilogue} code
 at the site of each return
 from the code. Sometimes a compiler breaks up the register
 save/unsave operations and moves them into the body of the
@@ -2887,8 +2887,8 @@ frame. Sometimes they use a frame pointer register, sometimes
 not.}
 
 \item \textit{The algorithm to compute CFA changes as you progress through
-the \addtoindex{prologue} 
-and \addtoindex{epilogue code}. 
+the \addtoindex{prologue}
+and \addtoindex{epilogue code}.
 (By definition, the CFA value
 does not change.)}
 
@@ -2944,7 +2944,7 @@ virtual unwinding rules that are associated with the indicated
 location.
 
 The CFA column defines the rule which computes the Canonical
-Frame Address value; 
+Frame Address value;
 \bb
 the rule may indicate
 \eb
@@ -2966,7 +2966,7 @@ previous frame.
 The register rules are:
 
 \begin{longtable}{lP{9cm}}
-undefined 
+undefined
 &A register that has this rule has no recoverable value in the previous frame.
 (By convention, it is not preserved by a callee.) \\
 
@@ -2983,14 +2983,14 @@ val\_offset(N)
 current CFA value and N is a signed offset.\\
 
 register(R)
-&The previous value of this register is stored 
+&The previous value of this register is stored
 in another register numbered R.\\
 
 expression(E)
 &The previous value of this register is located at the address produced by
 executing the DWARF expression E (see Section \refersec{chap:dwarfexpressions}).\\
 
-val\_expression(E) 
+val\_expression(E)
 &The previous value of this register is the value produced by executing the
 DWARF expression E (see Section \refersec{chap:dwarfexpressions}).\\
 
@@ -3008,13 +3008,13 @@ the program.}
 
 \needlines{4}
 The virtual unwind information is encoded in a self-contained
-section called 
-\dotdebugframe{}.  Entries in a 
+section called
+\dotdebugframe{}.  Entries in a
 \dotdebugframe{} section
 are aligned on a multiple of the address size relative to
 the start of the section and come in two forms: a Common
 \addtoindexx{common information entry}
-Information Entry (CIE) and a 
+Information Entry (CIE) and a
 \addtoindexx{frame description entry}
 Frame Description Entry (FDE).
 
@@ -3030,8 +3030,8 @@ the following fields, in order:
 \begin{enumerate}[1. ]
 \item \HFNlength{} (\livelink{datarep:initiallengthvalues}{initial length})  \\
 A constant that gives the number of bytes of the CIE structure,
-not including the length field itself 
-(see Section \refersec{datarep:initiallengthvalues}). 
+not including the length field itself
+(see Section \refersec{datarep:initiallengthvalues}).
 The
 size of the \texttt{length} field plus the value of \texttt{length} must be an
 integral multiple of the address size.
@@ -3040,8 +3040,8 @@ integral multiple of the address size.
 A constant that is used to distinguish CIEs from FDEs.
 
 \item  \HFNversion{} (\HFTubyte) \\
-A version number\addtoindexx{version number!call frame information} 
-(see Section \refersec{datarep:callframeinformation}). 
+A version number\addtoindexx{version number!call frame information}
+(see Section \refersec{datarep:callframeinformation}).
 This number is specific to the call frame information
 and is independent of the DWARF version number.
 
@@ -3064,7 +3064,7 @@ If there is no augmentation, this value is a zero byte.
 \needlines{5}
 \textit{The augmentation string allows users to indicate that there
 is additional target\dash specific information in the CIE or FDE
-which is needed to virtually 
+which is needed to virtually
 unwind a stack frame. For example, this
 might be information about dynamically allocated data which
 needs to be freed on exit from the routine.}
@@ -3075,7 +3075,7 @@ UTF\dash 8 encoding.}
 
 \needlines{4}
 \item \HFNaddresssize{} (\HFTubyte) \\
-The size of a target address in 
+The size of a target address in
 \bb
 bytes in
 \eb
@@ -3087,23 +3087,23 @@ its address size must match the address size here.
 \bbeb
 \\
 
-\item \HFNcodealignmentfactor{} (unsigned LEB128) 
+\item \HFNcodealignmentfactor{} (unsigned LEB128)
 \addtoindexx{LEB128!unsigned}\addtoindexx{unsigned LEB128|see{LEB128, unsigned}}
 \addtoindexx{code alignment factor} \\
-A 
+A
 \addtoindexx{\textless caf\textgreater|see{code alignment factor}}
 constant that is factored out of all advance location
 instructions (see Section \refersec{chap:rowcreationinstructions}).
-The resulting value is  
+The resulting value is
 \mbox{\textit{operand} * \HFNcodealignmentfactor}.
 
 \item  \HFNdataalignmentfactor{} (signed LEB128)
 \addtoindexx{LEB128!signed}\addtoindexx{signed LEB128|see{LEB128, signed}} \\
 \addtoindexx{data alignment factor}
-A 
+A
 \addtoindexx{\textless daf\textgreater|see{data alignment factor}}
 constant that is factored out of certain offset instructions
-(see Sections \refersec{chap:cfadefinitioninstructions} and 
+(see Sections \refersec{chap:cfadefinitioninstructions} and
 \refersec{chap:registerruleinstructions}).
 The resulting value is  \mbox{\textit{operand} * \HFNdataalignmentfactor}.
 
@@ -3116,7 +3116,7 @@ register.
 \needlines{8}
 \item \HFNinitialinstructions{} (array of \HFTubyte) \\
 A sequence of rules that are interpreted to create the initial
-setting of each column in the table.  
+setting of each column in the table.
 
 The default rule for
 all columns before interpretation of the initial instructions
@@ -3135,39 +3135,39 @@ An FDE contains the following fields, in order:
 \item \HFNlength{} (\livelink{datarep:initiallengthvalues}{initial length})  \\
 A constant that gives the number of bytes of the header and
 instruction stream for this function, not including the length
-field itself 
-(see Section \refersec{datarep:initiallengthvalues}). 
+field itself
+(see Section \refersec{datarep:initiallengthvalues}).
 The size of the \texttt{length} field
 plus the value of length must be an integral multiple of the
 address size.
 
 \item \HFNCIEpointer{} (4 or 8 bytes, see Section \refersec{datarep:32bitand64bitdwarfformats}) \\
-A constant 
+A constant
 \addtoindexx{section offset!in FDE header}
 offset into the \dotdebugframe{}
 section that denotes
 the CIE that is associated with this FDE.
 
 \needlines{4}
-\item  \HFNinitiallocation{} (target address) 
+\item  \HFNinitiallocation{} (target address)
 \db
 \\
 The address of the first location associated with this table
 entry.
-\db 
+\db
 
 \item  \HFNaddressrange{} (target address) \\
-The number 
+The number
 \addtoindexx{target address}
 of bytes of program instructions described by this entry.
 
 \item \HFNinstructions{} (array of \HFTubyte) \\
-A sequence of table defining instructions that are described 
+A sequence of table defining instructions that are described
 in Section \refersec{chap:callframeinstructions}.
 
 \needlines{4}
 \item \HFNpadding{} (array of \HFTubyte) \\
-Enough \DWCFAnop{} instructions 
+Enough \DWCFAnop{} instructions
 to make the size of this entry match the \HFNlength{} value above.
 \end{enumerate}
 
@@ -3176,24 +3176,24 @@ to make the size of this entry match the \HFNlength{} value above.
 \label{chap:callframeinstructions}
 Each call frame instruction is defined to take 0 or more
 operands. Some of the operands may be encoded as part of the
-opcode (see Section \refersec{datarep:callframeinformation}). 
+opcode (see Section \refersec{datarep:callframeinformation}).
 The instructions are defined in
 the following sections.
 
 \needlines{8}
 Some call frame instructions have operands that are encoded
-as DWARF expressions 
-(see Section \refersec{chap:generaloperations}). 
+as DWARF expressions
+(see Section \refersec{chap:generaloperations}).
 The following DWARF
 operators cannot be used in such operands:
 
 
 \begin{itemize}
 \item
-\DWOPaddrx, \DWOPcalltwo, \DWOPcallfour{}, \DWOPcallref, 
-\DWOPconsttype, \DWOPconstx, \DWOPconvert, \DWOPdereftype, 
+\DWOPaddrx, \DWOPcalltwo, \DWOPcallfour{}, \DWOPcallref,
+\DWOPconsttype, \DWOPconstx, \DWOPconvert, \DWOPdereftype,
 \DWOPregvaltype{} and \DWOPreinterpret{}
-operators are 
+operators are
 not allowed in an operand of these instructions because
 the call frame information must not depend on other
 debug sections.
@@ -3217,14 +3217,14 @@ and \DWCFAvalexpression.}
 \begin{enumerate}[1. ]
 
 \item \textbf{\DWCFAsetlocTARG} \\
-The \DWCFAsetlocNAME{} instruction 
+The \DWCFAsetlocNAME{} instruction
 takes a single operand that
 represents a target address. The required action is to create a
 new table row using the specified address as the location. All
 other values in the new row are initially identical to the
 current row. The new location value is always greater than
 the current one.
-\db 
+\db
 
 \needlines{4}
 \item \textbf{\DWCFAadvancelocTARG} \\
@@ -3232,8 +3232,8 @@ The \DWCFAadvancelocNAME{} instruction takes a single operand (encoded
 with the opcode) that represents a constant delta. The required
 action is to create a new table row with a location value that
 is computed by taking the current entry\textquoteright s location value
-and adding the value of 
-\mbox{\textit{delta} * \addttindex{code\_alignment\_factor}}. 
+and adding the value of
+\mbox{\textit{delta} * \addttindex{code\_alignment\_factor}}.
 All other values in the new row are initially identical to the
 current row
 
@@ -3276,12 +3276,12 @@ an unsigned LEB128 value\addtoindexx{LEB128!unsigned}
 representing a register number and a
 signed LEB128\addtoindexx{LEB128!signed} factored offset. This instruction is identical
 to \DWCFAdefcfa{} except that the second operand is signed
-and factored. The resulting offset is 
+and factored. The resulting offset is
 \mbox{\textit{factored\_offset} * \addttindex{data\_alignment\_factor}}.
 
 
 \item \textbf{\DWCFAdefcfaregisterTARG} \\
-The \DWCFAdefcfaregisterNAME{} 
+The \DWCFAdefcfaregisterNAME{}
 instruction takes a single
 unsigned LEB128\addtoindexx{LEB128!unsigned} operand representing a register number. The
 required action is to define the current CFA rule to use
@@ -3301,7 +3301,7 @@ to use a register and offset.
 \needlines{6}
 \item \textbf{\DWCFAdefcfaoffsetsfTARG} \\
 The \DWCFAdefcfaoffsetsfNAME{} instruction takes a signed
-LEB128\addtoindexx{LEB128!signed} operand representing a 
+LEB128\addtoindexx{LEB128!signed} operand representing a
 factored offset. This instruction
 is identical to \DWCFAdefcfaoffset{} except that the
 operand is signed and factored. The resulting offset is
@@ -3311,8 +3311,8 @@ register and offset.
 
 \needlines{5}
 \item \textbf{\DWCFAdefcfaexpressionTARG} \\
-The \DWCFAdefcfaexpressionNAME{} instruction takes a 
-single operand encoded as 
+The \DWCFAdefcfaexpressionNAME{} instruction takes a
+single operand encoded as
 \bb
 an \CLASSexprval{}
 \eb
@@ -3320,7 +3320,7 @@ value representing a
 DWARF expression. The required action is to establish that
 expression as the means by which the current CFA is computed.
 
-\textit{See Section \refersec{chap:callframeinstructions} 
+\textit{See Section \refersec{chap:callframeinstructions}
 regarding restrictions on the DWARF
 expression operators that can be used.}
 
@@ -3349,40 +3349,40 @@ number (encoded with the opcode) and an unsigned LEB128\addtoindexx{LEB128!unsig
 constant representing a factored offset. The required action
 is to change the rule for the register indicated by the
 register number to be an offset(N) rule where the value of
-N is 
+N is
 \bb
 \mbox{\textit{factored\_offset} * \addttindex{data\_alignment\_factor}}.
 \eb
 
 \needlines{4}
 \item \textbf{\DWCFAoffsetextendedTARG} \\
-The \DWCFAoffsetextendedNAME{} 
-instruction takes two unsigned LEB128\addtoindexx{LEB128!unsigned} 
+The \DWCFAoffsetextendedNAME{}
+instruction takes two unsigned LEB128\addtoindexx{LEB128!unsigned}
 operands representing a register number and a factored
 offset. This instruction is identical to
-\DWCFAoffset{} 
+\DWCFAoffset{}
 except for the encoding and size of the register operand.
 
 \needlines{6}
 \item \textbf{\DWCFAoffsetextendedsfTARG} \\
-The \DWCFAoffsetextendedsfNAME{} 
+The \DWCFAoffsetextendedsfNAME{}
 instruction takes two operands:
-an unsigned LEB128\addtoindexx{LEB128!unsigned} 
+an unsigned LEB128\addtoindexx{LEB128!unsigned}
 value representing a register number and a
 signed LEB128 factored offset. This instruction is identical
-to \DWCFAoffsetextended{} 
+to \DWCFAoffsetextended{}
 except that the second operand is
-signed and factored. The resulting offset is 
+signed and factored. The resulting offset is
 \mbox{\textit{factored\_offset} * \addttindex{data\_alignment\_factor}}.
 
 \needlines{4}
 \item \textbf{\DWCFAvaloffsetTARG} \\
-The \DWCFAvaloffsetNAME{} 
+The \DWCFAvaloffsetNAME{}
 instruction takes two unsigned
 LEB128 operands\addtoindexx{LEB128!unsigned} representing a register number and a
 factored offset. The required action is to change the rule
 for the register indicated by the register number to be a
-val\_offset(N) rule where the value of N is 
+val\_offset(N) rule where the value of N is
 \mbox{\textit{factored\_offset} * \addttindex{data\_alignment\_factor}}.
 
 \needlines{6}
@@ -3391,11 +3391,11 @@ The \DWCFAvaloffsetsfNAME{} instruction takes two operands: an
 unsigned LEB128\addtoindexx{LEB128!unsigned} value representing a register number and a
 signed LEB128\addtoindexx{LEB128!signed} factored offset. This instruction is identical
 to \DWCFAvaloffset{} except that the second operand is signed
-and factored. The resulting offset is 
+and factored. The resulting offset is
 \mbox{\textit{factored\_offset} * \addttindex{data\_alignment\_factor}}.
 
 \item \textbf{\DWCFAregisterTARG} \\
-The \DWCFAregisterNAME{} 
+The \DWCFAregisterNAME{}
 instruction takes two unsigned LEB128\addtoindexx{LEB128!unsigned}
 operands representing register numbers. The required action
 is to set the rule for the first register to be register(R)
@@ -3403,12 +3403,12 @@ where R is the second register.
 
 \item \textbf{\DWCFAexpressionTARG} \\
 The \DWCFAexpressionNAME{} instruction takes two operands: an
-unsigned LEB128\addtoindexx{LEB128!unsigned} 
-value representing a register number, and 
+unsigned LEB128\addtoindexx{LEB128!unsigned}
+value representing a register number, and
 \bb
 an \CLASSexprval{}
 \eb
-value representing a DWARF expression. 
+value representing a DWARF expression.
 The required action is to change the rule for the register
 indicated by the register number to be an expression(E)
 rule where E is the DWARF expression. That is, the DWARF
@@ -3416,14 +3416,14 @@ expression computes the address. The value of the CFA is
 pushed on the DWARF evaluation stack prior to execution of
 the DWARF expression.
 
-\textit{See Section \refersec{chap:callframeinstructions} 
+\textit{See Section \refersec{chap:callframeinstructions}
 regarding restrictions on the DWARF
 expression operators that can be used.}
 
 \needlines{7}
 \item \textbf{\DWCFAvalexpressionTARG} \\
 The \DWCFAvalexpressionNAME{} instruction takes two operands:
-an unsigned LEB128\addtoindexx{LEB128!unsigned} 
+an unsigned LEB128\addtoindexx{LEB128!unsigned}
 value representing a register number, and
 \bb
 an \CLASSexprval{}
@@ -3436,7 +3436,7 @@ expression computes the value of the given register. The value
 of the CFA is pushed on the DWARF evaluation stack prior to
 execution of the DWARF expression.
 
-\textit{See Section \refersec{chap:callframeinstructions} 
+\textit{See Section \refersec{chap:callframeinstructions}
 regarding restrictions on the DWARF
 expression operators that can be used.}
 
@@ -3451,7 +3451,7 @@ in the CIE.
 \needlines{5}
 \item \textbf{\DWCFArestoreextendedTARG} \\
 The \DWCFArestoreextendedNAME{}
-instruction takes a single unsigned LEB128\addtoindexx{LEB128!unsigned} 
+instruction takes a single unsigned LEB128\addtoindexx{LEB128!unsigned}
 operand that represents a register number. This
 instruction is identical to \DWCFArestore{} except for the
 encoding and size of the register operand.
@@ -3463,7 +3463,7 @@ encoding and size of the register operand.
 
 \textit{The next two instructions provide the ability to stack and
 retrieve complete register states. They may be useful, for
-example, for a compiler that moves \addtoindex{epilogue} code 
+example, for a compiler that moves \addtoindex{epilogue} code
 into the
 body of a function.}
 
@@ -3472,7 +3472,7 @@ body of a function.}
 
 \item \textbf{\DWCFArememberstateTARG} \\
 The \DWCFArememberstateNAME{} instruction takes no operands. The
-required action is to push the set of rules for 
+required action is to push the set of rules for
 \bb
 the current CFA and
 \eb
@@ -3496,7 +3496,7 @@ appropriate size.
 
 \end{enumerate}
 
-\subsection{Call Frame Instruction Usage} 
+\subsection{Call Frame Instruction Usage}
 \label{chap:callframeinstructionusage}
 
 \textit{To determine the virtual unwind rule set for a given location
@@ -3511,7 +3511,7 @@ Set L2 to the value of the \HFNinitiallocation{} field from the FDE header.}
 
 
 \item \textit{Read and process the FDE's instruction
-sequence until a \DWCFAadvanceloc, 
+sequence until a \DWCFAadvanceloc,
 \DWCFAsetloc, or the
 end of the instruction stream is encountered.}
 
@@ -3530,7 +3530,7 @@ than L1.}
 
 \textit{The rules in the register set now apply to location L1.}
 
-\textit{For an example, see 
+\textit{For an example, see
 Appendix \refersec{app:callframeinformationexample}.}
 
 
@@ -3538,8 +3538,8 @@ Appendix \refersec{app:callframeinformationexample}.}
 \subsection{Call Frame Calling Address}
 \label{chap:callframecallingaddress}
 
-\textit{When 
-virtually unwinding frames, consumers frequently wish to obtain 
+\textit{When
+virtually unwinding frames, consumers frequently wish to obtain
 the address of the instruction which called a subroutine. This
 information is not always provided. Typically, however,
 one of the registers in the virtual unwind table is the
@@ -3556,10 +3556,10 @@ is complete.
 calling address, but that need not be the case, especially if
 the producer knows in some way the call never will return. The
 context of the 'return address' might be on a different line,
-in a different lexical \livelink{chap:lexicalblock}{block}, 
+in a different lexical \livelink{chap:lexicalblock}{block},
 or past the end of the calling
 subroutine. If a consumer were to assume that it was in the
-same context as the calling address, the 
+same context as the calling address, the
 virtual unwind might fail.}
 
 \needlines{5}
@@ -3572,6 +3572,3 @@ this is not possible. However, subtracting 1 from the return
 address, although not guaranteed to provide the exact calling
 address, generally will produce an address within the same
 context as the calling address, and that usually is sufficient.}
-
-
-
