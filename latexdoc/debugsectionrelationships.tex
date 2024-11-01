@@ -1,9 +1,9 @@
 \chapter{Debug Section Relationships (Informative)}
 \label{app:debugsectionrelationshipsinformative}
-DWARF information is organized into multiple program sections, 
-each of which holds a particular kind of information. In some 
-cases, information in one section refers to information in one 
-or more of the others. These relationships are illustrated by 
+DWARF information is organized into multiple program sections,
+each of which holds a particular kind of information. In some
+cases, information in one section refers to information in one
+or more of the others. These relationships are illustrated by
 the diagrams and associated notes on the following pages.
 
 In the figures, a section is shown as a shaded oval with the
@@ -18,7 +18,7 @@ explained in the subsequent notes.
 \section{Normal DWARF Section Relationships}
 Figure \referfol{fig:debugsectionrelationships} illustrates
 the DWARF section relations without split DWARF object files
-involved. Similarly, it does not show the 
+involved. Similarly, it does not show the
 relationships between the main debugging sections of an executable
 or sharable file and a related \addtoindex{supplementary object file}.
 
@@ -26,7 +26,7 @@ or sharable file and a related \addtoindex{supplementary object file}.
 \section{Split DWARF Section Relationships}
 Figure \refersec{fig:splitdwarfsectionrelationships} illustrates
 the DWARF section relationships for \splitDWARFobjectfile{s}.
-However, it does not show the 
+However, it does not show the
 relationships between the main debugging sections of an executable
 or shareable file and a related \addtoindex{supplementary object file}.
 \bb
@@ -39,13 +39,13 @@ using indexing sections (such as \dotdebugstroffsets).
 \begin{figure}
 \scriptsize
 \begin{tikzpicture}
-    [sect/.style={rectangle, rounded corners=10pt, draw, fill=blue!15, 
+    [sect/.style={rectangle, rounded corners=10pt, draw, fill=blue!15,
          inner sep=.2cm, minimum width=3.9cm},
      link/.style={rectangle,                       draw,
          inner sep=.2cm, minimum width=4.4cm},
      circ/.style={circle,                          draw, fill=yellow!25,
          minimum size=0.5cm}]
-     
+
 % The first (leftmost) column, first sections, then links, from top to bottom
 %
 \node(zsectnam)	at ( 0, 15.0) [sect] {\dotdebugnames};
@@ -55,10 +55,10 @@ using indexing sections (such as \dotdebugstroffsets).
 									  \end{tabular}};
 \node(zcircs)   at (-1.6,5.5) [circ] {\textit{A}};
 \node(zlinkb)   at ( 0,  1.5) [link] {To abbreviations~~(b)};
-\node(zsectabb) at ( 0,    0) [sect] {\begin{tabular}{c} 
-										\dotdebugabbrev  
+\node(zsectabb) at ( 0,    0) [sect] {\begin{tabular}{c}
+										\dotdebugabbrev
 									  \end{tabular}};
-                                      
+
 \draw[thin,triangle 45-]            (zcircs)   -- (zsectinf);
 \draw[thin,to reversed-]			(zsectnam) -- (zlinka);
 \draw[thin,-triangle 45]	    	(zlinka)   -- (zsectinf);
@@ -185,7 +185,7 @@ using indexing sections (such as \dotdebugstroffsets).
 										\end{tabular}};
 
 \draw[thin,triangle 45-]		(zsectinf) -- (zlinku);
-\draw[thin,-to reversed]		(zlinku) -- (zsectara);  
+\draw[thin,-to reversed]		(zlinku) -- (zsectara);
 \draw[thin,to reversed-]        (zsectmac.north east) -- (zlinky);
 \draw[thin,-triangle 45]        (zlinky) -- (zsectstr.east);
 \draw[triangle 45-triangle 45]  (zsectmac.east) -- (zlinkz);
@@ -213,11 +213,11 @@ using indexing sections (such as \dotdebugstroffsets).
 \bb
 \itembfnl{(a) \dotdebugnames{} to \dotdebuginfo}
 \eb
-The list of compilation units following the header 
+The list of compilation units following the header
 contains the offsets in the
-\dotdebuginfo{} section of the 
+\dotdebuginfo{} section of the
 corresponding compilation unit headers (not
-the compilation unit entries). 
+the compilation unit entries).
 
 %b
 %
@@ -225,7 +225,7 @@ the compilation unit entries).
 \itembfnl{(b) \dotdebuginfo{} to \dotdebugabbrev}
 \eb
 The \HFNdebugabbrevoffset{} value in the header is the offset in the
-\dotdebugabbrev{} 
+\dotdebugabbrev{}
 section of the abbreviations for that compilation unit.
 
 \bb
@@ -247,65 +247,65 @@ section of the corresponding string.
 
 %e
 \itembfnl{(e) \dotdebuginfo{} to \dotdebugstroffsets}
-The value of the 
+The value of the
 \bb
-\DWATstroffsets{} 
+\DWATstroffsets{}
 \eb
 attribute in a
-\DWTAGcompileunit{}, \DWTAGtypeunit{} or \DWTAGpartialunit{} 
+\DWTAGcompileunit{}, \DWTAGtypeunit{} or \DWTAGpartialunit{}
 DIE is the offset in the
-\dotdebugstroffsets{} section of the 
+\dotdebugstroffsets{} section of the
 \bb
 header of the string offsets information
 \eb
 \addtoindexx{string offsets information}
 for that unit.
-In addition, attribute values of class string may have 
-one of the forms 
+In addition, attribute values of class string may have
+one of the forms
 \DWFORMstrxXNor, whose value is an index into the
 string offsets table.
 
 %f
 \itembfnl{(f) \dotdebuginfo{} to \dotdebuginfo}
-The operand of the \DWOPcallref{} 
+The operand of the \DWOPcallref{}
 DWARF expression operator is the
-offset of a debugging information entry in the 
+offset of a debugging information entry in the
 \dotdebuginfo{} section of another compilation.
 Similarly for attribute operands that use
 \DWFORMrefaddr.
 
 %g
 \itembfnl{(g) \dotdebuginfo{} to \dotdebugmacro}
-An attribute value of class 
+An attribute value of class
 \livelink{chap:classmacptr}{macptr} (specifically form
-\DWFORMsecoffset) is an 
-offset within the 
+\DWFORMsecoffset) is an
+offset within the
 \dotdebugmacro{} section
 of the beginning of the macro information for the referencing unit.
 
 %h
 \itembfnl{(h) \dotdebuginfo{} to \dotdebugline}
-An attribute value of class 
+An attribute value of class
 \livelink{chap:classlineptr}{lineptr} (specifically form
-\DWFORMsecoffset) 
-is an offset in the 
+\DWFORMsecoffset)
+is an offset in the
 \dotdebugline{} section of the
 beginning of the line number information for the referencing unit.
 
 %i
 \needlines{5}
 \itembfnl{(i) \dotdebuginfo{} to \dotdebugrnglists}
-An attribute value of class \CLASSrnglist{} 
-(specifically form \DWFORMrnglistx{} or \DWFORMsecoffset) 
-is an index or offset within the \dotdebugrnglists{} 
+An attribute value of class \CLASSrnglist{}
+(specifically form \DWFORMrnglistx{} or \DWFORMsecoffset)
+is an index or offset within the \dotdebugrnglists{}
 section of a \addtoindex{range list}.
 
 %j
 \itembfnl{(j) \dotdebuginfo{} to \dotdebugloclists}
-An attribute value of class \CLASSloclist{} 
-(specifically form \DWFORMloclistx{} or \DWFORMsecoffset) 
+An attribute value of class \CLASSloclist{}
+(specifically form \DWFORMloclistx{} or \DWFORMsecoffset)
 is an index or offset within the \dotdebugloclists{}
-section of a 
+section of a
 \bb
 \addtoindex{value list} or
 \eb
@@ -323,52 +323,52 @@ indices relative to that offset.
 %l
 \itembfnl{(l) \dotdebugstroffsets{} to \dotdebugstr}
 Entries in the string offsets table
-are offsets to the corresponding string text in the 
+are offsets to the corresponding string text in the
 \dotdebugstr{} section.
 
 %m
 \itembfnl{(m) \dotdebugmacro{} to \dotdebugstroffsets}
-The second operand of a 
-\DWMACROdefinestrx{} or \DWMACROundefstrx{} 
+The second operand of a
+\DWMACROdefinestrx{} or \DWMACROundefstrx{}
 macro information entry is an index
-into the string offset table in the 
+into the string offset table in the
 \dotdebugstroffsets{} section.
 
 %n
 \itembfnl{(n) \dotdebugmacro{} to \dotdebugline}
-The second operand of 
-\DWMACROstartfile{} refers to a file entry in the 
-\dotdebugline{} section relative to the start 
+The second operand of
+\DWMACROstartfile{} refers to a file entry in the
+\dotdebugline{} section relative to the start
 of that section given in the macro information header.
 
 %o
 \itembfnl{(o) \dotdebugloclists{} to \dotdebugaddr}
-\DWOPaddrx{} and \DWOPconstx{} operators that occur in the 
-\dotdebugloclists{} section refer indirectly to the 
-\dotdebugaddr{} section by way of the 
-\DWATaddrbase{} attribute in the associated \dotdebuginfo{} 
+\DWOPaddrx{} and \DWOPconstx{} operators that occur in the
+\dotdebugloclists{} section refer indirectly to the
+\dotdebugaddr{} section by way of the
+\DWATaddrbase{} attribute in the associated \dotdebuginfo{}
 section.
 \bb
-Also, some operands of the \DWLLEbaseaddressx, \DWLLEstartxendx{} 
-and \DWLLEstartxlength{} value list or 
-location list entries have operands that 
+Also, some operands of the \DWLLEbaseaddressx, \DWLLEstartxendx{}
+and \DWLLEstartxlength{} value list or
+location list entries have operands that
 are an index into the \dotdebugaddr{} section.
 \eb
 
 %p
 \itembfnl{(p) \dotdebugmacro{} to \dotdebugstr}
-The second operand of a 
+The second operand of a
 \DWMACROdefinestrp{} or \DWMACROundefstrp{} macro information
-entry is an index into the string table in the 
+entry is an index into the string table in the
 \dotdebugstr{} section.
 
 %q
 \needlines{4}
 \itembfnl{(q) \dotdebugmacro{} to \dotdebugmacro}
-The operand of a 
+The operand of a
 \DWMACROimport{} macro information
-entry is an offset into another part of the 
-\dotdebugmacro{} section to the header for the 
+entry is an offset into another part of the
+\dotdebugmacro{} section to the header for the
 sequence to be replicated.
 
 %r
@@ -387,15 +387,15 @@ This form can be used in a \dotdebuginfo{} section
 (as well as in a \dotdebugline{} section).\footnote{
 \bb
 The circled (A) of the left connects to the circled
-(A) on the right 
+(A) on the right
 \eb
 via hyperspace (a wormhole).}
 \bb
 
 %t
 \itembfnl{(t) \dotdebugrnglists{} to \dotdebugaddr}
-Some operands of \DWRLEbaseaddressx, \DWRLEstartxendx{} and 
-\DWRLEstartxlength{} range list entries are an 
+Some operands of \DWRLEbaseaddressx, \DWRLEstartxendx{} and
+\DWRLEstartxlength{} range list entries are an
 an index into the \dotdebugaddr{} section.
 \eb
 
@@ -403,9 +403,9 @@ an index into the \dotdebugaddr{} section.
 %
 \bb
 \itembfnl{(u) \dotdebugnames{} to \dotdebugstroffsets}
-When \HFNstrformat{} of the section header equals \DWFORMstrxfour{}, 
+When \HFNstrformat{} of the section header equals \DWFORMstrxfour{},
 the first array of the name table
-field contains indexes into the \dotdebugstroffsets{} section, 
+field contains indexes into the \dotdebugstroffsets{} section,
 which indirectly refers to the relevant string.
 See also item (c) above.
 \eb
@@ -430,7 +430,7 @@ unit entry).
 \begin{figure}
 %\scriptsize
 \begin{tikzpicture}
-    [sect/.style={rectangle, rounded corners=10pt, draw, fill=blue!15, 
+    [sect/.style={rectangle, rounded corners=10pt, draw, fill=blue!15,
         inner sep=.2cm, minimum width=4.0cm},
      link/.style={rectangle,                       draw,
         inner sep=.2cm, minimum width=4.5cm}]
@@ -488,7 +488,7 @@ unit entry).
 \draw[thin,-triangle 45]	(ysectinf) -- (ysectsto) node[midway, right] {(e)};
 \draw[thin,-triangle 45]	(ysectsto) -- (ysectstr) node[midway, right] {(l)};
 
-\draw[dashed, thick,-triangle 45]  (ysectinf) .. controls (7.5, 11) ..(ysectinfdwo) 
+\draw[dashed, thick,-triangle 45]  (ysectinf) .. controls (7.5, 11) ..(ysectinfdwo)
                                                        node[midway, above] {(did)};
 
 \draw[thin,-triangle 45]  (ysectinfdwo) -- (ysectabbdwo) node[midway, left] {(co)};
@@ -513,8 +513,8 @@ unit entry).
 \draw (17,14) node {\begin{tabular}{r} Split DWARF \\ in separate object \end{tabular}};
 
 % Temporary!!!
-\draw (8.5,-1) node [fill=red!70] {Revision per Issue 240320.1 pending}; 
-                       
+\draw (8.5,-1) node [fill=red!70] {Revision per Issue 240320.1 pending};
+
 \end{tikzpicture}
 \vspace{3mm}
 \caption{Split DWARF section relationships}
@@ -530,49 +530,49 @@ unit entry).
 
 % a
 \itembfnl{(a)  \dotdebugaranges{} to \dotdebuginfo}
-The \texttt{debug\_info\_offset} field in the header is the 
-offset in the \dotdebuginfo{} section of the corresponding 
-compilation unit header of the skeleton \dotdebuginfo{} section 
-(not the compilation unit entry).  The \DWATdwoname{} attribute 
-in the \dotdebuginfo{} skeleton connects 
+The \texttt{debug\_info\_offset} field in the header is the
+offset in the \dotdebuginfo{} section of the corresponding
+compilation unit header of the skeleton \dotdebuginfo{} section
+(not the compilation unit entry).  The \DWATdwoname{} attribute
+in the \dotdebuginfo{} skeleton connects
 the ranges to the full compilation unit in \dotdebuginfodwo.
 
 % b
 \itembfnl{(b) \dotdebugnames{} to \dotdebuginfo}
 The \dotdebugnames{} section  offsets lists provide an offset
-for the skeleton compilation unit and eight 
-byte signatures for the type units that appear only in the 
-\dotdebuginfodwo. The DIE offsets for these 
-compilation units and type units refer to the DIEs in the 
-\dotdebuginfodwo{} section for the respective 
+for the skeleton compilation unit and eight
+byte signatures for the type units that appear only in the
+\dotdebuginfodwo. The DIE offsets for these
+compilation units and type units refer to the DIEs in the
+\dotdebuginfodwo{} section for the respective
 compilation unit and type units.
 
 % c
 \itembfnl{(c) \dotdebuginfo{} skeleton to \dotdebugabbrev}
-The \HFNdebugabbrevoffset{} value in the header is 
-the offset in the \dotdebugabbrev{} section of the 
+The \HFNdebugabbrevoffset{} value in the header is
+the offset in the \dotdebugabbrev{} section of the
 abbreviations for that compilation unit skeleton.
 
 % co
 \itembfnl{(co) \dotdebuginfodwo{} to \dotdebugabbrevdwo}
-The \HFNdebugabbrevoffset{} value in the header 
-is the offset in the \dotdebugabbrevdwo{} section of the 
+The \HFNdebugabbrevoffset{} value in the header
+is the offset in the \dotdebugabbrevdwo{} section of the
 abbreviations for that compilation unit.
 
 % d
 \itembfnl{(d) \dotdebuginfo{} to \dotdebugstr}
 Attribute values of class string may have form \DWFORMstrp{}
-\bb 
+\bb
 or \DWFORMstrpeight{},
 \eb
-whose value is an offset in the 
+whose value is an offset in the
 \dotdebugstr{} section of the corresponding string.
 
 % did
 \itembfnl{(did) \dotdebuginfo{} to \dotdebuginfodwo}
 The \DWATdwoname{}
-attribute in a skeleton unit identifies the file containing 
-the corresponding \texttt{.dwo} (split) data. 
+attribute in a skeleton unit identifies the file containing
+the corresponding \texttt{.dwo} (split) data.
 
 % do
 %
@@ -581,88 +581,88 @@ the corresponding \texttt{.dwo} (split) data.
 % e
 \itembfnl{(e) \dotdebuginfo{} to \dotdebugstroffsets}
 Attribute values of class string may have one of the forms
-\DWFORMstrxXNor, whose value is an index into the 
+\DWFORMstrxXNor, whose value is an index into the
 \dotdebugstroffsets{} section for the corresponding string.
 
 % eo
 \needlines{4}
 \itembfnl{(eo)\dotdebuginfodwo{} to \dotdebugstroffsetsdwo}
 Attribute values of class string may have one of the forms
-\DWFORMstrxXNor, whose value is an index into the 
+\DWFORMstrxXNor, whose value is an index into the
 \dotdebugstroffsetsdwo{} section for the corresponding string.
 
 % go
 \itembfnl{(go) \dotdebuginfodwo{} to \dotdebugmacrodwo}
-An attribute of class \CLASSmacptr{} (specifically \DWATmacros{} 
-with form \DWFORMsecoffset{}) is an offset within the 
-\dotdebugmacrodwo{} section of the beginning of the macro 
+An attribute of class \CLASSmacptr{} (specifically \DWATmacros{}
+with form \DWFORMsecoffset{}) is an offset within the
+\dotdebugmacrodwo{} section of the beginning of the macro
 information for the referencing unit.
 
 % h
 \itembfnl{(h) \dotdebuginfo{} (skeleton) to \dotdebugline}
-An attribute value of class \CLASSlineptr{} (specifically 
-\DWATstmtlist{} with form \DWFORMsecoffset) 
-is an offset within the \dotdebugline{} section of the 
-beginning of the line number information for the 
+An attribute value of class \CLASSlineptr{} (specifically
+\DWATstmtlist{} with form \DWFORMsecoffset)
+is an offset within the \dotdebugline{} section of the
+beginning of the line number information for the
 referencing unit.
 
 % ho
 \itembfnl{(ho) \dotdebuginfodwo{}  to \dotdebuglinedwo{} (skeleton)}
-An attribute value of class \CLASSlineptr{} (specifically  
-\DWATstmtlist{}  with form \DWFORMsecoffset) 
-is an offset within the \dotdebuglinedwo{} section of the 
-beginning of the line number header information 
-for the referencing unit (the line table details are not in 
-\dotdebuglinedwo{} but the line header with its list 
+An attribute value of class \CLASSlineptr{} (specifically
+\DWATstmtlist{}  with form \DWFORMsecoffset)
+is an offset within the \dotdebuglinedwo{} section of the
+beginning of the line number header information
+for the referencing unit (the line table details are not in
+\dotdebuglinedwo{} but the line header with its list
 of file names is present).
 
 % i
 \needlines{5}
 \bb
 \itembfnl{(i) \dotdebuginfo{} to \dotdebugrnglists}
-An attribute value of class \CLASSrnglist{} 
-(specifically form \DWFORMrnglistx{} or \DWFORMsecoffset) 
-is an index or offset within the \dotdebugrnglists{} 
+An attribute value of class \CLASSrnglist{}
+(specifically form \DWFORMrnglistx{} or \DWFORMsecoffset)
+is an index or offset within the \dotdebugrnglists{}
 section of a \addtoindex{range list}.
 \eb
 
 % io
 \itembfnl{(io) \dotdebuginfodwo{} to \dotdebugrnglistsdwo}
-An attribute value of class \CLASSrnglist{} (specifically 
-\DWATranges{} with form \DWFORMrnglistx{} or \DWFORMsecoffset) 
+An attribute value of class \CLASSrnglist{} (specifically
+\DWATranges{} with form \DWFORMrnglistx{} or \DWFORMsecoffset)
 is an index or offset within the \dotdebugrnglistsdwo{}
 section of a \addtoindex{range list}.
-The format of \dotdebugrnglistsdwo{} 
+The format of \dotdebugrnglistsdwo{}
 \bb
 value list or
 \eb
-location list entries 
+location list entries
 is restricted to a subset of those in \dotdebugrnglists.
 See Section \refersec{chap:noncontiguousaddressranges} for details.
 
 % jo
 \itembfnl{(jo) \dotdebuginfodwo{} to \dotdebugloclistsdwo}
-An attribute value of class 
+An attribute value of class
 \CLASSloclist{} (specifically with form \DWFORMloclistx{}
-or \DWFORMsecoffset) 
-is an index or offset within the \dotdebugloclistsdwo{} 
-section of a 
+or \DWFORMsecoffset)
+is an index or offset within the \dotdebugloclistsdwo{}
+section of a
 \bb
 \addtoindex{value list} or
 \eb
 \addtoindex{location list}.
-The format of \dotdebugloclistsdwo{} location list entries 
+The format of \dotdebugloclistsdwo{} location list entries
 is restricted to a subset of those in \dotdebugloclists.
 See Section \refersec{chap:locationlists} for details.
 
 \needlines{4}
 % k
 \itembfnl{(k) \dotdebuginfo{} to \dotdebugaddr}
-The value of the \DWATaddrbase{} attribute in the 
-\DWTAGcompileunit, \DWTAGpartialunit{} or \DWTAGtypeunit{} DIE 
-is the offset in the \dotdebugaddr{} section of the machine 
+The value of the \DWATaddrbase{} attribute in the
+\DWTAGcompileunit, \DWTAGpartialunit{} or \DWTAGtypeunit{} DIE
+is the offset in the \dotdebugaddr{} section of the machine
 addresses for that unit.
-\DWFORMaddrxXN, \DWOPaddrx{} and \DWOPconstx{} contain indices 
+\DWFORMaddrxXN, \DWOPaddrx{} and \DWOPconstx{} contain indices
 relative to that offset.
 
 % lo
