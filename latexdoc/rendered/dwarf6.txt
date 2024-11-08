@@ -1624,15 +1624,14 @@ specioc to location descriptions are deoned in Section 2.6 on page 43.
 November 1, 2024                                  ***WORKING DRAFT***                                                             Page 26
                                             Chapter 2.  General Description
 2.5.1          DWARF Expression Evaluation Context
-A DWARF expression is evaluated in a context that can include a number of
-context elements. If multiple context elements are specioed, then they must be
-self consistent or the result of the evaluation is undeoned. The context elements
-that can be specioed are:
+DWARF expressions and location descriptions (see 2.6 on page 43) are evaluated
+within a context provided by the debugger or other DWARF consumer. The
+context includes the following elements:
 1.    Required result kind
-      The kind of result required ~either a location description or a value ~is
-      determined by the DWARF construct where the expression is found.
-      For example, DWARF attributes with exprval class require a value and attributes
-      with locdesc class require a location description (see Section 7.5.5 on page 227).
+      The kind of result required ~either a location or a value ~is determined by
+      the DWARF construct where the expression is found.
+      For example, DWARF attributes with exprval class require a value, and attributes
+      with locdesc class require location description (see Section 7.5.5 on page 227).
 2.    Initial stack
       In most cases, the DWARF expression stack is empty at the start of expression
       evaluation. In certain circumstances, however, one or more values are pushed
@@ -1669,7 +1668,9 @@ November 1, 2024                                  ***WORKING DRAFT***           
       command that focuses on a specioc thread, or it may be selected
       automatically when the running thread stops at a breakpoint.
       If there is no running process (or an image of a process, as from a core ole),
-      there is no current thread.
+      there is no current thread. A single-threaded program (as distinguished from
+      a multi-threaded program with only a single thread) might not have a current
+      thread.
       It is required for operations that provide access to thread-local storage.
       For example, the DW.OP.form.tls.addressoperation requires a current thread.
 6.    Current call frame
@@ -1691,14 +1692,25 @@ November 1, 2024                                  ***WORKING DRAFT***           
       frame.
       The current frame must be an active call frame in the current thread.
 7.    Current lane
+      On SIMD (Single-Instruction Multiple-Data Stream) and SIMT (Single-Instruction
+      Multiple-Thread) architectures, one-grained parallel execution can be achieved by
+      dispatching a single instruction across multiple data streams (e.g., a vector or array).
+      Some parallel programming models allow for the vectorization of loops using SIMD
+November 1, 2024                                  ***WORKING DRAFT***                                                             Page 28
+                                            Chapter 2.  General Description
+      instructions. These parallel streams can be considered one-grain threads of execution,
+      or lanes, where each lane typically shares a common stack, program counter, and
+      register ole.
+      In SIMT architectures, control AEow may diverge through the use of predication,
+      where each instruction executes only in certain lanes. Some SIMT architectures,
+      however, provide separate stacks and register oles for each lane, and the parallel
+      streams of execution would be better represented as threads (above).
       The current lane is a SIMD/SIMT lane identioer. This applies to source
       languages that are implemented using a SIMD/SIMT execution model. These
       implementations map source language vectorized operations to SIMD/SIMT
       lanes of execution ((see Section 3.3.5.4 on page 88). When debugging a
       SIMD/SIMT program, the current lane is typically selected by a user
       command that focuses on a specioc lane.
-November 1, 2024                                  ***WORKING DRAFT***                                                             Page 28
-                                            Chapter 2.  General Description
       It is required for operations that are related to SIMD/SIMT lanes.
       For example, the DW.OP.push.laneoperation pushes the value of the current lane.
       The current lane must be consistent with the value of the
@@ -1706,9 +1718,9 @@ November 1, 2024                                  ***WORKING DRAFT***           
       frame and program location. It is consistent if the value is greater than or
       equal to 0 and less than the, possibly default, value of the
       DW.AT.num.lanesattribute.
-      If there is no running process, the current lane is not available. If the current
-      running program is not using a SIMD/SIMT execution model, the current
-      lane is always 0.
+      If there is no running process, there is no current lane. If the current running
+      program is not using a SIMD/SIMT execution model, the current lane is
+      always 0.
 8.    Current program counter (PC)
       The current program counter identioes the current point of execution in the
       current call frame of the current thread and/or lane.
@@ -1718,9 +1730,11 @@ November 1, 2024                                  ***WORKING DRAFT***           
       Section 7.24 on page 256).
       It is required for the evaluation of value lists and location lists to select
       amongst multiple program location ranges.
-      If there is no running process, there is no current program counter. When
-      evaluating expression lists when no current pc is available, only default
-      location descriptions are used.
+      If there is no running process, there is no current program counter.
+      When evaluating value lists and location lists when no current pc is available, only
+      default location descriptions are used.
+November 1, 2024                                  ***WORKING DRAFT***                                                             Page 29
+                                            Chapter 2.  General Description
 9.    Current object
       The current object is a data object described by a data object entry (see Section
       4.1) that is being inspected. When evaluating expressions that provide
@@ -1730,13 +1744,12 @@ November 1, 2024                                  ***WORKING DRAFT***           
       current object is the data object entry (if there is one) that referred to the type
       entry (e.g., via DW.AT.type).
       A current object is required for the DW.OP.push.object.addressoperation
-      and by some attributes (e.g., DW.AT.data.member.location) where the
-      object's location is provided as part of the initial stack.
+      and by some attributes (e.g., DW.AT.data.member.locationand
+      DW.AT.use.location`) where the object's location is provided as part of the
+      initial stack.
 A DWARF expression for a location description may be able to be evaluated without a
 thread, call frame, lane, program counter, or architecture context element. For example,
 the location of a global variable may be able to be evaluated without such context, while
-November 1, 2024                                  ***WORKING DRAFT***                                                             Page 29
-                                            Chapter 2.  General Description
 the location of local variables in a stack frame cannot be evaluated without additional
 context.
 The address.size oelds in the headers of all the entries in the .debug_info,
@@ -1754,6 +1767,8 @@ address of the object, the value of the array bound, the length of a dynamic
 string, the desired value itself, and so on).
 The generic type is the same as the unspecioed type used for stack operations deoned in
 DWARF Version 4 and before.
+November 1, 2024                                  ***WORKING DRAFT***                                                             Page 30
+                                            Chapter 2.  General Description
 2.5.2.1        Literal Encodings
 The following operations all push a value onto the DWARF stack. Operations
 other than DW.OP.const.type push a value with the generic type, and if the
@@ -1769,8 +1784,6 @@ bits are pushed on the stack.
 3.    DW.OP.const1u, DW.OP.const2u, DW.OP.const4u, DW.OP.const8u
       The single operand of a DW.OP.const!n?u operation provides a 1, 2, 4, or
       8-byte unsigned integer constant, respectively.
-November 1, 2024                                  ***WORKING DRAFT***                                                             Page 30
-                                            Chapter 2.  General Description
 4.    DW.OP.const1s, DW.OP.const2s, DW.OP.const4s, DW.OP.const8s
       The single operand of a DW.OP.const!n?s operation provides a 1, 2, 4, or
       8-byte signed integer constant, respectively.
@@ -1791,6 +1804,8 @@ November 1, 2024                                  ***WORKING DRAFT***           
       where a constant, the size of a machine address, is stored. This index is
       relative to the value of the DW.AT.addr.base attribute of the associated
       compilation unit.
+November 1, 2024                                  ***WORKING DRAFT***                                                             Page 31
+                                            Chapter 2.  General Description
       The DW.OP.constx operation is provided for constants that require link-time
       relocation but should not be interpreted by the consumer as a relocatable address (for
       example, ooesets to thread-local storage).
@@ -1806,8 +1821,6 @@ November 1, 2024                                  ***WORKING DRAFT***           
       While the size of the constant can be inferred from the base type deonition, it is
       encoded explicitly into the operation so that the operation can be parsed easily
       without reference to the .debug_info section.
-November 1, 2024                                  ***WORKING DRAFT***                                                             Page 31
-                                            Chapter 2.  General Description
 2.5.2.2        Register Values
 The following operations push a value onto the stack that is either part or all of
 the contents of a register or the result of adding the contents of a register to a
@@ -1828,6 +1841,8 @@ with the generic type.
       The DW.OP.bregx operation provides the sum of two values specioed by its
       two operands. The orst operand is a register number which is specioed by an
       unsigned LEB128 number. The second operand is a signed LEB128 ooeset.
+November 1, 2024                                  ***WORKING DRAFT***                                                             Page 32
+                                            Chapter 2.  General Description
 4.    DW.OP.regval.type
       The DW.OP.regval.type operation pushes the contents of a given register
       interpreted as a value of a given type. The orst operand is an unsigned
@@ -1844,8 +1859,6 @@ with the generic type.
       least signiocant bit end and the other as a register number identifying the
       register from which to extract the value. If the extracted value is smaller than
       the size of the generic type, it is zero extended.
-November 1, 2024                                  ***WORKING DRAFT***                                                             Page 32
-                                            Chapter 2.  General Description
 2.5.2.3        Stack Operations
 The following operations manipulate the DWARF stack. Operations that index
 the stack assume that the top of the stack (most recently added entry) has index 0.
@@ -1864,6 +1877,8 @@ Each entry on the stack has an associated type.
       The DW.OP.over operation duplicates the entry currently second in the
       stack at the top of the stack. This is equivalent to a DW.OP.pick operation,
       with index 1.
+November 1, 2024                                  ***WORKING DRAFT***                                                             Page 33
+                                            Chapter 2.  General Description
 5.    DW.OP.swap
       The DW.OP.swap operation swaps the top two stack entries. The entry at
       the top of the stack (including its type identioer) becomes the second stack
@@ -1880,30 +1895,30 @@ Each entry on the stack has an associated type.
       from that address is pushed, and has the generic type. The size of the data
       retrieved from the dereferenced address is the size of an address on the target
       machine.
-November 1, 2024                                  ***WORKING DRAFT***                                                             Page 33
+8.    DW.OP.deref.size
+      The DW.OP.deref.size operation behaves like the DW.OP.deref operation:
+      it pops the top stack entry and treats it as an address. The popped value must
+      have an integral type. The value retrieved from that address is pushed, and
+      has the generic type. In the DW.OP.deref.size operation, however, the size
+      in bytes of the data retrieved from the dereferenced address is specioed by
+      the single operand. This operand is a 1-byte unsigned integral constant
+      whose value may not be larger than the size of the generic type. The data
+      retrieved is zero extended to the size of an address on the target machine
+      before being pushed onto the expression stack.
+9.    DW.OP.deref.type
+      The DW.OP.deref.type operation behaves like the DW.OP.deref.size
+      operation: it pops the top stack entry and treats it as an address. The popped
+      value must have an integral type. The value retrieved from that address is
+      pushed together with a type identioer. In the DW.OP.deref.type operation,
+      the size in bytes of the data retrieved from the dereferenced address is
+      specioed by the orst operand. This operand is a 1-byte unsigned integral
+      constant whose value which is the same as the size of the base type
+      referenced by the second operand. The second operand is an unsigned
+      LEB128 integer that represents the ooeset of a debugging information entry in
+      the current compilation unit, which must be a DW.TAG.base.type entry that
+      provides the type of the data pushed.
+November 1, 2024                                  ***WORKING DRAFT***                                                             Page 34
                                               Chapter 2.  General Description
-  8.    DW.OP.deref.size
-        The DW.OP.deref.size operation behaves like the DW.OP.deref operation:
-        it pops the top stack entry and treats it as an address. The popped value must
-        have an integral type. The value retrieved from that address is pushed, and
-        has the generic type. In the DW.OP.deref.size operation, however, the size
-        in bytes of the data retrieved from the dereferenced address is specioed by
-        the single operand. This operand is a 1-byte unsigned integral constant
-        whose value may not be larger than the size of the generic type. The data
-        retrieved is zero extended to the size of an address on the target machine
-        before being pushed onto the expression stack.
-  9.    DW.OP.deref.type
-        The DW.OP.deref.type operation behaves like the DW.OP.deref.size
-        operation: it pops the top stack entry and treats it as an address. The popped
-        value must have an integral type. The value retrieved from that address is
-        pushed together with a type identioer. In the DW.OP.deref.type operation,
-        the size in bytes of the data retrieved from the dereferenced address is
-        specioed by the orst operand. This operand is a 1-byte unsigned integral
-        constant whose value which is the same as the size of the base type
-        referenced by the second operand. The second operand is an unsigned
-        LEB128 integer that represents the ooeset of a debugging information entry in
-        the current compilation unit, which must be a DW.TAG.base.type entry that
-        provides the type of the data pushed.
         While the size of the pushed value could be inferred from the base type deonition, it is
         encoded explicitly into the operation so that the operation can be parsed easily
         without reference to the .debug_info section.
@@ -1921,8 +1936,6 @@ November 1, 2024                                  ***WORKING DRAFT***           
         operation. The entry at the top of the stack is treated as an address. The
         second stack entry is treated as an iaddress space identioerj for those
         architectures that support multiple address spaces. Both of these entries must
-  November 1, 2024                                  ***WORKING DRAFT***                                                             Page 34
-                                              Chapter 2.  General Description
         have integral type identioers. The top two stack elements are popped, and a
         data item is retrieved through an implementation-deoned address calculation
         and pushed as the new stack top. In the DW.OP.xderef.size operation,
@@ -1943,6 +1956,8 @@ November 1, 2024                                  ***WORKING DRAFT***           
         is an unsigned LEB128 integer that represents the ooeset of a debugging
         information entry in the current compilation unit, which must be a
         DW.TAG.base.type entry that provides the type of the data pushed.
+  November 1, 2024                                  ***WORKING DRAFT***                                                             Page 35
+                                              Chapter 2.  General Description
 13.     DW.OP.push.object.address
         The DW.OP.push.object.address operation pushes the address of the object
         currently being evaluated as part of evaluation of a user presented expression
@@ -1962,8 +1977,6 @@ November 1, 2024                                  ***WORKING DRAFT***           
         typeidentioer. The meaning of the value on the top of the stack prior to this
         operation is deoned by the run-time environment. If the run-time
         environment supports multiple thread-local storage blocks for a single
-  November 1, 2024                                  ***WORKING DRAFT***                                                             Page 35
-                                              Chapter 2.  General Description
         thread, then the block corresponding to the executable or shared library
         containing this DWARF expression is used.
         Some implementations of C, C++, Fortran, and other languages, support a
@@ -1980,6 +1993,8 @@ November 1, 2024                                  ***WORKING DRAFT***           
         ordinary DWARF location descriptions. Instead of forcing complex thread-local
         storage calculations into the DWARF expressions, the DW.OP.form.tls.address
         allows the consumer to perform the computation based on the run-time environment.
+  November 1, 2024                                  ***WORKING DRAFT***                                                             Page 36
+                                              Chapter 2.  General Description
 15.     DW.OP.call.frame.cfa
         The DW.OP.call.frame.cfa operation pushes the value of the current call
         frame address (CFA), obtained from the Call Frame Information (see Section
@@ -1991,8 +2006,6 @@ November 1, 2024                                  ***WORKING DRAFT***           
         because the values of the registers used in computing the CFA change during a
         subroutine. If the Call Frame Information is present, then it already encodes such
         changes, and it is space eOEcient to reference that.
-  November 1, 2024                                  ***WORKING DRAFT***                                                             Page 36
-                                              Chapter 2.  General Description
 16.     DW.OP.push.lane
         The DW.OP.push.lane operation pushes a lane index value of the generic
         type, which provides the context of the lane in which the expression is being
@@ -2016,6 +2029,8 @@ November 1, 2024                                  ***WORKING DRAFT***           
   DW.OP.mul, DW.OP.neg and DW.OP.plus require integral types of the
   operand (either integral base type or the generic type). Operations do not cause
   an exception on overAEow.
+  November 1, 2024                                  ***WORKING DRAFT***                                                             Page 37
+                                              Chapter 2.  General Description
   1.    DW.OP.abs
         The DW.OP.abs operation pops the top stack entry, interprets it as a signed
         value and pushes its absolute value. If the absolute value cannot be
@@ -2027,8 +2042,6 @@ November 1, 2024                                  ***WORKING DRAFT***           
         The DW.OP.div operation pops the top two stack values, divides the former
         second entry by the former top of the stack using signed division, and pushes
         the result.
-  November 1, 2024                                  ***WORKING DRAFT***                                                             Page 37
-                                              Chapter 2.  General Description
   4.    DW.OP.minus
         The DW.OP.minus operation pops the top two stack values, subtracts the
         former top of the stack from the former second entry, and pushes the result.
@@ -2052,6 +2065,8 @@ November 1, 2024                                  ***WORKING DRAFT***           
 10.     DW.OP.plus
         The DW.OP.plus operation pops the top two stack entries, adds them
         together, and pushes the result.
+  November 1, 2024                                  ***WORKING DRAFT***                                                             Page 38
+                                              Chapter 2.  General Description
 11.     DW.OP.plus.uconst
         The DW.OP.plus.uconst operation pops the top stack entry, adds it to the
         unsigned LEB128 constant operand interpreted as the same type as the
@@ -2062,8 +2077,6 @@ November 1, 2024                                  ***WORKING DRAFT***           
         The DW.OP.shl operation pops the top two stack entries, shifts the former
         second entry left (olling with zero bits) by the number of bits specioed by the
         former top of the stack, and pushes the result.
-  November 1, 2024                                  ***WORKING DRAFT***                                                             Page 38
-                                              Chapter 2.  General Description
 13.     DW.OP.shr
         The DW.OP.shr operation pops the top two stack entries, shifts the former
         second entry right logically (olling with zero bits) by the number of bits
@@ -2088,15 +2101,15 @@ November 1, 2024                                  ***WORKING DRAFT***           
             #    push the constant value 1 onto the stack if the result of the operation is
                  true or the constant value 0 if the result of the operation is false. The
                  pushed value has the generic type.
-        If the operands have the generic type, the comparisons are performed as
-        signed operations.
-  2.    DW.OP.skip
-        DW.OP.skip is an unconditional branch. Its single operand is a 2-byte
-        signed integer constant. The 2-byte constant is the number of bytes of the
-        DWARF expression to skip forward or backward from the current operation,
-        beginning after the 2-byte constant.
   November 1, 2024                                  ***WORKING DRAFT***                                                             Page 39
                                             Chapter 2.  General Description
+      If the operands have the generic type, the comparisons are performed as
+      signed operations.
+2.    DW.OP.skip
+      DW.OP.skip is an unconditional branch. Its single operand is a 2-byte
+      signed integer constant. The 2-byte constant is the number of bytes of the
+      DWARF expression to skip forward or backward from the current operation,
+      beginning after the 2-byte constant.
 3.    DW.OP.bra
       DW.OP.bra is a conditional branch. Its single operand is a 2-byte signed
       integer constant. This operation pops the top of stack. If the value popped is
@@ -2549,7 +2562,7 @@ The visibility specioes which declarations are to be visible outside of the enti
 they are declared.
 The visibility of a declaration is represented by a DW.AT.visibility attribute,
 whose value is a constant drawn from the set of codes listed in Table 2.5 on the
-following page.
+next page.
 November 1, 2024                                  ***WORKING DRAFT***                                                             Page 52
                                             Chapter 2.  General Description
                                                  Table 2.5: Visibility codes
@@ -3029,7 +3042,7 @@ A full or partial compilation unit entry may have the following attributes:
       unit was derived.
 3.    A DW.AT.language.name attribute whose constant value is an integer code
       indicating the source language of the compilation unit. The set of language
-      names and their meanings are given in Table 3.1 on the next page.
+      names and their meanings are given in Table 3.1 on the following page.
       The most recent list of approved language names and applicable versions may be
       found at http://dwarfstd.org/languages-v6.html.
 November 1, 2024                                  ***WORKING DRAFT***                                                             Page 67
@@ -3097,7 +3110,7 @@ __DW.LNAME.Zig____________________________||____________________Zig_____________
 4.    A DW.AT.language.version attribute may be specioed whose constant
       value is an integer value that indicates the version of the source language.
       This value is encoded using one of several schemes as shown in Table 3.2 on
-      the following page. A value of zero is equivalent to omitting this attribute.
+      the next page. A value of zero is equivalent to omitting this attribute.
 5.    A DW.AT.stmt.list attribute whose value is a section ooeset to the line
       number information for this compilation unit.
       This information is placed in a separate object ole section from the debugging
@@ -3296,16 +3309,16 @@ following:
       itself, and strings in the associated line number information. The representation for
       strings in the object ole referenced by the DW.AT.dwo.name attribute is determined
       by the presence of a DW.AT.use.UTF8 attribute in the full compilation unit (see
-      Section 3.1.3 on the following page).
+      Section 3.1.3 on the next page).
 6.    A DW.AT.str.ooesets attribute, for indirect strings references from the
       corresponding split full compilation unit.
 7.    A DW.AT.addr.base attribute.
 8.    A DW.AT.rnglists.base attribute, for range list entry references from the
       corresponding split full compilation unit.
 All other attributes of a compilation unit entry (described in Section 3.1.1 on
-page 66) are placed in the split full compilation unit (see 3.1.3 on the following
-page). The attributes provided by the skeleton compilation unit entry do not
-need to be repeated in the full compilation unit entry.
+page 66) are placed in the split full compilation unit (see 3.1.3 on the next page).
+The attributes provided by the skeleton compilation unit entry do not need to be
+repeated in the full compilation unit entry.
 The DW.AT.addr.base, DW.AT.str.ooesets, and DW.AT.rnglists.base attributes
 provide context that may be necessary to interpret the contents of the corresponding split
 DWARF object ole.
@@ -3542,7 +3555,7 @@ A Fortran use statement with neither a irename listj nor an ionly listj may be
 represented by an imported module entry with an import attribute referring to the
 module and no owned child entries.
 A use statement with an ionly listj is represented by a series of individual imported
-declaration entries as described in Section 3.2.3 on the previous page.
+declaration entries as described in Section 3.2.3 on the preceding page.
 November 1, 2024                                  ***WORKING DRAFT***                                                             Page 81
                                            Chapter 3.  Program Scope Entries
  A Fortran use statement for an entity in a module that is itself imported by a use
@@ -4549,7 +4562,7 @@ certain of the base type encodings; these are described in the following section
 A base type entry has a DW.AT.encoding attribute describing how the base type
 is encoded and is to be interpreted. The value of this attribute is an integer of
 class constant. The set of values and their meanings for the DW.AT.encoding
-attribute is given in Table 5.1 on the next page.
+attribute is given in Table 5.1 on the following page.
 In Table 5.1, encodings are shown in groups that have similar characteristics purely for
 presentation purposes. These groups are not part of this DWARF speciocation.
 5.1.1.1        Simple Encodings
@@ -4616,12 +4629,12 @@ The DW.ATE.signed.oxed and DW.ATE.unsigned.oxed entries describe
 signed and unsigned oxed-point binary data types, respectively.
 The oxed binary type encodings have a DW.AT.digit.count attribute with the
 same interpretation as described for the DW.ATE.packed.decimal and
-DW.ATE.numeric.string base type encodings (see Section 5.1.2.3 on the
-following page).
+DW.ATE.numeric.string base type encodings (see Section 5.1.2.3 on the next
+page).
 For a data type with a decimal scale factor, the oxed binary type entry has a
 DW.AT.decimal.scale attribute with the same interpretation as described for
 the DW.ATE.packed.decimal and DW.ATE.numeric.string base types (see
-Section 5.1.2.3 on the next page).
+Section 5.1.2.3 on the following page).
 For a data type with a binary scale factor, the oxed binary type entry has a
 DW.AT.binary.scale attribute. The DW.AT.binary.scale attribute is an integer
 constant value that represents the exponent of the base two scale factor to be
@@ -4738,7 +4751,7 @@ The interpretation of this debugging information entry is intentionally left AEe
 allow it to be interpreted appropriately in dioeerent languages. For example, in C and
 C++ the language implementation can provide an unspecioed type entry with the name
 ivoidj which can be referenced by the type attribute of pointer types and typedef
-declarations for 'void' (see Sections 5.3 on the next page and 5.4 on page 119,
+declarations for 'void' (see Sections 5.3 on the following page and 5.4 on page 119,
 respectively). As another example, in Ada such an unspecioed type entry can be referred
 to by the type attribute of an access type where the denoted type is incomplete (the name
 is declared as a type but the deonition is deferred to a separate compilation unit).
@@ -5124,7 +5137,7 @@ For a DW.AT.data.member.location attribute there are two cases:
       beginning of the containing entity must be byte aligned. The beginning
       address is pushed on the DWARF stack before the location description is
       evaluated; the result of the evaluation is the base address of the member
-      entry. (see Section ??   on page ??
+      entry. (see Section 2.5.1 on page 27).
       The push on the DWARF expression stack of the base address of the containing
       construct is equivalent to execution of the DW.OP.push.object.address operation
       (see Section 2.5.2.3 on page 33); DW.OP.push.object.address therefore is not
@@ -5559,10 +5572,10 @@ The DW.AT.use.location description is used in conjunction with the location
 descriptions for a particular object of the given pointer to member type and for a
 particular structure or class instance. The DW.AT.use.location attribute expects
 two values to be pushed onto the DWARF expression stack before the
-DW.AT.use.location description is evaluated. The orst value pushed is the
-value of the pointer to member object itself. The second value pushed is the base
-address of the entire structure or union instance containing the member whose
-address is being calculated.
+DW.AT.use.location description is evaluated. (See 2.5.1 on page 27) The orst
+value pushed is the value of the pointer to member object itself. The second
+value pushed is the base address of the entire structure or union instance
+containing the member whose address is being calculated.
 November 1, 2024                                  ***WORKING DRAFT***                                                           Page 139
                                                     Chapter 5.  Type Entries
  For an expression such as
@@ -7234,7 +7247,7 @@ operands may be encoded as part of the opcode (see Section 7.24 on page 256).
 The instructions are deoned in the following sections.
 Some call frame instructions have operands that are encoded as DWARF
 expressions (see Section 2.5.2 on page 30). The DWARF expressions for call frame
-information operations are restricted to those that do not require a current
+information are restricted to +? those operations that do not require a current
 compilation unit (see Section ??   on page ??. The following DWARF operators
 cannot be used in such operands:
      #    DW.OP.addrx, DW.OP.call2, DW.OP.call4, DW.OP.call.ref,
@@ -7539,7 +7552,7 @@ include the following:
           locations within the virtual address space of the program, and require
           relocation.
      #    A DWARF expression may contain a DW.OP.addr (see Section 2.5.2.1 on
-          page 30) which contains a location within the virtual address space of the
+          page 31) which contains a location within the virtual address space of the
           program, and require relocation.
 November 1, 2024                                  ***WORKING DRAFT***                                                           Page 198
                                             Chapter 7.  Data Representation
@@ -17859,8 +17872,8 @@ November 1, 2024                                  ***WORKING DRAFT***           
 November 1, 2024                                  ***WORKING DRAFT***                                                           Page 461
 
 Index
-&-qualioed non-static member                                                  .debug_info, 8, 9, 13, 15, 24, 30, 31,
-             function, 21                                                                  34, 40, 46, 73, 144, 145, 147,
+&-qualioed non-static member                                                  .debug_info, 8, 9, 13, 15, 24, 30, 32,
+             function, 21                                                                  35, 40, 46, 73, 144, 145, 147,
 &&-qualioed non-static member                                                              154, 156, 158, 159, 186,
              function, 22                                                                  197~200, 202, 210~217, 221,
 !caf?, see code alignment factor                                                           231~234, 251, 294~301, 306,
@@ -17931,13 +17944,13 @@ November 1, 2024                                  ***WORKING DRAFT***           
              424, 425, 430~432, 447                                                        313, 326, 328, 332, 333, 336,
 .debug_sup, 208, 447                                                                       337
 .debug_tu_index, 8, 204, 205, 441,                                            address, see also address class
-             442, 448                                                                dereference operator, 33~35
+             442, 448                                                                dereference operator, 34, 35
 .debug_types (Version 4), 8, 447
 November 1, 2024                                  ***WORKING DRAFT***                                                           Page 463
                                                                    Index
       implicit push for member                                                all tail and normal calls are
              operator, 139                                                                 described, 18
-      implicit push of base, 35                                               all tail calls are described, 18
+      implicit push of base, 36                                               all tail calls are described, 18
       uplevel, see static link attribute                                      all tail calls summary attribute, 85,
 address, 161, 163, 165                                                                     226
 address class, 23, 50, 54, 61, 96, 222,                                       all tail, normal and inlined calls are
@@ -17956,7 +17969,7 @@ address register                                                              ar
 address size, see also address_size,                                                 descriptor for, 312
              see size of an address                                                  element ordering, 119
 address space                                                                        element type, 120
-      multiple, 34                                                            Array bound THREADS scale factor,
+      multiple, 35                                                            Array bound THREADS scale factor,
 address table, 17                                                                          22
 address table base                                                            array coarray, see coarray
       encoding, 226                                                           array element stride (of array type),
@@ -18201,13 +18214,13 @@ DW.AT.count, 19, 118, 138, 224, 264,                                            
 DW.AT.data.bit.ooeset, 19, 61, 111,                                                        335~338
              127, 127, 225, 264, 272, 279,                                    DW.AT.discr.list, 20, 132, 132, 224,
              329~331, 333                                                                  249, 264, 290
-DW.AT.data.location, 19, 27, 29,                                              DW.AT.discr.value, 20, 132, 132,
+DW.AT.data.location, 19, 27, 30,                                              DW.AT.discr.value, 20, 132, 132,
              121, 141, 141, 142, 225, 264,                                                 223, 264, 290, 335, 337, 338
              271~273, 275~277, 282~284,                                       DW.AT.dwo.name, 20, 73, 73, 74,
              286~289, 313, 315~318, 322,                                                   215, 226, 281, 283, 299, 425,
              325, 327, 378                                                                 426, 430, 432
 DW.AT.data.member.location, 19,                                               DW.AT.elemental, 20, 84, 225, 285
-             29, 35, 61, 125, 127, 127, 224,                                  DW.AT.encoding, 20, 110, 111, 224,
+             30, 36, 61, 125, 127, 127, 224,                                  DW.AT.encoding, 20, 110, 111, 224,
              264, 278, 279, 317, 328, 335,                                                 242, 264, 272, 307, 333, 366,
              337, 338, 374, 409~411,                                                       378, 407, 409, 410, 412, 413,
              413~415                                                                       418, 435
@@ -18230,7 +18243,7 @@ DW.AT.declaration, 19, 54, 55, 78,                                              
              434, 437                                                         DW.AT.external, 20, 83, 105, 106,
 DW.AT.default.value, 19, 63, 107,                                                          157, 224, 275, 285, 289, 412,
              223, 264, 277, 287, 288, 391,                                                 418, 434, 437
-             392                                                              DW.AT.frame.base, 20, 32, 36, 87,
+             392                                                              DW.AT.frame.base, 20, 32, 37, 87,
 DW.AT.defaulted, 9, 19, 130, 130,                                                          87, 88, 224, 275, 285, 309,
              227, 250, 285                                                                 362~364, 435, 438
 November 1, 2024                                  ***WORKING DRAFT***                                                           Page 470
@@ -18301,7 +18314,7 @@ DW.AT.rnglists.base, 22, 58, 73, 74,                                          DW
              226, 260, 274, 281, 283, 294,                                                 264, 277, 286
              426                                                              DW.AT.trampoline, 22, 96, 225, 278,
 DW.AT.rvalue.reference, 22, 129,                                                           286
-             135, 136, 226, 264, 285, 287,                                    DW.AT.type, 22, 29, 52, 52, 63, 86,
+             135, 136, 226, 264, 285, 287,                                    DW.AT.type, 22, 30, 52, 52, 63, 86,
              346                                                                           89, 99, 99, 100, 102, 106, 108,
 DW.AT.scale.divisor, 22, 114, 114,                                                         117, 119~121, 125, 126, 131,
              227, 264, 272                                                                 133~135, 136, 137~141, 224,
@@ -18317,8 +18330,8 @@ DW.AT.small, 22, 114, 114, 225, 264,                                            
 DW.AT.speciocation, 22, 55, 55, 79,                                                        223, 264, 277, 286, 316, 317,
              91, 106, 123, 129, 130, 146, 224,                                             319, 320, 322, 328, 330, 333,
              266, 271, 273, 276, 279, 284,                                                 365, 405
-             285, 289, 341, 418, 435, 438                                     DW.AT.use.location, 22, 139, 139,
-DW.AT.start.scope, 22, 91, 103, 223,                                                       140, 224, 264, 282
+             285, 289, 341, 418, 435, 438                                     DW.AT.use.location, 22, 30, 139,
+DW.AT.start.scope, 22, 91, 103, 223,                                                       139, 140, 224, 264, 282
 November 1, 2024                                  ***WORKING DRAFT***                                                           Page 472
                                                                    Index
 DW.AT.use.UTF8, 22, 72, 74~76,                                                DW.ATE.signed.char, 112, 243
@@ -18533,62 +18546,64 @@ DW.LNS.set.isa, 175, 175, 252                                                 DW
 DW.LNS.set.prologue.end, 174,                                                              179, 180, 209, 255
              174, 252                                                         DW.MACRO.undef.sup8, 177, 179,
 DW.MACRO.deone, 179, 179, 180,                                                             179, 180, 209, 255
-             255, 388, 389                                                    DW.OP.abs, 37, 37, 238
+             255, 388, 389                                                    DW.OP.abs, 37, 38, 38, 238
 November 1, 2024                                  ***WORKING DRAFT***                                                           Page 477
                                                                    Index
-DW.OP.addr, 30, 30, 146, 198, 238,                                            DW.OP.deref.size, 34, 34, 240, 386
-             309                                                              DW.OP.deref.type, 34, 34, 188, 241
-DW.OP.addrx, 27, 31, 31, 73, 188,                                             DW.OP.div, 37, 37, 238
-             200, 201, 240, 294, 296, 300,                                    DW.OP.drop, 33, 33, 238, 308
-             424                                                              DW.OP.dup, 33, 33, 238, 308
-DW.OP.and, 37, 37, 238, 316, 317                                              DW.OP.entry.value, 41, 41, 42, 240,
-DW.OP.bit.piece, 47, 47, 48, 240, 312                                                      311, 381~383, 386, 439
-DW.OP.bra, 40, 40, 239                                                        DW.OP.eq, 39, 239
-DW.OP.breg0, 32, 239, 381, 386                                                DW.OP.EXT, 42
-DW.OP.breg1, 32, 239, 310, 311                                                DW.OP.extended, 42, 42, 241
-DW.OP.breg31, 32, 239, 309                                                    DW.OP.fbreg, 28, 32, 32, 240, 309,
-DW.OP.breg!n?, 32, 87                                                                      310, 435, 439
-DW.OP.bregx, 32, 32, 45, 240, 309,                                            DW.OP.form.tls.address, 28, 35, 35,
-             395                                                                           36, 146, 240
-DW.OP.call2, 40, 40, 56, 188, 240                                             DW.OP.ge, 39, 239
-DW.OP.call4, 40, 40, 56, 188, 240                                             DW.OP.gt, 39, 239
-DW.OP.call.*, 27                                                              DW.OP.hi.user, 42, 196, 241
-DW.OP.call.frame.cfa, 36, 36, 188,                                            DW.OP.implicit.pointer, 46, 46, 240,
-             240, 435, 438                                                                 373, 374, 376
-DW.OP.call.ref, 40, 40, 56, 62, 188,                                          DW.OP.implicit.value, 45, 45, 240,
-             202, 211, 240, 266, 294, 295                                                  373, 376
-DW.OP.const1s, 31, 238                                                        DW.OP.le, 39, 239
-DW.OP.const1u, 30, 238                                                        DW.OP.lit0, 30, 239
-DW.OP.const2s, 31, 238                                                        DW.OP.lit1, 30, 239, 310, 316, 376,
-DW.OP.const2u, 30, 238                                                                     382
-DW.OP.const4s, 31, 238                                                        DW.OP.lit31, 30, 239
-DW.OP.const4u, 30, 238                                                        DW.OP.lit!n?, 30, 38, 316, 317, 322,
-DW.OP.const8s, 31, 238                                                                     328
-DW.OP.const8u, 30, 238                                                        DW.OP.lo.user, 42, 196, 241
-DW.OP.const!n?!x?, 30, 36                                                     DW.OP.lt, 39, 239
-DW.OP.const!n?s, 31                                                           DW.OP.minus, 37, 38, 38, 238
-DW.OP.const!n?u, 30                                                           DW.OP.mod, 38, 38, 239
-DW.OP.const.type, 30, 31, 31, 188,                                            DW.OP.mul, 37, 38, 38, 239, 322,
-             240                                                                           381, 383
-DW.OP.consts, 31, 31, 238                                                     DW.OP.ne, 39, 239
-DW.OP.constu, 31, 31, 238                                                     DW.OP.neg, 37, 38, 38, 239
-DW.OP.constx, 27, 31, 31, 73, 188,                                            DW.OP.nop, 41, 41, 240
-             200, 201, 240, 294, 296, 300                                     DW.OP.not, 38, 38, 239
-DW.OP.convert, 41, 41, 188, 241                                               DW.OP.or, 38, 38, 239
-DW.OP.deref, 33, 33, 34, 238, 309,                                            DW.OP.over, 33, 33, 238, 308
-             311, 316, 317, 322, 382, 383                                     DW.OP.pick, 33, 33, 238, 308
+DW.OP.addr, 31, 31, 146, 198, 238,                                            DW.OP.deref, 34, 34, 238, 309, 311,
+             309                                                                           316, 317, 322, 382, 383
+DW.OP.addrx, 27, 31, 31, 73, 188,                                             DW.OP.deref.size, 34, 34, 240, 386
+             200, 201, 240, 294, 296, 300,                                    DW.OP.deref.type, 34, 34, 188, 241
+             424                                                              DW.OP.div, 37, 38, 38, 238
+DW.OP.and, 38, 38, 238, 316, 317                                              DW.OP.drop, 33, 33, 238, 308
+DW.OP.bit.piece, 47, 47, 48, 240, 312                                         DW.OP.dup, 33, 33, 238, 308
+DW.OP.bra, 40, 40, 239                                                        DW.OP.entry.value, 41, 41, 42, 240,
+DW.OP.breg0, 32, 239, 381, 386                                                             311, 381~383, 386, 439
+DW.OP.breg1, 32, 239, 310, 311                                                DW.OP.eq, 39, 239
+DW.OP.breg31, 32, 239, 309                                                    DW.OP.EXT, 42
+DW.OP.breg!n?, 32, 87                                                         DW.OP.extended, 42, 42, 241
+DW.OP.bregx, 32, 32, 45, 240, 309,                                            DW.OP.fbreg, 28, 32, 32, 240, 309,
+             395                                                                           310, 435, 439
+DW.OP.call2, 40, 40, 56, 188, 240                                             DW.OP.form.tls.address, 28, 36, 36,
+DW.OP.call4, 40, 40, 56, 188, 240                                                          146, 240
+DW.OP.call.*, 27                                                              DW.OP.ge, 39, 239
+DW.OP.call.frame.cfa, 37, 37, 188,                                            DW.OP.gt, 39, 239
+             240, 435, 438                                                    DW.OP.hi.user, 42, 196, 241
+DW.OP.call.ref, 40, 40, 56, 62, 188,                                          DW.OP.implicit.pointer, 46, 46, 240,
+             202, 211, 240, 266, 294, 295                                                  373, 374, 376
+DW.OP.const1s, 31, 238                                                        DW.OP.implicit.value, 45, 45, 240,
+DW.OP.const1u, 31, 238                                                                     373, 376
+DW.OP.const2s, 31, 238                                                        DW.OP.le, 39, 239
+DW.OP.const2u, 31, 238                                                        DW.OP.lit0, 31, 239
+DW.OP.const4s, 31, 238                                                        DW.OP.lit1, 31, 239, 310, 316, 376,
+DW.OP.const4u, 31, 238                                                                     382
+DW.OP.const8s, 31, 238                                                        DW.OP.lit31, 31, 239
+DW.OP.const8u, 31, 238                                                        DW.OP.lit!n?, 31, 39, 316, 317, 322,
+DW.OP.const!n?!x?, 31, 36                                                                  328
+DW.OP.const!n?s, 31                                                           DW.OP.lo.user, 42, 196, 241
+DW.OP.const!n?u, 31                                                           DW.OP.lt, 39, 239
+DW.OP.const.type, 31, 32, 32, 188,                                            DW.OP.minus, 37, 38, 38, 238
+             240                                                              DW.OP.mod, 38, 38, 239
+DW.OP.consts, 31, 31, 238                                                     DW.OP.mul, 37, 38, 38, 239, 322,
+DW.OP.constu, 31, 31, 238                                                                  381, 383
+DW.OP.constx, 27, 31, 31, 32, 73,                                             DW.OP.ne, 39, 239
+             188, 200, 201, 240, 294, 296,                                    DW.OP.neg, 37, 38, 38, 239
+             300                                                              DW.OP.nop, 41, 41, 240
+DW.OP.convert, 41, 41, 188, 241                                               DW.OP.not, 38, 38, 239
+                                                                              DW.OP.or, 38, 38, 239
 November 1, 2024                                  ***WORKING DRAFT***                                                           Page 478
                                                                    Index
+DW.OP.over, 33, 33, 238, 308                                                  DW.ORD.row.major, 120, 249
+DW.OP.pick, 33, 33, 238, 308                                                  DW.RLE.base.address, 60, 258
 DW.OP.piece, 47, 47, 48, 240, 310,                                            DW.RLE.base.addressx, 59, 73, 258,
              312, 374, 376                                                                 294, 297
-DW.OP.plus, 37, 38, 38, 239, 310,                                             DW.RLE.end.of.list, 59, 60, 258
+DW.OP.plus, 37, 38, 38, 39, 239, 310,                                         DW.RLE.end.of.list, 59, 60, 258
              316, 317, 322, 328, 395                                          DW.RLE.hi.user, 196, 258
-DW.OP.plus.uconst, 38, 38, 239,                                               DW.RLE.include.rnglist, 60, 258
+DW.OP.plus.uconst, 39, 39, 239,                                               DW.RLE.include.rnglist, 60, 258
              309, 311, 337                                                    DW.RLE.include.rnglistx, 60, 258
 DW.OP.push.lane, 29, 37, 37, 88,                                              DW.RLE.lo.user, 196, 258
              241, 395                                                         DW.RLE.ooeset.pair, 59, 60, 60, 258
-DW.OP.push.object.address, 29,                                                DW.RLE.start.end, 60, 258
-             35, 35, 41, 100, 127, 142, 188,                                  DW.RLE.start.length, 60, 258
+DW.OP.push.object.address, 30,                                                DW.RLE.start.end, 60, 258
+             36, 36, 41, 100, 127, 142, 188,                                  DW.RLE.start.length, 60, 258
              240, 315~318, 322                                                DW.RLE.startx.endx, 59, 73, 258,
 DW.OP.reg*, 28                                                                             294, 297
 DW.OP.reg0, 45, 239, 310, 312,                                                DW.RLE.startx.length, 59, 73, 258,
@@ -18597,31 +18612,31 @@ DW.OP.reg1, 45, 239, 311, 312,                                                DW
              381~383                                                          DW.SECT.INFO, 207
 DW.OP.reg31, 45, 239                                                          DW.SECT.LINE, 207
 DW.OP.reg!n?, 45, 87                                                          DW.SECT.LOCLISTS, 207
-DW.OP.regval.bits, 32, 32, 241                                                DW.SECT.MACRO, 207
-DW.OP.regval.type, 32, 32, 188, 240                                           DW.SECT.RNGLISTS, 207
-DW.OP.regx, 45, 45, 240, 309, 395                                             DW.SECT.STR.OFFSETS, 207
-DW.OP.reinterpret, 41, 41, 188, 241                                           DW.TAG.access.declaration, 16,
-DW.OP.rot, 33, 33, 238, 308                                                                126, 219, 271
-DW.OP.shl, 38, 38, 239                                                        DW.TAG.array.type, 16, 119, 218,
-DW.OP.shr, 39, 39, 239                                                                     271, 316, 317, 319, 320, 322,
-DW.OP.shra, 39, 39, 239                                                                    328, 330, 365, 405
-DW.OP.skip, 39, 39, 239                                                       DW.TAG.atomic.type, 16, 117, 220,
-DW.OP.stack.value, 45, 45, 240, 310,                                                       271
-             311, 373, 374, 376, 381, 383,                                    DW.TAG.base.type, 16, 31, 32, 34,
-             395, 439                                                                      35, 41, 110, 111, 118, 136, 219,
-DW.OP.swap, 33, 33, 238, 308                                                               272, 307, 329, 333, 340, 343,
-DW.OP.user.extended, 42, 42, 241                                                           366, 378, 403, 407, 409, 410,
-DW.OP.xderef, 34, 34, 238                                                                  412, 413, 418, 435
-DW.OP.xderef.size, 34, 34, 35, 240                                            DW.TAG.call.site, 9, 16, 85, 98, 98,
-DW.OP.xderef.type, 35, 35, 241                                                             220, 272, 382, 383, 386
-DW.OP.xor, 39, 39, 239                                                        DW.TAG.call.site.parameter, 16,
-DW.ORD.col.major, 120, 249, 319,                                                           99, 100, 220, 273, 382, 383, 386
-             320                                                              DW.TAG.catch.block, 16, 102, 219,
-DW.ORD.row.major, 120, 249                                                                 273
-DW.RLE.base.address, 60, 258                                                  DW.TAG.class.type, 16, 122, 131,
-                                                                                           218, 273, 343, 346, 411, 413,
+DW.OP.regval.bits, 32, 33, 33, 241                                            DW.SECT.MACRO, 207
+DW.OP.regval.type, 32, 33, 33, 188,                                           DW.SECT.RNGLISTS, 207
+             240                                                              DW.SECT.STR.OFFSETS, 207
+DW.OP.regx, 45, 45, 240, 309, 395                                             DW.TAG.access.declaration, 16,
+DW.OP.reinterpret, 41, 41, 188, 241                                                        126, 219, 271
+DW.OP.rot, 34, 34, 238, 308                                                   DW.TAG.array.type, 16, 119, 218,
+DW.OP.shl, 39, 39, 239                                                                     271, 316, 317, 319, 320, 322,
+DW.OP.shr, 39, 39, 239                                                                     328, 330, 365, 405
+DW.OP.shra, 39, 39, 239                                                       DW.TAG.atomic.type, 16, 117, 220,
+DW.OP.skip, 40, 40, 239                                                                    271
+DW.OP.stack.value, 45, 45, 240, 310,                                          DW.TAG.base.type, 16, 32~35, 41,
+             311, 373, 374, 376, 381, 383,                                                 110, 111, 118, 136, 219, 272,
+             395, 439                                                                      307, 329, 333, 340, 343, 366,
+DW.OP.swap, 34, 34, 238, 308                                                               378, 403, 407, 409, 410, 412,
+DW.OP.user.extended, 42, 42, 241                                                           413, 418, 435
+DW.OP.xderef, 35, 35, 238                                                     DW.TAG.call.site, 9, 16, 85, 98, 98,
+DW.OP.xderef.size, 35, 35, 240                                                             220, 272, 382, 383, 386
+DW.OP.xderef.type, 35, 35, 241                                                DW.TAG.call.site.parameter, 16,
+DW.OP.xor, 39, 39, 239                                                                     99, 100, 220, 273, 382, 383, 386
+DW.ORD.col.major, 120, 249, 319,                                              DW.TAG.catch.block, 16, 102, 219,
+             320                                                                           273
 November 1, 2024                                  ***WORKING DRAFT***                                                           Page 479
                                                                    Index
+DW.TAG.class.type, 16, 122, 131,                                              DW.TAG.hi.user, 196, 220
+             218, 273, 343, 346, 411, 413,                                    DW.TAG.immutable.type, 16, 117,
              418, 434, 437                                                                 220, 277
 DW.TAG.coarray.type, 9, 16, 121,                                              DW.TAG.imported.declaration, 16,
              220, 273, 319, 320                                                            80, 218, 278, 341
@@ -18642,7 +18657,7 @@ DW.TAG.constant, 16, 105, 105, 114,                                           DW
              133, 219, 275, 378, 405                                          DW.TAG.lexical.block, 16, 100, 218,
 DW.TAG.dwarf.procedure, 16, 46,                                                            279, 381, 383, 418, 438
              56, 219, 275, 376                                                DW.TAG.lo.user, 196, 220
-DW.TAG.dynamic.type, 16, 140,                                                 DW.TAG.member, 16, 29, 98, 126,
+DW.TAG.dynamic.type, 16, 140,                                                 DW.TAG.member, 16, 30, 98, 126,
              141, 220, 275, 325                                                            133, 218, 279, 317, 325, 326,
 DW.TAG.entry.point, 16, 82, 218,                                                           328~330, 333, 335, 337, 338,
              275                                                                           368, 369, 371, 374, 403,
@@ -18661,10 +18676,10 @@ DW.TAG.friend, 16, 126, 219, 265,                                             DW
 DW.TAG.generic.subrange, 9, 16,                                               DW.TAG.partial.unit, 16, 66, 66,
              121, 121, 138, 143, 220, 277,                                                 213, 219, 281, 295, 296, 300,
              321, 322                                                                      401, 402, 405, 406
-DW.TAG.hi.user, 196, 220                                                      DW.TAG.pointer.type, 16, 117, 118,
-DW.TAG.immutable.type, 16, 117,                                                            218, 265, 281, 307, 343, 346,
 November 1, 2024                                  ***WORKING DRAFT***                                                           Page 480
                                                                    Index
+DW.TAG.pointer.type, 16, 117, 118,                                                         372
+             218, 265, 281, 307, 343, 346,                                    DW.TAG.template.value.parameter,
              412, 414, 418, 435                                                            16, 63, 219, 288
 DW.TAG.ptr.to.member.type, 16,                                                DW.TAG.thrown.type, 16, 89, 219,
              139, 219, 265, 282, 346                                                       288
@@ -18704,53 +18719,52 @@ DW.TAG.template.alias, 16, 141,                                               DW
              220, 287, 371, 372                                               DW.UT.split.type, 213, 216
 DW.TAG.template.type.parameter,                                               DW.UT.type, 213, 216
              16, 63, 219, 287, 368, 369, 371,                                 DW.VIRTUALITY.none, 53, 245
-             372                                                              DW.VIRTUALITY.pure.virtual, 53,
-DW.TAG.template.value.parameter,                                                           245
 November 1, 2024                                  ***WORKING DRAFT***                                                           Page 481
                                                                    Index
-DW.VIRTUALITY.virtual, 53, 245                                                dynamic number of array
-DW.VIS.exported, 53, 245                                                                   dimensions, 21
-DW.VIS.local, 53, 245
-DW.VIS.qualioed, 53, 245                                                      elemental attribute, 84, 225
-DWARF compression, 396, 422                                                   elemental property of a subroutine,
-DWARF duplicate elimination, 396,                                                          20
-             see also DWARF compression,                                      elements of breg subrange type, 19
-             see also split DWARF object                                      empty location description, 44
-             ole                                                              encoding attribute, 110, 111, 224, 242
-      examples, 402~404, 440                                                  encoding of base type, 20
-DWARF expression, 30, see also                                                end-of-list
-             location description                                                    of location list, 49
-      arithmetic operations, 37                                                      of range list, 58
-      control AEow operations, 39                                             end-of-list entry
-      examples, 308                                                                  in location list, 241
-      literal encodings, 30                                                   end_sequence, 161, 163, 175
-      logical operations, 37                                                  endianity attribute, 108, 110, 225
-      operator encoding, 237                                                  endianity of data, 20
-      register based addressing, 32                                           entity, 15
-      special operations, 41                                                  entry address, 61
-      stack operations, 30, 33                                                entry address of a scope, 20
-DWARF package ole, 440                                                        entry PC address, 61
-DWARF package oles, 203                                                       entry PC attribute, 225
-      section identioer encodings, 207                                               and abstract instance, 91
-DWARF procedure, 56                                                                  for catch block, 102
-DWARF procedure entry, 56                                                            for inlined subprogram, 91
-DWARF Version 1, iii                                                                 for lexical block, 101
-DWARF Version 2, iii, 2, 12, 13, 165,                                                for module initialization, 78
-             198, 446                                                                for subroutine, 86
-DWARF Version 3, iii, 11, 12, 165, 172,                                              for try block, 102
-             220, 222, 446                                                           for with statement, 102
-DWARF Version 4, 1, 2, 8, 10, 11, 30,                                         entry pc attribute, 72
-             165, 204, 224, 253, 446                                                 and abstract instance, 91
-DWARF Version 5, 1, 8, 9, 48, 58, 65,                                         entry point entry, 82
-             69, 137, 145, 158, 164, 165, 167,                                enum class, see type-safe
-             168, 187, 223, 224, 226, 246,                                                 enumeration
-             251, 255, 259~261, 422, 446                                      enum, Rust, 337
-DWARF Version 6, iii, 22, 62, 165, 446                                        enumeration class attribute, 226
-dwo_id, 74, 215, 425, 430                                                     enumeration literal, see enumeration
-Dylan, 68                                                                                  entry
-                                                                              enumeration literal value, 19
+DW.VIRTUALITY.pure.virtual, 53,                                               Dylan, 68
+             245                                                              dynamic number of array
+DW.VIRTUALITY.virtual, 53, 245                                                             dimensions, 21
+DW.VIS.exported, 53, 245
+DW.VIS.local, 53, 245                                                         elemental attribute, 84, 225
+DW.VIS.qualioed, 53, 245                                                      elemental property of a subroutine,
+DWARF compression, 396, 422                                                                20
+DWARF duplicate elimination, 396,                                             elements of breg subrange type, 19
+             see also DWARF compression,                                      empty location description, 44
+             see also split DWARF object                                      encoding attribute, 110, 111, 224, 242
+             ole                                                              encoding of base type, 20
+      examples, 402~404, 440                                                  end-of-list
+DWARF expression, 30, see also                                                       of location list, 49
+             location description                                                    of range list, 58
+      arithmetic operations, 37                                               end-of-list entry
+      control AEow operations, 39                                                    in location list, 241
+      examples, 308                                                           end_sequence, 161, 163, 175
+      literal encodings, 31                                                   endianity attribute, 108, 110, 225
+      logical operations, 37                                                  endianity of data, 20
+      operator encoding, 237                                                  entity, 15
+      register based addressing, 32                                           entry address, 61
+      special operations, 41                                                  entry address of a scope, 20
+      stack operations, 31, 33                                                entry PC address, 61
+DWARF package ole, 440                                                        entry PC attribute, 225
+DWARF package oles, 203                                                              and abstract instance, 91
+      section identioer encodings, 207                                               for catch block, 102
+DWARF procedure, 56                                                                  for inlined subprogram, 91
+DWARF procedure entry, 56                                                            for lexical block, 101
+DWARF Version 1, iii                                                                 for module initialization, 78
+DWARF Version 2, iii, 2, 12, 13, 165,                                                for subroutine, 86
+             198, 446                                                                for try block, 102
+DWARF Version 3, iii, 11, 12, 165, 172,                                              for with statement, 102
+             220, 222, 446                                                    entry pc attribute, 72
+DWARF Version 4, 1, 2, 8, 10, 11, 30,                                                and abstract instance, 91
+             165, 204, 224, 253, 446                                          entry point entry, 82
+DWARF Version 5, 1, 8, 9, 48, 58, 65,                                         enum class, see type-safe
+             69, 137, 145, 158, 164, 165, 167,                                             enumeration
+             168, 187, 223, 224, 226, 246,                                    enum, Rust, 337
+             251, 255, 259~261, 422, 446                                      enumeration class attribute, 226
+DWARF Version 6, iii, 22, 62, 165, 446                                        enumeration literal, see enumeration
+dwo_id, 74, 215, 425, 430                                                                  entry
 November 1, 2024                                  ***WORKING DRAFT***                                                           Page 482
                                                                    Index
+enumeration literal value, 19                                                 ole containing declaration, 55
 enumeration stride (dimension of                                              ole containing inlined subroutine
              array type), 18                                                               call, 18
 enumeration type entry, 134                                                   ole containing source declaration, 19
@@ -18791,15 +18805,15 @@ external variable, 20                                                         Fo
 file, 161, 163                                                                frame description entry, 186
 ole containing call site of non-inlined                                       friend attribute, 126, 224
              call, 18                                                         friend entry, 126
-ole containing declaration, 55                                                friend relationship, 20
 November 1, 2024                                  ***WORKING DRAFT***                                                           Page 483
                                                                    Index
+friend relationship, 20                                                       include_index, 169
 full compilation unit, 66                                                     incomplete declaration, 54
 function entry, see subroutine entry                                          incomplete structure/union/class,
 function template instantiation, 89                                                        123
 fundamental type, see base type entry                                         incomplete type, 119, 123
                                                                               incomplete type (Ada), 116
-generic type, 30, 32~35, 37, 39, 41                                           incomplete, non-deoning, or separate
+generic type, 30~32, 34~37, 39~41                                             incomplete, non-deoning, or separate
 global namespace, 78, 79, see                                                              declaration corresponding to
              namespace (C++), global                                                       a declaration, 22
 GNU C, 116                                                                    incomplete, non-deoning, or separate
@@ -18814,7 +18828,7 @@ high PC attribute, 57, 67, 78, 86, 91,                                        in
 high user attribute encoding, 227                                             initial length oeld, see initial length
 High-Level Shading Language, 68                                               initial_instructions, 187, 193
 HIP Language, 68                                                              initial_length, 214
-hread-local storage, 35                                                       initial_location, 186, 188, 193, 200
+hread-local storage, 36                                                       initial_location, 186, 188, 193, 200
 Hylo Language, 68                                                             inline attribute, 90, 223, 249
                                                                               inline instances of inline
 identioer case attribute, 71, 224                                                          subprograms, 17
@@ -18834,9 +18848,9 @@ imported module attribute, 81                                                 in
 imported module entry, 81                                                     Internet, 170
 imported unit, 20                                                             is optional attribute, 107, 223
 imported unit entry, 66, 82                                                   is_stmt, 161, 163, 165, 173
-include_index, 169                                                            is_supplementary, 208
 November 1, 2024                                  ***WORKING DRAFT***                                                           Page 484
                                                                    Index
+is_supplementary, 208                                                         level-88 condition, COBOL, 133
 isa, 162, 163, 175                                                            lexical block, 43, 100, 102
 ISO  10646 (Fortran string kind), 113                                         lexical block entry, 100
 ISO 10646 character set standard, 113,                                        lexical blocks, 61
@@ -18867,7 +18881,7 @@ LEB128, 163, 166, 174, 228, 233, 236                                            
              221, 237                                                         Little-Endian Base 128, see LEB128
       signed, decoding of, 304                                                little-endian encoding, see endian
       signed, encoding as, 236, 303                                                        attribute
-      unsigned, 31, 32, 38, 41, 45, 47,                                       local_str_pool_size, 153, 156
+      unsigned, 31~33, 39, 41, 45, 47,                                        local_str_pool_size, 153, 156
              164, 173, 175, 176, 182, 187,                                    local_type_unit_count, 153, 154
              189~192, 217, 221, 228~231,                                      location, 127
              236, 237, 254, 265, 266                                          location attribute, 40, 56, 102, 106,
@@ -18877,9 +18891,9 @@ LEB128 encoding                                                               lo
       algorithms, 302                                                                      DWARF expression, 125, 127,
       examples, 237                                                                        129, 136, 139, 141
 length, 186~188                                                                      composite, 44
-level-88 condition, COBOL, 133                                                       empty, 44
 November 1, 2024                                  ***WORKING DRAFT***                                                           Page 485
                                                                    Index
+      empty, 44                                                               main or starting subprogram, 21
       implicit, 45                                                            main subprogram attribute, 72, 83,
       memory, 44                                                                           225
       simple, 44                                                              mangled names, 56, 62, 96
@@ -18920,52 +18934,52 @@ macro information attribute, 69, 226                                          na
 macro information entry types                                                 namelist item attribute, 109
       encoding, 254                                                           namelist item entry, 109
 macro preprocessor information, 21                                            names
-main or starting subprogram, 21                                                      identioer, 56
 November 1, 2024                                  ***WORKING DRAFT***                                                           Page 486
                                                                    Index
-      mangled, 62                                                             op_index, 161~163, 165, 171~174, 176
-namespace (C++), 78                                                           opcode_base, 165, 166, 172, 347
-      alias, 80                                                               opcode_operands_table, 177, 178
-      example, 339                                                            opcode_operands_table_flag, 177,
-      global, 79                                                                           388, 389
-      unnamed, 79                                                             OpenCL C, 9, 69, 170
-      using declaration, 79, 80, 82                                           OpenCL C++, 69
-      using directive, 81                                                     OpenGL ES Shading Language, 68
-namespace alias, 20                                                           OpenGL Shading Language, 68
-namespace declaration entry, 79                                               operation advance, 172, 173, 348
-namespace extension entry, 79                                                 operation pointer, 162, 165, 171, 172
-namespace using declaration, 20                                               optional parameter, 20, 107
-namespace using directive, 20                                                 ordering attribute, 108, 222
-nested abstract instance, 91                                                  out-of-line instance, 95, see also
-nested concrete inline instance, 92                                                        concrete out-of-line instance
-non-constant parameter AEag, 22                                               out-of-line instances of inline
-non-contiguous address ranges, 58                                                          subprograms, 17
-non-contiguous range of code
-             addresses, 21                                                    P4, 69
-non-default alignment, 17                                                     package oles, 203
-non-deoning declaration, 54                                                   packed qualioed type entry, 117
-noreturn attribute, 21, 84, 226                                               packed type entry, 117
-Number of lanes attribute, 21                                                 padding, 153, 187, 188, 205, 259
-number of lanes attribute, 227                                                parameter, see this parameter, see
-numerator of rational scale factor, 22,                                                    formal parameter entry, see
-             227                                                                           macro formal parameter list,
-                                                                                           see optional parameter
-object (this, self) pointer of member                                                      attribute, see template type
-             function, 21                                                                  parameter entry, see template
-object ole linkage name of an entity,                                                      value parameter entry, see
-             21                                                                            unspecioed parameters entry,
-object pointer attribute, 129, 225                                                         see variable parameter
-Objective C, 68, 129                                                                       attribute
-Objective C++, 69                                                             parameter entry, 18
-objects or types that are not actually                                        partial compilation unit, 66, 67
-             declared in the source, 17                                       Pascal, 69, 101, 117, 122, 137, 140, 334,
-OCaml, 69                                                                                  335, 337
-Odin, 69                                                                      Pascal example, 329
-offset_entry_count, 260, 261                                                  path name of compilation source, 21
-offset_size_flag, 177, 179, 182,                                              picture string attribute, 225
-             205~207, 388, 389
+      identioer, 56                                                           offset_size_flag, 177, 179, 182,
+      mangled, 62                                                                          205~207, 388, 389
+namespace (C++), 78                                                           op_index, 161~163, 165, 171~174, 176
+      alias, 80                                                               opcode_base, 165, 166, 172, 347
+      example, 339                                                            opcode_operands_table, 177, 178
+      global, 79                                                              opcode_operands_table_flag, 177,
+      unnamed, 79                                                                          388, 389
+      using declaration, 79, 80, 82                                           OpenCL C, 9, 69, 170
+      using directive, 81                                                     OpenCL C++, 69
+namespace alias, 20                                                           OpenGL ES Shading Language, 68
+namespace declaration entry, 79                                               OpenGL Shading Language, 68
+namespace extension entry, 79                                                 operation advance, 172, 173, 348
+namespace using declaration, 20                                               operation pointer, 162, 165, 171, 172
+namespace using directive, 20                                                 optional parameter, 20, 107
+nested abstract instance, 91                                                  ordering attribute, 108, 222
+nested concrete inline instance, 92                                           out-of-line instance, 95, see also
+non-constant parameter AEag, 22                                                            concrete out-of-line instance
+non-contiguous address ranges, 58                                             out-of-line instances of inline
+non-contiguous range of code                                                               subprograms, 17
+             addresses, 21
+non-default alignment, 17                                                     P4, 69
+non-deoning declaration, 54                                                   package oles, 203
+noreturn attribute, 21, 84, 226                                               packed qualioed type entry, 117
+Number of lanes attribute, 21                                                 packed type entry, 117
+number of lanes attribute, 227                                                padding, 153, 187, 188, 205, 259
+numerator of rational scale factor, 22,                                       parameter, see this parameter, see
+             227                                                                           formal parameter entry, see
+                                                                                           macro formal parameter list,
+object (this, self) pointer of member                                                      see optional parameter
+             function, 21                                                                  attribute, see template type
+object ole linkage name of an entity,                                                      parameter entry, see template
+             21                                                                            value parameter entry, see
+object pointer attribute, 129, 225                                                         unspecioed parameters entry,
+Objective C, 68, 129                                                                       see variable parameter
+Objective C++, 69                                                                          attribute
+objects or types that are not actually                                        parameter entry, 18
+             declared in the source, 17                                       partial compilation unit, 66, 67
+OCaml, 69                                                                     Pascal, 69, 101, 117, 122, 137, 140, 334,
+Odin, 69                                                                                   335, 337
+offset_entry_count, 260, 261                                                  Pascal example, 329
+                                                                              path name of compilation source, 21
 November 1, 2024                                  ***WORKING DRAFT***                                                           Page 487
                                                                    Index
+picture string attribute, 225                                                        and abstract instance, 91
 picture string for numeric string                                             ranges lists, 22
              type, 21                                                         ranges table base attribute, 73
 PL/I, 69                                                                      rank attribute, 226
@@ -19006,95 +19020,97 @@ range list base                                                                 
       encoding, 226                                                           rnglistsptr, see also rnglistsptr class
 ranges attribute, 57, 58, 67, 78, 86, 91,                                     rnglistsptr class, 24, 73, 103, 226, 227,
              100~102, 225                                                                  231, 234, 235
-      and abstract instance, 91                                               Ruby, 69
 November 1, 2024                                  ***WORKING DRAFT***                                                           Page 488
                                                                    Index
-Rust, 69, 116, 337, 338                                                       set type entry, 137
-rvalue reference qualioed type entry,                                         shared qualioed type entry, 117
-             117                                                              sibling attribute, 25, 55, 222
-rvalue reference type entry, 117                                              signature attribute, 225
-rvaluereference attribute, 226                                                signed LEB128, see LEB128, signed
-                                                                              SIMD Vectorization, 88
-sbyte, 144, 165, 263                                                          simple location description, 44
-scalar coarray, see coarray                                                   single location description, 43
-scale factor for oxed-point type, 22                                          size of an address, 26, see also
-scaled encodings, 113                                                                      address_size, 30, 33, 35, 136,
-      binary, 113                                                                          158, 164, 216, 251
-      composition of, 114                                                     skeleton compilation unit, 73
-      decimal, 113                                                            SLEB128, 236
-      AEoating-point, 114                                                     slot_count, 205
-      rational, 114                                                           small attribute, 114, 225
-section group, 397~404, 406, 408, 419,                                        special opcodes in line number
-             420                                                                           program, 171
-      name, 399                                                               specialized .debug_line.dwo section,
-section length, 144, 153                                                                   434
-      use in headers, 211                                                     specialized line number table, 76,
-section ooeset, 11, 144, 214~217, 251                                                      201, 423
-      alignment of, 262                                                       speciocation attribute, 79, 91, 123,
-      in .debug.aranges header, 158,                                                       129, 130, 224
-             251                                                              split DWARF object ole, 73, 74, 76,
-      in .debug.info header, 214~217                                                       147, 151, 200, 203, 227, 293,
-      in class lineptr value, 229                                                          422, 427, 430, 431, 433
-      in class loclist value, 230                                                    example, 427
-      in class loclistsptr, 230                                                      object ole name, 20
-      in class macptr value, 230                                              split DWARF object ole name
-      in class reference value, 231                                                  encoding, 226
-      in class rnglist value, 231                                             split DWARF object ole name
-      in class rnglistsptr, 231                                                            attribute, 73
-      in class string value, 233                                              split type unit, 76
-      in FDE header, 187                                                      standard opcodes in line number
-      in macro information attribute, 69                                                   program, 173
-      in statement list attribute, 69                                         standard_opcode_lengths, 166, 347
-      use in headers, 211                                                     start scope attribute, 103, 223
-section_count, 205                                                                   and abstract instance, 91
-section_offset, 153                                                           statement list attribute, 69, 76, 222
-self pointer attribute, see object                                            static link attribute, 224
-             pointer attribute                                                str_format, 153, 156, 294, 295, 297
+Ruby, 69                                                                      self pointer attribute, see object
+Rust, 69, 116, 337, 338                                                                    pointer attribute
+rvalue reference qualioed type entry,                                         set type entry, 137
+             117                                                              shared qualioed type entry, 117
+rvalue reference type entry, 117                                              sibling attribute, 25, 55, 222
+rvaluereference attribute, 226                                                signature attribute, 225
+                                                                              signed LEB128, see LEB128, signed
+sbyte, 144, 165, 263                                                          SIMD Vectorization, 88
+scalar coarray, see coarray                                                   simple location description, 44
+scale factor for oxed-point type, 22                                          single location description, 43
+scaled encodings, 113                                                         size of an address, 26, see also
+      binary, 113                                                                          address_size, 30, 31, 34, 35,
+      composition of, 114                                                                  136, 158, 164, 216, 251
+      decimal, 113                                                            skeleton compilation unit, 73
+      AEoating-point, 114                                                     SLEB128, 236
+      rational, 114                                                           slot_count, 205
+section group, 397~404, 406, 408, 419,                                        small attribute, 114, 225
+             420                                                              special opcodes in line number
+      name, 399                                                                            program, 171
+section length, 144, 153                                                      specialized .debug_line.dwo section,
+      use in headers, 211                                                                  434
+section ooeset, 11, 144, 214~217, 251                                         specialized line number table, 76,
+      alignment of, 262                                                                    201, 423
+      in .debug.aranges header, 158,                                          speciocation attribute, 79, 91, 123,
+             251                                                                           129, 130, 224
+      in .debug.info header, 214~217                                          split DWARF object ole, 73, 74, 76,
+      in class lineptr value, 229                                                          147, 151, 200, 203, 227, 293,
+      in class loclist value, 230                                                          422, 427, 430, 431, 433
+      in class loclistsptr, 230                                                      example, 427
+      in class macptr value, 230                                                     object ole name, 20
+      in class reference value, 231                                           split DWARF object ole name
+      in class rnglist value, 231                                                    encoding, 226
+      in class rnglistsptr, 231                                               split DWARF object ole name
+      in class string value, 233                                                           attribute, 73
+      in FDE header, 187                                                      split type unit, 76
+      in macro information attribute, 69                                      standard opcodes in line number
+      in statement list attribute, 69                                                      program, 173
+      use in headers, 211                                                     standard_opcode_lengths, 166, 347
+section_count, 205                                                            start scope attribute, 103, 223
+section_offset, 153                                                                  and abstract instance, 91
+                                                                              statement list attribute, 69, 76, 222
 November 1, 2024                                  ***WORKING DRAFT***                                                           Page 489
                                                                    Index
-str_offsets, 153                                                              sup_checksum, 208
-stride attribute, see bit stride attribute                                    sup_checksum_len, 208
-             or byte stride attribute                                         sup.olename, 208
-string, see also string class                                                 supplementary object ole, 8, 17, 24,
-string class, 24, 56, 96, 107, 222, 223,                                                   179, 182, 208, 209, 232, 233,
-             225, 226, 232, 234~236                                                        292, 293
-string length attribute, 136, 223                                             Swift, 69
-      size of length, 226                                                     SYCL, 69
-      size of length data, 136
-string length of string type, 22                                              tag, 15
-      size of, 22                                                             tag names, see debugging
-string length size attribute, 136                                                          information entry
-string ooeset section attribute, 72                                                  list of, 23
-string ooesets attribute, 227                                                 target address, 188
-string ooesets base attribute, 77                                                    reserved, 26
-string ooesets information, 295                                               target subroutine of trampoline, 22
-string ooesets information for unit, 22                                       template alias entry, 141
-string type entry, 136                                                        template alias example, 370, 371
-strooesetsptr, see also strooesetsptr class                                   template alias example 1, 371
-strooesetsptr class, 25, 72, 77, 227, 234,                                    template alias example 2, 372
-             235                                                              template instantiation, 63
-structure type entry, 122                                                            and special compilation unit, 131
-subprogram called, 18                                                                function, 89
-subprogram entry, 82, 83                                                      template type parameter entry, 63
-      as member function, 128                                                 template value parameter, 19
-      use for template instantiation, 89                                      template value parameter entry, 63
-      use in inlined subprogram, 90                                           Tensor (array) type, 22
-subrange stride (dimension of array                                           tensor attribute, 227
-             type), 18                                                        this parameter, 53, 96
-subrange type entry, 137                                                      this pointer attribute, see object
-      as array dimension, 120                                                              pointer attribute
-subroutine call site summary                                                  thread scaled attribute, 225
-             attributes, 85                                                   threads scaled attribute, 138
-subroutine entry, 82                                                          thrown exception, see thrown type
-subroutine formal parameters, 86                                                           entry
-subroutine frame base address, 20                                             thrown type entry, 89
-subroutine or subroutine type, 17                                             trampoline (subprogram) entry, 96
-subroutine prototype, 21                                                      trampoline attribute, 96, 225
-subroutine return address save                                                try block, 102
-             location, 22                                                     try block entry, 102
-subroutine type entry, 135                                                    try/catch blocks, 61
+static link attribute, 224                                                    subroutine return address save
+str_format, 153, 156, 294, 295, 297                                                        location, 22
+str_offsets, 153                                                              subroutine type entry, 135
+stride attribute, see bit stride attribute                                    sup_checksum, 208
+             or byte stride attribute                                         sup_checksum_len, 208
+string, see also string class                                                 sup.olename, 208
+string class, 24, 56, 96, 107, 222, 223,                                      supplementary object ole, 8, 17, 24,
+             225, 226, 232, 234~236                                                        179, 182, 208, 209, 232, 233,
+string length attribute, 136, 223                                                          292, 293
+      size of length, 226                                                     Swift, 69
+      size of length data, 136                                                SYCL, 69
+string length of string type, 22
+      size of, 22                                                             tag, 15
+string length size attribute, 136                                             tag names, see debugging
+string ooeset section attribute, 72                                                        information entry
+string ooesets attribute, 227                                                        list of, 23
+string ooesets base attribute, 77                                             target address, 188
+string ooesets information, 295                                                      reserved, 26
+string ooesets information for unit, 22                                       target subroutine of trampoline, 22
+string type entry, 136                                                        template alias entry, 141
+strooesetsptr, see also strooesetsptr class                                   template alias example, 370, 371
+strooesetsptr class, 25, 72, 77, 227, 234,                                    template alias example 1, 371
+             235                                                              template alias example 2, 372
+structure type entry, 122                                                     template instantiation, 63
+subprogram called, 18                                                                and special compilation unit, 131
+subprogram entry, 82, 83                                                             function, 89
+      as member function, 128                                                 template type parameter entry, 63
+      use for template instantiation, 89                                      template value parameter, 19
+      use in inlined subprogram, 90                                           template value parameter entry, 63
+subrange stride (dimension of array                                           Tensor (array) type, 22
+             type), 18                                                        tensor attribute, 227
+subrange type entry, 137                                                      this parameter, 53, 96
+      as array dimension, 120                                                 this pointer attribute, see object
+subroutine call site summary                                                               pointer attribute
+             attributes, 85                                                   thread scaled attribute, 225
+subroutine entry, 82                                                          threads scaled attribute, 138
+subroutine formal parameters, 86                                              thrown exception, see thrown type
+subroutine frame base address, 20                                                          entry
+subroutine or subroutine type, 17                                             thrown type entry, 89
+subroutine prototype, 21                                                      trampoline (subprogram) entry, 96
+                                                                              trampoline attribute, 96, 225
 November 1, 2024                                  ***WORKING DRAFT***                                                           Page 490
                                                                    Index
+try block, 102                                                                ubyte, 144, 153, 154, 158, 163~166,
+try block entry, 102                                                                       171, 177, 186~189, 208,
+try/catch blocks, 61                                                                       214~216, 251, 259~261, 263
 type                                                                          UCS character, 112
       of call site, 22                                                        uhalf, 144, 153, 158, 164, 174, 177, 189,
       of declaration, 22                                                                   205, 208, 214~216, 251,
@@ -19133,27 +19149,27 @@ type_offset, 217                                                                
 type_signature, 216                                                           use UTF8 attribute, 22, 72, 225, 233
 typedef entry, 119                                                            using declaration, see namespace
                                                                                            (C++), using declaration
-ubyte, 144, 153, 154, 158, 163~166,                                           using directive, see namespace (C++),
-             171, 177, 186~189, 208,                                                       using directive
-             214~216, 251, 259~261, 263                                       UTF character, 112
 November 1, 2024                                  ***WORKING DRAFT***                                                           Page 491
                                                                    Index
-UTF-8, 12, 22, 72, 186, 225, 233                                              vtable element location attribute, 129,
-uword, 144, 153, 154, 189, 205, 260,                                                       225
-             261, 263                                                         VVMM language version encoding
-                                                                                           scheme, 68~70
-vallist class, 24, 42, 227, 234, 235                                          VVMMPP language version
-value list, 296, 300                                                                       encoding scheme, 68~70
-value lists, 42
-value pointed to by an argument, 18                                           with statement entry, 101
-variable entry, 105
-variable length data, see LEB128                                              YYYY language version encoding
-variable parameter attribute, 106, 224                                                     scheme, 68~70
-variant entry, 132                                                            YYYYMM language version
-variant part entry, 131                                                                    encoding scheme, 68~70
-version, 153, 158, 164, 186, 205, 208,                                        YYYYRR language version encoding
-             214~216, 251, 258~261, 347                                                    scheme, 69, 70
-version number                                                                Zig, 69
+using directive, see namespace (C++),                                         void type, see unspecioed type entry
+             using directive                                                  volatile qualioed type entry, 117
+UTF character, 112                                                            vtable element location attribute, 129,
+UTF-8, 12, 22, 72, 186, 225, 233                                                           225
+uword, 144, 153, 154, 189, 205, 260,                                          VVMM language version encoding
+             261, 263                                                                      scheme, 68~70
+                                                                              VVMMPP language version
+vallist class, 24, 42, 227, 234, 235                                                       encoding scheme, 68~70
+value list, 296, 300
+value lists, 42                                                               with statement entry, 101
+value pointed to by an argument, 18
+variable entry, 105                                                           YYYY language version encoding
+variable length data, see LEB128                                                           scheme, 68~70
+variable parameter attribute, 106, 224                                        YYYYMM language version
+variant entry, 132                                                                         encoding scheme, 68~70
+variant part entry, 131                                                       YYYYRR language version encoding
+version, 153, 158, 164, 186, 205, 208,                                                     scheme, 69, 70
+             214~216, 251, 258~261, 347                                       Zig, 69
+version number
       address lookup table, 158
       address range table, 251
       address table, 259
@@ -19176,6 +19192,4 @@ virtuality of member function or base
              class, 23
 visibility attribute, 52, 223
 visibility of declaration, 23
-void type, see unspecioed type entry
-volatile qualioed type entry, 117
 November 1, 2024                                  ***WORKING DRAFT***                                                           Page 492
