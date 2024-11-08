@@ -1138,18 +1138,19 @@ Section \refersec{chap:locationdescriptions}.
 
 \subsection{DWARF Expression Evaluation Context}
 \label{chap:expressionevaluationcontext}
-A DWARF expression is evaluated in a context that can include a number
-of context elements. If multiple context elements are specified, then
-they must be self consistent or the result of the evaluation is
-undefined. The context elements that can be specified are:
+DWARF expressions and location descriptions (see
+\refersec{chap:locationdescriptions}) are evaluated within a context
+provided by the debugger or other DWARF consumer. The context includes
+the following elements:
+
 \begin{enumerate}[1. ]
 
 \itembfnl{Required result kind} The kind of result required
-  \textemdash either a location description or a value \textemdash is
-  determined by the DWARF construct where the expression is found.
+\textemdash either a location or a value \textemdash is determined by
+the DWARF construct where the expression is found.
 
 \textit{For example, DWARF attributes with exprval class require a
-  value and attributes with locdesc class require a location
+  value, and attributes with locdesc class require location
   description (see Section \refersec{datarep:classesandforms}).}
 
 \itembfnl{Initial stack}
@@ -1203,7 +1204,10 @@ by a user command that focuses on a specific thread, or it may be
 selected automatically when the running thread stops at a breakpoint.
 
 If there is no running process (or an image of a process, as from a
-core file), there is no current thread.
+core file), there is no current thread. A single-threaded program (as
+distinguished from a multi-threaded program with only a single thread)
+might not have a current thread.
+
 
 It is required for operations that provide access to thread-local
 storage.
@@ -1239,6 +1243,22 @@ The current frame must be an active call frame in the current thread.
 
 \itembfnl{Current lane}
 
+\textit{On SIMD (Single-Instruction Multiple-Data Stream) and SIMT
+  (Single-Instruction Multiple-Thread) architectures, fine-grained
+  parallel execution can be achieved by dispatching a single
+  instruction across multiple data streams (e.g., a vector or
+  array). Some parallel programming models allow for the vectorization
+  of loops using SIMD instructions. These parallel streams can be
+  considered fine-grain threads of execution, or lanes, where each
+  lane typically shares a common stack, program counter, and register
+  file.}
+
+\textit{In SIMT architectures, control flow may diverge through the
+  use of predication, where each instruction executes only in certain
+  lanes. Some SIMT architectures, however, provide separate stacks and
+  register files for each lane, and the parallel streams of execution
+  would be better represented as threads (above).}
+
 The current lane is a SIMD/SIMT lane identifier. This applies to
 source languages that are implemented using a SIMD/SIMT execution
 model. These implementations map source language vectorized operations
@@ -1258,9 +1278,9 @@ frame and program location. It is consistent if the value is greater
 than or equal to 0 and less than the, possibly default, value of the
 \DWATnumlanes attribute.
 
-If there is no running process, the current lane is not available. If
-the current running program is not using a SIMD/SIMT execution model,
-the current lane is always 0.
+If there is no running process, there is no current lane. If the
+current running program is not using a SIMD/SIMT execution model, the
+current lane is always 0.
 
 \itembfnl{Current program counter (PC)}
 The current program counter identifies the current point of execution
@@ -1276,8 +1296,10 @@ It is required for the evaluation of value lists and location lists to
 select amongst multiple program location ranges.
 
 If there is no running process, there is no current program
-counter. When evaluating expression lists when no current pc is
-available, only default location descriptions are used.
+counter.
+
+\textit{When evaluating value lists and location lists when no current
+  pc is available, only default location descriptions are used.}
 
 \itembfnl{Current object}
 
@@ -1291,8 +1313,9 @@ object entry (if there is one) that referred to the type entry (e.g.,
 via \DWATtype).
 
 A current object is required for the \DWOPpushobjectaddress operation
-and by some attributes (e.g., \DWATdatamemberlocation) where the
-object's location is provided as part of the initial stack.
+and by some attributes (e.g., \DWATdatamemberlocation and
+\DWATuselocation`) where the object's location is provided as part of
+the initial stack.
 
 \end{enumerate}
 
