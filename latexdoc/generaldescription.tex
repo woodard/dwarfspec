@@ -1159,10 +1159,28 @@ the location of an object whose location changes over the object’s
 lifetime.}
 
 Information about the location of program objects is provided by
-location descriptions.
+location descriptions. Location descriptions can be either of two forms:
 
-Location descriptions can consist of one or more single location
-descriptions.
+\begin{itemize}
+
+\item Single location descriptions, which are a language-independent
+  representation of addressing rules of arbitrary complexity built
+  from DWARF expressions. They are sufficient for describing the
+  location of any object as long as its lifetime is either static or
+  the same as the lexical block that owns it, excluding any prologue
+  or epilogue ranges, and it does not move during its lifetime.
+
+\item Location lists, which are used to describe objects that have a
+  limited lifetime or change their location during their lifetime.
+  Location lists are described in Section 2.6.
+
+\end{itemize}
+
+Location descriptions are distinguished in a context-sensitive manner.
+As the value of an attribute, a single location description is encoded
+using class `locdesc`, and a location list is encoded using class `loclist`
+(which serves as an index into a separate section containing location
+lists).
 
 A single location description specifies the storage bank that holds
 a program object and a position within that storage bank where the
@@ -1196,9 +1214,9 @@ during the execution of any operation or when evaluation of the
 expression is completed. If a location is expected, but the result is
 a value, the value is implicitly treated as a memory address in the
 default address space, and converted to a memory location. If a value
-is expected, but the result is a memory location in the default
-address space, the address is implicitly converted to a value of the
-generic type.
+is expected, but the result is an addressable memory location in the
+default address space, the address is implicitly converted to a value
+of the generic type.
 
 \textit{Location descriptions are a language independent representation of
 addressing rules.}
@@ -1546,47 +1564,6 @@ pushes the result.
 \needlines{6}
 \subsection{Location Operations}
 \label{chap:locationoperations}
-Information about the location of program objects is provided by
-location descriptions. Location descriptions can be either of two
-forms:
-
-\begin{itemize}
-\item \textit{Single location descriptions},
-which
-\addtoindexx{location description!single}
-are
-\addtoindexx{single location description}
-a language independent representation of
-addressing rules of arbitrary complexity built from
-DWARF expressions (See Section \refersec{chap:dwarfexpressions})
-and/or other
-DWARF operations specific to describing locations. They are
-sufficient for describing the location of any object as long
-as its lifetime is either static or the same as the
-\livelink{chap:lexicalblock}{lexical block} that owns it,
-\bb
-excluding any prologue or epilogue ranges,
-\eb
-and it does not move during its lifetime.
-
-
-\needlines{4}
-\item \textit{Location lists}, which are used to
-\addtoindexx{location list}
-describe
-\addtoindexx{location description!use in location list}
-objects that have a limited lifetime or change their location
-during their lifetime. Location lists are described in
-Section \refersec{chap:locationlists} below.
-
-\end{itemize}
-
-Location descriptions are distinguished in a context-sensitive
-manner. As the value of an attribute, a single location description is
-encoded using \CLASSlocdesc, and a location list is encoded using
-\CLASSloclist (which serves as an index into a separate section
-containing location lists).
-
 The following operations can be used to push a location onto the
 stack:
 
