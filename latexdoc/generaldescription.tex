@@ -1626,6 +1626,24 @@ where a machine address is stored.
 This index is relative to the value of the
 \DWATaddrbase{} attribute of the associated compilation unit.
 
+\itembfnl{\DWOPbregzeroTARG, \DWOPbregoneTARG, \dots,
+  \DWOPbregthirtyoneTARG} The single operand of the \DWOPbregnTARG{}
+operations provides a signed LEB128\addtoindexx{LEB128!signed} byte
+offset. The contents of the specified register (0–31) are treated as a
+memory address in the default address space. The offset is added to
+the address obtained from the register and the resulting memory
+location is pushed onto the stack.
+
+\itembfnl{\DWOPbregxTARG} The \DWOPbregxNAME{} operation provides a
+memory location formed from its two operands. The first operand is a
+register number which is specified by an unsigned
+LEB128\addtoindexx{LEB128!unsigned} number. The contents of the
+specified register are treated as a memory address in the default
+address space. The second operand is a signed
+LEB128\addtoindexx{LEB128!signed} byte offset. The offset is added to
+the address obtained from the register and the resulting location is
+pushed onto the stack.
+
 \itembfnl{\DWOPformtlsaddressTARG}
 The \DWOPformtlsaddressNAME{}
 operation pops a value from the stack, which must have an
@@ -1664,22 +1682,10 @@ Instead of    forcing complex thread-local storage calculations into
 the DWARF expressions, the \DWOPformtlsaddress{} allows the consumer
 to perform the computation based on the run-time environment.}
 
-\itembfnl{\DWOPbregzeroTARG, \DWOPbregoneTARG, \dots,
-  \DWOPbregthirtyoneTARG} The single operand of the \DWOPbregnTARG{}
-operations provides a signed LEB128\addtoindexx{LEB128!signed} offset
-from the contents of the specified register.
-
-\itembfnl{\DWOPbregxTARG}
-The \DWOPbregxNAME{} operation provides the sum of two values
-specified by its two operands. The first operand is a register number
-which is specified by an unsigned LEB128\addtoindexx{LEB128!unsigned}
-number. The second operand is a signed
-LEB128\addtoindexx{LEB128!signed} offset.
-
 \itembfnl{\DWOPderefTARG}
-The \DWOPderefNAME{} operation pops the top stack entry and treats it
-as a location. The first S bytes, where S is the size of an address on
-the target machine, are retrieved from the location and pushed onto
+The \DWOPderefNAME{} operation pops a location `L` from the top of the
+stack. The first `S` bytes, where `S` is the size of an address on the
+target machine, are retrieved from the location `L` and pushed onto
 the stack as a value of the \generictype{}.
 
 \needlines{6}
@@ -1703,9 +1709,10 @@ LEB128 integer that represents the offset of a debugging information
 entry in the current compilation unit, which must be a
 \DWTAGbasetype{} entry that provides the type `T` of the value to be
 retrieved. The size `S` must be the same as the size of the base type
-represented by thesecond operand. This operation pops the top stack
-entry and treats it as a location. The first `S` bytes are retrieved
-from the location and pushed onto the stack as a value of type `T`.
+represented by thesecond operand. This operation pops a location `L`
+from the stack. The first `S` bytes are retrieved from the location
+`L` and pushed onto the stack as a value of type `T`.
+
 
 \needlines{6}
 \textit{While the size of the pushed value could be inferred from the
