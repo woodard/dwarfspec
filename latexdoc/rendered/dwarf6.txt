@@ -1636,22 +1636,22 @@ context includes the following elements:
       In most cases, the DWARF expression stack is empty at the start of expression
       evaluation. In certain circumstances, however, one or more values are pushed
       implicitly onto the stack before evaluation of the expression starts (e.g.
-      DW.AT.data.location).
+      DW.AT.data.member.location).
 3.    Current compilation unit
       The current compilation unit is the compilation unit debugging information
       entry that contains the DWARF expression being evaluated.
       It is required for operations that reference debug information associated with
       the same compilation unit, including indicating if such references use the
       32-bit or 64-bit DWARF format.
-      For example, the DW.OP.constxand DW.OP.addrxoperations require the address
+      For example, the DW.OP.constx and DW.OP.addrx operations require the address
       size, which is a property of the compilation unit.
       Note that this compilation unit might not be the same as the compilation unit
       determined from the loaded code object corresponding to the current program
       location. For example, the evaluation of the expression E associated with a
-      DW.AT.locationattribute of the debug information entry operand of the
-      DW.OP.call.*operations is evaluated with the compilation unit that contains E and
-      not the one that contains the DW.OP.call.*operation expression.
-      The DWARF expressions for call frame information (see Section 7.24 on page 256)
+      DW.AT.location attribute of the debug information entry operand of the
+      DW.OP.call.* operations is evaluated with the compilation unit that contains E
+      and not the one that contains the DW.OP.call.* operation expression.
+      The DWARF expressions for call frame information (see Section 6.4 on page 183)
       operations are restricted to those that do not require a current compilation unit.
 4.    Target architecture
       The target architecture is typically provided by the object ole containing the
@@ -1663,6 +1663,11 @@ November 1, 2024                                  ***WORKING DRAFT***           
       Architecture-specioc entities include DWARF register identioers, DWARF address
       space identioers, the default address space, and the address space address sizes.
 5.    Current thread
+      Many programming environments support the concept of independent threads of
+      execution, where the process and its address space are shared among the threads, but
+      each thread has its own stack, program counter, and possibly its own block of memory
+      for thread-local storage (TLS). These threads may be implemented in user-space or
+      with kernel threads, or by a combination of the two.
       The current thread identioes a current thread of execution. When debugging
       a multi-threaded program, the current thread may be selected by a user
       command that focuses on a specioc thread, or it may be selected
@@ -1672,14 +1677,14 @@ November 1, 2024                                  ***WORKING DRAFT***           
       a multi-threaded program with only a single thread) might not have a current
       thread.
       It is required for operations that provide access to thread-local storage.
-      For example, the DW.OP.form.tls.addressoperation requires a current thread.
+      For example, the DW.OP.form.tls.address operation requires a current thread.
 6.    Current call frame
       The current call frame identioes an active invocation of a subprogram in the
       current thread. It is identioed by its address on the call stack (see Section
       3.3.5.2 on page 87). The address is referred to as the frame base or the call
       frame address (CFA). The call frame information is used to determine the
       base addresses for the call frames of the current thread's call stack (see
-      Section 7.24 on page 256).
+      Section 6.4 on page 183).
       When debugging a running program or examining a core ole, the current
       frame may be the topmost (most recently activated) frame (e.g., where a
       breakpoint has triggered), or may be selected by a user command to focus the
@@ -1691,13 +1696,13 @@ November 1, 2024                                  ***WORKING DRAFT***           
       If there is no running process (or image of a process), there is no current call
       frame.
       The current frame must be an active call frame in the current thread.
+November 1, 2024                                  ***WORKING DRAFT***                                                             Page 28
+                                            Chapter 2.  General Description
 7.    Current lane
       On SIMD (Single-Instruction Multiple-Data Stream) and SIMT (Single-Instruction
       Multiple-Thread) architectures, one-grained parallel execution can be achieved by
       dispatching a single instruction across multiple data streams (e.g., a vector or array).
       Some parallel programming models allow for the vectorization of loops using SIMD
-November 1, 2024                                  ***WORKING DRAFT***                                                             Page 28
-                                            Chapter 2.  General Description
       instructions. These parallel streams can be considered one-grain threads of execution,
       or lanes, where each lane typically shares a common stack, program counter, and
       register ole.
@@ -1712,12 +1717,11 @@ November 1, 2024                                  ***WORKING DRAFT***           
       SIMD/SIMT program, the current lane is typically selected by a user
       command that focuses on a specioc lane.
       It is required for operations that are related to SIMD/SIMT lanes.
-      For example, the DW.OP.push.laneoperation pushes the value of the current lane.
-      The current lane must be consistent with the value of the
-      DW.AT.num.lanesattribute of the subprogram corresponding to context's
-      frame and program location. It is consistent if the value is greater than or
-      equal to 0 and less than the, possibly default, value of the
-      DW.AT.num.lanesattribute.
+      For example, the DW.OP.push.lane operation pushes the value of the current lane.
+      The current lane must be consistent with the value of the DW.AT.num.lanes
+      attribute of the subprogram corresponding to context's frame and program
+      location. It is consistent if the value is greater than or equal to 0 and less than
+      the, possibly default, value of the DW.AT.num.lanes attribute.
       If there is no running process, there is no current lane. If the current running
       program is not using a SIMD/SIMT execution model, the current lane is
       always 0.
@@ -1727,25 +1731,25 @@ November 1, 2024                                  ***WORKING DRAFT***           
       The PC of the top (most recently activated) call frame is the program counter
       for the current thread. The call frame information is used to obtain the value
       of the return address register to determine the PC of the other call frames (see
-      Section 7.24 on page 256).
+      Section 6.4 on page 183).
       It is required for the evaluation of value lists and location lists to select
       amongst multiple program location ranges.
+November 1, 2024                                  ***WORKING DRAFT***                                                             Page 29
+                                            Chapter 2.  General Description
       If there is no running process, there is no current program counter.
       When evaluating value lists and location lists when no current pc is available, only
       default location descriptions are used.
-November 1, 2024                                  ***WORKING DRAFT***                                                             Page 29
-                                            Chapter 2.  General Description
 9.    Current object
       The current object is a data object described by a data object entry (see Section
       4.1) that is being inspected. When evaluating expressions that provide
       attribute values of a data object, the containing debugging information entry
       is the current object. When evaluating expressions that provide attribute
-      values for a type (e.g., DW.AT.data.locationfor a DW.TAG.member), the
+      values for a type (e.g., DW.AT.data.location for a DW.TAG.member), the
       current object is the data object entry (if there is one) that referred to the type
       entry (e.g., via DW.AT.type).
-      A current object is required for the DW.OP.push.object.addressoperation
-      and by some attributes (e.g., DW.AT.data.member.locationand
-      DW.AT.use.location`) where the object's location is provided as part of the
+      A current object is required for the DW.OP.push.object.address operation
+      and by some attributes (e.g., DW.AT.data.member.location and
+      DW.AT.use.location) where the object's location is provided as part of the
       initial stack.
 A DWARF expression for a location description may be able to be evaluated without a
 thread, call frame, lane, program counter, or architecture context element. For example,
@@ -1832,7 +1836,7 @@ with the generic type.
 1.    DW.OP.fbreg
       The DW.OP.fbreg operation provides a signed LEB128 ooeset from the
       address specioed by the location description in the DW.AT.frame.base
-      attribute of the current function. (see Section 7.5.5 on page 227)
+      attribute of the current function. (see Section 2.5.1 on page 27)
       This is typically a stack pointer register plus or minus some ooeset.
 2.    DW.OP.breg0, DW.OP.breg1, . . . , DW.OP.breg31
       The single operand of the DW.OP.breg!n? operations provides a signed
@@ -1973,8 +1977,8 @@ November 1, 2024                                  ***WORKING DRAFT***           
         The DW.OP.form.tls.address operation pops a value from the stack, which
         must have an integral type identioer, translates this value into an address in
         the thread-local storage for the current thread (see Section 2.5.1 on page 27)
-        and pushes the address onto the stack together with the generic
-        typeidentioer. The meaning of the value on the top of the stack prior to this
+        and pushes the address onto the stack together with the generic type
+        identioer. The meaning of the value on the top of the stack prior to this
         operation is deoned by the run-time environment. If the run-time
         environment supports multiple thread-local storage blocks for a single
         thread, then the block corresponding to the executable or shared library
@@ -1999,8 +2003,6 @@ November 1, 2024                                  ***WORKING DRAFT***           
         The DW.OP.call.frame.cfa operation pushes the value of the current call
         frame address (CFA), obtained from the Call Frame Information (see Section
         2.5.1 on page 27 and Section 6.4 on page 183).
-        The operation pushes the value of the CFA, obtained from the Call Frame
-        Information (see Section 6.4 on page 183).
         Although the value of DW.AT.frame.base can be computed using other DWARF
         expression operators, in some cases this would require an extensive location list
         because the values of the registers used in computing the CFA change during a
@@ -2009,7 +2011,9 @@ November 1, 2024                                  ***WORKING DRAFT***           
 16.     DW.OP.push.lane
         The DW.OP.push.lane operation pushes a lane index value of the generic
         type, which provides the context of the lane in which the expression is being
-        evaluated. See section 3.3.5 on page 87.
+        evaluated. See The operation pushes the value of the CFA, obtained from the
+        Call Frame Information (see Section 2.5.1 on page 27 and Section 3.3.5 on
+        page 87.
         Producers that widen source code into vectorized machine code may use this
         operation to describe the location of a source variable as function of a single lane in
         the widened machine code.
@@ -2449,8 +2453,8 @@ November 1, 2024                                  ***WORKING DRAFT***           
           to that base address is non-existent, which is equivalent to omitting the
           description.
      #    End-of-list. This kind of entry marks the end of the location list.
-          If there is no current PC (see Section 2.5.1 on page 27), only default location
-          description entries will apply.
+If there is no current PC (see Section 2.5.1 on page 27), only default location description
+entries will apply.
 A location list consists of a sequence of zero or more bounded location
 description or base address entries, optionally followed by a default location
 entry, and terminated by an end-of-list entry.
@@ -18214,15 +18218,15 @@ DW.AT.count, 19, 118, 138, 224, 264,                                            
 DW.AT.data.bit.ooeset, 19, 61, 111,                                                        335~338
              127, 127, 225, 264, 272, 279,                                    DW.AT.discr.list, 20, 132, 132, 224,
              329~331, 333                                                                  249, 264, 290
-DW.AT.data.location, 19, 27, 30,                                              DW.AT.discr.value, 20, 132, 132,
-             121, 141, 141, 142, 225, 264,                                                 223, 264, 290, 335, 337, 338
+DW.AT.data.location, 19, 30, 121,                                             DW.AT.discr.value, 20, 132, 132,
+             141, 141, 142, 225, 264,                                                      223, 264, 290, 335, 337, 338
              271~273, 275~277, 282~284,                                       DW.AT.dwo.name, 20, 73, 73, 74,
              286~289, 313, 315~318, 322,                                                   215, 226, 281, 283, 299, 425,
              325, 327, 378                                                                 426, 430, 432
 DW.AT.data.member.location, 19,                                               DW.AT.elemental, 20, 84, 225, 285
-             30, 36, 61, 125, 127, 127, 224,                                  DW.AT.encoding, 20, 110, 111, 224,
-             264, 278, 279, 317, 328, 335,                                                 242, 264, 272, 307, 333, 366,
-             337, 338, 374, 409~411,                                                       378, 407, 409, 410, 412, 413,
+             27, 30, 36, 61, 125, 127, 127,                                   DW.AT.encoding, 20, 110, 111, 224,
+             224, 264, 278, 279, 317, 328,                                                 242, 264, 272, 307, 333, 366,
+             335, 337, 338, 374, 409~411,                                                  378, 407, 409, 410, 412, 413,
              413~415                                                                       418, 435
 DW.AT.decimal.scale, 19, 113, 114,                                            DW.AT.endianity, 20, 108, 108, 110,
              115, 116, 225, 264, 272                                                       225, 244, 264, 272, 275, 277,
