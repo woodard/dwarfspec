@@ -141,32 +141,29 @@ or more other compilation unit entries that refer to that
 partial compilation unit (see
 Section \refersec{chap:importedunitentries}).
 
-A full or partial compilation unit entry
-may have the following attributes:
-\begin{enumerate}[1. ]
-\item Either a \DWATlowpc{} and
-\DWAThighpc{} pair of
+\bb
+A full or partial compilation unit entry must have
+either a \DWATlowpc{} and \DWAThighpc{} pair of
 \addtoindexx{high PC attribute}
-attributes
 \addtoindexx{low PC attribute}
-or
-\addtoindexx{ranges attribute}
-a
+attributes or a
 \DWATranges{} attribute
 \addtoindexx{ranges attribute}
-whose values encode
+whose values encode the contiguous or
 \addtoindexx{discontiguous address ranges|see{non-contiguous address ranges}}
-the contiguous or
 non-contiguous address ranges, respectively,
 of the machine instructions generated for the compilation
 unit (see Section \refersec{chap:codeaddressesandranges}).
 
-A \DWATlowpc{} attribute
-may also be specified in combination
+A full or partial compilation unit entry
+may also have the following attributes:
+\begin{enumerate}[1. ]
+\item 
+A \DWATlowpc{} attribute may
+\eb
+be specified in combination with
 \addtoindexx{ranges attribute}
-with
 \DWATranges{} to specify the
-\addtoindexx{ranges attribute}
 default base address for use in
 \addtoindexx{location list}
 location lists (see Section
@@ -626,15 +623,30 @@ kinds of mismatched files and for looking up a full
 split unit in a DWARF package file
 (see Section \refersec{datarep:dwarfpackagefiles}).}
 
+\bb
+\item
+Either a \DWATlowpc{} and \DWAThighpc{} pair of
+\addtoindexx{high PC attribute}
+\addtoindexx{low PC attribute}
+attributes or a
+\DWATranges{} attribute
+\addtoindexx{ranges attribute}
+whose values encode the contiguous or
+\addtoindexx{discontiguous address ranges|see{non-contiguous address ranges}}
+non-contiguous address ranges, respectively,
+of the machine instructions generated for the compilation
+unit (see Section \refersec{chap:codeaddressesandranges}).
+\eb
+
 \end{enumerate}
 
 A skeleton compilation unit may have additional attributes,
 which are the same as for conventional compilation unit entries
 except as noted, from among the following:
+\db
 \begin{enumerate}[1. ]
-\addtocounter{enumi}{1}
-\item Either a \DWATlowpc{} and \DWAThighpc{} pair of attributes
-or a \DWATranges{} attribute.
+\addtocounter{enumi}{2}
+% Optional \DWATlowpc{}/\DWAThighpc{}/\DWATranges{} attributes
 \item A \DWATstmtlist{} attribute.
 \item A \DWATcompdir{} attribute.
 
