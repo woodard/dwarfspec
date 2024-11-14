@@ -1263,12 +1263,12 @@ the beginning of the containing entity has a non-zero bit
 offset then the beginning of the member entry has that same
 bit offset as well.
 
-\item Otherwise, the value must be a \addtoindex{location description}.
-In
-this case, the beginning of the containing entity must be byte
-aligned. The beginning address is pushed on the DWARF stack
-before the \addtoindex{location} description is evaluated; the result of
-the evaluation is the base address of the member entry.
+\item Otherwise, the value must be a \addtoindex{location
+description}.  In this case, the beginning of the containing entity
+must be byte aligned. The beginning address is pushed on the DWARF
+stack before the \addtoindex{location} description is evaluated; the
+result of the evaluation is the base address of the member
+entry. (see Section \refersec{chap:expressionevaluationcontext}).
 
 \textit{The push on the DWARF expression stack of the base address of
 the containing construct is equivalent to execution of the
@@ -2198,22 +2198,19 @@ or structure and to any instance of the pointer or member
 type. The method is thus associated with the type entry,
 rather than with each instance of the type.}
 
-The \DWATuselocation{} description is used in conjunction
-with the location descriptions for a particular object of the
-given \addtoindex{pointer to member type} and for a particular structure or
-class instance. The \DWATuselocation{}
-attribute expects two values to be
-\addtoindexi{pushed}{address!implicit push for member operator}
-onto the DWARF expression stack before
-the \DWATuselocation{} description is evaluated.
-The first value
-\addtoindexi{pushed}{address!implicit push for member operator}
-is the value of the \addtoindex{pointer to member} object
-itself. The second value
-\addtoindexi{pushed}{address!implicit push for member operator}
-is the base address of the
-entire structure or union instance containing the member
-whose address is being calculated.
+The \DWATuselocation{} description is used in conjunction with the
+location descriptions for a particular object of the given
+\addtoindex{pointer to member type} and for a particular structure or
+class instance. The \DWATuselocation{} attribute expects two values to
+be \addtoindexi{pushed}{address!implicit push for member operator}
+onto the DWARF expression stack before the \DWATuselocation{}
+description is evaluated. (See
+\refersec{chap:expressionevaluationcontext}) The first value
+\addtoindexi{pushed}{address!implicit push for member operator} is the
+value of the \addtoindex{pointer to member} object itself. The second
+value \addtoindexi{pushed}{address!implicit push for member operator}
+is the base address of the entire structure or union instance
+containing the member whose address is being calculated.
 
 \needlines{6}
 \textit{For an expression such as}

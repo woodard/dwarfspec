@@ -1136,6 +1136,211 @@ general operations that are defined here, operations that are
 specific to location descriptions are defined in
 Section \refersec{chap:locationdescriptions}.
 
+\subsection{DWARF Expression Evaluation Context}
+\label{chap:expressionevaluationcontext}
+DWARF expressions and location descriptions (see
+\refersec{chap:locationdescriptions}) are evaluated within a context
+provided by the debugger or other DWARF consumer. The context includes
+the following elements:
+
+\begin{enumerate}[1. ]
+
+\itembfnl{Required result kind} The kind of result required
+\textemdash either a location or a value \textemdash is determined by
+the DWARF construct where the expression is found.
+
+\textit{For example, DWARF attributes with exprval class require a
+  value, and attributes with locdesc class require location
+  description (see Section \refersec{datarep:classesandforms}).}
+
+\itembfnl{Initial stack}
+
+In most cases, the DWARF expression stack is empty at the start of
+expression evaluation. In certain circumstances, however, one or more
+values are pushed implicitly onto the stack before evaluation of the
+expression starts (e.g. \DWATdatamemberlocation).
+
+\itembfnl{Current compilation unit}
+
+The current compilation unit is the compilation unit debugging
+information entry that contains the DWARF expression being evaluated.
+
+It is required for operations that reference debug information
+associated with the same compilation unit, including indicating if
+such references use the 32-bit or 64-bit DWARF format.
+
+\textit{For example, the \DWOPconstx{} and \DWOPaddrx{} operations
+  require the address size, which is a property of the compilation
+  unit.}
+
+\textit{Note that this compilation unit might not be the same as the
+  compilation unit determined from the loaded code object
+  corresponding to the current program location. For example, the
+  evaluation of the expression E associated with a \DWATlocation{}
+  attribute of the debug information entry operand of the \DWOPcallX{}
+  operations is evaluated with the compilation unit that contains E
+  and not the one that contains the \DWOPcallX{} operation
+  expression.}
+
+\textit{The DWARF expressions for call frame information (see Section
+  \refersec{chap:callframeinformation}) operations are restricted
+  to those that do not require a current compilation unit.}
+
+\itembfnl{Target architecture}
+
+The target architecture is typically provided by the object file
+containing the DWARF information. It may also be refined by
+instruction set identifiers in the line number table.
+
+It is required for operations that specify architecture-specific
+entities.
+
+\textit{Architecture-specific entities include DWARF register
+  identifiers, DWARF address space identifiers, the default address
+  space, and the address space address sizes.}
+
+\itembfnl{Current thread}
+
+\textit{Many programming environments support the concept of
+  independent threads of execution, where the process and its address
+  space are shared among the threads, but each thread has its own
+  stack, program counter, and possibly its own block of memory for
+  thread-local storage (TLS). These threads may be implemented in
+  user-space or with kernel threads, or by a combination of the two.}
+
+The current thread identifies a current thread of execution. When
+debugging a multi-threaded program, the current thread may be selected
+by a user command that focuses on a specific thread, or it may be
+selected automatically when the running thread stops at a breakpoint.
+
+If there is no running process (or an image of a process, as from a
+core file), there is no current thread. A single-threaded program (as
+distinguished from a multi-threaded program with only a single thread)
+might not have a current thread.
+
+It is required for operations that provide access to thread-local
+storage.
+
+\textit{For example, the \DWOPformtlsaddress{} operation requires a
+  current thread.}
+
+\itembfnl{Current call frame}
+The current call frame identifies an active invocation of a subprogram
+in the current thread. It is identified by its address on the call
+stack (see Section \refersec{chap:framebase}). The address is referred
+to as the frame base or the call frame address (CFA). The call frame
+information is used to determine the base addresses for the call
+frames of the current thread’s call stack (see Section
+\refersec{chap:callframeinformation}).
+
+When debugging a running program or examining a core file, the current
+frame may be the topmost (most recently activated) frame (e.g., where
+a breakpoint has triggered), or may be selected by a user command to
+focus the view on a frame further down the call stack. The current
+frame provides a view of the state of the running process at a
+particular point in time.
+
+It is required for operations that use the contents of registers
+(e.g., \DWOPregSTAR) or frame-local storage (e.g., \DWOPfbreg) so that
+the debugger can retrieve values from the selected view of the process
+state.
+
+If there is no running process (or image of a process), there is no
+current call frame.
+
+The current frame must be an active call frame in the current thread.
+
+\itembfnl{Current lane}
+
+\textit{On SIMD (Single-Instruction Multiple-Data Stream) and SIMT
+  (Single-Instruction Multiple-Thread) architectures, fine-grained
+  parallel execution can be achieved by dispatching a single
+  instruction across multiple data streams (e.g., a vector or
+  array). Some parallel programming models allow for the vectorization
+  of loops using SIMD instructions. These parallel streams can be
+  considered fine-grain threads of execution, or lanes, where each
+  lane typically shares a common stack, program counter, and register
+  file.}
+
+\textit{In SIMT architectures, control flow may diverge through the
+  use of predication, where each instruction executes only in certain
+  lanes. Some SIMT architectures, however, provide separate stacks and
+  register files for each lane, and the parallel streams of execution
+  would be better represented as threads (above).}
+
+The current lane is a SIMD/SIMT lane identifier. This applies to
+source languages that are implemented using a SIMD/SIMT execution
+model. These implementations map source language vectorized operations
+to SIMD/SIMT lanes of execution ((see Section
+\refersec{chap:lanesinsimdvectorization}). When debugging
+a SIMD/SIMT program, the current lane is typically selected by a user
+command that focuses on a specific lane.
+
+It is required for operations that are related to SIMD/SIMT lanes.
+
+\textit{For example, the \DWOPpushlane{} operation pushes the value of
+  the current lane.}
+
+The current lane must be consistent with the value of the
+\DWATnumlanes{} attribute of the subprogram corresponding to context’s
+frame and program location. It is consistent if the value is greater
+than or equal to 0 and less than the, possibly default, value of the
+\DWATnumlanes{} attribute.
+
+If there is no running process, there is no current lane. If the
+current running program is not using a SIMD/SIMT execution model, the
+current lane is always 0.
+
+\itembfnl{Current program counter (PC)}
+The current program counter identifies the current point of execution
+in the current call frame of the current thread and/or lane.
+
+The PC of the top (most recently activated) call frame is the program
+counter for the current thread. The call frame information is used to
+obtain the value of the return address register to determine the PC of
+the other call frames (see Section
+\refersec{chap:callframeinformation}).
+
+It is required for the evaluation of value lists and location lists to
+select amongst multiple program location ranges.
+
+If there is no running process, there is no current program
+counter.
+
+\textit{When evaluating value lists and location lists when no current
+  pc is available, only default location descriptions are used.}
+
+\itembfnl{Current object}
+
+The current object is a data object described by a data object entry
+(see Section 4.1) that is being inspected. When evaluating expressions
+that provide attribute values of a data object, the containing
+debugging information entry is the current object. When evaluating
+expressions that provide attribute values for a type (e.g.,
+\DWATdatalocation{} for a \DWTAGmember), the current object is the data
+object entry (if there is one) that referred to the type entry (e.g.,
+via \DWATtype).
+
+A current object is required for the \DWOPpushobjectaddress{} operation
+and by some attributes (e.g., \DWATdatamemberlocation{} and
+\DWATuselocation) where the object's location is provided as part of
+the initial stack.
+
+\end{enumerate}
+
+\textit{A DWARF expression for a location description may be able to
+be evaluated without a thread, call frame, lane, program counter, or
+architecture context element. For example, the location of a global
+variable may be able to be evaluated without such context, while the
+location of local variables in a stack frame cannot be evaluated
+without additional context.}
+
+The address\_size fields in the headers of all the entries in the
+\dotdebuginfo, \dotdebugaddr, \dotdebugline, \dotdebugrnglists{},
+\dotdebugrnglistsdwo{}, \dotdebugloclists{}, and
+\dotdebugloclistsdwo{} sections corresponding to any given program
+counter.
+
 \needlines{6}
 \subsection{General Operations}
 \label{chap:generaloperations}
@@ -1271,11 +1476,11 @@ signed offset together with the \generictype.
 
 \needlines{8}
 \begin{enumerate}[1. ]
-\itembfnl{\DWOPfbregTARG}
-The \DWOPfbregNAME{} operation provides a
-signed LEB128\addtoindexx{LEB128!signed} offset
-from the address specified by the location description in the
-\DWATframebase{} attribute of the current function.
+  \itembfnl{\DWOPfbregTARG}
+The \DWOPfbregNAME{} operation provides a signed
+LEB128\addtoindexx{LEB128!signed} offset from the address specified by
+the location description in the \DWATframebase{} attribute of the
+current function. (see Section \refersec{chap:expressionevaluationcontext})
 
 \textit{This is typically a stack pointer register plus or minus some offset.}
 
@@ -1470,15 +1675,14 @@ debugging information entry in the current compilation unit, which must be a
 
 \needlines{6}
 \itembfnl{\DWOPpushobjectaddressTARG}
-The \DWOPpushobjectaddressNAME{}
-operation pushes the address
-of the object currently being evaluated as part of evaluation
-of a user presented expression. This object may correspond
-to an independent variable described by its own debugging
-information entry or it may be a component of an array,
-structure, or class whose address has been dynamically
-determined by an earlier step during user expression
-evaluation.
+The \DWOPpushobjectaddressNAME{} operation pushes the address of the
+object currently being evaluated as part of evaluation of a user
+presented expression (see Section
+\refersec{chap:expressionevaluationcontext}). This object may
+correspond to an independent variable described by its own debugging
+information entry or it may be a component of an array, structure, or
+class whose address has been dynamically determined by an earlier step
+during user expression evaluation.
 
 \textit{This operator provides explicit functionality
 (especially for arrays involving descriptors) that is analogous
@@ -1491,19 +1695,18 @@ Appendix \refersec{app:aggregateexamples}.}
 
 \needlines{4}
 \itembfnl{\DWOPformtlsaddressTARG}
-The \DWOPformtlsaddressNAME{}
-operation pops a value from the stack, which must have an
-integral type identifier, translates this
-value into an address in the
-\addtoindex{thread-local storage}
-for a thread, and pushes the address
-onto the stack together with the \generictype{} identifier.
-The meaning of the value on the top of the stack prior to this
-operation is defined by the run-time environment.  If the run-time
-environment supports multiple thread-local storage
+
+The \DWOPformtlsaddressNAME{} operation pops a value from the stack,
+which must have an integral type identifier, translates this value
+into an address in the t\addtoindex{hread-local storage} for the
+current thread (see Section \refersec{chap:expressionevaluationcontext})
+and pushes the address onto the stack together with the \generictype{}
+identifier. The meaning of the value on the top of the stack prior to
+this operation is defined by the run-time environment.  If the
+run-time environment supports multiple thread-local storage
 \nolink{blocks} for a single thread, then the \nolink{block}
-corresponding to the executable or shared
-library containing this DWARF expression is used.
+corresponding to the executable or shared library containing this
+DWARF expression is used.
 
 \textit{Some implementations of
 \addtoindex{C}, \addtoindex{C++}, \addtoindex{Fortran}, and other
@@ -1530,10 +1733,10 @@ to perform the computation based on the run-time environment.}
 
 \needlines{6}
 \itembfnl{\DWOPcallframecfaTARG}
-The \DWOPcallframecfaNAME{}
-operation pushes the value of the
-CFA, obtained from the Call Frame Information
-(see Section \refersec{chap:callframeinformation}).
+The \DWOPcallframecfaNAME{} operation pushes the value of the current
+call frame address (CFA), obtained from the Call Frame Information
+(see Section \refersec{chap:expressionevaluationcontext} and Section
+\refersec{chap:callframeinformation}).
 
 \textit{Although the value of \DWATframebase{}
 can be computed using other DWARF expression operators,
@@ -1547,10 +1750,12 @@ space efficient to reference that.}
 \needlines{6}
 \bb
 \itembfnl{\DWOPpushlaneTARG}
-The \DWOPpushlaneNAME{} operation pushes a lane index value
-of the generic type, which provides the context of the lane in
-which the expression is being evaluated.
-See section \refersec{chap:lowlevelinformation}.
+The \DWOPpushlaneNAME{} operation pushes a lane index value of the
+generic type, which provides the context of the lane in which the
+expression is being evaluated.  See The operation pushes the value of
+the CFA, obtained from the Call Frame Information (see Section
+\refersec{chap:expressionevaluationcontext} and Section
+\refersec{chap:lowlevelinformation}.
 
 \textit{Producers that widen source code into vectorized machine
 code may use this operation to describe the location of a source
@@ -2356,6 +2561,10 @@ equivalent to omitting the description.
 This kind of entry marks the end of the location list.
 
 \end{itemize}
+
+\textit{If there is no current PC (see Section
+  \refersec{chap:expressionevaluationcontext}), only default location
+  description entries will apply.}
 
 A location list consists of a sequence of zero or more bounded
 location description or base address entries, optionally followed
