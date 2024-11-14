@@ -633,7 +633,7 @@ in Figure \refersec{fig:fortranarrayexampledwarfdescription}.
         \DWATassociated(expression=    ! Test 'ptr\_assoc' \nolink{flag}
             \DWOPpushobjectaddress
             \DWOPlitn                ! where n == offset(ptr\_assoc)
-            \DWOPplus
+            \DWOPoffset
             \DWOPderef
             \DWOPlitone                  ! mask for 'ptr\_assoc' \nolink{flag}
             \DWOPand)
@@ -650,14 +650,14 @@ in Figure \refersec{fig:fortranarrayexampledwarfdescription}.
                 \DWOPlitn             ! where n ==
                                          !   offset(desc, dims) +
                                          !   offset(dims\_str, lower\_bound)
-                \DWOPplus
+                \DWOPoffset
                 \DWOPderef)
             \DWATupperbound(expression=
                 \DWOPpushobjectaddress
                 \DWOPlitn            ! where n ==
                                         !   offset(desc, dims) +
                                         !   offset(dims\_str, upper\_bound)
-                \DWOPplus
+                \DWOPoffset
                 \DWOPderef)
             !  Note: for the m'th dimension, the second operator becomes
             !  \DWOPlitn where
@@ -693,14 +693,14 @@ in Figure \refersec{fig:fortranarrayexampledwarfdescription}.
         \DWATallocated(expression=       ! Test 'ptr\_alloc' \nolink{flag}
             \DWOPpushobjectaddress
             \DWOPlitn                  ! where n == offset(ptr\_alloc)
-            \DWOPplus
+            \DWOPoffset
             \DWOPderef
             \DWOPlittwo                    ! Mask for 'ptr\_alloc' \nolink{flag}
             \DWOPand)
         \DWATdatalocation(expression=   ! Get raw data address
             \DWOPpushobjectaddress
             \DWOPlitn                  ! where n == offset(base)
-            \DWOPplus
+            \DWOPoffset
             \DWOPderef)
 7\$:     \DWTAGsubrangetype
             ! No name, default stride
@@ -708,12 +708,12 @@ in Figure \refersec{fig:fortranarrayexampledwarfdescription}.
             \DWATlowerbound(expression=
                 \DWOPpushobjectaddress
                 \DWOPlitn              ! where n == ...
-                \DWOPplus
+                \DWOPoffset
                 \DWOPderef)
             \DWATupperbound(expression=
                 \DWOPpushobjectaddress
                 \DWOPlitn              ! where n == ...
-                \DWOPplus
+                \DWOPoffset
                 \DWOPderef)
 8\$: \DWTAGvariable
         \DWATname("arrayvar")
@@ -1009,12 +1009,12 @@ Figure~\refersec{fig:assumedrankdwarf}.
           \DWATrank(expression=
               \DWOPpushobjectaddress
               \DWOPlitn                        ! offset of rank in descriptor
-              \DWOPplus
+              \DWOPoffset
               \DWOPderef)
           \DWATdatalocation(expression=
               \DWOPpushobjectaddress
               \DWOPlitn                        ! offset of data in descriptor
-              \DWOPplus
+              \DWOPoffset
               \DWOPderef)
 11\$:     \DWTAGgenericsubrange
               \DWATtype(reference to integer)
@@ -1027,7 +1027,7 @@ Figure~\refersec{fig:assumedrankdwarf}.
                   \DWOPlitn                    ! dim[i] offsetof(dim)
                   \DWOPplus                      ! dim[i]+offset
                   \DWOPpushobjectaddress       ! dim[i]+offsetof(dim) objptr
-                  \DWOPplus                      ! objptr.dim[i]
+                  \DWOPoffset                      ! objptr.dim[i]
                   \DWOPlitn                    ! objptr.dim[i] offsetof(lb)
                   \DWOPplus                      ! objptr.dim[i].lowerbound
                   \DWOPderef)                    ! *objptr.dim[i].lowerbound
@@ -1038,7 +1038,7 @@ Figure~\refersec{fig:assumedrankdwarf}.
                   \DWOPlitn                    ! offsetof(dim)
                   \DWOPplus
                   \DWOPpushobjectaddress
-                  \DWOPplus
+                  \DWOPoffset
                   \DWOPlitn                    ! offset of upperbound in dim
                   \DWOPplus
                   \DWOPderef)
