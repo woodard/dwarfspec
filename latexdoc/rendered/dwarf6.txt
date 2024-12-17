@@ -2014,11 +2014,6 @@ November 1, 2024                                  ***WORKING DRAFT***           
         evaluated. See The operation pushes the value of the CFA, obtained from the
         Call Frame Information (see Section 2.5.1 on page 27 and Section 3.3.5 on
         page 87.
-        Producers that widen source code into vectorized machine code may use this
-        operation to describe the location of a source variable as function of a single lane in
-        the widened machine code.
-        Consumers supply the lane argument to obtain the location of the instance of that
-        source variable that corresponds to the provided lane argument.
   Examples illustrating many of these stack operations are found in Appendix D.1.2 on
   page 308.
   2.5.2.4        Arithmetic and Logical Operations
@@ -2033,12 +2028,12 @@ November 1, 2024                                  ***WORKING DRAFT***           
   DW.OP.mul, DW.OP.neg and DW.OP.plus require integral types of the
   operand (either integral base type or the generic type). Operations do not cause
   an exception on overAEow.
-  November 1, 2024                                  ***WORKING DRAFT***                                                             Page 37
-                                              Chapter 2.  General Description
   1.    DW.OP.abs
         The DW.OP.abs operation pops the top stack entry, interprets it as a signed
         value and pushes its absolute value. If the absolute value cannot be
         represented, the result is undeoned.
+  November 1, 2024                                  ***WORKING DRAFT***                                                             Page 37
+                                              Chapter 2.  General Description
   2.    DW.OP.and
         The DW.OP.and operation pops the top two stack values, performs a
         bitwise and operation on the two, and pushes the result.
@@ -2069,14 +2064,14 @@ November 1, 2024                                  ***WORKING DRAFT***           
 10.     DW.OP.plus
         The DW.OP.plus operation pops the top two stack entries, adds them
         together, and pushes the result.
-  November 1, 2024                                  ***WORKING DRAFT***                                                             Page 38
-                                              Chapter 2.  General Description
 11.     DW.OP.plus.uconst
         The DW.OP.plus.uconst operation pops the top stack entry, adds it to the
         unsigned LEB128 constant operand interpreted as the same type as the
         operand popped from the top of the stack and pushes the result.
         This operation is supplied speciocally to be able to encode more oeld ooesets in two
         bytes than can be done with iDW.OP.lit!n? DW.OP.plus.j
+  November 1, 2024                                  ***WORKING DRAFT***                                                             Page 38
+                                              Chapter 2.  General Description
 12.     DW.OP.shl
         The DW.OP.shl operation pops the top two stack entries, shifts the former
         second entry left (olling with zero bits) by the number of bits specioed by the
@@ -2105,10 +2100,10 @@ November 1, 2024                                  ***WORKING DRAFT***           
             #    push the constant value 1 onto the stack if the result of the operation is
                  true or the constant value 0 if the result of the operation is false. The
                  pushed value has the generic type.
+        If the operands have the generic type, the comparisons are performed as
+        signed operations.
   November 1, 2024                                  ***WORKING DRAFT***                                                             Page 39
                                             Chapter 2.  General Description
-      If the operands have the generic type, the comparisons are performed as
-      signed operations.
 2.    DW.OP.skip
       DW.OP.skip is an unconditional branch. Its single operand is a 2-byte
       signed integer constant. The 2-byte constant is the number of bytes of the
@@ -18550,7 +18545,7 @@ DW.LNS.set.isa, 175, 175, 252                                                 DW
 DW.LNS.set.prologue.end, 174,                                                              179, 180, 209, 255
              174, 252                                                         DW.MACRO.undef.sup8, 177, 179,
 DW.MACRO.deone, 179, 179, 180,                                                             179, 180, 209, 255
-             255, 388, 389                                                    DW.OP.abs, 37, 38, 38, 238
+             255, 388, 389                                                    DW.OP.abs, 37, 37, 238
 November 1, 2024                                  ***WORKING DRAFT***                                                           Page 477
                                                                    Index
 DW.OP.addr, 31, 31, 146, 198, 238,                                            DW.OP.deref, 34, 34, 238, 309, 311,
@@ -18581,7 +18576,7 @@ DW.OP.const2u, 31, 238                                                        DW
 DW.OP.const4s, 31, 238                                                        DW.OP.lit1, 31, 239, 310, 316, 376,
 DW.OP.const4u, 31, 238                                                                     382
 DW.OP.const8s, 31, 238                                                        DW.OP.lit31, 31, 239
-DW.OP.const8u, 31, 238                                                        DW.OP.lit!n?, 31, 39, 316, 317, 322,
+DW.OP.const8u, 31, 238                                                        DW.OP.lit!n?, 31, 38, 316, 317, 322,
 DW.OP.const!n?!x?, 31, 36                                                                  328
 DW.OP.const!n?s, 31                                                           DW.OP.lo.user, 42, 196, 241
 DW.OP.const!n?u, 31                                                           DW.OP.lt, 39, 239
@@ -18600,9 +18595,9 @@ DW.OP.over, 33, 33, 238, 308                                                  DW
 DW.OP.pick, 33, 33, 238, 308                                                  DW.RLE.base.address, 60, 258
 DW.OP.piece, 47, 47, 48, 240, 310,                                            DW.RLE.base.addressx, 59, 73, 258,
              312, 374, 376                                                                 294, 297
-DW.OP.plus, 37, 38, 38, 39, 239, 310,                                         DW.RLE.end.of.list, 59, 60, 258
+DW.OP.plus, 37, 38, 38, 239, 310,                                             DW.RLE.end.of.list, 59, 60, 258
              316, 317, 322, 328, 395                                          DW.RLE.hi.user, 196, 258
-DW.OP.plus.uconst, 39, 39, 239,                                               DW.RLE.include.rnglist, 60, 258
+DW.OP.plus.uconst, 38, 38, 239,                                               DW.RLE.include.rnglist, 60, 258
              309, 311, 337                                                    DW.RLE.include.rnglistx, 60, 258
 DW.OP.push.lane, 29, 37, 37, 88,                                              DW.RLE.lo.user, 196, 258
              241, 395                                                         DW.RLE.ooeset.pair, 59, 60, 60, 258
@@ -18817,7 +18812,7 @@ function entry, see subroutine entry                                          in
 function template instantiation, 89                                                        123
 fundamental type, see base type entry                                         incomplete type, 119, 123
                                                                               incomplete type (Ada), 116
-generic type, 30~32, 34~37, 39~41                                             incomplete, non-deoning, or separate
+generic type, 30~32, 34~37, 39, 41                                            incomplete, non-deoning, or separate
 global namespace, 78, 79, see                                                              declaration corresponding to
              namespace (C++), global                                                       a declaration, 22
 GNU C, 116                                                                    incomplete, non-deoning, or separate
@@ -18885,7 +18880,7 @@ LEB128, 163, 166, 174, 228, 233, 236                                            
              221, 237                                                         Little-Endian Base 128, see LEB128
       signed, decoding of, 304                                                little-endian encoding, see endian
       signed, encoding as, 236, 303                                                        attribute
-      unsigned, 31~33, 39, 41, 45, 47,                                        local_str_pool_size, 153, 156
+      unsigned, 31~33, 38, 41, 45, 47,                                        local_str_pool_size, 153, 156
              164, 173, 175, 176, 182, 187,                                    local_type_unit_count, 153, 154
              189~192, 217, 221, 228~231,                                      location, 127
              236, 237, 254, 265, 266                                          location attribute, 40, 56, 102, 106,
