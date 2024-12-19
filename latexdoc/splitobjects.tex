@@ -133,9 +133,10 @@ skeleton \dotdebuginfo{} section.
 \dotdebugaddr{} - Contains references to loadable sections,
 indexed by attributes of one of the forms \DWFORMaddrxXN{},
 or location expression \DWOPaddrx{} opcodes.
-\item
-\dotdebugaranges{} - Contains the accelerated range lookup table
-for the compilation unit.
+\db
+%\item
+%\dotdebugaranges{} - Contains the accelerated range lookup table
+%for the compilation unit.
 \item
 \dotdebugframe{} - Contains the frame tables.
 \item
@@ -297,8 +298,12 @@ locate a skeleton compilation unit. The
 \DWATcompdir{} and \DWATdwoname{} attributes in the skeleton
 compilation unit can then be used to locate the corresponding
 DWARF object file for the compilation unit. Similarly, for an
-address lookup, the consumer can use the \dotdebugaranges{} table,
-which will also lead to a skeleton compilation unit. For a file
+address lookup, the consumer can use the 
+\bb
+unit level \DWATlowpc/\DWAThighpc{} and/or \DWATranges{} attributes
+to identify
+\eb  
+a skeleton compilation unit. For a file
 and line number lookup, the skeleton compilation units can be
 used to locate the line number tables.
 
@@ -437,9 +442,8 @@ information:
   \dotdebugstr
   \dotdebugaddr
   \dotdebugnames
-  \dotdebugaranges
 \end{alltt}
-
+\db %   \dotdebugaranges
 The \dotdebugabbrev{} section contains just a single entry describing
 the skeleton compilation unit DIE.
 
@@ -525,8 +529,10 @@ that name. From the skeleton compilation unit, the consumer can
 find the \splitDWARFobjectfile{} that it can then read to get the full
 DWARF information.
 
-The \dotdebugaranges{} section contains the PC ranges defined in this
-compilation unit, and allow a DWARF consumer to map a PC value to
+\bb
+The unit level \DWATlowpc/\DWAThighpc{} and/or \DWATranges{} attributes
+\eb  
+allow a DWARF consumer to map a PC value to
 a skeleton compilation unit, and then to a \splitDWARFobjectfile.
 
 
@@ -586,7 +592,10 @@ the addresses in the program that are referred to by the debug
 information.
 
 The linked executable will also contain \dotdebugabbrev,
-\dotdebugstr{}, \dotdebugnames{} and \dotdebugaranges{} sections, each the
+\bb
+\dotdebugstr{} and \dotdebugnames{}
+\eb
+sections, each the
 result of combining and relocating the contributions from the
 relocatable object files.
 
