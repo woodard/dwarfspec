@@ -141,8 +141,8 @@ An \livetarg{datarep:initiallengthvalues}{initial length} field
 \addtoindexx{initial length field|see{initial length}}
 is one of the fields that occur at the beginning
 of those DWARF sections that have a header
-(\dotdebugaranges{},
-\dotdebuginfo{},
+\db	% Delete \dotdebugaranges{},
+(\dotdebuginfo{},
 \dotdebugline{},
 \dotdebugloclists{},
 \dotdebugnames{} and
@@ -234,8 +234,9 @@ These entries refer to strings in the \dotdebugstr{} section.
 These values require relocation.
 \eb
 
-\item Entries in the \dotdebugaddr{} and \dotdebugaranges{}
-sections may contain references to locations within the virtual address
+\item Entries in the \dotdebugaddr{}
+\db	% and \dotdebugaranges
+section may contain references to locations within the virtual address
 space of the program, and thus require relocation.
 
 \item Entries in the \dotdebugloclists{} and \dotdebugrnglists{} sections may
@@ -253,8 +254,11 @@ of these offsets requires relocation. Depending on the implementation,
 these relocations may be implicit (that is, the producer may not need to
 emit any explicit relocation information for these offsets).
 
-\item The \HFNdebuginfooffset{} field in the \dotdebugaranges{} header and
-the list of compilation units following the \dotdebugnames{} header contain
+\item The \HFNdebuginfooffset{} field in the
+\bb
+headers of the compilation units listed
+\eb
+following the \dotdebugnames{} header contain
 references to the \dotdebuginfo{} section.  These references require relocation
 so that after linking they refer to the correct contribution in the combined
 \dotdebuginfo{} section in the executable file.
@@ -296,7 +300,10 @@ and includes the following:
 The line number tables, frame tables, and
 accelerated access tables, in the usual sections:
 \dotdebugline, \dotdebuglinestr,
-\dotdebugframe, \dotdebugnames{} and \dotdebugaranges,
+\bb
+\dotdebugframe{} and \dotdebugnames{},
+\eb
+\db	% and \dotdebugaranges,
 respectively.
 \needlines{4}
 \item
@@ -873,6 +880,7 @@ unit, except for contributions to the \dotdebugstroffsets{},
 \dotdebugstroffsetsdwo, or \dotdebugnames{} sections.
 \eb
 
+\bb
 \textit{The exception for the \dotdebugstroffsets{} section enables
 an executable program with a mixture of 32-bit and 64-bit DWARF compilation
 units to refer to any string in the merged \dotdebugstr{} section,
@@ -937,7 +945,7 @@ the 64-bit DWARF format, they are 8-byte unsigned integer values.
 \begin{center}
 \begin{tabular}{lll}
 Section &Name & Role  \\ \hline
-\dotdebugaranges{}   & \HFNdebuginfooffset{}   	& offset in \dotdebuginfo{} \\
+\db	%\dotdebugaranges{} & \HFNdebuginfooffset{} & offset in \dotdebuginfo{} \\
 \dotdebugframe{}/CIE & \HFNCIEid{}              & CIE distinguished value \\
 \dotdebugframe{}/FDE & \HFNCIEpointer{}      	& offset in \dotdebugframe{} \\
 \dotdebuginfo{}      & \HFNdebugabbrevoffset{}	& offset in \dotdebugabbrev{} \\
@@ -3237,7 +3245,8 @@ defined language.
 \DWLNAMEHylo~\ddag			&0x0028	&0 \\
 \DWLNAMEHIP~\ddag			&0x0029 &0 \\
 \DWLNAMEOdin~\ddag			&0x002a &0 \\
-\DWLNAMEPFour~\ddag			&0x002b &0
+\DWLNAMEPFour~\ddag			&0x002b &0 \\
+\DWLNAMEMetal~\ddag			&0x002c &0
 \eb
 \\
 \DWLNAMElouser				&0x8000 &  \\
@@ -3476,71 +3485,7 @@ are given in Table \referfol{datarep:defaultedattributeencodings}.
 \end{longtable}
 \end{centering}
 
-\needlines{10}
-\section{Address Range Table}
-\label{datarep:addrssrangetable}
-
-Each
-\bb
-\dotdebugaranges{} section contribution
-begins with a header containing:
-\eb
-\begin{enumerate}[1. ]
-
-\item \HFNunitlength{} (\livelink{datarep:initiallengthvalues}{initial length}) \\
-A 4-byte or 12-byte length containing the length of the
-\addtoindexx{initial length}
-set of entries for this compilation unit, not including the
-length field itself
-\bb
-(see Section \refersec{datarep:32bitand64bitdwarfformats}).
-\eb
-
-\item \HFNversion{} (\HFTuhalf) \\
-A 2-byte version identifier representing the version of the
-DWARF information for the address range table.
-
-This value in this field \addtoindexx{version number!address range table} is 2.
-
-\item \HFNdebuginfooffset{} (\livelink{datarep:sectionoffsetlength}{section offset}) \\
-A
-\addtoindexx{section offset!in .debug\_aranges header}
-4-byte or 8-byte offset into the
-\dotdebuginfo{} section of
-the compilation unit header. In the \thirtytwobitdwarfformat,
-this is a 4-byte unsigned offset; in the \sixtyfourbitdwarfformat,
-this is an 8-byte unsigned offset
-(see Section \refersec{datarep:32bitand64bitdwarfformats}).
-
-\item \HFNaddresssize{} (\HFTubyte) \\
-\addtoindexx{size of an address}
-A 1-byte unsigned integer containing the size in bytes of an
-address.
-\db
-
-\item \HFNreservedwassegmentselectorsize{}
-\bbeb
-\\
-
-\end{enumerate}
-
-This header is followed by a series of tuples. Each tuple
-consists of
-\bb
-an address and a length. The
-address and length size are each given by the \HFNaddresssize{}
-field of the header.
-The first tuple following the header in
-each set begins at an offset that is a multiple of the size
-of a single tuple (that is,
-\eb
-twice the \addtoindex{size of an address}).
-The header is padded, if necessary, to that boundary.
-Each set of tuples is terminated by
-\db
-a 0 for the address and a 0 for the length.
-\db
-
+\db	% Delete Section 7.21, Address Range Table
 
 \needlines{12}
 \section{Line Number Information}
