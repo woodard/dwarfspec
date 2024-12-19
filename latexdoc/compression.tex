@@ -1,13 +1,13 @@
 \chapter[Compression (Informative)]{DWARF Compression and Duplicate Elimination (Informative)}
 \label{app:dwarfcompressionandduplicateeliminationinformative}
 
-% It seemed difficult to get close to the same layout and 
+% It seemed difficult to get close to the same layout and
 % captioning as DWARF4 here with figures as they moved (floated)
 % making it hard to follow.  Hence this uses fewer figures.
 
-DWARF 
+DWARF
 \addtoindexx{DWARF compression}
-can 
+can
 \addtoindexx{DWARF duplicate elimination}
 use a lot of disk space.
 
@@ -52,7 +52,7 @@ to suggest traditional contents as a way of explaining the
 approach, not to be limiting.}
 
 A traditional relocatable object output file
-from a single compilation might contain sections 
+from a single compilation might contain sections
 named:
 \begin{alltt}
     \dotdata{}
@@ -60,23 +60,21 @@ named:
     \dotdebuginfo{}
     \dotdebugabbrev{}
     \dotdebugline{}
-    \dotdebugaranges{}
 \end{alltt}
-A relocatable object file from a compilation system 
+\db %    \dotdebugaranges{}
+A relocatable object file from a compilation system
 attempting duplicate DWARF elimination might
 contain sections as in:
-
 \begin{alltt}
     \dotdata{}
     \dottext{}
     \dotdebuginfo{}
     \dotdebugabbrev{}
     \dotdebugline{}
-    \dotdebugaranges{}
 \end{alltt}
-
-followed (or preceded, the order is not significant) 
-by a series of 
+\db %    \dotdebugaranges{}
+followed (or preceded, the order is not significant)
+by a series of
 \addtoindexx{section group}
 section groups:
 \begin{alltt}
@@ -95,7 +93,7 @@ where each \addtoindex{section group} might or might not contain executable
 code (\dottext{} sections) or data (\dotdata{} sections).
 
 \needlines{6}
-A \textit{\addtoindex{section group}} is a named set 
+A \textit{\addtoindex{section group}} is a named set
 of section contributions
 within an object file with the property that the entire set
 of section contributions must be retained or discarded as a
@@ -108,32 +106,32 @@ generally be handled by a linker in two ways:
 one of them is chosen to be kept and used, while the rest
 are discarded.
 
-\item Given a \addtoindex{section group} 
+\item Given a \addtoindex{section group}
 that is not referenced from any
-section outside of the \addtoindex{section group}, 
+section outside of the \addtoindex{section group},
 the section group
 is discarded.
 
 \end{enumerate}
 
 
-Which handling applies may be indicated by the 
+Which handling applies may be indicated by the
 \addtoindex{section group}
 itself and/or selection of certain linker options.
 
-For example, if a linker determines that 
+For example, if a linker determines that
 \addtoindex{section group} 1
-from A.o and 
+from A.o and
 \addtoindex{section group} 3 from B.o are identical, it could
 discard one group and arrange that all references in A.o and
 B.o apply to the remaining one of the two identical section
 groups. This saves space.
 
 An important part of making it possible to \doublequote{redirect}
-references to the surviving 
+references to the surviving
 \addtoindex{section group} is the use of
 consistently chosen linker global symbols for referring to
-locations within each 
+locations within each
 \addtoindex{section group}.
 It follows that references
 are simply to external names and the linker already knows
@@ -144,36 +142,36 @@ linker (outside of DWARF itself, and normal object/linker
 facilities such as simple relocations) are:
 \begin{enumerate}[1. ]
 
-\item A means to reference the \dotdebuginfo{} information 
-of one compilation unit from the \dotdebuginfo{} section of 
+\item A means to reference the \dotdebuginfo{} information
+of one compilation unit from the \dotdebuginfo{} section of
 another compilation unit (\DWFORMrefaddr{} provides this).
 
 \item A means to combine multiple contributions to specific sections
 (for example, \dotdebuginfo{}) into a single object file.
 
-\item  A means to identify a \addtoindex{section group} 
+\item  A means to identify a \addtoindex{section group}
 (giving it a name).
 
 \item A means to indicate which sections go together to make
-up a \addtoindex{section group}, so that the group can be 
+up a \addtoindex{section group}, so that the group can be
 treated as a unit (kept or discarded).
 
-\item  A means to indicate how each \addtoindex{section group} 
+\item  A means to indicate how each \addtoindex{section group}
 should be processed by the linker.
 
 \end{enumerate}
 
 \textit{The notion of section and section contribution used here
 corresponds closely to the similarly named concepts in the
-ELF object file representation. 
+ELF object file representation.
 The notion of \addtoindex{section group} is
 an abstraction of common extensions of the ELF representation
-widely known as 
+widely known as
 \doublequote{\COMDAT{}s} or \doublequote{\COMDAT{} sections.} (Other
 object file representations provide \COMDAT{}\dash style mechanisms as
 well.) There are several variations in the \COMDAT{} schemes in
 common use, any of which should be sufficient for the purposes
-of the 
+of the
 \addtoindexx{duplication elimination|see{DWARF duplicate elimination}}
 DWARF duplicate elimination techniques described here.}
 
@@ -189,18 +187,18 @@ implementors.
 Implementations should clearly document their naming conventions.
 
 In the following, it will be helpful to refer to the examples
-in 
+in
 Figure \ref{fig:duplicateeliminationexample1csource}
-through 
+through
 Figure \ref{fig:duplicateeliminationexample2companiondwarf}
-of 
+of
 Section \refersec{app:examples}.
 
 \textbf{Section Group Names}
 
 Section groups must have a \addtoindex{section group} name.
 \addtoindexx{section group!name}
-For the subsequent 
+For the subsequent
 \addtoindex{C++} example, a name like
 \begin{alltt}
     <producer-prefix>.<file-designator>.<gid-number>
@@ -209,11 +207,11 @@ will suffice, where
 
 \begin{description}
 
-\item  [\textless producer\dash prefix\textgreater] 
+\item  [\textless producer\dash prefix\textgreater]
 is some string specific to the
 producer, which has a language\dash designation embedded in the
 name when appropriate. (Alternatively, the language name
-could be embedded in the 
+could be embedded in the
 \textless gid\dash number\textgreater).
 
 
@@ -229,26 +227,26 @@ specific wa.h header file in such a way that
 \begin{itemize}
 
 \item  a 'matching' output from another compile generates
-the same 
+the same
 \textless gid\dash number\textgreater,
 and
 
 \item  a non-matching output (say because of \texttt{\#defines})
-generates a different 
+generates a different
 \textless gid\dash number\textgreater.
 \end{itemize}
 
 \end{description}
 
-\textit{It may be useful to think of a 
+\textit{It may be useful to think of a
 \textless gid\dash number\textgreater
 as a kind
 of \doublequote{digital signature} that allows a fast test for the
-equality of two 
+equality of two
 \addtoindexx{section group}
 section groups.}
 
-So, for example, the \addtoindex{section group} 
+So, for example, the \addtoindex{section group}
 corresponding to file wa.h
 above is given the name \texttt{my.compiler.company.cpp.wa.h.123456}.
 
@@ -256,7 +254,7 @@ above is given the name \texttt{my.compiler.company.cpp.wa.h.123456}.
 \needlines{4}
 \textbf{Debugging Information Entry Names}
 
-Global labels for 
+Global labels for
 \addtoindexx{debugging information entry!ownership relation}
 debugging information entries (the need for which is explained
 below) within a \addtoindex{section group}
@@ -274,24 +272,24 @@ such as
 
 where
 \begin{description}
-\item [\textless prefix\textgreater]  
+\item [\textless prefix\textgreater]
 distinguishes this as a DWARF debug info name, and should identify the producer
 and, when appropriate, the language.
-\item [\textless file\dash designator\textgreater]  
-and 
-\texttt{\textless gid\dash number\textgreater} 
+\item [\textless file\dash designator\textgreater]
+and
+\texttt{\textless gid\dash number\textgreater}
 are as above.
 
 \item  [\textless die\dash number\textgreater]
-could be a number sequentially assigned 
+could be a number sequentially assigned
 to entities (tokens, perhaps) found
 during compilation.
 
 \end{description}
 
-In general, every point in the 
+In general, every point in the
 \addtoindexx{section group}
-section group 
+section group
 \dotdebuginfo{} that
 could be referenced from outside by \emph{any} compilation unit must
 normally have an external name generated for it in the linker
@@ -301,14 +299,14 @@ those points or not.
 \textit{The completeness of the set of names generated is a
 quality-of-implementation issue.}
 
-It is up to the producer to ensure that if 
-\textless die\dash numbers\textgreater\ 
+It is up to the producer to ensure that if
+\textless die\dash numbers\textgreater\
 in separate compilations would not match properly then a
-distinct 
-\textless gid\dash number\textgreater\ 
+distinct
+\textless gid\dash number\textgreater\
 is generated.
 
-Note that only 
+Note that only
 \addtoindexx{section group}
 section groups that are designated as
 duplicate\dash removal\dash applies actually require the
@@ -316,7 +314,7 @@ duplicate\dash removal\dash applies actually require the
     <prefix>.<file-designator>.<gid-number>.<die-number>
 \end{alltt}
 external labels for debugging information entries as all other
-\addtoindex{section group} sections can use 'local' labels 
+\addtoindex{section group} sections can use 'local' labels
 (section\dash relative
 relocations).
 
@@ -324,22 +322,22 @@ relocations).
 imposed by this document.)
 
 \textit{Local labels use references with form \DWFORMreffour{}
-or 
-\DWFORMrefeight. 
+or
+\DWFORMrefeight.
 (These are affected by relocations
-so 
-\DWFORMrefudata, 
-\DWFORMrefone{} and 
+so
+\DWFORMrefudata,
+\DWFORMrefone{} and
 \DWFORMreftwo{} are
-normally not usable and 
+normally not usable and
 \DWFORMrefaddr{} is not necessary
 for a local label.)}
 
 
-\subsubsection{Use of \addtoindex{DW\_TAG\_compile\_unit} versus 
+\subsubsection{Use of \addtoindex{DW\_TAG\_compile\_unit} versus
 \addtoindex{DW\_TAG\_partial\_unit}}
 
-A \addtoindex{section group} compilation unit that uses 
+A \addtoindex{section group} compilation unit that uses
 \DWTAGcompileunit{}
 is like any other compilation unit, in that its contents
 are evaluated by consumers as though it were an ordinary
@@ -347,7 +345,7 @@ compilation unit.
 
 An \#include directive appearing outside any other
 declarations is a good candidate to be represented using
-\DWTAGcompileunit. 
+\DWTAGcompileunit.
 However, an \#include appearing inside
 a \addtoindex{C++} namespace declaration or a function, for example, is
 not a good candidate because the entities included are not
@@ -357,10 +355,10 @@ This also applies to \addtoindex{Fortran} INCLUDE lines when declarations
 are included into a subprogram or module context.
 
 Consequently a compiler must use \DWTAGpartialunit{} (instead
-of \DWTAGcompileunit) 
-in a \addtoindex{section group} 
-whenever the section group 
-contents are not necessarily globally visible. 
+of \DWTAGcompileunit)
+in a \addtoindex{section group}
+whenever the section group
+contents are not necessarily globally visible.
 This
 directs consumers to ignore that compilation unit when scanning
 top level declarations and definitions.
@@ -381,19 +379,19 @@ A \DWTAGimportedunit{} debugging information entry has an
 \DWTAGpartialunit{} debugging information entry.
 
 A \DWTAGimportedunit{} debugging information entry refers
-to a 
-\DWTAGcompileunit{} or 
+to a
+\DWTAGcompileunit{} or
 \DWTAGpartialunit{} debugging
-information entry to specify that the 
+information entry to specify that the
 \DWTAGcompileunit{} or
 \DWTAGpartialunit{} contents logically appear at the point
-of the 
+of the
 \DWTAGimportedunit{} entry.
 
 
 \subsubsection{Use of DW\_FORM\_ref\_addr}
 
-Use 
+Use
 \DWFORMrefaddr{} to reference from one compilation
 unit's debugging information entries to those of another
 compilation unit.
@@ -409,11 +407,11 @@ name should be used for an external symbol and a relocation
 generated based on that name.
 
 \needlines{4}
-\textit{When referencing into a 
+\textit{When referencing into a
 \addtoindexx{section group}
-non-section group 
+non-section group
 \dotdebuginfo{},
-from another \dotdebuginfo{} (from anywhere) 
+from another \dotdebuginfo{} (from anywhere)
 \DWFORMrefaddr{} is
 still the form to be used, but a section\dash relative relocation
 generated by use of a non-exported name (often called an
@@ -423,23 +421,23 @@ same object file.}
 \subsection{Examples}
 \label{app:examples}
 
-This section provides several 
+This section provides several
 \addtoindexx{DWARF duplicate elimination!examples}
 examples in order to have a
 concrete basis for discussion.
 
 In these examples, the focus is on the arrangement of DWARF
-information into sections (specifically the 
+information into sections (specifically the
 \dotdebuginfo{}
 section) and the naming conventions used to achieve references
-into 
+into
 \addtoindexx{section group}
-section groups. 
+section groups.
 In practice, all of the examples that
-follow involve DWARF sections other than just 
+follow involve DWARF sections other than just
 \dotdebuginfo{}
-(for example, \dotdebugline{}, 
-\dotdebugaranges{}, or others);
+(for example, \dotdebugline{});
+\db % \dotdebugaranges{}, or others);
 however, only the \dotdebuginfo{}
 section is shown to keep the
 examples compact and easier to read.
@@ -449,9 +447,9 @@ the underlying object language is not (and varies from system to system).
 
 \subsubsection{C++ Example}
 
-The \addtoindex{C++} source 
+The \addtoindex{C++} source
 \addtoindexx{DWARF duplicate elimination!examples}
-in 
+in
 Figure \refersec{fig:duplicateeliminationexample1csource}
 is used to illustrate the DWARF
 representation intended to allow duplicate elimination.
@@ -477,7 +475,7 @@ f(A &a)
 \end{figure}
 
 Figure \refersec{fig:duplicateeliminationexample1dwarfsectiongroup}
-shows the \addtoindex{section group} corresponding to the included file 
+shows the \addtoindex{section group} corresponding to the included file
 wa.h.
 
 \begin{figure}
@@ -502,18 +500,18 @@ DW.cpp.wa.h.123456.4:     ! linker global symbol
         \DWATname("i")
         \DWATtype(\DWFORMrefn to DW.cpp.wa.h.123456.2)
             ! (This is a local reference, so the more
-            ! compact form \DWFORMrefn 
+            ! compact form \DWFORMrefn
             ! for n = 1,2,4, or 8 can be used)
 \end{alltt}
 \end{dwflisting}
 \vspace{2mm}
-\caption{Duplicate elimination example \#1: DWARF section group} 
+\caption{Duplicate elimination example \#1: DWARF section group}
 \label{fig:duplicateeliminationexample1dwarfsectiongroup}
 \end{figure}
 
 Figure \refersec{fig:duplicateeliminationexample1primarycompilationunit}
 shows the \doublequote{normal} DWARF sections, which are not part of
-any \addtoindex{section group}, 
+any \addtoindex{section group},
 and how they make use of the information
 in the \addtoindex{section group} shown above.
 
@@ -536,28 +534,28 @@ in the \addtoindex{section group} shown above.
         ...
 \end{alltt}
 \end{dwflisting}
-\caption{Duplicate elimination example \#1: primary compilation unit} 
+\caption{Duplicate elimination example \#1: primary compilation unit}
 \label{fig:duplicateeliminationexample1primarycompilationunit}
 \end{figure}
 
 \needlines{4}
-This example uses \DWTAGcompileunit{} 
+This example uses \DWTAGcompileunit{}
 for the \addtoindex{section group},
 implying that the contents of the compilation unit are
-globally visible (in accordance with 
+globally visible (in accordance with
 \addtoindex{C++} language rules).
-\DWTAGpartialunit{} 
+\DWTAGpartialunit{}
 is not needed for the same reason.
 
 \needlines{6}
 \subsubsection{C Example}
 
-The \addtoindex{C++} example 
+The \addtoindex{C++} example
 \addtoindexx{DWARF duplicate elimination!examples}
 in this Section might appear to be equally
-valid as a \addtoindex{C} example. However, for \addtoindex{C} 
+valid as a \addtoindex{C} example. However, for \addtoindex{C}
 it is prudent to include a \DWTAGimportedunit{}
-in the primary unit 
+in the primary unit
 (see Figure \refersec{fig:duplicateeliminationexample1primarycompilationunit})
 as well as an \DWATimport{} attribute that refers to the proper unit
 in the \addtoindex{section group}.
@@ -575,7 +573,7 @@ from other compilations.}
 
 For a \addtoindex{Fortran}
 \addtoindexx{DWARF duplicate elimination!examples}
-example, consider 
+example, consider
 Figure \refersec{fig:duplicateeliminationexample2fortransource}.
 
 \begin{figure}[ht]
@@ -595,14 +593,14 @@ FOO = C(N + SEVEN)
 RETURN
 END
 \end{nlnlisting}
-\caption{Duplicate elimination example \#2: Fortran source} 
+\caption{Duplicate elimination example \#2: Fortran source}
 \label{fig:duplicateeliminationexample2fortransource}
 \end{figure}
 
 
 Figure \refersec{fig:duplicateeliminationexample2dwarfsectiongroup}
 shows the \addtoindex{section group}
-corresponding to the included file 
+corresponding to the included file
 \addtoindexx{Fortran example}
 CommonStuff.fh.
 
@@ -684,11 +682,11 @@ shows the sections for the primary compilation unit.
 \label{fig:duplicateeliminationexample2primaryunit}
 \end{figure}
 
-A companion main program is shown in 
+A companion main program is shown in
 Figure \refersec{fig:duplicateeliminationexample2companionsource}
 
 \begin{figure}
-\textit{File Main.f} 
+\textit{File Main.f}
 \begin{nlnlisting}
 INCLUDE 'CommonStuff.fh'
 C(50) = 8
@@ -702,10 +700,10 @@ END
 \needlines{3}
 That main program results in an object file that
 contained a duplicate of the \addtoindex{section group} named
-\texttt{my.f90.company.f90.CommonStuff.fh.654321} 
+\texttt{my.f90.company.f90.CommonStuff.fh.654321}
 corresponding to the
 included file as well as the remainder of the main subprogram
-as shown in 
+as shown in
 Figure \refersec{fig:duplicateeliminationexample2companiondwarf}.
 
 \begin{figure}
@@ -748,7 +746,7 @@ visible as global entities.
 A large portion of debug information is type information, and
 in a typical compilation environment, many types are duplicated
 many times. One method of controlling the amount of duplication
-is separating each type into a separate 
+is separating each type into a separate
 \COMDAT{} \dotdebuginfo{} section
 and arranging for the linker to recognize and eliminate
 duplicates at the individual type level.
@@ -771,14 +769,14 @@ and any number of additional \COMDAT{} \dotdebuginfo{} sections
 containing type units.
 
 \needlines{5}
-As discussed in the previous section 
-(Section \refersec{app:usingcompilationunits}), 
+As discussed in the previous section
+(Section \refersec{app:usingcompilationunits}),
 many
 linkers today support the concept of a \COMDAT{} group or
 linkonce section. The general idea is that a \doublequote{key} can be
 attached to a section or a group of sections, and the linker
 will include only one copy of a \addtoindex{section group}
-(or individual section) for any given key. 
+(or individual section) for any given key.
 For \COMDAT{} \dotdebuginfo{} sections, the
 key is the \addtoindex{type signature}
 formed from the algorithm given in
@@ -787,9 +785,9 @@ Section \refersec{datarep:typesignaturecomputation}.
 \subsection{Signature Computation Example}
 \label{app:signaturecomputationexample}
 
-As an example, 
+As an example,
 \addtoindexx{type signature!example computation}
-consider a \addtoindex{C++} header file 
+consider a \addtoindex{C++} header file
 containing the type definitions shown
 in Figure \refersec{fig:typesignatureexamplescsource}.
 
@@ -822,7 +820,7 @@ namespace N {
 
 Next, consider one possible representation of the DWARF
 information that describes the type \doublequote{struct C} as shown
-in 
+in
 \refersec{fig:typesignaturecomputation1dwarfrepresentation}.
 
 \begin{figure}
@@ -867,9 +865,9 @@ L2:
 In computing a signature for the type \texttt{N::C}, flatten the type
 \addtoindexx{type signature}
 description into a byte stream according to the procedure
-outlined in 
+outlined in
 Section \refersec{datarep:typesignaturecomputation}.
-The result is shown in 
+The result is shown in
 Figure \refersec{fig:typesignaturecomputation1flattenedbytestream}.
 
 \begin{figure}
@@ -925,11 +923,11 @@ Figure \refersec{fig:typesignaturecomputation1flattenedbytestream}.
 
 \needlines{4}
 Running an \MDfive{} hash over this byte stream, and taking the
-low\dash order 64 bits, yields the final signature: 
+low\dash order 64 bits, yields the final signature:
 0xd28081e8 dcf5070a.
 
 Next, consider a representation of the DWARF information that
-describes the type \doublequote{class A} as shown in 
+describes the type \doublequote{class A} as shown in
 Figure \refersec{fig:typesignaturecomputation2dwarfrepresentation}.
 
 \begin{figure}
@@ -1031,28 +1029,28 @@ Figure~\ref{fig:typesignaturecomputation2dwarfrepresentation}: Type signature co
 \end{figure}
 
 In this example, the structure types \texttt{N::A} and \texttt{N::C} have each
-been placed in separate 
+been placed in separate
 \addtoindexx{type unit}
 type units.  For \texttt{N::A}, the actual
 definition of the type begins at label L1. The definition
 involves references to the \texttt{int} base type and to two pointer
 types. The information for each of these referenced types is
-also included in this \addtoindex{type unit}, 
+also included in this \addtoindex{type unit},
 since base types and pointer
 types are trivial types that are not worth the overhead of a
-separate \addtoindex{type unit}. 
+separate \addtoindex{type unit}.
 The last pointer type contains a reference
 to an incomplete type \texttt{N::B}, which is also included here as
 a declaration, since the complete type is unknown and its
 signature is therefore unavailable. There is also a reference
-to \texttt{N::C}, using 
+to \texttt{N::C}, using
 \DWFORMrefsigeight{} to refer to the type signature
 \addtoindexx{type signature} for that type.
 
 \begin{figure}
 \figurepart{1}{3}
 \begin{dwflisting}
-% DWARF4 had a \DWATnamespace{} below, 
+% DWARF4 had a \DWATnamespace{} below,
 % but this error is fixed here to be \DWTAGnamespace.
 \begin{alltt}
 // Step 2: 'C' \DWTAGnamespace "N"
@@ -1104,7 +1102,7 @@ to \texttt{N::C}, using
 \begin{figure}
 \figurepart{2}{3}
 \begin{dwflisting}
-\begin{alltt}    
+\begin{alltt}
     // Step 6: 'T' \DWATtype (type \#3)
     0x54 0x49
         // Step 3: 'D' \DWTAGpointertype
@@ -1156,7 +1154,7 @@ to \texttt{N::C}, using
 Figure~\ref{fig:typesignatureexample2flattenedbytestream}: Type signature example \#2: flattened byte stream \textit{(continued)}
 \end{center}
 \end{figure}
-    
+
 \begin{figure}
 \figurepart{3}{3}
 \begin{dwflisting}
@@ -1217,9 +1215,9 @@ Figure~\ref{fig:typesignatureexample2flattenedbytestream}: Type signature exampl
 
 In computing a signature for the type \texttt{N::A}, flatten the type
 description into a byte stream according to the procedure
-outlined in 
+outlined in
 Section \refersec{datarep:typesignaturecomputation}.
-The result is shown in 
+The result is shown in
 Figure \refersec{fig:typesignatureexample2flattenedbytestream}.
 
 Running an \MDfive{} hash over this byte stream, and taking the
@@ -1228,7 +1226,7 @@ low-order 64 bits, yields the final signature: 0xd6d160f5
 
 A source file that includes this header file may declare a
 variable of type \texttt{N::A}, and its DWARF information may look
-like that shown in 
+like that shown in
 Figure \refersec{fig:typesignatureexampleusage}.
 
 \begin{figure}[ht]
@@ -1257,7 +1255,7 @@ Figure \refersec{fig:typesignaturecomputationgrammar}
 presents a semi-formal grammar that may aid in understanding
 how the bytes of the flattened type description are formed
 during the type signature computation algorithm of
-Section \refersec{datarep:typesignaturecomputation}. 
+Section \refersec{datarep:typesignaturecomputation}.
 
 \begin{figure}[ht]
 \begin{dwflisting}
@@ -1321,8 +1319,8 @@ empty
 \subsection{Declarations Completing Non-Defining Declarations}
 \label{app:declarationscompletingnondefiningdeclarations}
 Consider a compilation unit that contains a definition of the member
-function \texttt{N::A::v()} from 
-Figure \refersec{fig:typesignatureexamplescsource}. 
+function \texttt{N::A::v()} from
+Figure \refersec{fig:typesignatureexamplescsource}.
 A possible representation of the
 debug information for this function in the compilation unit is shown
 in Figure \refersec{fig:completingedeclarationofamemberfunctiondwarf}.
@@ -1381,11 +1379,11 @@ L4:
 \subsection{\#include compression}
 \label{app:includecompression}
 
-\addtoindex{C++} has a much greater 
-problem than 
+\addtoindex{C++} has a much greater
+problem than
 \addtoindex{C} with the number and
 size of the headers included and the amount of data in each,
-but even with \addtoindex{C} 
+but even with \addtoindex{C}
 there is substantial header file information
 duplication.
 
@@ -1394,10 +1392,10 @@ A reasonable approach is to put each header file in its own
 section groups are marked to ensure duplicate removal.
 
 All data instances and code instances (even if they came
-from the header files above) are put 
+from the header files above) are put
 \addtoindexx{section group}
 into non-section group
-sections such as the base object file 
+sections such as the base object file
 \dotdebuginfo{} section.
 
 \subsection{Eliminating function duplication}
@@ -1414,19 +1412,19 @@ this function, should be reduced to just a single copy.
 For each such code group (function template in this example)
 the compiler assigns a name for the group which will match
 all other instantiations of this function but match nothing
-else. 
-The 
+else.
+The
 \addtoindexx{section group}
 section groups are marked to ensure duplicate
 removal, so that the second and subsequent definitions seen
 by the static linker are simply discarded.
 
 
-References to other 
+References to other
 \dotdebuginfo{} sections follow the approach
 suggested above, but the naming rule is slightly
-different in that the \texttt{\textless file-designator\textgreater} 
-should be interpreted as a 
+different in that the \texttt{\textless file-designator\textgreater}
+should be interpreted as a
 \bb
 \texttt{\textless function-designator\textgreater}.
 \eb
@@ -1438,7 +1436,7 @@ should be interpreted as a
 Section groups can help make it easy for a linker to completely
 remove unused functions.
 
-Such 
+Such
 \addtoindexx{section group}
 section groups are not marked for duplicate removal,
 since the functions are not duplicates of anything.
@@ -1450,12 +1448,12 @@ text, data, and DWARF sections.
 There will also be a compilation unit that has the file\dash level
 declarations and definitions. Other per\dash function compilation
 unit DWARF information (\dotdebuginfo{}) points to this common
-file\dash level compilation unit using 
+file\dash level compilation unit using
 \DWTAGimportedunit.
 
 Section groups can use \DWFORMrefaddr{} and internal labels
 (section\dash relative relocations) to refer to the main object
-file sections, as the 
+file sections, as the
 \addtoindexx{section group}
 section groups here are either deleted
 as unused or kept. There is no possibility (aside from error)
@@ -1470,9 +1468,9 @@ Abstract instances
 \addtoindexx{abstract instance}
 \addtoindexx{concrete out-of-line instance}
 and concrete-out-of-line instances may be
-put in distinct compilation units using 
+put in distinct compilation units using
 \addtoindexx{section group}
-section groups. 
+section groups.
 This
 makes possible some useful duplicate DWARF elimination.
 
@@ -1490,4 +1488,3 @@ Each complete declaration of a globally-visible type can be
 placed in its own separate type section, with a group key
 derived from the type signature. The linker can then remove
 all duplicate type declarations based on the key.
-

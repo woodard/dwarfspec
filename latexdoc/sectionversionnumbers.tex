@@ -10,7 +10,7 @@ changes to that section are made. The DWARF standard that
 a producer is following is not explicitly encoded in the
 file. Version numbers in the section headers are represented
 \bb
-as two-byte unsigned integers. 
+as two-byte unsigned integers.
 \eb
 
 Table \refersec{tab:sectionversionnumbers}
@@ -22,21 +22,21 @@ numbers are in use for each section. In that table:
 \item  \doublequote{V3} means \addtoindex{DWARF Version 3}, published December 20, 2005.
 \item  \doublequote{V4} means \addtoindex{DWARF Version 4}, published June 10, 2010.
 \item  \doublequote{V5} means \addtoindex{DWARF Version 5}, published February 13, 2017.
-\item  
+\item
 
 		\bb
 		\doublequote{V6} means\ \addtoindex{DWARF Version 6}\eb
 		    \footnote{
-				Higher numbers are reserved for future use.},  
+				Higher numbers are reserved for future use.},
 			published \ifthenelse{\boolean{isdraft}}{\textit{<to be determined>}}{\docdate}.
 
 \end{itemize}
 
 There are sections with no version number encoded in them;
-they are only accessed via the 
-\dotdebuginfo{} 
+they are only accessed via the
+\dotdebuginfo{}
 sections and so an incompatible change in those sections'
-format would be represented by a change in the 
+format would be represented by a change in the
 \dotdebuginfo{} section version number.
 
 \needlines{10}
@@ -44,14 +44,14 @@ format would be represented by a change in the
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{lccccc}
   \caption{Section version numbers} \label{tab:sectionversionnumbers} \\
-  \hline 
+  \hline
 \bbeb
-  \bfseries Section Name &\bfseries V2 &\bfseries V3 &\bfseries V4 
+  \bfseries Section Name &\bfseries V2 &\bfseries V3 &\bfseries V4
                          &\bfseries V5 &\bfseries V6 \\
   \hline
 \endfirsthead
-   \bfseries Section Name &\bfseries V2 &\bfseries V3 &\bfseries V4 
-						  &\bfseries V5 &\bfseries V6 \\ 
+   \bfseries Section Name &\bfseries V2 &\bfseries V3 &\bfseries V4
+						  &\bfseries V5 &\bfseries V6 \\
    \hline
 \endhead
   \hline \emph{Continued on next page}
@@ -60,7 +60,8 @@ format would be represented by a change in the
 \endlastfoot
 \dotdebugabbrev{}   & * & * & * & * & * \\
 \dotdebugaddr{}	    & - & - & - & 5 & 5 \\
-\dotdebugaranges{}  & 2 & 2 & 2 & 2 & 2 \\
+\bbeb
+\dotdebugaranges{}  & 2 & 2 & 2 & 2 & - \\
 \dotdebugframe{}\footnote{\textit{For the \dotdebugframe{} section, version 2 is unused.}}
                     & 1 & 3 & 4 & 4 & 4 \\
 \dotdebuginfo{}     & 2 & 3 & 4 & 5 & 5 \\
@@ -91,7 +92,7 @@ format would be represented by a change in the
 \dotdebugmacrodwo   & - & - & - & 5 & 5 \\
 \dotdebugrnglistsdwo& - & - & - & 5 & 5 \\
 \dotdebugstrdwo     & - & - & - & * & * \\
-\dotdebugstroffsetsdwo 
+\dotdebugstroffsetsdwo
                     & - & - & - & 5 & 5 \\
 \\
 \multicolumn{6}{c}{\textit{(package file sections)}}
@@ -110,7 +111,6 @@ Notes:
 (the section does not include a header or the section's header does not include a version).
 \item  \doublequote{-} means that the section was not defined in that
 version of the DWARF standard.
-\item  The version numbers for corresponding .debug\_<kind> and .debug\_<kind>.dwo 
+\item  The version numbers for corresponding .debug\_<kind> and .debug\_<kind>.dwo
 sections are the same.
 \end{itemize}
-

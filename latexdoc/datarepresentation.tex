@@ -13,34 +13,34 @@ and of other fundamental elements described above.
 \addtoindexx{producer-specific extensions|see{extensibility}}
 \addtoindexx{producer extensibility|see{extensibility}}
 To reserve a portion of the DWARF name space and ranges of
-enumeration values for use for 
+enumeration values for use for
 \bb
-producer-specific 
+producer-specific
 \eb
 extensions,
 special labels are reserved for tag names, attribute names,
 base type encodings, location operations, language names,
 calling conventions and call frame instructions.
 
-The labels denoting the beginning and end of the 
-\hypertarget{chap:DWXXXlohiuser}{reserved value range} for 
+The labels denoting the beginning and end of the
+\hypertarget{chap:DWXXXlohiuser}{reserved value range} for
 \bb
-producer-specific 
+producer-specific
 \eb
 extensions consist of the
-appropriate prefix 
-(\DWATlouserMARK{}\DWAThiuserMARK{}DW\_AT, 
-\DWATElouserMARK{}\DWATEhiuserMARK{}DW\_ATE, 
-\DWCClouserMARK{}\DWCChiuserMARK{}DW\_CC, 
-\DWCFAlouserMARK{}\DWCFAhiuserMARK{}DW\_CFA, 
-\DWENDlouserMARK{}\DWENDhiuserMARK{}DW\_END, 
-\DWIDXlouserMARK{}\DWIDXhiuserMARK{}DW\_IDX, 
+appropriate prefix
+(\DWATlouserMARK{}\DWAThiuserMARK{}DW\_AT,
+\DWATElouserMARK{}\DWATEhiuserMARK{}DW\_ATE,
+\DWCClouserMARK{}\DWCChiuserMARK{}DW\_CC,
+\DWCFAlouserMARK{}\DWCFAhiuserMARK{}DW\_CFA,
+\DWENDlouserMARK{}\DWENDhiuserMARK{}DW\_END,
+\DWIDXlouserMARK{}\DWIDXhiuserMARK{}DW\_IDX,
 \bb
 \DWLLElouserMARK{}\DWLLEhiuserMARK{}DW\_LLE,
 \DWLNAMElouserMARK{}\DWLNAMEhiuserMARK{}DW\_LNAME,
-\eb 
-\DWLNCTlouserMARK{}\DWLNCThiuserMARK{}DW\_LNCT, 
-\DWLNElouserMARK{}\DWLNEhiuserMARK{}DW\_LNE, 
+\eb
+\DWLNCTlouserMARK{}\DWLNCThiuserMARK{}DW\_LNCT,
+\DWLNElouserMARK{}\DWLNEhiuserMARK{}DW\_LNE,
 \DWMACROlouserMARK{}\DWMACROhiuserMARK{}DW\_MACRO,
 \DWOPlouserMARK{}\DWOPhiuserMARK{}DW\_OP,
 \bb
@@ -48,10 +48,10 @@ appropriate prefix
 \eb
 \DWTAGlouserMARK{}\DWTAGhiuserMARK{}DW\_TAG,
 \DWUTlouserMARK{}\DWUThiuserMARK{}DW\_UT)
-followed by \_lo\_user or \_hi\_user. 
-Values in the  range between \textit{prefix}\_lo\_user 
+followed by \_lo\_user or \_hi\_user.
+Values in the  range between \textit{prefix}\_lo\_user
 and \textit{prefix}\_hi\_user inclusive,
-are reserved for 
+are reserved for
 \bb
 producer-specific extensions. Producers
 \eb
@@ -62,38 +62,38 @@ for use by the system.
 \textit{For example, for debugging information entry
 tags, the special labels are \DWTAGlouserNAME{} and \DWTAGhiuserNAME.}
 
-\textit{There may also be codes for 
+\textit{There may also be codes for
 \bb
-producer-specific 
+producer-specific
 \eb
 extensions
 between the number of standard line number opcodes and
 the first special line number opcode. However, since the
 number of standard opcodes varies with the DWARF version,
 the range for extensions is also version dependent. Thus,
-\DWLNSlouserTARG{} and 
+\DWLNSlouserTARG{} and
 \DWLNShiuserTARG{} symbols are not defined.}
 
-Producer-defined 
+Producer-defined
 \bbeb
 tags, attributes, base type encodings, location
 atoms, language names, line number actions, calling conventions
-and call frame instructions, 
+and call frame instructions,
 \bb
 use the form
-\text{prefix\_producer\_id\_name} by historical convention, where 
-\textit{producer\_id}\addtoindexx{producer id} 
+\text{prefix\_producer\_id\_name} by historical convention, where
+\textit{producer\_id}\addtoindexx{producer id}
 \eb
 is some identifying
-character sequence chosen so as to avoid conflicts with other 
+character sequence chosen so as to avoid conflicts with other
 \bb
-producers. While this convention is not strictly necessary, 
+producers. While this convention is not strictly necessary,
 it is still recommended.
 \eb
 
-To ensure that extensions added by one 
+To ensure that extensions added by one
 \bb
-producer 
+producer
 \eb
 may be safely
 ignored by consumers that do not understand those extensions,
@@ -121,7 +121,7 @@ the semantics of previously existing tags.
 \label{datarep:errorvalues}
 \addtoindexx{reserved values!error}
 
-As 
+As
 \addtoindexx{error value}
 a convenience for consumers of DWARF information, the value
 0 is reserved in the encodings for attribute names, attribute
@@ -137,16 +137,16 @@ not appear in DWARF debugging information.
 \label{datarep:initiallengthvalues}
 \addtoindexx{reserved values!initial length}
 
-An \livetarg{datarep:initiallengthvalues}{initial length} field 
+An \livetarg{datarep:initiallengthvalues}{initial length} field
 \addtoindexx{initial length field|see{initial length}}
-is one of the fields that occur at the beginning 
+is one of the fields that occur at the beginning
 of those DWARF sections that have a header
-(\dotdebugaranges{}, 
-\dotdebuginfo{}, 
+\db	% Delete \dotdebugaranges{},
+(\dotdebuginfo{},
 \dotdebugline{},
 \dotdebugloclists{},
 \dotdebugnames{} and
-\dotdebugrnglists) 
+\dotdebugrnglists)
 or the length field
 that occurs at the beginning of the CIE and FDE structures
 in the \dotdebugframe{} section.
@@ -156,13 +156,13 @@ In an \addtoindex{initial length} field, the values \wfffffffzero through
 \wffffffff are reserved by DWARF to indicate some form of
 extension relative to \DWARFVersionII; such values must not
 be interpreted as a length field. The use of one such value,
-\xffffffff, is defined in Section 
-\db\refersec{datarep:32bitand64bitdwarfformats}; 
+\xffffffff, is defined in Section
+\db\refersec{datarep:32bitand64bitdwarfformats};
 the use of
 the other values is reserved for possible future extensions.
 
 
-\section{Relocatable, Split, Executable, Shared, Package and Supplementary Object Files} 
+\section{Relocatable, Split, Executable, Shared, Package and Supplementary Object Files}
 \label{datarep:executableobjectsandsharedobjects}
 
 \subsection{Relocatable Object Files}
@@ -176,7 +176,7 @@ relocates the contents of each object file into a combined virtual
 address space.
 
 The DWARF debugging information is placed in several sections (see
-Appendix \refersec{app:debugsectionrelationshipsinformative}), and 
+Appendix \refersec{app:debugsectionrelationshipsinformative}), and
 requires an object file format capable of
 representing these separate sections. There are symbolic references
 between these sections, and also between the debugging information
@@ -187,7 +187,7 @@ object file format and the target processor architecture. These
 references include the following:
 
 \begin{itemize}
-\item The compilation unit header (see Section 
+\item The compilation unit header (see Section
 \refersec{datarep:unitheaders}) in the \dotdebuginfo{}
 section contains a reference to the \dotdebugabbrev{} table. This
 reference requires a relocation so that after linking, it refers to
@@ -195,35 +195,35 @@ that contribution to the combined \dotdebugabbrev{} section in the
 executable file.
 
 \item Debugging information entries may have attributes with the form
-\DWFORMaddr{} (see Section \refersec{datarep:attributeencodings}). 
+\DWFORMaddr{} (see Section \refersec{datarep:attributeencodings}).
 These attributes represent locations
 within the virtual address space of the program, and require
 relocation.
 
-\item A DWARF expression may contain a \DWOPaddr{} (see Section 
-\refersec{chap:literalencodings}) which contains a location within 
+\item A DWARF expression may contain a \DWOPaddr{} (see Section
+\refersec{chap:literalencodings}) which contains a location within
 the virtual address space of the program, and require relocation.
 
 \needlines{4}
 \item Debugging information entries may have attributes with the form
-\DWFORMsecoffset{} (see Section \refersec{datarep:attributeencodings}). 
+\DWFORMsecoffset{} (see Section \refersec{datarep:attributeencodings}).
 These attributes refer to
 debugging information in other debugging information sections within
 the object file, and must be relocated during the linking process.
 
 \item Debugging information entries may have attributes with the form
-\DWFORMrefaddr{} (see Section \refersec{datarep:attributeencodings}). 
+\DWFORMrefaddr{} (see Section \refersec{datarep:attributeencodings}).
 These attributes refer to
 debugging information entries that may be outside the current
 compilation unit. These values require both symbolic binding and
 relocation.
 
 \item Debugging information entries may have attributes with the form
-\DWFORMstrp{} 
+\DWFORMstrp{}
 \bb
 or \DWFORMstrpeight{}
 \eb
-(see Section \refersec{datarep:attributeencodings}). 
+(see Section \refersec{datarep:attributeencodings}).
 These attributes refer to strings in
 the \dotdebugstr{} section. These values require relocation.
 
@@ -234,12 +234,13 @@ These entries refer to strings in the \dotdebugstr{} section.
 These values require relocation.
 \eb
 
-\item Entries in the \dotdebugaddr{} and \dotdebugaranges{}
-sections may contain references to locations within the virtual address
+\item Entries in the \dotdebugaddr{}
+\db	% and \dotdebugaranges
+section may contain references to locations within the virtual address
 space of the program, and thus require relocation.
 
 \item Entries in the \dotdebugloclists{} and \dotdebugrnglists{} sections may
-contain references to locations within the virtual address space of the 
+contain references to locations within the virtual address space of the
 program depending on whether certain kinds of location or range
 list entries are used, and thus require relocation.
 
@@ -253,23 +254,26 @@ of these offsets requires relocation. Depending on the implementation,
 these relocations may be implicit (that is, the producer may not need to
 emit any explicit relocation information for these offsets).
 
-\item The \HFNdebuginfooffset{} field in the \dotdebugaranges{} header and 
-the list of compilation units following the \dotdebugnames{} header contain 
-references to the \dotdebuginfo{} section.  These references require relocation 
-so that after linking they refer to the correct contribution in the combined 
+\item The \HFNdebuginfooffset{} field in the
+\bb
+headers of the compilation units listed
+\eb
+following the \dotdebugnames{} header contain
+references to the \dotdebuginfo{} section.  These references require relocation
+so that after linking they refer to the correct contribution in the combined
 \dotdebuginfo{} section in the executable file.
 
-\item Frame descriptor entries in the \dotdebugframe{} section 
-(see Section \refersec{chap:structureofcallframeinformation}) contain an 
-\HFNinitiallocation{} field value within the virtual address 
-space of the program and require relocation. 
+\item Frame descriptor entries in the \dotdebugframe{} section
+(see Section \refersec{chap:structureofcallframeinformation}) contain an
+\HFNinitiallocation{} field value within the virtual address
+space of the program and require relocation.
 
 \end{itemize}
 
 \needlines{4}
-\textit{Note that operands of classes 
-\CLASSconstant{} and 
-\CLASSflag{} do not require relocation. Attribute operands that use 
+\textit{Note that operands of classes
+\CLASSconstant{} and
+\CLASSflag{} do not require relocation. Attribute operands that use
 forms \DWFORMstring{},
 \DWFORMrefone, \DWFORMreftwo, \DWFORMreffour, \DWFORMrefeight, or
 \DWFORMrefudata{} also do not need relocation.}
@@ -280,7 +284,7 @@ forms \DWFORMstring{},
 A DWARF producer may partition the debugging
 information such that the majority of the debugging
 information can remain in individual object files without
-being processed by the linker. 
+being processed by the linker.
 
 \textit{This reduces link time by reducing the amount of information
 the linker must process.}
@@ -295,8 +299,11 @@ and includes the following:
 \item
 The line number tables, frame tables, and
 accelerated access tables, in the usual sections:
-\dotdebugline, \dotdebuglinestr, 
-\dotdebugframe, \dotdebugnames{} and \dotdebugaranges,
+\dotdebugline, \dotdebuglinestr,
+\bb
+\dotdebugframe{} and \dotdebugnames{},
+\eb
+\db	% and \dotdebugaranges,
 respectively.
 \needlines{4}
 \item
@@ -304,13 +311,13 @@ An address table, in the \dotdebugaddr{} section. This table
 contains all addresses and constants that require
 link-time relocation, and items in the table can be
 referenced indirectly from the debugging information via
-the \DWFORMaddrxXNand{} forms, 
+the \DWFORMaddrxXNand{} forms,
 by the \DWOPaddrx{} and \DWOPconstx{} operators, and
 by certain of the \texttt{DW\_LLE\_*} location list
 and \texttt{DW\_RLE\_*} range list entries.
 \item
 A skeleton compilation unit, as described in Section
-\refersec{chap:skeletoncompilationunitentries}, 
+\refersec{chap:skeletoncompilationunitentries},
 in the \dotdebuginfo{} section.
 \item
 An abbreviations table for the skeleton compilation unit,
@@ -323,19 +330,19 @@ table is necessary only if the skeleton compilation unit
 uses one of the indirect string forms (\DWFORMstrp{},
 \bb
 \DWFORMstrpeight{},
-\eb 
+\eb
 \DWFORMstrxXNor).
 
 \needlines{4}
 \item
 A string offsets table, in the \dotdebugstroffsets{}
-section for strings in the \dotdebugstr{} section. 
+section for strings in the \dotdebugstr{} section.
 The string offsets table is necessary only if
-the skeleton compilation unit uses 
+the skeleton compilation unit uses
 one of the indexed string forms (\DWFORMstrxXN).
 \end{itemize}
 The attributes contained in the skeleton compilation
-unit can be used by a DWARF consumer to find the 
+unit can be used by a DWARF consumer to find the
 DWARF object file that contains the second partition.
 
 \subsubsection{Second Partition (Unlinked or in a \texttt{.dwo} File)}
@@ -351,12 +358,12 @@ file. This partition includes the following:
 The full compilation unit, in the \dotdebuginfodwo{} section.
 
 Attributes contained in the full compilation unit
-may refer to machine addresses indirectly using 
-one of the \DWFORMaddrxXNor{} 
+may refer to machine addresses indirectly using
+one of the \DWFORMaddrxXNor{}
 forms, which access the table of addresses specified by the
 \DWATaddrbase{} attribute in the associated skeleton unit.
 Location descriptions may similarly do so using the \DWOPaddrx{} and
-\DWOPconstx{} operations. 
+\DWOPconstx{} operations.
 
 \item Separate type units, in the \dotdebuginfodwo{} section.
 
@@ -365,7 +372,7 @@ Abbreviations table(s) for the compilation unit and type
 units, in the \dotdebugabbrevdwo{} section
 used by the \dotdebuginfodwo{} section.
 
-\item 
+\item
 \bb
 Value lists and location
 \eb
@@ -374,11 +381,11 @@ lists, in the \dotdebugloclistsdwo{} section.
 \item Range lists, in the \dotdebugrnglistsdwo{} section.
 
 \item
-A \addtoindex{specialized line number table} (for the type 
+A \addtoindex{specialized line number table} (for the type
 \bb
-units, and macro information), 
+units, and macro information),
 \eb
-in the \dotdebuglinedwo{} section. 
+in the \dotdebuglinedwo{} section.
 
 This table
 contains only the directory and filename lists needed to
@@ -416,7 +423,7 @@ apply also to the corresponding split DWARF section (for example,
 Split DWARF object files do not get linked with any other files,
 therefore references between sections must not make use of
 normal object file relocation information. As a result, symbolic
-references within or between sections 
+references within or between sections
 \bb
 (such as from using \DWFORMrefaddr{} and \DWOPcallref)
 \eb
@@ -450,7 +457,7 @@ within the debugging information always implicitly indicate which
 section a particular offset refers to. (For example, a reference
 of form \DWFORMsecoffset{} may refer to one of several sections,
 depending on the class allowed by a particular attribute of a
-debugging information entry, as shown in 
+debugging information entry, as shown in
 Table \refersec{tab:attributeencodings}.)
 
 \needlines{6}
@@ -475,7 +482,7 @@ each to be loaded at virtual address 0.
 
 \subsection{DWARF Package Files}
 \label{datarep:dwarfpackagefiles}
-\textit{Using \splitDWARFobjectfile{s} allows the developer to compile, 
+\textit{Using \splitDWARFobjectfile{s} allows the developer to compile,
 link, and debug an application quickly with less link-time overhead,
 but a more convenient format is needed for saving the debug
 information for later debugging of a deployed application. A
@@ -492,7 +499,7 @@ A DWARF package file is itself an object file, using the
 \addtoindexx{package files}
 \addtoindexx{DWARF package files}
 same object file format (including \byteorder) as the
-corresponding application binary. It 
+corresponding application binary. It
 \bb
 contains
 \eb
@@ -515,7 +522,7 @@ files, and combined, section by section:
 \end{alltt}
 
 The string table section in \dotdebugstrdwo{} contains all the
-strings referenced from DWARF attributes using 
+strings referenced from DWARF attributes using
 any of the forms
 \DWFORMstrxXNor. Any attribute in a compilation unit or a type
 unit using this form refers to an entry in that unit's
@@ -563,7 +570,7 @@ within its corresponding section and a size.
 Each \typeunitset{} may contain contributions from the following
 sections:
 \begin{alltt}
-    \dotdebuginfodwo{} (required) 
+    \dotdebuginfodwo{} (required)
     \dotdebugabbrevdwo{} (required)
     \dotdebuglinedwo
     \dotdebugstroffsetsdwo
@@ -585,7 +592,7 @@ The index section header contains the following fields:
 \begin{enumerate}[1. ]
 \item \HFNversion{} (\HFTuhalf) \\
 A version number.
-\addtoindexx{version number!CU index information} 
+\addtoindexx{version number!CU index information}
 \addtoindexx{version number!TU index information}
 This number is specific to the CU and TU index information
 and is independent of the DWARF version number.
@@ -594,10 +601,10 @@ The version number is \versiondotdebugcuindex.
 
 \bb
 \item \HFNoffsetsizeflag{} (\HFTuhalf) \\
-If the \HFNoffsetsizeflag{} is zero, the header is for a 32-bit 
-DWARF format unit index section and all offsets and lengths 
-are 4 bytes long; if it is one, the header is for a 64-bit 
-DWARF format unit index section and all offsets and lengths 
+If the \HFNoffsetsizeflag{} is zero, the header is for a 32-bit
+DWARF format unit index section and all offsets and lengths
+are 4 bytes long; if it is one, the header is for a 64-bit
+DWARF format unit index section and all offsets and lengths
 are 8 bytes long.
 \eb
 
@@ -629,10 +636,10 @@ of an array of $S$ 8-byte slots. Each slot contains a 64-bit
 signature.
 % (using the \byteorder{} of the application binary).
 
-The parallel table of indices begins immediately after the hash table 
+The parallel table of indices begins immediately after the hash table
 (at offset \mbox{$16 + 8 * S$} from the beginning of the section), and
 consists of an array of $S$ 4-byte slots,
-% (using the byte order of the application binary), 
+% (using the byte order of the application binary),
 corresponding 1-1 with slots in the hash
 table. Each entry in the parallel table contains a row index into
 the tables of offsets and sizes.
@@ -644,7 +651,7 @@ value, the row index in a used slot will always be non-zero.
 Given an 8-byte compilation unit ID or type signature $X$,
 an entry in the hash table is located as follows:
 \begin{enumerate}[1. ]
-\item Define $REP(X)$ to be the value of $X$ interpreted as an 
+\item Define $REP(X)$ to be the value of $X$ interpreted as an
       unsigned 64-bit integer in the target byte order.
 \item Calculate a primary hash $H = REP(X)\ \&\ MASK(k)$, where
       $MASK(k)$ is a mask with the low-order $k$ bits all set to 1.
@@ -665,12 +672,12 @@ table (at offset \mbox{$16 + 12 * S$} from the beginning of the section).
 This table consists of a single header row containing $N$ fields,
 each a 4-byte unsigned integer, followed by $U$ data rows, each
 \bb
-containing $N$ unsigned integer fields of size specified 
-by the index header \HFNoffsetsizeflag{} field. 
+containing $N$ unsigned integer fields of size specified
+by the index header \HFNoffsetsizeflag{} field.
 \eb
-The fields in the header row provide a section identifier referring 
+The fields in the header row provide a section identifier referring
 to a debug section; the available section identifiers are shown in
-Table \referfol{tab:dwarfpackagefilesectionidentifierencodings}. 
+Table \referfol{tab:dwarfpackagefilesectionidentifierencodings}.
 Each data row corresponds to a specific CU
 or TU in the package file. In the data rows, each field provides
 an offset to the debug section whose identifier appears in the
@@ -705,7 +712,7 @@ starting at 1.
 \end{longtable}
 \end{centering}
 
-The offsets provided by the CU and TU index sections are the 
+The offsets provided by the CU and TU index sections are the
 base offsets for the contributions made by each CU or TU to the
 corresponding section in the package file. Each CU and TU header
 contains a \HFNdebugabbrevoffset{} field, used to find the abbreviations
@@ -715,16 +722,16 @@ interpreted as relative to the base offset given in the index
 section. Likewise, offsets into \dotdebuglinedwo{} from
 \DWATstmtlist{} attributes are interpreted as relative to
 the base offset for \dotdebuglinedwo{}, and offsets into other debug
-sections obtained from DWARF attributes are also 
+sections obtained from DWARF attributes are also
 interpreted as relative to the corresponding base offset.
 
 The table of sizes begins immediately following the table of
 offsets, and provides the sizes of the contributions made by each
-CU or TU to the corresponding section in the package file. 
-This table consists of U data rows, each with 
+CU or TU to the corresponding section in the package file.
+This table consists of U data rows, each with
 \bb
-$N$ unsigned integer fields of size specified by 
-the index header \HFNoffsetsizeflag{} field. 
+$N$ unsigned integer fields of size specified by
+the index header \HFNoffsetsizeflag{} field.
 \eb
 Each data row corresponds to the same CU or TU
 as the corresponding data row in the table of offsets described
@@ -746,44 +753,44 @@ object files, which allow the compiler to split the debugging information betwee
 multiple files in order to reduce link time and executable size.}
 
 \needlines{4}
-A DWARF \addtoindex{supplementary object file} is itself an object file, 
+A DWARF \addtoindex{supplementary object file} is itself an object file,
 using the same object
-file format, \byteorder{}, and size as the corresponding application 
-executables or shared libraries. It 
+file format, \byteorder{}, and size as the corresponding application
+executables or shared libraries. It
 \bb
 contains
 \eb
-a file header, section table, and a number of DWARF debug information 
+a file header, section table, and a number of DWARF debug information
 sections.  Both the \addtoindex{supplementary object file}
-and all the executable or shared object files that reference entries or 
-strings in that file must contain a \dotdebugsup{} section that establishes 
+and all the executable or shared object files that reference entries or
+strings in that file must contain a \dotdebugsup{} section that establishes
 the relationship.
 
 The \dotdebugsup{} section contains:
 \begin{enumerate}[1. ]
 \item \HFNversion{} (\HFTuhalf) \\
 A 2-byte unsigned integer representing the version of the DWARF
-information for the compilation unit. 
+information for the compilation unit.
 
 The value in this field is \versiondotdebugsup.
 
 \item \HFNissupplementary{} (\HFTubyte) \\
 A 1-byte unsigned integer, which contains the value 1 if it is
-in the \addtoindex{supplementary object file} that other executable or 
-shared object files refer to, or 0 if it is an executable or shared object 
+in the \addtoindex{supplementary object file} that other executable or
+shared object files refer to, or 0 if it is an executable or shared object
 referring to a \addtoindex{supplementary object file}.
 
 \needlines{4}
 \item \HFNsupfilename{} (null terminated filename string) \\
-If \HFNissupplementary{} is 0, this contains either an absolute 
-filename for the \addtoindex{supplementary object file}, or a filename 
-relative to the object file containing the \dotdebugsup{} section.  
+If \HFNissupplementary{} is 0, this contains either an absolute
+filename for the \addtoindex{supplementary object file}, or a filename
+relative to the object file containing the \dotdebugsup{} section.
 If \HFNissupplementary{} is 1, then \HFNsupfilename{}
 is not needed and must be an empty string (a single null byte).
 
 \needlines{4}
 \item \HFNsupchecksumlen{} (unsigned LEB128) \\
-Length of the following \HFNsupchecksum{} field; 
+Length of the following \HFNsupchecksum{} field;
 this value can be 0 if no checksum is provided.
 
 \item \HFNsupchecksum{} (array of \HFTubyte) \\
@@ -794,25 +801,25 @@ provides unique identification of the supplementary file.
 
 \needlines{5}
 Debug information entries that refer to an executable's or shared
-object's addresses must \emph{not} be moved to supplementary files 
+object's addresses must \emph{not} be moved to supplementary files
 (the addresses will likely not be the same). Similarly,
 entries referenced from within location descriptions or using loclistsptr
 form attributes must not be moved to a \addtoindex{supplementary object file}.
 
 Executable or shared object file compilation units can use
 \DWTAGimportedunit{} with an
-\DWATimport{} attribute that uses form \DWFORMrefsupfour{} or \DWFORMrefsupeight{} 
-to import entries from the \addtoindex{supplementary object file}, 
+\DWATimport{} attribute that uses form \DWFORMrefsupfour{} or \DWFORMrefsupeight{}
+to import entries from the \addtoindex{supplementary object file},
 \bb
-form \DWFORMrefsupfour{} or \DWFORMrefsupeight{} 
+form \DWFORMrefsupfour{} or \DWFORMrefsupeight{}
 \eb
 to refer directly to individual entries in the supplementary file, or
 \bb
-form \DWFORMstrpsup{} or \DWFORMstrpsupeight{} 
+form \DWFORMstrpsup{} or \DWFORMstrpsupeight{}
 \eb
 to refer to strings that are used by debug information of multiple
 executables or shared object files.  Within the \addtoindex{supplementary object file}'s
-debugging sections, forms \DWFORMrefsupfour{}, 
+debugging sections, forms \DWFORMrefsupfour{},
 \bb
 \DWFORMrefsupeight{}, \DWFORMstrpsup{} and \DWFORMstrpsupeight{}
 \eb
@@ -820,22 +827,22 @@ are not used, and all reference forms referring to \db other sections
 refer to the local sections in the \addtoindex{supplementary object file}.
 
 \needlines{8}
-In macro information, 
+In macro information,
 \bb
 \DWMACROdefinesupfour{},
 \DWMACROdefinesupeight{},
 \DWMACROundefsupfour{}
  and
-\DWMACROundefsupeight{} 
+\DWMACROundefsupeight{}
 \eb
-opcodes can refer to strings in the 
+opcodes can refer to strings in the
 \dotdebugstr{} section of the \addtoindex{supplementary object file},
 \bb
-while 
+while
 \DWMACROimportsupfour{} and \DWMACROimportsupeight{}
 \eb
-can refer to \dotdebugmacro{} section entries.  Within the 
-\dotdebugmacro{} section of a \addtoindex{supplementary object file}, 
+can refer to \dotdebugmacro{} section entries.  Within the
+\dotdebugmacro{} section of a \addtoindex{supplementary object file},
 \DWMACROdefinestrp{} and \DWMACROundefstrp{}
 opcodes refer to the local \dotdebugstr{} section in that
 supplementary file, not the one in
@@ -868,14 +875,15 @@ can coexist and be distinguished within a single linked object.
 
 \bb
 The 32-bit and 64-bit DWARF format conventions must \emph{not} be
-intermixed within a single compilation 
-unit, except for contributions to the \dotdebugstroffsets{}, 
+intermixed within a single compilation
+unit, except for contributions to the \dotdebugstroffsets{},
 \dotdebugstroffsetsdwo, or \dotdebugnames{} sections.
 \eb
 
-\textit{The exception for the \dotdebugstroffsets{} section enables 
-an executable program with a mixture of 32-bit and 64-bit DWARF compilation 
-units to refer to any string in the merged \dotdebugstr{} section, 
+\bb
+\textit{The exception for the \dotdebugstroffsets{} section enables
+an executable program with a mixture of 32-bit and 64-bit DWARF compilation
+units to refer to any string in the merged \dotdebugstr{} section,
 even if that section exceeds 4GB in size.}
 \eb
 
@@ -886,7 +894,7 @@ apply also to the corresponding split DWARF section (for example,
 
 \bb
 \textit{Attribute values and section header fields that represent
-addresses in the target program are not affected by the rules that 
+addresses in the target program are not affected by the rules that
 follow.}
 \eb
 
@@ -895,8 +903,8 @@ The differences between the 32- and 64-bit DWARF formats are
 detailed in the following:
 \begin{enumerate}[1. ]
 
-\item  In the 32-bit DWARF format, an 
-\addtoindex{initial length} field 
+\item  In the 32-bit DWARF format, an
+\addtoindex{initial length} field
 \bb
 (see Section \refersec{datarep:initiallengthvalues}).
 \eb
@@ -923,11 +931,11 @@ fields that occur
 \addtoindexx{section offset!use in headers}
 in the headers of DWARF sections (other than initial length
 \addtoindexx{initial length}
-fields) 
+fields)
 \bb
 depend on the choice of DWARF format as follows: for
 \eb
-the 32-bit DWARF format these are 4-byte unsigned integer values; 
+the 32-bit DWARF format these are 4-byte unsigned integer values;
 \bb
 for
 \eb
@@ -937,13 +945,13 @@ the 64-bit DWARF format, they are 8-byte unsigned integer values.
 \begin{center}
 \begin{tabular}{lll}
 Section &Name & Role  \\ \hline
-\dotdebugaranges{}   & \HFNdebuginfooffset{}   	& offset in \dotdebuginfo{} \\
+\db	%\dotdebugaranges{} & \HFNdebuginfooffset{} & offset in \dotdebuginfo{} \\
 \dotdebugframe{}/CIE & \HFNCIEid{}              & CIE distinguished value \\
 \dotdebugframe{}/FDE & \HFNCIEpointer{}      	& offset in \dotdebugframe{} \\
 \dotdebuginfo{}      & \HFNdebugabbrevoffset{}	& offset in \dotdebugabbrev{} \\
 \dotdebugline{}      & \HFNheaderlength{}       & length of header itself \\
 \dotdebugnames{}     & entry in array of CUs    & offset in \dotdebuginfo{} \\
-                     & or local TUs             & \\ 
+                     & or local TUs             & \\
 \hline
 \end{tabular}
 \end{center}
@@ -958,9 +966,9 @@ each other (both offset and size).
 
 \item Within the body of the \dotdebuginfo{}
 section, certain forms of attribute value depend on the choice
-of DWARF format as 
+of DWARF format as
 \bb
-follows: for 
+follows: for
 \eb
 the 32-bit DWARF format,
 the value is a 4-byte unsigned integer; for the 64-bit DWARF
@@ -969,7 +977,7 @@ format, the value is an 8-byte unsigned integer.
 \begin{center}
 \begin{nolinenumbersenv}
 \begin{tabular}{lp{6cm}}
-Form             & Role  \\ 
+Form             & Role  \\
 \hline
 \DWFORMlinestrp  & offset in \dotdebuglinestr \\
 \DWFORMrefaddr   & offset in \dotdebuginfo{} \\
@@ -992,7 +1000,7 @@ description depend on the choice of DWARF format as follows: for the
 \begin{center}
 \begin{nolinenumbersenv}
 \begin{tabular}{lp{6cm}}
-Form             & Role  \\ 
+Form             & Role  \\
 \hline
 \DWFORMlinestrp  & offset in \dotdebuglinestr \\
 \hline
@@ -1000,12 +1008,12 @@ Form             & Role  \\
 \end{nolinenumbersenv}
 \end{center}
 
-\item Within the body of the \dotdebugnames{} 
+\item Within the body of the \dotdebugnames{}
 sections, the representation of each entry in the array of
 compilation units (CUs) and the array of local type units
-(TUs), which represents an offset in the 
+(TUs), which represents an offset in the
 \dotdebuginfo{}
-section, depends on the DWARF format as follows: 
+section, depends on the DWARF format as follows:
 \bb
 for
 \eb
@@ -1016,13 +1024,13 @@ for
 the 64-bit DWARF format, it is a 8-byte unsigned integer.
 
 \needlines{4}
-\item In the body of the \dotdebugstroffsets{} 
+\item In the body of the \dotdebugstroffsets{}
 sections, the size of entries in the body depend on the DWARF
-format as follows: 
+format as follows:
 \bb
 for
 \eb
-the 32-bit DWARF format, entries are 4-byte unsigned integer values; 
+the 32-bit DWARF format, entries are 4-byte unsigned integer values;
 \bb
 for
 \eb
@@ -1030,16 +1038,16 @@ the 64-bit DWARF format, they are 8-byte unsigned integers.
 
 \needlines{4}
 \item Within the body of the \dotdebugloclists{} and \dotdebugrnglists{}
-sections, the offsets 
+sections, the offsets
 \bb
-that 
+that
 \eb
 follow the header depend on the
-DWARF format as follows: 
+DWARF format as follows:
 \bb
 for
 \eb
-the 32-bit DWARF format, offsets are 4-byte unsigned integer values; 
+the 32-bit DWARF format, offsets are 4-byte unsigned integer values;
 \bb
 for
 \eb
@@ -1054,7 +1062,7 @@ A DWARF consumer that supports the 64-bit DWARF format must
 support executables in which some compilation units use the
 32-bit format and others use the 64-bit format provided that
 the combination links correctly (that is, provided that there
-are no link\dash time errors due to truncation or overflow). 
+are no link\dash time errors due to truncation or overflow).
 (An implementation is not required to guarantee detection and
 reporting of all such errors.)
 
@@ -1077,26 +1085,26 @@ executable libraries can still be used.}
 For each compilation unit compiled with a DWARF producer,
 a contribution is made to the \dotdebuginfo{} section of
 the object file. Each such contribution consists of a
-compilation unit header 
-(see Section \refersec{datarep:compilationunitheader}) 
-followed by a single \DWTAGcompileunit{} or 
+compilation unit header
+(see Section \refersec{datarep:compilationunitheader})
+followed by a single \DWTAGcompileunit{} or
 \DWTAGpartialunit{} debugging
 information entry, together with its children.
 
 For each type defined in a compilation unit, a separate
-contribution may also be made to the \dotdebuginfo{} 
+contribution may also be made to the \dotdebuginfo{}
 section of the object file. Each
-such contribution consists of a \addtoindex{type unit} header 
-(see Section \refersec{datarep:typeunitheaders}) 
+such contribution consists of a \addtoindex{type unit} header
+(see Section \refersec{datarep:typeunitheaders})
 followed by a \DWTAGtypeunit{} entry, together with
 its children.
 
 Each debugging information entry begins with a code that
-represents an entry in a separate 
+represents an entry in a separate
 \addtoindex{abbreviations table}. This
 code is followed directly by a series of attribute values.
 
-The appropriate entry in the 
+The appropriate entry in the
 \addtoindex{abbreviations table} guides the
 interpretation of the information contained directly in the
 \dotdebuginfo{} section.
@@ -1112,7 +1120,7 @@ units may share the same table.
 Unit headers contain a field, \HFNunittype{}, whose value indicates the kind of
 compilation unit (see Section \refersec{chap:unitentries}).
 \db
-The encodings for the unit type 
+The encodings for the unit type
 enumeration are shown in Table \refersec{tab:unitheaderunitkindencodings}.
 
 \needlines{6}
@@ -1126,14 +1134,14 @@ enumeration are shown in Table \refersec{tab:unitheaderunitkindencodings}.
 \endfirsthead
   \bfseries Unit header unit type encodings&\bfseries Value \\ \hline
 \endhead
-  \hline 
+  \hline
   \multicolumn{2}{l}{\emph{Continued on next page}}
 \endfoot
-  \hline 
+  \hline
 \endlastfoot
-\DWUTcompileTARG      &0x01 \\ 
-\DWUTtypeTARG         &0x02 \\ 
-\DWUTpartialTARG      &0x03 \\ 
+\DWUTcompileTARG      &0x01 \\
+\DWUTtypeTARG         &0x02 \\
+\DWUTpartialTARG      &0x03 \\
 \DWUTskeletonTARG     &0x04 \\
 \DWUTsplitcompileTARG &0x05 \\
 \DWUTsplittypeTARG    &0x06 \\
@@ -1151,7 +1159,7 @@ All unit headers have the same initial three fields: \HFNinitiallength, \HFNvers
 \begin{enumerate}[1. ]
 
 \item \HFNunitlength{} (\livelink{datarep:initiallengthvalues}{initial length}) \\
-A 4-byte or 12-byte 
+A 4-byte or 12-byte
 \addtoindexx{initial length}
 unsigned integer representing the length
 of the \dotdebuginfo{} contribution for that compilation unit,
@@ -1164,7 +1172,7 @@ not including the length field itself
 \addtoindexx{version number!compilation unit}
 A 2-byte unsigned integer representing the version of the
 DWARF information for the compilation unit.
- 
+
 The value in this field is \versiondotdebuginfo.
 
 \textit{See also Appendix \refersec{app:dwarfsectionversionnumbersinformative}
@@ -1173,12 +1181,12 @@ for a summary of all version numbers that apply to DWARF sections.}
 \needlines{7}
 \item \HFNunittype{} (\HFTubyte) \\
 A 1-byte unsigned integer identifying this unit as a compilation unit.
-The value of this field is 
+The value of this field is
 \DWUTcompile{} for a (non-split) full compilation unit or
 \DWUTpartial{} for a (non-split) partial compilation unit
 (see Section \refersec{chap:fullandpartialcompilationunitentries}).
 
-\textit{See Section \ref{datarep:skeletonandfullcompilationunitheaders} 
+\textit{See Section \ref{datarep:skeletonandfullcompilationunitheaders}
 regarding a split full compilation unit.}
 
 \needlines{4}
@@ -1189,7 +1197,7 @@ an address on the target architecture.
 
 \needlines{7}
 \item \HFNdebugabbrevoffset{} (\livelink{datarep:sectionoffsetlength}{section offset}) \\
-A 
+A
 \addtoindexx{section offset!in .debug\_info header}
 4-byte or 8-byte unsigned offset into the \dotdebugabbrev{}
 section. This offset associates the compilation unit with a
@@ -1206,7 +1214,7 @@ in the \sixtyfourbitdwarfformat, this is an 8-byte unsigned length
 \begin{enumerate}[1. ]
 
 \item \HFNunitlength{} (\livelink{datarep:initiallengthvalues}{initial length}) \\
-A 4-byte or 12-byte 
+A 4-byte or 12-byte
 \addtoindexx{initial length}
 unsigned integer representing the length
 of the \dotdebuginfo{}
@@ -1220,7 +1228,7 @@ not including the length field itself
 \addtoindexx{version number!compilation unit}
 A 2-byte unsigned integer representing the version of the
 DWARF information for the compilation unit.
- 
+
 The value in this field is \versiondotdebuginfo.
 
 \textit{See also Appendix \refersec{app:dwarfsectionversionnumbersinformative}
@@ -1229,7 +1237,7 @@ for a summary of all version numbers that apply to DWARF sections.}
 \needlines{4}
 \item \HFNunittype{} (\HFTubyte) \\
 A 1-byte unsigned integer identifying this unit as a compilation unit.
-The value of this field is 
+The value of this field is
 \DWUTskeleton{} for a skeleton compilation unit or
 \DWUTsplitcompile{} for a split (full) compilation unit
 (see Section \refersec{chap:skeletoncompilationunitentries}).
@@ -1243,9 +1251,9 @@ an address on the target architecture.
 \db
 
 \item \HFNdebugabbrevoffset{} (\livelink{datarep:sectionoffsetlength}{section offset}) \\
-A 
+A
 \addtoindexx{section offset!in .debug\_info header}
-4-byte or 8-byte unsigned offset into the 
+4-byte or 8-byte unsigned offset into the
 \dotdebugabbrev{}
 section. This offset associates the compilation unit with a
 particular set of debugging information entry abbreviations. In
@@ -1255,10 +1263,10 @@ in the \sixtyfourbitdwarfformat, this is an 8-byte unsigned length
 
 \needlines{6}
 \item \HFNdwoid{} (unit ID) \\
-An 8-byte implementation-defined integer constant value, 
-known as the compilation unit ID, that provides 
-unique identification of a skeleton compilation 
-unit and its associated split compilation unit in 
+An 8-byte implementation-defined integer constant value,
+known as the compilation unit ID, that provides
+unique identification of a skeleton compilation
+unit and its associated split compilation unit in
 the object file named in the \DWATdwoname{} attribute
 of the skeleton compilation.
 
@@ -1269,12 +1277,12 @@ of the skeleton compilation.
 \label{datarep:typeunitheaders}
 The header for the series of debugging information entries
 contributing to the description of a type that has been
-placed in its own \addtoindex{type unit}, within the 
+placed in its own \addtoindex{type unit}, within the
 \dotdebuginfo{} section,
 consists of the following information:
 \begin{enumerate}[1. ]
 \item \HFNunitlength{} (\livelink{datarep:initiallengthvalues}{initial length}) \\
-A 4-byte or 12-byte unsigned integer 
+A 4-byte or 12-byte unsigned integer
 \addtoindexx{initial length}
 representing the length
 of the \dotdebuginfo{} contribution for that type unit,
@@ -1288,7 +1296,7 @@ not including the length field itself
 \addtoindexx{version number!type unit}
 A 2-byte unsigned integer representing the version of the
 DWARF information for the type unit.
- 
+
 The value in this field is \versiondotdebuginfo.
 
 \item \HFNunittype{} (\HFTubyte) \\
@@ -1299,7 +1307,7 @@ or \DWUTsplittype{} for a split type unit.
 
 \needlines{4}
 \item \HFNaddresssize{} (\HFTubyte) \\
-A 1-byte unsigned integer representing the size 
+A 1-byte unsigned integer representing the size
 \addtoindexx{size of an address}
 in bytes of
 an address on the target architecture.
@@ -1307,9 +1315,9 @@ an address on the target architecture.
 
 \needlines{6}
 \item \HFNdebugabbrevoffset{} (\livelink{datarep:sectionoffsetlength}{section offset}) \\
-A 
+A
 \addtoindexx{section offset!in .debug\_info header}
-4-byte or 8-byte unsigned offset into the 
+4-byte or 8-byte unsigned offset into the
 \dotdebugabbrev{}
 section. This offset associates the type unit with a
 particular set of debugging information entry abbreviations. In
@@ -1319,18 +1327,18 @@ in the \sixtyfourbitdwarfformat, this is an 8-byte unsigned length
 
 \item \HFNtypesignature{} (8-byte unsigned integer) \\
 \addtoindexx{type signature}
-A unique 8-byte signature (see Section 
+A unique 8-byte signature (see Section
 \refersec{datarep:typesignaturecomputation})
-of the type described in this type unit.  
+of the type described in this type unit.
 
-\textit{An attribute that refers (using 
+\textit{An attribute that refers (using
 \DWFORMrefsigeight{}) to
-the primary type contained in this 
+the primary type contained in this
 \addtoindex{type unit} uses this value.}
 
 \needlines{8}
 \item \HFNtypeoffset{} (\livelink{datarep:sectionoffsetlength}{section offset}) \\
-A 4-byte or 8-byte unsigned offset 
+A 4-byte or 8-byte unsigned offset
 \addtoindexx{section offset!in .debug\_info header}
 relative to the beginning
 of the \addtoindex{type unit} header.
@@ -1348,7 +1356,7 @@ this is an 8-byte unsigned length
 
 \subsection{Debugging Information Entry}
 \label{datarep:debugginginformationentry}
-Each debugging information entry begins with an 
+Each debugging information entry begins with an
 unsigned LEB128\addtoindexx{LEB128!unsigned}
 number containing the abbreviation code for the entry. This
 code represents an entry within the abbreviations table
@@ -1378,7 +1386,7 @@ debugging information entry. Each declaration begins with
 an unsigned LEB128\addtoindexx{LEB128!unsigned}
 number representing the abbreviation
 code itself. It is this code that appears at the beginning
-of a debugging information entry in the 
+of a debugging information entry in the
 \dotdebuginfo{}
 section. As described above, the abbreviation
 code 0 is reserved for null debugging information entries. The
@@ -1387,7 +1395,7 @@ number that encodes the entry\textquoteright s tag. The encodings for the
 tag names are given in Table \refersec{tab:tagencodings}.
 
 \bb
-\textit{An abbreviations table may be padded at the end 
+\textit{An abbreviations table may be padded at the end
 with null bytes.}
 \eb
 
@@ -1400,10 +1408,10 @@ with null bytes.}
 \endfirsthead
   \bfseries Tag name&\bfseries Value \\ \hline
 \endhead
-  \hline 
+  \hline
   \multicolumn{2}{l}{\emph{Continued on next page}}
 \endfoot
-  \hline 
+  \hline
 \endlastfoot
 \DWTAGarraytype{} 			&0x01 \\
 \DWTAGclasstype				&0x02 \\
@@ -1466,8 +1474,8 @@ with null bytes.}
 \DWTAGunspecifiedtype		&0x3b  \\
 \DWTAGpartialunit			&0x3c  \\
 \DWTAGimportedunit			&0x3d  \\
-\textit{Reserved}			&0x3e\footnote{Code 0x3e is reserved to allow backward compatible 
-									support of the 
+\textit{Reserved}			&0x3e\footnote{Code 0x3e is reserved to allow backward compatible
+									support of the
 									DW\_TAG\_mutable\_type\addtoindexx{DW\_TAG\_mutable\_type (deprecated)}
 									DIE that was defined (only) in \DWARFVersionIII.} \\
 \DWTAGcondition				&\xiiif \\
@@ -1491,20 +1499,20 @@ with null bytes.}
 \needlines{8}
 Following the tag encoding is a 1-byte value that determines
 whether a debugging information entry using this abbreviation
-has child entries or not. If the value is 
+has child entries or not. If the value is
 \DWCHILDRENyesTARG,
 the next physically succeeding entry of any debugging
 information entry using this abbreviation is the first
 child of that entry. If the 1-byte value following the
-abbreviation\textquoteright s tag encoding is 
+abbreviation\textquoteright s tag encoding is
 \DWCHILDRENnoTARG, the next
 physically succeeding entry of any debugging information entry
 using this abbreviation is a sibling of that entry. (Either
 the first child or sibling entries may be null entries). The
-encodings for the child determination byte are given in 
+encodings for the child determination byte are given in
 Table \refersec{tab:childdeterminationencodings}
-(As mentioned in 
-Section \refersec{chap:relationshipofdebugginginformationentries}, 
+(As mentioned in
+Section \refersec{chap:relationshipofdebugginginformationentries},
 each chain of sibling entries is terminated by a null entry.)
 
 \needlines{10}
@@ -1522,7 +1530,7 @@ each chain of sibling entries is terminated by a null entry.)
 \endfoot
   \hline
 \endlastfoot
-\DWCHILDRENno&0x00 \\ 
+\DWCHILDRENno&0x00 \\
 \DWCHILDRENyes&0x01 \\ \hline
 \end{longtable}
 \end{centering}
@@ -1532,70 +1540,70 @@ Finally, the child encoding is followed by a series of
 attribute specifications. Each attribute specification
 consists of two parts
 \bb
-(except for \DWFORMimplicitconst{}, \DWFORMaddrxoffset{} 
+(except for \DWFORMimplicitconst{}, \DWFORMaddrxoffset{}
 and \DWFORMindirect{}, see below).
 \eb
-The first part is an 
+The first part is an
 unsigned LEB128\addtoindexx{LEB128!unsigned}
-number representing the attribute\textquoteright s name. 
-The second part is an 
-unsigned LEB128\addtoindexx{LEB128!unsigned} 
-number representing the attribute\textquoteright s form. 
+number representing the attribute\textquoteright s name.
+The second part is an
+unsigned LEB128\addtoindexx{LEB128!unsigned}
+number representing the attribute\textquoteright s form.
 The series of attribute specifications ends with an
 entry containing 0 for the name and 0 for the form.
 
 \bb
 For attributes with the form \DWFORMimplicitconstTARG{},
 in addition to the attribute name and form values,
-\eb 
-the attribute specification contains 
-a third part, which is a signed LEB128\addtoindexx{LEB128!signed} 
+\eb
+the attribute specification contains
+a third part, which is a signed LEB128\addtoindexx{LEB128!signed}
 number.
 \label{datarep:attributeencodingsimplicitconst}
-The value of this number is used as the value of the 
-attribute.  
+The value of this number is used as the value of the
+attribute.
 
 \bb
 For attributes with the form \DWFORMaddrxoffsetTARG{}, following the
-attribute name, the attribute specification contains 
-two unsigned LEB128 numbers, each representing a form. The first 
-form must be of class address and the second of class constant. Values 
-using this form in the \dotdebuginfo{} section contain a value for the first 
-form followed by a value for the second form. The total value of the 
-\DWFORMaddrxoffsetNAME{} is then computed by adding those two values together 
-(if the first value is an indirect address, that is resolved first 
+attribute name, the attribute specification contains
+two unsigned LEB128 numbers, each representing a form. The first
+form must be of class address and the second of class constant. Values
+using this form in the \dotdebuginfo{} section contain a value for the first
+form followed by a value for the second form. The total value of the
+\DWFORMaddrxoffsetNAME{} is then computed by adding those two values together
+(if the first value is an indirect address, that is resolved first
 before adding it to the second value).
 \eb
 
 \needlines{5}
 \bb
-For attributes with the form \DWFORMindirectTARG{}, 
+For attributes with the form \DWFORMindirectTARG{},
 the actual attribute form value itself is in the \dotdebuginfo{}
-section which begins with an unsigned LEB128 number that 
-specifies the actual form, followed by the value according to 
+section which begins with an unsigned LEB128 number that
+specifies the actual form, followed by the value according to
 that form.
 \eb
-This allows producers to choose forms for particular attributes 
-\addtoindexx{abbreviations table!dynamic forms in} dynamically, 
+This allows producers to choose forms for particular attributes
+\addtoindexx{abbreviations table!dynamic forms in} dynamically,
 without having to add a new entry to the abbreviations table.
 
 \bb
-If the actual attribute form is \DWFORMimplicitconst, the form is 
-(still) followed by a signed LEB128 number. 
+If the actual attribute form is \DWFORMimplicitconst, the form is
+(still) followed by a signed LEB128 number.
 
 \needlines{4}
 If the actual attribute form is itself \DWFORMindirect, the indirection
-repeats. There may be one or more occurrences of \DWFORMindirect{} in 
+repeats. There may be one or more occurrences of \DWFORMindirect{} in
 sequence until a non-\DWFORMindirect{} form is reached. The sequence of
-\DWFORMindirect{} forms does not have any effect other than to use up 
+\DWFORMindirect{} forms does not have any effect other than to use up
 space.
 \eb
 
 The abbreviations for a given compilation unit end with an
 entry consisting of a 0 byte for the abbreviation code.
 
-\textit{See 
-Appendix \refersec{app:compilationunitsandabbreviationstableexample} 
+\textit{See
+Appendix \refersec{app:compilationunitsandabbreviationstableexample}
 for a depiction of the organization of the
 debugging information.}
 
@@ -1603,84 +1611,84 @@ debugging information.}
 \subsection{Attribute Encodings}
 \label{datarep:attributeencodings}
 
-The encodings for the attribute names are given in 
+The encodings for the attribute names are given in
 Table \referfol{tab:attributeencodings}.
 
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c|l}
-  \caption{Attribute encodings} 
-  \label{tab:attributeencodings} 
+  \caption{Attribute encodings}
+  \label{tab:attributeencodings}
   \addtoindexx{attribute encodings} \\
   \hline \bfseries Attribute name&\bfseries Value &\bfseries Classes \\ \hline
 \endfirsthead
   \bfseries Attribute name&\bfseries Value &\bfseries Classes\\ \hline
 \endhead
-  \hline 
+  \hline
   \multicolumn{2}{l}{\emph{Continued on next page}}
 \endfoot
   \hline
-  \multicolumn{3}{l}{\ddagnewinversionx} 
+  \multicolumn{3}{l}{\ddagnewinversionx}
 \endlastfoot
 \DWATsibling		&0x01	&\CLASSreference
 								\addtoindexx{sibling attribute} \\
 \bbeb
-\DWATlocation		&0x02	&\CLASSlocdesc, 
+\DWATlocation		&0x02	&\CLASSlocdesc,
 							\CLASSloclist
 								\addtoindexx{location attribute} \\
-\DWATname			&0x03	&\CLASSstring 
+\DWATname			&0x03	&\CLASSstring
 								\addtoindexx{name attribute} \\
 \textit{Reserved}	&0x04	&\textit{not applicable} \\
 \textit{Reserved}	&0x05	&\textit{not applicable} \\
 \textit{Reserved}	&0x06	&\textit{not applicable} \\
 \textit{Reserved}	&0x07	&\textit{not applicable} \\
 \textit{Reserved}	&0x08	&\textit{not applicable} \\
-\DWATordering		&0x09	&\CLASSconstant 
+\DWATordering		&0x09	&\CLASSconstant
 								\addtoindexx{ordering attribute}  \\
 \textit{Reserved}	&0x0a	&\textit{not applicable} \\
 \bbeb
-\DWATbytesize		&0x0b	&\CLASSconstant, 
+\DWATbytesize		&0x0b	&\CLASSconstant,
 							\CLASSexprval,
 							\CLASSreference
 								\addtoindexx{byte size attribute} \\
 \bbeb
-\textit{Reserved}	&0x0c\footnote{Code 0x0c is reserved to allow backward 
+\textit{Reserved}	&0x0c\footnote{Code 0x0c is reserved to allow backward
 								compatible support of the DW\_AT\_bit\_offset
-								\addtoindexx{DW\_AT\_bit\_offset (deprecated)} 
-								\mbox{attribute} which was defined in 
+								\addtoindexx{DW\_AT\_bit\_offset (deprecated)}
+								\mbox{attribute} which was defined in
 								\DWARFVersionIII{} and earlier.}
 							&\textit{not applicable}
 								\addtoindexx{bit offset attribute (Version 3)}
 								\addtoindexx{DW\_AT\_bit\_offset (deprecated)}  \\
 \bbeb
-\DWATbitsize		&0x0d	&\CLASSconstant, 
-							\CLASSexprval, 
-							\CLASSreference   
+\DWATbitsize		&0x0d	&\CLASSconstant,
+							\CLASSexprval,
+							\CLASSreference
 								\addtoindexx{bit size attribute} \\
 \textit{Reserved}	&0x0e	&\textit{not applicable} \\
 \textit{Reserved}	&0x0f	&\textit{not applicable} \\
-\DWATstmtlist		&0x10	&\CLASSlineptr 
+\DWATstmtlist		&0x10	&\CLASSlineptr
 								\addtoindexx{statement list attribute} \\
-\DWATlowpc			&0x11	&\CLASSaddress 
+\DWATlowpc			&0x11	&\CLASSaddress
 								\addtoindexx{low PC attribute}  \\
-\DWAThighpc			&0x12	&\CLASSaddress, 
+\DWAThighpc			&0x12	&\CLASSaddress,
 							\CLASSconstant
 								\addtoindexx{high PC attribute}  \\
-%\DWATlanguage&0x13&\livelink{chap:classconstant}{constant} 
+%\DWATlanguage&0x13&\livelink{chap:classconstant}{constant}
 %            \addtoindexx{language attribute}  \\
 \bbeb
-\textit{Reserved}	&0x13\footnote{Code 0x13 is reserved to allow 
-								backward compatible support of the 
-								DW\_AT\_language\addtoindexx{DW\_AT\_language 
-								(deprecated)} \mbox{attribute} which was 
+\textit{Reserved}	&0x13\footnote{Code 0x13 is reserved to allow
+								backward compatible support of the
+								DW\_AT\_language\addtoindexx{DW\_AT\_language
+								(deprecated)} \mbox{attribute} which was
 								defined in \DWARFVersionV{} and earlier.}
-							&\textit{not applicable} 
+							&\textit{not applicable}
 								\addtoindexx{language attribute (Version 5)}
 								\addtoindexx{DW\_AT\_language (deprecated)}  \\
 \textit{Reserved}	&0x14	&\textit{not applicable} \\
-\DWATdiscr			&0x15	&\CLASSreference 
+\DWATdiscr			&0x15	&\CLASSreference
 								\addtoindexx{discriminant attribute}  \\
-\DWATdiscrvalue		&0x16	&\CLASSconstant 
+\DWATdiscrvalue		&0x16	&\CLASSconstant
 								\addtoindexx{discriminant value attribute}  \\
 \DWATvisibility		&0x17	&\CLASSconstant
 								\addtoindexx{visibility attribute} \\
@@ -1695,14 +1703,14 @@ Table \referfol{tab:attributeencodings}.
 								\addtoindexx{common reference attribute}  \\
 \DWATcompdir		&0x1b	&\CLASSstring
 								\addtoindexx{compilation directory attribute}  \\
-\DWATconstvalue		&0x1c	&\CLASSblock, 
-							\CLASSconstant, 
+\DWATconstvalue		&0x1c	&\CLASSblock,
+							\CLASSconstant,
 							\CLASSstring
 								\addtoindexx{constant value attribute} \\
 \DWATcontainingtype &0x1d	&\CLASSreference
 								\addtoindexx{containing type attribute} \\
-\DWATdefaultvalue	&0x1e	&\CLASSconstant, 
-							\CLASSreference, 
+\DWATdefaultvalue	&0x1e	&\CLASSconstant,
+							\CLASSreference,
 							\CLASSflag,
 \bbeb
 							\CLASSstring
@@ -1710,11 +1718,11 @@ Table \referfol{tab:attributeencodings}.
 \textit{Reserved}	&0x1f	&\textit{not applicable} \\
 \DWATinline			&0x20	&\CLASSconstant
 								\addtoindexx{inline attribute}  \\
-\DWATisoptional		&0x21	&\CLASSflag 
+\DWATisoptional		&0x21	&\CLASSflag
 								\addtoindexx{is optional attribute} \\
 \bbeb
-\DWATlowerbound		&0x22	&\CLASSconstant, 
-							\CLASSexprval, 
+\DWATlowerbound		&0x22	&\CLASSconstant,
+							\CLASSexprval,
 							\CLASSreference
 								\addtoindexx{lower bound attribute}  \\
 \textit{Reserved}	&0x23	&\textit{not applicable} \\
@@ -1729,7 +1737,7 @@ Table \referfol{tab:attributeencodings}.
 \bbeb
 \DWATreturnaddr		&0x2a	&\CLASSlocdesc,
 							\CLASSloclist
-							\addtoindexx{return address attribute} \\            
+							\addtoindexx{return address attribute} \\
 \textit{Reserved}	&0x2b	&\textit{not applicable} \\
 \DWATstartscope		&0x2c	&\CLASSconstant,
 							\CLASSrnglist
@@ -1737,16 +1745,16 @@ Table \referfol{tab:attributeencodings}.
 \textit{Reserved}	&0x2d	&\textit{not applicable} \\
 \bbeb
 \DWATbitstride		&0x2e	&\CLASSconstant,
-							\CLASSexprval, 
+							\CLASSexprval,
 							\CLASSreference
 								\addtoindexx{bit stride attribute}  \\
 \bbeb
 \DWATupperbound		&0x2f	&\CLASSconstant,
-							\CLASSexprval, 
+							\CLASSexprval,
 							\CLASSreference
 								\addtoindexx{upper bound attribute}  \\
 \textit{Reserved}	&0x30	&\textit{not applicable} \\
-\DWATabstractorigin	&0x31	&\CLASSreference 
+\DWATabstractorigin	&0x31	&\CLASSreference
 								\addtoindexx{abstract origin attribute}  \\
 \DWATaccessibility	&0x32	&\CLASSconstant
 								\addtoindexx{accessibility attribute}  \\
@@ -1759,19 +1767,19 @@ Table \referfol{tab:attributeencodings}.
 \DWATcallingconvention&0x36	&\CLASSconstant
 								\addtoindexx{calling convention attribute} \\
 \bbeb
-\DWATcount			&0x37	&\CLASSconstant, 
-							\CLASSexprval, 
+\DWATcount			&0x37	&\CLASSconstant,
+							\CLASSexprval,
 							\CLASSreference
 								\addtoindexx{count attribute}  \\
 \bbeb
 \DWATdatamemberlocation
-					&0x38	&\CLASSconstant, 
-							\CLASSlocdesc, 
-							\CLASSloclist 
+					&0x38	&\CLASSconstant,
+							\CLASSlocdesc,
+							\CLASSloclist
 								\addtoindexx{data member attribute}  \\
 \DWATdeclcolumn		&0x39	&\CLASSconstant
 								\addtoindexx{declaration column attribute}  \\
-\DWATdeclfile		&0x3a	&\CLASSconstant 
+\DWATdeclfile		&0x3a	&\CLASSconstant
 								\addtoindexx{declaration file attribute}  \\
 \DWATdeclline		&0x3b	&\CLASSconstant
 								\addtoindexx{declaration line attribute}  \\
@@ -1784,17 +1792,17 @@ Table \referfol{tab:attributeencodings}.
 \DWATexternal		&\xiiif	&\CLASSflag
 								\addtoindexx{external attribute}  \\
 \bbeb
-\DWATframebase		&0x40	&\CLASSlocdesc, 
-							\CLASSloclist 
+\DWATframebase		&0x40	&\CLASSlocdesc,
+							\CLASSloclist
 								\addtoindexx{frame base attribute}  \\
 \DWATfriend			&0x41	&\CLASSreference
 								\addtoindexx{friend attribute}  \\
 \DWATidentifiercase	&0x42	&\CLASSconstant
 								\addtoindexx{identifier case attribute}  \\
-\textit{Reserved}	&0x43\footnote{Code 0x43 is reserved to allow backward 
+\textit{Reserved}	&0x43\footnote{Code 0x43 is reserved to allow backward
 								compatible support of the DW\_AT\_macro\_info
 								\addtoindexx{DW\_AT\_macro\_info (deprecated)}
-								\mbox{attribute} which was defined in 
+								\mbox{attribute} which was defined in
 								\DWARFVersionIV{} and earlier.}
 							& \textit{not applicable} \\
 \DWATnamelistitem	&0x44	&\CLASSreference
@@ -1802,23 +1810,23 @@ Table \referfol{tab:attributeencodings}.
 \DWATpriority		&0x45	&\CLASSreference
 								\addtoindexx{priority attribute}  \\
 \bbeb
-\textit{Reserved}	&0x46\footnote{Code 0x46 is reserved to allow backward 
+\textit{Reserved}	&0x46\footnote{Code 0x46 is reserved to allow backward
 								compatible support of the DW\_AT\_segment
 								\addtoindexx{DW\_AT\_segment (deprecated)}
-								\mbox{attribute} which was defined in 
+								\mbox{attribute} which was defined in
 								\DWARFVersionV{} and earlier.}
 							&\textit{not applicable}  \\
 \DWATspecification	&0x47	&\CLASSreference
 								\addtoindexx{specification attribute}  \\
 \bbeb
 \DWATstaticlink		&0x48	&\CLASSlocdesc,
-							\CLASSloclist 
+							\CLASSloclist
 								\addtoindexx{static link attribute}  \\
 \DWATtype			&0x49	&\CLASSreference
 								\addtoindexx{type attribute}  \\
 \bbeb
-\DWATuselocation	&0x4a	&\CLASSlocdesc, 
-							\CLASSloclist 
+\DWATuselocation	&0x4a	&\CLASSlocdesc,
+							\CLASSloclist
 								\addtoindexx{location list attribute}  \\
 \DWATvariableparameter&0x4b	&\CLASSflag
 								\addtoindexx{variable parameter attribute}  \\
@@ -1826,39 +1834,39 @@ Table \referfol{tab:attributeencodings}.
 								\addtoindexx{virtuality attribute}  \\
 \bbeb
 \DWATvtableelemlocation
-					&0x4d	&\CLASSlocdesc, 
-							\CLASSloclist 
+					&0x4d	&\CLASSlocdesc,
+							\CLASSloclist
 								\addtoindexx{vtable element location attribute}  \\
 \bbeb
 \DWATallocated		&0x4e	&\CLASSconstant,
-							\CLASSexprval, 
+							\CLASSexprval,
 							\CLASSreference
 								\addtoindexx{allocated attribute}  \\
 \bbeb
-\DWATassociated		&0x4f	&\CLASSconstant, 
-							\CLASSexprval, 
+\DWATassociated		&0x4f	&\CLASSconstant,
+							\CLASSexprval,
 							\CLASSreference
 								\addtoindexx{associated attribute}  \\
 \bbeb
 \DWATdatalocation	&0x50	&\CLASSlocdesc
 								\addtoindexx{data location attribute}  \\
 \bbeb
-\DWATbytestride		&0x51	&\CLASSconstant, 
-							\CLASSexprval, 
+\DWATbytestride		&0x51	&\CLASSconstant,
+							\CLASSexprval,
 							\CLASSreference
 								\addtoindexx{byte stride attribute}  \\
-\DWATentrypc		&0x52	&\CLASSaddress, 
+\DWATentrypc		&0x52	&\CLASSaddress,
 							\CLASSconstant
 								\addtoindexx{entry PC attribute}  \\
 \DWATuseUTFeight	&0x53	&\CLASSflag
 								\addtoindexx{use UTF8 attribute}\addtoindexx{UTF-8}  \\
 \DWATextension		&0x54	&\CLASSreference
 								\addtoindexx{extension attribute}  \\
-\DWATranges			&0x55	&\CLASSrnglist      
+\DWATranges			&0x55	&\CLASSrnglist
 								\addtoindexx{ranges attribute}  \\
-\DWATtrampoline		&0x56	&\CLASSaddress, 
-							\CLASSflag, 
-							\CLASSreference, 
+\DWATtrampoline		&0x56	&\CLASSaddress,
+							\CLASSflag,
+							\CLASSreference,
 							\CLASSstring
 								\addtoindexx{trampoline attribute}  \\
 \DWATcallcolumn		&0x57	&\CLASSconstant
@@ -1871,17 +1879,17 @@ Table \referfol{tab:attributeencodings}.
 								\addtoindexx{description attribute}  \\
 \DWATbinaryscale	&0x5b	&\CLASSconstant
 								\addtoindexx{binary scale attribute}  \\
-\DWATdecimalscale	&0x5c	&\CLASSconstant 
+\DWATdecimalscale	&0x5c	&\CLASSconstant
 								\addtoindexx{decimal scale attribute}  \\
 \DWATsmall 			&0x5d	&\CLASSreference
 								\addtoindexx{small attribute}  \\
-\DWATdecimalsign	&0x5e	&\CLASSconstant 
+\DWATdecimalsign	&0x5e	&\CLASSconstant
 								\addtoindexx{decimal scale attribute}  \\
 \DWATdigitcount		&0x5f	&\CLASSconstant
 								\addtoindexx{digit count attribute}  \\
 \DWATpicturestring	&0x60	&\CLASSstring
 								\addtoindexx{picture string attribute}  \\
-\DWATmutable		&0x61	&\CLASSflag 
+\DWATmutable		&0x61	&\CLASSflag
 								\addtoindexx{mutable attribute}  \\
 \DWATthreadsscaled	&0x62	&\CLASSflag
 								\addtoindexx{thread scaled attribute}  \\
@@ -1898,7 +1906,7 @@ Table \referfol{tab:attributeencodings}.
 \DWATrecursive		&0x68	&\CLASSflag
 								\addtoindexx{recursive attribute}  \\
 \DWATsignature{} 	&0x69	&\CLASSreference
-								\addtoindexx{signature attribute}  \\ 
+								\addtoindexx{signature attribute}  \\
 \DWATmainsubprogram &0x6a	&\CLASSflag
 								\addtoindexx{main subprogram attribute}  \\
 \DWATdatabitoffset  &0x6b	&\CLASSconstant
@@ -1920,11 +1928,11 @@ Table \referfol{tab:attributeencodings}.
 							\CLASSexprval
 								\addtoindexx{rank attribute}  \\
 \bb
-\textit{Reserved} 	&0x72\footnote{Code 0x72 is reserved to allow backward 
-								compatible support of the DW\_AT\_str\_offsets\_base 
-								\mbox{attribute} which was defined in 
-								\DWARFVersionV{} and earlier.} 
-							&\textit{not applicable} 
+\textit{Reserved} 	&0x72\footnote{Code 0x72 is reserved to allow backward
+								compatible support of the DW\_AT\_str\_offsets\_base
+								\mbox{attribute} which was defined in
+								\DWARFVersionV{} and earlier.}
+							&\textit{not applicable}
 \eb \\
 \DWATaddrbase 		&0x73	&\CLASSaddrptr
 								\addtoindexx{address table base!encoding} \\
@@ -1974,35 +1982,35 @@ Table \referfol{tab:attributeencodings}.
 \bbeb
 \DWATcalldatavalue 	&0x86 	&\CLASSexprval
 								\addtoindexx{call data value attribute} \\
-\DWATnoreturn 		&0x87 	&\CLASSflag 
+\DWATnoreturn 		&0x87 	&\CLASSflag
 								\addtoindexx{noreturn attribute} \\
-\DWATalignment 		&0x88 	&\CLASSconstant 
+\DWATalignment 		&0x88 	&\CLASSconstant
 								\addtoindexx{alignment attribute} \\
 \DWATexportsymbols 	&0x89 	&\CLASSflag
 								\addtoindexx{export symbols attribute} \\
-\DWATdeleted 		&0x8a 	&\CLASSflag 
+\DWATdeleted 		&0x8a 	&\CLASSflag
 								\addtoindexx{deleted attribute} \\
-\DWATdefaulted 		&0x8b 	&\CLASSconstant 
+\DWATdefaulted 		&0x8b 	&\CLASSconstant
 								\addtoindexx{defaulted attribute} \\
-\DWATloclistsbase 	&0x8c 	&\CLASSloclistsptr 
+\DWATloclistsbase 	&0x8c 	&\CLASSloclistsptr
 								\addtoindexx{location list base attribute} \\
-\bbeb 
-\DWATscalemultiplier~\ddag &0x8d &\CLASSconstant 
+\bbeb
+\DWATscalemultiplier~\ddag &0x8d &\CLASSconstant
 								\addtoindexx{numerator of rational scale factor} \\
-\bbeb 
-\DWATscaledivisor~\ddag &0x8e &\CLASSconstant 
+\bbeb
+\DWATscaledivisor~\ddag &0x8e &\CLASSconstant
 								\addtoindexx{divisor of rational scale factor} \\
 \bbeb
-\DWATstroffsets~\ddag &0x8f &\CLASSstroffsetsptr 
+\DWATstroffsets~\ddag &0x8f &\CLASSstroffsetsptr
 								\addtoindexx{string offsets attribute} \\
 \bbeb
-\DWATlanguagename~\ddag &0x90 &\CLASSconstant 
+\DWATlanguagename~\ddag &0x90 &\CLASSconstant
 								\addtoindexx{language name attribute} \\
 \bbeb
-\DWATlanguageversion~\ddag &0x91 &\CLASSconstant 
+\DWATlanguageversion~\ddag &0x91 &\CLASSconstant
 								\addtoindexx{language version attribute} \\
 \bbeb
-\DWATbias~\ddag		&0x92& \CLASSconstant 
+\DWATbias~\ddag		&0x92& \CLASSconstant
 								\addtoindexx{bias attribute} \\
 \bbeb
 \DWATtensor~\ddag	&0x93&	\CLASSflag
@@ -2013,7 +2021,7 @@ Table \referfol{tab:attributeencodings}.
 \DWATlouser& 0x2000 & --- \addtoindexx{low user attribute encoding}  \\
 \DWAThiuser&\xiiifff& --- \addtoindexx{high user attribute encoding} \\
 
-\end{longtable} 
+\end{longtable}
 \end{centering}
 
 \subsection{Classes and Forms}
@@ -2022,22 +2030,22 @@ Each class is a set of forms which have related representations
 and which are given a common interpretation according to the
 attribute in which the form is used.
 The attribute form governs how the value of an attribute is
-encoded. 
-The classes and the forms they include are listed below. 
+encoded.
+The classes and the forms they include are listed below.
 
 \needlines{5}
-Form \DWFORMsecoffsetTARG{} 
-is a member of more than one class, namely 
+Form \DWFORMsecoffsetTARG{}
+is a member of more than one class, namely
 \CLASSaddrptr,
 \CLASSlineptr,
-\CLASSloclist, \CLASSloclistsptr, 
+\CLASSloclist, \CLASSloclistsptr,
 \CLASSmacptr,
-\CLASSrnglist{}, \CLASSrnglistsptr, 
+\CLASSrnglist{}, \CLASSrnglistsptr,
 and
 \CLASSstroffsetsptr;
 as a result, it is not possible for an
 attribute to allow more than one of these classes.
-The list of classes allowed by the applicable attribute in 
+The list of classes allowed by the applicable attribute in
 Table \refersec{tab:attributeencodings}
 determines the class of the form.
 
@@ -2048,9 +2056,9 @@ to depend in part on the value of an attribute of the
 \begin{itemize}
 \item
 In the case of a \splitDWARFobjectfile{}, the associated
-compilation unit is the skeleton compilation unit corresponding 
+compilation unit is the skeleton compilation unit corresponding
 to the containing unit.
-\item Otherwise, the associated compilation unit 
+\item Otherwise, the associated compilation unit
 is the containing unit.
 \end{itemize}
 
@@ -2066,24 +2074,24 @@ the purpose and general usage of each class):
 Represented as either:
 \begin{itemize}
 \item An object of appropriate size to hold an
-address on the target machine (\DWFORMaddrTARG). 
-The size is encoded in the compilation unit header 
+address on the target machine (\DWFORMaddrTARG).
+The size is encoded in the compilation unit header
 (see Section \refersec{datarep:compilationunitheader}).
 This address is relocatable in a relocatable object file and
 is relocated in an executable file or shared object file.
 
-\item An indirect index into a table of addresses (as 
-described in the previous bullet) in the \dotdebugaddr{} section 
-(\DWFORMaddrxTARG, \DWFORMaddrxoneTARG, \DWFORMaddrxtwoTARG, 
-\DWFORMaddrxthreeTARG{} and \DWFORMaddrxfourTARG). 
+\item An indirect index into a table of addresses (as
+described in the previous bullet) in the \dotdebugaddr{} section
+(\DWFORMaddrxTARG, \DWFORMaddrxoneTARG, \DWFORMaddrxtwoTARG,
+\DWFORMaddrxthreeTARG{} and \DWFORMaddrxfourTARG).
 The representation of a \DWFORMaddrxNAME{} value is an unsigned
-\addtoindex{LEB128} value, which is interpreted as a zero-based 
+\addtoindex{LEB128} value, which is interpreted as a zero-based
 index into an array of addresses in the \dotdebugaddr{} section.
-The representation of a \DWFORMaddrxoneNAME, \DWFORMaddrxtwoNAME, 
-\DWFORMaddrxthreeNAME{} or \DWFORMaddrxfourNAME{} value is a 
+The representation of a \DWFORMaddrxoneNAME, \DWFORMaddrxtwoNAME,
+\DWFORMaddrxthreeNAME{} or \DWFORMaddrxfourNAME{} value is a
 1-, 2-, 3- or 4-byte unsigned integer value, respectively,
 which is similarly interpreted.
-The index is relative to the value of the \DWATaddrbase{} attribute 
+The index is relative to the value of the \DWATaddrbase{} attribute
 of the associated compilation unit.
 
 \end{itemize}
@@ -2133,15 +2141,15 @@ debugging information entries or data bytes.
 \livetarg{datarep:classconstant}{}
 There are eight forms of constants. There are fixed length
 constant data forms for one-, two-, four-, eight- and sixteen-byte values
-(respectively, 
-\DWFORMdataoneTARG, 
-\DWFORMdatatwoTARG, 
+(respectively,
+\DWFORMdataoneTARG,
+\DWFORMdatatwoTARG,
 \DWFORMdatafourTARG,
 \DWFORMdataeightTARG{} and
-\DWFORMdatasixteenTARG). 
+\DWFORMdatasixteenTARG).
 There are variable length constant
-data forms encoded using 
-signed LEB128 numbers (\DWFORMsdataTARG) and unsigned 
+data forms encoded using
+signed LEB128 numbers (\DWFORMsdataTARG) and unsigned
 LEB128 numbers (\DWFORMudataTARG).
 There is also an implicit constant (\DWFORMimplicitconst,
 \bb
@@ -2149,11 +2157,11 @@ see Section \refersec{datarep:attributeencodingsimplicitconst}),
 whose value is provided as part of an abbreviation specification.
 \eb
 \needlines{4}
-The data in \DWFORMdataone, 
-\DWFORMdatatwo, 
-\DWFORMdatafour{}, 
+The data in \DWFORMdataone,
+\DWFORMdatatwo,
+\DWFORMdatafour{},
 \DWFORMdataeight{} and
-\DWFORMdatasixteen{} 
+\DWFORMdatasixteen{}
 can be anything. Depending on context, it may
 be a signed integer, an unsigned integer, a floating\dash point
 constant, or anything else. A consumer must use context to
@@ -2161,25 +2169,25 @@ know how to interpret the bits, which if they are target
 machine data (such as an integer or floating-point constant)
 will be in target machine \byteorder.
 
-\textit{If one of the \DWFORMdataTARG\textless n\textgreater 
+\textit{If one of the \DWFORMdataTARG\textless n\textgreater
 forms is used to represent a
 signed or unsigned integer, it can be hard for a consumer
 to discover the context necessary to determine which
 interpretation is intended. Producers are therefore strongly
-encouraged to use \DWFORMsdata{} or 
+encouraged to use \DWFORMsdata{} or
 \DWFORMudata{} for signed and
-unsigned integers respectively, rather than 
+unsigned integers respectively, rather than
 \DWFORMdata\textless n\textgreater.}
 
 \needlines{4}
 \bb
 \item \CLASSexprval \\
 \livetarg{datarep:classexprval}{}
-A DWARF expression that evaluates to a value 
+A DWARF expression that evaluates to a value
 (see Section \refersec{chap:dwarfexpressions}).
-This is represented as an unsigned LEB128\addtoindexx{LEB128!unsigned} length, 
+This is represented as an unsigned LEB128\addtoindexx{LEB128!unsigned} length,
 followed by a byte sequence of the specified length (\DWFORMexprvalTARG)
-containing the expression. 
+containing the expression.
 \eb
 
 
@@ -2198,18 +2206,18 @@ no value is encoded in the debugging information entry itself.
 \needlines{4}
 \item \CLASSlineptr \\
 \livetarg{datarep:classlineptr}{}
-This is an offset into 
+This is an offset into
 \addtoindexx{section offset!in class lineptr value}
-the 
+the
 \dotdebugline{} or \dotdebuglinedwo{} section
 (\DWFORMsecoffset).
-It consists of an offset from the beginning of the 
+It consists of an offset from the beginning of the
 \dotdebugline{}
 section to the first byte of
 the data making up the line number list for the compilation
-unit. 
+unit.
 It is relocatable in a relocatable object file, and
-relocated in an executable or shared object file. In the 
+relocated in an executable or shared object file. In the
 \thirtytwobitdwarfformat, this offset is a 4-byte unsigned value;
 in the \sixtyfourbitdwarfformat, it is an 8-byte unsigned value
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
@@ -2218,11 +2226,11 @@ in the \sixtyfourbitdwarfformat, it is an 8-byte unsigned value
 \bb
 \item \CLASSlocdesc \\
 \livetarg{datarep:classlocdesc}{}
-A DWARF location description 
+A DWARF location description
 (see Section \refersec{chap:locationdescriptions}).
-This is represented as an unsigned LEB128\addtoindexx{LEB128!unsigned} length, 
+This is represented as an unsigned LEB128\addtoindexx{LEB128!unsigned} length,
 followed by a byte sequence of the specified length (\DWFORMlocdescTARG)
-containing the location description. 
+containing the location description.
 \eb
 
 
@@ -2235,20 +2243,20 @@ A location list (see Section \refersec{chap:locationlists}).
 This is represented as either:
 \begin{itemize}
 \item
-An index into the \dotdebugloclists{} section (\DWFORMloclistxTARG). 
-The unsigned ULEB operand identifies an offset location 
-relative to the base of that section (the location of the first offset 
-in the section, not the first byte of the section). The contents of 
-that location is then added to the base to determine the location of 
+An index into the \dotdebugloclists{} section (\DWFORMloclistxTARG).
+The unsigned ULEB operand identifies an offset location
+relative to the base of that section (the location of the first offset
+in the section, not the first byte of the section). The contents of
+that location is then added to the base to determine the location of
 the target list of entries.
 \needlines{7}
 \item
-An offset into the \dotdebugloclists{} section (\DWFORMsecoffset). 
-The operand consists of a byte 
+An offset into the \dotdebugloclists{} section (\DWFORMsecoffset).
+The operand consists of a byte
 offset\addtoindexx{section offset!in class loclist value}
 from the beginning of the \dotdebugloclists{} section.
 It is relocatable in a relocatable object file, and
-relocated in an executable or shared object file. In the 
+relocated in an executable or shared object file. In the
 \thirtytwobitdwarfformat, this offset is a 4-byte unsigned value;
 in the \sixtyfourbitdwarfformat, it is an 8-byte unsigned value
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
@@ -2257,29 +2265,29 @@ in the \sixtyfourbitdwarfformat, it is an 8-byte unsigned value
 \needlines{8}
 \item \CLASSloclistsptr \\
 \livetarg{datarep:classloclistsptr}{}
-This is an offset into the \dotdebugloclists{} section (\DWFORMsecoffset). 
-The operand consists of a byte 
+This is an offset into the \dotdebugloclists{} section (\DWFORMsecoffset).
+The operand consists of a byte
 offset\addtoindexx{section offset!in class loclistsptr}
 from the beginning of the \dotdebugloclists{} section.
 It is relocatable in a relocatable object file, and
-relocated in an executable or shared object file. In the 
+relocated in an executable or shared object file. In the
 \thirtytwobitdwarfformat, this offset is a 4-byte unsigned value;
 in the \sixtyfourbitdwarfformat, it is an 8-byte unsigned value
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
 \item \CLASSmacptr \\
 \livetarg{datarep:classmacptr}{}
-This is an 
+This is an
 \addtoindexx{section offset!in class macptr value}
-offset into the 
+offset into the
 \dotdebugmacro{} or \dotdebugmacrodwo{} section
-(\DWFORMsecoffset). 
-It consists of an offset from the beginning of the 
-\dotdebugmacro{} or \dotdebugmacrodwo{} 
-section to the the header making up the 
-macro information list for the compilation unit. 
+(\DWFORMsecoffset).
+It consists of an offset from the beginning of the
+\dotdebugmacro{} or \dotdebugmacrodwo{}
+section to the the header making up the
+macro information list for the compilation unit.
 It is relocatable in a relocatable object file, and
-relocated in an executable or shared object file. In the 
+relocated in an executable or shared object file. In the
 \thirtytwobitdwarfformat, this offset is a 4-byte unsigned value;
 in the \sixtyfourbitdwarfformat, it is an 8-byte unsigned value
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
@@ -2290,19 +2298,19 @@ in the \sixtyfourbitdwarfformat, it is an 8-byte unsigned value
 This is represented as either:
 \begin{itemize}
 \item
-An index into the \dotdebugrnglists{} section (\DWFORMrnglistxTARG). 
-The unsigned ULEB operand identifies an offset location 
-relative to the base of that section (the location of the first offset 
-in the section, not the first byte of the section). The contents of 
-that location is then added to the base to determine the location of 
+An index into the \dotdebugrnglists{} section (\DWFORMrnglistxTARG).
+The unsigned ULEB operand identifies an offset location
+relative to the base of that section (the location of the first offset
+in the section, not the first byte of the section). The contents of
+that location is then added to the base to determine the location of
 the target range list of entries.
 \item
-An offset into the \dotdebugrnglists{} section (\DWFORMsecoffset). 
-The operand consists of a byte 
+An offset into the \dotdebugrnglists{} section (\DWFORMsecoffset).
+The operand consists of a byte
 offset\addtoindexx{section offset!in class rnglist value}
 from the beginning of the \dotdebugrnglists{} section.
 It is relocatable in a relocatable object file, and
-relocated in an executable or shared object file. In the 
+relocated in an executable or shared object file. In the
 \thirtytwobitdwarfformat, this offset is a 4-byte unsigned value;
 in the \sixtyfourbitdwarfformat, it is an 8-byte unsigned value
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
@@ -2312,10 +2320,10 @@ in the \sixtyfourbitdwarfformat, it is an 8-byte unsigned value
 \item \CLASSrnglistsptr \\
 \livetarg{datarep:classrnglistsptr}{}
 This is an offset\addtoindexx{section offset!in class rnglistsptr}
-into the \dotdebugrnglists{} section (\DWFORMsecoffset). 
-It consists of a byte offset from the beginning of the 
+into the \dotdebugrnglists{} section (\DWFORMsecoffset).
+It consists of a byte offset from the beginning of the
 \dotdebugrnglists{} section.
-It is relocatable in a relocatable object file, and relocated 
+It is relocatable in a relocatable object file, and relocated
 in an executable or shared object file.
 In the \thirtytwobitdwarfformat, this offset
 is a 4-byte unsigned value; in the 64-bit DWARF
@@ -2329,50 +2337,50 @@ There are four types of reference.\addtoindexx{reference class}
 \begin{itemize}
 \item
 The first type of reference can identify any debugging
-information entry within the containing unit. 
-This type of reference is an 
+information entry within the containing unit.
+This type of reference is an
 offset\addtoindexx{section offset!in class reference value}
 from the first byte of the compilation
 header for the compilation unit containing the reference. There
 are five forms for this type of reference. There are fixed
 length forms for one, two, four and eight byte offsets
 (respectively,
-\DWFORMrefnMARK 
-\DWFORMrefoneTARG, 
-\DWFORMreftwoTARG, 
+\DWFORMrefnMARK
+\DWFORMrefoneTARG,
+\DWFORMreftwoTARG,
 \DWFORMreffourTARG,
-and \DWFORMrefeightTARG). 
+and \DWFORMrefeightTARG).
 There is also an unsigned variable
-length offset encoded form that uses 
+length offset encoded form that uses
 unsigned LEB128\addtoindexx{LEB128!unsigned} numbers
-(\DWFORMrefudataTARG). 
+(\DWFORMrefudataTARG).
 Because this type of reference is within
 the containing compilation unit, no relocation of the value
 is required.
 
 \item
 The second type of reference can identify any debugging
-information entry within a 
+information entry within a
 \dotdebuginfo{} section; in particular,
 it may refer to an entry in a different compilation unit
 from the unit containing the reference, and may refer to an
 entry in a different shared object file.  This type of reference
-(\DWFORMrefaddrTARG) 
+(\DWFORMrefaddrTARG)
 is an offset from the beginning of the
-\dotdebuginfo{} 
+\dotdebuginfo{}
 section of the target executable or shared object file, or, for
-references within a \addtoindex{supplementary object file}, 
+references within a \addtoindex{supplementary object file},
 an offset from the beginning of the local \dotdebuginfo{} section;
 it is relocatable in a relocatable object file and frequently
-relocated in an executable or shared object file. 
+relocated in an executable or shared object file.
 \db
-In the 
-\thirtytwobitdwarfformat, this offset is a 4-byte unsigned value; 
-in the \sixtyfourbitdwarfformat, it is an 8-byte unsigned value 
+In the
+\thirtytwobitdwarfformat, this offset is a 4-byte unsigned value;
+in the \sixtyfourbitdwarfformat, it is an 8-byte unsigned value
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
 \textit{A debugging information entry that may be referenced by
-another compilation unit using 
+another compilation unit using
 \DWFORMrefaddr{} must have a global symbolic name.}
 
 \needlines{5}
@@ -2387,28 +2395,28 @@ or when the reference is used.}
 \item
 The third type of reference can identify any debugging
 information type entry that has been placed in its own
-\addtoindex{type unit}. This type of 
+\addtoindex{type unit}. This type of
 reference (\DWFORMrefsigeightTARG) is the
 \addtoindexx{type signature}
-8-byte type signature 
-(see Section \refersec{datarep:typesignaturecomputation}) 
-that was computed for the type. 
+8-byte type signature
+(see Section \refersec{datarep:typesignaturecomputation})
+that was computed for the type.
 
 \item
-The fourth type of reference is a reference from within the 
+The fourth type of reference is a reference from within the
 \dotdebuginfo{} section of the executable or shared object file to
-a debugging information entry in the \dotdebuginfo{} section of 
+a debugging information entry in the \dotdebuginfo{} section of
 a \addtoindex{supplementary object file}.
 This type of reference (\DWFORMrefsupfourTARG{}
-or \DWFORMrefsupeightTARG{}) is a 4- or 8-byte offset (respectively) 
-from the beginning of the \dotdebuginfo{} section in the 
+or \DWFORMrefsupeightTARG{}) is a 4- or 8-byte offset (respectively)
+from the beginning of the \dotdebuginfo{} section in the
 \addtoindex{supplementary object file}.
 
 \textit{The use of compilation unit relative references will reduce the
 number of link\dash time relocations and so speed up linking. The
 use of the second, third and fourth type of reference allows for the
 sharing of information, such as types, across compilation
-units, while the fourth type further allows for sharing of information 
+units, while the fourth type further allows for sharing of information
 across compilation units from different executables or shared object files.}
 
 \textit{A reference to any kind of compilation unit identifies the
@@ -2420,15 +2428,15 @@ header.}
 \item \CLASSstring \\
 \livetarg{datarep:classstring}{}
 A string is a sequence of contiguous non\dash null bytes followed by
-one null byte. 
+one null byte.
 \addtoindexx{string class}
-A string may be represented: 
+A string may be represented:
 \begin{itemize}
 \setlength{\itemsep}{0em}
-\item Immediately in the debugging information entry itself 
-(\DWFORMstringTARG), 
+\item Immediately in the debugging information entry itself
+(\DWFORMstringTARG),
 
-\item As an 
+\item As an
 \addtoindexx{section offset!in class string value}
 offset into a string table contained in
 the \dotdebugstr{} section of the object file (\DWFORMstrpTARG{}
@@ -2437,41 +2445,41 @@ or \DWFORMstrpeightTARG),
 \eb
 the \dotdebuglinestr{} section of the object file (\DWFORMlinestrpTARG),
 or as an offset into a string table contained in the
-\dotdebugstr{} section of a \addtoindex{supplementary object file} 
+\dotdebugstr{} section of a \addtoindex{supplementary object file}
 (\DWFORMstrpsupTARG{}
 \bb
 or \DWFORMstrpsupeightTARG),
 \eb
-\DWFORMstrpsupNAME{} offsets from the \dotdebuginfo{}  
+\DWFORMstrpsupNAME{} offsets from the \dotdebuginfo{}
 section of a \addtoindex{supplementary object file}
 refer to the local \dotdebugstr{} section of that same file.
 
 \needlines{6}
-In the \thirtytwobitdwarfformat, the representation of a 
+In the \thirtytwobitdwarfformat, the representation of a
 \DWFORMstrpNAME{}, \DWFORMlinestrpNAME{} or \DWFORMstrpsupNAME{}
 value is a 4-byte unsigned offset; in the \sixtyfourbitdwarfformat,
-it is an 8-byte unsigned offset 
+it is an 8-byte unsigned offset
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 \bb
-In both 32-bit and 64-bit formats, the representation of a 
-\DWFORMstrpeight{} or \DWFORMstrpsupeight{} 
+In both 32-bit and 64-bit formats, the representation of a
+\DWFORMstrpeight{} or \DWFORMstrpsupeight{}
 value is an 8-byte unsigned offset.
 \eb
 
 \needlines{6}
-\item As an indirect offset into the string table using an 
-index into a table of offsets contained in the 
-\dotdebugstroffsets{} section of the object file 
-(\DWFORMstrxTARG, \DWFORMstrxoneTARG, \DWFORMstrxtwoTARG, 
+\item As an indirect offset into the string table using an
+index into a table of offsets contained in the
+\dotdebugstroffsets{} section of the object file
+(\DWFORMstrxTARG, \DWFORMstrxoneTARG, \DWFORMstrxtwoTARG,
 \DWFORMstrxthreeTARG{} and \DWFORMstrxfourTARG).
-The representation of a \DWFORMstrxNAME{} value is an unsigned 
-\addtoindex{LEB128} value, which is interpreted as a zero-based 
+The representation of a \DWFORMstrxNAME{} value is an unsigned
+\addtoindex{LEB128} value, which is interpreted as a zero-based
 index into an array of offsets in the \dotdebugstroffsets{} section.
-The representation of a \DWFORMstrxoneNAME, \DWFORMstrxtwoNAME, 
-\DWFORMstrxthreeNAME{} or \DWFORMstrxfourNAME{} value is a 
+The representation of a \DWFORMstrxoneNAME, \DWFORMstrxtwoNAME,
+\DWFORMstrxthreeNAME{} or \DWFORMstrxfourNAME{} value is a
 1-, 2-, 3- or 4-byte unsigned integer value, respectively,
 which is similarly interpreted.
-The offset entries in the \dotdebugstroffsets{} section 
+The offset entries in the \dotdebugstroffsets{} section
 \bb
 are described in Section \refersec{datarep:stringoffsetstable}.
 \eb
@@ -2487,7 +2495,7 @@ Character Set standard (ISO/IEC 10646\dash 1:1993).
 Otherwise, the string representation is unspecified.
 
 \textit{The \addtoindex{Unicode} Standard Version 3 is fully compatible with
-ISO/IEC 10646\dash 1:1993. 
+ISO/IEC 10646\dash 1:1993.
 \addtoindexx{ISO 10646 character set standard}
 It contains all the same characters
 and encoding points as ISO/IEC 10646, as well as additional
@@ -2501,8 +2509,8 @@ not. However, the UTF\dash 8 representation is strongly recommended.}
 \needlines{4}
 \item \CLASSstroffsetsptr \\
 \livetarg{datarep:classstroffsetsptr}{}
-This is an offset into the \dotdebugstroffsets{} section 
-(\DWFORMsecoffset). It consists of an offset from the beginning of the 
+This is an offset into the \dotdebugstroffsets{} section
+(\DWFORMsecoffset). It consists of an offset from the beginning of the
 \dotdebugstroffsets{} section to the
 \bb
 header
@@ -2526,19 +2534,19 @@ This class has the same representation as class \CLASSloclist.
 
 \end{itemize}
 
-In no case does an attribute use one of the classes 
+In no case does an attribute use one of the classes
 \CLASSaddrptr,
 \CLASSlineptr,
-\CLASSloclistsptr, 
-\CLASSmacptr, 
-\CLASSrnglistsptr{} or 
+\CLASSloclistsptr,
+\CLASSmacptr,
+\CLASSrnglistsptr{} or
 \CLASSstroffsetsptr{}
 to point into either the
 \dotdebuginfo{} or \dotdebugstr{} section.
 
 \subsection{Form Encodings}
 \label{datarep:formencodings}
-The form encodings are listed in 
+The form encodings are listed in
 Table \referfol{tab:attributeformencodings}.
 
 \needlines{8}
@@ -2550,7 +2558,7 @@ Table \referfol{tab:attributeformencodings}.
 \endfirsthead
   \bfseries Form name&\bfseries Value &\bfseries Classes\\ \hline
 \endhead
-  \hline 
+  \hline
   \multicolumn{3}{l}{\emph{Continued on next page}}
 \endfoot
   \hline
@@ -2614,11 +2622,11 @@ Table \referfol{tab:attributeformencodings}.
 \section{Variable Length Data}
 \label{datarep:variablelengthdata}
 \addtoindexx{variable length data|see {LEB128}}
-Integers may be 
+Integers may be
 \addtoindexx{Little-Endian Base 128|see{LEB128}}
 encoded using \doublequote{Little-Endian Base 128}
 \addtoindexx{little-endian encoding|see{endian attribute}}
-(LEB128) numbers. 
+(LEB128) numbers.
 \addtoindexx{LEB128}
 LEB128 is a scheme for encoding integers
 densely that exploits the assumption that most integers are
@@ -2633,15 +2641,15 @@ unsigned integer, when the big end is all zeroes or sign
 extension bits.}
 
 \needlines{4}
-Unsigned LEB128\addtoindexx{LEB128!unsigned} (\addtoindex{ULEB128}) 
+Unsigned LEB128\addtoindexx{LEB128!unsigned} (\addtoindex{ULEB128})
 numbers are encoded as follows:
 \addtoindexx{LEB128!unsigned, encoding as}
 start at the low order end of an unsigned integer and chop
 it into 7-bit chunks. Place each chunk into the low order 7
 bits of a byte. Typically, several of the high order bytes
-will be 
+will be
 \bb
-zero, which may be discarded. 
+zero, which may be discarded.
 \eb
 Emit the remaining bytes in a
 stream, starting with the low order byte; set the high order
@@ -2659,7 +2667,7 @@ numbers. The
 that an additional byte follows.
 
 
-The encoding for signed, two\textquoteright{s} complement LEB128 
+The encoding for signed, two\textquoteright{s} complement LEB128
 (\addtoindex{SLEB128}) \addtoindexx{LEB128!signed, encoding as}
 numbers is similar, except that the criterion for discarding
 high order bytes is not whether they are zero, but whether
@@ -2670,21 +2678,21 @@ byte containing the low order 7 bits, with the high order
 bit cleared to indicate the end of the byte stream. Note
 that there is nothing within the LEB128 representation that
 indicates whether an encoded number is signed or unsigned. The
-decoder must know what type of number to expect. 
+decoder must know what type of number to expect.
 Table \refersec{tab:examplesofunsignedleb128encodings}
 gives some examples of unsigned LEB128\addtoindexx{LEB128!unsigned}
 numbers and Table \refersec{tab:examplesofsignedleb128encodings}
-gives some examples of signed LEB128\addtoindexx{LEB128!signed} 
+gives some examples of signed LEB128\addtoindexx{LEB128!signed}
 numbers.
 
-\textit{Some 
+\textit{Some
 \bb
-producers may choose to insert padding or alignment bytes by 
-retaining (not discarding) one or more high-order bytes that would 
+producers may choose to insert padding or alignment bytes by
+retaining (not discarding) one or more high-order bytes that would
 not affect the decoded value.}
 \eb
 
-\textit{Appendix \refersec{app:variablelengthdataencodingdecodinginformative} 
+\textit{Appendix \refersec{app:variablelengthdataencodingdecodinginformative}
 \addtoindexx{LEB128!examples}
 gives algorithms for encoding and decoding these forms.}
 
@@ -2693,7 +2701,7 @@ gives algorithms for encoding and decoding these forms.}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{c|c|c}
   \caption{Examples of unsigned LEB128 encodings}
-  \label{tab:examplesofunsignedleb128encodings} 
+  \label{tab:examplesofunsignedleb128encodings}
   \addtoindexx{LEB128 encoding!examples}\addtoindexx{LEB128!unsigned} \\
   \hline \bfseries Number&\bfseries First byte &\bfseries Second byte \\ \hline
 \endfirsthead
@@ -2717,8 +2725,8 @@ gives algorithms for encoding and decoding these forms.}
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{c|c|c}
-  \caption{Examples of signed LEB128 encodings} 
-  \label{tab:examplesofsignedleb128encodings} 
+  \caption{Examples of signed LEB128 encodings}
+  \label{tab:examplesofsignedleb128encodings}
   \addtoindexx{LEB128!signed} \\
   \hline \bfseries Number&\bfseries First byte &\bfseries Second byte \\ \hline
 \endfirsthead
@@ -2747,27 +2755,27 @@ gives algorithms for encoding and decoding these forms.}
 \subsection{DWARF Expressions}
 \label{datarep:dwarfexpressions}
 
-A 
+A
 \addtoindexx{DWARF expression!operator encoding}
 DWARF expression is stored in a \nolink{block} of contiguous
 bytes. The bytes form a sequence of operations. Each operation
 is a 1-byte code that identifies that operation, followed by
 zero or more bytes of additional data. The encodings for the
-operations are described in 
-Table \refersec{tab:dwarfoperationencodings}. 
+operations are described in
+Table \refersec{tab:dwarfoperationencodings}.
 
 \needlines{10}
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c|c|l}
   \caption{DWARF operation encodings} \label{tab:dwarfoperationencodings} \\
-  \hline & &\bfseries No. of  &\\ 
+  \hline & &\bfseries No. of  &\\
   \bfseries Operation&\bfseries Code &\bfseries Operands &\bfseries Notes\\ \hline
 \endfirsthead
-   & &\bfseries No. of &\\ 
+   & &\bfseries No. of &\\
   \bfseries Operation&\bfseries Code &\bfseries  Operands &\bfseries Notes\\ \hline
 \endhead
-  \hline 
+  \hline
   \multicolumn{4}{l}{\emph{Continued on next page}}
 \endfoot
   \hline
@@ -2777,7 +2785,7 @@ Table \refersec{tab:dwarfoperationencodings}.
 
 \textit{Reserved}	&0x01&-& \\
 \textit{Reserved}	&0x02&-& \\
-\DWOPaddr			&0x03&1 & constant address  \\ 
+\DWOPaddr			&0x03&1 & constant address  \\
 					& & &(size is target specific) \\
 \textit{Reserved}	&0x04&-& \\
 \textit{Reserved}	&0x05&-& \\
@@ -2882,11 +2890,11 @@ Table \refersec{tab:dwarfoperationencodings}.
 \eb
 					&	&TOS~-~1   &integer register number \\
 \bbeb
-\DWOPpushlane~\ddag	& 0xab &0	& \\					
+\DWOPpushlane~\ddag	& 0xab &0	& \\
 \bbeb
 \DWOPextended~\ddag & 0xde & 1~+ & \\
 \bbeb
-\DWOPuserextended~\ddag 
+\DWOPuserextended~\ddag
 					& 0xdf & 1~+ & \\
 \DWOPlouser			& 0xe0 && \\
 \DWOPhiuser			& \xff && \\
@@ -2899,13 +2907,13 @@ Table \refersec{tab:dwarfoperationencodings}.
 \subsection{Location Descriptions}
 \label{datarep:locationdescriptions}
 
-A location description is used to compute the 
+A location description is used to compute the
 location of a variable or other entity.
 
 \subsection{Location Lists}
 \label{datarep:locationlists}
 Each entry in a \addtoindex{location list} is either a location list entry,
-a base address entry, a default location entry or an 
+a base address entry, a default location entry or an
 \addtoindexx{end-of-list entry!in location list}
 end-of-list entry.
 
@@ -2917,7 +2925,7 @@ Table \refersec{tab:locationlistentryencodingvalues}.
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c}
-  \caption{Location list entry encoding values} 
+  \caption{Location list entry encoding values}
   \label{tab:locationlistentryencodingvalues} \\
   \hline \bfseries Location list entry encoding name&\bfseries Value \\ \hline
 \endfirsthead
@@ -2947,7 +2955,7 @@ Table \refersec{tab:locationlistentryencodingvalues}.
 \end{centering}
 
 \bb
-If a producer defines a producer-specific kind of location 
+If a producer defines a producer-specific kind of location
 list entry, the kind code must be immediately followed by an
 unsigned LEB128 value that specifies the length of all
 remaining bytes (not including either the kind or the length
@@ -2959,9 +2967,9 @@ itself) for that entry.
 \label{datarep:basetypeattributeencodings}
 
 The\hypertarget{chap:DWATencodingencodingofbasetype}{}
-encodings of the constants used in the 
-\DWATencodingDEFN{} attribute\addtoindexx{encoding attribute} 
-are given in 
+encodings of the constants used in the
+\DWATencodingDEFN{} attribute\addtoindexx{encoding attribute}
+are given in
 Table \refersec{tab:basetypeencodingvalues}.
 
 \begin{centering}
@@ -3010,9 +3018,9 @@ Table \refersec{tab:basetypeencodingvalues}.
 
 \vspace*{2mm}
 \needlines{10}
-The encodings of the constants used in the 
-\DWATdecimalsign{} attribute 
-are given in 
+The encodings of the constants used in the
+\DWATdecimalsign{} attribute
+are given in
 Table \refersec{tab:decimalsignencodings}.
 
 \needlines{10}
@@ -3032,13 +3040,13 @@ Table \refersec{tab:decimalsignencodings}.
 \DWDSleadingoverpunch{}  & 0x02  \\
 \DWDStrailingoverpunch{} & 0x03  \\
 \DWDSleadingseparate{}   & 0x04  \\
-\DWDStrailingseparate{}  & 0x05 \\ 
+\DWDStrailingseparate{}  & 0x05 \\
 \end{longtable}
 \end{centering}
 
 \needlines{9}
-The encodings of the constants used in the 
-\DWATendianity{} attribute are given in 
+The encodings of the constants used in the
+\DWATendianity{} attribute are given in
 Table \refersec{tab:endianityencodings}.
 
 \begin{centering}
@@ -3066,11 +3074,11 @@ Table \refersec{tab:endianityencodings}.
 \needlines{10}
 \section{Accessibility Codes}
 \label{datarep:accessibilitycodes}
-The encodings of the constants used in the 
+The encodings of the constants used in the
 \DWATaccessibility{}
-attribute 
+attribute
 \addtoindexx{accessibility attribute}
-are given in 
+are given in
 Table \refersec{tab:accessibilityencodings}.
 
 \begin{centering}
@@ -3096,9 +3104,9 @@ Table \refersec{tab:accessibilityencodings}.
 
 \section{Visibility Codes}
 \label{datarep:visibilitycodes}
-The encodings of the constants used in the 
-\DWATvisibility{} attribute are given in 
-Table \refersec{tab:visibilityencodings}. 
+The encodings of the constants used in the
+\DWATvisibility{} attribute are given in
+Table \refersec{tab:visibilityencodings}.
 
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
@@ -3123,8 +3131,8 @@ Table \refersec{tab:visibilityencodings}.
 \section{Virtuality Codes}
 \label{datarep:vitualitycodes}
 
-The encodings of the constants used in the 
-\DWATvirtuality{} attribute are given in 
+The encodings of the constants used in the
+\DWATvirtuality{} attribute are given in
 Table \refersec{tab:virtualityencodings}.
 
 \begin{centering}
@@ -3148,27 +3156,27 @@ Table \refersec{tab:virtualityencodings}.
 \end{centering}
 
 \needlines{4}
-The value 
-\DWVIRTUALITYnone{} is equivalent to the absence of the 
+The value
+\DWVIRTUALITYnone{} is equivalent to the absence of the
 \DWATvirtuality{}
 attribute.
 
 \section{Source Languages}
 \label{datarep:sourcelanguages}
 
-The encodings of the constants used 
+The encodings of the constants used
 \addtoindexx{language attribute, encoding}
-in 
+in
 \addtoindexx{language name encoding}
-the 
+the
 \bb
 \DWATlanguagename{}
 \eb
-attribute are given in 
+attribute are given in
 Table \refersec{tab:languageencodings}.
 \db
 Table \refersec{tab:languageencodings}
-also shows the 
+also shows the
 \addtoindexx{lower bound attribute!default}
 default lower bound, if any, assumed for
 an omitted \DWATlowerbound{} attribute in the context of a
@@ -3182,12 +3190,12 @@ defined language.
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c|c}
   \caption{Language encodings} \label{tab:languageencodings}\\
-  \hline \bfseries Language name&\bfseries Value &\bfseries Default Lower Bound \\ 
+  \hline \bfseries Language name&\bfseries Value &\bfseries Default Lower Bound \\
   \hline
 \endfirsthead
   \bfseries Language name&\bfseries Value &\bfseries Default Lower Bound\\ \hline
 \endhead
-  \hline 
+  \hline
   \multicolumn{3}{l}{\emph{Continued on next page}}
 \endfoot
   \hline
@@ -3231,15 +3239,16 @@ defined language.
 \DWLNAMEHLSL~\ddag			&0x0022	&0 \\
 \DWLNAMEOpenCLCPP~\ddag		&0x0023	&0 \\
 \DWLNAMECPPforOpenCL~\ddag	&0x0024	&0 \\
-\DWLNAMESYCL~\ddag			&0x0025 &0 \\ 
+\DWLNAMESYCL~\ddag			&0x0025 &0 \\
 \DWLNAMERuby~\ddag			&0x0026 &0 \\
 \DWLNAMEMove~\ddag			&0x0027 &0 \\
 \DWLNAMEHylo~\ddag			&0x0028	&0 \\
 \DWLNAMEHIP~\ddag			&0x0029 &0 \\
 \DWLNAMEOdin~\ddag			&0x002a &0 \\
-\DWLNAMEPFour~\ddag			&0x002b &0
-\eb 
-\\ 
+\DWLNAMEPFour~\ddag			&0x002b &0 \\
+\DWLNAMEMetal~\ddag			&0x002c &0
+\eb
+\\
 \DWLNAMElouser				&0x8000 &  \\
 \DWLNAMEhiuser				&\xffff &  \\
 \end{longtable}
@@ -3248,16 +3257,16 @@ defined language.
 \section{Address Class Encodings}
 \label{datarep:addressclassencodings}
 
-The value of the common 
-\addtoindex{address class} encoding 
+The value of the common
+\addtoindex{address class} encoding
 \DWADDRnone{} is 0.
 
 \needlines{16}
 \section{Identifier Case}
 \label{datarep:identifiercase}
 
-The encodings of the constants used in the 
-\DWATidentifiercase{} attribute are given in 
+The encodings of the constants used in the
+\DWATidentifiercase{} attribute are given in
 Table \refersec{tab:identifiercaseencodings}.
 
 \needlines{8}
@@ -3283,7 +3292,7 @@ Table \refersec{tab:identifiercaseencodings}.
 \needlines{8}
 \section{Calling Convention Encodings}
 \label{datarep:callingconventionencodings}
-The encodings of the constants used in the 
+The encodings of the constants used in the
 \DWATcallingconvention{} attribute are given in
 Table \refersec{tab:callingconventionencodings}.
 
@@ -3297,10 +3306,10 @@ Table \refersec{tab:callingconventionencodings}.
 \endhead
   \hline \emph{Continued on next page}
 \endfoot
-  \hline 
+  \hline
 \endlastfoot
 
-\DWCCnormal			&0x01 \\	
+\DWCCnormal			&0x01 \\
 \DWCCprogram		&0x02 \\
 \DWCCnocall			&0x03 \\
 \DWCCpassbyreference&0x04 \\
@@ -3315,10 +3324,10 @@ Table \refersec{tab:callingconventionencodings}.
 \section{Inline Codes}
 \label{datarep:inlinecodes}
 
-The encodings of the constants used in 
+The encodings of the constants used in
 \addtoindexx{inline attribute}
-the 
-\DWATinline{} attribute are given in 
+the
+\DWATinline{} attribute are given in
 Table \refersec{tab:inlineencodings}.
 
 \needlines{8}
@@ -3350,8 +3359,8 @@ Table \refersec{tab:inlineencodings}.
 \section{Array Ordering}
 \label{datarep:arrayordering}
 
-The encodings of the constants used in the 
-\DWATordering{} attribute are given in 
+The encodings of the constants used in the
+\DWATordering{} attribute are given in
 Table \refersec{tab:orderingencodings}.
 
 \needlines{8}
@@ -3378,12 +3387,12 @@ Table \refersec{tab:orderingencodings}.
 \section{Discriminant Lists}
 \label{datarep:discriminantlists}
 
-The descriptors used in 
+The descriptors used in
 \addtoindexx{discriminant list attribute}
-the 
-\DWATdiscrlist{} attribute are 
+the
+\DWATdiscrlist{} attribute are
 encoded as 1-byte constants. The
-defined values are given in 
+defined values are given in
 Table \refersec{tab:discriminantdescriptorencodings}.
 
 % Odd that the 'Name' field capitalized here, it is not caps elsewhere.
@@ -3476,71 +3485,7 @@ are given in Table \referfol{datarep:defaultedattributeencodings}.
 \end{longtable}
 \end{centering}
 
-\needlines{10}
-\section{Address Range Table}
-\label{datarep:addrssrangetable}
-
-Each 
-\bb
-\dotdebugaranges{} section contribution
-begins with a header containing:
-\eb
-\begin{enumerate}[1. ]
-
-\item \HFNunitlength{} (\livelink{datarep:initiallengthvalues}{initial length}) \\
-A 4-byte or 12-byte length containing the length of the
-\addtoindexx{initial length}
-set of entries for this compilation unit, not including the
-length field itself
-\bb
-(see Section \refersec{datarep:32bitand64bitdwarfformats}).
-\eb
-
-\item \HFNversion{} (\HFTuhalf) \\
-A 2-byte version identifier representing the version of the
-DWARF information for the address range table.
-
-This value in this field \addtoindexx{version number!address range table} is 2. 
- 
-\item \HFNdebuginfooffset{} (\livelink{datarep:sectionoffsetlength}{section offset}) \\
-A 
-\addtoindexx{section offset!in .debug\_aranges header}
-4-byte or 8-byte offset into the 
-\dotdebuginfo{} section of
-the compilation unit header. In the \thirtytwobitdwarfformat,
-this is a 4-byte unsigned offset; in the \sixtyfourbitdwarfformat,
-this is an 8-byte unsigned offset 
-(see Section \refersec{datarep:32bitand64bitdwarfformats}).
-
-\item \HFNaddresssize{} (\HFTubyte) \\
-\addtoindexx{size of an address}
-A 1-byte unsigned integer containing the size in bytes of an
-address. 
-\db
-
-\item \HFNreservedwassegmentselectorsize{} 
-\bbeb
-\\
-
-\end{enumerate}
-
-This header is followed by a series of tuples. Each tuple
-consists of 
-\bb
-an address and a length. The
-address and length size are each given by the \HFNaddresssize{}
-field of the header. 
-The first tuple following the header in
-each set begins at an offset that is a multiple of the size
-of a single tuple (that is, 
-\eb
-twice the \addtoindex{size of an address}). 
-The header is padded, if necessary, to that boundary. 
-Each set of tuples is terminated by 
-\db
-a 0 for the address and a 0 for the length. 
-\db
-
+\db	% Delete Section 7.21, Address Range Table
 
 \needlines{12}
 \section{Line Number Information}
@@ -3549,13 +3494,13 @@ a 0 for the address and a 0 for the length.
 The \addtoindexi{version number}{version number!line number information}
 in the line number program header is \versiondotdebugline{}.
 
-The boolean values \doublequote{true} and \doublequote{false} 
+The boolean values \doublequote{true} and \doublequote{false}
 used by the line number information program are encoded
-as a single byte containing the value 0 
+as a single byte containing the value 0
 for \doublequote{false,} and a non-zero value for \doublequote{true.}
 
 \needlines{10}
-The encodings for the standard opcodes are given in 
+The encodings for the standard opcodes are given in
 \addtoindexx{line number opcodes!standard opcode encoding}
 Table \refersec{tab:linenumberstandardopcodeencodings}.
 
@@ -3593,7 +3538,7 @@ Table \refersec{tab:linenumberstandardopcodeencodings}.
 
 \clearpage
 \needlines{12}
-The encodings for the extended opcodes are given in 
+The encodings for the extended opcodes are given in
 \addtoindexx{line number opcodes!extended opcode encoding}
 Table \refersec{tab:linenumberextendedopcodeencodings}.
 
@@ -3613,7 +3558,7 @@ Table \refersec{tab:linenumberextendedopcodeencodings}.
 
 \DWLNEendsequence	&0x01 \\
 \DWLNEsetaddress	&0x02 \\
-\textit{Reserved}	&0x03\footnote{Code 0x03 is reserved to allow backward compatible support of the 
+\textit{Reserved}	&0x03\footnote{Code 0x03 is reserved to allow backward compatible support of the
                                    DW\_LNE\_define\_file\addtoindexx{DW\_LNE\_define\_file (deprecated)}
 								   operation which was defined in \DWARFVersionIV{} and earlier.} \\
 \DWLNEsetdiscriminator &0x04 \\
@@ -3629,7 +3574,7 @@ Table \refersec{tab:linenumberextendedopcodeencodings}.
 \end{centering}
 
 \needlines{6}
-The encodings for the line number header entry formats are given in 
+The encodings for the line number header entry formats are given in
 \addtoindexx{line number opcodes!file entry format encoding}
 Table \refersec{tab:linenumberheaderentryformatencodings}.
 
@@ -3667,14 +3612,14 @@ The \addtoindexi{version number}{version number!macro information}
 in the macro information header is \versiondotdebugmacro{}.
 
 The source line numbers and source file indices encoded in the
-macro information section are represented as 
+macro information section are represented as
 unsigned LEB128\addtoindexx{LEB128!unsigned} numbers.
 
 \needlines{4}
-The macro information entry type is encoded as a single unsigned byte. 
-The encodings 
+The macro information entry type is encoded as a single unsigned byte.
+The encodings
 \addtoindexx{macro information entry types!encoding}
-are given in 
+are given in
 Table \refersec{tab:macroinfoentrytypeencodings}.
 
 \needlines{40}
@@ -3701,16 +3646,16 @@ Table \refersec{tab:macroinfoentrytypeencodings}.
 \DWMACROdefinestrp      &0x05 \\
 \DWMACROundefstrp       &0x06 \\
 \DWMACROimport          &0x07 \\
-\textit{Reserved}		&0x08\footnote{Code 0x08 is reserved to allow backward compatible 
-								support of the 
+\textit{Reserved}		&0x08\footnote{Code 0x08 is reserved to allow backward compatible
+								support of the
 								DW\_MACRO\_define\_sup\addtoindexx{DW\_MACRO\_define\_sup (deprecated)}
 								entry type that was defined (only) in \DWARFVersionV.} \\
-\textit{Reserved}		&0x09\footnote{Code 0x09 is reserved to allow backward compatible 
-								support of the 
+\textit{Reserved}		&0x09\footnote{Code 0x09 is reserved to allow backward compatible
+								support of the
 								DW\_MACRO\_undef\_sup\addtoindexx{DW\_MACRO\_undef\_sup (deprecated)}
 								entry type that was defined (only) in \DWARFVersionV.} \\
-\textit{Reserved}		&0x0a\footnote{Code 0x0a is reserved to allow backward compatible 
-								support of the 
+\textit{Reserved}		&0x0a\footnote{Code 0x0a is reserved to allow backward compatible
+								support of the
 								DW\_MACRO\_import\_sup\addtoindexx{DW\_MACRO\_import\_sup (deprecated)}
 								entry type that was defined (only) in \DWARFVersionV.} \\
 \DWMACROdefinestrx      &0x0b \\
@@ -3750,14 +3695,14 @@ Table \refersec{tab:callframeinstructionencodings}.
 \setlength{\extrarowheight}{0.15cm}
 \begin{longtable}{l|c|c|P{3.5cm}}
   \caption{Call frame instruction encodings} \label{tab:callframeinstructionencodings} \\
-  \hline 
+  \hline
                         & \bfseries High 2 & \bfseries Low 6 & \bfseries Operand 1, \\
-  \bfseries Instruction & \bfseries Bits   & \bfseries Bits  & \bfseries Operand 2  \\ 
+  \bfseries Instruction & \bfseries Bits   & \bfseries Bits  & \bfseries Operand 2  \\
   \hline
 \endfirsthead
   \hline
                         & \bfseries High 2 & \bfseries Low 6 & \bfseries Operand 1, \\
-  \bfseries Instruction & \bfseries Bits   & \bfseries Bits  & \bfseries Operand 2  \\ 
+  \bfseries Instruction & \bfseries Bits   & \bfseries Bits  & \bfseries Operand 2  \\
   \hline
 \endhead
   \hline
@@ -3806,7 +3751,7 @@ Each entry in a \addtoindex{range list}
 (see Section \refersec{chap:noncontiguousaddressranges})
 is either a
 \addtoindexx{base address selection entry!in range list}
-range list entry, 
+range list entry,
 \addtoindexx{range list}
 a base address selection entry, or an end-of-list entry.
 
@@ -3818,7 +3763,7 @@ Table \refersec{tab:rnglistsentryencodingvalues}.
 \begin{centering}
 \setlength{\extrarowheight}{0.1cm}
 \begin{longtable}{l|c}
-  \caption{Range list entry encoding values} 
+  \caption{Range list entry encoding values}
   \label{tab:rnglistsentryencodingvalues} \\
   \hline \bfseries Range list entry encoding name&\bfseries Value \\ \hline
 \endfirsthead
@@ -3841,7 +3786,7 @@ Table \refersec{tab:rnglistsentryencodingvalues}.
 \DWRLEincludernglist~\ddag	& 0x08 \\
 \DWRLEincludernglistx~\ddag	& 0x09 \\
 \DWRLElouser~\ddag 			& 0xc0 \\
-\DWRLEhiuser~\ddag 			& \xff 
+\DWRLEhiuser~\ddag 			& \xff
 \eb
 \end{longtable}
 \end{centering}
@@ -3856,13 +3801,13 @@ itself) for that entry.
 
 For a \addtoindex{range list} to be specified, the base address of the
 \addtoindexx{base address selection entry!in range list}
-corresponding compilation unit must be defined 
+corresponding compilation unit must be defined
 (see Section \refersec{chap:fullandpartialcompilationunitentries}).
 
 \needlines{6}
 \section{String Offsets Table}
 \label{datarep:stringoffsetstable}
-Each 
+Each
 \bb
 \dotdebugstroffsets{} or \dotdebugstroffsetsdwo{} section
 contribution
@@ -3892,7 +3837,7 @@ A 2-byte version identifier containing the value
 Reserved to DWARF (must be zero).
 \end{enumerate}
 
-This header is followed by a series of string table 
+This header is followed by a series of string table
 \bb
 offset entries
 \eb
@@ -3900,7 +3845,7 @@ that have the same representation as \DWFORMstrp.
 For the 32-bit DWARF format, each offset is 4 bytes long; for
 the 64-bit DWARF format, each offset is 8 bytes long.
 
-The 
+The
 \bb
 \DWATstroffsets{} attribute points to the header.
 \eb
@@ -3909,14 +3854,14 @@ The entries following the header are indexed sequentially,
 starting from 0.
 
 \bb
-\textit{This table may be padded with unused entries. 
-These entries should have all 1 bits as a hint that the 
+\textit{This table may be padded with unused entries.
+These entries should have all 1 bits as a hint that the
 entries are unused.}
 \eb
 
 \section{Address Table}
 \label{datarep:addresstable}
-Each 
+Each
 \bb
 \dotdebugaddr{} section contribution
 \eb
@@ -3944,18 +3889,18 @@ bytes of an address
 on the target system.
 
 \needlines{4}
-\item	\HFNreservedwassegmentselectorsize{} 
+\item	\HFNreservedwassegmentselectorsize{}
 \db
 \\
 
 \end{enumerate}
 
-This header is followed by a series of 
+This header is followed by a series of
 \bb
 addresses where
 \eb
 the address size is given by the \HFNaddresssize{}
-field of the header. 
+field of the header.
 \db
 
 The \DWATaddrbase{} attribute points to the first entry
@@ -3963,15 +3908,15 @@ following the header. The entries are indexed sequentially
 from this base entry, starting from 0.
 
 \bb
-\textit{This table may be padded with unused entries. 
-These entries should have all 1 bits as a hint that the 
+\textit{This table may be padded with unused entries.
+These entries should have all 1 bits as a hint that the
 entries are unused.}
 \eb
 
 \needlines{10}
 \section{Range List Table}
 \label{app:ranglisttable}
-Each \dotdebugrnglists{} and \dotdebugrnglistsdwo{} section 
+Each \dotdebugrnglists{} and \dotdebugrnglistsdwo{} section
 \bb
 contribution
 \eb
@@ -3989,17 +3934,17 @@ including the length field itself
 \item  \HFNversion{} (\HFTuhalf) \\
 \addtoindexx{version number!range list table}
 A 2-byte version identifier containing the value
-\versiondotdebugrnglists{}. 
+\versiondotdebugrnglists{}.
 
 \needlines{4}
 \item	\HFNaddresssize{} (\HFTubyte) \\
 A 1-byte unsigned integer containing the size in
-bytes of an address 
+bytes of an address
 \db
 on the target system.
 
 \needlines{4}
-\item	\HFNreservedwassegmentselectorsize{} 
+\item	\HFNreservedwassegmentselectorsize{}
 \db
 \\
 
@@ -4009,23 +3954,23 @@ that follow the header. This count may be zero.
 \end{enumerate}
 
 Immediately following the header is an array of offsets.
-This array is followed by a series of range lists. 
+This array is followed by a series of range lists.
 
-If the \HFNoffsetentrycount{} is non-zero, there 
+If the \HFNoffsetentrycount{} is non-zero, there
 is one offset for each range list. The contents
-of the $i$\textsuperscript{th} offset is the offset 
+of the $i$\textsuperscript{th} offset is the offset
 (an unsigned integer) from the
-beginning of the offset array to the location of the 
+beginning of the offset array to the location of the
 $i$\textsuperscript{th} range list.
-In the 32-bit DWARF format, each offset is 4-bytes in size; 
-in the 64-bit DWARF format, each offset is 8-bytes in size 
+In the 32-bit DWARF format, each offset is 4-bytes in size;
+in the 64-bit DWARF format, each offset is 8-bytes in size
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
 \needlines{5}
-\textit{If the \HFNoffsetentrycount{} is zero, then \DWFORMrnglistx{} cannot 
-be used to access a range list; \DWFORMsecoffset{} must be used 
-instead. If the \HFNoffsetentrycount{} is non-zero, then \DWFORMrnglistx{} 
-may be used to access a range 
+\textit{If the \HFNoffsetentrycount{} is zero, then \DWFORMrnglistx{} cannot
+be used to access a range list; \DWFORMsecoffset{} must be used
+instead. If the \HFNoffsetentrycount{} is non-zero, then \DWFORMrnglistx{}
+may be used to access a range
 \bb
 list.
 \eb\db
@@ -4035,15 +3980,15 @@ Range lists are
 described in Section \refersec{chap:noncontiguousaddressranges}.
 \db
 
-The \DWATrnglistsbase{} attribute points to the first offset 
+The \DWATrnglistsbase{} attribute points to the first offset
 following the header. The range lists are referenced
 by the index of the position of their corresponding offset in the
 array of offsets, which indirectly specifies the offset to the
 target list.
 
 \bb
-\textit{This table may be padded with unused entries. 
-These entries should have all 1 bits as a hint that the 
+\textit{This table may be padded with unused entries.
+These entries should have all 1 bits as a hint that the
 entries are unused.}
 \eb
 
@@ -4074,12 +4019,12 @@ A 2-byte version identifier containing the value
 \needlines{5}
 \item	\HFNaddresssize{} (\HFTubyte) \\
 A 1-byte unsigned integer containing the size in
-bytes of an address 
+bytes of an address
 \db
 on the target system.
 
 \needlines{4}
-\item	\HFNreservedwassegmentselectorsize{} 
+\item	\HFNreservedwassegmentselectorsize{}
 \db
 \\
 
@@ -4089,40 +4034,40 @@ that follow the header. This count may be zero.
 \end{enumerate}
 
 Immediately following the header is an array of offsets.
-This array is followed by a series of 
+This array is followed by a series of
 \bb
-value lists and 
+value lists and
 \eb
-location lists. 
+location lists.
 
-If the \HFNoffsetentrycount{} is non-zero, there 
-is one offset for each 
+If the \HFNoffsetentrycount{} is non-zero, there
+is one offset for each
 \bb
-value list and 
+value list and
 \eb
 location list. The contents
-of the $i$\textsuperscript{th} offset is the offset 
+of the $i$\textsuperscript{th} offset is the offset
 (an unsigned integer) from the
-beginning of the offset array to the location of the 
-$i$\textsuperscript{th} 
+beginning of the offset array to the location of the
+$i$\textsuperscript{th}
 \bb
-value list or 
+value list or
 \eb
-location list. 
-In the 32-bit DWARF format, each offset is 4-bytes in size; 
-in the 64-bit DWARF format, each offset is 8-bytes in size 
+location list.
+In the 32-bit DWARF format, each offset is 4-bytes in size;
+in the 64-bit DWARF format, each offset is 8-bytes in size
 (see Section \refersec{datarep:32bitand64bitdwarfformats}).
 
-\textit{If the \HFNoffsetentrycount{} is zero, then \DWFORMloclistx{} cannot 
-be used to access a 
+\textit{If the \HFNoffsetentrycount{} is zero, then \DWFORMloclistx{} cannot
+be used to access a
 \bb
-value list or 
+value list or
 \eb
-location list; \DWFORMsecoffset{} must be used 
-instead. If the \HFNoffsetentrycount{} is non-zero, then \DWFORMloclistx{} 
-may be used to access a 
+location list; \DWFORMsecoffset{} must be used
+instead. If the \HFNoffsetentrycount{} is non-zero, then \DWFORMloclistx{}
+may be used to access a
 \bb
-value list or location 
+value list or location
 \eb
 list.
 \db
@@ -4134,8 +4079,8 @@ Value lists are described in Section \refersec{chap:valuelists}.
 Location lists are described in Section \refersec{chap:locationlists}.
 \db
 
-The \DWATloclistsbase{} attribute points to the first offset 
-following the header. The 
+The \DWATloclistsbase{} attribute points to the first offset
+following the header. The
 \bb
 value lists and
 \eb
@@ -4150,10 +4095,10 @@ target list.
 The debugging information in this format is intended to
 exist in sections of an object file, or an equivalent
 separate file or database, having names beginning with
-the prefix ".debug\_" (see Appendix 
+the prefix ".debug\_" (see Appendix
 \refersec{app:dwarfsectionversionnumbersinformative}
-for a complete list of such names). 
-Except as specifically specified, this information is not 
+for a complete list of such names).
+Except as specifically specified, this information is not
 aligned on 2-, 4- or 8-byte boundaries. Consequently:
 
 \begin{itemize}
@@ -4161,7 +4106,7 @@ aligned on 2-, 4- or 8-byte boundaries. Consequently:
 32-bit addresses, an assembler or compiler must provide a way
 to produce 2-byte and 4-byte quantities without alignment
 restrictions, and the linker must be able to relocate a
-4-byte address or 
+4-byte address or
 \addtoindexx{section offset!alignment of}
 section offset that occurs at an arbitrary
 alignment.
@@ -4170,7 +4115,7 @@ alignment.
 64-bit addresses, an assembler or compiler must provide a
 way to produce 2-byte, 4-byte and 8-byte quantities without
 alignment restrictions, and the linker must be able to relocate
-an 8-byte address or 4-byte 
+an 8-byte address or 4-byte
 \addtoindexx{section offset!alignment of}
 section offset that occurs at an
 arbitrary alignment.
@@ -4179,7 +4124,7 @@ arbitrary alignment.
 32-bit addresses, an assembler or compiler must provide a
 way to produce 2-byte, 4-byte and 8-byte quantities without
 alignment restrictions, and the linker must be able to relocate
-a 4-byte address or 8-byte 
+a 4-byte address or 8-byte
 \addtoindexx{section offset!alignment of}
 section offset that occurs at an
 arbitrary alignment.
@@ -4193,7 +4138,7 @@ executable object.}
 64-bit addresses, an assembler or compiler must provide a
 way to produce 2-byte, 4-byte and 8-byte quantities without
 alignment restrictions, and the linker must be able to
-relocate an 8-byte address or 
+relocate an 8-byte address or
 \addtoindexx{section offset!alignment of}
 section offset that occurs at
 an arbitrary alignment.
@@ -4233,8 +4178,8 @@ Table \ref{tab:integerrepresentationnames}.
 \section{Type Signature Computation}
 \label{datarep:typesignaturecomputation}
 
-A \addtoindex{type signature} is used by a DWARF consumer 
-to resolve type references to the type definitions that 
+A \addtoindex{type signature} is used by a DWARF consumer
+to resolve type references to the type definitions that
 are contained in \addtoindex{type unit}s (see Section
 \refersec{chap:typeunitentries}).
 
@@ -4243,8 +4188,8 @@ are contained in \addtoindex{type unit}s (see Section
 only compare two type signatures to check for equality.}
 
 \needlines{4}
-The type signature for a type T0 is formed from the 
-\MDfive{}\footnote{\livetarg{def:MDfive}{MD5} Message Digest Algorithm, 
+The type signature for a type T0 is formed from the
+\MDfive{}\footnote{\livetarg{def:MDfive}{MD5} Message Digest Algorithm,
 R.L. Rivest, RFC 1321, April 1992}
 digest of a flattened description of the type. The flattened
 description of the type is a byte sequence derived from the
@@ -4262,7 +4207,7 @@ is nested inside another type or a namespace, append to S
 the type\textquoteright s context as follows: For each surrounding type
 or namespace, beginning with the outermost such construct,
 append the letter 'C', the DWARF tag of the construct, and
-the name (taken from 
+the name (taken from
 \addtoindexx{name attribute}
 the \DWATname{} attribute) of the type
 \addtoindexx{name attribute}
@@ -4344,16 +4289,16 @@ code, and the attribute value.
 \simplerule[\textwidth]
 \end{table}
 
-Note that except for the initial 
+Note that except for the initial
 \DWATname{} attribute,
 \addtoindexx{name attribute}
 attributes are appended in order according to the alphabetical
 spelling of their identifier.
 
 \needlines{4}
-If an implementation defines any 
+If an implementation defines any
 \bb
-producer-specific 
+producer-specific
 \eb
 attributes,
 any such attributes that are essential to the definition of
@@ -4361,7 +4306,7 @@ the type are also included at the end of the above list,
 in their own alphabetical suborder.
 
 An attribute that refers to another type entry T is processed
-as follows: 
+as follows:
 \begin{enumerate}[ a)]
 \item
 If T is in the list V at some V[x], use the
@@ -4381,23 +4326,23 @@ the value consists of the form code (encoded as an unsigned
 LEB128 value) followed by the encoding of the value according
 to the form code. To ensure reproducibility of the signature,
 the set of forms used in the signature computation is limited
-to the following: 
-\DWFORMsdata, 
-\DWFORMflag, 
+to the following:
+\DWFORMsdata,
+\DWFORMflag,
 \DWFORMstring,
 \DWFORMexprval,
 and \DWFORMblock.
 
 \needlines{14}
 \item If the tag in Step 3 is one of \DWTAGpointertype,
-\DWTAGreferencetype, 
+\DWTAGreferencetype,
 \DWTAGrvaluereferencetype,
-\DWTAGptrtomembertype, 
+\DWTAGptrtomembertype,
 or \DWTAGfriend, and the referenced
-type (via the \DWATtype{} or 
+type (via the \DWATtype{} or
 \DWATfriend{} attribute) has a
 \DWATname{} attribute, append to S the letter 'N', the DWARF
-attribute code (\DWATtype{} or 
+attribute code (\DWATtype{} or
 \DWATfriend), the context of
 the type (according to the method in Step 2), the letter 'E',
 and the name of the type. For \DWTAGfriend, if the referenced
@@ -4407,12 +4352,12 @@ name to be used is the ABI-specific name of the subprogram
 
 \needlines{6}
 \item If the tag in Step 3 is not one of \DWTAGpointertype,
-\DWTAGreferencetype, 
+\DWTAGreferencetype,
 \DWTAGrvaluereferencetype,
-\DWTAGptrtomembertype, or 
+\DWTAGptrtomembertype, or
 \DWTAGfriend, but has
 a \DWATtype{} attribute, or if the referenced type (via
-the \DWATtype{} or 
+the \DWATtype{} or
 \DWATfriend{} attribute) does not have a
 \DWATname{} attribute, the attribute is processed according to
 the method in Step 4 for an attribute that refers to another
@@ -4421,7 +4366,7 @@ type entry.
 
 \item Visit each child C of the debugging information
 entry as follows: If C is a nested type entry or a member
-function entry, and has 
+function entry, and has
 a \DWATname{} attribute, append to
 \addtoindexx{name attribute}
 S the letter 'S', the tag of C, and its name; otherwise,
@@ -4433,11 +4378,11 @@ there are no children), append a zero byte.
 
 
 For the purposes of this algorithm, if a debugging information
-entry S has a 
-\DWATspecification{} 
+entry S has a
+\DWATspecification{}
 attribute that refers to
-another entry D (which has a 
-\DWATdeclaration{} 
+another entry D (which has a
+\DWATdeclaration{}
 attribute),
 then S inherits the attributes and children of D, and S is
 processed as if those attributes and children were present in
@@ -4447,7 +4392,7 @@ one in D is ignored.
 
 \needlines{4}
 DWARF tag and attribute codes are appended to the sequence
-as unsigned LEB128\addtoindexx{LEB128!unsigned} values, 
+as unsigned LEB128\addtoindexx{LEB128!unsigned} values,
 using the values defined earlier in this chapter.
 
 \textit{A grammar describing this computation may be found in
@@ -4463,17 +4408,17 @@ separate \addtoindex{type unit}.}
 
 \textit{If a debugging information entry contains an attribute from
 the list above that would require an unsupported form, that
-entry is not suitable for a separate 
+entry is not suitable for a separate
 \addtoindex{type unit}.}
 
-\textit{A type is suitable for a separate 
+\textit{A type is suitable for a separate
 \addtoindex{type unit} only
 if all of the type entries that it contains or refers to in
 Steps 6 and 7 are themselves suitable for a separate
 \addtoindex{type unit}.}
 
 \needlines{4}
-\textit{Where the DWARF producer may reasonably choose two or 
+\textit{Where the DWARF producer may reasonably choose two or
 more different forms for a given attribute, it should choose
 the simplest possible form in computing the signature. (For
 example, a constant value should be preferred to
@@ -4483,7 +4428,7 @@ an
 expression when possible.)}
 
 Once the string S has been formed from the DWARF encoding,
-an 16-byte \MDfive{} digest is computed for the string and the 
+an 16-byte \MDfive{} digest is computed for the string and the
 last eight bytes are taken as the type signature.
 
 \textit{The string S is intended to be a flattened representation of
@@ -4491,7 +4436,7 @@ the type that uniquely identifies that type (that is, a different
 type is highly unlikely to produce the same string).}
 
 \needlines{6}
-\textit{A debugging information entry is not 
+\textit{A debugging information entry is not
 \db
 placed in a
 separate \addtoindex{type unit} if any of the following apply:}
@@ -4499,7 +4444,7 @@ separate \addtoindex{type unit} if any of the following apply:}
 \begin{itemize}
 
 \item \textit{The entry has an attribute whose value is a location
-description, and the location description 
+description, and the location description
 contains a reference to
 another debugging information entry (for example, a \DWOPcallref{}
 operator), as it is unlikely that the entry will remain
@@ -4521,7 +4466,7 @@ a type.}
 \item \textit{The \DWATdeclaration{} attribute is not included because it
 indicates that the debugging information entry represents an
 incomplete declaration, and incomplete declarations should
-not be placed in 
+not be placed in
 \addtoindexx{type unit}
 separate type units.}
 
@@ -4529,50 +4474,50 @@ separate type units.}
 it does not provide any information unique to the defining
 declaration of the type.}
 
-\item \textit{The \DWATdeclfile, 
+\item \textit{The \DWATdeclfile,
 \DWATdeclline, and
 \DWATdeclcolumn{} attributes are not included because they
 may vary from one source file to the next, and would prevent
 two otherwise identical type declarations from producing the
 same \MDfive{} digest.}
 
-\item \textit{The \DWATobjectpointer{} attribute is not included 
-because the information it provides is not necessary for the 
+\item \textit{The \DWATobjectpointer{} attribute is not included
+because the information it provides is not necessary for the
 computation of a unique type signature.}
 
 \end{itemize}
 
-\textit{Nested types and some types referred to by a debugging 
-information entry are encoded by name rather than by recursively 
-encoding the type to allow for cases where a complete definition 
+\textit{Nested types and some types referred to by a debugging
+information entry are encoded by name rather than by recursively
+encoding the type to allow for cases where a complete definition
 of the type might not be available in all compilation units.}
 
 \needlines{4}
-\textit{If a type definition contains the definition of a member function, 
-it cannot be moved as is into a type unit, because the member function 
-contains attributes that are unique to that compilation unit. 
-Such a type definition can be moved to a type unit by rewriting the 
-debugging information entry tree, 
-moving the member function declaration into a separate declaration tree, 
-and replacing the function definition in the type with a non-defining 
-declaration of the function (as if the function had been defined out of 
+\textit{If a type definition contains the definition of a member function,
+it cannot be moved as is into a type unit, because the member function
+contains attributes that are unique to that compilation unit.
+Such a type definition can be moved to a type unit by rewriting the
+debugging information entry tree,
+moving the member function declaration into a separate declaration tree,
+and replacing the function definition in the type with a non-defining
+declaration of the function (as if the function had been defined out of
 line).}
 
-An example that illustrates the computation of an \MDfive{} digest may be found in 
+An example that illustrates the computation of an \MDfive{} digest may be found in
 Appendix \refersec{app:usingtypeunits}.
 
 \section{Name Table Hash Function}
 \label{datarep:nametablehashfunction}
-The hash function used for hashing name strings in the accelerated 
+The hash function used for hashing name strings in the accelerated
 access name index table (see Section \refersec{chap:acceleratedaccess})
-is defined in \addtoindex{C} as shown in 
+is defined in \addtoindex{C} as shown in
 Figure \referfol{fig:nametablehashfunctiondefinition}.\footnoteRR{
-This hash function is sometimes known as the 
+This hash function is sometimes known as the
 "\addtoindex{Bernstein hash function}" or the
-"\addtoindex{DJB hash function}"  
-(see, for example, 
+"\addtoindex{DJB hash function}"
+(see, for example,
 \hrefself{http://en.wikipedia.org/wiki/List\_of\_hash\_functions} or
-\hrefself{http://stackoverflow.com/questions/10696223/reason-for-5381-number-in-djb-hash-function)}.} 
+\hrefself{http://stackoverflow.com/questions/10696223/reason-for-5381-number-in-djb-hash-function)}.}
 
 \begin{figure}[ht]
 \begin{nlnlisting}
@@ -4598,17 +4543,17 @@ uint32_t /* must be a 32-bit integer type */
 \bb
 \section{Contiguous Tables}
 \label{datarep:contiguoustables}
-Tables within each section must be contiguous with the preceding 
-table in that section, or the beginning of the section if there 
+Tables within each section must be contiguous with the preceding
+table in that section, or the beginning of the section if there
 is no preceding table.
 
-\textit{Consumers may prefer to have these tables padded so that 
-each subsequent table is "aligned" on a certain boundary, typically 
-4 or 8 bytes. Every table of information has a way for the table as 
-a whole to be padded if the producer wishes to do so. Tables from 
-multiple object files that are concatenated by a linker would then 
-each be aligned without any special effort by the linker; this 
-alignment may provide performance or other benefits. 
-This padding is entirely optional, and does not relax any constraint 
+\textit{Consumers may prefer to have these tables padded so that
+each subsequent table is "aligned" on a certain boundary, typically
+4 or 8 bytes. Every table of information has a way for the table as
+a whole to be padded if the producer wishes to do so. Tables from
+multiple object files that are concatenated by a linker would then
+each be aligned without any special effort by the linker; this
+alignment may provide performance or other benefits.
+This padding is entirely optional, and does not relax any constraint
 specified in Section \refersec{datarep:dependenciesandconstraints}.}
 \eb

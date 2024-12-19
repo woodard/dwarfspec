@@ -183,11 +183,11 @@ and another has a struct named \texttt{fred}, a lookup for
 \doublequote{fred} will find the list containing those two index
 entries.
 
-The index section contains 
+The index section contains
 \bb
 nine
 \eb
-individual parts, as illustrated in 
+individual parts, as illustrated in
 Figure \referfol{fig:nameindexlayoutpart1}.
 \begin{enumerate}
 \item A header, describing the layout of the section.
@@ -223,7 +223,7 @@ Figure \referfol{fig:nameindexlayoutpart1}.
 %\includegraphics[keepaspectratio=true,scale=1.0]{name-index-drawings-6p1}
 
 \begin{tikzpicture}[
-  every node/.style={node font=\small, anchor=north west, text height=.8em, 
+  every node/.style={node font=\small, anchor=north west, text height=.8em,
                      text depth=.2em, inner sep=4pt, outer ysep=0},
   caption/.style={node font=\small \bfseries, text width=90pt},
   overview/.style={draw, node font=\small, minimum height=28pt, text width=90pt},
@@ -269,7 +269,7 @@ Figure \referfol{fig:nameindexlayoutpart1}.
 \end{scope}
 
 \begin{scope}[on background layer]
-  \filldraw [explode] (culist.north east) -- (cu0.north west) -- 
+  \filldraw [explode] (culist.north east) -- (cu0.north west) --
                        (cu3.south west) -- (culist.south east) -- cycle;
 \end{scope}
 
@@ -287,7 +287,7 @@ Figure \referfol{fig:nameindexlayoutpart1}.
 \end{scope}
 
 \begin{scope}[on background layer]
-  \filldraw [explode] (ltulist.north east) -- (ltu0.north west) -- 
+  \filldraw [explode] (ltulist.north east) -- (ltu0.north west) --
                       (ltu3.south west) -- (ltulist.south east) -- cycle;
 \end{scope}
 
@@ -305,7 +305,7 @@ Figure \referfol{fig:nameindexlayoutpart1}.
 \end{scope}
 
 \begin{scope}[on background layer]
-  \filldraw [explode] (ftulist.north east) -- (ftu0.north west) -- 
+  \filldraw [explode] (ftulist.north east) -- (ftu0.north west) --
                       (ftu3.south west) -- (ftulist.south east) -- cycle;
 \end{scope}
 
@@ -321,7 +321,7 @@ Figure \referfol{fig:nameindexlayoutpart1}.
 \end{scope}
 
 \begin{scope}[on background layer]
-  \filldraw [explode] (hash.north east) -- (hash0.north west) -- 
+  \filldraw [explode] (hash.north east) -- (hash0.north west) --
                       (hash1.south west) -- (hash.south east) -- cycle;
 \end{scope}
 
@@ -336,7 +336,7 @@ Figure \referfol{fig:nameindexlayoutpart1}.
 \end{scope}
 
 \begin{scope}[on background layer]
-  \filldraw [explode] (names.north east) -- (name0.north west) -- 
+  \filldraw [explode] (names.north east) -- (name0.north west) --
                       (name1.south west) -- (names.south east) -- cycle;
 \end{scope}
 
@@ -347,7 +347,7 @@ Figure \referfol{fig:nameindexlayoutpart1}.
 \end{scope}
 
 begin{scope}
-\filldraw [explode] (localstrs.north east) -- (localstrs0.north west) -- 
+\filldraw [explode] (localstrs.north east) -- (localstrs0.north west) --
                     (localstrs0.south west) -- (localstrs.south east) -- cycle;
 
 % Exploded View of Abbreviations
@@ -357,7 +357,7 @@ begin{scope}
 \end{scope}
 
 \begin{scope}[on background layer]
-  \filldraw [explode] (abbrev.north east) -- (abbrev0.north west) -- 
+  \filldraw [explode] (abbrev.north east) -- (abbrev0.north west) --
                       (abbrev0.south west) -- (abbrev.south east) -- cycle;
 \end{scope}
 
@@ -822,14 +822,14 @@ independent of the DWARF version number.
 
 \bb
 \item \HFNstrformat{} (\HFTubyte) \\
-An enumerated constant that specifies the representation of 
-string references in the name index. The possible values are: 
-\DWFORMstrp, \DWFORMstrpeight, and \DWFORMstrxfour{} (see 
+An enumerated constant that specifies the representation of
+string references in the name index. The possible values are:
+\DWFORMstrp, \DWFORMstrpeight, and \DWFORMstrxfour{} (see
 Section \refersec{datarep:classesandforms}).
 
 \item \HFNpadding{} (\HFTubyte) \\
 \eb
-Reserved to DWARF (must be zero). 
+Reserved to DWARF (must be zero).
 
 \item \HFNcompunitcount{} (\HFTuword) \\
 The number of CUs in the CU list.
@@ -849,18 +849,18 @@ The number of unique names in the index.
 
 \bb
 \item \HFNlocalstrpoolsize{} (\HFTsectionlength) \\
-Size of the local string pool. If this value is non-zero, 
-string offsets (when \HFNstrformat{} is \DWFORMstrp{} or \DWFORMstrpeight) 
-reference the local string pool. If this value is 0, 
-string offsets reference the \dotdebugstr{} section. 
+Size of the local string pool. If this value is non-zero,
+string offsets (when \HFNstrformat{} is \DWFORMstrp{} or \DWFORMstrpeight)
+reference the local string pool. If this value is 0,
+string offsets reference the \dotdebugstr{} section.
 If \HFNstrformat{} is \DWFORMstrxfour, this field should be 0.
 
 \item \HFNstroffsets{} (\HFNsectionoffset) \\
-A 4-byte or 8-byte unsigned offset that points to the header 
-of the compilation unit’s contribution to the \dotdebugstroffsets{} 
-section. Indirect string references (when \HFNstrformat{} is 
-\DWFORMstrxfour) are interpreted as zero-based indexes into the 
-array of offsets following the header. If \HFNstrformat{} is 
+A 4-byte or 8-byte unsigned offset that points to the header
+of the compilation unit’s contribution to the \dotdebugstroffsets{}
+section. Indirect string references (when \HFNstrformat{} is
+\DWFORMstrxfour) are interpreted as zero-based indexes into the
+array of offsets following the header. If \HFNstrformat{} is
 \DWFORMstrp{} or \DWFORMstrpeight, this field should be 0.
 \eb
 
@@ -869,7 +869,7 @@ array of offsets following the header. If \HFNstrformat{} is
 The size in bytes of the abbreviations table.
 
 \needlines{4}
-\item 
+\item
 \bb
 \HFNaugmentationsize{} (\HFTuword) \\
 The size in bytes of the augmentation sequence.
@@ -1014,16 +1014,16 @@ in the name table.
 \subsubsubsection{Name Table}
 \label{chap:nametable}
 \bb
-The name table immediately follows the hash lookup table. 
-It consists of two arrays: an array of string pointers or indexes, 
-followed immediately by an array of entry offsets. The items in 
-the first array are determined by the \HFNstrformat{} field in the 
-section header, and may be 4-byte or 8-byte offsets into either the 
-\dotdebugstr{} section or the local string pool, or 4-byte indexes 
+The name table immediately follows the hash lookup table.
+It consists of two arrays: an array of string pointers or indexes,
+followed immediately by an array of entry offsets. The items in
+the first array are determined by the \HFNstrformat{} field in the
+section header, and may be 4-byte or 8-byte offsets into either the
+\dotdebugstr{} section or the local string pool, or 4-byte indexes
 into the array of offsets in the \dotdebugstroffsets{} section.
-The items in the second array are section offsets: 4-byte unsigned 
-integers for the DWARF-32 format or 8-byte unsigned integers for the 
-DWARF-64 format. The entry offsets in the second array refer to index 
+The items in the second array are section offsets: 4-byte unsigned
+integers for the DWARF-32 format or 8-byte unsigned integers for the
+DWARF-64 format. The entry offsets in the second array refer to index
 entries, and are relative to the start of the entry pool area.
 \eb
 
@@ -1041,29 +1041,29 @@ requirement for the name table.}
 \bb
 \subsubsubsection{Local String Pool}
 \label{chap:localstringpool}
-The local string pool, if present, immediately follows the name table. 
-It consists of a series of null-terminated strings. Its size is given by 
+The local string pool, if present, immediately follows the name table.
+It consists of a series of null-terminated strings. Its size is given by
 \HFNlocalstrpoolsize.
 
-\textit{For non-split DWARF compilation units, strings used by the 
-name table will have significant overlap with strings used by the 
-\dotdebuginfo{} section, and a local string pool is not advisable. 
-Relocations for the string references may be minimized by using the 
-indirect string forms in both \dotdebuginfo{} and \dotdebugnames. 
-For split DWARF compilation units with a linker that is aware of 
-and can combine \dotdebugnames{} sections into a single per-module 
-index, there is likely little overlap, and relocations for string 
-references in the name table can be minimized by using the local 
-string pool. If the linker simply concatenates the per-CU indexes, 
-however, it remains beneficial to use indirect string forms and a 
+\textit{For non-split DWARF compilation units, strings used by the
+name table will have significant overlap with strings used by the
+\dotdebuginfo{} section, and a local string pool is not advisable.
+Relocations for the string references may be minimized by using the
+indirect string forms in both \dotdebuginfo{} and \dotdebugnames.
+For split DWARF compilation units with a linker that is aware of
+and can combine \dotdebugnames{} sections into a single per-module
+index, there is likely little overlap, and relocations for string
+references in the name table can be minimized by using the local
+string pool. If the linker simply concatenates the per-CU indexes,
+however, it remains beneficial to use indirect string forms and a
 separate string table.}
 \eb
 
 \needlines{6}
 \subsubsubsection{Abbreviations Table}
-The abbreviations table immediately follows 
+The abbreviations table immediately follows
 \bb
-the local string pool or, if the local string pool is absent, 
+the local string pool or, if the local string pool is absent,
 \eb
 the name table. This table
 consists of a series of abbreviation declarations. Its size is given
@@ -1163,82 +1163,7 @@ it useful to maintain alignment.}
 The size of the entry pool is the remaining size of the contribution to
 the index section, as defined by the \texttt{unit\_length} header field.
 
-\needlines{6}
-\subsection{Lookup by Address}
-\label{chap:lookupbyaddress}
-For \addtoindexx{lookup!by address}
-lookup by address, a table is maintained in a separate
-\addtoindexx{accelerated access!by address}
-object file section called
-\dotdebugaranges{}. The table consists
-of sets of variable length entries, each set describing the
-portion of the program\textquoteright{}s address space that is covered by
-a single compilation unit.
-
-\needlines{4}
-Each set begins with a header containing five values:
-\begin{enumerate}[1. ]
-\item \HFNunitlength{} (\livelink{datarep:initiallengthvalues}{initial length}) \\
-The length of this contribution to the address lookup section,
-not including the length field itself
-\bb
-(see Section \refersec{datarep:initiallengthvalues}).
-\eb
-
-\item \HFNversion{} (\HFTuhalf) \\
-A version number\addtoindexx{version number!address lookup table}
-(see Section \refersec{datarep:addrssrangetable}).
-This number is specific to the address lookup table and is
-independent of the DWARF version number.
-
-\item \HFNdebuginfooffset{} (section offset) \\
-The offset from the
-\addtoindexx{section offset!in .debug\_aranges header}
-beginning of the \dotdebuginfo{} section of the
-compilation unit header referenced by the set.
-
-\item \HFNaddresssize{} (\HFTubyte) \\
-The \addtoindex{size of an address}
-in bytes on the target architecture.
-\db
-
-\item \HFNreservedwassegmentselectorsize{}
-\bbeb
-\\
-
-\end{enumerate}
-
-\needlines{6}
-This header is followed by a variable number of address range
-descriptors. Each descriptor is a
-\bb
-pair consisting of the beginning address
-\eb
-of a range of text or data covered by some entry owned by
-the corresponding compilation unit, followed by the
-\db
-length of that range. A particular set is terminated by an
-entry consisting of
-\bb
-two
-\eb
-zeroes.
-\db
-By scanning the table, a debugger can quickly decide
-which compilation unit to look in to find the debugging
-information for an object that has a given address.
-
-\bb
-A range description entry whose address is the reserved address (see
-Section \refersec{chap:reservedtargetaddress}), indicates a
-non-existent range, which is equivalent to
-omitting the range description.
-\eb
-
-\textit{If the range of addresses covered by the text and/or data
-of a compilation unit is not contiguous, then there may be
-multiple address range descriptors for that compilation unit.}
-
+\db	% Delete Section 6.1.2 Lookup By Address
 
 \section{Line Number Information}
 \label{chap:linenumberinformation}
@@ -1294,9 +1219,9 @@ the matrix each row whose file, line, source column and
 discriminator\addttindexx{discriminator}
 is identical with that of its
 \bb
-predecessors, except where the instruction is marked as a 
-suggested breakpoint location, the end of a prologue region, 
-or the beginning of an epilogue region. 
+predecessors, except where the instruction is marked as a
+suggested breakpoint location, the end of a prologue region,
+or the beginning of an epilogue region.
 \eb
 Second, we design a byte-coded language
 for a state machine and store a stream of bytes in the object
@@ -1418,7 +1343,7 @@ the exit of a function. \\
 
 \bb
 \LNSREGprologueepilogue &
-A boolean indicating that the current row describes instructions 
+A boolean indicating that the current row describes instructions
 within a prologue or epilogue range.
 \eb
 \\
@@ -1460,7 +1385,7 @@ program, the state of the registers is as show in Table
 \hline
 \LNSREGaddress 			& 0 \\
 \LNSREGopindex 			& 0 \\
-\bbeb 
+\bbeb
 \LNSREGfile				& 0 \\
 \LNSREGline 			& 1 \\
 \LNSREGcolumn 			& 0 \\
@@ -1480,7 +1405,7 @@ program, the state of the registers is as show in Table
 \vspace{5mm}
 \end{table}
 
-\textit{The 
+\textit{The
 \LNSREGisa{} value 0 specifies that the instruction set is the
 architecturally determined default instruction set. This may
 be fixed by the ABI, or it may be specified by other means,
@@ -1598,7 +1523,7 @@ in their calculations.
 \item \HFNmaximumoperationsperinstruction{} (\HFTubyte) \\
 The maximum number of individual operations that may be
 encoded in an instruction. Line number program opcodes
-that alter the \LNSREGaddress{} and 
+that alter the \LNSREGaddress{} and
 \LNSREGopindex{} registers use this and
 \HFNminimuminstructionlength{} in their calculations.
 
@@ -1608,14 +1533,14 @@ architectures, this field is 1, the \LNSREGopindex{} register is always
 
 \needlines{8}
 \item \HFNdefaultisstmt{} (\HFTubyte) \\
-The initial value of the \LNSREGisstmt{} register.  
+The initial value of the \LNSREGisstmt{} register.
 
 \textit{A simple approach
 to building line number information when machine instructions
 are emitted in an order corresponding to the source program
 is to set \HFNdefaultisstmt{}
 to \doublequote{true} and to not change the
-value of the \LNSREGisstmt{} register 
+value of the \LNSREGisstmt{} register
 within the line number program.
 One matrix entry is produced for each line that has code
 generated for it. The effect is that every entry in the
@@ -1628,7 +1553,7 @@ the matrix for a line number; in this case, at least one entry
 (often but not necessarily only one) specifies a recommended
 breakpoint location for the line number. \DWLNSnegatestmt{}
 opcodes in the line number program control which matrix entries
-constitute such a recommendation and 
+constitute such a recommendation and
 \HFNdefaultisstmt{} might
 be either \doublequote{true} or \doublequote{false.} This approach might be
 used as part of support for debugging optimized code.}
@@ -1673,7 +1598,7 @@ extensions.}
 This array specifies the number of \addtoindex{LEB128} operands for each
 of the standard opcodes. The first element of the array
 corresponds to the opcode whose value is 1, and the last
-element corresponds to the opcode whose value 
+element corresponds to the opcode whose value
 is \mbox{\HFNopcodebase{} - 1}.
 
 \textit{By increasing \HFNopcodebase{}, and adding elements to this array,
@@ -1810,10 +1735,10 @@ in the following \HFNfilenames{} field.
 A sequence of file name entries. Each entry consists of:
 \begin{itemize}
 \setlength{\itemsep}{0em}
-\item A format code (ULEB128), which selects a record format 
+\item A format code (ULEB128), which selects a record format
 descriptor from the \HFNfilenameformattable{}, by its index.
 
-\item A sequence of fields as described by the selected record 
+\item A sequence of fields as described by the selected record
 format descriptor.
 \end{itemize}
 
@@ -1893,13 +1818,13 @@ from an executable.
 In a \dotdebuglinedwo{} section, the forms \DWFORMstrxXNand{} may
 also be used. These refer into the \dotdebugstroffsetsdwo{}
 section (and indirectly also the \dotdebugstrdwo{} section)
-because no 
+because no
 \bb
-\doublequote{.debug\_line\_str\_offsets.dwo} or 
-\doublequote{.debug\_line\_str.dwo} 
+\doublequote{.debug\_line\_str\_offsets.dwo} or
+\doublequote{.debug\_line\_str.dwo}
 \eb
-sections exist or are defined for 
-use in split objects. (The form \DWFORMstring{} may also be used, 
+sections exist or are defined for
+use in split objects. (The form \DWFORMstring{} may also be used,
 but this precludes the benefits of string sharing.)
 
 \item \DWLNCTdirectoryindexTARG \\
